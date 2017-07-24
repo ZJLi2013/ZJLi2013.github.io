@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
+  <entry>
+    <title><![CDATA[cs231 -- CNN in computer vision]]></title>
+    <url>%2F2017%2F07%2F24%2FCNN-demo%2F</url>
+    <content type="text"><![CDATA[what happend in high dimensional space?Pixel-based distance on high-dimensional data can be very unintuitive. Linear Classification1) define a score function from image pixels to class scores. benefits, no need to store all data 2) SVM and Softmax 3) a loss function, measure the quality of a paricular set of parameters based on how well the induced scores agreed with the ground truth labels optimization (SGD)the loss function as a hihg-dimeonsional optimization landscape, in which trying to reach the bottom BPRectified linear unit (ReLU)Neural Networkstrain a small network, the final loss are relatively few local minima, and easy to converge, but they are high loss; if train large network, there may many different solutions, but the variance in final loss is much smaller. –&gt; all solutions are equally as good, rely less on the random initialization in practice, use regularization tech to control overfit on large train network Data Preprocessing1) mean subtraction 2) normalization 3) PCA &amp; whitening 4) weight initialization 5) regularization 5.1) L-norm regularization 5.2) Dropout Hyperparamter optimization1) initial learning rate 2) learning rate decay schedule 3) regularization strength (L2 penalty) tips: decay learning rate over the period of training; search for good hyperparameters with random search CNNlayers used to build ConvNet architectures: 1) Convolutional layer 2) ReLU layer 3) Pooling layer 4) Fully-connected layer case study: LeNet AlexNet ZF Net GoogleNet VGGNet ResNet Visulization CNNTransfer learning]]></content>
+      <tags>
+        <tag>Deep Learning</tag>
+      </tags>
+  </entry>
 </search>
