@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Deep Learning," />
+  <meta name="keywords" content="Open course," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="what happend in high dimensional space?Pixel-based distance on high-dimensional data can be very unintuitive. Linear Classification1) define a score function from image pixels to class scores. benefit">
-<meta name="keywords" content="Deep Learning">
+<meta name="description" content="1 Deep Reinforcement Learning linkapps:  motion planning  2 Convolutional Neural Networks linkapps: End-2-end driving task(pedestrian detect) 3 Recurrent Neural Networks linkapps: steering control thr">
+<meta name="keywords" content="Open course">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cs231 -- CNN in computer vision">
-<meta property="og:url" content="http://yoursite.com/2017/07/24/CNN-demo/index.html">
+<meta property="og:title" content="MIT 6.S094 Deep Learning for Self Drving Cars">
+<meta property="og:url" content="http://yoursite.com/2017/08/07/MIT-s094/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what happend in high dimensional space?Pixel-based distance on high-dimensional data can be very unintuitive. Linear Classification1) define a score function from image pixels to class scores. benefit">
+<meta property="og:description" content="1 Deep Reinforcement Learning linkapps:  motion planning  2 Convolutional Neural Networks linkapps: End-2-end driving task(pedestrian detect) 3 Recurrent Neural Networks linkapps: steering control thr">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-07-24T21:01:56.000Z">
+<meta property="og:updated_time" content="2017-08-08T02:34:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cs231 -- CNN in computer vision">
-<meta name="twitter:description" content="what happend in high dimensional space?Pixel-based distance on high-dimensional data can be very unintuitive. Linear Classification1) define a score function from image pixels to class scores. benefit">
+<meta name="twitter:title" content="MIT 6.S094 Deep Learning for Self Drving Cars">
+<meta name="twitter:description" content="1 Deep Reinforcement Learning linkapps:  motion planning  2 Convolutional Neural Networks linkapps: End-2-end driving task(pedestrian detect) 3 Recurrent Neural Networks linkapps: steering control thr">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/24/CNN-demo/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/08/07/MIT-s094/"/>
 
 
 
 
 
-  <title>cs231 -- CNN in computer vision | Serious Autonomous Vehicles</title>
+  <title>MIT 6.S094 Deep Learning for Self Drving Cars | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/24/CNN-demo/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/07/MIT-s094/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">cs231 -- CNN in computer vision</h1>
+          <h1 class="post-title" itemprop="name headline">MIT 6.S094 Deep Learning for Self Drving Cars</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-24T16:57:46-04:00">
-                2017-07-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-07T22:34:23-04:00">
+                2017-08-07
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/07/24/CNN-demo/#comments" itemprop="discussionUrl">
+                <a href="/2017/08/07/MIT-s094/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/07/24/CNN-demo/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/08/07/MIT-s094/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,38 +366,12 @@
       
 
       
-        <h2 id="what-happend-in-high-dimensional-space"><a href="#what-happend-in-high-dimensional-space" class="headerlink" title="what happend in high dimensional space?"></a>what happend in high dimensional space?</h2><p>Pixel-based distance on high-dimensional data can be very unintuitive.</p>
-<h2 id="Linear-Classification"><a href="#Linear-Classification" class="headerlink" title="Linear Classification"></a>Linear Classification</h2><p>1) define a score function from image pixels to class scores. benefits, no need to store all data</p>
-<p>2) SVM and Softmax </p>
-<p>3) a loss function, measure the quality of a paricular set of parameters based on how well the induced scores agreed with the ground truth labels</p>
-<h2 id="optimization-SGD"><a href="#optimization-SGD" class="headerlink" title="optimization (SGD)"></a>optimization (SGD)</h2><p>the loss function as a hihg-dimeonsional optimization landscape, in which trying to reach the bottom</p>
-<h2 id="BP"><a href="#BP" class="headerlink" title="BP"></a>BP</h2><h2 id="Rectified-linear-unit-ReLU"><a href="#Rectified-linear-unit-ReLU" class="headerlink" title="Rectified linear unit (ReLU)"></a>Rectified linear unit (ReLU)</h2><h2 id="Neural-Networks"><a href="#Neural-Networks" class="headerlink" title="Neural Networks"></a>Neural Networks</h2><p>train a small network, the final loss are relatively few local minima, and easy to converge, but they are high loss; if train large network, there may many different solutions, but the variance in final loss is much smaller. –&gt; all solutions are equally as good, rely less on the random initialization </p>
-<p>in practice, use regularization tech to control overfit on large train network</p>
-<h2 id="Data-Preprocessing"><a href="#Data-Preprocessing" class="headerlink" title="Data Preprocessing"></a>Data Preprocessing</h2><p>1) mean subtraction</p>
-<p>2) normalization</p>
-<p>3) PCA &amp; whitening</p>
-<p>4) weight initialization</p>
-<p>5) regularization</p>
-<pre><code>5.1) L-norm regularization
+        <h2 id="1-Deep-Reinforcement-Learning-link"><a href="#1-Deep-Reinforcement-Learning-link" class="headerlink" title="1 Deep Reinforcement Learning link"></a>1 Deep Reinforcement Learning <a href="https://www.dropbox.com/s/2z7276330jaw37k/lecture2.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps:  motion planning 
+</code></pre><h2 id="2-Convolutional-Neural-Networks-link"><a href="#2-Convolutional-Neural-Networks-link" class="headerlink" title="2 Convolutional Neural Networks link"></a>2 Convolutional Neural Networks <a href="https://www.dropbox.com/s/q34bi7t0udms01x/lecture3.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps: End-2-end driving task(pedestrian detect)
+</code></pre><h2 id="3-Recurrent-Neural-Networks-link"><a href="#3-Recurrent-Neural-Networks-link" class="headerlink" title="3 Recurrent Neural Networks link"></a>3 Recurrent Neural Networks <a href="https://goo.gl/qG4Ys9" target="_blank" rel="external">link</a></h2><pre><code>apps: steering control through time
+</code></pre><h3 id="CNN-Project-DeepTesla"><a href="#CNN-Project-DeepTesla" class="headerlink" title="CNN Project: DeepTesla"></a>CNN Project: <a href="http://selfdrivingcars.mit.edu/deeptesla/" target="_blank" rel="external">DeepTesla</a></h3><p>###DRL Project: <a href="http://selfdrivingcars.mit.edu/deeptraffic/" target="_blank" rel="external">DeepTraffic</a></p>
+<p>###Framework:  <a href="https://github.com/karpathy/convnetjs" target="_blank" rel="external">ConvNetJS</a></p>
 
-5.2) Dropout
-</code></pre><h2 id="Hyperparamter-optimization"><a href="#Hyperparamter-optimization" class="headerlink" title="Hyperparamter optimization"></a>Hyperparamter optimization</h2><p>1) initial learning rate</p>
-<p>2) learning rate decay schedule </p>
-<p>3) regularization strength (L2 penalty)</p>
-<p>tips:  decay learning rate over the period of training; search for good hyperparameters with random search</p>
-<h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><p>layers used to build ConvNet architectures:</p>
-<p>1)    Convolutional layer</p>
-<p>2)  ReLU layer</p>
-<p>3)  Pooling layer</p>
-<p>4)    Fully-connected layer</p>
-<p>case study:</p>
-<pre><code>LeNet    
-AlexNet
-ZF Net
-GoogleNet
-VGGNet
-ResNet
-</code></pre><h2 id="Visulization-CNN"><a href="#Visulization-CNN" class="headerlink" title="Visulization CNN"></a>Visulization CNN</h2><h2 id="Transfer-learning"><a href="#Transfer-learning" class="headerlink" title="Transfer learning"></a>Transfer learning</h2>
       
     </div>
 
@@ -426,7 +400,7 @@ ResNet
       
         <div class="post-tags">
           
-            <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+            <a href="/tags/Open-course/" rel="tag"># Open course</a>
           
         </div>
       
@@ -439,15 +413,15 @@ ResNet
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/07/24/CNN-demo/" rel="next" title="cs231 -- CNN in computer vision">
+                <i class="fa fa-chevron-left"></i> cs231 -- CNN in computer vision
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/08/07/MIT-s094/" rel="prev" title="MIT 6.S094 Deep Learning for Self Drving Cars">
-                MIT 6.S094 Deep Learning for Self Drving Cars <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -595,7 +569,7 @@ ResNet
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-happend-in-high-dimensional-space"><span class="nav-number">1.</span> <span class="nav-text">what happend in high dimensional space?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linear-Classification"><span class="nav-number">2.</span> <span class="nav-text">Linear Classification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimization-SGD"><span class="nav-number">3.</span> <span class="nav-text">optimization (SGD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BP"><span class="nav-number">4.</span> <span class="nav-text">BP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rectified-linear-unit-ReLU"><span class="nav-number">5.</span> <span class="nav-text">Rectified linear unit (ReLU)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Neural-Networks"><span class="nav-number">6.</span> <span class="nav-text">Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Preprocessing"><span class="nav-number">7.</span> <span class="nav-text">Data Preprocessing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hyperparamter-optimization"><span class="nav-number">8.</span> <span class="nav-text">Hyperparamter optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CNN"><span class="nav-number">9.</span> <span class="nav-text">CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Visulization-CNN"><span class="nav-number">10.</span> <span class="nav-text">Visulization CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transfer-learning"><span class="nav-number">11.</span> <span class="nav-text">Transfer learning</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Deep-Reinforcement-Learning-link"><span class="nav-number">1.</span> <span class="nav-text">1 Deep Reinforcement Learning link</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Convolutional-Neural-Networks-link"><span class="nav-number">2.</span> <span class="nav-text">2 Convolutional Neural Networks link</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Recurrent-Neural-Networks-link"><span class="nav-number">3.</span> <span class="nav-text">3 Recurrent Neural Networks link</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CNN-Project-DeepTesla"><span class="nav-number">3.1.</span> <span class="nav-text">CNN Project: DeepTesla</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -738,9 +712,9 @@ ResNet
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/07/24/CNN-demo/';
-          this.page.identifier = '2017/07/24/CNN-demo/';
-          this.page.title = 'cs231 -- CNN in computer vision';
+          this.page.url = 'http://yoursite.com/2017/08/07/MIT-s094/';
+          this.page.identifier = '2017/08/07/MIT-s094/';
+          this.page.title = 'MIT 6.S094 Deep Learning for Self Drving Cars';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
