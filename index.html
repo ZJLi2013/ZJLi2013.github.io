@@ -291,6 +291,146 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/19/moduo2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/19/moduo2/" itemprop="url">moduo 2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-19T22:16:11-04:00">
+                2018-06-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/19/moduo2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/19/moduo2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>The several classes defined in Moduo: TcpServer,  Acceptor, TcpConnection, EventLoop, epoller, channel, eventLoopThread, eventLoopThreadPool.</p>
+<h2 id="1-TcpServer-construction"><a href="#1-TcpServer-construction" class="headerlink" title="1) TcpServer construction"></a>1) TcpServer construction</h2><p>each TcpServer suppose have multi- tcp connections, the acceptor works as the main I/O thread, which listen the server-side I/O socket, and handle all client input connections at first, (later will assign the connection task to each worker thread from pool). so the input argument “loop” during TcpServer construction is the main I/O eventLoop. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">TcpServer::TcpServer(EventLoop* loop,</div><div class="line">                     <span class="keyword">const</span> InetAddress&amp; listenAddr,</div><div class="line">                     <span class="keyword">const</span> <span class="built_in">string</span>&amp; nameArg,</div><div class="line">                     Option option)</div><div class="line">  : loop_(CHECK_NOTNULL(loop)),	                  ipPort_(listenAddr.toIpPort()),</div><div class="line">    name_(nameArg),</div><div class="line">    acceptor_(<span class="keyword">new</span> Acceptor(loop, listenAddr, option == kReusePort)),</div><div class="line">    threadPool_(<span class="keyword">new</span> EventLoopThreadPool(loop, name_)),		    connectionCallback_(defaultConnectionCallback),</div><div class="line">    messageCallback_(defaultMessageCallback),</div><div class="line">    nextConnId_(<span class="number">1</span>)</div><div class="line">&#123;</div><div class="line">  acceptor_-&gt;setNewConnectionCallback(</div><div class="line">      boost::bind(&amp;TcpServer::newConnection, <span class="keyword">this</span>, _1, _2));</div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">one advantage of bind/callback is to <span class="keyword">import</span> functors to different <span class="class"><span class="keyword">class</span> <span class="title">domain</span>. <span class="title">and</span> <span class="title">server</span> <span class="title">has</span> <span class="title">always</span> <span class="title">one</span> <span class="title">I</span>/<span class="title">O</span> <span class="title">socket</span>, <span class="title">but</span> <span class="title">client</span>-<span class="title">socket</span>-<span class="title">fd</span> <span class="title">suppose</span> <span class="title">be</span> <span class="title">a</span> <span class="title">lot</span>. </span></div><div class="line"></div><div class="line">##2) <span class="title">TcpServer</span> <span class="title">newConnection</span></div><div class="line"><span class="title">Each</span> <span class="title">new</span> <span class="title">tcp</span> <span class="title">connection</span>, <span class="title">will</span> <span class="title">assign</span> <span class="title">a</span> <span class="title">worker</span> <span class="title">thread</span> <span class="title">to</span> <span class="title">execute</span> <span class="title">the</span> <span class="title">speical</span> <span class="title">callback</span> <span class="title">functor</span> <span class="title">for</span> <span class="title">this</span> <span class="title">new</span> <span class="title">connection</span>, <span class="title">which</span> <span class="title">is</span> <span class="title">implemented</span> <span class="title">as</span>:</div></pre></td></tr></table></figure>
+<p> ioLoop-&gt;runInLoop(boost::bind(&amp;TcpConnection::connectEstablished, conn));<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">How to schedule thread in threadpool is implemented by round-robin, which is implemented as:</div><div class="line">``` c</div><div class="line">EventLoopThreadPool::getNextLoop()</div></pre></td></tr></table></figure></p>
+<p>###one concern, does each worker thread run EventLoop.loop(), which will call epoll_wait(), and execute all active channels? suppose no.</p>
+<p>##3) TcpConnection construction<br>each new client connection will reponse to a new socket fd, and a new channel. (channel is actually the container of socket fd); and the functors on this connection is also imported to channel callbacks. basically from outside, we only see channel objects, TcpConnection object is the inner class. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">TcpConnection::TcpConnection(EventLoop* loop,</div><div class="line">                             <span class="keyword">const</span> <span class="built_in">string</span>&amp; nameArg,</div><div class="line">                             <span class="keyword">int</span> sockfd,</div><div class="line">                             <span class="keyword">const</span> InetAddress&amp; localAddr,</div><div class="line">                             <span class="keyword">const</span> InetAddress&amp; peerAddr)</div><div class="line">  : loop_(CHECK_NOTNULL(loop)),</div><div class="line">    name_(nameArg),</div><div class="line">    state_(kConnecting),</div><div class="line">    reading_(<span class="literal">true</span>),</div><div class="line">    socket_(<span class="keyword">new</span> Socket(sockfd)),</div><div class="line">    channel_(<span class="keyword">new</span> Channel(loop, sockfd)),</div><div class="line">    localAddr_(localAddr),</div><div class="line">    peerAddr_(peerAddr),</div><div class="line">    highWaterMark_(<span class="number">64</span>*<span class="number">1024</span>*<span class="number">1024</span>)</div><div class="line">&#123;</div><div class="line">  channel_-&gt;setReadCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleRead, <span class="keyword">this</span>, _1));</div><div class="line">  channel_-&gt;setWriteCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleWrite, <span class="keyword">this</span>));</div><div class="line">  channel_-&gt;setCloseCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleClose, <span class="keyword">this</span>));</div><div class="line">  channel_-&gt;setErrorCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleError, <span class="keyword">this</span>));</div><div class="line">  LOG_DEBUG &lt;&lt; <span class="string">"TcpConnection::ctor["</span> &lt;&lt;  name_ &lt;&lt; <span class="string">"] at "</span> &lt;&lt; <span class="keyword">this</span></div><div class="line">            &lt;&lt; <span class="string">" fd="</span> &lt;&lt; sockfd;</div><div class="line">  socket_-&gt;setKeepAlive(<span class="literal">true</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>so where are channel (read/write/error/close) handleEvent callbacks triggered? it is during the eventloop.loop, after epoller return the active events, based on the status of each revent, special handleEvent is called.</p>
+<p>##4) eventLoop construction<br>during constrution of eventLoop, a new poller is created based on this eventLoop itself, also a new wakeupfd and a new wakeupChannel. the purpose of wakeup fd/channel is to  immediately wake up the work thread, rather than waiting till PollTime. and the wakeupfd bind handleRead, in which read one byte to make this wakeupfd I/O readable, which then is ready for I/O. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">EventLoop::EventLoop()</div><div class="line">  : looping_(<span class="literal">false</span>),</div><div class="line">    quit_(<span class="literal">false</span>),</div><div class="line">    eventHandling_(<span class="literal">false</span>),</div><div class="line">    callingPendingFunctors_(<span class="literal">false</span>),</div><div class="line">    iteration_(<span class="number">0</span>),</div><div class="line">    threadId_(CurrentThread::tid()),</div><div class="line">    poller_(Poller::newDefaultPoller(<span class="keyword">this</span>)),</div><div class="line">    timerQueue_(<span class="keyword">new</span> TimerQueue(<span class="keyword">this</span>)),</div><div class="line">    wakeupFd_(createEventfd()),		</div><div class="line">    wakeupChannel_(<span class="keyword">new</span> Channel(<span class="keyword">this</span>, wakeupFd_)),</div><div class="line">    currentActiveChannel_(<span class="literal">NULL</span>)</div><div class="line">&#123;</div><div class="line">  LOG_DEBUG &lt;&lt; <span class="string">"EventLoop created "</span> &lt;&lt; <span class="keyword">this</span> &lt;&lt; <span class="string">" in thread "</span> &lt;&lt; threadId_;</div><div class="line">  <span class="keyword">if</span> (t_loopInThisThread)</div><div class="line">  &#123;</div><div class="line">    LOG_FATAL &lt;&lt; <span class="string">"Another EventLoop "</span> &lt;&lt; t_loopInThisThread</div><div class="line">              &lt;&lt; <span class="string">" exists in this thread "</span> &lt;&lt; threadId_;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span></div><div class="line">  &#123;</div><div class="line">    t_loopInThisThread = <span class="keyword">this</span>;</div><div class="line">  &#125;</div><div class="line">  wakeupChannel_-&gt;setReadCallback(</div><div class="line">      boost::bind(&amp;EventLoop::handleRead, <span class="keyword">this</span>));	    <span class="comment">// we are always reading the wakeupfd</span></div><div class="line">  wakeupChannel_-&gt;enableReading();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>“activeChannels” suppose to be a class variable, which is shared by eventLoop objects, but it’s ok to keep a copy for each eventLoop object to avoid multi-thread competing. and suppose epoll_wait() is thread-safe, so later during construction of eventLoopThreadPool, multi eventLoopThreads won’t conflict with “active channels”</p>
+<p>##5) epoller construction<br>epoller object is created during eventloop construction. since the three interface of epoll instance are thread-safe, they look like global funcs.</p>
+<p>epoll_create(), return an epfd referring to the new epoll instance, this epfd is used by all subsequent calsl to the epoll interface. </p>
+<p>epoll_wait(), return all ready events on the epoll instance referred by epfd. </p>
+<p>epoll_ctl(), traverse the red-black tree strucutre to return the existing fd, or add new fd to the tree. </p>
+<p>##6) channel construction<br>channel is the container of one fd, and is related to one eventLoop. channel is not responsible to create/delete fd, the real owner of each fd is TcpConnection or acceptor. Channel object works like a pipe to send fd from inner object TcpConnection to the eventLoop. the advantage  here is eventLoop is independent from connections. </p>
+<p>##7) channel:update()<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">channel::update() --&gt;</div><div class="line">	loop-&gt;updateChannel() --&gt; </div><div class="line">		poller-&gt;updateChannel() --&gt;</div><div class="line">			<span class="comment">//poller maintain a channel list, call epoll_ctl to add/return/delete the requiring channel</span></div></pre></td></tr></table></figure></p>
+<p>##8) one epoll + threadpool vs per thread per epoll<br>the first method, one global epoll listens all new connections, and send each connection callback to a new thread to execute. method 2, to listen the server I/O socket need to bind a unique epoll, in Moduo which is the acceptor epoll. then all client connection socket will be dealt with their own worker epoll.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/reading-notes-on-moduo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1532,162 +1672,13 @@ threadA.do();
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/24/CNN-demo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/24/CNN-demo/" itemprop="url">cs231 -- CNN in computer vision</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-24T16:57:46-04:00">
-                2017-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/07/24/CNN-demo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/07/24/CNN-demo/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="what-happend-in-high-dimensional-space"><a href="#what-happend-in-high-dimensional-space" class="headerlink" title="what happend in high dimensional space?"></a>what happend in high dimensional space?</h2><p>Pixel-based distance on high-dimensional data can be very unintuitive.</p>
-<h2 id="Linear-Classification"><a href="#Linear-Classification" class="headerlink" title="Linear Classification"></a>Linear Classification</h2><p>1) define a score function from image pixels to class scores. benefits, no need to store all data</p>
-<p>2) SVM and Softmax </p>
-<p>3) a loss function, measure the quality of a paricular set of parameters based on how well the induced scores agreed with the ground truth labels</p>
-<h2 id="optimization-SGD"><a href="#optimization-SGD" class="headerlink" title="optimization (SGD)"></a>optimization (SGD)</h2><p>the loss function as a hihg-dimeonsional optimization landscape, in which trying to reach the bottom</p>
-<h2 id="BP"><a href="#BP" class="headerlink" title="BP"></a>BP</h2><h2 id="Rectified-linear-unit-ReLU"><a href="#Rectified-linear-unit-ReLU" class="headerlink" title="Rectified linear unit (ReLU)"></a>Rectified linear unit (ReLU)</h2><h2 id="Neural-Networks"><a href="#Neural-Networks" class="headerlink" title="Neural Networks"></a>Neural Networks</h2><p>train a small network, the final loss are relatively few local minima, and easy to converge, but they are high loss; if train large network, there may many different solutions, but the variance in final loss is much smaller. –&gt; all solutions are equally as good, rely less on the random initialization </p>
-<p>in practice, use regularization tech to control overfit on large train network</p>
-<h2 id="Data-Preprocessing"><a href="#Data-Preprocessing" class="headerlink" title="Data Preprocessing"></a>Data Preprocessing</h2><p>1) mean subtraction</p>
-<p>2) normalization</p>
-<p>3) PCA &amp; whitening</p>
-<p>4) weight initialization</p>
-<p>5) regularization</p>
-<pre><code>5.1) L-norm regularization
-
-5.2) Dropout
-</code></pre><h2 id="Hyperparamter-optimization"><a href="#Hyperparamter-optimization" class="headerlink" title="Hyperparamter optimization"></a>Hyperparamter optimization</h2><p>1) initial learning rate</p>
-<p>2) learning rate decay schedule </p>
-<p>3) regularization strength (L2 penalty)</p>
-<p>tips:  decay learning rate over the period of training; search for good hyperparameters with random search</p>
-<h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><p>layers used to build ConvNet architectures:</p>
-<p>1)    Convolutional layer</p>
-<p>2)  ReLU layer</p>
-<p>3)  Pooling layer</p>
-<p>4)    Fully-connected layer</p>
-<p>case study:</p>
-<pre><code>LeNet    
-AlexNet
-ZF Net
-GoogleNet
-VGGNet
-ResNet
-</code></pre><h2 id="Visulization-CNN"><a href="#Visulization-CNN" class="headerlink" title="Visulization CNN"></a>Visulization CNN</h2><h2 id="Transfer-learning"><a href="#Transfer-learning" class="headerlink" title="Transfer learning"></a>Transfer learning</h2>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1731,7 +1722,7 @@ ResNet
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1744,7 +1735,7 @@ ResNet
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
