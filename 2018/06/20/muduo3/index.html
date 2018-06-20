@@ -96,14 +96,14 @@
 <meta name="description" content="one concern yesterday: does each worker thread call loop() and run the whole active channels callback ? suppose no. let’s track the process : 123456tcpServer.start() -&amp;gt;	threadPool.start() -&amp;gt;		ne">
 <meta name="keywords" content="muduo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="muduo-3">
+<meta property="og:title" content="muduo 3">
 <meta property="og:url" content="http://yoursite.com/2018/06/20/muduo3/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="one concern yesterday: does each worker thread call loop() and run the whole active channels callback ? suppose no. let’s track the process : 123456tcpServer.start() -&amp;gt;	threadPool.start() -&amp;gt;		ne">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-20T21:23:00.000Z">
+<meta property="og:updated_time" content="2018-06-20T21:25:54.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="muduo-3">
+<meta name="twitter:title" content="muduo 3">
 <meta name="twitter:description" content="one concern yesterday: does each worker thread call loop() and run the whole active channels callback ? suppose no. let’s track the process : 123456tcpServer.start() -&amp;gt;	threadPool.start() -&amp;gt;		ne">
 
 
@@ -138,7 +138,7 @@
 
 
 
-  <title>muduo-3 | Serious Autonomous Vehicles</title>
+  <title>muduo 3 | Serious Autonomous Vehicles</title>
   
 
 
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">muduo-3</h1>
+          <h1 class="post-title" itemprop="name headline">muduo 3</h1>
         
 
         <div class="post-meta">
@@ -391,7 +391,7 @@
 </tbody>
 </table>
 <p>suppose T1 is assigend to worker thread A, etc. when calling  eventLoopThread A.loop(),  epoll_wait() is first called and return number of active events, epoll_wait() is thread-safe, no worry.</p>
-<p>then activeChannels-&gt;HandleEvents() is called. the real executor of this handleEvents is in the TcpConnection objects, namely: T1 or T2 or T3.</p>
+<p>then activeChannels:HandleEvents() is called. the real executor of this handleEvents is in the TcpConnection objects, namely: T1 or T2 or T3.</p>
 <p>each TcpConnection object has its own loop-, and only the worker thread with the same loop- can execute the events. so even though threadA get the list of all active events, but only events in T1 conenction will be executed by threadA.</p>
 <p>so we can see, in per (worker) thread per epoll, each (worker) epoll looks like only return the active channels/events in current worker thread’s eventLoop. There is no conflict among multiple worker threads, since each worker threas has its own eventLoop. </p>
 <h2 id="how-about-eventLoop-in-server-client"><a href="#how-about-eventLoop-in-server-client" class="headerlink" title="how about eventLoop in server/client"></a>how about eventLoop in server/client</h2><p>the eventLoopThread is kind of triggered inside Muduo, where is Tcp server/client eventLoop triggered ? from outsiders.</p>
@@ -738,7 +738,7 @@
         var disqus_config = function () {
           this.page.url = 'http://yoursite.com/2018/06/20/muduo3/';
           this.page.identifier = '2018/06/20/muduo3/';
-          this.page.title = 'muduo-3';
+          this.page.title = 'muduo 3';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
