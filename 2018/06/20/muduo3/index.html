@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="c++11,Moduo," />
+  <meta name="keywords" content="muduo," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="Moduo: A C++ non-blocking network library for multi-threaded server in Linux.  C++ 11 featuresa.    functional, bindin C++11, function declartion can be: 123456789	return-type func(args)//or	auto func">
-<meta name="keywords" content="c++11,Moduo">
+<meta name="description" content="one concern yesterday: does each worker thread call loop() and run the whole active channels callback ? suppose no. let’s track the process : 123456tcpServer.start() -&amp;gt;	threadPool.start() -&amp;gt;		ne">
+<meta name="keywords" content="muduo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="reading-notes-on-moduo">
-<meta property="og:url" content="http://yoursite.com/2018/06/14/reading-notes-on-moduo/index.html">
+<meta property="og:title" content="muduo-3">
+<meta property="og:url" content="http://yoursite.com/2018/06/20/muduo3/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="Moduo: A C++ non-blocking network library for multi-threaded server in Linux.  C++ 11 featuresa.    functional, bindin C++11, function declartion can be: 123456789	return-type func(args)//or	auto func">
+<meta property="og:description" content="one concern yesterday: does each worker thread call loop() and run the whole active channels callback ? suppose no. let’s track the process : 123456tcpServer.start() -&amp;gt;	threadPool.start() -&amp;gt;		ne">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-15T03:50:57.000Z">
+<meta property="og:updated_time" content="2018-06-20T21:23:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="reading-notes-on-moduo">
-<meta name="twitter:description" content="Moduo: A C++ non-blocking network library for multi-threaded server in Linux.  C++ 11 featuresa.    functional, bindin C++11, function declartion can be: 123456789	return-type func(args)//or	auto func">
+<meta name="twitter:title" content="muduo-3">
+<meta name="twitter:description" content="one concern yesterday: does each worker thread call loop() and run the whole active channels callback ? suppose no. let’s track the process : 123456tcpServer.start() -&amp;gt;	threadPool.start() -&amp;gt;		ne">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/14/reading-notes-on-moduo/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/20/muduo3/"/>
 
 
 
 
 
-  <title>reading-notes-on-moduo | Serious Autonomous Vehicles</title>
+  <title>muduo-3 | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/reading-notes-on-moduo/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/20/muduo3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">reading-notes-on-moduo</h1>
+          <h1 class="post-title" itemprop="name headline">muduo-3</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T23:35:28-04:00">
-                2018-06-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-20T17:17:33-04:00">
+                2018-06-20
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/14/reading-notes-on-moduo/#comments" itemprop="discussionUrl">
+                <a href="/2018/06/20/muduo3/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/14/reading-notes-on-moduo/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/06/20/muduo3/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,30 +366,35 @@
       
 
       
-        <p><a href="https://github.com/chenshuo/muduo" target="_blank" rel="external">Moduo: A C++ non-blocking network library for multi-threaded server in Linux</a>. </p>
-<h2 id="C-11-features"><a href="#C-11-features" class="headerlink" title="C++ 11 features"></a>C++ 11 features</h2><h3 id="a-functional-bind"><a href="#a-functional-bind" class="headerlink" title="a.    functional, bind"></a>a.    functional, bind</h3><p>in C++11, function declartion can be:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">	return-type func(args)</div><div class="line">//or</div><div class="line">	auto func(args) -&gt; return_type</div><div class="line"></div><div class="line">//	the good part of &quot;-&gt;&quot; is to use &quot;decltype&quot; to decide the return type from future.</div><div class="line"></div><div class="line">	std::function&lt;return_type(arg1_type, arg2_type..)&gt; ;</div><div class="line">	[](type1, type2..)&#123;&#125; ; //lambda func, anonymous func</div><div class="line">	std::forward</div></pre></td></tr></table></figure>
-<p>std::bind() is used to assign existed variables to func parameters during compile-time, and unassigned parameters stand as placeholders, which then replace by real parameters during running-time, and return a new func. bind() can be used to bind static func, global func, class member func.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">	   std::bind(global_func, 1.0, _2) ; </div><div class="line">	   std::bind(&amp;class:memberfunc, classPointer[this], _1); </div><div class="line">``` 		</div><div class="line">		</div><div class="line"></div><div class="line">### b.  multi-threads synchronized primitives </div><div class="line"></div><div class="line">Q: what is condition variable ? </div><div class="line">	</div><div class="line">A: used to block one or more threads, till been notified by another thread or overtime been wakeup. But if all threads are waiting, that&apos;s a problem, so at least for one thread, the condition variable should be true.</div></pre></td></tr></table></figure>
-<pre><code>threadA.wait(condition_variable);
-while(;;)
-{
-    threadB.do();    
-}
-threadB.notify();
-threadA.do();
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">Q: what is mutex?</div><div class="line">	</div><div class="line">A: it works like a lock, to block any other thread to access special part of memory, at any time, only one thread can own the mutex. in reality, to define mutexLock class will manage lock/unlock automatically due to the constructor/destructor of the object. </div><div class="line"></div><div class="line">### c.  rvalue reference, universal reference, std::forward </div><div class="line">	</div><div class="line">Q: why need right-value reference ?</div><div class="line">	</div><div class="line">A: to use rvalue like lvalue, save object/variable copying, the detail is about move constructor. universal reference, means either rvalue reference or lvalue reference,  is to declare a variable /parameter with type T&amp;&amp; for some deduced type T</div><div class="line"></div><div class="line">### d.  functional template, variadic arguments </div><div class="line">	</div><div class="line">basically, it&apos;s to support any type, any number of parameters in function template. </div><div class="line">	</div><div class="line"></div><div class="line">``` </div><div class="line">		template&lt;typename… Args&gt;  class  tuple&#123;&#125; //a template class</div><div class="line">		template&lt;typename T, typename… Args&gt; void func()&#123;&#125; 	</div><div class="line">	/* Args :: a template type parameter pack, a list of parameters</div><div class="line">	   T ::  a normal template type parameter</div><div class="line">  	*/ </div><div class="line"></div><div class="line">		func(T, args...) </div><div class="line">		/* (...) at right of func parameters is meta operator </div><div class="line">		used to unpack &quot;args&quot; into separate arguments  */</div></pre></td></tr></table></figure>
-<h2 id="a-simple-thread-thread-pool-lib"><a href="#a-simple-thread-thread-pool-lib" class="headerlink" title="a simple thread / thread pool lib"></a>a simple thread / thread pool lib</h2><p>take a look at: <a href="https://github.com/mtrebi/thread-pool" target="_blank" rel="external">thread-pool</a> </p>
-<p>basically, a task queue to store all todo tasks; a thread pool, to store the worker threads, each of which takes one task from the task queue continuously till the queue empty. </p>
-<p>racing condition happens when two threads try to take the same task simultaneously, so mutex. and all operators requrieing thread-safe should use mutex, e.g. enqueue/dequeue task<br>then callback functors, how each worker thread deal with the task at hand? to design function template with variadic arguments.</p>
-<h2 id="a-simple-Tcp-network-lib"><a href="#a-simple-Tcp-network-lib" class="headerlink" title="a simple Tcp network lib"></a>a simple Tcp network lib</h2><p>take a look at: <a href="https://github.com/kashimAstro/SimpleNetwork" target="_blank" rel="external">simpleNetwork</a></p>
-<p>in server:  socket() -&gt; bind() -&gt; listen() -&gt; accept() –&gt; send()/write()</p>
-<p>in client: socket() -&gt; connect() -&gt; recv()/send()</p>
-<p>a basic idea is that each connection, the server will create a new thread to handle it. But it consume server quickly. </p>
-<h2 id="I-O-nonblocking-event-driven-amp-multiplex"><a href="#I-O-nonblocking-event-driven-amp-multiplex" class="headerlink" title="I/O nonblocking/event-driven &amp;  multiplex"></a>I/O nonblocking/event-driven &amp;  multiplex</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></div><div class="line"><span class="keyword">int</span> fd; <span class="comment">//file descriptor, non-negative</span></div><div class="line"><span class="keyword">short</span> events; <span class="comment">//events to watch, set by user</span></div><div class="line"><span class="keyword">short</span> revents; <span class="comment">//returned events, return from system kernel</span></div><div class="line">  &#125;;</div><div class="line"></div><div class="line">POLLIN | POLLPRI ; <span class="comment">//event read</span></div><div class="line">POLLOUT | POLLWRBAND ; <span class="comment">//event write</span></div><div class="line">POLLER ; <span class="comment">//event error</span></div><div class="line">POLLHUP ; <span class="comment">//event hang up</span></div></pre></td></tr></table></figure>
-<p>the basic idea of multplex(Linux APIs: poll(), epoll()) is to use one single thread to listen many connections/socket/fd, once any socket is ready for I/O, the thread will execute the write/read callback. </p>
-<p>epoll() on success, return the number of revents or 0; on error return -1</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> &#123;</span></div><div class="line">	__u32 events ;</div><div class="line">	<span class="keyword">union</span>&#123;</div><div class="line">		<span class="keyword">void</span>* ptr,  <span class="comment">//if need to store a pointer </span></div><div class="line">		<span class="keyword">int</span> fd,     <span class="comment">// if need to store socket fd </span></div><div class="line">		__u32 u32, <span class="comment">// to store general 32 bit number </span></div><div class="line">		__u64  u64  <span class="comment">// to store general 64 bit number</span></div><div class="line">	&#125; data;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+        <p>one concern yesterday: does each worker thread call loop() and run the whole active channels callback ?</p>
+<p>suppose no. let’s track the process :</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tcpServer.start() -&gt;</div><div class="line">	threadPool.start() -&gt;</div><div class="line">		<span class="keyword">new</span> EventLoopThread(eventLoopThread::threadFunc, threadName)</div><div class="line">		eventLoopThread-&gt;startLoop() -&gt;</div><div class="line">	   		thread.start() -&gt; detail::startThread() -&gt; </div><div class="line">	   		runInThread()::func_()</div></pre></td></tr></table></figure>
+<p>the real func_ during creating new eventLoopThread, is threadFunc(), in which call loop.loop().</p>
+<p>first, this loop object is created inside this new eventLoopThread object, no issue that the loop.threadId_ is current threadID. </p>
+<p>when multiple worker threads exist, what happens ?</p>
+<table>
+<thead>
+<tr>
+<th>threads</th>
+<th style="text-align:center">A</th>
+<th style="text-align:center">B</th>
+<th style="text-align:right">C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>conns</td>
+<td style="text-align:center">T1</td>
+<td style="text-align:center">T2</td>
+<td style="text-align:right">T3</td>
+</tr>
+</tbody>
+</table>
+<p>suppose T1 is assigend to worker thread A, etc. when calling  eventLoopThread A.loop(),  epoll_wait() is first called and return number of active events, epoll_wait() is thread-safe, no worry.</p>
+<p>then activeChannels-&gt;HandleEvents() is called. the real executor of this handleEvents is in the TcpConnection objects, namely: T1 or T2 or T3.</p>
+<p>each TcpConnection object has its own loop-, and only the worker thread with the same loop- can execute the events. so even though threadA get the list of all active events, but only events in T1 conenction will be executed by threadA.</p>
+<p>so we can see, in per (worker) thread per epoll, each (worker) epoll looks like only return the active channels/events in current worker thread’s eventLoop. There is no conflict among multiple worker threads, since each worker threas has its own eventLoop. </p>
+<h2 id="how-about-eventLoop-in-server-client"><a href="#how-about-eventLoop-in-server-client" class="headerlink" title="how about eventLoop in server/client"></a>how about eventLoop in server/client</h2><p>the eventLoopThread is kind of triggered inside Muduo, where is Tcp server/client eventLoop triggered ? from outsiders.</p>
 
       
     </div>
@@ -419,9 +424,7 @@ threadA.do();
       
         <div class="post-tags">
           
-            <a href="/tags/c-11/" rel="tag"># c++11</a>
-          
-            <a href="/tags/Moduo/" rel="tag"># Moduo</a>
+            <a href="/tags/muduo/" rel="tag"># muduo</a>
           
         </div>
       
@@ -434,8 +437,8 @@ threadA.do();
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/05/coding-is-the-system-engineering/" rel="next" title="coding is the system engineering">
-                <i class="fa fa-chevron-left"></i> coding is the system engineering
+              <a href="/2018/06/19/muduo2/" rel="next" title="moduo 2">
+                <i class="fa fa-chevron-left"></i> moduo 2
               </a>
             
           </div>
@@ -443,10 +446,6 @@ threadA.do();
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/19/moduo2/" rel="prev" title="moduo 2">
-                moduo 2 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -526,7 +525,7 @@ threadA.do();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -539,7 +538,7 @@ threadA.do();
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -594,7 +593,7 @@ threadA.do();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-11-features"><span class="nav-number">1.</span> <span class="nav-text">C++ 11 features</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-functional-bind"><span class="nav-number">1.1.</span> <span class="nav-text">a.    functional, bind</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-simple-thread-thread-pool-lib"><span class="nav-number">2.</span> <span class="nav-text">a simple thread / thread pool lib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-simple-Tcp-network-lib"><span class="nav-number">3.</span> <span class="nav-text">a simple Tcp network lib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#I-O-nonblocking-event-driven-amp-multiplex"><span class="nav-number">4.</span> <span class="nav-text">I/O nonblocking/event-driven &  multiplex</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#how-about-eventLoop-in-server-client"><span class="nav-number">1.</span> <span class="nav-text">how about eventLoop in server/client</span></a></li></ol></div>
             
 
           </div>
@@ -737,9 +736,9 @@ threadA.do();
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/06/14/reading-notes-on-moduo/';
-          this.page.identifier = '2018/06/14/reading-notes-on-moduo/';
-          this.page.title = 'reading-notes-on-moduo';
+          this.page.url = 'http://yoursite.com/2018/06/20/muduo3/';
+          this.page.identifier = '2018/06/20/muduo3/';
+          this.page.title = 'muduo-3';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';

@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/19/moduo2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/20/muduo3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -310,7 +310,158 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/06/19/moduo2/" itemprop="url">moduo 2</a></h1>
+                <a class="post-title-link" href="/2018/06/20/muduo3/" itemprop="url">muduo-3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-20T17:17:33-04:00">
+                2018-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/20/muduo3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/20/muduo3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>one concern yesterday: does each worker thread call loop() and run the whole active channels callback ?</p>
+<p>suppose no. let’s track the process :</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tcpServer.start() -&gt;</div><div class="line">	threadPool.start() -&gt;</div><div class="line">		<span class="keyword">new</span> EventLoopThread(eventLoopThread::threadFunc, threadName)</div><div class="line">		eventLoopThread-&gt;startLoop() -&gt;</div><div class="line">	   		thread.start() -&gt; detail::startThread() -&gt; </div><div class="line">	   		runInThread()::func_()</div></pre></td></tr></table></figure>
+<p>the real func_ during creating new eventLoopThread, is threadFunc(), in which call loop.loop().</p>
+<p>first, this loop object is created inside this new eventLoopThread object, no issue that the loop.threadId_ is current threadID. </p>
+<p>when multiple worker threads exist, what happens ?</p>
+<table>
+<thead>
+<tr>
+<th>threads</th>
+<th style="text-align:center">A</th>
+<th style="text-align:center">B</th>
+<th style="text-align:right">C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>conns</td>
+<td style="text-align:center">T1</td>
+<td style="text-align:center">T2</td>
+<td style="text-align:right">T3</td>
+</tr>
+</tbody>
+</table>
+<p>suppose T1 is assigend to worker thread A, etc. when calling  eventLoopThread A.loop(),  epoll_wait() is first called and return number of active events, epoll_wait() is thread-safe, no worry.</p>
+<p>then activeChannels-&gt;HandleEvents() is called. the real executor of this handleEvents is in the TcpConnection objects, namely: T1 or T2 or T3.</p>
+<p>each TcpConnection object has its own loop-, and only the worker thread with the same loop- can execute the events. so even though threadA get the list of all active events, but only events in T1 conenction will be executed by threadA.</p>
+<p>so we can see, in per (worker) thread per epoll, each (worker) epoll looks like only return the active channels/events in current worker thread’s eventLoop. There is no conflict among multiple worker threads, since each worker threas has its own eventLoop. </p>
+<h2 id="how-about-eventLoop-in-server-client"><a href="#how-about-eventLoop-in-server-client" class="headerlink" title="how about eventLoop in server/client"></a>how about eventLoop in server/client</h2><p>the eventLoopThread is kind of triggered inside Muduo, where is Tcp server/client eventLoop triggered ? from outsiders.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/19/muduo2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/19/muduo2/" itemprop="url">moduo 2</a></h1>
         
 
         <div class="post-meta">
@@ -341,9 +492,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/19/moduo2/#comments" itemprop="discussionUrl">
+                <a href="/2018/06/19/muduo2/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/19/moduo2/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/06/19/muduo2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -429,7 +580,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/reading-notes-on-moduo/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/muduo1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -448,7 +599,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/06/14/reading-notes-on-moduo/" itemprop="url">reading-notes-on-moduo</a></h1>
+                <a class="post-title-link" href="/2018/06/14/muduo1/" itemprop="url">reading-notes-on-moduo</a></h1>
         
 
         <div class="post-meta">
@@ -479,9 +630,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/14/reading-notes-on-moduo/#comments" itemprop="discussionUrl">
+                <a href="/2018/06/14/muduo1/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/14/reading-notes-on-moduo/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/06/14/muduo1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1545,131 +1696,6 @@ threadA.do();
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/07/MIT-s094/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/07/MIT-s094/" itemprop="url">MIT 6.S094 Deep Learning for Self Driving Cars</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-07T22:36:47-04:00">
-                2017-08-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/08/07/MIT-s094/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/08/07/MIT-s094/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="1-Deep-Reinforcement-Learning-link"><a href="#1-Deep-Reinforcement-Learning-link" class="headerlink" title="1 Deep Reinforcement Learning link"></a>1 Deep Reinforcement Learning <a href="https://www.dropbox.com/s/2z7276330jaw37k/lecture2.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps:  motion planning 
-</code></pre><h2 id="2-Convolutional-Neural-Networks-link"><a href="#2-Convolutional-Neural-Networks-link" class="headerlink" title="2 Convolutional Neural Networks link"></a>2 Convolutional Neural Networks <a href="https://www.dropbox.com/s/q34bi7t0udms01x/lecture3.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps: End-2-end driving task(pedestrian detect)
-</code></pre><h2 id="3-Recurrent-Neural-Networks-link"><a href="#3-Recurrent-Neural-Networks-link" class="headerlink" title="3 Recurrent Neural Networks link"></a>3 Recurrent Neural Networks <a href="https://goo.gl/qG4Ys9" target="_blank" rel="external">link</a></h2><pre><code>apps: steering control through time
-</code></pre><h3 id="CNN-Project-DeepTesla"><a href="#CNN-Project-DeepTesla" class="headerlink" title="CNN Project: DeepTesla"></a>CNN Project: <a href="http://selfdrivingcars.mit.edu/deeptesla/" target="_blank" rel="external">DeepTesla</a></h3><h3 id="DRL-Project-DeepTraffic"><a href="#DRL-Project-DeepTraffic" class="headerlink" title="DRL Project: DeepTraffic"></a>DRL Project: <a href="http://selfdrivingcars.mit.edu/deeptraffic/" target="_blank" rel="external">DeepTraffic</a></h3><h3 id="Framework-ConvNetJS"><a href="#Framework-ConvNetJS" class="headerlink" title="Framework:  ConvNetJS"></a>Framework:  <a href="https://github.com/karpathy/convnetjs" target="_blank" rel="external">ConvNetJS</a></h3>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1720,7 +1746,7 @@ threadA.do();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1733,7 +1759,7 @@ threadA.do();
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
