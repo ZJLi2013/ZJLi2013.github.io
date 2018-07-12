@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="vehicle network,CAN," />
 
 
 
@@ -93,16 +93,18 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/tags/Open-course/index.html">
+<meta name="description" content="vehicle networ is what connects the different parts together as a vehile.  the lower-level basicA few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Etherne">
+<meta name="keywords" content="vehicle network,CAN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vehicle network">
+<meta property="og:url" content="http://yoursite.com/2018/07/12/vehicle-network/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="vehicle networ is what connects the different parts together as a vehile.  the lower-level basicA few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Etherne">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-07-12T21:57:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="vehicle network">
+<meta name="twitter:description" content="vehicle networ is what connects the different parts together as a vehile.  the lower-level basicA few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Etherne">
 
 
 
@@ -130,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/Open-course/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/12/vehicle-network/"/>
 
 
 
 
 
-  <title>Tag: Open course | Serious Autonomous Vehicles</title>
+  <title>vehicle network | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,44 +281,171 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h1>Open course<small>Tag</small>
-      </h1>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/12/vehicle-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vehicle network</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-12T17:55:12-04:00">
+                2018-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/12/vehicle-network/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/12/vehicle-network/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p>vehicle networ is what connects the different parts together as a vehile. </p>
+<h2 id="the-lower-level-basic"><a href="#the-lower-level-basic" class="headerlink" title="the lower-level basic"></a>the lower-level basic</h2><p>A few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Ethernet driver, network configure, how to code a ECU/MCU etc. </p>
+<p>there are EE students working on this close to physical level implementation, on how to talk with register, MCU pins and controls, and some implementing the data traffic protocol in network. While both are isolated from top applications, since no matter where the data come from, either AV application or connected vehicle or media data, doesn’t make a difference.  </p>
+<h2 id="architecture"><a href="#architecture" class="headerlink" title="architecture"></a>architecture</h2><p> <a href="https://autoelectricalsystems.wordpress.com/2015/11/07/typical-vehicle-network-architecture/" target="_blank" rel="external">typical vehicle network architecture</a></p>
+<p>beyond the basic, network architecture brings a good vision to understand what makes a vehicle electronicly as a whole. and which is serving all apps with v2x, in-vehicle entertainment, AV.</p>
+<p>I was thought ECU handling events the same as web server. while they are very different. each ECU is doing only one special task. e.g. ABS ECU only dealing with ABS events, there are no many ABS events happening simultaneously to seize the ECU computing resource; however, a web server have to deal with multiplex request simultaneously, either using thread pool or asynchronous event callbacks. </p>
+<p>each ECU actually has an easy life, but the bus seems easily choked since around 100+ ECU nodes in the vehicle network. however again, typical vehicle network architecture is very matured products, without data-heavy applications arising, current CAN bus is great.</p>
+<h2 id="smart-phone-in-wheels"><a href="#smart-phone-in-wheels" class="headerlink" title="smart phone in wheels?"></a>smart phone in wheels?</h2><p>one day in future, every vehicle running on road is requesting some data from cloud seamlessly, the scenario is like billions of browsers send requests to Google server seamlessly, then the cloud may face same issues in today’s web server. </p>
+<p>Service oriented architecture(SOA) is also rising in vehicle network architeture design, but what kind of services is better locally in vehicle, and which services in cloud ? as hardwares evolution, even the computing-heavy tasks, e.g. vision based detection, path planning in AV, suppose not be a burden for local ECUs. so these services make sense locally served.  </p>
+<p>except that, I only image future vehicle as a smart phone on wheels. so remote cloud server do connect to, e.g. talk to another vehicle, play online game during driving, check weather, find out a parking lot, resturant or similar, or the car company want to steal user data privately? </p>
+<p>SOA is a good move to decouple ECU modules and make the network bus light, and it’s fun to try some vehicle network architecture open project or play with ROS simulator if hardware required. but in a business view, I don’t know a good story to attract investors, namely vehicle network sounds not that blinking amazing.</p>
 
-      <h2 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2017/08/07/MIT-s094/" itemprop="url">
-              
-                <span itemprop="name">MIT 6.S094 Deep Learning for Self Driving Cars</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-08-07T22:36:47-04:00"
-              content="2017-08-07" >
-          08-07
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vehicle-network/" rel="tag"># vehicle network</a>
+          
+            <a href="/tags/CAN/" rel="tag"># CAN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/29/gnu-make/" rel="next" title="gnu-make">
+                <i class="fa fa-chevron-left"></i> gnu-make
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -324,6 +453,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -344,8 +484,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -418,6 +567,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#the-lower-level-basic"><span class="nav-number">1.</span> <span class="nav-text">the lower-level basic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#architecture"><span class="nav-number">2.</span> <span class="nav-text">architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#smart-phone-in-wheels"><span class="nav-number">3.</span> <span class="nav-text">smart phone in wheels?</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -531,10 +696,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
@@ -552,6 +717,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/07/12/vehicle-network/';
+          this.page.identifier = '2018/07/12/vehicle-network/';
+          this.page.title = 'vehicle network';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
