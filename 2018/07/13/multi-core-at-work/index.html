@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="multi core," />
 
 
 
@@ -93,16 +93,18 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/archives/2018/page/2/index.html">
+<meta name="description" content="NUMAuniform memory arch,  all CPUs in the same sokcet shall the memory, and the memory IO is bottleneck; non uniform memory acess(NUMA), each CPU has itw own memory, inter-CPU memory access is remote.">
+<meta name="keywords" content="multi core">
+<meta property="og:type" content="article">
+<meta property="og:title" content="multi-core at work">
+<meta property="og:url" content="http://yoursite.com/2018/07/13/multi-core-at-work/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="NUMAuniform memory arch,  all CPUs in the same sokcet shall the memory, and the memory IO is bottleneck; non uniform memory acess(NUMA), each CPU has itw own memory, inter-CPU memory access is remote.">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-07-13T21:22:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="multi-core at work">
+<meta name="twitter:description" content="NUMAuniform memory arch,  all CPUs in the same sokcet shall the memory, and the memory IO is bottleneck; non uniform memory acess(NUMA), each CPU has itw own memory, inter-CPU memory access is remote.">
 
 
 
@@ -130,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/page/2/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/13/multi-core-at-work/"/>
 
 
 
 
 
-  <title>Archive | Serious Autonomous Vehicles</title>
+  <title>multi-core at work | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,144 +281,233 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      Um..! 16 posts in total. Keep on posting.
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/13/multi-core-at-work/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
     </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">multi-core at work</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-13T17:21:04-04:00">
+                2018-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/13/multi-core-at-work/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/13/multi-core-at-work/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
 
       
       
-      
 
+      
+        <h2 id="NUMA"><a href="#NUMA" class="headerlink" title="NUMA"></a>NUMA</h2><p>uniform memory arch,  all CPUs in the same sokcet shall the memory, and the memory IO is bottleneck; non uniform memory acess(NUMA), each CPU has itw own memory, inter-CPU memory access is remote.</p>
+<pre><code>numctl  cpu_node_bind
+MPI binding APIs
+</code></pre><p>memory allocation strategy in NUMA</p>
+<pre><code>interleave: place the memory on alternating node,
+the first memory portion in node0, the next 
+portion in node1
+membind: forcely to allocate memory in special node
+</code></pre><h2 id="CPU-affinity"><a href="#CPU-affinity" class="headerlink" title="CPU affinity"></a>CPU affinity</h2><p>the benifit of CPU affinity is to reduce context switch since one special process is binded to one speical CPU, so the data required in this process (no other process data will be switched in), can always in the CPU cache. espcially for NUMA arch to access data locally. and this is specially true when the application generate a large cache footprint, e.g. in scientific computing.</p>
+<p>for general applications, CPU afinity may reduce performance, since in this way the CPU scheduler can’t work properly.</p>
+<h2 id="CPU-info"><a href="#CPU-info" class="headerlink" title="CPU info"></a>CPU info</h2><pre><code>/proc/cpuinfo
+</code></pre><p>physical id:  socket index<br>siblings:   number of cores in each socket<br>core id:   current core index </p>
+<p>e.g. Ford HPC CPU architecture:</p>
+<pre><code>2 or 4 CPU sockets group into one computing node
+each socket has 10 or 12 CPU cores
+each socket has a on-board shared memory
+</code></pre><h2 id="atomic-operation"><a href="#atomic-operation" class="headerlink" title="atomic operation"></a>atomic operation</h2><p>CPU physical mechanism:</p>
+<pre><code>physically there is a bus #hlock pin. 
+if #lock is added before the assembly instruction, 
+the corresponding machine code will be pulled down
+during the execution of the #hlock pin till the
+end, basically the bus is locked only for current 
+instruction
+</code></pre><p>cache coherence:</p>
+<p>the cache unit tranfered between CPU and main memory is cache line. in one socket, as slibings share L3 cache, there is an scenario, when CPU1 modified one variable, but not yet writen to main memory, and CPU2 read from main memory and did modified again, then the variable in CPU1 and CPU2 is not coherence. </p>
+<pre><code>volatile in C, forcely to read the variable value 
+from main memory every time, to avoid use dirty
+memory in cache
+</code></pre><p>another scenario, to achieve and cache coherence, and the same variable is read and write repeatly by multiple processes, the performance is worse, “false sharing” </p>
+<p>lock:</p>
+<pre><code>signal, also called &quot;sleeping lock&quot;: used when the
+lock need to keep for a longer time 
+spin lock: at most hold by one thread, to block
+other threads into critial area, used to keep 
+for a short time.
+write/read lock:
+</code></pre><h2 id="system-performance"><a href="#system-performance" class="headerlink" title="system performance"></a>system performance</h2><p>resident memory(res), the portion of virtual memory space that is actually in RAM; swapped memory, when the physical memory is full and the system needs more memory, inactive pages in memory moved to the shared space, and swapped usable memory in</p>
+<pre><code>virtual memory = res memory +  swapped memory
+</code></pre><p>mmap, to access the remote (data block) like access local RAM. </p>
+<p>voluntary context switches(vcs):</p>
+<pre><code>when a thread makes a system call that blocks. vcs
+measures the frequency of calling blocked system I/O 
+</code></pre><p>involuntary context switches(ivcs):</p>
+<pre><code>when a thread has being runing too long without
+making a system call that blocks, and there are
+other processes waiting for CPU, then OS will
+switch for other CPUs. ivcs measures the CPU
+competition, an unfinished processed is switched off
+</code></pre><p>in general, as more threads, the context switch cost increase, due to the total amount of switch increase and as well each switch is more expensive, since CPU cache is limited, and each process will hold fewer data in cache. </p>
+<p>cpu_time (clock_t):<br>    the total amount of time that a process has actually used</p>
+<p>user CPU time:<br>     the amount of time spend in user space running </p>
+<p>system CPU time:<br>      the amount of time spent during kernel space running </p>
+<p>wall-clock time:<br>    the whole time from the process start to end</p>
+<h2 id="Linux-IPC"><a href="#Linux-IPC" class="headerlink" title="Linux IPC"></a>Linux IPC</h2><p>inter-process communication(IPC) share memory is used in our application to cowork with MPI. while IPC helps to balance memory distributed in multi computing nodes, and MPI threads are the working horse to eat shared data. there are other IPC libs, e.g.  Boost.interprocess.</p>
+<pre><code>ftok() -&gt; to generate a IPC key, based on a special file path
+
+shmget() -&gt; generate a shared memory portion and return a shm_id
+
+shmat() -&gt; attach to the shm_id and return a pointer to that shared memory
+
+shmctl() 
+
+shmdt() 
+</code></pre><p>in design, all threads call shmget() to get a pointer to the share memory section, but actually only master thread do create the portion, others read it. since all thread can access the share memory section, it’s important to keep the first returned pointer from master thread clean/unpolluated. </p>
+<h1 id="MPI"><a href="#MPI" class="headerlink" title="MPI"></a>MPI</h1><p>there are a few <a href="http://mpitutorial.com/tutorials" target="_blank" rel="external">basic MPI APIs</a>. </p>
+<p>in our project, to benefit both CPU and memory performance, we actually need: 1) subgroup the MPI comm, 2) bind MPI threads to sockets.</p>
+<pre><code>MPI_COMM_GROUP()
+MPI_Group_incl() 
+MPI_COMM_create()
+</code></pre><p>apis and numctl during run-time:</p>
+<pre><code>mpirun -bycore -bind-to-socket -&gt; bind process to each core on the socket 
+
+mpirun -bysocket  -bind-to-socket 
+
+mpirun numctl -membind=0 -np 32 ./run 
+</code></pre>
+      
+    </div>
+
+    <div>
       
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2018">2018</h2>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/multi-core/" rel="tag"># multi core</a>
+          
         </div>
       
+
+      
+      
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/12/vehicle-network/" rel="next" title="vehicle network">
+                <i class="fa fa-chevron-left"></i> vehicle network
+              </a>
+            
+          </div>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          <span class="post-nav-divider"></span>
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/05/18/where-are-you-in-next-5-years-2/" itemprop="url">
-              
-                <span itemprop="name">where are you in next 5 years(2)</span>
-              
-            </a>
-        
-      </h2>
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-18T16:32:42-04:00"
-              content="2018-05-18" >
-          05-18
-        </time>
-      </div>
-
-    </header>
+      
+      
+    </footer>
   </article>
 
 
 
-    
-
+    <div class="post-spread">
       
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/05/14/where-are-you-in-next-5-years/" itemprop="url">
-              
-                <span itemprop="name">where are you in next 5-years</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-14T22:16:24-04:00"
-              content="2018-05-14" >
-          05-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/05/07/what-happens-in-automotive-softwares/" itemprop="url">
-              
-                <span itemprop="name">what happens in automotive softwares</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-05-07T20:40:43-04:00"
-              content="2018-05-07" >
-          05-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2018/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2018/">1</a><span class="page-number current">2</span>
-  </nav>
-
-
+    </div>
+  </div>
 
 
           </div>
@@ -424,6 +515,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -444,8 +546,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -518,6 +629,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NUMA"><span class="nav-number">1.</span> <span class="nav-text">NUMA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU-affinity"><span class="nav-number">2.</span> <span class="nav-text">CPU affinity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU-info"><span class="nav-number">3.</span> <span class="nav-text">CPU info</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#atomic-operation"><span class="nav-number">4.</span> <span class="nav-text">atomic operation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#system-performance"><span class="nav-number">5.</span> <span class="nav-text">system performance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-IPC"><span class="nav-number">6.</span> <span class="nav-text">Linux IPC</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MPI"><span class="nav-number"></span> <span class="nav-text">MPI</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -631,11 +758,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
 
 
   
@@ -654,6 +779,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/07/13/multi-core-at-work/';
+          this.page.identifier = '2018/07/13/multi-core-at-work/';
+          this.page.title = 'multi-core at work';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
