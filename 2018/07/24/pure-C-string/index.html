@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="amb," />
+  <meta name="keywords" content="pure C," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up. After jumped into the source">
-<meta name="keywords" content="amb">
+<meta name="description" content="string initializationin pure C, string is a char array terminating with NULL(‘\0’). To initialize an array of char(string) is with a string literal(a double-quotaed string). in general, the string lit">
+<meta name="keywords" content="pure C">
 <meta property="og:type" content="article">
-<meta property="og:title" content="coding is the system engineering">
-<meta property="og:url" content="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/index.html">
+<meta property="og:title" content="pure-C-string">
+<meta property="og:url" content="http://yoursite.com/2018/07/24/pure-C-string/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up. After jumped into the source">
+<meta property="og:description" content="string initializationin pure C, string is a char array terminating with NULL(‘\0’). To initialize an array of char(string) is with a string literal(a double-quotaed string). in general, the string lit">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-06-15T03:37:35.000Z">
+<meta property="og:updated_time" content="2018-07-24T22:45:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="coding is the system engineering">
-<meta name="twitter:description" content="during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up. After jumped into the source">
+<meta name="twitter:title" content="pure-C-string">
+<meta name="twitter:description" content="string initializationin pure C, string is a char array terminating with NULL(‘\0’). To initialize an array of char(string) is with a string literal(a double-quotaed string). in general, the string lit">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/24/pure-C-string/"/>
 
 
 
 
 
-  <title>coding is the system engineering | Serious Autonomous Vehicles</title>
+  <title>pure-C-string | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/24/pure-C-string/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">coding is the system engineering</h1>
+          <h1 class="post-title" itemprop="name headline">pure-C-string</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-05T23:04:36-04:00">
-                2018-06-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T18:43:37-04:00">
+                2018-07-24
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/05/coding-is-the-system-engineering/#comments" itemprop="discussionUrl">
+                <a href="/2018/07/24/pure-C-string/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/05/coding-is-the-system-engineering/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/07/24/pure-C-string/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,16 +366,11 @@
       
 
       
-        <p>during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up.</p>
-<p>After jumped into the source code, soonly I found the dependent third-party libs, e.t. Qt, Glib, libwebsockets. None of these basis libs looks familiar, that’s really headache. </p>
-<p>So had to jump to learn a little about these libs first. Qt is heavy, give up on reading source code, basically to know what’s used for; Glib has a core on eventloop, after review the concept: nonblocking event I/O; and few lighter projects are found, e.g. event.js in RocketEngine. so I was happy to read js source code, but after reading nothing really keep in my head due to don’t know where to use them, neither don’t understand why these implement is necessary. </p>
-<p>maybe a bigger project with more details, so picked moduo, written by a Chinese. there is a book on this project, which started with multi-thread programming issues, no help. same problem, I am not familar with the application scenario, so can’t really catch the essential. </p>
-<p>back to the question: how to effciently read source code?<br>1) I suppose, first to understand the application scenario<br>2) compile and run in debug to track the data flow for projects, which you can’t see the flow by once<br>3) if it’s a framework/foundmental libs, write demo</p>
-<p>The company IT system is not developer-friendly, git, cmake, npm, python lib are missing. that’s maybe the reason I am becoming lazy, if tools at-hand, may give a try; if not, nothing really do. The company has itself gmake system, but the bottom code never been touched. </p>
-<p>Then I compiled the demo libwebsocket, many failures bump out, during school time, I used a lot cmake, g++ with local headers, link to LD/_LIBRARY/_PATH, all out of practice for couple years. </p>
-<p>Anyway, at this moment, I realize that coding is a system enginnering. first to be really familar with OS, then the basic libs, then think about to write applications. </p>
-<p>For me, the first occupy with software is from (industry) application layer, lack of foundmental. now when to do sth, I feel hands are bounded, that push me to the root.</p>
-<p>Rome is not built in one day, OMG.</p>
+        <h2 id="string-initialization"><a href="#string-initialization" class="headerlink" title="string initialization"></a>string initialization</h2><p>in pure C, string is a char array terminating with NULL(‘\0’). To initialize an array of char(string) is with a string literal(a double-quotaed string).</p>
+<p>in general, the string literal is used as the initializer for an array of char; anywhere else, it is a static array of chars, which shouldn’t be modified by a pointer.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* initialize a string in C </span></div><div class="line"> * the size of s1 is taken from the size of the initializer</div><div class="line"> */</div><div class="line">	<span class="keyword">char</span> s1[] = <span class="string">"hello world"</span> ; </div><div class="line"><span class="comment">// or </span></div><div class="line">	<span class="keyword">char</span> s1[<span class="number">12</span>] = <span class="string">"hello world"</span>; </div><div class="line"></div><div class="line"><span class="comment">/* common errors */</span></div><div class="line">	<span class="keyword">char</span> s2[];</div><div class="line">	s2 = <span class="string">"hello world"</span></div><div class="line"><span class="comment">// error: storage size of 's2' isn't known </span></div><div class="line"></div><div class="line">	<span class="keyword">char</span> s2[<span class="number">12</span>];</div><div class="line">	s2 = <span class="string">"hello world"</span></div><div class="line"><span class="comment">// error:  invalid array assignment </span></div><div class="line"><span class="comment">/* there is no "=" operator defined for char array in C </span></div><div class="line">   using strcpy()</div><div class="line">*/</div><div class="line">``` </div><div class="line"></div><div class="line">## <span class="keyword">char</span> pointer arithmetic </div><div class="line"></div><div class="line">```c</div><div class="line">	<span class="keyword">char</span> s1[<span class="number">12</span>];</div><div class="line">	*s1++ ;	</div><div class="line"><span class="comment">//error:  lvalue requied as increment operand</span></div><div class="line"><span class="comment">/* s3 is an array, can't modify the address of an array. the difference between pointer and array </span></div><div class="line">*/ </div><div class="line">	 <span class="keyword">char</span>* s2 = s1; </div><div class="line">	 *s2++;</div><div class="line"><span class="comment">/* s2 is a pointer to s1, ++ is ok */</span></div></pre></td></tr></table></figure>
+<h2 id="string-h"><a href="#string-h" class="headerlink" title="string.h"></a>string.h</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* concatenate two strings */</span></div><div class="line"><span class="built_in">strcat</span>(<span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2) ;</div><div class="line"><span class="built_in">strncat</span>(<span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2, <span class="keyword">size_t</span> n); </div><div class="line"></div><div class="line"><span class="comment">/*  locate the first/last occurance of char c in string s */</span></div><div class="line"><span class="built_in">strchr</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">int</span> c);</div><div class="line"><span class="built_in">memchr</span>(<span class="keyword">const</span> <span class="keyword">void</span>* s1, <span class="keyword">int</span> c, <span class="keyword">size_t</span> n);</div><div class="line"><span class="built_in">strrchr</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">int</span> c); </div><div class="line"></div><div class="line"><span class="comment">/*  compare s1 and s2 alphabetically */</span></div><div class="line"><span class="built_in">strcmp</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2);	</div><div class="line"><span class="built_in">strncmp</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2, <span class="keyword">size_t</span> n);</div><div class="line"><span class="built_in">memcmp</span>(<span class="keyword">const</span> <span class="keyword">void</span>* s1, <span class="keyword">const</span> <span class="keyword">void</span>* s2, <span class="keyword">size_t</span> n);</div><div class="line"></div><div class="line"><span class="comment">/*  copy s2 to s1 */</span></div><div class="line"><span class="built_in">strcpy</span>(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2); </div><div class="line"><span class="built_in">memcpy</span>(<span class="keyword">void</span>* s1, <span class="keyword">void</span>* s2, <span class="keyword">size_t</span> n);</div><div class="line"></div><div class="line"><span class="comment">/* number of bytes, not including terminating NULL; sizeof() will inlcude the terminating NULL */</span></div><div class="line"><span class="built_in">strlen</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1); </div><div class="line"></div><div class="line"><span class="comment">/* find the first occurance of substring s2 in s1 */</span></div><div class="line"><span class="built_in">strstr</span>(<span class="keyword">const</span> <span class="keyword">char</span> *s1,  <span class="keyword">const</span> <span class="keyword">char</span> *s2);</div><div class="line"></div><div class="line"><span class="comment">/* split string s1 into a sequence of tokens by s2 */</span></div><div class="line">strtok(<span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2);</div></pre></td></tr></table></figure>
+<p>\<string.h> is replaced by <cstring> in C++.<br>and be aware of <a href="https://www.cs.fsu.edu/~myers/cop3330/notes/strings.html" target="_blank" rel="external">downs of C string</a>.</cstring></string.h></p>
 
       
     </div>
@@ -405,7 +400,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/amb/" rel="tag"># amb</a>
+            <a href="/tags/pure-C/" rel="tag"># pure C</a>
           
         </div>
       
@@ -418,8 +413,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/31/open-source-project-checked/" rel="next" title="open source project checked">
-                <i class="fa fa-chevron-left"></i> open source project checked
+              <a href="/2018/07/18/which-function-is-called/" rel="next" title="which function is called">
+                <i class="fa fa-chevron-left"></i> which function is called
               </a>
             
           </div>
@@ -427,10 +422,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/14/muduo1/" rel="prev" title="moduo 1">
-                moduo 1 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -485,8 +476,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -559,6 +559,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#string-initialization"><span class="nav-number">1.</span> <span class="nav-text">string initialization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string-h"><span class="nav-number">2.</span> <span class="nav-text">string.h</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -696,9 +712,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/06/05/coding-is-the-system-engineering/';
-          this.page.identifier = '2018/06/05/coding-is-the-system-engineering/';
-          this.page.title = 'coding is the system engineering';
+          this.page.url = 'http://yoursite.com/2018/07/24/pure-C-string/';
+          this.page.identifier = '2018/07/24/pure-C-string/';
+          this.page.title = 'pure-C-string';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
