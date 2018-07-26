@@ -291,6 +291,146 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/26/Pure-C-structure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/26/Pure-C-structure/" itemprop="url">pure C structure</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-26T00:03:29-04:00">
+                2018-07-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/26/Pure-C-structure/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/26/Pure-C-structure/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="definition"><a href="#definition" class="headerlink" title="definition"></a>definition</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">gid_</span> &#123;</span></div><div class="line">			<span class="keyword">double</span> x;</div><div class="line">			<span class="keyword">double</span> y;</div><div class="line">			<span class="keyword">char</span>* name ;</div><div class="line">		&#125; gid ;</div></pre></td></tr></table></figure>
+<p>typedef defines “gid” as an alias name to “struct gid_ “. typedef also alias function handle/pointer, which is often used in asynchronous/event callback programming. other data encapsulation are:<br>    enum : map a list of const names to integral constants<br>    union: store many data type in one memory address</p>
+<h2 id="initialization"><a href="#initialization" class="headerlink" title="initialization"></a>initialization</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gid g1=&#123;<span class="number">2.0</span>, <span class="number">3.0</span>, <span class="string">"g1"</span>&#125;;</div><div class="line">gid g2=&#123;.x=<span class="number">2.0</span>, .y=<span class="number">3.0</span>, .name=<span class="string">"g2"</span>&#125;;</div><div class="line">gid g3=(gid)&#123;<span class="number">2.0</span>, <span class="number">3.0</span>, <span class="string">"g3"</span>&#125;;</div></pre></td></tr></table></figure>
+<p>in C++, structure initialization can also be done in constructor. </p>
+<h2 id="memory-alignment"><a href="#memory-alignment" class="headerlink" title="memory alignment"></a>memory alignment</h2><p>for better memory access in CPU architecture, <a href="http://www.catb.org/esr/structure-packing/" target="_blank" rel="external">memory alignment</a> in structure is considered. namely:</p>
+<pre><code>chars can start on any byte address
+2-bytes shorts must start on an even address 
+4-bytes ints/floats must start on an address divisible by 4
+8-bytes doubles/longs must start on an address divisible by 8 
+</code></pre><p>the size of the whole structure, is aligned to intergeral times of the max size of its member variable. e.g. sizeof(gid) = 24, not 8+8+4.</p>
+<p>to put the member variables in ascending/descending order is good practice.</p>
+<h2 id="structure-pointer-arithmetic"><a href="#structure-pointer-arithmetic" class="headerlink" title="structure pointer arithmetic"></a>structure pointer arithmetic</h2><p>“gid++” will step forward the sizeof(gid); structure also supports self-reference:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">gid_</span> &#123;</span></div><div class="line">		<span class="keyword">char</span> *name ;</div><div class="line">		<span class="keyword">double</span> x;</div><div class="line">		<span class="keyword">double</span> y;</div><div class="line">		gid_ *next_gid ; </div><div class="line">	&#125; gid ;</div></pre></td></tr></table></figure>
+<p>another common utils is structure array: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gid gid_list[MAX_SIZE]; </div><div class="line">gid **gid_list_p ;</div></pre></td></tr></table></figure>
+<h2 id="structure-as-function-parameters"><a href="#structure-as-function-parameters" class="headerlink" title="structure as function parameters"></a>structure as function parameters</h2><p>in general, passing structure reference or pointer to function. other utils, e.g. return as structure. </p>
+<h2 id="structure-in-C"><a href="#structure-in-C" class="headerlink" title="structure in C++"></a>structure in C++</h2><p>in C++, structure supports member functions, is same as a public class. and the initialization can be done either in constructor function or direct initialization during definition. see <a href="https://www.quora.com/What-is-the-difference-between-C-structure-C++-structure" target="_blank" rel="external">the difference of struct between C and C++</a></p>
+<h2 id=""><a href="#" class="headerlink" title="\"></a>\<stdlib.h\></stdlib.h\></h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> /* convert string s1 to an int*/	</div><div class="line">	int atoi(const char* s1);</div><div class="line"> </div><div class="line"> /* memory op */</div><div class="line">	void* malloc(size_t size); </div><div class="line">	void free(void *ptr);</div><div class="line">	</div><div class="line"> /* system level op */</div><div class="line">	char* getenv(const char *name);</div><div class="line">	int system(const char *command); </div><div class="line"></div><div class="line">/* algorithms */</div><div class="line">	void* bsearch(const void* key, const void* base,</div><div class="line">	size_t nitems, size_t size,  int(*compar)(const void*, const void*))  </div><div class="line"></div><div class="line">	void qsort(void *base, size_t nitems, size_t size, </div><div class="line">int(*compar)(const void*, const void*))</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/24/pure-C-string/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -310,7 +450,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/24/pure-C-string/" itemprop="url">pure-C-string</a></h1>
+                <a class="post-title-link" href="/2018/07/24/pure-C-string/" itemprop="url">pure C string</a></h1>
         
 
         <div class="post-meta">
@@ -1590,138 +1730,6 @@ threadA.do();
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/05/coding-is-the-system-engineering/" itemprop="url">coding is the system engineering</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-05T23:04:36-04:00">
-                2018-06-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/05/coding-is-the-system-engineering/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/05/coding-is-the-system-engineering/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up.</p>
-<p>After jumped into the source code, soonly I found the dependent third-party libs, e.t. Qt, Glib, libwebsockets. None of these basis libs looks familiar, that’s really headache. </p>
-<p>So had to jump to learn a little about these libs first. Qt is heavy, give up on reading source code, basically to know what’s used for; Glib has a core on eventloop, after review the concept: nonblocking event I/O; and few lighter projects are found, e.g. event.js in RocketEngine. so I was happy to read js source code, but after reading nothing really keep in my head due to don’t know where to use them, neither don’t understand why these implement is necessary. </p>
-<p>maybe a bigger project with more details, so picked moduo, written by a Chinese. there is a book on this project, which started with multi-thread programming issues, no help. same problem, I am not familar with the application scenario, so can’t really catch the essential. </p>
-<p>back to the question: how to effciently read source code?<br>1) I suppose, first to understand the application scenario<br>2) compile and run in debug to track the data flow for projects, which you can’t see the flow by once<br>3) if it’s a framework/foundmental libs, write demo</p>
-<p>The company IT system is not developer-friendly, git, cmake, npm, python lib are missing. that’s maybe the reason I am becoming lazy, if tools at-hand, may give a try; if not, nothing really do. The company has itself gmake system, but the bottom code never been touched. </p>
-<p>Then I compiled the demo libwebsocket, many failures bump out, during school time, I used a lot cmake, g++ with local headers, link to LD/_LIBRARY/_PATH, all out of practice for couple years. </p>
-<p>Anyway, at this moment, I realize that coding is a system enginnering. first to be really familar with OS, then the basic libs, then think about to write applications. </p>
-<p>For me, the first occupy with software is from (industry) application layer, lack of foundmental. now when to do sth, I feel hands are bounded, that push me to the root.</p>
-<p>Rome is not built in one day, OMG.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1772,7 +1780,7 @@ threadA.do();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
