@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="definition12345typedef struct gid_ &amp;#123;			double x;			double y;			char* name ;		&amp;#125; gid ; typedef defines “gid” as an alias name to “struct gid_ “. typedef also alias function handle/pointer, whi">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-07-26T04:10:10.000Z">
+<meta property="og:updated_time" content="2018-07-31T23:19:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="pure C structure">
 <meta name="twitter:description" content="definition12345typedef struct gid_ &amp;#123;			double x;			double y;			char* name ;		&amp;#125; gid ; typedef defines “gid” as an alias name to “struct gid_ “. typedef also alias function handle/pointer, whi">
@@ -381,7 +381,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">gid_</span> &#123;</span></div><div class="line">		<span class="keyword">char</span> *name ;</div><div class="line">		<span class="keyword">double</span> x;</div><div class="line">		<span class="keyword">double</span> y;</div><div class="line">		gid_ *next_gid ; </div><div class="line">	&#125; gid ;</div></pre></td></tr></table></figure>
 <p>another common utils is structure array: </p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gid gid_list[MAX_SIZE]; </div><div class="line">gid **gid_list_p ;</div></pre></td></tr></table></figure>
-<h2 id="structure-as-function-parameters"><a href="#structure-as-function-parameters" class="headerlink" title="structure as function parameters"></a>structure as function parameters</h2><p>in general, passing structure reference or pointer to function. other utils, e.g. return as structure. </p>
+<h2 id="structure-as-function-parameters"><a href="#structure-as-function-parameters" class="headerlink" title="structure as function parameters"></a>structure as function parameters</h2><p>in general, structure can be passing to function by value or by pointer, but not by reference in pure C. also structure as return value from function can be value or a pointer</p>
 <h2 id="structure-in-C"><a href="#structure-in-C" class="headerlink" title="structure in C++"></a>structure in C++</h2><p>in C++, structure supports member functions, is same as a public class. and the initialization can be done either in constructor function or direct initialization during definition. see <a href="https://www.quora.com/What-is-the-difference-between-C-structure-C++-structure" target="_blank" rel="external">the difference of struct between C and C++</a></p>
 <h2 id="stdlib-h"><a href="#stdlib-h" class="headerlink" title="stdlib.h"></a>stdlib.h</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> /* convert string s1 to an int*/	</div><div class="line">	int atoi(const char* s1);</div><div class="line"> </div><div class="line"> /* memory op */</div><div class="line">	void* malloc(size_t size); </div><div class="line">	void free(void *ptr);</div><div class="line">	</div><div class="line"> /* system level op */</div><div class="line">	char* getenv(const char *name);</div><div class="line">	int system(const char *command); </div><div class="line"></div><div class="line">/* algorithms */</div><div class="line">	void* bsearch(const void* key, const void* base,</div><div class="line">	size_t nitems, size_t size,  int(*compar)(const void*, const void*))  </div><div class="line"></div><div class="line">	void qsort(void *base, size_t nitems, size_t size, </div><div class="line">int(*compar)(const void*, const void*))</div></pre></td></tr></table></figure>
 
@@ -518,7 +518,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
