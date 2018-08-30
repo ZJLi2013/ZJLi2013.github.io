@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Linux," />
+  <meta name="keywords" content="leetCode," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="websocket projects recently reviewed: uWebSocket, which is used in Udacity self-driving car term2 projects. the other is libwebsocket, which is used in automotive message broker(amb).  gcc compiler o">
-<meta name="keywords" content="Linux">
+<meta name="description" content="leetCode 62(unique paths):        A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below). The robot can only move either down or right at any point in time. Th">
+<meta name="keywords" content="leetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="gnu-make">
-<meta property="og:url" content="http://yoursite.com/2018/06/29/gnu-make/index.html">
+<meta property="og:title" content="how recursive works with passing reference variables">
+<meta property="og:url" content="http://yoursite.com/2018/08/29/how-recursive-works-with-passing-reference-variables/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="websocket projects recently reviewed: uWebSocket, which is used in Udacity self-driving car term2 projects. the other is libwebsocket, which is used in automotive message broker(amb).  gcc compiler o">
+<meta property="og:description" content="leetCode 62(unique paths):        A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below). The robot can only move either down or right at any point in time. Th">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-10T20:42:26.000Z">
+<meta property="og:updated_time" content="2018-08-30T03:57:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="gnu-make">
-<meta name="twitter:description" content="websocket projects recently reviewed: uWebSocket, which is used in Udacity self-driving car term2 projects. the other is libwebsocket, which is used in automotive message broker(amb).  gcc compiler o">
+<meta name="twitter:title" content="how recursive works with passing reference variables">
+<meta name="twitter:description" content="leetCode 62(unique paths):        A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below). The robot can only move either down or right at any point in time. Th">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/29/gnu-make/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/29/how-recursive-works-with-passing-reference-variables/"/>
 
 
 
 
 
-  <title>gnu-make | Serious Autonomous Vehicles</title>
+  <title>how recursive works with passing reference variables | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/29/gnu-make/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-recursive-works-with-passing-reference-variables/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">gnu-make</h1>
+          <h1 class="post-title" itemprop="name headline">how recursive works with passing reference variables</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-29T17:45:40-04:00">
-                2018-06-29
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:56:44-04:00">
+                2018-08-29
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/29/gnu-make/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/29/how-recursive-works-with-passing-reference-variables/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/29/gnu-make/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/29/how-recursive-works-with-passing-reference-variables/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,38 +366,18 @@
       
 
       
-        <p> websocket projects recently reviewed: <a href="https://github.com/uNetworking/uWebSockets" target="_blank" rel="external">uWebSocket</a>, which is used in Udacity self-driving car term2 projects. the other is <a href="https://github.com/warmcat/libwebsockets" target="_blank" rel="external">libwebsocket</a>, which is used in <a href="https://github.com/otcshare/automotive-message-broker/tree/master/ambd" target="_blank" rel="external">automotive message broker</a>(amb). </p>
-<h2 id="gcc-compiler-options"><a href="#gcc-compiler-options" class="headerlink" title="gcc compiler options"></a>gcc compiler options</h2><p><a href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html" target="_blank" rel="external">gcc and make:  a tutorial on how to compile, link and build c/c++ projects</a></p>
-<pre><code>-wall : print all warning messages 
--c : compile into object, by default the object has same name as the source file
--o : specify the output executable filename
-</code></pre><h2 id="headers-h-static-libs-lib-a-amp-shared-libs-dll-so"><a href="#headers-h-static-libs-lib-a-amp-shared-libs-dll-so" class="headerlink" title="headers(.h), static libs(.lib, .a) &amp; shared libs(.dll, .so)"></a>headers(.h), static libs(.lib, .a) &amp; shared libs(.dll, .so)</h2><p>gcc by default, links to the shared libraries if available.</p>
-<p>the compiler search “include-paths” for headers, which is specified via -L\<dir\> option or CPATH; </dir\></p>
-<p>the linker search “library-paths” to link the program into an executable object, which is specified via -L\<dir\> or LIBRARY_PATH, in addition, need to specify the library name via -l<name></name></dir\></p>
-<p>the system default “include-paths” can be found by “cpp -v”</p>
-<h2 id="gcc-environment-variables"><a href="#gcc-environment-variables" class="headerlink" title="gcc environment variables"></a>gcc environment variables</h2><p>PATH is used to search executable and run-time shared libs. (woo, this suppose to replace LD-LIBRARY-PATH)<br>CPATH is used to search “include-paths”, it’s searched after paths specified in -I&lt;dir> options. C_INCLUDE_PATH &amp; CPLUS_INCLUDE_PATH can be used to specify C &amp; C++ headers<br>LIBRARY_PATH is used to search linking-time “library-paths”, it’s searched after paths specified in -L\<dir\> options. the standard directories is  /usr/lib </dir\></p>
-<h2 id="Linux-utils"><a href="#Linux-utils" class="headerlink" title="Linux utils"></a>Linux utils</h2><p>1) readelf: read <a href="https://amir.rachum.com/blog/2016/09/17/shared-libraries/" target="_blank" rel="external">ELF</a> </p>
-<p>2) ldconfig : by default, read /etc/ls.so.conf, sets up the appropirate symbolic links in the dynamic link dir, and then write a cache to /etc/ld.so.cache, which then is used by other programs</p>
-<p>3) ldd: to see recursive shared library dependencies</p>
-<p>4) file: determine file type </p>
-<p>5) nm: list symbol table of an object file, commonly-used to check if a particular func or variable is defined in an object file. “T” indicates   it is defined; “U” means undefined, which should be resolved by the linker.</p>
-<h2 id="make-amp-cmake"><a href="#make-amp-cmake" class="headerlink" title="make &amp; cmake"></a>make &amp; cmake</h2><p>[gnu make] (<a href="https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents" target="_blank" rel="external">https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents</a>) </p>
-<p>there are many best practical, e.g. <a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1" target="_blank" rel="external">effective cmake</a></p>
-<h2 id="build-libuv"><a href="#build-libuv" class="headerlink" title="build libuv"></a>build libuv</h2><p>it’s built based on GNU autotools</p>
-<pre><code>sh autogen.sh  
-&quot;libtoolize: AC_CONFIG_MACRO_DIR([m4]) conflicts with ACLOCAL_AMFLAGS=-I m4&quot;
-</code></pre><p><a href="https://pete.akeo.ie/2010/12/that-darn-libtoolize-acconfigmacrodirm4.html" target="_blank" rel="external">fixing-solution</a>, then make all &amp; make install, so here is libuv.so, add the directory to \$LIBRARY_PATH in ~/.bashrc </p>
-<h2 id="build-uWebSockets"><a href="#build-uWebSockets" class="headerlink" title="build uWebSockets"></a>build uWebSockets</h2><p>it’s built based on gnu make. the tests command has dependents on libuv. since already added libuv directory to \$LIBRARY_PATH, run through. if else, errors output:</p>
-<pre><code>cannot find -luv
-collect2: error: ld returned 1 exit status
-Makefile:xx recipe for targe &apos;tests&apos; failed    
-make: *** [tests] Error 1 
-</code></pre><p>try to run ./testsBin, get another error:</p>
-<pre><code>error while loading shared libraries: libuWS.so: cannot open shared object file: No such file or directory 
-</code></pre><p>that’s run-time error, since libuWS.so is not included in \$PATH or speically for building/testing purpose, define $LD_LIBRARY_PATH. </p>
-<h2 id="build-libwebsockets"><a href="#build-libwebsockets" class="headerlink" title="build libwebsockets"></a>build libwebsockets</h2><p>it’s built based on cmake. there is some dependent, but should go through well.</p>
-<h2 id="beyond-the-note"><a href="#beyond-the-note" class="headerlink" title="beyond the note"></a>beyond the note</h2><p>when 2-months ago, looking at amb project, which has websocket plugin module, then find uWebSocket lib, during reading this tiny lib, where libuv APIs are highly-used, and soon found out libuv is actually the event-loop in nodejs. Woo, somehow they are related.</p>
-<p>build tools are highly used in each project, but prior experience is more done by luck.</p>
+        <p>leetCode 62(unique paths):<br>        A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below). The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked ‘Finish’ in the diagram below). How many possible unique paths are there?</p>
+<p>solution: it’s easy to model as a math combination problem, assume the  right-step has m; the down-step has n. so each path from top left to bottom right, has (m+n) steps totally. the total unique paths is   C_(m+n)^m </p>
+<p>passing by value: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span> rm, <span class="keyword">int</span> rn)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> rm==<span class="number">0</span> ? <span class="number">1</span> : (rm+rn)/rm * sol(rm<span class="number">-1</span>, rn);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>what happened if rm-1 changed to  rm–?  </p>
+<pre><code>warning: unsequenced modification and access to &apos;rm&apos;
+</code></pre><p>what about passing as reference ? </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span>&amp; m, <span class="keyword">int</span>&amp; n)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> m==<span class="number">0</span> ? <span class="number">1</span> : (m+n)/(<span class="keyword">float</span>)m * sol(--m, n);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>if using m– :</p>
+<pre><code>error:  expects an l-value for 1st argument of sol(int&amp;, int&amp;)
+</code></pre><p>m– is only r-value, can’t be used as reference varaible; but –m is r-value. </p>
+<p>for m as a reference variable,  –m is the way to update the content of the address. while m– more like move to the next address?</p>
 
       
     </div>
@@ -427,7 +407,7 @@ make: *** [tests] Error 1
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
+            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
           
         </div>
       
@@ -440,8 +420,8 @@ make: *** [tests] Error 1
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/25/career-thoughts/" rel="next" title="career thoughts">
-                <i class="fa fa-chevron-left"></i> career thoughts
+              <a href="/2018/08/29/how-backtracks-work/" rel="next" title="how backtracks work">
+                <i class="fa fa-chevron-left"></i> how backtracks work
               </a>
             
           </div>
@@ -449,10 +429,6 @@ make: *** [tests] Error 1
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/12/vehicle-network/" rel="prev" title="vehicle network">
-                vehicle network <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -507,17 +483,8 @@ make: *** [tests] Error 1
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -590,22 +557,6 @@ make: *** [tests] Error 1
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc-compiler-options"><span class="nav-number">1.</span> <span class="nav-text">gcc compiler options</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#headers-h-static-libs-lib-a-amp-shared-libs-dll-so"><span class="nav-number">2.</span> <span class="nav-text">headers(.h), static libs(.lib, .a) & shared libs(.dll, .so)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc-environment-variables"><span class="nav-number">3.</span> <span class="nav-text">gcc environment variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-utils"><span class="nav-number">4.</span> <span class="nav-text">Linux utils</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#make-amp-cmake"><span class="nav-number">5.</span> <span class="nav-text">make & cmake</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-libuv"><span class="nav-number">6.</span> <span class="nav-text">build libuv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-uWebSockets"><span class="nav-number">7.</span> <span class="nav-text">build uWebSockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#build-libwebsockets"><span class="nav-number">8.</span> <span class="nav-text">build libwebsockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beyond-the-note"><span class="nav-number">9.</span> <span class="nav-text">beyond the note</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -743,9 +694,9 @@ make: *** [tests] Error 1
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/06/29/gnu-make/';
-          this.page.identifier = '2018/06/29/gnu-make/';
-          this.page.title = 'gnu-make';
+          this.page.url = 'http://yoursite.com/2018/08/29/how-recursive-works-with-passing-reference-variables/';
+          this.page.identifier = '2018/08/29/how-recursive-works-with-passing-reference-variables/';
+          this.page.title = 'how recursive works with passing reference variables';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
