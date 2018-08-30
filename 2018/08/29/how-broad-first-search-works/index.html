@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="vehicle network," />
+  <meta name="keywords" content="leetCode," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="vehicle networ is what connects the different parts together as a vehile.  the lower-level basicA few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Etherne">
-<meta name="keywords" content="vehicle network">
+<meta name="description" content="leetCode 45 (jump game): Given an array of non-negative integers, you are initially positioned at the first index of the array.Each element in the array represents your maximum jump length at that pos">
+<meta name="keywords" content="leetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vehicle network">
-<meta property="og:url" content="http://yoursite.com/2018/07/12/vehicle-network/index.html">
+<meta property="og:title" content="how broad first search works">
+<meta property="og:url" content="http://yoursite.com/2018/08/29/how-broad-first-search-works/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="vehicle networ is what connects the different parts together as a vehile.  the lower-level basicA few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Etherne">
+<meta property="og:description" content="leetCode 45 (jump game): Given an array of non-negative integers, you are initially positioned at the first index of the array.Each element in the array represents your maximum jump length at that pos">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-07-12T21:59:55.000Z">
+<meta property="og:updated_time" content="2018-08-30T03:36:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vehicle network">
-<meta name="twitter:description" content="vehicle networ is what connects the different parts together as a vehile.  the lower-level basicA few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Etherne">
+<meta name="twitter:title" content="how broad first search works">
+<meta name="twitter:description" content="leetCode 45 (jump game): Given an array of non-negative integers, you are initially positioned at the first index of the array.Each element in the array represents your maximum jump length at that pos">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/12/vehicle-network/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/29/how-broad-first-search-works/"/>
 
 
 
 
 
-  <title>vehicle network | Serious Autonomous Vehicles</title>
+  <title>how broad first search works | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/12/vehicle-network/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-broad-first-search-works/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">vehicle network</h1>
+          <h1 class="post-title" itemprop="name headline">how broad first search works</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-12T17:55:12-04:00">
-                2018-07-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:35:58-04:00">
+                2018-08-29
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/12/vehicle-network/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/29/how-broad-first-search-works/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/12/vehicle-network/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/29/how-broad-first-search-works/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,17 +366,10 @@
       
 
       
-        <p>vehicle networ is what connects the different parts together as a vehile. </p>
-<h2 id="the-lower-level-basic"><a href="#the-lower-level-basic" class="headerlink" title="the lower-level basic"></a>the lower-level basic</h2><p>A few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Ethernet driver, network configure, how to code a ECU/MCU etc. </p>
-<p>there are EE students working on this close to physical level implementation, on how to talk with register, MCU pins and controls, and some implementing the data traffic protocol in network. While both are isolated from top applications, since no matter where the data come from, either AV application or connected vehicle or media data, doesn’t make a difference.  </p>
-<h2 id="architecture"><a href="#architecture" class="headerlink" title="architecture"></a>architecture</h2><p> <a href="https://autoelectricalsystems.wordpress.com/2015/11/07/typical-vehicle-network-architecture/" target="_blank" rel="external">typical vehicle network architecture</a></p>
-<p>beyond the basic, network architecture brings a good vision to understand what makes a vehicle electronicly as a whole. and which is serving all apps with v2x, in-vehicle entertainment, AV.</p>
-<p>I was thought ECU handling events the same as web server. while they are very different. each ECU is doing only one special task. e.g. ABS ECU only dealing with ABS events, there are no many ABS events happening simultaneously to seize the ECU computing resource; however, a web server have to deal with multiplex request simultaneously, either using thread pool or asynchronous event callbacks. </p>
-<p>each ECU actually has an easy life, but the bus seems easily choked since around 100+ ECU nodes in the vehicle network. however again, typical vehicle network architecture is very matured products, without data-heavy applications arising, current CAN bus is great.</p>
-<h2 id="smart-phone-in-wheels"><a href="#smart-phone-in-wheels" class="headerlink" title="smart phone in wheels?"></a>smart phone in wheels?</h2><p>one day in future, every vehicle running on road is requesting some data from cloud seamlessly, the scenario is like billions of browsers send requests to Google server seamlessly, then the cloud may face same issues in today’s web server. </p>
-<p>Service oriented architecture(SOA) is also rising in vehicle network architeture design, but what kind of services is better locally in vehicle, and which services in cloud ? as hardwares evolution, even the computing-heavy tasks, e.g. vision based detection, path planning in AV, suppose not be a burden for local ECUs. so these services make sense locally served.  </p>
-<p>except that, I only image future vehicle as a smart phone on wheels. so remote cloud server do connect to, e.g. talk to another vehicle, play online game during driving, check weather, find out a parking lot, resturant or similar, or the car company want to steal user data privately? </p>
-<p>SOA is a good move to decouple ECU modules and make the network bus light, and it’s fun to try some vehicle network architecture open project or play with ROS simulator if hardware required. but in a business view, I don’t know a good story to attract investors, namely vehicle network sounds not that blinking amazing.</p>
+        <p>leetCode 45 (jump game): Given an array of non-negative integers, you are initially positioned at the first index of the array.Each element in the array represents your maximum jump length at that position.Your goal is to reach the last index in the minimum number of jumps.</p>
+<p> e.g. [2, 3, 1, 1, 4] –&gt; 2 </p>
+<p>solution: at current position, bfs all the next positions it can jump to, when the back element is in next position list, then reached.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums )</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator  it, cur_it ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; *adj = <span class="keyword">new</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;[nums.size()]; 	</div><div class="line">	<span class="keyword">int</span> cur_node ; </div><div class="line">	<span class="keyword">for</span>(it=nums.begin(); it &lt; nums.end();  it++)</div><div class="line">	&#123;</div><div class="line">		cur_node = *it; </div><div class="line">		adj[cur_node].push_back(cur_node); </div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=cur_node; i++)</div><div class="line">		&#123;</div><div class="line">			cur_it =  <span class="built_in">std</span>::next(it, i);</div><div class="line">			adj[cur_node].push_back(*cur_it); </div><div class="line">			<span class="keyword">if</span>( *cur_it == nums.back())&#123;</div><div class="line">				it = nums.end();  <span class="comment">//reach the last element, so return </span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp; </div><div class="line">	<span class="keyword">int</span> last_element = nums.back(); </div><div class="line">	<span class="keyword">int</span> mini_path = <span class="number">1</span>; </div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; nums.size(); i++)</div><div class="line">	&#123;</div><div class="line">		tmp = adj[i]; </div><div class="line">		<span class="keyword">if</span>(!tmp.empty())</div><div class="line">		&#123; </div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;tmp.size(); j++)</div><div class="line">			&#123;</div><div class="line">				<span class="built_in">cout</span>&lt;&lt; tmp[j] &lt;&lt; <span class="string">' '</span> ;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>; </div><div class="line">			<span class="keyword">if</span>(tmp.back() == last_element)</div><div class="line">			&#123;</div><div class="line">				<span class="keyword">return</span> mini_path; </div><div class="line">			&#125;</div><div class="line">			mini_path++; </div><div class="line">		&#125;</div><div class="line">	&#125;	</div><div class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -406,7 +399,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/vehicle-network/" rel="tag"># vehicle network</a>
+            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
           
         </div>
       
@@ -419,8 +412,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/29/gnu-make/" rel="next" title="gnu-make">
-                <i class="fa fa-chevron-left"></i> gnu-make
+              <a href="/2018/08/29/how-recursive-works/" rel="next" title="how recursive works">
+                <i class="fa fa-chevron-left"></i> how recursive works
               </a>
             
           </div>
@@ -428,10 +421,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/13/multi-core-at-work/" rel="prev" title="multi-core at work">
-                multi-core at work <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -486,17 +475,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -569,22 +549,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#the-lower-level-basic"><span class="nav-number">1.</span> <span class="nav-text">the lower-level basic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#architecture"><span class="nav-number">2.</span> <span class="nav-text">architecture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#smart-phone-in-wheels"><span class="nav-number">3.</span> <span class="nav-text">smart phone in wheels?</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -722,9 +686,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/07/12/vehicle-network/';
-          this.page.identifier = '2018/07/12/vehicle-network/';
-          this.page.title = 'vehicle network';
+          this.page.url = 'http://yoursite.com/2018/08/29/how-broad-first-search-works/';
+          this.page.identifier = '2018/08/29/how-broad-first-search-works/';
+          this.page.title = 'how broad first search works';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
