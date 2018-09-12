@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="pure C," />
+  <meta name="keywords" content="leetCode," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="this is a review from GNU C lib. socket is a two-way communication channel, both read and write can be performed at either end.   sys/socket.h1234567891011121314151617181920212223242526272829303132333">
-<meta name="keywords" content="pure C">
+<meta name="description" content="scramble string at leetCode 87. sol: get all possible scrambled strings of s1, then compare if s2 is in it. for 1-char:   scramble(&amp;quot;a&amp;quot;) --&amp;gt; &amp;quot;a&amp;quot;      for 2-chars :  scramble(&amp;quo">
+<meta name="keywords" content="leetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pure C socket">
-<meta property="og:url" content="http://yoursite.com/2018/07/31/pure-C-socket/index.html">
+<meta property="og:title" content="scrabmle string">
+<meta property="og:url" content="http://yoursite.com/2018/09/11/scrabmle-string/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="this is a review from GNU C lib. socket is a two-way communication channel, both read and write can be performed at either end.   sys/socket.h1234567891011121314151617181920212223242526272829303132333">
+<meta property="og:description" content="scramble string at leetCode 87. sol: get all possible scrambled strings of s1, then compare if s2 is in it. for 1-char:   scramble(&amp;quot;a&amp;quot;) --&amp;gt; &amp;quot;a&amp;quot;      for 2-chars :  scramble(&amp;quo">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-07-31T23:36:41.000Z">
+<meta property="og:updated_time" content="2018-09-12T01:08:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pure C socket">
-<meta name="twitter:description" content="this is a review from GNU C lib. socket is a two-way communication channel, both read and write can be performed at either end.   sys/socket.h1234567891011121314151617181920212223242526272829303132333">
+<meta name="twitter:title" content="scrabmle string">
+<meta name="twitter:description" content="scramble string at leetCode 87. sol: get all possible scrambled strings of s1, then compare if s2 is in it. for 1-char:   scramble(&amp;quot;a&amp;quot;) --&amp;gt; &amp;quot;a&amp;quot;      for 2-chars :  scramble(&amp;quo">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/31/pure-C-socket/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/11/scrabmle-string/"/>
 
 
 
 
 
-  <title>pure C socket | Serious Autonomous Vehicles</title>
+  <title>scrabmle string | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-socket/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/scrabmle-string/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pure C socket</h1>
+          <h1 class="post-title" itemprop="name headline">scrabmle string</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T19:26:58-04:00">
-                2018-07-31
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T21:07:03-04:00">
+                2018-09-11
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/31/pure-C-socket/#comments" itemprop="discussionUrl">
+                <a href="/2018/09/11/scrabmle-string/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/31/pure-C-socket/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/09/11/scrabmle-string/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,9 +366,15 @@
       
 
       
-        <p>this is a review from <a href="https://www.gnu.org/software/libc/manual/html_node/Sockets.html" target="_blank" rel="external">GNU C lib</a>. socket is a two-way communication channel, both read and write can be performed at either end.  </p>
-<h2 id="sys-socket-h"><a href="#sys-socket-h" class="headerlink" title="sys/socket.h"></a>sys/socket.h</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(AF_INET, SOCK_STREAM, protocol)</span></span>; </div><div class="line"><span class="comment">/* return fd for this new socket, or -1 as error */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> socket_fd)</span></span>; </div><div class="line"><span class="comment">/* return 0 when close successfuly, else return -1 */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr, <span class="keyword">socketlen_t</span> len)</span></span>;</div><div class="line"><span class="comment">/* initiate a connection from (client) socket to (server) address; by default, the connection is blocking untill server respond */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> socket, <span class="keyword">int</span> n)</span></span>;</div><div class="line"><span class="comment">/* n specifies the length of queue for pending connections; when the queue fills up, new clients attempting to connect will fail */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr,  <span class="keyword">socketlen_t</span> *len_ptr)</span></span>;</div><div class="line"><span class="comment">/* if successfully, accept return a new socket fd, the original (server) socket remains open and unconnected;  the address and len_ptr are used to return information about the name of client socket that initiated this connection */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> send(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current sending socket. no receiver socket explicitly defined, since connection-oriented(TCP)protocol will connect first prior to send/receive  */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> recv(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current receiving socket */</span></div><div class="line"></div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">#<span class="meta"># network socket </span></div><div class="line"></div><div class="line">I didn't realize GNU C socket I/O is so related to network socket. the missing part when reading muduo, libuv is here. </div><div class="line"></div><div class="line">The server listens the connection requests on the special server socket, then accept each incoming connection. select() blocks/sleeps the program until input is available/ready on the special server socket/fd. </div><div class="line"></div><div class="line">```<span class="function">c</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *<span class="built_in">set</span>)</span> </div><div class="line"><span class="comment">/* initialized the file descriptor set to empty set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span> <span class="comment">/* add fd to set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd,  fd_set *<span class="built_in">set</span>)</span> <span class="comment">/*remove fd from set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> fd_set * <span class="built_in">set</span>)</span>  </div><div class="line"><span class="comment">/* return true(non-zero) if fd is in  set; else return 0 */</span></div><div class="line">STDIN_FILENO ; <span class="comment">/*  file descriptor for std input “1” */</span></div></pre></td></tr></table></figure>
-<p>how to debug server/client code? <a href="https://github.com/alphadose/Alpha-Chat/blob/master/" target="_blank" rel="external">chatRoom</a></p>
+        <p><a href="https://leetcode.com/problems/scramble-string/description/" target="_blank" rel="external">scramble string</a> at leetCode 87. sol: get all possible scrambled strings of s1, then compare if s2 is in it.</p>
+<pre><code>for 1-char:   scramble(&quot;a&quot;) --&gt; &quot;a&quot; 
+    for 2-chars :  scramble(&quot;ab&quot;) --&gt; &quot;ba&quot;  
+for 3-chars:  scramble(&quot;abc&quot;) --&gt; &quot;bac&quot;, &quot;cba&quot;,  &quot;acb&quot;, &quot;cba&quot;      for 4-chars:   scramble(&quot;abcd&quot;) --&gt;  (a | bcd) + (ab | cd) +  (abc | d) 
+for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (abc |  de) + (abcd | e) 
+</code></pre><p>from the enumaration, there is always a left-substring and a right-substring, and recursive in each substring. consider the push_back order, there are two:  left-&gt;\right and right-&gt;\left at each two slibings.</p>
+<p>additional routines: how to do substring join and how to delete duplicate string from string-vector.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="function"><span class="built_in">string</span> <span class="title">join</span><span class="params">(<span class="built_in">string</span>&amp; sub1, <span class="built_in">string</span>&amp; sub2)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">string</span> res; </div><div class="line">	 res.reserve(sub1.size() + sub2.size());</div><div class="line">	 </div><div class="line">	 <span class="built_in">string</span>::iterator it;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(it = sub1.begin(); it != sub1.end(); it++)</div><div class="line">		 res.push_back(*it);</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(it = sub2.begin(); it != sub2.end(); it++)</div><div class="line">		 res.push_back(*it);</div><div class="line">	 </div><div class="line">	 <span class="keyword">return</span> res;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> <span class="comment">//<span class="doctag">TODO:</span>  keep in mind the transfer function, and how to design it  </span></div><div class="line"> <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;  scramble(<span class="built_in">string</span>&amp; s)</div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">string</span>  ls, rs; </div><div class="line">	 <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; vls, vrs, vcurs; </div><div class="line">	 </div><div class="line">	 <span class="keyword">if</span>(s.size() == <span class="number">1</span>)</div><div class="line">	 &#123;</div><div class="line">		 vcurs.push_back(s); </div><div class="line">		 <span class="keyword">return</span> vcurs; </div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;s.size(); i++)</div><div class="line">	 &#123;</div><div class="line">		 ls = s.substr(<span class="number">0</span>, i);</div><div class="line">		 rs = s.substr(i, s.size()); </div><div class="line">		 vls = scramble(ls);</div><div class="line">		 vrs = scramble(rs); 		 </div><div class="line">		 </div><div class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> m=<span class="number">0</span>; m&lt; vls.size(); m++)</div><div class="line">			 <span class="keyword">for</span>(<span class="keyword">int</span> n=<span class="number">0</span>; n &lt; vrs.size(); n++)</div><div class="line">			 &#123;				 </div><div class="line">				 vcurs.push_back(join(vls[m], vrs[n])); </div><div class="line">				 vcurs.push_back(join(vrs[n], vls[m])); 			 </div><div class="line">			 &#125;</div><div class="line">	 &#125;</div><div class="line"></div><div class="line"><span class="comment">/*how to delete duplicated string from vector&lt;string&gt; */</span> 	 </div><div class="line">	 <span class="built_in">std</span>::sort(vcurs.begin(), vcurs.end()); </div><div class="line">	 vcurs.erase( <span class="built_in">std</span>::unique(vcurs.begin(), vcurs.end()), vcurs.end()); </div><div class="line">	 <span class="keyword">return</span> vcurs; </div><div class="line"> &#125; </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">string</span> s1 = <span class="string">"abcd"</span> ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; outs = scramble(s1); </div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;outs.size(); i++)</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; outs[i] &lt;&lt; <span class="built_in">endl</span>; </div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>How to write a completed code, meaning, always take care the boundaries correctly, no missing situations. It’s easy to start from scratch and achieve somewhere, but hard to be completed.</p>
 
       
     </div>
@@ -398,7 +404,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/pure-C/" rel="tag"># pure C</a>
+            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
           
         </div>
       
@@ -411,8 +417,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/31/pure-C-i-o/" rel="next" title="pure C I/O">
-                <i class="fa fa-chevron-left"></i> pure C I/O
+              <a href="/2018/09/04/how-dynamic-programming-works/" rel="next" title="how dynamic programming works">
+                <i class="fa fa-chevron-left"></i> how dynamic programming works
               </a>
             
           </div>
@@ -421,8 +427,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/02/design-a-threadpool-in-pure-C/" rel="prev" title="design a threadpool in pure C">
-                design a threadpool in pure C <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/11/object-creating-in-C-C/" rel="prev" title="object creating in C/C++">
+                object creating in C/C++ <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -478,17 +484,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -561,22 +558,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sys-socket-h"><span class="nav-number">1.</span> <span class="nav-text">sys/socket.h</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -714,9 +695,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/07/31/pure-C-socket/';
-          this.page.identifier = '2018/07/31/pure-C-socket/';
-          this.page.title = 'pure C socket';
+          this.page.url = 'http://yoursite.com/2018/09/11/scrabmle-string/';
+          this.page.identifier = '2018/09/11/scrabmle-string/';
+          this.page.title = 'scrabmle string';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
