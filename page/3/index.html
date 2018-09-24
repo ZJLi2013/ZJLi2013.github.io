@@ -291,6 +291,203 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/13/multi-core-at-work/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/13/multi-core-at-work/" itemprop="url">multi-core at work</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-13T17:21:04-04:00">
+                2018-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/13/multi-core-at-work/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/13/multi-core-at-work/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="NUMA"><a href="#NUMA" class="headerlink" title="NUMA"></a>NUMA</h2><p>uniform memory arch,  all CPUs in the same sokcet shall the memory, and the memory IO is bottleneck; non uniform memory acess(NUMA), each CPU has itw own memory, inter-CPU memory access is remote.</p>
+<pre><code>numctl  cpu_node_bind
+MPI binding APIs
+</code></pre><p>memory allocation strategy in NUMA</p>
+<pre><code>interleave: place the memory on alternating node,
+the first memory portion in node0, the next 
+portion in node1
+membind: forcely to allocate memory in special node
+</code></pre><h2 id="CPU-affinity"><a href="#CPU-affinity" class="headerlink" title="CPU affinity"></a>CPU affinity</h2><p>the benifit of CPU affinity is to reduce context switch since one special process is binded to one speical CPU, so the data required in this process (no other process data will be switched in), can always in the CPU cache. espcially for NUMA arch to access data locally. and this is specially true when the application generate a large cache footprint, e.g. in scientific computing.</p>
+<p>for general applications, CPU afinity may reduce performance, since in this way the CPU scheduler can’t work properly.</p>
+<h2 id="CPU-info"><a href="#CPU-info" class="headerlink" title="CPU info"></a>CPU info</h2><pre><code>/proc/cpuinfo
+</code></pre><p>physical id:  socket index<br>siblings:   number of cores in each socket<br>core id:   current core index </p>
+<p>e.g. Ford HPC CPU architecture:</p>
+<pre><code>2 or 4 CPU sockets group into one computing node
+each socket has 10 or 12 CPU cores
+each socket has a on-board shared memory
+</code></pre><h2 id="atomic-operation"><a href="#atomic-operation" class="headerlink" title="atomic operation"></a>atomic operation</h2><p>CPU physical mechanism:</p>
+<pre><code>physically there is a bus #hlock pin. 
+if #lock is added before the assembly instruction, 
+the corresponding machine code will be pulled down
+during the execution of the #hlock pin till the
+end, basically the bus is locked only for current 
+instruction
+</code></pre><p>cache coherence:</p>
+<p>the cache unit tranfered between CPU and main memory is cache line. in one socket, as slibings share L3 cache, there is an scenario, when CPU1 modified one variable, but not yet writen to main memory, and CPU2 read from main memory and did modified again, then the variable in CPU1 and CPU2 is not coherence. </p>
+<pre><code>volatile in C, forcely to read the variable value 
+from main memory every time, to avoid use dirty
+memory in cache
+</code></pre><p>another scenario, to achieve and cache coherence, and the same variable is read and write repeatly by multiple processes, the performance is worse, “false sharing” </p>
+<p>lock:</p>
+<pre><code>signal, also called &quot;sleeping lock&quot;: used when the
+lock need to keep for a longer time 
+spin lock: at most hold by one thread, to block
+other threads into critial area, used to keep 
+for a short time.
+write/read lock:
+</code></pre><h2 id="system-performance"><a href="#system-performance" class="headerlink" title="system performance"></a>system performance</h2><p>resident memory(res), the portion of virtual memory space that is actually in RAM; swapped memory, when the physical memory is full and the system needs more memory, inactive pages in memory moved to the shared space, and swapped usable memory in</p>
+<pre><code>virtual memory = res memory +  swapped memory
+</code></pre><p>mmap, to access the remote (data block) like access local RAM. </p>
+<p>voluntary context switches(vcs):</p>
+<pre><code>when a thread makes a system call that blocks. vcs
+measures the frequency of calling blocked system I/O 
+</code></pre><p>involuntary context switches(ivcs):</p>
+<pre><code>when a thread has being runing too long without
+making a system call that blocks, and there are
+other processes waiting for CPU, then OS will
+switch for other CPUs. ivcs measures the CPU
+competition, an unfinished processed is switched off
+</code></pre><p>in general, as more threads, the context switch cost increase, due to the total amount of switch increase and as well each switch is more expensive, since CPU cache is limited, and each process will hold fewer data in cache. </p>
+<p>cpu_time (clock_t):<br>    the total amount of time that a process has actually used</p>
+<p>user CPU time:<br>     the amount of time spend in user space running </p>
+<p>system CPU time:<br>      the amount of time spent during kernel space running </p>
+<p>wall-clock time:<br>    the whole time from the process start to end</p>
+<h2 id="Linux-IPC"><a href="#Linux-IPC" class="headerlink" title="Linux IPC"></a>Linux IPC</h2><p>inter-process communication(IPC) share memory is used in our application to cowork with MPI. while IPC helps to balance memory distributed in multi computing nodes, and MPI threads are the working horse to eat shared data. there are other IPC libs, e.g.  Boost.interprocess.</p>
+<pre><code>ftok() -&gt; to generate a IPC key, based on a special file path
+
+shmget() -&gt; generate a shared memory portion and return a shm_id
+
+shmat() -&gt; attach to the shm_id and return a pointer to that shared memory
+
+shmctl() 
+
+shmdt() 
+</code></pre><p>in design, all threads call shmget() to get a pointer to the share memory section, but actually only master thread do create the portion, others read it. since all thread can access the share memory section, it’s important to keep the first returned pointer from master thread clean/unpolluated. </p>
+<h1 id="MPI"><a href="#MPI" class="headerlink" title="MPI"></a>MPI</h1><p>there are a few <a href="http://mpitutorial.com/tutorials" target="_blank" rel="external">basic MPI APIs</a>. </p>
+<p>in our project, to benefit both CPU and memory performance, we actually need: 1) subgroup the MPI comm, 2) bind MPI threads to sockets.</p>
+<pre><code>MPI_COMM_GROUP()
+MPI_Group_incl() 
+MPI_COMM_create()
+</code></pre><p>apis and numctl during run-time:</p>
+<pre><code>mpirun -bycore -bind-to-socket -&gt; bind process to each core on the socket 
+
+mpirun -bysocket  -bind-to-socket 
+
+mpirun numctl -membind=0 -np 32 ./run 
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/12/vehicle-network/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1576,144 +1773,6 @@ threadA.do();
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/18/where-are-you-in-next-5-years-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/18/where-are-you-in-next-5-years-2/" itemprop="url">where are you in next 5 years(2)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-18T16:32:42-04:00">
-                2018-05-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/05/18/where-are-you-in-next-5-years-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/18/where-are-you-in-next-5-years-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="the-billions-level-product"><a href="#the-billions-level-product" class="headerlink" title="the billions level product"></a>the billions level product</h2><p>Think about these guys in the world, who defined products/services used by billions people, they are more than model innovation, but really make a diffrence in most people’s life. </p>
-<p>e.g. iPhone, facebook, Google, they are not created from nowhere, but went through product iterations by iterations, and they only imerge when the tech, the market, the time all are in perfect. </p>
-<p>How many people in history achieved here? in any sense, it’s the history choose that person, not that person made history. so take it easy even you are not the 0.01%.</p>
-<h2 id="in-the-promising-market"><a href="#in-the-promising-market" class="headerlink" title="in the promising market"></a>in the promising market</h2><p>most people in their life time neither can be the next Jobs, nor Bill Gates. that’s the reality, no sad but clean expectation in the end before really in the last day of life. </p>
-<p>the second goal is easier, find a promising market and lead a small product, maybe lucky invovled in a domain market finally. You are not significant, but one of other 5000 competitors. Even this career path, however, you can’t expect the normal lifestyle: start at 25 and retire at 55 with enough 401K to death. If so, mostly you will be fired out someday in 30s or 40s. Chinese say, “if you dont plan far, you will be in trouble soon”</p>
-<p>so what may be the promising market subset in automotive software in next 5 years? generally say: 1) service, consulting; 2) self-business; 3)tech expert. in specificly saying: 1) electricity, energy infrastructure;  2) connected, cloud infrastructure; 3) autonomous vehicle.4) mobile apps, which is the carrier for the first 3.  </p>
-<p>I mean the trend is so clear these days. No one can say he dont’ know where should stand in future. but where are you now? I like the model Elon Musk mentioned when do future plan: what’s your reality, what’s your goal, how to meet the gap, than focus on acting.</p>
-<h2 id="will-automotive-software-like-mobile-smartphones"><a href="#will-automotive-software-like-mobile-smartphones" class="headerlink" title="will automotive software like mobile smartphones ?"></a>will automotive software like mobile smartphones ?</h2><p>It’s interesting even now there are few third-party or independent “automotive software” companines, on opposite, in mobile market, there are lots of small or big third-party developing companines around Andriod, iOS, the mobile ecosystem is plenty and diversity. the reality in automotive field is lack of abstraction and separation between bottom hardware and top applications.</p>
-<p>in a mature mobile ecosystem, developer -&gt; end-users<br>in automotive software ecosystem, devleoper –&gt; OEM –&gt; end-users</p>
-<p>some auto allience is working on(AutoSAR). as developers, either gain some knowledge in hardware/control to solve the gap, or waiting for the day. </p>
-<p>what I expect on the way, may be like mobile time:<br>1) automotive OS platform<br>2) vehicle apps<br>3) infrastures extending</p>
-<p>once the platform is unified, suppose many new auto branchs will emergy. like HTC, Xiaomi, Vivo, Huawei, Lenvo branches after Andriod OS. then new market stratgey is highly required, also traditional OEMs will be heavily impacted. </p>
-<h2 id="OEM-don’t-like-mobile-ecosystem"><a href="#OEM-don’t-like-mobile-ecosystem" class="headerlink" title="OEM don’t like mobile ecosystem"></a>OEM don’t like mobile ecosystem</h2><p>this may happen soon or never, since OEM don’t like this trend. most possiblely, automotive software developers will highly rely on OEMs. so where will I stand in next 5-years ?</p>
-<p>OEM is good at strategy study and product integration. at a tech supplier, the benefit is more product driven experience. </p>
-<p>OEM suppose to have the advantage at automotive platform built-up, but reality is big Internet/software companies with product-level solutions, and OEM doesn’t. </p>
-<p>it is clear for me in next 5-years to jump into electric, connected, autonomous related industries, either at OEM level or supplier level. Also it is the time to do some study at automotive platform vendors.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1764,7 +1823,7 @@ threadA.do();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">35</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
