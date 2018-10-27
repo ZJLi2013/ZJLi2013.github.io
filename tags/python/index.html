@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="pure C," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,16 @@
 
 
 
-<meta name="description" content="actually this post should be named as “pure C multithreads”, while it’s better to write some real code. a simple threadpool in pure C exposed APIsat most simple case, what a threadpool object should d">
-<meta name="keywords" content="pure C">
-<meta property="og:type" content="article">
-<meta property="og:title" content="design a threadpool in pure C">
-<meta property="og:url" content="http://yoursite.com/2018/08/02/design-a-threadpool-in-pure-C/index.html">
+<meta name="description" content="what I don&apos;t know">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Serious Autonomous Vehicles">
+<meta property="og:url" content="http://yoursite.com/tags/python/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="actually this post should be named as “pure C multithreads”, while it’s better to write some real code. a simple threadpool in pure C exposed APIsat most simple case, what a threadpool object should d">
+<meta property="og:description" content="what I don&apos;t know">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-02T04:45:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="design a threadpool in pure C">
-<meta name="twitter:description" content="actually this post should be named as “pure C multithreads”, while it’s better to write some real code. a simple threadpool in pure C exposed APIsat most simple case, what a threadpool object should d">
+<meta name="twitter:title" content="Serious Autonomous Vehicles">
+<meta name="twitter:description" content="what I don&apos;t know">
 
 
 
@@ -132,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/02/design-a-threadpool-in-pure-C/"/>
+  <link rel="canonical" href="http://yoursite.com/tags/python/"/>
 
 
 
 
 
-  <title>design a threadpool in pure C | Serious Autonomous Vehicles</title>
+  <title>Tag: python | Serious Autonomous Vehicles</title>
   
 
 
@@ -163,7 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,175 +279,44 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/design-a-threadpool-in-pure-C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
+  <div id="posts" class="posts-collapse">
+    <div class="collection-title">
+      <h1>python<small>Tag</small>
+      </h1>
+    </div>
 
     
-      <header class="post-header">
+      
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">design a threadpool in pure C</h1>
-        
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2018/10/27/pYTHON-again/" itemprop="url">
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span itemprop="name">pYTHON again</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-02T00:44:08-04:00">
-                2018-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/02/design-a-threadpool-in-pure-C/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/02/design-a-threadpool-in-pure-C/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>actually this post should be named as “pure C multithreads”, while it’s better to write some real code. <a href="https://github.com/Pithikos/C-Thread-Pool" target="_blank" rel="external">a simple threadpool in pure C</a></p>
-<h2 id="exposed-APIs"><a href="#exposed-APIs" class="headerlink" title="exposed APIs"></a>exposed APIs</h2><p>at most simple case, what a threadpool object should do? </p>
-<pre><code>thpool_init(num_threads);
-thpool_destory(threapool_obj);
-thpool_add_work(callback, args); 
-// so user define event callback() can be passed in;  
-</code></pre><p>threadpool is used to assign jobs (from job list) to a thread. so joblist should be an internal class; and it’s better to package thread, job as separate class too;  to add work, what kind of funcs need for joblist ?  at least, to add new job(from outside) to the joblist.</p>
-<h2 id="internal-structures"><a href="#internal-structures" class="headerlink" title="internal structures:"></a>internal structures:</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">thread</span> &#123;</span></div><div class="line"> 	<span class="keyword">int</span> id;</div><div class="line"> 	<span class="keyword">pthread_t</span> thread;   <span class="comment">//pthread_t is a unsigned long int; it's system assigned</span></div><div class="line"> 	threadpool *thpool;  <span class="comment">//so thread know its domain</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">job</span> &#123;</span></div><div class="line">	(<span class="keyword">void</span>*) func(<span class="keyword">void</span>*); <span class="comment">// each job/task should have a callback func</span></div><div class="line">	(<span class="keyword">void</span>*) func_arg ; <span class="comment">//and func args</span></div><div class="line">	<span class="comment">//since consider joblist as a list, it's helpful to add pointers to neighbors</span></div><div class="line">	job* prev;</div><div class="line">	job* next;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">jobqueue</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> num_jobs;</div><div class="line">    job* front;</div><div class="line">    job* rear;</div><div class="line">    <span class="comment">//some flags to support add new node(job) to the list</span></div><div class="line"></div><div class="line">&#125;    </div><div class="line">   	 </div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">threadpool_</span> &#123;</span></div><div class="line">    thread* threads_array;</div><div class="line">    jobqueue job_queue;</div><div class="line">    <span class="comment">// some flags</span></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h2 id="consider-syncronlization"><a href="#consider-syncronlization" class="headerlink" title="consider syncronlization"></a>consider syncronlization</h2><p>will multi threads call add_task() simutaneously? if so, jobqueue should have a mutex object;</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">jobqueue</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> num_jobs;</div><div class="line">    job* front;</div><div class="line">    job* rear;</div><div class="line">    <span class="keyword">pthread_mutex_t</span>  jq_mutex;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>during threadpool initialization, will all threads be created simultaneously and immediately? if not, there should be thread status flags (creating, exisiting-but-idle, working, died); and to update these flags need protect by mutex object;    </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">threadpool_</span> &#123;</span></div><div class="line">    thread* threads_array;</div><div class="line">    jobqueue job_queue;</div><div class="line">    <span class="keyword">int</span> num_threads; <span class="comment">//stands for the number of all existing threads</span></div><div class="line">    <span class="keyword">pthread_mutex_t</span> tp_mutex;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>this is an interesting, when design a lib, what’s in my mind. hopefully implement by the end of week.</p>
-
-      
-    </div>
-
-    <div>
-      
+            </a>
         
+      </h2>
 
-      
-    </div>
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-10-27T00:05:45-04:00"
+              content="2018-10-27" >
+          10-27
+        </time>
+      </div>
 
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/pure-C/" rel="tag"># pure C</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/07/31/pure-C-socket/" rel="next" title="pure C socket">
-                <i class="fa fa-chevron-left"></i> pure C socket
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/10/C-template-and-STL-containers/" rel="prev" title="C++ template and STL containers">
-                C++ template and STL containers <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
+    
   </div>
+
+  
 
 
           </div>
@@ -457,17 +324,6 @@ thpool_add_work(callback, args);
 
 
           
-  <div class="comments" id="comments">
-    
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -488,17 +344,8 @@ thpool_add_work(callback, args);
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -571,22 +418,6 @@ thpool_add_work(callback, args);
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#exposed-APIs"><span class="nav-number">1.</span> <span class="nav-text">exposed APIs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#internal-structures"><span class="nav-number">2.</span> <span class="nav-text">internal structures:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#consider-syncronlization"><span class="nav-number">3.</span> <span class="nav-text">consider syncronlization</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -700,10 +531,10 @@ thpool_add_work(callback, args);
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-
+  
 
   
 
@@ -721,18 +552,6 @@ thpool_add_work(callback, args);
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/08/02/design-a-threadpool-in-pure-C/';
-          this.page.identifier = '2018/08/02/design-a-threadpool-in-pure-C/';
-          this.page.title = 'design a threadpool in pure C';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://zjlee.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
     
 
   
