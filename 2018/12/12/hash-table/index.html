@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="leetCode," />
 
 
 
@@ -93,16 +93,18 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/archives/2017/07/index.html">
+<meta name="description" content="the ideas behind hashtable is: 1) input the key to hash function, output the bucket index; 2) adding the element  to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply">
+<meta name="keywords" content="leetCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hash table">
+<meta property="og:url" content="http://yoursite.com/2018/12/12/hash-table/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="the ideas behind hashtable is: 1) input the key to hash function, output the bucket index; 2) adding the element  to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-12-12T20:49:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="hash table">
+<meta name="twitter:description" content="the ideas behind hashtable is: 1) input the key to hash function, output the bucket index; 2) adding the element  to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply">
 
 
 
@@ -130,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2017/07/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/12/hash-table/"/>
 
 
 
 
 
-  <title>Archive | Serious Autonomous Vehicles</title>
+  <title>hash table | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,65 +281,185 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-    <span class="archive-page-counter">
-      
-      
-       
-      
-      OK! 42 posts in total. Keep on posting.
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/12/hash-table/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
     </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hash table</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-12T15:47:28-05:00">
+                2018-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/12/hash-table/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/12/hash-table/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
 
       
       
-      
 
+      
+        <p>the ideas behind <a href="https://algs4.cs.princeton.edu/34hash/" target="_blank" rel="external">hashtable</a> is: 1) input the key to hash function, output the bucket index; 2) adding the element <key, value=""> to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply keys in the same bucket, which is called “collesion chaining”. 3) hashtable has three basic operators: insert/put, search/get, and remove. </key,></p>
+<p>the memory usage of hashtable is continuous bucket array, then each bucket is a linked list. when first thought about the “continue array”, really is a vector, then why need hash function. That’s the point, hashtable allows the benefits of both vector and linked list. </p>
+<p>a few interesting topics about hash. </p>
+<p>1)<a href="http://www.partow.net/programming/hashfunctions/#HashAndPrimes" target="_blank" rel="external">why prime numbers?</a>  the fundamental mathematical operations with prime numbers generally result in numbers who’s bit biases are close to random. in other word, when multiply or add a set of randome numbers by a prime number, the resulting numbers when as a group, statistically analyzed at their bit levels should show no bias towards being one state or another. in comupter science, pseudo random number generator has bit bias. </p>
+<p>2) <a href="http://www.partow.net/programming/hashfunctions/#AvailableHashFunctions" target="_blank" rel="external">string hash/scattering</a>,<br>basically the hash functions should deal with each chracter in the input string, so no information about this string will be missed, and the information entropy after hashing operator suppose increase.  </p>
+<p>3) <a href="http://www.voidcn.com/article/p-cywhtscu-bdy.html" target="_blank" rel="external">Blizzard hash function</a>. not all hash function deal collision conflict with linked list, here is the example.</p>
+<p>4) <a href="https://tessil.github.io/2016/08/29/benchmark-hopscotch-map.html" target="_blank" rel="external">hash map benchmark performance review</a></p>
+<p>one feeling at this moment, so many brilliant and deep-focusing guys there, stay foolish and stay humble. </p>
+<h2 id="std-unordered-map"><a href="#std-unordered-map" class="headerlink" title="std::unordered_map"></a>std::unordered_map</h2><p>there is <a href="https://www.geeksforgeeks.org/map-vs-unordered_map-c/" target="_blank" rel="external">map vs unordered_map</a> :</p>
+<pre><code>map      |     unordered_map
+</code></pre><hr>
+<pre><code>Ordering        | increasing  order   | no ordering
+                | (by default)        |
+
+Implementation  | Self balancing BST  | Hash Table
+
+search time     | log(n)    | O(1) -&gt;Average 
+                |           | O(n) -&gt; Worst 
+
+Insertion time  | log(n) + Rebalance  | Same as search
+
+Deletion time   | log(n) + Rebalance  | Same as search
+</code></pre><p>basically <code>map</code> works for traversal, pre/post element access; <code>unordered_map</code> is quick in once search,insertion, deletion. here is <a href="https://gist.github.com/DragonOsman/fe8f75466a69b2835d432bfbba0cd739" target="_blank" rel="external">a dictionary demo</a></p>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><p><a href="https://leetcode.com/problems/word-ladder/" target="_blank" rel="external">word ladder</a>,  hash table is used to find a special word from dictionary. the benefit of unorder_set is O(1) find. so design a unorder_set to store the dict.</p>
+<p>in the following example, each character position in the word requires 25 times search of the dict. also every marked word from the dict, should not be searched second time.</p>
+<p>another variable is used to track the list of one_character_diff from current word, it’s like BFS. so design as a queue, which only need take care the neighbor two layers. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">string</span> start, <span class="built_in">string</span> end, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordList)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> length = <span class="number">2</span> ; </div><div class="line">	<span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; dict ;</div><div class="line">	foreach word in wordList:</div><div class="line">		dict.insert(word)</div><div class="line">	</div><div class="line">	<span class="built_in">queue</span>&lt;<span class="built_in">string</span>&gt; one_diff_list; </div><div class="line">	<span class="comment">// initial by pushing start </span></div><div class="line">	one_diff_list.push(start);</div><div class="line">	<span class="keyword">while</span>(!one_diff_list.empty())&#123;</div><div class="line">		<span class="keyword">int</span> size = one_diff_list.size();	</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;size; i++)&#123;</div><div class="line">			<span class="built_in">string</span> word=one_diff_list.front();</div><div class="line">			one_diff_list.pop();</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;start.length(); i++)&#123;</div><div class="line">				<span class="keyword">char</span> oldChar = word[i];</div><div class="line">				<span class="keyword">for</span>(<span class="keyword">char</span> c=<span class="string">'a'</span>; c&lt;=<span class="string">'z'</span>; c++)&#123;</div><div class="line">					<span class="keyword">if</span>(c == oldChar) <span class="keyword">continue</span> ;</div><div class="line">					word[i] = c ; </div><div class="line">					<span class="keyword">if</span>(dict.find(word) != dict.end())&#123;</div><div class="line">						<span class="keyword">if</span>(word == end) </div><div class="line">						&#123; <span class="comment">//find the match</span></div><div class="line">						  <span class="keyword">return</span> length;</div><div class="line">						&#125;</div><div class="line">						one_diff_list.push(word);</div><div class="line">						dict.erase(word);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">				word[i] = oldChar;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		length++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
       
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
+          
         </div>
       
+
+      
+      
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/01/reinforce-learning-in-simulator/" rel="next" title="reinforce learning in simulator">
+                <i class="fa fa-chevron-left"></i> reinforce learning in simulator
+              </a>
+            
+          </div>
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          <span class="post-nav-divider"></span>
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/07/24/CNN-demo/" itemprop="url">
-              
-                <span itemprop="name">cs231 -- CNN in computer vision</span>
-              
-            </a>
-        
-      </h2>
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-24T16:57:46-04:00"
-              content="2017-07-24" >
-          07-24
-        </time>
-      </div>
-
-    </header>
+      
+      
+    </footer>
   </article>
 
 
 
-    
-
-  </section>
-
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -345,6 +467,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -365,8 +498,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -439,6 +581,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#std-unordered-map"><span class="nav-number">1.</span> <span class="nav-text">std::unordered_map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">2.</span> <span class="nav-text">example</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -552,11 +710,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
 
 
   
@@ -575,6 +731,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2018/12/12/hash-table/';
+          this.page.identifier = '2018/12/12/hash-table/';
+          this.page.title = 'hash table';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
