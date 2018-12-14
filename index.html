@@ -291,6 +291,130 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/BFS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/14/BFS/" itemprop="url">BFS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-14T16:43:24-05:00">
+                2018-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/14/BFS/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/14/BFS/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>previously <a href="https://zjli2013.github.io/2018/12/13/DFS/" target="_blank" rel="external">DFS</a> is used to solve the kind of problem:  traversal all possible solutions; <a href="https://leetcode.com/problems/palindrome-partitioning-ii/" target="_blank" rel="external">leetcode 132</a>, here askes for the mini cuts, once find out the mini-cuts solution, done, no traverse all possibilities.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// define done, cut as class member variable </span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">bool</span>&amp; done)</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> len = s.length();</div><div class="line">  <span class="built_in">string</span> left, right;</div><div class="line">  <span class="keyword">int</span> i =<span class="number">0</span>;</div><div class="line">  <span class="keyword">while</span>(!done &amp;&amp; i&lt;len)&#123;</div><div class="line">    left = s.substr(<span class="number">0</span>, len-i); <span class="comment">//starting from the longest left string</span></div><div class="line">    right = s.substr(len-i, i);</div><div class="line">    <span class="keyword">if</span>(palindrome(left))&#123;</div><div class="line">        cut++;</div><div class="line">        <span class="keyword">if</span>(palindrome(right))</div><div class="line">        &#123;</div><div class="line">          done = <span class="literal">true</span> ;</div><div class="line">        &#125;<span class="keyword">else</span> &#123;</div><div class="line">            bfs(right, done);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/13/DFS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1560,137 +1684,6 @@ g 3, 6
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/24/construct-a-self-balanced-BStree/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/24/construct-a-self-balanced-BStree/" itemprop="url">construct a self balanced BStree</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-24T17:59:21-04:00">
-                2018-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/24/construct-a-self-balanced-BStree/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/24/construct-a-self-balanced-BStree/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/description/" target="_blank" rel="external">leetCode 109</a> construct a height-balanced Binary Search tree from input array(sorted or not).</p>
-<p>a self-balanced BStree, which means the left and right kid of each node have no more than 1 height difference, also named as AVL tree. There are three basic routines in implementation of AVL tree:  right <a href="https://en.wikipedia.org/wiki/Tree_rotation" target="_blank" rel="external">tree rotate</a>, left tree rotate, and insert. and each TreeNode requires an additionly <code>height</code> value.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode*  <span class="title">rightRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode*  root_left =  leaf-&gt;left ;</div><div class="line">	TreeNode*  left_right = root_left-&gt;right ;</div><div class="line">	root_left-&gt;right = leaf;</div><div class="line">	leaf-&gt;left = left_right;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_left; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">leftRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode* root_right = leaf-&gt;right; </div><div class="line">	TreeNode* right_left = root_right-&gt;left; </div><div class="line">	root_right-&gt;left = leaf;</div><div class="line">	leaf-&gt;right =  right_left;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_right;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">insert</span><span class="params">(TreeNode* root, <span class="keyword">int</span> key)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(root==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(key));</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(key &gt; root-&gt;val)</div><div class="line">		root-&gt;right = insert(root-&gt;right, key);</div><div class="line">	</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(key &lt; root-&gt;val)</div><div class="line">			root-&gt;left = insert(root-&gt;left, key);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="keyword">return</span> root; </div><div class="line">	</div><div class="line">	root-&gt;height = <span class="built_in">std</span>::max(height(root-&gt;left), height(root-&gt;right)) + <span class="number">1</span> ; </div><div class="line">	<span class="keyword">int</span> balance = height_dif(root); </div><div class="line">	<span class="keyword">if</span>(balance &gt; <span class="number">1</span> &amp;&amp; key &lt; root-&gt;val )  <span class="comment">//new key inserted in left sub </span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> rightRotate(root); </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">/* keep in mind,    -1 &lt;= last_balance &lt;= 1 </span></div><div class="line">	   only  key &lt; root-&gt;val, will it possible that current_balance &gt; 1 */</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(balance &lt; <span class="number">-1</span> &amp;&amp; key &gt; root-&gt;val )</div><div class="line">	&#123;	</div><div class="line">		<span class="keyword">return</span> leftRotate(root);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>at the very first coding I natively pass node pointer by reference:</p>
-<pre><code>TreeNode* insert(TreeNode* &amp;root, int key)
-root-&gt;right = insert(root-&gt;right, key);
-</code></pre><p>since assigned insert() back to the same node pointer again, if passing by reference, each insert will clear the memory-write the same memory all the time, and can’t generate. what actually happen in <code>insert</code> is creating a new object. </p>
-<p>the structure pointer inside structure definition is the trick here. when define <code>root</code> node, both <code>left</code>and <code>right</code> nodes are <code>nullptr</code>, so argument <code>root-&gt;right</code> is <code>nullptr</code>, but the returning <code>root-&gt;right</code> is actually pointing to a node structure memory. </p>
-<p>also <a href="https://en.wikipedia.org/wiki/Null_pointer#Null_Dereferencing" target="_blank" rel="external">nullptr can’t be dereferring</a>,  basically since nullptr doesn’t point to any meaningful object, to dereference a null pointer will cause runtime or immediate crash.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1741,7 +1734,7 @@ root-&gt;right = insert(root-&gt;right, key);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
