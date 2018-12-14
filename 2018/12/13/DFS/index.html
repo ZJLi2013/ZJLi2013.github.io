@@ -96,14 +96,14 @@
 <meta name="description" content="parlindrome partitionleetCode 131  a sample code : 12345678910111213141516void dfs(int depth, string s)&amp;#123;  if(depth == s.size())&amp;#123;    v.push_back(v1);  &amp;#125;  if(depth&amp;lt;s.size())&amp;#123;    f">
 <meta name="keywords" content="leetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DFS">
+<meta property="og:title" content="palinedrome partition with dfs &amp; bfs">
 <meta property="og:url" content="http://yoursite.com/2018/12/13/DFS/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="parlindrome partitionleetCode 131  a sample code : 12345678910111213141516void dfs(int depth, string s)&amp;#123;  if(depth == s.size())&amp;#123;    v.push_back(v1);  &amp;#125;  if(depth&amp;lt;s.size())&amp;#123;    f">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-13T21:19:57.000Z">
+<meta property="og:updated_time" content="2018-12-14T22:38:24.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DFS">
+<meta name="twitter:title" content="palinedrome partition with dfs &amp; bfs">
 <meta name="twitter:description" content="parlindrome partitionleetCode 131  a sample code : 12345678910111213141516void dfs(int depth, string s)&amp;#123;  if(depth == s.size())&amp;#123;    v.push_back(v1);  &amp;#125;  if(depth&amp;lt;s.size())&amp;#123;    f">
 
 
@@ -138,7 +138,7 @@
 
 
 
-  <title>DFS | Serious Autonomous Vehicles</title>
+  <title>palinedrome partition with dfs & bfs | Serious Autonomous Vehicles</title>
   
 
 
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">DFS</h1>
+          <h1 class="post-title" itemprop="name headline">palinedrome partition with dfs & bfs</h1>
         
 
         <div class="post-meta">
@@ -433,6 +433,8 @@ to pop -&gt; traversed element
 </code></pre><p>and a container to hold all solutions.</p>
 <p>if design recursive with returned value, consider the critical condition. e.g. what suppose to return when the last element, and usually design the returned value as local variable in each recursive function, rather than a global variable. </p>
 <p>one more thing is about the traversing direction, from left to right end, then when coding make sure the direction is consistent at all times.</p>
+<p><code>DFS</code> is used to solve the kind of problem:  traversal all possible solutions; <a href="https://leetcode.com/problems/palindrome-partitioning-ii/" target="_blank" rel="external">leetcode 132</a> askes for the mini cuts, once find out the mini-cuts solution, done, no traverse all possibilities.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// define done, cut as class member variable </span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">bool</span>&amp; done)</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> len = s.length();</div><div class="line">  <span class="built_in">string</span> left, right;</div><div class="line">  <span class="keyword">int</span> i =<span class="number">0</span>;</div><div class="line">  <span class="keyword">while</span>(!done &amp;&amp; i&lt;len)&#123;</div><div class="line">    left = s.substr(<span class="number">0</span>, len-i); <span class="comment">//starting from the longest left string</span></div><div class="line">    right = s.substr(len-i, i);</div><div class="line">    <span class="keyword">if</span>(palindrome(left))&#123;</div><div class="line">        cut++;</div><div class="line">        <span class="keyword">if</span>(palindrome(right))</div><div class="line">        &#123;</div><div class="line">          done = <span class="literal">true</span> ;</div><div class="line">        &#125;<span class="keyword">else</span> &#123;</div><div class="line">            bfs(right, done);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -484,10 +486,6 @@ to pop -&gt; traversed element
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/14/BFS/" rel="prev" title="BFS">
-                BFS <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -567,7 +565,7 @@ to pop -&gt; traversed element
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">44</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -780,7 +778,7 @@ to pop -&gt; traversed element
         var disqus_config = function () {
           this.page.url = 'http://yoursite.com/2018/12/13/DFS/';
           this.page.identifier = '2018/12/13/DFS/';
-          this.page.title = 'DFS';
+          this.page.title = 'palinedrome partition with dfs & bfs';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
