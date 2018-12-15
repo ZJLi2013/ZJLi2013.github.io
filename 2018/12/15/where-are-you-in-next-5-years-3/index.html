@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="leetCode," />
+  <meta name="keywords" content="automotive software," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="pre&amp;amp;in-order inputleetCode105 :  given preorder and inorder traversal of a tree, construct the binary tree.  sol: each top node in Btree, has left-branch and right-branch, and each branch is a sim">
-<meta name="keywords" content="leetCode">
+<meta name="description" content="at the end of 2018,    I was lay off from GM after only a couple months. in the middle of 2018, I was planning to jump out from the traditional CAE group, to try the new autonomous vehicle. but a few">
+<meta name="keywords" content="automotive software">
 <meta property="og:type" content="article">
-<meta property="og:title" content="construct BTree from pre&#x2F;in&#x2F;post-order input">
-<meta property="og:url" content="http://yoursite.com/2018/09/19/construct-BTree-from-pre-in-post-order-input/index.html">
+<meta property="og:title" content="where are you in next 5 years(3)">
+<meta property="og:url" content="http://yoursite.com/2018/12/15/where-are-you-in-next-5-years-3/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="pre&amp;amp;in-order inputleetCode105 :  given preorder and inorder traversal of a tree, construct the binary tree.  sol: each top node in Btree, has left-branch and right-branch, and each branch is a sim">
+<meta property="og:description" content="at the end of 2018,    I was lay off from GM after only a couple months. in the middle of 2018, I was planning to jump out from the traditional CAE group, to try the new autonomous vehicle. but a few">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-09-19T21:36:08.000Z">
+<meta property="og:updated_time" content="2018-12-15T17:26:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="construct BTree from pre&#x2F;in&#x2F;post-order input">
-<meta name="twitter:description" content="pre&amp;amp;in-order inputleetCode105 :  given preorder and inorder traversal of a tree, construct the binary tree.  sol: each top node in Btree, has left-branch and right-branch, and each branch is a sim">
+<meta name="twitter:title" content="where are you in next 5 years(3)">
+<meta name="twitter:description" content="at the end of 2018,    I was lay off from GM after only a couple months. in the middle of 2018, I was planning to jump out from the traditional CAE group, to try the new autonomous vehicle. but a few">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/19/construct-BTree-from-pre-in-post-order-input/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/15/where-are-you-in-next-5-years-3/"/>
 
 
 
 
 
-  <title>construct BTree from pre/in/post-order input | Serious Autonomous Vehicles</title>
+  <title>where are you in next 5 years(3) | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/construct-BTree-from-pre-in-post-order-input/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/15/where-are-you-in-next-5-years-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">construct BTree from pre/in/post-order input</h1>
+          <h1 class="post-title" itemprop="name headline">where are you in next 5 years(3)</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-19T17:33:49-04:00">
-                2018-09-19
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-15T12:24:59-05:00">
+                2018-12-15
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/#comments" itemprop="discussionUrl">
+                <a href="/2018/12/15/where-are-you-in-next-5-years-3/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/12/15/where-are-you-in-next-5-years-3/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,14 +366,24 @@
       
 
       
-        <h2 id="pre-amp-in-order-input"><a href="#pre-amp-in-order-input" class="headerlink" title="pre&amp;in-order input"></a>pre&amp;in-order input</h2><p><a href="https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/" target="_blank" rel="external">leetCode105</a> :  given preorder and inorder traversal of a tree, construct the binary tree. </p>
-<p>sol: each top node in Btree, has left-branch and right-branch, and each branch is a similar-structure subtree. so every time pop out the top node, and recursive the two subtrees, which return as the left kid and right kid of current top node.</p>
-<p>the recursive stopped when the list is empty(in real case, this means the node has only either left or right kid);  or stopped when only one element in the list(in real case, the node has both kids, so left or right subtree has only one element).</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode* <span class="title">sol</span><span class="params">(<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; pre,  <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; in)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="keyword">if</span>(pre.empty() || in.empty())</div><div class="line">	 &#123;</div><div class="line">		 <span class="keyword">return</span> <span class="literal">nullptr</span>; <span class="comment">//empty left/right node </span></div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">if</span>(pre.size() == <span class="number">1</span> &amp;&amp; in.size() == <span class="number">1</span>) </div><div class="line">	 &#123;</div><div class="line">			 <span class="keyword">return</span> <span class="keyword">new</span> TreeNode(pre.front());</div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">int</span> root = pre.front(); </div><div class="line">	 pre.pop_front(); </div><div class="line">	 TreeNode* root_node = <span class="keyword">new</span> TreeNode(root); </div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator in_it, pre_it; </div><div class="line">	 in_it =  <span class="built_in">std</span>::find(in.begin(), in.end(), root);</div><div class="line">	 <span class="keyword">if</span>(in_it == in.end()) <span class="comment">//only one node in inorder list now, wont happen</span></div><div class="line">	 &#123;</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(in.front()));</div><div class="line">	 &#125;</div><div class="line">	 <span class="keyword">int</span> idx =  <span class="built_in">std</span>::distance(in.begin(), in_it);</div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_left_subtree(in.begin(), in_it);</div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_right_subtree(++in_it, in.end());	</div><div class="line">	 in.erase(in_it);</div><div class="line">	 </div><div class="line">	pre_it = pre.begin(); </div><div class="line">	<span class="built_in">std</span>::advance(pre_it, idx); </div><div class="line">	</div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; pre_left_subtree(pre.begin(), pre_it); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; pre_right_subtree(pre_it, pre.end()); 	</div><div class="line">	</div><div class="line">	root_node-&gt;left = sol(pre_left_subtree, in_left_subtree);</div><div class="line">	root_node-&gt;right = sol(pre_right_subtree, in_right_subtree);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> root_node; 	 </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>in each recursive step, I am using exteral containers, same stragey in <a href="https://zjli2013.github.io/2018/09/11/scrabmle-string/" target="_blank" rel="external">scramble string</a>. is there a one-swap way? </p>
-<h2 id="post-in-order-input"><a href="#post-in-order-input" class="headerlink" title="post/in-order input"></a>post/in-order input</h2><p><a href="https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/description/" target="_blank" rel="external">leetCode106</a></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode*  <span class="title">sol</span><span class="params">(<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; in,  <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; post)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(in.empty() || post.empty())</div><div class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>; </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(in.size() == <span class="number">1</span> || post.size() == <span class="number">1</span>)</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(in.front())); <span class="comment">// return the left || right kid </span></div><div class="line">	</div><div class="line">	<span class="comment">//first find out the tree root, the last element in post-order </span></div><div class="line">	<span class="keyword">int</span> root_v =  post.back();</div><div class="line">	TreeNode* root = <span class="keyword">new</span> TreeNode(root_v); </div><div class="line">	post.pop_back(); </div><div class="line">	<span class="comment">//find root_v in  inorder </span></div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator  in_lit =  <span class="built_in">std</span>::find(in.begin(), in.end(), root_v); </div><div class="line">	</div><div class="line">	<span class="comment">//create subtrees recursive </span></div><div class="line">	<span class="keyword">int</span> left_length =  <span class="built_in">std</span>::distance(in.begin(), in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_left_sub(in.begin(), in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_right_sub(++in_lit, in.end()); </div><div class="line">	in.erase(in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator post_lit = <span class="built_in">std</span>::next(post.begin(), left_length); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; post_left_sub(post.begin(), post_lit);</div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; post_right_sub(post_lit, post.end()); </div><div class="line">	</div><div class="line">	root-&gt;left = sol(in_left_sub, post_left_sub); </div><div class="line">	root-&gt;right = sol(in_right_sub, post_right_sub);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> root ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <p>at the end of 2018,    I was lay off from GM after only a couple months. in the middle of 2018, I was planning to jump out from the traditional CAE group, to try the new autonomous vehicle. but a few things I missed when made that decision: </p>
+<h2 id="the-big-environment"><a href="#the-big-environment" class="headerlink" title="the big environment"></a>the big environment</h2><p>how long will the traditional automotive industry stay in a sort of good shape? the answer now is not long. from Oct 2018, both Ford and GM publicly lay off over 15%, the vehicle market at both China and NA were significantly down from Q3; even earlier the manufactoring robotic supplieres mentioned their 2019 order were <code>almost zero</code>. so layoff employees is almost destined. </p>
+<p>in economics, consumer index is the reason, employment/unemployment rate is the result, not the reverse. and there is a delay from consumer index to unemployment, about 3 ~ 6 month. so when the market is done, a few month later, the unempolyment rate will show up. </p>
+<p>an even biggger environment, the trade war among China and USA raise the cost, fear both the consumers and the investors. not only vehicle market, consumer electronics (e.g. apple), internet(e.g. Google), retail industry(e.g. Alibaba) and as closely related to lologistics, chips, energy, housing, finance all go down. </p>
+<p>the winter is coming. Sooo  scary, hate Trump !</p>
+<h2 id="new-techs-in-vehicle"><a href="#new-techs-in-vehicle" class="headerlink" title="new techs in vehicle"></a>new techs in vehicle</h2><p>for a new stuff in market, the trend is starting extremely high, then low to bottom, then go to rationality. it happens to AI, autonomous vehicle(AV) market. starting from 2016, billions invest in, every step looks promising, revolution. but 2 years now, even Waymo said it can’t make AV in bussiness. </p>
+<p>on one way, OEMs can’t be lay behind, so buy startups, on the other way, they can’t all invest in AV, which has no mature market strategy. the more invest, the higher risk. </p>
+<p>for people who want to eat this AV cake, cold cold. </p>
+<h2 id="how-to-face-the-changing-world"><a href="#how-to-face-the-changing-world" class="headerlink" title="how to face the changing world"></a>how to face the changing world</h2><p>have to say, there is no well-prepared in this quick-changing world, plan is always out of date.</p>
+<p>at the middle of year, I thought I made the right decision to leave Ford CAE group, join GM autonmous group, now put myself in a poor situation. </p>
+<p>I usually have a mind, that this thing has to, must to be done in this and only this way; this situation is and has to be dealed in this and only this way; this person is and has to be treated in this and only this way. I know this is the poor mindset. </p>
+<p>they say “poor people make poor decisions”, thanks to warn me up. e.g. </p>
+<pre><code>* so high risk to depend on one single incoming resource 
 
+* no stable business, keep humble and keep foolish
+
+* be positive, be felxible. 
+</code></pre>
       
     </div>
 
@@ -402,7 +412,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
+            <a href="/tags/automotive-software/" rel="tag"># automotive software</a>
           
         </div>
       
@@ -415,8 +425,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/19/construct-BTree-from-breadth-order-input/" rel="next" title="construct BTree from breadth-order input">
-                <i class="fa fa-chevron-left"></i> construct BTree from breadth-order input
+              <a href="/2018/12/14/clone-graph-with-dfs-bfs/" rel="next" title="clone graph with dfs & bfs">
+                <i class="fa fa-chevron-left"></i> clone graph with dfs & bfs
               </a>
             
           </div>
@@ -424,10 +434,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/24/construct-a-self-balanced-BStree/" rel="prev" title="construct a self balanced BStree">
-                construct a self balanced BStree <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -575,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pre-amp-in-order-input"><span class="nav-number">1.</span> <span class="nav-text">pre&in-order input</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#post-in-order-input"><span class="nav-number">2.</span> <span class="nav-text">post/in-order input</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#the-big-environment"><span class="nav-number">1.</span> <span class="nav-text">the big environment</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-techs-in-vehicle"><span class="nav-number">2.</span> <span class="nav-text">new techs in vehicle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#how-to-face-the-changing-world"><span class="nav-number">3.</span> <span class="nav-text">how to face the changing world</span></a></li></ol></div>
             
 
           </div>
@@ -718,9 +724,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/09/19/construct-BTree-from-pre-in-post-order-input/';
-          this.page.identifier = '2018/09/19/construct-BTree-from-pre-in-post-order-input/';
-          this.page.title = 'construct BTree from pre/in/post-order input';
+          this.page.url = 'http://yoursite.com/2018/12/15/where-are-you-in-next-5-years-3/';
+          this.page.identifier = '2018/12/15/where-are-you-in-next-5-years-3/';
+          this.page.title = 'where are you in next 5 years(3)';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
