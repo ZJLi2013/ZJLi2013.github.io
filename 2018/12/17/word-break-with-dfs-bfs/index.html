@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="pure C," />
+  <meta name="keywords" content="leetCode," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="this is a review from GNU C lib. socket is a two-way communication channel, both read and write can be performed at either end.   sys/socket.h1234567891011121314151617181920212223242526272829303132333">
-<meta name="keywords" content="pure C">
+<meta name="description" content="leetcode 139 dfstraversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but">
+<meta name="keywords" content="leetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pure C socket">
-<meta property="og:url" content="http://yoursite.com/2018/07/31/pure-C-socket/index.html">
+<meta property="og:title" content="word break with dfs &amp; bfs">
+<meta property="og:url" content="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="this is a review from GNU C lib. socket is a two-way communication channel, both read and write can be performed at either end.   sys/socket.h1234567891011121314151617181920212223242526272829303132333">
+<meta property="og:description" content="leetcode 139 dfstraversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-07-31T23:36:41.000Z">
+<meta property="og:updated_time" content="2018-12-18T04:22:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pure C socket">
-<meta name="twitter:description" content="this is a review from GNU C lib. socket is a two-way communication channel, both read and write can be performed at either end.   sys/socket.h1234567891011121314151617181920212223242526272829303132333">
+<meta name="twitter:title" content="word break with dfs &amp; bfs">
+<meta name="twitter:description" content="leetcode 139 dfstraversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/31/pure-C-socket/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/"/>
 
 
 
 
 
-  <title>pure C socket | Serious Autonomous Vehicles</title>
+  <title>word break with dfs & bfs | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-socket/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pure C socket</h1>
+          <h1 class="post-title" itemprop="name headline">word break with dfs & bfs</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T19:26:58-04:00">
-                2018-07-31
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T23:22:15-05:00">
+                2018-12-17
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/31/pure-C-socket/#comments" itemprop="discussionUrl">
+                <a href="/2018/12/17/word-break-with-dfs-bfs/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/31/pure-C-socket/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/12/17/word-break-with-dfs-bfs/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,9 +366,13 @@
       
 
       
-        <p>this is a review from <a href="https://www.gnu.org/software/libc/manual/html_node/Sockets.html" target="_blank" rel="external">GNU C lib</a>. socket is a two-way communication channel, both read and write can be performed at either end.  </p>
-<h2 id="sys-socket-h"><a href="#sys-socket-h" class="headerlink" title="sys/socket.h"></a>sys/socket.h</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(AF_INET, SOCK_STREAM, protocol)</span></span>; </div><div class="line"><span class="comment">/* return fd for this new socket, or -1 as error */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> socket_fd)</span></span>; </div><div class="line"><span class="comment">/* return 0 when close successfuly, else return -1 */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr, <span class="keyword">socketlen_t</span> len)</span></span>;</div><div class="line"><span class="comment">/* initiate a connection from (client) socket to (server) address; by default, the connection is blocking untill server respond */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> socket, <span class="keyword">int</span> n)</span></span>;</div><div class="line"><span class="comment">/* n specifies the length of queue for pending connections; when the queue fills up, new clients attempting to connect will fail */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr,  <span class="keyword">socketlen_t</span> *len_ptr)</span></span>;</div><div class="line"><span class="comment">/* if successfully, accept return a new socket fd, the original (server) socket remains open and unconnected;  the address and len_ptr are used to return information about the name of client socket that initiated this connection */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> send(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current sending socket. no receiver socket explicitly defined, since connection-oriented(TCP)protocol will connect first prior to send/receive  */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> recv(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current receiving socket */</span></div><div class="line"></div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">#<span class="meta"># network socket </span></div><div class="line"></div><div class="line">I didn't realize GNU C socket I/O is so related to network socket. the missing part when reading muduo, libuv is here. </div><div class="line"></div><div class="line">The server listens the connection requests on the special server socket, then accept each incoming connection. select() blocks/sleeps the program until input is available/ready on the special server socket/fd. </div><div class="line"></div><div class="line">```<span class="function">c</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *<span class="built_in">set</span>)</span> </div><div class="line"><span class="comment">/* initialized the file descriptor set to empty set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span> <span class="comment">/* add fd to set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd,  fd_set *<span class="built_in">set</span>)</span> <span class="comment">/*remove fd from set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> fd_set * <span class="built_in">set</span>)</span>  </div><div class="line"><span class="comment">/* return true(non-zero) if fd is in  set; else return 0 */</span></div><div class="line">STDIN_FILENO ; <span class="comment">/*  file descriptor for std input “1” */</span></div></pre></td></tr></table></figure>
-<p>how to debug server/client code? <a href="https://github.com/alphadose/Alpha-Chat/blob/master/" target="_blank" rel="external">chatRoom</a></p>
+        <p><a href="https://leetcode.com/problems/word-break/description/" target="_blank" rel="external">leetcode 139</a></p>
+<h2 id="dfs"><a href="#dfs" class="headerlink" title="dfs"></a>dfs</h2><p>traversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but also traversing all unnecessary possibilites. and need design a class variable to stop the dfs() </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> found = <span class="literal">false</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span>&#123;</div><div class="line">  <span class="built_in">string</span> left, right ;</div><div class="line">  <span class="keyword">if</span>(s.size() == <span class="number">0</span> || s.empty())</div><div class="line">  &#123;</div><div class="line">    found = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">return</span> found;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=s.size(); i++)</div><div class="line">  &#123;</div><div class="line">    left = s.substr(<span class="number">0</span>, i);</div><div class="line">    right = s.substr(i, s.size()-i);</div><div class="line">    <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">    &#123;</div><div class="line">      dfs(right, dict);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> found;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="bfs"><a href="#bfs" class="headerlink" title="bfs"></a>bfs</h2><p>as mentioned above, <code>dfs</code> goes to all possibile branches, which is not required. <code>bfs</code> is like a greedy way, to find out one working solution and done.</p>
+<p>also need keep track of searched left sub-strings, since the remaining right sub-strings may can not find a matched from dict, then the left sub-string is not acceptable, so the left sub-string need move one char further.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">bfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> len = s.size();</div><div class="line">    <span class="built_in">string</span> s1, q, left, right;</div><div class="line">    <span class="built_in">queue</span>&lt;<span class="built_in">string</span>&gt; sq;</div><div class="line">    sq.push(s);</div><div class="line"></div><div class="line">    <span class="built_in">string</span> tmp ;</div><div class="line">    <span class="keyword">while</span>(!sq.empty())&#123;</div><div class="line">    tmp = sq.front(); sq.pop();</div><div class="line">    <span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line">    s1 = s ;</div><div class="line">    <span class="keyword">while</span>(!s1.empty() &amp;&amp; i &lt;= s1.size())</div><div class="line">    &#123;</div><div class="line">      <span class="keyword">if</span>(tmp == s)&#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i);</div><div class="line">        right = s1.substr(i, s1.size()-i);</div><div class="line">      &#125;<span class="keyword">else</span></div><div class="line">      &#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i+tmp.size()); <span class="comment">///will dead-cycle </span></div><div class="line">        right = s1.substr(i+tmp.size(), s1.size()-i-tmp.size());</div><div class="line">      &#125;</div><div class="line">      i++;</div><div class="line">      <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">      &#123;</div><div class="line">        q += left ;</div><div class="line">        sq.push(left);</div><div class="line">        s1 = right;</div><div class="line">        i = <span class="number">0</span>;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>this <code>bfs</code> is not good design.<br>a pretty simple sample <a href="https://www.jiuzhang.com/solution/word-break/#tag-highlight-lang-cpp" target="_blank" rel="external">code</a></p>
 
       
     </div>
@@ -398,7 +402,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/pure-C/" rel="tag"># pure C</a>
+            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
           
         </div>
       
@@ -411,8 +415,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/31/pure-C-i-o/" rel="next" title="pure C I/O">
-                <i class="fa fa-chevron-left"></i> pure C I/O
+              <a href="/2018/12/15/where-are-you-in-next-5-years-3/" rel="next" title="where are you in next 5 years(3)">
+                <i class="fa fa-chevron-left"></i> where are you in next 5 years(3)
               </a>
             
           </div>
@@ -420,10 +424,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/02/design-a-threadpool-in-pure-C/" rel="prev" title="design a threadpool in pure C">
-                design a threadpool in pure C <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -571,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sys-socket-h"><span class="nav-number">1.</span> <span class="nav-text">sys/socket.h</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#dfs"><span class="nav-number">1.</span> <span class="nav-text">dfs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bfs"><span class="nav-number">2.</span> <span class="nav-text">bfs</span></a></li></ol></div>
             
 
           </div>
@@ -714,9 +714,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/07/31/pure-C-socket/';
-          this.page.identifier = '2018/07/31/pure-C-socket/';
-          this.page.title = 'pure C socket';
+          this.page.url = 'http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/';
+          this.page.identifier = '2018/12/17/word-break-with-dfs-bfs/';
+          this.page.title = 'word break with dfs & bfs';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
