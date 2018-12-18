@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="the ideas behind hashtable is: 1) input the key to hash function, output the bucket index; 2) adding the element  to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply">
+<meta name="description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
 <meta name="keywords" content="leetCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hash table">
-<meta property="og:url" content="http://yoursite.com/2018/12/12/hash-table/index.html">
+<meta property="og:title" content="lru cache design">
+<meta property="og:url" content="http://yoursite.com/2018/12/18/lru-cache-design/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="the ideas behind hashtable is: 1) input the key to hash function, output the bucket index; 2) adding the element  to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply">
+<meta property="og:description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-12T20:49:14.000Z">
+<meta property="og:updated_time" content="2018-12-18T21:21:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hash table">
-<meta name="twitter:description" content="the ideas behind hashtable is: 1) input the key to hash function, output the bucket index; 2) adding the element  to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply">
+<meta name="twitter:title" content="lru cache design">
+<meta name="twitter:description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/12/hash-table/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/18/lru-cache-design/"/>
 
 
 
 
 
-  <title>hash table | Serious Autonomous Vehicles</title>
+  <title>lru cache design | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/12/hash-table/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/lru-cache-design/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">hash table</h1>
+          <h1 class="post-title" itemprop="name headline">lru cache design</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-12T15:47:28-05:00">
-                2018-12-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-18T16:21:01-05:00">
+                2018-12-18
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/12/hash-table/#comments" itemprop="discussionUrl">
+                <a href="/2018/12/18/lru-cache-design/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/12/hash-table/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/12/18/lru-cache-design/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,33 +366,22 @@
       
 
       
-        <p>the ideas behind <a href="https://algs4.cs.princeton.edu/34hash/" target="_blank" rel="external">hashtable</a> is: 1) input the key to hash function, output the bucket index; 2) adding the element <key, value=""> to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply keys in the same bucket, which is called “collesion chaining”. 3) hashtable has three basic operators: insert/put, search/get, and remove. </key,></p>
-<p>the memory usage of hashtable is continuous bucket array, then each bucket is a linked list. when first thought about the “continue array”, really is a vector, then why need hash function. That’s the point, hashtable allows the benefits of both vector and linked list. </p>
-<p>a few interesting topics about hash. </p>
-<p>1)<a href="http://www.partow.net/programming/hashfunctions/#HashAndPrimes" target="_blank" rel="external">why prime numbers?</a>  the fundamental mathematical operations with prime numbers generally result in numbers who’s bit biases are close to random. in other word, when multiply or add a set of randome numbers by a prime number, the resulting numbers when as a group, statistically analyzed at their bit levels should show no bias towards being one state or another. in comupter science, pseudo random number generator has bit bias. </p>
-<p>2) <a href="http://www.partow.net/programming/hashfunctions/#AvailableHashFunctions" target="_blank" rel="external">string hash/scattering</a>,<br>basically the hash functions should deal with each chracter in the input string, so no information about this string will be missed, and the information entropy after hashing operator suppose increase.  </p>
-<p>3) <a href="http://www.voidcn.com/article/p-cywhtscu-bdy.html" target="_blank" rel="external">Blizzard hash function</a>. not all hash function deal collision conflict with linked list, here is the example.</p>
-<p>4) <a href="https://tessil.github.io/2016/08/29/benchmark-hopscotch-map.html" target="_blank" rel="external">hash map benchmark performance review</a></p>
-<p>one feeling at this moment, so many brilliant and deep-focusing guys there, stay foolish and stay humble. </p>
-<h2 id="std-unordered-map"><a href="#std-unordered-map" class="headerlink" title="std::unordered_map"></a>std::unordered_map</h2><p>there is <a href="https://www.geeksforgeeks.org/map-vs-unordered_map-c/" target="_blank" rel="external">map vs unordered_map</a> :</p>
-<pre><code>map      |     unordered_map
-</code></pre><hr>
-<pre><code>Ordering        | increasing  order   | no ordering
-                | (by default)        |
-
-Implementation  | Self balancing BST  | Hash Table
-
-search time     | log(n)    | O(1) -&gt;Average 
-                |           | O(n) -&gt; Worst 
-
-Insertion time  | log(n) + Rebalance  | Same as search
-
-Deletion time   | log(n) + Rebalance  | Same as search
-</code></pre><p>basically <code>map</code> works for traversal, pre/post element access; <code>unordered_map</code> is quick in once search,insertion, deletion. here is <a href="https://gist.github.com/DragonOsman/fe8f75466a69b2835d432bfbba0cd739" target="_blank" rel="external">a dictionary demo</a></p>
-<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><p><a href="https://leetcode.com/problems/word-ladder/" target="_blank" rel="external">word ladder</a>,  hash table is used to find a special word from dictionary. the benefit of unorder_set is O(1) find. so design a unorder_set to store the dict.</p>
-<p>in the following example, each character position in the word requires 25 times search of the dict. also every marked word from the dict, should not be searched second time.</p>
-<p>another variable is used to track the list of one_character_diff from current word, it’s like BFS. so design as a queue, which only need take care the neighbor two layers. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">string</span> start, <span class="built_in">string</span> end, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordList)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> length = <span class="number">2</span> ; </div><div class="line">	<span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; dict ;</div><div class="line">	foreach word in wordList:</div><div class="line">		dict.insert(word)</div><div class="line">	</div><div class="line">	<span class="built_in">queue</span>&lt;<span class="built_in">string</span>&gt; one_diff_list; </div><div class="line">	<span class="comment">// initial by pushing start </span></div><div class="line">	one_diff_list.push(start);</div><div class="line">	<span class="keyword">while</span>(!one_diff_list.empty())&#123;</div><div class="line">		<span class="keyword">int</span> size = one_diff_list.size();	</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;size; i++)&#123;</div><div class="line">			<span class="built_in">string</span> word=one_diff_list.front();</div><div class="line">			one_diff_list.pop();</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;start.length(); i++)&#123;</div><div class="line">				<span class="keyword">char</span> oldChar = word[i];</div><div class="line">				<span class="keyword">for</span>(<span class="keyword">char</span> c=<span class="string">'a'</span>; c&lt;=<span class="string">'z'</span>; c++)&#123;</div><div class="line">					<span class="keyword">if</span>(c == oldChar) <span class="keyword">continue</span> ;</div><div class="line">					word[i] = c ; </div><div class="line">					<span class="keyword">if</span>(dict.find(word) != dict.end())&#123;</div><div class="line">						<span class="keyword">if</span>(word == end) </div><div class="line">						&#123; <span class="comment">//find the match</span></div><div class="line">						  <span class="keyword">return</span> length;</div><div class="line">						&#125;</div><div class="line">						one_diff_list.push(word);</div><div class="line">						dict.erase(word);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">				word[i] = oldChar;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		length++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+        <p><a href="https://leetcode.com/problems/lru-cache/" target="_blank" rel="external">leetCode 146</a>, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements:</p>
+<p>first a hash map data structure for key, value operations, e.g. get(), put(); but normal hash map can’t track the most recent used element, so either find a data structure, which can track the recently used element in the hash map; or define some routines to do it.</p>
+<h2 id="a-data-structure-to-catch-recently-used"><a href="#a-data-structure-to-catch-recently-used" class="headerlink" title="a data structure to catch recently used"></a>a data structure to catch recently used</h2><p>each get(), put() will operate on one special element, and that element should be marked as recently used, and the next element is the least recently used element, which can be overlapped in next operation.</p>
+<p><code>stack</code> and  <code>queue</code> have some property to track the most recent element, but they are one-way, not straight forward to manage two neighbor elements. </p>
+<p><code>double linked list</code> is a good choice to track both the most recent element and the least most recent element. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></div><div class="line">	<span class="keyword">int</span> val ;</div><div class="line">	<span class="keyword">int</span> key ;</div><div class="line">	Node *pre ;</div><div class="line">	Node *next ;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value_, <span class="keyword">int</span> key_)</span></span></div><div class="line">	&#123;</div><div class="line">		val = value_;</div><div class="line">		key = key_ ; </div><div class="line">		pre = <span class="literal">NULL</span> ;</div><div class="line">		next = <span class="literal">NULL</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> &#123;</span></div><div class="line">	<span class="keyword">public</span>: </div><div class="line">		<span class="built_in">list</span>&lt;node*&gt; recent ;</div><div class="line">		unorder_map&lt;<span class="keyword">int</span>, node*&gt;  hash ;</div><div class="line">		<span class="keyword">int</span> capacity ;</div><div class="line">		</div><div class="line">		LRUCache(<span class="keyword">int</span> cap): capacity(cap) &#123;&#125;</div><div class="line">		</div><div class="line">		<span class="function">node* <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key])</div><div class="line">				recent.push_front(hash[key]); </div><div class="line">				<span class="keyword">return</span> hash[key] ;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span> ;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key]);</div><div class="line">				hash[key] =  value; </div><div class="line">				recent.push_front(hash[key]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			node* tmp = <span class="keyword">new</span> node(value, key); </div><div class="line">			hash[key] = tmp ; </div><div class="line">			recent.remove(tmp); </div><div class="line">			recent.push_front(tmp);</div><div class="line">	</div><div class="line">			<span class="keyword">if</span>(hash.size() &gt;= capacity)&#123;</div><div class="line">				node *tmp2 = recent.back(); </div><div class="line">				hash.erase(tmp2-&gt;key); </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="routines-to-track-recently-used"><a href="#routines-to-track-recently-used" class="headerlink" title="routines to track recently used"></a>routines to track recently used</h2><p>in this way, the hash is still needed, but define <a href="http://rainykat.blogspot.com/2017/02/leetcode-146-lru-cachehashmap-doubly.html" target="_blank" rel="external">routine</a> to set the latest updated node always at front.</p>
+<pre><code class="c"><span class="function"><span class="keyword">void</span> <span class="title">setHead</span><span class="params">(Node* n)</span></span>{
+    n.next = head ; 
+    n.pre = null ;
+    <span class="keyword">if</span>(head != null) head.pre = n ;
+    head = n ; 
+    <span class="keyword">if</span>(end == null) end = head;  <span class="comment">//only 1 element </span>
+}
+</code></pre>
+<p>when solving real problems, either has a good understand about special data structure, which can solve this problem, or the raw way is to implement routines based on the exisiting input</p>
 
       
     </div>
@@ -435,8 +424,8 @@ Deletion time   | log(n) + Rebalance  | Same as search
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/01/reinforce-learning-in-simulator/" rel="next" title="reinforce learning in simulator">
-                <i class="fa fa-chevron-left"></i> reinforce learning in simulator
+              <a href="/2018/12/18/where-are-you-in-next-5-years-4/" rel="next" title="where are you in next 5 years">
+                <i class="fa fa-chevron-left"></i> where are you in next 5 years
               </a>
             
           </div>
@@ -444,10 +433,6 @@ Deletion time   | log(n) + Rebalance  | Same as search
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/13/surrounded-regions/" rel="prev" title="surrounded regions">
-                surrounded regions <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -595,7 +580,7 @@ Deletion time   | log(n) + Rebalance  | Same as search
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#std-unordered-map"><span class="nav-number">1.</span> <span class="nav-text">std::unordered_map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">2.</span> <span class="nav-text">example</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-data-structure-to-catch-recently-used"><span class="nav-number">1.</span> <span class="nav-text">a data structure to catch recently used</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#routines-to-track-recently-used"><span class="nav-number">2.</span> <span class="nav-text">routines to track recently used</span></a></li></ol></div>
             
 
           </div>
@@ -738,9 +723,9 @@ Deletion time   | log(n) + Rebalance  | Same as search
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/12/12/hash-table/';
-          this.page.identifier = '2018/12/12/hash-table/';
-          this.page.title = 'hash table';
+          this.page.url = 'http://yoursite.com/2018/12/18/lru-cache-design/';
+          this.page.identifier = '2018/12/18/lru-cache-design/';
+          this.page.title = 'lru cache design';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
