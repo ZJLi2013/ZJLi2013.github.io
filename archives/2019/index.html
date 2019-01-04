@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="leetCode," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,16 @@
 
 
 
-<meta name="description" content="leetcode 139 dfstraversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but">
-<meta name="keywords" content="leetCode">
-<meta property="og:type" content="article">
-<meta property="og:title" content="word break with dfs &amp; bfs">
-<meta property="og:url" content="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/index.html">
+<meta name="description" content="what I don&apos;t know">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Serious Autonomous Vehicles">
+<meta property="og:url" content="http://yoursite.com/archives/2019/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="leetcode 139 dfstraversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but">
+<meta property="og:description" content="what I don&apos;t know">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-18T04:22:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="word break with dfs &amp; bfs">
-<meta name="twitter:description" content="leetcode 139 dfstraversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but">
+<meta name="twitter:title" content="Serious Autonomous Vehicles">
+<meta name="twitter:description" content="what I don&apos;t know">
 
 
 
@@ -132,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/"/>
+  <link rel="canonical" href="http://yoursite.com/archives/2019/"/>
 
 
 
 
 
-  <title>word break with dfs & bfs | Serious Autonomous Vehicles</title>
+  <title>Archive | Serious Autonomous Vehicles</title>
   
 
 
@@ -163,7 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left  page-archive  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,169 +279,65 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  <section id="posts" class="posts-collapse">
+    <span class="archive-move-on"></span>
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    <span class="archive-page-counter">
+      
+      
+       
+        
+      Nice! 52 posts in total. Keep on posting.
     </span>
 
     
-      <header class="post-header">
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">word break with dfs & bfs</h1>
-        
+      
+      
+      
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+      
+        
+        <div class="collection-title">
+          <h2 class="archive-year motion-element" id="archive-year-2019">2019</h2>
+        </div>
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2019/01/04/未来五年在哪里-2/" itemprop="url">
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span itemprop="name">未来五年在哪里(2)</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T23:22:15-05:00">
-                2018-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/17/word-break-with-dfs-bfs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/17/word-break-with-dfs-bfs/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p><a href="https://leetcode.com/problems/word-break/description/" target="_blank" rel="external">leetcode 139</a></p>
-<h2 id="dfs"><a href="#dfs" class="headerlink" title="dfs"></a>dfs</h2><p>traversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but also traversing all unnecessary possibilites. and need design a class variable to stop the dfs() </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> found = <span class="literal">false</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span>&#123;</div><div class="line">  <span class="built_in">string</span> left, right ;</div><div class="line">  <span class="keyword">if</span>(s.size() == <span class="number">0</span> || s.empty())</div><div class="line">  &#123;</div><div class="line">    found = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">return</span> found;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=s.size(); i++)</div><div class="line">  &#123;</div><div class="line">    left = s.substr(<span class="number">0</span>, i);</div><div class="line">    right = s.substr(i, s.size()-i);</div><div class="line">    <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">    &#123;</div><div class="line">      dfs(right, dict);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> found;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="bfs"><a href="#bfs" class="headerlink" title="bfs"></a>bfs</h2><p>as mentioned above, <code>dfs</code> goes to all possibile branches, which is not required. <code>bfs</code> is like a greedy way, to find out one working solution and done.</p>
-<p>also need keep track of searched left sub-strings, since the remaining right sub-strings may can not find a matched from dict, then the left sub-string is not acceptable, so the left sub-string need move one char further.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">bfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> len = s.size();</div><div class="line">    <span class="built_in">string</span> s1, q, left, right;</div><div class="line">    <span class="built_in">queue</span>&lt;<span class="built_in">string</span>&gt; sq;</div><div class="line">    sq.push(s);</div><div class="line"></div><div class="line">    <span class="built_in">string</span> tmp ;</div><div class="line">    <span class="keyword">while</span>(!sq.empty())&#123;</div><div class="line">    tmp = sq.front(); sq.pop();</div><div class="line">    <span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line">    s1 = s ;</div><div class="line">    <span class="keyword">while</span>(!s1.empty() &amp;&amp; i &lt;= s1.size())</div><div class="line">    &#123;</div><div class="line">      <span class="keyword">if</span>(tmp == s)&#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i);</div><div class="line">        right = s1.substr(i, s1.size()-i);</div><div class="line">      &#125;<span class="keyword">else</span></div><div class="line">      &#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i+tmp.size()); <span class="comment">///will dead-cycle </span></div><div class="line">        right = s1.substr(i+tmp.size(), s1.size()-i-tmp.size());</div><div class="line">      &#125;</div><div class="line">      i++;</div><div class="line">      <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">      &#123;</div><div class="line">        q += left ;</div><div class="line">        sq.push(left);</div><div class="line">        s1 = right;</div><div class="line">        i = <span class="number">0</span>;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>this <code>bfs</code> is not good design.<br>a pretty simple sample <a href="https://www.jiuzhang.com/solution/word-break/#tag-highlight-lang-cpp" target="_blank" rel="external">code</a></p>
-
-      
-    </div>
-
-    <div>
-      
+            </a>
         
+      </h2>
 
-      
-    </div>
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2019-01-04T10:39:32-05:00"
+              content="2019-01-04" >
+          01-04
+        </time>
+      </div>
 
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/12/15/where-are-you-in-next-5-years-3/" rel="next" title="where are you in next 5 years(3)">
-                <i class="fa fa-chevron-left"></i> where are you in next 5 years(3)
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/18/where-are-you-in-next-5-years-4/" rel="prev" title="where are you in next 5 years (4)">
-                where are you in next 5 years (4) <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+    
+
+  </section>
+
+  
+
 
 
           </div>
@@ -451,17 +345,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -482,17 +365,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -565,22 +439,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#dfs"><span class="nav-number">1.</span> <span class="nav-text">dfs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bfs"><span class="nav-number">2.</span> <span class="nav-text">bfs</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -694,9 +552,11 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
-
+  
+    <script type="text/javascript" id="motion.page.archive">
+      $('.archive-year').velocity('transition.slideLeftIn');
+    </script>
+  
 
 
   
@@ -715,18 +575,6 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/';
-          this.page.identifier = '2018/12/17/word-break-with-dfs-bfs/';
-          this.page.title = 'word break with dfs & bfs';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://zjlee.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
     
 
   

@@ -291,6 +291,141 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/design-a-threadpool-in-pure-C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/02/design-a-threadpool-in-pure-C/" itemprop="url">design a threadpool in pure C</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-02T00:44:08-04:00">
+                2018-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/02/design-a-threadpool-in-pure-C/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/02/design-a-threadpool-in-pure-C/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>actually this post should be named as “pure C multithreads”, while it’s better to write some real code. <a href="https://github.com/Pithikos/C-Thread-Pool" target="_blank" rel="external">a simple threadpool in pure C</a></p>
+<h2 id="exposed-APIs"><a href="#exposed-APIs" class="headerlink" title="exposed APIs"></a>exposed APIs</h2><p>at most simple case, what a threadpool object should do? </p>
+<pre><code>thpool_init(num_threads);
+thpool_destory(threapool_obj);
+thpool_add_work(callback, args); 
+// so user define event callback() can be passed in;  
+</code></pre><p>threadpool is used to assign jobs (from job list) to a thread. so joblist should be an internal class; and it’s better to package thread, job as separate class too;  to add work, what kind of funcs need for joblist ?  at least, to add new job(from outside) to the joblist.</p>
+<h2 id="internal-structures"><a href="#internal-structures" class="headerlink" title="internal structures:"></a>internal structures:</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">thread</span> &#123;</span></div><div class="line"> 	<span class="keyword">int</span> id;</div><div class="line"> 	<span class="keyword">pthread_t</span> thread;   <span class="comment">//pthread_t is a unsigned long int; it's system assigned</span></div><div class="line"> 	threadpool *thpool;  <span class="comment">//so thread know its domain</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">job</span> &#123;</span></div><div class="line">	(<span class="keyword">void</span>*) func(<span class="keyword">void</span>*); <span class="comment">// each job/task should have a callback func</span></div><div class="line">	(<span class="keyword">void</span>*) func_arg ; <span class="comment">//and func args</span></div><div class="line">	<span class="comment">//since consider joblist as a list, it's helpful to add pointers to neighbors</span></div><div class="line">	job* prev;</div><div class="line">	job* next;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">jobqueue</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> num_jobs;</div><div class="line">    job* front;</div><div class="line">    job* rear;</div><div class="line">    <span class="comment">//some flags to support add new node(job) to the list</span></div><div class="line"></div><div class="line">&#125;    </div><div class="line">   	 </div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">threadpool_</span> &#123;</span></div><div class="line">    thread* threads_array;</div><div class="line">    jobqueue job_queue;</div><div class="line">    <span class="comment">// some flags</span></div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h2 id="consider-syncronlization"><a href="#consider-syncronlization" class="headerlink" title="consider syncronlization"></a>consider syncronlization</h2><p>will multi threads call add_task() simutaneously? if so, jobqueue should have a mutex object;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">jobqueue</span> &#123;</span></div><div class="line">    <span class="keyword">int</span> num_jobs;</div><div class="line">    job* front;</div><div class="line">    job* rear;</div><div class="line">    <span class="keyword">pthread_mutex_t</span>  jq_mutex;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>during threadpool initialization, will all threads be created simultaneously and immediately? if not, there should be thread status flags (creating, exisiting-but-idle, working, died); and to update these flags need protect by mutex object;    </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">threadpool_</span> &#123;</span></div><div class="line">    thread* threads_array;</div><div class="line">    jobqueue job_queue;</div><div class="line">    <span class="keyword">int</span> num_threads; <span class="comment">//stands for the number of all existing threads</span></div><div class="line">    <span class="keyword">pthread_mutex_t</span> tp_mutex;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>this is an interesting, when design a lib, what’s in my mind. hopefully implement by the end of week.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1600,141 +1735,6 @@ make: *** [tests] Error 1
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/25/career-thoughts/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/25/career-thoughts/" itemprop="url">career thoughts</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-25T16:49:59-04:00">
-                2018-06-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/25/career-thoughts/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/25/career-thoughts/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="product-data-managment"><a href="#product-data-managment" class="headerlink" title="product data managment"></a>product data managment</h2><p>an interesting meeting with material research group, these guys have some IT needs, but does’nt reach there. e.g. there are plenty of material fatigue data, including metadata, tables, S-N plots, so how to organize/manage them? one solution is from MSC Material Center[<a href="http://www.mscsoftware.com/news/msc-software-reinvents-materials-lifecycle-management-materialcenter" target="_blank" rel="external">http://www.mscsoftware.com/news/msc-software-reinvents-materials-lifecycle-management-materialcenter</a>]</p>
-<p>what triggered me is “data management” in general. In manufacturing industry, like automotive, many old style data used and storied in different departments, e.g. the material property data, load time history data for CAE department, the vehicle diagnostic logging data in vehcile control department, the vehicle dynamics records in vehicle test department. but neither are well-structured nor easy to track.</p>
-<p>two fields so far:  data dashboard, requires data visulization and data mining; product lifecycle management, it’s a product driven, and may also have data dashboard needs. currently as I see, most data analysis is in bussiness driven view, not in product itself. how to accelerate product iteration through better using history products data suppose to be a big thing. </p>
-<p>on another side, industry data management is a little different than bussiness/market data. e.g. every year Ford releases a new F-150 truck, does it start out of new? no, the 2018 mois stly iterate by the 2017. so there is product data management, just managed through all component departments. </p>
-<p>maybe the questions should ask is: 1 do we get the most value from these whole product level data? 2 how to make special data manageble at subsystem level? it needs more experience in the whole process, but bring some thoughts in next career: PLM software and data management in special domain, e.g. material datacenter product. </p>
-<h2 id="cloud-CAE"><a href="#cloud-CAE" class="headerlink" title="cloud CAE"></a>cloud CAE</h2><p>since dashboard is so popluar to migrate the traditional software GUI to web/mobile app; and CAE solver can deployed in cloud, which is a better stronger reason to do user-side dashboard: with job submission, job status, and result plot/visulization sections.</p>
-<p>but why is it necessary to migrate CAE solvers in cloud? why the manufacturing product companines would like to share their prodcuts data with cloud providers? </p>
-<p>turn one step back, the most obvious reason is whenever internet is needed, e.g. communication among different end-users, cloud is good chonice; and for startup companies, who can’t afford to run jobs locally, have to migrate their calculation in cloud. </p>
-<p>I am kind of curious who is using AWS? Netflix, BMW, Autodesk! I was so suprised at first, how BMW and Autodesk would like to use AWS? anyway Netflix is data-flow based company, the core business is client-server communication, which make sense to use AWS. </p>
-<p>while BMW is using AWS for new business: connected service, all a sudden it makes sense. the car product business won’t be shared with AWS, but cloud is required as infrastructure for v2x connected service. that’s amazing.</p>
-<p>AutoDesk say a different story in cloud, since they sell CAD softwares,  few people want to buy and own an expensive software but choose to pay for the service, by all meaning, this is not a new business, but AWS offer a mature channel.</p>
-<p>even though, cloud providers say they are cost-reducing, high-scalability, but I don’t think manufacturing companies will buy it due to security,  instead they maintain their own clusters and share limited business in cloud.</p>
-<p>so standing in manufacturing industry, it’s better to figure out new services, which require communications through cloud, than migrate CAE solvers to cloud. that’s my second point.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1785,7 +1785,7 @@ make: *** [tests] Error 1
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-count">52</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1860,7 +1860,7 @@ make: *** [tests] Error 1
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
