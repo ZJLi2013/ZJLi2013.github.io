@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="leetCode," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,16 @@
 
 
 
-<meta name="description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
-<meta name="keywords" content="leetCode">
-<meta property="og:type" content="article">
-<meta property="og:title" content="lru cache design">
-<meta property="og:url" content="http://yoursite.com/2018/12/18/lru-cache-design/index.html">
+<meta name="description" content="what I don&apos;t know">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Serious Autonomous Vehicles">
+<meta property="og:url" content="http://yoursite.com/archives/2019/03/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
+<meta property="og:description" content="what I don&apos;t know">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-18T21:21:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lru cache design">
-<meta name="twitter:description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
+<meta name="twitter:title" content="Serious Autonomous Vehicles">
+<meta name="twitter:description" content="what I don&apos;t know">
 
 
 
@@ -132,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/18/lru-cache-design/"/>
+  <link rel="canonical" href="http://yoursite.com/archives/2019/03/"/>
 
 
 
 
 
-  <title>lru cache design | Serious Autonomous Vehicles</title>
+  <title>Archive | Serious Autonomous Vehicles</title>
   
 
 
@@ -163,7 +161,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail ">
+  <div class="container sidebar-position-left  page-archive  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -281,178 +279,65 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  <section id="posts" class="posts-collapse">
+    <span class="archive-move-on"></span>
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/lru-cache-design/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    <span class="archive-page-counter">
+      
+      
+       
+        
+      Nice! 59 posts in total. Keep on posting.
     </span>
 
     
-      <header class="post-header">
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">lru cache design</h1>
-        
+      
+      
+      
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+      
+        
+        <div class="collection-title">
+          <h2 class="archive-year motion-element" id="archive-year-2019">2019</h2>
+        </div>
+      
+      
+
+      
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2019/03/02/apollo-control-module/" itemprop="url">
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span itemprop="name">apollo control module</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-18T16:21:01-05:00">
-                2018-12-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/18/lru-cache-design/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/18/lru-cache-design/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p><a href="https://leetcode.com/problems/lru-cache/" target="_blank" rel="external">leetCode 146</a>, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements:</p>
-<p>first a hash map data structure for key, value operations, e.g. get(), put(); but normal hash map can’t track the most recent used element, so either find a data structure, which can track the recently used element in the hash map; or define some routines to do it.</p>
-<h2 id="a-data-structure-to-catch-recently-used"><a href="#a-data-structure-to-catch-recently-used" class="headerlink" title="a data structure to catch recently used"></a>a data structure to catch recently used</h2><p>each get(), put() will operate on one special element, and that element should be marked as recently used, and the next element is the least recently used element, which can be overlapped in next operation.</p>
-<p><code>stack</code> and  <code>queue</code> have some property to track the most recent element, but they are one-way, not straight forward to manage two neighbor elements. </p>
-<p><code>double linked list</code> is a good choice to track both the most recent element and the least most recent element. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></div><div class="line">	<span class="keyword">int</span> val ;</div><div class="line">	<span class="keyword">int</span> key ;</div><div class="line">	Node *pre ;</div><div class="line">	Node *next ;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value_, <span class="keyword">int</span> key_)</span></span></div><div class="line">	&#123;</div><div class="line">		val = value_;</div><div class="line">		key = key_ ; </div><div class="line">		pre = <span class="literal">NULL</span> ;</div><div class="line">		next = <span class="literal">NULL</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> &#123;</span></div><div class="line">	<span class="keyword">public</span>: </div><div class="line">		<span class="built_in">list</span>&lt;node*&gt; recent ;</div><div class="line">		unorder_map&lt;<span class="keyword">int</span>, node*&gt;  hash ;</div><div class="line">		<span class="keyword">int</span> capacity ;</div><div class="line">		</div><div class="line">		LRUCache(<span class="keyword">int</span> cap): capacity(cap) &#123;&#125;</div><div class="line">		</div><div class="line">		<span class="function">node* <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key])</div><div class="line">				recent.push_front(hash[key]); </div><div class="line">				<span class="keyword">return</span> hash[key] ;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span> ;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key]);</div><div class="line">				hash[key] =  value; </div><div class="line">				recent.push_front(hash[key]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			node* tmp = <span class="keyword">new</span> node(value, key); </div><div class="line">			hash[key] = tmp ; </div><div class="line">			recent.remove(tmp); </div><div class="line">			recent.push_front(tmp);</div><div class="line">	</div><div class="line">			<span class="keyword">if</span>(hash.size() &gt;= capacity)&#123;</div><div class="line">				node *tmp2 = recent.back(); </div><div class="line">				hash.erase(tmp2-&gt;key); </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<h2 id="routines-to-track-recently-used"><a href="#routines-to-track-recently-used" class="headerlink" title="routines to track recently used"></a>routines to track recently used</h2><p>in this way, the hash is still needed, but define <a href="http://rainykat.blogspot.com/2017/02/leetcode-146-lru-cachehashmap-doubly.html" target="_blank" rel="external">routine</a> to set the latest updated node always at front.</p>
-<pre><code class="c"><span class="function"><span class="keyword">void</span> <span class="title">setHead</span><span class="params">(Node* n)</span></span>{
-    n.next = head ; 
-    n.pre = null ;
-    <span class="keyword">if</span>(head != null) head.pre = n ;
-    head = n ; 
-    <span class="keyword">if</span>(end == null) end = head;  <span class="comment">//only 1 element </span>
-}
-</code></pre>
-<p>when solving real problems, either has a good understand about special data structure, which can solve this problem, or the raw way is to implement routines based on the exisiting input</p>
-
-      
-    </div>
-
-    <div>
-      
+            </a>
         
+      </h2>
 
-      
-    </div>
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2019-03-02T05:22:51-05:00"
+              content="2019-03-02" >
+          03-02
+        </time>
+      </div>
 
-    <div>
-      
-        
-
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/12/18/where-are-you-in-next-5-years-4/" rel="next" title="where are you in next 5 years (4)">
-                <i class="fa fa-chevron-left"></i> where are you in next 5 years (4)
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/18/insertion-sort-list/" rel="prev" title="insertion sort list">
-                insertion sort list <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+    
+
+  </section>
+
+  
+
 
 
           </div>
@@ -460,17 +345,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -491,17 +365,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -574,22 +439,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-data-structure-to-catch-recently-used"><span class="nav-number">1.</span> <span class="nav-text">a data structure to catch recently used</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#routines-to-track-recently-used"><span class="nav-number">2.</span> <span class="nav-text">routines to track recently used</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -703,9 +552,11 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
-
+  
+    <script type="text/javascript" id="motion.page.archive">
+      $('.archive-year').velocity('transition.slideLeftIn');
+    </script>
+  
 
 
   
@@ -724,18 +575,6 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/12/18/lru-cache-design/';
-          this.page.identifier = '2018/12/18/lru-cache-design/';
-          this.page.title = 'lru cache design';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://zjlee.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
     
 
   
