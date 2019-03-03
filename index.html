@@ -291,6 +291,152 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/03/apollo-planning-module/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/03/apollo-planning-module/" itemprop="url">apollo planning module</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-03T08:30:43-05:00">
+                2019-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/03/apollo-planning-module/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/03/apollo-planning-module/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://yq.aliyun.com/articles/691219" target="_blank" rel="external">决策规划</a>, 根据导航信息及车辆的当前状态，在有限时间内，计算出一条合适的轨迹。</p>
+<h2 id="Lattice-Planner"><a href="#Lattice-Planner" class="headerlink" title="Lattice Planner"></a><a href="https://mp.weixin.qq.com/s/YDIoVf20kybu8JEUY3GZWg?spm=a2c4e.11153940.blogcont691219.30.78693edf59tdSa" target="_blank" rel="external">Lattice Planner</a></h2><ul>
+<li>Sample candidate trajectories </li>
+<li>Assign costs </li>
+<li>Select lowest-cost trajectory, to satisfy constraint &amp; collision check in each cycle</li>
+<li>Output </li>
+</ul>
+<h3 id="Frenet-坐标"><a href="#Frenet-坐标" class="headerlink" title="Frenet 坐标"></a>Frenet 坐标</h3><p>定义沿路面的一条光滑参考线（路面中心线）， 汽车位置坐标由纵向偏移量，横向偏移量表示。纵向坐标，由汽车质心在参考线上的投影点，到参考线起点的长度s表示；横向坐标， 由投影点到汽车质心的距离l表示。</p>
+<p>在Frenet坐标下，汽车的朝向、速度、加速度可由横、纵向偏移量的一阶导、二阶导表示。另外，由车辆动力学控制方程可知，横向的偏移量变化率与纵向速度相关，即横向运动是由纵向运动诱发的。</p>
+<h3 id="生成轨迹"><a href="#生成轨迹" class="headerlink" title="生成轨迹"></a>生成轨迹</h3><p>分别由初始（当前）横向、纵向的状态信息（位置、速度、加速度），和下一时刻的横向、纵向状态信息（位置、速度、加速度），可以得到Frenet坐标下的一个轨迹点。通过一系列的时间点t0，t1, … tn, 可以得到一系列的轨迹点p0, p1, … pn， 即形成一条轨迹。</p>
+<h3 id="轨迹集合采样"><a href="#轨迹集合采样" class="headerlink" title="轨迹集合采样"></a>轨迹集合采样</h3><p>轨迹采样，本质上是通过在解空间随机布点，然后贪婪搜索，筛选最低cost function value的点，即为可行轨迹。</p>
+<p>横向偏移量由动力学方程可由纵向偏移量唯一决定，即从控制方程上，每个scenario可以变成由纵向偏移量当唯一自变量的控制方程，从而保证有唯一最优解或者无解。但实际上，由纵向偏移量唯一表示的控制方程，需要满足不同scenario的约束条件，即一个带约束条件的优化问题。随机算法是一个鲁棒性很强的方法，而且大部分情况下，至少可以得到一个可行解。apollo中横向轨迹、纵向轨迹分别采样。</p>
+<p>apollo的横向轨迹的采样，由内部自定义三种横向偏移量： -0.5， 0， 0.5； 同时，设计到达这些横向偏移量的纵向位移： 10， 20， 40， 80. 两层循环即可得到一个轨迹集合。由此定义的横向轨迹不一定符合运动学、动力学约束。</p>
+<p>apollo的纵向轨迹的采样，考虑巡航、跟车、超车、停车等scenario。</p>
+<p>比如，巡航场景，通过两层循环采样。外层循环将速度从零到速度上限按等间距均匀遍历，内层循环由1s-8s均匀遍历。对于停车的场景，末状态的速度、加速度是0.</p>
+<h3 id="ST-Graph"><a href="#ST-Graph" class="headerlink" title="ST-Graph"></a>ST-Graph</h3><p>横坐标是时刻，纵坐标是障碍车的车头、车尾的位置。st图将描绘障碍车进入当前车道到离开当前车道所占据的位置区域。自驾车必须确保与障碍车所占据位置有重合。跟车，即在被占区域的下方，或超车，即在被占区域的上方。</p>
+<p>由跟车或超车，即可采样各个时刻的纵向偏移量，然后同理横向偏移量采样，形成纵向轨迹集合。</p>
+<h3 id="轨迹cost"><a href="#轨迹cost" class="headerlink" title="轨迹cost"></a>轨迹cost</h3><p>轨迹规划的约束条件： 达到目的、 横向偏移代价（尽量沿着道路中心行驶）、碰撞代价、符合交规、平稳舒适（横向加速度代价）、 纵向加速度代价（激烈加速）、向心加速度代价（转弯场景）。</p>
+<p>对于换道场景，对当前车道、目标车道的参考线做一次采样，并找到最低cost的轨迹。可以设计换道cost 。</p>
+<h2 id="EM-planner"><a href="#EM-planner" class="headerlink" title="EM planner"></a>EM planner</h2><p>expectation maximum(EM) ， <a href="https://blog.csdn.net/yuxuan20062007/article/details/83629595" target="_blank" rel="external">最大期望算法</a>，在概率模型中寻找参数最大似然估计或最大后验估计，其概率模型依赖于无法观测的隐性变量。</p>
+<p>首先，计算期望（e)， 利用对隐藏变量的现有估计值，计算其最大似然估计值；然后，最大值m， 最大化在e步上求的的最大似然值来计算参数的值。step-2 的参数被用于下一个 step-1 的计算。</p>
+<p>em planner 会迭代对路径path、速度velocity进行优化。基于当前步的path和对其他运动物体的预测，优化当前步的速度；然后基于这个新的速度，再优化path。迭代直到收敛。</p>
+<p>EM Planner 相比 Lattice Planner，利用了更多当前时间步的状态信息，在每个local timestep 都得到一个可行解。一系列的局部解，相当于弱形式，如果解空间存在可行解，局部解的迭代最终也将给出系统的可行解</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Plan</span><span class="params">(<span class="keyword">const</span> common::vehicle_state::VehicleState &amp;vehicle_state, </span></span></div><div class="line"><span class="keyword">const</span> <span class="keyword">bool</span> is_on_auto_mode,</div><div class="line"><span class="keyword">const</span> <span class="keyword">double</span> publish_time, </div><div class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;common::TrajectoryPoint&gt;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/02/apollo-control-module/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1798,130 +1944,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/insertion-sort-list/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/18/insertion-sort-list/" itemprop="url">insertion sort list</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-18T18:00:29-05:00">
-                2018-12-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/18/insertion-sort-list/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/18/insertion-sort-list/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://leetcode.com/problems/insertion-sort-list/" target="_blank" rel="external">leetCode 147</a>, this is  another example when solving problem, either find a good data structure, which looks like stand in a higher dimensions with additional DOF, or define the routines on the given data structure.</p>
-<h2 id="additional-set"><a href="#additional-set" class="headerlink" title="additional set"></a>additional set</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">classcomp</span> &#123;</span></div><div class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span> <span class="params">(<span class="keyword">const</span> ListNode* lhs, <span class="keyword">const</span> ListNode* rhs)</span> <span class="keyword">const</span></span></div><div class="line">  &#123;<span class="keyword">return</span> lhs-&gt;val &lt; rhs-&gt;val;&#125;</div><div class="line">&#125;;  </div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="built_in">set</span>&lt;ListNode*, classcomp&gt;  labels ; </div><div class="line">    <span class="function">ListNode* <span class="title">insertionSortList</span><span class="params">(ListNode* head)</span> </span>&#123;</div><div class="line">            <span class="keyword">while</span>(head)&#123;</div><div class="line">                labels.insert(head); </div><div class="line">                head = head-&gt;next ;</div><div class="line">            &#125;</div><div class="line">     </div><div class="line">            head = labels[<span class="number">0</span>]; </div><div class="line">            ListNode* node = labels[<span class="number">0</span>]; </div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;labels.size(); i++)&#123;</div><div class="line">                node-&gt;next =  labels[i]; </div><div class="line">                node = node-&gt;next ; </div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            <span class="keyword">return</span> head; </div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">basically `<span class="built_in">unordered_set</span>` has ordering by <span class="keyword">default</span>, so how about first inserting each element from the <span class="built_in">list</span> to <span class="built_in">set</span>, then <span class="built_in">set</span> the next pointer <span class="keyword">for</span> each element, which take additional space, but did the job straight forward </div><div class="line"></div><div class="line"></div><div class="line">#<span class="meta"># single linked list</span></div><div class="line"></div><div class="line">since single linked <span class="built_in">list</span> can't access the previous node, so define prev pointer <span class="keyword">and</span> current pointer, <span class="keyword">and</span> every insertaion needs <span class="keyword">do</span> the compare from frist element to the previous element. </div><div class="line"></div><div class="line">```c </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line">  <span class="function"><span class="keyword">public</span>  ListNode *<span class="title">insertionoSortList</span><span class="params">(ListNode *head)</span></span>&#123;</div><div class="line">    ListNode *result = <span class="literal">nullptr</span> ;</div><div class="line">    <span class="keyword">if</span>(head == nullprt || head.next = null)&#123;</div><div class="line">      result = head ;</div><div class="line">      <span class="keyword">return</span> result ;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ListNode *dummy = <span class="keyword">new</span> ListNode(<span class="number">0</span>); </div><div class="line">    ListNode *cur = head ; </div><div class="line">    ListNode *next, *pre;</div><div class="line">    <span class="keyword">while</span>(cur != <span class="literal">nullptr</span>)&#123;</div><div class="line">        next = cur-&gt;next ;</div><div class="line">        pre = dummy ; </div><div class="line">        <span class="keyword">while</span>(pre.next != <span class="literal">nullptr</span> &amp;&amp; pre.next-&gt;val &lt;  cur-&gt;val)&#123;</div><div class="line">          pre = pre.next ; </div><div class="line">        &#125;  <span class="comment">//return the position where cur node should insert </span></div><div class="line">        cur-&gt;next = pre-&gt;next ; </div><div class="line">        pre-&gt;next = cur ; </div><div class="line">        cur = next ; </div><div class="line">      &#125;       </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1972,7 +1994,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">60</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
