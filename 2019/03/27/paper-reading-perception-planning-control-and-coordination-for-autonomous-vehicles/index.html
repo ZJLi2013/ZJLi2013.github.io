@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="c++11," />
+  <meta name="keywords" content="self-driving," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="which function is calledwhen a derived object calls the base class member function, inside which calls another virtual member function, which is implemented inside the derived class, so which virtual">
-<meta name="keywords" content="c++11">
+<meta name="description" content="Lidar Perception point cloud based approach, directly use the raw sensor data for further processing. usually applied a voxel-based filtering to reduce the number of points   feature based approach, e">
+<meta name="keywords" content="self-driving">
 <meta property="og:type" content="article">
-<meta property="og:title" content="which function is called">
-<meta property="og:url" content="http://yoursite.com/2018/07/18/which-function-is-called/index.html">
+<meta property="og:title" content="paper reading-perception, planning, control and coordination for autonomous vehicles">
+<meta property="og:url" content="http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="which function is calledwhen a derived object calls the base class member function, inside which calls another virtual member function, which is implemented inside the derived class, so which virtual">
+<meta property="og:description" content="Lidar Perception point cloud based approach, directly use the raw sensor data for further processing. usually applied a voxel-based filtering to reduce the number of points   feature based approach, e">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-07-19T02:01:07.000Z">
+<meta property="og:updated_time" content="2019-03-27T09:41:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="which function is called">
-<meta name="twitter:description" content="which function is calledwhen a derived object calls the base class member function, inside which calls another virtual member function, which is implemented inside the derived class, so which virtual">
+<meta name="twitter:title" content="paper reading-perception, planning, control and coordination for autonomous vehicles">
+<meta name="twitter:description" content="Lidar Perception point cloud based approach, directly use the raw sensor data for further processing. usually applied a voxel-based filtering to reduce the number of points   feature based approach, e">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/18/which-function-is-called/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/"/>
 
 
 
 
 
-  <title>which function is called | Serious Autonomous Vehicles</title>
+  <title>paper reading-perception, planning, control and coordination for autonomous vehicles | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/18/which-function-is-called/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">which function is called</h1>
+          <h1 class="post-title" itemprop="name headline">paper reading-perception, planning, control and coordination for autonomous vehicles</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-18T22:00:16-04:00">
-                2018-07-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T05:41:05-04:00">
+                2019-03-27
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/18/which-function-is-called/#comments" itemprop="discussionUrl">
+                <a href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/18/which-function-is-called/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,11 +366,109 @@
       
 
       
-        <h1 id="which-function-is-called"><a href="#which-function-is-called" class="headerlink" title="which function is called"></a>which function is called</h1><p>when a derived object calls the base class member function, inside which calls another virtual member function, which is implemented inside the derived class, so which virtual member function is actually called ?  </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Weld</span> &#123;</span></div><div class="line">	<span class="keyword">public</span>: </div><div class="line">		Weld()&#123;&#125;;</div><div class="line">		<span class="keyword">virtual</span> ~Weld()&#123;&#125;;</div><div class="line">		<span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">getDataIndex</span><span class="params">()</span></span>&#123;</div><div class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Weld::getDataIndex"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">			<span class="keyword">return</span> <span class="literal">true</span> ; </div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="function"><span class="keyword">bool</span> <span class="title">getInternalDataList</span><span class="params">()</span></span>&#123;	</div><div class="line">			<span class="keyword">return</span> getDataIndex();</div><div class="line">		&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpotWeld</span>:</span> <span class="keyword">public</span> Weld&#123;</div><div class="line">	<span class="keyword">public</span>:</div><div class="line">		SpotWeld()&#123;&#125;;</div><div class="line">		<span class="keyword">virtual</span> ~SpotWeld()&#123;&#125;;</div><div class="line">		<span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">getDataIndex</span><span class="params">()</span></span>&#123;</div><div class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"SpotWeld::getDataIndex"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">			<span class="keyword">return</span> <span class="literal">true</span>; </div><div class="line">		&#125;</div><div class="line"></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ACM2</span> :</span> <span class="keyword">public</span> SpotWeld&#123;</div><div class="line">	<span class="keyword">public</span>:</div><div class="line">		ACM2()&#123;&#125;;</div><div class="line">		~ACM2()&#123;&#125;;</div><div class="line">		<span class="function"><span class="keyword">virtual</span> <span class="keyword">bool</span> <span class="title">getDataIndex</span><span class="params">()</span></span>&#123;</div><div class="line">			<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"ACM2::getDataIndex"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="function"><span class="keyword">bool</span> <span class="title">getPoints</span><span class="params">()</span></span>&#123;</div><div class="line">			<span class="keyword">return</span> getInternalDataList();</div><div class="line">		&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">	ACM2  acm2 ;</div><div class="line">	acm2.getPoints();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>output is:</p>
-<pre><code>ACM2::getDataIndex
-</code></pre><p>so the derived object always calls the member function that most closest to its own class domain first, even if this member function is called from a base class member function.</p>
+        <h2 id="Lidar-Perception"><a href="#Lidar-Perception" class="headerlink" title="Lidar Perception"></a>Lidar Perception</h2><ul>
+<li><p>point cloud based approach, directly use the raw sensor data for further processing. usually applied a voxel-based filtering to reduce the number of points </p>
+</li>
+<li><p>feature based approach, extract parametric features out of the point cloud, and represent the environment usign extracted features (out of date)</p>
+</li>
+<li><p>grid based approach</p>
+</li>
+</ul>
+<h3 id="segmentation-algorithms"><a href="#segmentation-algorithms" class="headerlink" title="segmentation algorithms"></a>segmentation algorithms</h3><p>cluster points into multiple homogeneous groups.</p>
+<ul>
+<li>edge based method</li>
+<li>region based method, cluster neighborhood points based on certain criteria</li>
+<li>model-based / parametric method,</li>
+<li>graph based method </li>
+</ul>
+<h3 id="detection-algorithms"><a href="#detection-algorithms" class="headerlink" title="detection algorithms"></a>detection algorithms</h3><p>categorize each cluster into different objects, the information in each cluster is mainly from spatial relationship and Lidar intensity of the points. </p>
+<h2 id="Vision"><a href="#Vision" class="headerlink" title="Vision"></a>Vision</h2><p>usually deal with road detection and on-road object detection. </p>
+<h2 id="Road-Detection"><a href="#Road-Detection" class="headerlink" title="Road Detection"></a>Road Detection</h2><h3 id="lane-mark-detection"><a href="#lane-mark-detection" class="headerlink" title="lane mark detection"></a>lane mark detection</h3><ul>
+<li><p>lane line feature extraction<br>basically identify the pixels that belong to lane line marks. </p>
+</li>
+<li><p>fitting the pixels into different models</p>
+</li>
+</ul>
+<ul>
+<li>estimate the vehicle pose(lateral position and moving orientation) based on the fitted model. </li>
+</ul>
+<h3 id="road-surface-detection"><a href="#road-surface-detection" class="headerlink" title="road surface detection"></a>road surface detection</h3><p>inform the self-driving car on the location of free space where it can drive without collision. usually three ways:</p>
+<ul>
+<li>feature based detection</li>
+</ul>
+<p>first identify the feature points or patches in the original image; based on the identified features, either model fitting or segmentation kind of algorithms will be applied to identify the road surfaces. </p>
+<ul>
+<li>feature based learning<br>first extract a set of features associated to pixels or image patches, then train a classifier based on the features to assign a road or non-road label to the pixels or patches</li>
+</ul>
+<ul>
+<li>deep learning</li>
+</ul>
+<h3 id="on-road-object-detection"><a href="#on-road-object-detection" class="headerlink" title="on-road object detection"></a>on-road object detection</h3><p>mainly concerns vehicle and pedestrain object classes, and mainly with deep learning based approaches, whose pipeline usually like:</p>
+<p>1) the proposal bounding boxes needs to be generated around the input image</p>
+<p>2) each proposal box will be sent through the CNN network to determine a classification and fine tune its bounding box location </p>
+<h2 id="Fusion"><a href="#Fusion" class="headerlink" title="Fusion"></a>Fusion</h2><p>sensor fusion betweeen Lidar and camera is necessary to make the best use of these devices and achive a robust environment perception result. </p>
+<h2 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h2><p>the problem of estimating the ego vehicle’s pose, can divided into 2 sub-problems:  pose fixing problem and dead reckoning problem. </p>
+<ul>
+<li><p>pose fixing problem is to predict a measurement given a pose, e.g. a map. </p>
+</li>
+<li><p>dead reckoning problem, the state is related to the observation by a set of differential equations, and these equations has to be integrated in order to navigate. </p>
+</li>
+</ul>
+<p>map aided localization algorithm use local features to achieve highly precise localization.  e.g. SLAM.</p>
+<p>a key event in smoothing based SLAM is loop closure, basically when features that have not been seen for a while are observed again from the sensor readings. when a loop closure is detected, the error caused by imperfect odometry can then be removed, and a substantial portion of the map can be updated. </p>
+<p>approaches to semantic mapping can be categorized into three ways:  object based, appearance based, and activity based. </p>
+<ul>
+<li><p>appearance based semantic mapping, interpret sensor readings to construct semantic information of the environment</p>
+</li>
+<li><p>object based semantic mapping, use the occurrence of key objects to build a semantic understanding of the environments, where object recognition and classification is important. </p>
+</li>
+<li><p>activity based semantic mapping, relies on information about the activities of the agents around the ego vehicle. </p>
+</li>
+</ul>
+<h2 id="Planning"><a href="#Planning" class="headerlink" title="Planning"></a>Planning</h2><h3 id="mission-planning"><a href="#mission-planning" class="headerlink" title="mission planning"></a>mission planning</h3><p>performed through graph search over a directed graph network, which reflects road/path network connectivity. </p>
+<h3 id="behavioral-planning"><a href="#behavioral-planning" class="headerlink" title="behavioral planning"></a>behavioral planning</h3><p>decision making to ensure the vehicle follows any road rules and interacts with other agents in a conventional, safe manner. </p>
+<h3 id="motion-planning"><a href="#motion-planning" class="headerlink" title="motion planning"></a>motion planning</h3><p>the process of deciding on a sequence of actions to reach a specified goal, typically based on avoiding colisions on a sequence of actions to reach a specified goal. </p>
+<ul>
+<li>combinatorial planning, builds a discrete representation of the real environment, and finds a complete solution. </li>
+</ul>
+<ul>
+<li>sampling-based planning, utilizes a collision checking module to conduct discrete searching over samples drawn from the configuration space, which rely on random sampling of continuous spaces and the generation of  a feasible trajectory graph where feasibility is verified through collision checking of nodes and edges to connect these nodes .</li>
+</ul>
+<h3 id="planning-in-dynamic-environments"><a href="#planning-in-dynamic-environments" class="headerlink" title="planning in dynamic environments"></a>planning in dynamic environments</h3><ul>
+<li><p>decision making structures for obstacle avoidance </p>
+<p>  to monitor regions along the intended path for potential obstacle collisions, where these regions are labeled as “critial zones”, and checking against the trajectories of all nearby vehicles to determine a “time to collision”. </p>
+</li>
+</ul>
+<ul>
+<li>planning in space-time </li>
+</ul>
+<ul>
+<li><p>control space obstacle represnetations </p>
+<p>  rather than checking for collisions directly in robot’s configuration space, directly plan in the control space by prohibiting certain control actions which are predicted to lead to collision.</p>
+</li>
+</ul>
+<h3 id="incremental-planning-and-replanning"><a href="#incremental-planning-and-replanning" class="headerlink" title="incremental planning and replanning"></a>incremental planning and replanning</h3><p>a means of incrementally generating sub-goals, a new plan is generated as often as a new sub-goal is defined. iteratively replanning to generate new solution trajectories presents a potential opportunity to carry over knowledge from previous planning iterations to subsequent planning iterations.</p>
+<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><h3 id="feedback-control"><a href="#feedback-control" class="headerlink" title="feedback control"></a>feedback control</h3><p>e.g. proportional-integral-derivative(PID) controller, the limitation of feedback-only control, is has delayed response to errors.</p>
+<h3 id="model-predictive-control"><a href="#model-predictive-control" class="headerlink" title="model predictive control"></a>model predictive control</h3><h3 id="trajectory-generation"><a href="#trajectory-generation" class="headerlink" title="trajectory generation"></a>trajectory generation</h3><ul>
+<li><p>combined trajectory generation and tracking </p>
+</li>
+<li><p>separate trajectory generation and tracking </p>
+<p>  1) trajectory generation, to find an entire control input, which corresponds to some desired state trajectory. can be dealed as a two point boundary value problem, with a starting state and a final state. </p>
+<p>  1.1) sensor based trajectory generation</p>
+<p>  1.2) dynamic based trajectory generation </p>
+</li>
+</ul>
+<h3 id="trajectory-tracking"><a href="#trajectory-tracking" class="headerlink" title="trajectory tracking"></a>trajectory tracking</h3><ul>
+<li><p>geometric methods</p>
+<p>  pursues a point along the path that is located at a certain lookahead distance away from the vehicle’s current position. the input is waypoints, rather than smooth curves. </p>
+</li>
+<li><p>model based methods </p>
+<p>  kinematic model based controllers performs well at low speed applications, but the error increase as the vehicle speed and curvature rate of path increases.</p>
+<p>  dynamic model based controllers performs well for higher speed driving applications</p>
+</li>
+</ul>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>this is an overview of self-driving car system. From a job-hunting view, the algorithms details are more important and better with some practial experience.</p>
+<p><a href="https://www.mdpi.com/2075-1702/5/1/6/htm" target="_blank" rel="external">paper link</a> </p>
 
       
     </div>
@@ -400,7 +498,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/c-11/" rel="tag"># c++11</a>
+            <a href="/tags/self-driving/" rel="tag"># self-driving</a>
           
         </div>
       
@@ -413,8 +511,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/13/multi-core-at-work/" rel="next" title="multi-core at work">
-                <i class="fa fa-chevron-left"></i> multi-core at work
+              <a href="/2019/03/27/book-reading-第一本无人驾驶技术书/" rel="next" title="book reading: 第一本无人驾驶技术书">
+                <i class="fa fa-chevron-left"></i> book reading: 第一本无人驾驶技术书
               </a>
             
           </div>
@@ -422,10 +520,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/24/pure-C-string/" rel="prev" title="pure C string">
-                pure C string <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -573,7 +667,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#which-function-is-called"><span class="nav-number">1.</span> <span class="nav-text">which function is called</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lidar-Perception"><span class="nav-number">1.</span> <span class="nav-text">Lidar Perception</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#segmentation-algorithms"><span class="nav-number">1.1.</span> <span class="nav-text">segmentation algorithms</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#detection-algorithms"><span class="nav-number">1.2.</span> <span class="nav-text">detection algorithms</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vision"><span class="nav-number">2.</span> <span class="nav-text">Vision</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Road-Detection"><span class="nav-number">3.</span> <span class="nav-text">Road Detection</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lane-mark-detection"><span class="nav-number">3.1.</span> <span class="nav-text">lane mark detection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#road-surface-detection"><span class="nav-number">3.2.</span> <span class="nav-text">road surface detection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#on-road-object-detection"><span class="nav-number">3.3.</span> <span class="nav-text">on-road object detection</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fusion"><span class="nav-number">4.</span> <span class="nav-text">Fusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Localization"><span class="nav-number">5.</span> <span class="nav-text">Localization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Planning"><span class="nav-number">6.</span> <span class="nav-text">Planning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mission-planning"><span class="nav-number">6.1.</span> <span class="nav-text">mission planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#behavioral-planning"><span class="nav-number">6.2.</span> <span class="nav-text">behavioral planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#motion-planning"><span class="nav-number">6.3.</span> <span class="nav-text">motion planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#planning-in-dynamic-environments"><span class="nav-number">6.4.</span> <span class="nav-text">planning in dynamic environments</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#incremental-planning-and-replanning"><span class="nav-number">6.5.</span> <span class="nav-text">incremental planning and replanning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Control"><span class="nav-number">7.</span> <span class="nav-text">Control</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#feedback-control"><span class="nav-number">7.1.</span> <span class="nav-text">feedback control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#model-predictive-control"><span class="nav-number">7.2.</span> <span class="nav-text">model predictive control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trajectory-generation"><span class="nav-number">7.3.</span> <span class="nav-text">trajectory generation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#trajectory-tracking"><span class="nav-number">7.4.</span> <span class="nav-text">trajectory tracking</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-number">8.</span> <span class="nav-text">summary</span></a></li></ol></div>
             
 
           </div>
@@ -716,9 +810,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/07/18/which-function-is-called/';
-          this.page.identifier = '2018/07/18/which-function-is-called/';
-          this.page.title = 'which function is called';
+          this.page.url = 'http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/';
+          this.page.identifier = '2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/';
+          this.page.title = 'paper reading-perception, planning, control and coordination for autonomous vehicles';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
