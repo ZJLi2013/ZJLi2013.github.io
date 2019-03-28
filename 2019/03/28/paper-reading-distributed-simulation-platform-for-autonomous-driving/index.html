@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="leetCode," />
+  <meta name="keywords" content="self-driving," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="leetCode 50 (N-Queens):     The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other. solution: each potentional position for a queen shoul">
-<meta name="keywords" content="leetCode">
+<meta name="description" content="to test newly developed algorithms, due to the massive amount of simulation data, need a distributed simulation platform based on Spark distributed framework.  simulation based on synthetic data, used">
+<meta name="keywords" content="self-driving">
 <meta property="og:type" content="article">
-<meta property="og:title" content="how backtracks work">
-<meta property="og:url" content="http://yoursite.com/2018/08/29/how-backtracks-work/index.html">
+<meta property="og:title" content="paper reading-distributed simulation platform for autonomous driving">
+<meta property="og:url" content="http://yoursite.com/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="leetCode 50 (N-Queens):     The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other. solution: each potentional position for a queen shoul">
+<meta property="og:description" content="to test newly developed algorithms, due to the massive amount of simulation data, need a distributed simulation platform based on Spark distributed framework.  simulation based on synthetic data, used">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-30T03:41:27.000Z">
+<meta property="og:updated_time" content="2019-03-28T05:22:44.445Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="how backtracks work">
-<meta name="twitter:description" content="leetCode 50 (N-Queens):     The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other. solution: each potentional position for a queen shoul">
+<meta name="twitter:title" content="paper reading-distributed simulation platform for autonomous driving">
+<meta name="twitter:description" content="to test newly developed algorithms, due to the massive amount of simulation data, need a distributed simulation platform based on Spark distributed framework.  simulation based on synthetic data, used">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/29/how-backtracks-work/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/"/>
 
 
 
 
 
-  <title>how backtracks work | Serious Autonomous Vehicles</title>
+  <title>paper reading-distributed simulation platform for autonomous driving | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-backtracks-work/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">how backtracks work</h1>
+          <h1 class="post-title" itemprop="name headline">paper reading-distributed simulation platform for autonomous driving</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:39:41-04:00">
-                2018-08-29
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-28T01:21:13-04:00">
+                2019-03-28
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/29/how-backtracks-work/#comments" itemprop="discussionUrl">
+                <a href="/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/29/how-backtracks-work/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,12 +366,35 @@
       
 
       
-        <p>leetCode 50 (N-Queens):<br>     The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.</p>
-<p>solution: each potentional position for a queen should satisfy no attach, then traverse the 2D grids to find out all good positions; it requires to find all possible combinations, so recursive call will be used also.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">bool</span> <span class="title">one_queen_visited</span><span class="params">(<span class="keyword">int</span>** mat, <span class="keyword">int</span> n, pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&amp; queen_idx)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="keyword">int</span> row = queen_idx.first ;</div><div class="line">	 <span class="keyword">int</span> col = queen_idx.second; </div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">	 &#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;n; j++)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">if</span>(mat[row][j] == <span class="number">0</span>)</div><div class="line">				mat[row][j] = <span class="number">1</span>;</div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[row][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="keyword">if</span>(mat[i][col] == <span class="number">0</span>)</div><div class="line">			 mat[i][col] = <span class="number">1</span>;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][col] == <span class="number">100</span>)</div><div class="line">			 <span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;</div><div class="line">		</div><div class="line">	 <span class="comment">//for left leaning </span></div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&gt;=<span class="number">0</span> &amp;&amp; j&gt;=<span class="number">0</span>; i--, j--)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&lt;n &amp;&amp; j&lt;n; i++, j++)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;	</div><div class="line">	  </div><div class="line">	 <span class="comment">//for right leaning </span></div><div class="line">		<span class="comment">//down</span></div><div class="line">	  <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&lt;n &amp;&amp; j&gt;=<span class="number">0</span>; i++, j--)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;</div><div class="line">	  <span class="comment">//up </span></div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&gt;=<span class="number">0</span> &amp;&amp; j&lt;n; i--, j++)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;	</div><div class="line"> </div><div class="line">	 mat[row][col] = <span class="number">100</span>;  <span class="comment">//queen location marked as 100</span></div><div class="line">	 <span class="keyword">return</span> <span class="literal">true</span>; </div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="keyword">int</span> backtrack = <span class="number">0</span>; </div><div class="line">	 </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span>** mat,  <span class="keyword">int</span> n, <span class="keyword">int</span> start_j=<span class="number">0</span>)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">std</span>::pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;  idx; </div><div class="line">	 <span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;   queens; </div><div class="line">	 <span class="built_in">vector</span>&lt; <span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; &gt;  queens_v; </div><div class="line">	 <span class="keyword">if</span>(start_j &gt; n) <span class="keyword">return</span> ;   <span class="comment">//end of recursive </span></div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">	 &#123;</div><div class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j= ((i==<span class="number">0</span>)? max(start_j, <span class="number">0</span>) : <span class="number">0</span>); j&lt;n; j++)</div><div class="line">		 &#123;</div><div class="line">			 idx =  <span class="built_in">std</span>::make_pair(i, j); </div><div class="line">			 <span class="keyword">if</span>(one_queen_visited(mat, n, idx)) <span class="comment">// find a fit queen position, store into  queens </span></div><div class="line">			 &#123;</div><div class="line">				 queens.push_back(idx);</div><div class="line">			 &#125;</div><div class="line">		 &#125;</div><div class="line">	 &#125; </div><div class="line">	 	 </div><div class="line">	 <span class="keyword">if</span>(queens.size() == n)</div><div class="line">	 &#123;</div><div class="line">		 queens_v.push_back(queens);</div><div class="line">		<span class="keyword">int</span>** mat_copy =  <span class="keyword">new</span> <span class="keyword">int</span>*[n] ;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">		&#123;</div><div class="line">			mat_copy[i] = <span class="keyword">new</span>  <span class="keyword">int</span>[n](); </div><div class="line">		&#125;	</div><div class="line">	</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;queens.size(); i++)</div><div class="line">		&#123;</div><div class="line">			idx =  queens[i];</div><div class="line">			mat_copy[idx.first][idx.second] = <span class="number">1</span> ;</div><div class="line">		&#125;</div><div class="line">	</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;n; j++)</div><div class="line">				<span class="built_in">cout</span>&lt;&lt; mat_copy[i][j] &lt;&lt; <span class="string">' '</span> ;</div><div class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">		&#125;</div><div class="line">	 &#125;</div><div class="line">		</div><div class="line">	clean_mat(mat, n);</div><div class="line">	sol(mat, n, ++backtrack); 			</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>I did actually new memory in C++ as following:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span>** mat = (<span class="keyword">int</span>**) <span class="keyword">new</span>(n * <span class="keyword">sizeof</span>(<span class="keyword">int</span>*)); </div><div class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;  i&lt;n; i++)</div><div class="line">	mat[i] = (<span class="keyword">int</span>*) <span class="keyword">new</span>( n * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div></pre></td></tr></table></figure>
-<p>which failed, then realized only malloc works in this way.</p>
+        <p>to test newly developed algorithms, due to the massive amount of simulation data, need a distributed simulation platform based on Spark distributed framework.</p>
+<ul>
+<li><p>simulation based on synthetic data, used in control and planning </p>
+</li>
+<li><p>simulation based on real data playback, used to test function and performance of different components</p>
+</li>
+</ul>
+<p>in autonomous driving system, each functional module in ROS is deployed as a node, the communication between nodes rely on the messages with well-defined formats. so the test of each module is independent, we can develop simulation module for each functional module. </p>
+<h2 id="anatomy-of-simulator"><a href="#anatomy-of-simulator" class="headerlink" title="anatomy of simulator"></a>anatomy of simulator</h2><p>there should be a dynamic model of the car, a vehicle dynamic model;  then the external environment is needed, which includes static and dynamic scenes.</p>
+<p>the simulator can decompose external environment into basic elements, and rearranges the combination to generate a variety of test cases, each simulating a specific scenario. </p>
+<p>e.g. the position, speed, next step command of the barrier vehicle can give different basic elements. </p>
+<h2 id="ROS-based-simulator"><a href="#ROS-based-simulator" class="headerlink" title="ROS based simulator"></a>ROS based simulator</h2><p>to use the real traffic data to reproduce the real scene requires a distributed simulation platform. </p>
+<ul>
+<li><p>ROSBAG, record from Topic and replay message to Topic. </p>
+<p>  the Record function is to create a recording node in ROS, and call the subscribe method to receive ROS message to all Topics, and then write the message to Bag file. </p>
+<p>  the Play function is to establish a play node, and call the advertise method to send message in bag to specified Topic. </p>
+</li>
+</ul>
+<h2 id="Spark-distributed-platform"><a href="#Spark-distributed-platform" class="headerlink" title="Spark distributed platform"></a>Spark distributed platform</h2><p>the Spark driver launch different simulation applications, e.g. localization algorithms, object recoginization algorithms, vehicle decision-making and control algorithms etc, then allocate resources to each Spark worker, who first reads the RosBag data into memory and launches a ROS node to process the incoming data. </p>
+<p>the interface between Spark and ROS is through Linux pipe, basically data written to the write end of the pipe is buffered by the kernel until it is read from the read end of the pipe.</p>
+<p>two problems: 1) Spark only support text-based data consuming; 2) Spark memeory to ROBag </p>
+<h3 id="Binary-data-streaming"><a href="#Binary-data-streaming" class="headerlink" title="Binary data streaming"></a>Binary data streaming</h3><p>the core Spark data structure is resilient distributed dataset (RDD). to process and transform binary data into a user-defined format and transform the output of Spark computation into a byte stream, even further to a generic binary file(HDFs)</p>
+<pre><code>1) encode and serialize the binary files(image, lidar input data) to form a binary byte stream 
+
+2) de-serialize and decode the binary stream, according to interpret byte stream into an understandable format and perform target computation
+
+3) the output then be encoded and serialized before passed in RDD partitions(e.g. HDFs), and returned to Spark driver 
+</code></pre><h3 id="data-retrieval-through-ROSbag-cache"><a href="#data-retrieval-through-ROSbag-cache" class="headerlink" title="data retrieval through ROSbag cache"></a>data retrieval through ROSbag cache</h3><p>two things: reading from memory through ROSbag play, and writing to memory through ROSbag record. </p>
+<p>solution: design a memoryChunkedFile class, derived from ChuckedFile class, to read/write memory rather than files.</p>
 
       
     </div>
@@ -401,7 +424,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
+            <a href="/tags/self-driving/" rel="tag"># self-driving</a>
           
         </div>
       
@@ -414,8 +437,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/29/how-broad-first-search-works/" rel="next" title="how broad first search works">
-                <i class="fa fa-chevron-left"></i> how broad first search works
+              <a href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" rel="next" title="paper reading-perception, planning, control and coordination for autonomous vehicles">
+                <i class="fa fa-chevron-left"></i> paper reading-perception, planning, control and coordination for autonomous vehicles
               </a>
             
           </div>
@@ -423,10 +446,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/29/how-recursive-works-with-passing-reference-variables/" rel="prev" title="how recursive works with passing reference variables">
-                how recursive works with passing reference variables <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -481,8 +500,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -555,6 +583,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#anatomy-of-simulator"><span class="nav-number">1.</span> <span class="nav-text">anatomy of simulator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROS-based-simulator"><span class="nav-number">2.</span> <span class="nav-text">ROS based simulator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark-distributed-platform"><span class="nav-number">3.</span> <span class="nav-text">Spark distributed platform</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Binary-data-streaming"><span class="nav-number">3.1.</span> <span class="nav-text">Binary data streaming</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-retrieval-through-ROSbag-cache"><span class="nav-number">3.2.</span> <span class="nav-text">data retrieval through ROSbag cache</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -692,9 +736,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/08/29/how-backtracks-work/';
-          this.page.identifier = '2018/08/29/how-backtracks-work/';
-          this.page.title = 'how backtracks work';
+          this.page.url = 'http://yoursite.com/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/';
+          this.page.identifier = '2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/';
+          this.page.title = 'paper reading-distributed simulation platform for autonomous driving';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
