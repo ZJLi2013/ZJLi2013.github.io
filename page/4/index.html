@@ -291,6 +291,131 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/01/Btree-traversal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/01/Btree-traversal/" itemprop="url">Btree traversal</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-01T23:01:14-04:00">
+                2018-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/01/Btree-traversal/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/01/Btree-traversal/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://en.wikipedia.org/wiki/Tree_traversal" target="_blank" rel="external">Btree traversal</a> is obvious to implement in recursion. here are non-recursion implementation, which needs <code>std::stack</code> or <code>std::queue</code> data structure to store the next level nodes in both deep-first-search idea and breadth-first-search idea, <a href="https://zjli2013.github.io/" target="_blank" rel="external">link</a>. these are good examples of using stack, queue. </p>
+<p>usage in <a href="https://leetcode.com/problems/flatten-binary-tree-to-linked-list/description/" target="_blank" rel="external">leetCode114</a>, flatten a BTree to a linked list</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line">void preorder_print(TreeNode* leaf)</div><div class="line">&#123;</div><div class="line">	if(leaf == nullptr)</div><div class="line">		return; </div><div class="line">	</div><div class="line">	std::stack&lt;int&gt; s; </div><div class="line">	TreeNode* tmp ; </div><div class="line">	s.clear();  //</div><div class="line">	s.push(leaf);</div><div class="line">	while(!s.empty())</div><div class="line">	&#123;</div><div class="line">		tmp = s.pop(); </div><div class="line">		cout &lt;&lt; tmp-&gt;value  &lt;&lt; ', ' ;</div><div class="line">		if(leaf-&gt;right != nullptr)</div><div class="line">			s.push(leaf-&gt;right);</div><div class="line">		if(leaf-&gt;left != nullptr)</div><div class="line">			s.push(leaf-&gt;left);</div><div class="line">	&#125;</div><div class="line">		</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">void inorder_print(TreeNode* leaf)</div><div class="line">&#123;</div><div class="line">	std::stack&lt;int&gt; s ; </div><div class="line">	s.clear(); </div><div class="line">	TreeNode *tmp; </div><div class="line">	</div><div class="line">	while( !s.empty() || leaf!=nullptr)</div><div class="line">	&#123;</div><div class="line">		if(leaf != nullptr)</div><div class="line">		&#123;</div><div class="line">			s.push(leaf);</div><div class="line">			leaf = leaf-&gt;left;</div><div class="line">		&#125;else</div><div class="line">		&#123;</div><div class="line">			tmp = s.top();</div><div class="line">			s.pop(); </div><div class="line">			cout &lt;&lt; tmp-&gt;value &lt;&lt; ', ' ;</div><div class="line">			leaf = leaf-&gt;right;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">void postorder_print(TreeNode* leaf)</div><div class="line">&#123;</div><div class="line">	std::stack&lt;int&gt; s ;</div><div class="line">	s.clear();</div><div class="line">	</div><div class="line">	TreeNode *lastNodeVisited = nullptr ; </div><div class="line">	TreeNode *peekNode = nullptr; </div><div class="line">	</div><div class="line">	while( !s.empty() || leaf != nullptr)</div><div class="line">	&#123;</div><div class="line">		if(leaf != nullptr)</div><div class="line">		&#123;</div><div class="line">			s.push(leaf);</div><div class="line">			leaf = leaf-&gt;left;</div><div class="line">		&#125;else</div><div class="line">		&#123;</div><div class="line">			peekNode = s.top();</div><div class="line">			if(peekNode-&gt;right != nullptr &amp;&amp; lastNodeVisited != peekNode-&gt;right)</div><div class="line">				leaf = peekNode-&gt;right;</div><div class="line">			else</div><div class="line">			&#123;</div><div class="line">				cout &lt;&lt; peekNode-&gt;value &lt;&lt; ', ';</div><div class="line">				lastNodeVisited = s.top();</div><div class="line">				s.pop();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">void bfs_print(TreeNode* leaf)</div><div class="line">&#123;</div><div class="line">	std::queue&lt;int&gt; q ;</div><div class="line">	q.clear();</div><div class="line">	q.push(leaf);</div><div class="line">	TreeNode *node; </div><div class="line">	while( ! q.empty())</div><div class="line">	&#123;</div><div class="line">		node = q.front(); </div><div class="line">		q.pop();</div><div class="line">		cout &lt;&lt; node-&gt;vaue &lt;&lt; ', ';</div><div class="line">		</div><div class="line">		if(node-&gt;left != nullptr)</div><div class="line">			q.push(node-&gt;left);</div><div class="line">		</div><div class="line">		if(node-&gt;right != nullptr)</div><div class="line">			q.push(node-&gt;right)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/24/construct-a-self-balanced-BStree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1468,132 +1593,6 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-broad-first-search-works/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/29/how-broad-first-search-works/" itemprop="url">how broad first search works</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:35:58-04:00">
-                2018-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/29/how-broad-first-search-works/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/29/how-broad-first-search-works/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>leetCode 45 (jump game): Given an array of non-negative integers, you are initially positioned at the first index of the array.Each element in the array represents your maximum jump length at that position.Your goal is to reach the last index in the minimum number of jumps.</p>
-<p> e.g. [2, 3, 1, 1, 4] –&gt; 2 </p>
-<p>solution: at current position, bfs all the next positions it can jump to, when the back element is in next position list, then reached.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums )</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator  it, cur_it ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; *adj = <span class="keyword">new</span> <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;[nums.size()]; 	</div><div class="line">	<span class="keyword">int</span> cur_node ; </div><div class="line">	<span class="keyword">for</span>(it=nums.begin(); it &lt; nums.end();  it++)</div><div class="line">	&#123;</div><div class="line">		cur_node = *it; </div><div class="line">		adj[cur_node].push_back(cur_node); </div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;=cur_node; i++)</div><div class="line">		&#123;</div><div class="line">			cur_it =  <span class="built_in">std</span>::next(it, i);</div><div class="line">			adj[cur_node].push_back(*cur_it); </div><div class="line">			<span class="keyword">if</span>( *cur_it == nums.back())&#123;</div><div class="line">				it = nums.end();  <span class="comment">//reach the last element, so return </span></div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp; </div><div class="line">	<span class="keyword">int</span> last_element = nums.back(); </div><div class="line">	<span class="keyword">int</span> mini_path = <span class="number">1</span>; </div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; nums.size(); i++)</div><div class="line">	&#123;</div><div class="line">		tmp = adj[i]; </div><div class="line">		<span class="keyword">if</span>(!tmp.empty())</div><div class="line">		&#123; </div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;tmp.size(); j++)</div><div class="line">			&#123;</div><div class="line">				<span class="built_in">cout</span>&lt;&lt; tmp[j] &lt;&lt; <span class="string">' '</span> ;</div><div class="line">			&#125;</div><div class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>; </div><div class="line">			<span class="keyword">if</span>(tmp.back() == last_element)</div><div class="line">			&#123;</div><div class="line">				<span class="keyword">return</span> mini_path; </div><div class="line">			&#125;</div><div class="line">			mini_path++; </div><div class="line">		&#125;</div><div class="line">	&#125;	</div><div class="line">	<span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1644,7 +1643,7 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">65</span>
+                <span class="site-state-item-count">66</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
