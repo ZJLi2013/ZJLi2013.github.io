@@ -291,6 +291,157 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/卡尔曼滤波/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/30/卡尔曼滤波/" itemprop="url">卡尔曼滤波</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-30T10:21:09-04:00">
+                2019-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/30/卡尔曼滤波/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/30/卡尔曼滤波/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="状态方程"><a href="#状态方程" class="headerlink" title="状态方程"></a>状态方程</h2><p>状态变量 <code>$x$</code> 满足, 其中 <code>u</code>为控制变量：</p>
+<pre><code>$$ x = A x_prev + B u_prev + w_prev $$    (1) 
+</code></pre><p>观测变量 <code>$z</code> 满足：</p>
+<pre><code>$$ z = H x + v $$                    (2)
+</code></pre><p>随机信号 $<code>w</code>$ 和 $<code>v</code>$ 分别表示过程激励噪声和观测噪声，假定相互独立，且服从正态分布。</p>
+<p>定义状态变量的先验估计 $<code>x^-</code>$， 即基于之前状态对当前状态的预测值； 定义后验估计 $<code>x^</code>$，即已知当前观测值所计算的当前状态变量。 定义先验误差 $<code>e^-</code>$, 后验误差 $<code>e^</code>$, 满足： </p>
+<pre><code>$$ e^- = x - x^- $$                     (3)
+
+$$ e^ = x - x^ $$                         (4)
+</code></pre><p>卡尔曼滤波表示： 后验估计（观测值所推导的状态变量值）与先验估计（预测的状态变量值）的差异，可表示为观测值与以先验估计为输入的观测值的差异的增益 <code>K</code>。</p>
+<pre><code>$$ x^ -  x^- =  K ( z - H x^- ) $$     (5)
+</code></pre><p><code>K</code>可由先验误差的协方差 <code>P</code>、观测噪声的协方差<code>R</code> 和观测增益<code>H</code>表示: </p>
+<pre><code>$$ K = P^- H^t /  (  HP^-H^t + R ) $$   (6)
+</code></pre><p>可见：</p>
+<p>1） 当<code>R</code> 趋于0时， <code>k</code> 趋近于 <code>h</code> 的逆，此时 <code>x^ = x</code>。即当观测误差很小，观测值趋近真实值。</p>
+<p>2） 当<code>P</code>趋于0时，即预测值趋近真实值。  </p>
+<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>卡尔曼滤波器用反馈控制估计过程状态（变量）：  滤波器估计某一时刻的状态（时间更新/预估），然后以（含噪声的）测量变量获得反馈（测量更新/校政）。</p>
+<p>时间更新，当前时步状态先验估计 <code>x^-</code> 及先验误差协方差近似<code>P^-</code>:</p>
+<pre><code>$$ x^- =  A x^-_prev + B u_prev $$  (7.1)
+
+$$ P^- = A P^_prev A^t + Q $$         (7.2)
+</code></pre><p>其中 $ P(w) ~ N(0, Q) $ </p>
+<p>测量更新，使用(6)更新卡尔曼增益<code>K</code>, 使用（5)更新后验状态变量<code>x^</code>和当前步先验误差协方差值 <code>P^</code>： </p>
+<pre><code>$$ P = ( I  - KH ) P^-  $$            (8)
+</code></pre><h2 id="控制器调参"><a href="#控制器调参" class="headerlink" title="控制器调参"></a>控制器调参</h2><p>测量误差一般可观测得到；而过程误差q需要通过与一个已知误差的在线滤波器对比调整系数。调参一般是离线过程。一般当过程误差和卡尔曼增益会快速收敛并保持常数。但测量误差受环境影响不易保持不变。</p>
+<h2 id="扩展卡尔曼"><a href="#扩展卡尔曼" class="headerlink" title="扩展卡尔曼"></a>扩展卡尔曼</h2><p>当观测值与系统状态变量 或 系统本身是非线性关系，方程(1), (2)变非线性函数。</p>
+<pre><code>$$  x = f(x_prev, u_prev, w) $$  (1.2) 
+$$  z =  h(x, v)    $$            (2.2) 
+</code></pre><p><a href="https://www.cs.unc.edu/~welch/kalman/media/pdf/kalman_intro_chinese.pdf" target="_blank" rel="external">link</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1696,152 +1847,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/03/apollo-planning-module/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/03/apollo-planning-module/" itemprop="url">apollo planning module</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-03T08:30:43-05:00">
-                2019-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/03/apollo-planning-module/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/03/apollo-planning-module/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://yq.aliyun.com/articles/691219" target="_blank" rel="external">决策规划</a>, 根据导航信息及车辆的当前状态，在有限时间内，计算出一条合适的轨迹。</p>
-<h2 id="Lattice-Planner"><a href="#Lattice-Planner" class="headerlink" title="Lattice Planner"></a><a href="https://mp.weixin.qq.com/s/YDIoVf20kybu8JEUY3GZWg?spm=a2c4e.11153940.blogcont691219.30.78693edf59tdSa" target="_blank" rel="external">Lattice Planner</a></h2><ul>
-<li>Sample candidate trajectories </li>
-<li>Assign costs </li>
-<li>Select lowest-cost trajectory, to satisfy constraint &amp; collision check in each cycle</li>
-<li>Output </li>
-</ul>
-<h3 id="Frenet-坐标"><a href="#Frenet-坐标" class="headerlink" title="Frenet 坐标"></a>Frenet 坐标</h3><p>定义沿路面的一条光滑参考线（路面中心线）， 汽车位置坐标由纵向偏移量，横向偏移量表示。纵向坐标，由汽车质心在参考线上的投影点，到参考线起点的长度s表示；横向坐标， 由投影点到汽车质心的距离l表示。</p>
-<p>在Frenet坐标下，汽车的朝向、速度、加速度可由横、纵向偏移量的一阶导、二阶导表示。另外，由车辆动力学控制方程可知，横向的偏移量变化率与纵向速度相关，即横向运动是由纵向运动诱发的。</p>
-<h3 id="生成轨迹"><a href="#生成轨迹" class="headerlink" title="生成轨迹"></a>生成轨迹</h3><p>分别由初始（当前）横向、纵向的状态信息（位置、速度、加速度），和下一时刻的横向、纵向状态信息（位置、速度、加速度），可以得到Frenet坐标下的一个轨迹点。通过一系列的时间点t0，t1, … tn, 可以得到一系列的轨迹点p0, p1, … pn， 即形成一条轨迹。</p>
-<h3 id="轨迹集合采样"><a href="#轨迹集合采样" class="headerlink" title="轨迹集合采样"></a>轨迹集合采样</h3><p>轨迹采样，本质上是通过在解空间随机布点，然后贪婪搜索，筛选最低cost function value的点，即为可行轨迹。</p>
-<p>横向偏移量由动力学方程可由纵向偏移量唯一决定，即从控制方程上，每个scenario可以变成由纵向偏移量当唯一自变量的控制方程，从而保证有唯一最优解或者无解。但实际上，由纵向偏移量唯一表示的控制方程，需要满足不同scenario的约束条件，即一个带约束条件的优化问题。随机算法是一个鲁棒性很强的方法，而且大部分情况下，至少可以得到一个可行解。apollo中横向轨迹、纵向轨迹分别采样。</p>
-<p>apollo的横向轨迹的采样，由内部自定义三种横向偏移量： -0.5， 0， 0.5； 同时，设计到达这些横向偏移量的纵向位移： 10， 20， 40， 80. 两层循环即可得到一个轨迹集合。由此定义的横向轨迹不一定符合运动学、动力学约束。</p>
-<p>apollo的纵向轨迹的采样，考虑巡航、跟车、超车、停车等scenario。</p>
-<p>比如，巡航场景，通过两层循环采样。外层循环将速度从零到速度上限按等间距均匀遍历，内层循环由1s-8s均匀遍历。对于停车的场景，末状态的速度、加速度是0.</p>
-<h3 id="ST-Graph"><a href="#ST-Graph" class="headerlink" title="ST-Graph"></a>ST-Graph</h3><p>横坐标是时刻，纵坐标是障碍车的车头、车尾的位置。st图将描绘障碍车进入当前车道到离开当前车道所占据的位置区域。自驾车必须确保与障碍车所占据位置有重合。跟车，即在被占区域的下方，或超车，即在被占区域的上方。</p>
-<p>由跟车或超车，即可采样各个时刻的纵向偏移量，然后同理横向偏移量采样，形成纵向轨迹集合。</p>
-<h3 id="轨迹cost"><a href="#轨迹cost" class="headerlink" title="轨迹cost"></a>轨迹cost</h3><p>轨迹规划的约束条件： 达到目的、 横向偏移代价（尽量沿着道路中心行驶）、碰撞代价、符合交规、平稳舒适（横向加速度代价）、 纵向加速度代价（激烈加速）、向心加速度代价（转弯场景）。</p>
-<p>对于换道场景，对当前车道、目标车道的参考线做一次采样，并找到最低cost的轨迹。可以设计换道cost 。</p>
-<h2 id="EM-planner"><a href="#EM-planner" class="headerlink" title="EM planner"></a>EM planner</h2><p>expectation maximum(EM) ， <a href="https://blog.csdn.net/yuxuan20062007/article/details/83629595" target="_blank" rel="external">最大期望算法</a>，在概率模型中寻找参数最大似然估计或最大后验估计，其概率模型依赖于无法观测的隐性变量。</p>
-<p>首先，计算期望（e)， 利用对隐藏变量的现有估计值，计算其最大似然估计值；然后，最大值m， 最大化在e步上求的的最大似然值来计算参数的值。step-2 的参数被用于下一个 step-1 的计算。</p>
-<p>em planner 会迭代对路径path、速度velocity进行优化。基于当前步的path和对其他运动物体的预测，优化当前步的速度；然后基于这个新的速度，再优化path。迭代直到收敛。</p>
-<p>EM Planner 相比 Lattice Planner，利用了更多当前时间步的状态信息，在每个local timestep 都得到一个可行解。一系列的局部解，相当于弱形式，如果解空间存在可行解，局部解的迭代最终也将给出系统的可行解</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Plan</span><span class="params">(<span class="keyword">const</span> common::vehicle_state::VehicleState &amp;vehicle_state, </span></span></div><div class="line"><span class="keyword">const</span> <span class="keyword">bool</span> is_on_auto_mode,</div><div class="line"><span class="keyword">const</span> <span class="keyword">double</span> publish_time, </div><div class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;common::TrajectoryPoint&gt;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1892,7 +1897,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">69</span>
+                <span class="site-state-item-count">70</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
