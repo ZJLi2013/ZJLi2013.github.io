@@ -291,6 +291,155 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/12/hash-table/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/12/hash-table/" itemprop="url">hash table</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-12T15:47:28-05:00">
+                2018-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/12/hash-table/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/12/hash-table/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>the ideas behind <a href="https://algs4.cs.princeton.edu/34hash/" target="_blank" rel="external">hashtable</a> is: 1) input the key to hash function, output the bucket index; 2) adding the element <key, value=""> to the bucket[idx]. usually design the bucket[idx] as a linked list, allowing mulitply keys in the same bucket, which is called “collesion chaining”. 3) hashtable has three basic operators: insert/put, search/get, and remove. </key,></p>
+<p>the memory usage of hashtable is continuous bucket array, then each bucket is a linked list. when first thought about the “continue array”, really is a vector, then why need hash function. That’s the point, hashtable allows the benefits of both vector and linked list. </p>
+<p>a few interesting topics about hash. </p>
+<p>1)<a href="http://www.partow.net/programming/hashfunctions/#HashAndPrimes" target="_blank" rel="external">why prime numbers?</a>  the fundamental mathematical operations with prime numbers generally result in numbers who’s bit biases are close to random. in other word, when multiply or add a set of randome numbers by a prime number, the resulting numbers when as a group, statistically analyzed at their bit levels should show no bias towards being one state or another. in comupter science, pseudo random number generator has bit bias. </p>
+<p>2) <a href="http://www.partow.net/programming/hashfunctions/#AvailableHashFunctions" target="_blank" rel="external">string hash/scattering</a>,<br>basically the hash functions should deal with each chracter in the input string, so no information about this string will be missed, and the information entropy after hashing operator suppose increase.  </p>
+<p>3) <a href="http://www.voidcn.com/article/p-cywhtscu-bdy.html" target="_blank" rel="external">Blizzard hash function</a>. not all hash function deal collision conflict with linked list, here is the example.</p>
+<p>4) <a href="https://tessil.github.io/2016/08/29/benchmark-hopscotch-map.html" target="_blank" rel="external">hash map benchmark performance review</a></p>
+<p>one feeling at this moment, so many brilliant and deep-focusing guys there, stay foolish and stay humble. </p>
+<h2 id="std-unordered-map"><a href="#std-unordered-map" class="headerlink" title="std::unordered_map"></a>std::unordered_map</h2><p>there is <a href="https://www.geeksforgeeks.org/map-vs-unordered_map-c/" target="_blank" rel="external">map vs unordered_map</a> :</p>
+<pre><code>map      |     unordered_map
+</code></pre><hr>
+<pre><code>Ordering        | increasing  order   | no ordering
+                | (by default)        |
+
+Implementation  | Self balancing BST  | Hash Table
+
+search time     | log(n)    | O(1) -&gt;Average 
+                |           | O(n) -&gt; Worst 
+
+Insertion time  | log(n) + Rebalance  | Same as search
+
+Deletion time   | log(n) + Rebalance  | Same as search
+</code></pre><p>basically <code>map</code> works for traversal, pre/post element access; <code>unordered_map</code> is quick in once search,insertion, deletion. here is <a href="https://gist.github.com/DragonOsman/fe8f75466a69b2835d432bfbba0cd739" target="_blank" rel="external">a dictionary demo</a></p>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><p><a href="https://leetcode.com/problems/word-ladder/" target="_blank" rel="external">word ladder</a>,  hash table is used to find a special word from dictionary. the benefit of unorder_set is O(1) find. so design a unorder_set to store the dict.</p>
+<p>in the following example, each character position in the word requires 25 times search of the dict. also every marked word from the dict, should not be searched second time.</p>
+<p>another variable is used to track the list of one_character_diff from current word, it’s like BFS. so design as a queue, which only need take care the neighbor two layers. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">string</span> start, <span class="built_in">string</span> end, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordList)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> length = <span class="number">2</span> ; </div><div class="line">	<span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt; dict ;</div><div class="line">	foreach word in wordList:</div><div class="line">		dict.insert(word)</div><div class="line">	</div><div class="line">	<span class="built_in">queue</span>&lt;<span class="built_in">string</span>&gt; one_diff_list; </div><div class="line">	<span class="comment">// initial by pushing start </span></div><div class="line">	one_diff_list.push(start);</div><div class="line">	<span class="keyword">while</span>(!one_diff_list.empty())&#123;</div><div class="line">		<span class="keyword">int</span> size = one_diff_list.size();	</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;size; i++)&#123;</div><div class="line">			<span class="built_in">string</span> word=one_diff_list.front();</div><div class="line">			one_diff_list.pop();</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;start.length(); i++)&#123;</div><div class="line">				<span class="keyword">char</span> oldChar = word[i];</div><div class="line">				<span class="keyword">for</span>(<span class="keyword">char</span> c=<span class="string">'a'</span>; c&lt;=<span class="string">'z'</span>; c++)&#123;</div><div class="line">					<span class="keyword">if</span>(c == oldChar) <span class="keyword">continue</span> ;</div><div class="line">					word[i] = c ; </div><div class="line">					<span class="keyword">if</span>(dict.find(word) != dict.end())&#123;</div><div class="line">						<span class="keyword">if</span>(word == end) </div><div class="line">						&#123; <span class="comment">//find the match</span></div><div class="line">						  <span class="keyword">return</span> length;</div><div class="line">						&#125;</div><div class="line">						one_diff_list.push(word);</div><div class="line">						dict.erase(word);</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">				word[i] = oldChar;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		length++;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/01/reinforce-learning-in-simulator/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1480,137 +1629,6 @@ root-&gt;right = insert(root-&gt;right, key);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/print-combinatorics/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/19/print-combinatorics/" itemprop="url">print combinatorics</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-19T17:30:23-04:00">
-                2018-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/19/print-combinatorics/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/19/print-combinatorics/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>combinatorics related algorithms e.g. unique BST(leetCode95), Permutations(46), Unique Path(62).  Give an integer <code>m</code>, how many different combinations can have? mathematically, it’s a permutation <code>P_m^m</code> or combination <code>C_m^n</code> problem, the total number is easy to calculate, but how to write a code to print out each combination elegantly ?</p>
-<p>one core step: how to generate a new combination(k+1) array by inserting one new element into the current combination(k). e.g. </p>
-<pre><code>{1, 2} --&gt; {3, 1, 2}, {1, 3, 2}, {1, 2, 3}
-</code></pre><p>here is basically insert <code>3</code> at (k+1) positions, and each new position will generate a new combination with (k+1) size. depends on the problem, choose either <code>vector</code>(to support random access) or <code>list</code> (to support O(1) insert or delete) as the container. </p>
-<p>one tip here, how to erase one element from std::list while iterating ?</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&gt;  next_layer(<span class="built_in">vector</span>&lt;<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; layer, <span class="keyword">int</span> c)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(layer.empty())</div><div class="line">	&#123;</div><div class="line">		<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; tmp ;</div><div class="line">		tmp.push_back(c);</div><div class="line">		layer.push_back(tmp);</div><div class="line">		<span class="keyword">return</span> layer;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&gt; next_layer_v, cur; </div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;layer.size(); i++)</div><div class="line">	&#123;</div><div class="line">		<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator lit ;</div><div class="line">		<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;  arr = layer[i] ; </div><div class="line">		cur.clear();</div><div class="line">		<span class="keyword">for</span>(lit = arr.begin(); lit != arr.end(); lit++)</div><div class="line">		&#123;</div><div class="line"> 			arr.insert(lit, c); <span class="comment">//insert c in front of lit</span></div><div class="line">   			cur.push_back(arr);</div><div class="line">   			lit = arr.erase(--lit);  <span class="comment">// erase c, which is 1 step in front of lit, and must return lit here, else lit will become non-refereable </span></div><div class="line">		&#125;</div><div class="line">	</div><div class="line">	 	next_layer_v.insert(next_layer_v.end(), cur.begin(),  cur.end()); </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> next_layer_v; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span> num)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="built_in">vector</span>&lt;<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; &gt; layer, last_layer;</div><div class="line">  <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;  cur_list ;</div><div class="line"></div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; num; i++)</div><div class="line">  &#123;</div><div class="line">	  layer = next_layer(last_layer, i);</div><div class="line">	  last_layer = layer;</div><div class="line">  &#125;</div><div class="line">  print_vec_list(layer);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>this implementation is more clear than what I did in <a href="https://zjli2013.github.io/2018/08/29/how-recursive-works/" target="_blank" rel="external">Permutation</a></p>
-<p>while the memory of many last layers vector<list<int>&gt; actually are not in using. how to recycle the memory ?</list<int></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&gt;().swap(layer);</div><div class="line"><span class="comment">//or -std=c++11</span></div><div class="line">layer.resize(<span class="number">0</span>);</div><div class="line">layer.shrink_to_fit();</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1661,7 +1679,7 @@ root-&gt;right = insert(root-&gt;right, key);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-count">72</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
