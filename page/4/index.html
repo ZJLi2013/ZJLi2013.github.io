@@ -291,6 +291,138 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/clone-graph-with-dfs-bfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/14/clone-graph-with-dfs-bfs/" itemprop="url">clone graph with dfs & bfs</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-14T18:56:47-05:00">
+                2018-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/14/clone-graph-with-dfs-bfs/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/14/clone-graph-with-dfs-bfs/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/clone-graph/" target="_blank" rel="external">leetcode 133</a>, the solution is traversing the graph, so either bfs or dfs should work.</p>
+<p><code>dfs</code> works like a stack, take an example when processA is running, inside processB is invoked, then processA hang, and go into processB; as processB is running, inside processC is invoked, then processB hanged, and go into processC. e.t.c. so the finished order is from innerest to outest.  <code>dfs</code> will always traverse all possibilities, then return to the outest layer. </p>
+<p>in clone graph,  e.g. </p>
+<pre><code>#0, 1,  2
+#1, 2
+#2, 2 
+</code></pre><p><code>dfs</code> process as: </p>
+<p>first deal with first line, element <code>0</code>, which trick element <code>1</code>, so process goes to second line, and trick element <code>2</code>, so go to third line(done), then return to second line(done), then return to first line, trick second neighbor <code>2</code> go on… </p>
+<p><code>bfs</code> works different, during processA running, processB is invoked, will still run processA to done, but also push processB to job queue, which will run next time. so using <code>bfs</code>, usually has a <code>queue</code> variable to mark unfinished jobs.</p>
+ <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">UndirectedGraphNode</span> &#123;</span></div><div class="line">  <span class="keyword">int</span> label ;</div><div class="line">  <span class="built_in">vector</span>&lt;UndirectedGraphNode *&gt; neighbors ;</div><div class="line">  UndirectedGraphNode(<span class="keyword">int</span> x) : label(x) &#123;&#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//graph traversing by bfs</span></div><div class="line"><span class="function">UndirectedGraphNode *<span class="title">cloneGraph</span><span class="params">(UndirectedGraphNode *node)</span></span>&#123;</div><div class="line">      <span class="keyword">if</span>(!node) <span class="keyword">return</span> <span class="literal">nullptr</span> ;</div><div class="line">      UndirectedGraphNode *c_node = <span class="keyword">new</span> UndirectedGraphNode(node-&gt;label);</div><div class="line">      <span class="built_in">queue</span>&lt;UndirectionGraphNode*&gt; qlist ;</div><div class="line">      unorder_map&lt;<span class="keyword">int</span>, UndirectionGraphNode*&gt; <span class="built_in">map</span>;</div><div class="line">      <span class="built_in">map</span>[c_node-&gt;label] = c_node ;</div><div class="line">      qlist.push(c_node);</div><div class="line">      UndirectedGraphNode cur, neighbor = <span class="literal">nullptr</span>;</div><div class="line">      </div><div class="line">      <span class="keyword">while</span>(!qlist.empty())&#123;</div><div class="line">        cur = qlist.front(); qlist.pop();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cur-&gt;neighbors.size(); i++)&#123;</div><div class="line">         neighbor =  cur-&gt;neighbors[i];</div><div class="line">         <span class="keyword">if</span>(<span class="built_in">map</span>.find(neighbor-&gt;label))</div><div class="line">         &#123;</div><div class="line">           c_node-&gt;neighbors.push_back(neighbor);</div><div class="line">         &#125;<span class="keyword">else</span>&#123;</div><div class="line">           UndirectedGraphNode *tmp = <span class="keyword">new</span> UndirectedGraphNode(neighbor-&gt;label);</div><div class="line">           c_node-&gt;neighbors.push_back(tmp); </div><div class="line">           <span class="built_in">map</span>[tmp-&gt;label] = tmp ;</div><div class="line">           qlist.push(tmp);  <span class="comment">//bfs idea: find new node, push it to queue and deal</span></div><div class="line">           <span class="comment">// with it in next while loop</span></div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">      <span class="keyword">return</span> <span class="built_in">map</span>[c_node-&gt;label];</div><div class="line">  &#125;</div><div class="line"></div><div class="line"> <span class="comment">//dfs</span></div><div class="line"> <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(UndirectedGraphNode\* node, unorder_map&lt;<span class="keyword">int</span>, UndirectionGraphNode*&gt;&amp; <span class="built_in">map</span>)</span></span></div><div class="line"> &#123;</div><div class="line">    UndirectedGraphNode * c_node = <span class="literal">nullptr</span>;</div><div class="line">    <span class="keyword">if</span>(!<span class="built_in">map</span>.find(node-&gt;label))&#123;</div><div class="line">      c_node = <span class="keyword">new</span> UndirectedGraphNode(node-&gt;label);</div><div class="line">      <span class="built_in">map</span>[c_node-&gt;label] = c_node;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      c_node = <span class="built_in">map</span>.find(node-&gt;label);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    UndirectedGraphNode* nei;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;node-&gt;neighbors.size(); i++)&#123;</div><div class="line">        nei = node-&gt;neighbors[i];</div><div class="line">        <span class="keyword">if</span>(<span class="built_in">map</span>.find(nei-&gt;label))&#123;</div><div class="line">          c_node-&gt;neighbors.push_back(nei);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">          dfs(nei, <span class="built_in">map</span>);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"> <span class="function">UndirectedGraphNode *<span class="title">cloneGraph</span><span class="params">(UndirectedGraphNode *node)</span></span>&#123;</div><div class="line">   unorder_map&lt;<span class="keyword">int</span>, UndirectionGraphNode*&gt; <span class="built_in">map</span>;</div><div class="line">   dfs(node, <span class="built_in">map</span>);</div><div class="line">   <span class="keyword">return</span> <span class="built_in">map</span>[node-&gt;label]; </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/13/palindrome-partition/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1562,137 +1694,6 @@ g 3, 6
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/24/construct-a-self-balanced-BStree/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/24/construct-a-self-balanced-BStree/" itemprop="url">construct a self balanced BStree</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-24T17:59:21-04:00">
-                2018-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/24/construct-a-self-balanced-BStree/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/24/construct-a-self-balanced-BStree/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/description/" target="_blank" rel="external">leetCode 109</a> construct a height-balanced Binary Search tree from input array(sorted or not).</p>
-<p>a self-balanced BStree, which means the left and right kid of each node have no more than 1 height difference, also named as AVL tree. There are three basic routines in implementation of AVL tree:  right <a href="https://en.wikipedia.org/wiki/Tree_rotation" target="_blank" rel="external">tree rotate</a>, left tree rotate, and insert. and each TreeNode requires an additionly <code>height</code> value.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode*  <span class="title">rightRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode*  root_left =  leaf-&gt;left ;</div><div class="line">	TreeNode*  left_right = root_left-&gt;right ;</div><div class="line">	root_left-&gt;right = leaf;</div><div class="line">	leaf-&gt;left = left_right;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_left; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">leftRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode* root_right = leaf-&gt;right; </div><div class="line">	TreeNode* right_left = root_right-&gt;left; </div><div class="line">	root_right-&gt;left = leaf;</div><div class="line">	leaf-&gt;right =  right_left;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_right;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">insert</span><span class="params">(TreeNode* root, <span class="keyword">int</span> key)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(root==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(key));</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(key &gt; root-&gt;val)</div><div class="line">		root-&gt;right = insert(root-&gt;right, key);</div><div class="line">	</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(key &lt; root-&gt;val)</div><div class="line">			root-&gt;left = insert(root-&gt;left, key);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="keyword">return</span> root; </div><div class="line">	</div><div class="line">	root-&gt;height = <span class="built_in">std</span>::max(height(root-&gt;left), height(root-&gt;right)) + <span class="number">1</span> ; </div><div class="line">	<span class="keyword">int</span> balance = height_dif(root); </div><div class="line">	<span class="keyword">if</span>(balance &gt; <span class="number">1</span> &amp;&amp; key &lt; root-&gt;val )  <span class="comment">//new key inserted in left sub </span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> rightRotate(root); </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">/* keep in mind,    -1 &lt;= last_balance &lt;= 1 </span></div><div class="line">	   only  key &lt; root-&gt;val, will it possible that current_balance &gt; 1 */</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(balance &lt; <span class="number">-1</span> &amp;&amp; key &gt; root-&gt;val )</div><div class="line">	&#123;	</div><div class="line">		<span class="keyword">return</span> leftRotate(root);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>at the very first coding I natively pass node pointer by reference:</p>
-<pre><code>TreeNode* insert(TreeNode* &amp;root, int key)
-root-&gt;right = insert(root-&gt;right, key);
-</code></pre><p>since assigned insert() back to the same node pointer again, if passing by reference, each insert will clear the memory-write the same memory all the time, and can’t generate. what actually happen in <code>insert</code> is creating a new object. </p>
-<p>the structure pointer inside structure definition is the trick here. when define <code>root</code> node, both <code>left</code>and <code>right</code> nodes are <code>nullptr</code>, so argument <code>root-&gt;right</code> is <code>nullptr</code>, but the returning <code>root-&gt;right</code> is actually pointing to a node structure memory. </p>
-<p>also <a href="https://en.wikipedia.org/wiki/Null_pointer#Null_Dereferencing" target="_blank" rel="external">nullptr can’t be dereferring</a>,  basically since nullptr doesn’t point to any meaningful object, to dereference a null pointer will cause runtime or immediate crash.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1743,7 +1744,7 @@ root-&gt;right = insert(root-&gt;right, key);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">74</span>
+                <span class="site-state-item-count">75</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
