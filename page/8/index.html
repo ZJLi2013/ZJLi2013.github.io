@@ -291,6 +291,146 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/22/W3C-automotive-open-web-platform/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/22/W3C-automotive-open-web-platform/" itemprop="url">W3C automotive open web platform</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-22T21:16:59-04:00">
+                2018-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/22/W3C-automotive-open-web-platform/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/22/W3C-automotive-open-web-platform/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="W3C-automotive-open-web-platform"><a href="#W3C-automotive-open-web-platform" class="headerlink" title="W3C automotive open web platform"></a>W3C automotive open web platform</h1><p>Main page: <a href="https://www.w3.org/auto/wg/" target="_blank" rel="external">Link</a></p>
+<p>A clear web framework: 1) define the network communication APIs(based WebSocket protocol); 2) standarlize vehicle data; 3) define APIs to access vehicle data. </p>
+<h2 id="Vehicle-Information-Service-Specification-VISS"><a href="#Vehicle-Information-Service-Specification-VISS" class="headerlink" title="Vehicle Information Service Specification(VISS)"></a>Vehicle Information Service Specification(VISS)</h2><p>Object: to define WebSocket based APIs for a vehicle information service to enable client apps to get, set, subscribe, unsubscribe to vehicle signals, data attributes<br><a href="https://w3c.github.io/automotive/vehicle_data/vehicle_information_service.html" target="_blank" rel="external">Link</a></p>
+<p><img src="VISS.png" alt="VISS architecture"> </p>
+<h2 id="Vehicle-Data"><a href="#Vehicle-Data" class="headerlink" title="Vehicle Data"></a>Vehicle Data</h2><p>doc <a href="https://rawgit.com/w3c/automotive/master/vehicle_data/data_spec.html" target="_blank" rel="external">Link</a></p>
+<p>Object: to define a standard Vehicle Data with might be available in a vehicle </p>
+<p>1)    VehicleInterface<br>2)    VehicleCommonDataType<br>3)    VehicleConfigurationInterface (identification, sizeConfiguration, fuelConfiguration, transmissionConfiguration, wheelConfiguration, steeringWheelConfiguration)<br>4)    Running Status Interface(vehicleSpeed, wheelSpeed, engineSpeed, vehiclePowerMode, powertrain, acceleratorPedalPosition, throttlePosition, tripMeters, transmission, cruiseControlStatus, lightStatus, interiorLightStatus, horn, chime, fuel, engineOil, acceleration, engineeCoolant, steeringWheel, wheelTick, ignitionTime, gyro, brakeOperation, buttonEvent, drivingStatus, nightMode, startStopMode)<br>5)    Maintenance Interfaces(odometer, transmissionOil, transmissionClutch, brakeMaintenance, washerFluid, malfuncitonIndicator, battery Status, Tire, trouble Code, diagnostic)<br>6)    Personalization Interfaces ( languageConfiguration, unitsOfMeasures, mirror, driveMode, seatAdjustment, dashboardIllumination, vehicleSound )<br>7)    DrivingSafety Interfaces ( antilockBrakingSystem, tractionControlSystem, electroniceStabilitySystem, topSpeedLimit, airbagStatus, door, childSafetyLock, seat)<br>8)    Climate Interfaces (temperature, rainSensor, wiperStatus, defrost, sunroof, convertibleRoof, sideWindow, climateControl, atmosphericPressure)<br>9)    Vision &amp; Parking Interfaces( laneDepartureDetection, alarm, parkingBrake, parkingSensors) </p>
+<h2 id="Vehicle-Information-API-Specification"><a href="#Vehicle-Information-API-Specification" class="headerlink" title="Vehicle Information API Specification"></a>Vehicle Information API Specification</h2><p>Object: define a high level API for accessing vehicle signals, data attributes and communicate with in-vehicle data servers </p>
+<p>doc <a href="https://www.w3.org/TR/vehicle-information-api/#vehicleinterface-interface" target="_blank" rel="external">Link</a></p>
+<ul>
+<li>VISClient Interface<br>  used to define any on-board, off-board clients</li>
+<li>VISClientOptions Interface<br>  used to define a connection to a vehicle signal     server(speicifiable by protocal, host, port) </li>
+<li>VISSubscription Interface<br>  used as return value from subscribed() methods  </li>
+<li>VSS Interface<br>  used as return value from getVSS(), which should be sufficent to fully traverse the VSS tree </li>
+</ul>
+<h2 id="Vehicle-Information-Access-API"><a href="#Vehicle-Information-Access-API" class="headerlink" title="Vehicle Information Access API"></a>Vehicle Information Access API</h2><p>doc <a href="https://rawgit.com/w3c/automotive/master/vehicle_data/vehicle_spec.html" target="_blank" rel="external">Link</a></p>
+<p>Object: enable connectivity through in-vehicle infotainment systems and vehicle data access protocols </p>
+<p>1)    Navigator Interface: exposes the interface to vehicle information services<br>2)    Vehicle Interface:  the initial entry point to get access to the vehicle information<br>3)    Zone interface: physical and logical zones<br>4)    VehicleIneterfaceCallback<br>5)    AvailableCallback<br>6)    VehicleInterfaceError  (permission denied, invalid operation, timeout, invalid zone, unknown, error, message)<br>7)    VehicleInterface : the base interface to get all vehicle properties<br>8)    VehicleCOnfigurationInterface :  access to static vehicle information<br>9)    VehicleSignalInterface:  access to variables vehicle info<br>10)    Data Availability :  available,  not supported, not supported security policy, supported …</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/18/where-are-you-in-next-5-years-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1027,7 +1167,7 @@ ResNet
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">76</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1040,7 +1180,7 @@ ResNet
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

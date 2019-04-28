@@ -291,6 +291,134 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/28/apollo-planning-源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/28/apollo-planning-源码/" itemprop="url">apollo planning 源码(1)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-28T11:30:06-04:00">
+                2019-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/28/apollo-planning-源码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/28/apollo-planning-源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line">APOLLO_MAIN(apollo::planning::Planning)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">	google::InitGoogleLogging(argv[<span class="number">0</span>]);</div><div class="line">	google::ParseCommandLineFlags(&amp;argc, &amp;argv, <span class="literal">true</span>); </div><div class="line">	signal(SIGINT, apollo::common::apollo_app_sigint_handler);</div><div class="line">	apollo::planning::Planning apollo_app_ ;</div><div class="line">	ros::init(argc, argv, apollo_app_.Name());</div><div class="line">	apollo_app_.Spin();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> ApolloApp::Spin()</div><div class="line">&#123;</div><div class="line">	ros::<span class="function">AsyncSpinner <span class="title">spinner</span><span class="params">(callback_thread_num_)</span></span>;</div><div class="line">	<span class="keyword">auto</span> status = Init();</div><div class="line">	status = Start(); </div><div class="line">	</div><div class="line">	spinner.start();</div><div class="line">	ros::waitForShutdown();</div><div class="line">	Stop();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"></div><div class="line">Status Planning::Init()</div><div class="line">&#123;</div><div class="line">	hdmap_ = apollo::hdmap::HDMapUtil::BaseMapPtr();</div><div class="line">	</div><div class="line">apollo::common::util::GetProtoFromFile(FLAGS_planning_config_file, &amp;config);</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(!AdapterManager::Initialized())&#123;</div><div class="line">		AdaapterManager::Init(FLAGS_planning_adapter_config_filename);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	AdapterManager::GetLocalization();</div><div class="line">	AdapterManager::GetChassis();</div><div class="line">	AdapterManager::GetRoutingResponse();</div><div class="line">	AdapterManager::GetRoutingRequest();</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_prediction)</div><div class="line">		AdapterManager::GetPrediction();</div><div class="line">		</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_traffic_light)</div><div class="line">		AdapterManager::GetTrafficLightDetection();</div><div class="line">		</div><div class="line">	ReferenceLineProvider::instance()-&gt;Init(hdmap_, config_.qp_spline_reference_line_smoother_config()); </div><div class="line">	</div><div class="line">	RegisterPlanners();</div><div class="line">	</div><div class="line">	planner_ = planner_factory_.CreateObject(config_.planner_type());</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> planner_-&gt;Init(config_);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* DEFINE_string(planning_adapter_config_filename,</span></div><div class="line">	"modules/planning/conf/adapter.conf",</div><div class="line">	"The adapter configuration file")</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;adapter_config_filename)</div><div class="line">&#123;</div><div class="line">	AdapterManagerConfig configs;</div><div class="line">	util::GetProtoFromFile(adapter_config_filename, &amp;configs);</div><div class="line">	Init(configs);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> AdapterManagerConfig&amp; configs)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(Initialized())	<span class="keyword">return</span>;</div><div class="line">	instance()-&gt;initialized_ = <span class="literal">true</span>; </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(configs.is_ros())&#123;</div><div class="line">		instance()-&gt;node_handle_.reset(<span class="keyword">new</span> ros::NodeHandle());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;config : configs.config())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::CHASSIS:</div><div class="line">			EnableChassis(FLAGS_chassis_topic, config);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::LOCALIZATION:</div><div class="line">			EnableLocalization(FLAGS_localization_topic, config);</div><div class="line">			<span class="keyword">break</span>;	</div><div class="line">			<span class="comment">// ...</span></div><div class="line">	&#125;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"><span class="comment">/* DEFINE_string 宏</span></div><div class="line">	FLAGS_chassis_topic -&gt;  /apollo/canbus/chassis</div><div class="line">	FLAGS_localization_topic -&gt; /apollo/localization/pose</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>where is <code>EnableChassis</code> ? </p>
+<p>in /apollo/modules/common/adapters/message_adapters.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> ChassisAdapter=Adapter&lt;::apollo::canbus::Chassis&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> GpsAdapter = Adapter&lt;apollo::localization::Gps&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> PlanningAdapter = Adapter&lt;planning::ADCTrajectory&gt;;</div></pre></td></tr></table></figure>
+<p>in /apollo/modules/common/adapters/adapter_manager.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> REGISTER_ADAPTER(name)</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> Enable#<span class="meta">#name(const std::string &amp;topic_name, const AdapterConfig&amp; config)</span></div><div class="line">	&#123;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h5 id="continue-tomorrow"><a href="#continue-tomorrow" class="headerlink" title="continue tomorrow"></a>continue tomorrow</h5>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/08/自动驾驶职位介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1713,174 +1841,6 @@ $$  z =  h(x, v)    $$            (2.2)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" itemprop="url">paper reading- autono Vi-Sim simualtion platform</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-28T05:36:00-04:00">
-                2019-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="introduction-of-Vi-Sim"><a href="#introduction-of-Vi-Sim" class="headerlink" title="introduction of Vi-Sim"></a>introduction of Vi-Sim</h2><ul>
-<li><p>data generation, allowing exports of traffic data and virtual sensor data on the vehicle, which can be used in training DL by generating automatically labelled classification and control data</p>
-</li>
-<li><p>dynamic traffic conditions, with varying vehicles, pedestrians, lighting, weather </p>
-</li>
-<li><p>rapid scenario construction</p>
-</li>
-</ul>
-<h2 id="simulation-modules"><a href="#simulation-modules" class="headerlink" title="simulation modules"></a>simulation modules</h2><p> Vi-Sim is divided into 8 extensible modules. </p>
-<h3 id="roads"><a href="#roads" class="headerlink" title="roads"></a>roads</h3><p> represented by center line, #lanes, directions, surface friction. the roads can quick constructed by drawing splines on the landscape</p>
-<h3 id="road-network"><a href="#road-network" class="headerlink" title="road network"></a>road network</h3><p> provides connectivity information of road and traffic infrastructure. the road network provides routing and localization purpose.</p>
-<h3 id="infrastructure"><a href="#infrastructure" class="headerlink" title="infrastructure"></a>infrastructure</h3><p> represents traffic lights, signage, and any entities that will modify the behavior of vehicles on the road. </p>
-<h3 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h3><p> represents the time of the day, weather, rain conditions, road friction etc. </p>
-<h3 id="non-vehicle-traffic"><a href="#non-vehicle-traffic" class="headerlink" title="non-vehicle traffic"></a>non-vehicle traffic</h3><p> basically pedestrains and cyclists in the map. both are following safe traffic rules.</p>
-<h3 id="data-capture"><a href="#data-capture" class="headerlink" title="data capture"></a>data capture</h3><p> this module used for logging data of the environment as well as sensor data from ego vehicle</p>
-<h2 id="driving-modules"><a href="#driving-modules" class="headerlink" title="driving modules"></a>driving modules</h2><h3 id="vehicle"><a href="#vehicle" class="headerlink" title="vehicle"></a>vehicle</h3><p>  represented as a physical-driven entity with specific tire, steering, sensor parameters. </p>
-<p>  the vehicle has 3 components: </p>
-<pre><code>* control is provided with steering, throttle, brake inputs;  
-
-
-* dynamics is implemented in Nvidia physX engine; 
-
-
-* perception component is a ray-cast with configurable uncertainty, detection time, classification error rate, and sensor angle/range. 
-</code></pre><p>   a vehicle can equip multiple sensors. the perception component provides interface to a generic camera interface and Monte Carlo scanning ray-casts, which can be extended to Lidar/camera based NN claassifiers. </p>
-<h3 id="driver"><a href="#driver" class="headerlink" title="driver"></a>driver</h3><p>   driving decision module, who fuses information from road network and vehicle’s sensor to make decisions. currently there are 3 driver models</p>
-<pre><code>   * lane-following driver, which employs control command like lane-keeping ADAS
-
-   * manual driver, allows a human drive the vehicle
-
-* autonoVi driver, use optimization-based maneuvering with traffic constraints to generate advanced behaviors 
-</code></pre><h2 id="limitations"><a href="#limitations" class="headerlink" title="limitations"></a>limitations</h2><ul>
-<li><p>lack of calibaration configuration to replicate specific sensors</p>
-</li>
-<li><p>driver modules are limited to hierarchical, rule-based approaches</p>
-</li>
-<li><p>real traffic conditions </p>
-</li>
-</ul>
-<h2 id="thoughts"><a href="#thoughts" class="headerlink" title="thoughts"></a>thoughts</h2><pre><code>1) sensor components in simulation, e.g.  Lidar, camera, Radar
-
-2) sensor calibration in simulation, Apollo and Carla may has some good suggestions 
-
-3) multi-agents environment
-
-4) distributed framework to ensure real time multi-agents simualtion 
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1931,7 +1891,7 @@ $$  z =  h(x, v)    $$            (2.2)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">75</span>
+                <span class="site-state-item-count">76</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1944,7 +1904,7 @@ $$  z =  h(x, v)    $$            (2.2)
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
