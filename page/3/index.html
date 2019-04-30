@@ -291,6 +291,141 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/22/apollo-self-driving-car/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/02/22/apollo-self-driving-car/" itemprop="url">apollo self driving car</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-22T09:22:31-05:00">
+                2019-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/02/22/apollo-self-driving-car/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/02/22/apollo-self-driving-car/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="apollo-self-driving-car"><a href="#apollo-self-driving-car" class="headerlink" title="apollo self-driving car"></a>apollo self-driving car</h1><h2 id="HD-maps"><a href="#HD-maps" class="headerlink" title="HD maps"></a>HD maps</h2><p>where to define the center-meter fidelity level maps, with landmarks, and even the height dimension as well, which is used as the guiding map and also the global coordinate to locate the vehicle in the world.  </p>
+<p>how to keep HD maps updated is a big invest. Baidu has hundreds service cars in China to collect the natural highway HD map data, even still to 2020. </p>
+<h2 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h2><p>SLAM tech is a robot maping the world at the same time localizing itself in the world. with HD maps prepared first, self-driving car only need localize itself at every timestep. and the common idea is comparing a few local landmarks with the corresponding global landmarks, then transfer the local vehicle position to its global position in HD map.</p>
+<h3 id="LiDAR-localization"><a href="#LiDAR-localization" class="headerlink" title="LiDAR localization"></a>LiDAR localization</h3><p> either based on the cloud points matching from continous timestamps; or calculating the error between the LiDAR points with the HD maps points; or based on the Karman filter, which give the highest possibility of the location of vehicle</p>
+<p>always accessible but not easy to construct, especially requiring HD maps. </p>
+<h3 id="Visual-localization"><a href="#Visual-localization" class="headerlink" title="Visual localization"></a>Visual localization</h3><p>based on particle filters, which give the most likely location of the vehicle.</p>
+<h2 id="Perception"><a href="#Perception" class="headerlink" title="Perception"></a>Perception</h2><h3 id="detection-amp-amp-classification"><a href="#detection-amp-amp-classification" class="headerlink" title="detection &amp;&amp; classification"></a>detection &amp;&amp; classification</h3><p>where the object located, and classify it. detection CNN to find the object in the image; then use classification CNN to classify it. or use a combined CNN to detect and classify at same time.</p>
+<h3 id="tracking"><a href="#tracking" class="headerlink" title="tracking"></a>tracking</h3><p>tracking helps when detection failed; also tracking helps to identity the object, so when objects overlapped in the image, still can tell which is which. </p>
+<h2 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h2><h3 id="model-based-prediction"><a href="#model-based-prediction" class="headerlink" title="model based prediction"></a>model based prediction</h3><h3 id="data-driven-prediction"><a href="#data-driven-prediction" class="headerlink" title="data driven prediction"></a>data driven prediction</h3><p>after prediction, then generate the trajectory. </p>
+<h2 id="Planning"><a href="#Planning" class="headerlink" title="Planning"></a>Planning</h2><p>transfer the world to graph, and find routings in the graph. routing is a global path, comparing to trajectory is the local way.</p>
+<h2 id="Vehicle-control"><a href="#Vehicle-control" class="headerlink" title="Vehicle control"></a>Vehicle control</h2><p>linear quadratic regulator</p>
+<p>PID </p>
+<p>model predictive control</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/where-am-I-in-next-5-years-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1514,135 +1649,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/17/word-break-with-dfs-bfs/" itemprop="url">word break with dfs & bfs</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T23:22:15-05:00">
-                2018-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/17/word-break-with-dfs-bfs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/17/word-break-with-dfs-bfs/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://leetcode.com/problems/word-break/description/" target="_blank" rel="external">leetcode 139</a></p>
-<h2 id="dfs"><a href="#dfs" class="headerlink" title="dfs"></a>dfs</h2><p>traversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but also traversing all unnecessary possibilites. and need design a class variable to stop the dfs() </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> found = <span class="literal">false</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span>&#123;</div><div class="line">  <span class="built_in">string</span> left, right ;</div><div class="line">  <span class="keyword">if</span>(s.size() == <span class="number">0</span> || s.empty())</div><div class="line">  &#123;</div><div class="line">    found = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">return</span> found;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=s.size(); i++)</div><div class="line">  &#123;</div><div class="line">    left = s.substr(<span class="number">0</span>, i);</div><div class="line">    right = s.substr(i, s.size()-i);</div><div class="line">    <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">    &#123;</div><div class="line">      dfs(right, dict);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> found;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="bfs"><a href="#bfs" class="headerlink" title="bfs"></a>bfs</h2><p>as mentioned above, <code>dfs</code> goes to all possibile branches, which is not required. <code>bfs</code> is like a greedy way, to find out one working solution and done.</p>
-<p>also need keep track of searched left sub-strings, since the remaining right sub-strings may can not find a matched from dict, then the left sub-string is not acceptable, so the left sub-string need move one char further.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">bfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> len = s.size();</div><div class="line">    <span class="built_in">string</span> s1, q, left, right;</div><div class="line">    <span class="built_in">queue</span>&lt;<span class="built_in">string</span>&gt; sq;</div><div class="line">    sq.push(s);</div><div class="line"></div><div class="line">    <span class="built_in">string</span> tmp ;</div><div class="line">    <span class="keyword">while</span>(!sq.empty())&#123;</div><div class="line">    tmp = sq.front(); sq.pop();</div><div class="line">    <span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line">    s1 = s ;</div><div class="line">    <span class="keyword">while</span>(!s1.empty() &amp;&amp; i &lt;= s1.size())</div><div class="line">    &#123;</div><div class="line">      <span class="keyword">if</span>(tmp == s)&#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i);</div><div class="line">        right = s1.substr(i, s1.size()-i);</div><div class="line">      &#125;<span class="keyword">else</span></div><div class="line">      &#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i+tmp.size()); <span class="comment">///will dead-cycle </span></div><div class="line">        right = s1.substr(i+tmp.size(), s1.size()-i-tmp.size());</div><div class="line">      &#125;</div><div class="line">      i++;</div><div class="line">      <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">      &#123;</div><div class="line">        q += left ;</div><div class="line">        sq.push(left);</div><div class="line">        s1 = right;</div><div class="line">        i = <span class="number">0</span>;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
-<p>this <code>bfs</code> is not good design.<br>a pretty simple sample <a href="https://www.jiuzhang.com/solution/word-break/#tag-highlight-lang-cpp" target="_blank" rel="external">code</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1693,7 +1699,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">76</span>
+                <span class="site-state-item-count">77</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
