@@ -291,6 +291,144 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/lru-cache-design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/18/lru-cache-design/" itemprop="url">lru cache design</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-18T16:21:01-05:00">
+                2018-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/18/lru-cache-design/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/18/lru-cache-design/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/lru-cache/" target="_blank" rel="external">leetCode 146</a>, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements:</p>
+<p>first a hash map data structure for key, value operations, e.g. get(), put(); but normal hash map can’t track the most recent used element, so either find a data structure, which can track the recently used element in the hash map; or define some routines to do it.</p>
+<h2 id="a-data-structure-to-catch-recently-used"><a href="#a-data-structure-to-catch-recently-used" class="headerlink" title="a data structure to catch recently used"></a>a data structure to catch recently used</h2><p>each get(), put() will operate on one special element, and that element should be marked as recently used, and the next element is the least recently used element, which can be overlapped in next operation.</p>
+<p><code>stack</code> and  <code>queue</code> have some property to track the most recent element, but they are one-way, not straight forward to manage two neighbor elements. </p>
+<p><code>double linked list</code> is a good choice to track both the most recent element and the least most recent element. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></div><div class="line">	<span class="keyword">int</span> val ;</div><div class="line">	<span class="keyword">int</span> key ;</div><div class="line">	Node *pre ;</div><div class="line">	Node *next ;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value_, <span class="keyword">int</span> key_)</span></span></div><div class="line">	&#123;</div><div class="line">		val = value_;</div><div class="line">		key = key_ ; </div><div class="line">		pre = <span class="literal">NULL</span> ;</div><div class="line">		next = <span class="literal">NULL</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> &#123;</span></div><div class="line">	<span class="keyword">public</span>: </div><div class="line">		<span class="built_in">list</span>&lt;node*&gt; recent ;</div><div class="line">		unorder_map&lt;<span class="keyword">int</span>, node*&gt;  hash ;</div><div class="line">		<span class="keyword">int</span> capacity ;</div><div class="line">		</div><div class="line">		LRUCache(<span class="keyword">int</span> cap): capacity(cap) &#123;&#125;</div><div class="line">		</div><div class="line">		<span class="function">node* <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key])</div><div class="line">				recent.push_front(hash[key]); </div><div class="line">				<span class="keyword">return</span> hash[key] ;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span> ;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key]);</div><div class="line">				hash[key] =  value; </div><div class="line">				recent.push_front(hash[key]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			node* tmp = <span class="keyword">new</span> node(value, key); </div><div class="line">			hash[key] = tmp ; </div><div class="line">			recent.remove(tmp); </div><div class="line">			recent.push_front(tmp);</div><div class="line">	</div><div class="line">			<span class="keyword">if</span>(hash.size() &gt;= capacity)&#123;</div><div class="line">				node *tmp2 = recent.back(); </div><div class="line">				hash.erase(tmp2-&gt;key); </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="routines-to-track-recently-used"><a href="#routines-to-track-recently-used" class="headerlink" title="routines to track recently used"></a>routines to track recently used</h2><p>in this way, the hash is still needed, but define <a href="http://rainykat.blogspot.com/2017/02/leetcode-146-lru-cachehashmap-doubly.html" target="_blank" rel="external">routine</a> to set the latest updated node always at front.</p>
+<pre><code class="c"><span class="function"><span class="keyword">void</span> <span class="title">setHead</span><span class="params">(Node* n)</span></span>{
+    n.next = head ; 
+    n.pre = null ;
+    <span class="keyword">if</span>(head != null) head.pre = n ;
+    head = n ; 
+    <span class="keyword">if</span>(end == null) end = head;  <span class="comment">//only 1 element </span>
+}
+</code></pre>
+<p>when solving real problems, either has a good understand about special data structure, which can solve this problem, or the raw way is to implement routines based on the exisiting input</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/where-are-you-in-next-5-years-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1565,131 +1703,6 @@ Deletion time   | log(n) + Rebalance  | Same as search
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/11/the-OK-and-not-OK-in-my-life/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/11/the-OK-and-not-OK-in-my-life/" itemprop="url">the OK and not OK in my life</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-11T18:42:04-04:00">
-                2018-10-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/11/the-OK-and-not-OK-in-my-life/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/11/the-OK-and-not-OK-in-my-life/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://www.monkeyquiz.com/life/rate_my_life.html" target="_blank" rel="external">go ahead</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;table cellspacing=&quot;0&quot; style=&quot;border: 1px solid #333333; margin: 10px;&quot;&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;border: none; font: bold 16px sans-serif; background: #ffddbb; color: #000000; padding: 5px; margin: 0px; text-align: center;&quot;&gt;This Is My Life, Rated&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;width: 85px; padding: 5px; font: bold 18px sans-serif; text-align: left; border: 1px solid #333333; border-left: none; background-image: none; background: #ffffcc; color: #000000;&quot;&gt;Life:</div><div class="line">&lt;/td&gt;&lt;td style=&quot;width: 240px; padding: 5px; padding-left: 0px; font: bold 18px sans-serif; text-align: left; border: 1px solid #333333; border-left: none; border-right: none; vertical-align: middle; background-image: none; background: #ffffff; color: #000000;&quot;&gt;&lt;img src=&quot;http://www.monkeyquiz.com/img/grebar.gif&quot; height=&quot;12&quot; width=&quot;124&quot; style=&quot;border: 1px solid #000000; border-left: none; vertical-align: middle; padding: 0px; margin: 0px;&quot;&gt; 6.2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;width: 85px; padding: 5px; font: bold 12px sans-serif; text-align: left; border: none; border-right: 1px solid #333333; background-image: none; background: #ffffcc; color: #000000;&quot;&gt;Mind:</div><div class="line">&lt;/td&gt;&lt;td style=&quot;width: 240px; padding: 5px; padding-left: 0px; font: bold 12px sans-serif; text-align: left; border: none; vertical-align: middle; background-image: none; background: #ffffff; color: #000000;&quot;&gt;&lt;img src=&quot;http://www.monkeyquiz.com/img/greblubar.gif&quot; height=&quot;12&quot; width=&quot;134&quot; style=&quot;border: 1px solid #000000; border-left: none; vertical-align: middle; padding: 0px; margin: 0px;&quot;&gt; 6.7&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;width: 85px; padding: 5px; font: bold 12px sans-serif; text-align: left; border: none; border-right: 1px solid #333333; background-image: none; background: #ffffcc; color: #000000;&quot;&gt;Body:</div><div class="line">&lt;/td&gt;&lt;td style=&quot;width: 240px; padding: 5px; padding-left: 0px; font: bold 12px sans-serif; text-align: left; border: none; vertical-align: middle; background-image: none; background: #ffffff; color: #000000;&quot;&gt;&lt;img src=&quot;http://www.monkeyquiz.com/img/blubar.gif&quot; height=&quot;12&quot; width=&quot;156&quot; style=&quot;border: 1px solid #000000; border-left: none; vertical-align: middle; padding: 0px; margin: 0px;&quot;&gt; 7.8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;width: 85px; padding: 5px; font: bold 12px sans-serif; text-align: left; border: none; border-right: 1px solid #333333; background-image: none; background: #ffffcc; color: #000000;&quot;&gt;Spirit:</div><div class="line">&lt;/td&gt;&lt;td style=&quot;width: 240px; padding: 5px; padding-left: 0px; font: bold 12px sans-serif; text-align: left; border: none; vertical-align: middle; background-image: none; background: #ffffff; color: #000000;&quot;&gt;&lt;img src=&quot;http://www.monkeyquiz.com/img/blupurbar.gif&quot; height=&quot;12&quot; width=&quot;176&quot; style=&quot;border: 1px solid #000000; border-left: none; vertical-align: middle; padding: 0px; margin: 0px;&quot;&gt; 8.8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;width: 85px; padding: 5px; font: bold 12px sans-serif; text-align: left; border: none; border-right: 1px solid #333333; background-image: none; background: #ffffcc; color: #000000;&quot;&gt;Friends/Family:</div><div class="line">&lt;/td&gt;&lt;td style=&quot;width: 240px; padding: 5px; padding-left: 0px; font: bold 12px sans-serif; text-align: left; border: none; vertical-align: middle; background-image: none; background: #ffffff; color: #000000;&quot;&gt;&lt;img src=&quot;http://www.monkeyquiz.com/img/orbar.gif&quot; height=&quot;12&quot; width=&quot;46&quot; style=&quot;border: 1px solid #000000; border-left: none; vertical-align: middle; padding: 0px; margin: 0px;&quot;&gt; 2.3&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;width: 85px; padding: 5px; font: bold 12px sans-serif; text-align: left; border: none; border-right: 1px solid #333333; background-image: none; background: #ffffcc; color: #000000;&quot;&gt;Love:</div><div class="line">&lt;/td&gt;&lt;td style=&quot;width: 240px; padding: 5px; padding-left: 0px; font: bold 12px sans-serif; text-align: left; border: none; vertical-align: middle; background-image: none; background: #ffffff; color: #000000;&quot;&gt;&lt;img src=&quot;http://www.monkeyquiz.com/img/redbar.gif&quot; height=&quot;12&quot; width=&quot;16&quot; style=&quot;border: 1px solid #000000; border-left: none; vertical-align: middle; padding: 0px; margin: 0px;&quot;&gt; 0.8&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;width: 85px; padding: 5px; font: bold 12px sans-serif; text-align: left; border: none; border-right: 1px solid #333333; background-image: none; background: #ffffcc; color: #000000;&quot;&gt;Finance:</div><div class="line">&lt;/td&gt;&lt;td style=&quot;width: 240px; padding: 5px; padding-left: 0px; font: bold 12px sans-serif; text-align: left; border: none; vertical-align: middle; background-image: none; background: #ffffff; color: #000000;&quot;&gt;&lt;img src=&quot;http://www.monkeyquiz.com/img/greblubar.gif&quot; height=&quot;12&quot; width=&quot;142&quot; style=&quot;border: 1px solid #000000; border-left: none; vertical-align: middle; padding: 0px; margin: 0px;&quot;&gt; 7.1&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;border: none; border-top: 1px solid #333333; font: bold 14px sans-serif; background: #ffeedd; padding: 5px; margin: 0px; text-align: center;&quot;&gt;&lt;a href=&quot;http://www.monkeyquiz.com/life/rate_my_life.html&quot; style=&quot;color: #0000ff;&quot;&gt;Take the Rate My Life Quiz&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</div></pre></td></tr></table></figure>
-<p>I am not a socialized man, period</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1740,7 +1753,7 @@ Deletion time   | log(n) + Rebalance  | Same as search
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">78</span>
+                <span class="site-state-item-count">79</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
