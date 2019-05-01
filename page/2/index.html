@@ -291,6 +291,149 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/" itemprop="url">paper reading-autonoVi: AV planning with dynamic maneuvers and traffic constraints</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-29T10:21:35-04:00">
+                2019-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this is the advanced driver module in <a href="https://zjli2013.github.io/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" target="_blank" rel="external">Vi-sim simulation platform</a>. this driver module algorithm pipeline:  </p>
+<p>1) a route plan by graph-search over the network of roads </p>
+<p>2) rules based guiding trajectories generation(traffic and lane following rules) </p>
+<p>3) set of candidate trajectories(control inputs) generation and evaluated by vehicle dynamic model and collision free model</p>
+<p>4) most feasible trajectory evaluated through optimization</p>
+<h3 id="vehicle-state-space"><a href="#vehicle-state-space" class="headerlink" title="vehicle state space"></a>vehicle state space</h3><p>the full state of a vehicle updates: </p>
+<p><code>X = (x, y, v, theta, throttle, steering, behavior)</code></p>
+<p>the vehicle updates its plan at a fixed palnning rate <code>dt</code>; at each pllaning step, the vehicle computes a target speed <code>v</code> and target steering <code>theta</code> to be achieved by the control system </p>
+<p><code>S(u, X)</code> determine if a set of control is feasible, given current state of the vehicle, <code>S(u, X)</code> will return false if the given input <code>u</code> cause a loss of traction or control.</p>
+<h3 id="sensing-and-perception"><a href="#sensing-and-perception" class="headerlink" title="sensing and perception"></a>sensing and perception</h3><p>the sensing module provide an approximation of the center line of lane, closet point on the lane center to the ego-vehicle, and friction coefficient.</p>
+<h3 id="route-choice-and-behavior-state"><a href="#route-choice-and-behavior-state" class="headerlink" title="route choice and behavior state"></a>route choice and behavior state</h3><p>behavior set includes merging, right turn, left run, keep straight. the behavior state of the vehicle is described as a finite-state machine(turn left, turn right, merge left, merge right), which restrict potential control decisions and adjust the weight of the cost function. </p>
+<h3 id="guiding-path"><a href="#guiding-path" class="headerlink" title="guiding path"></a>guiding path</h3><p>the ego-vehicle computes a set of waypoints along the current lane at fixed time intervals. <code>how to create the path based on waypoints</code> </p>
+<h3 id="collision-avoidance"><a href="#collision-avoidance" class="headerlink" title="collision avoidance"></a>collision avoidance</h3><p>define obstacles domain for each neighbor of the ego-vehicle, which is defined as all controls that could lead to collision.  the obstacles domain and the set of dynamic infeasible domain form the boundary of collision-free space for the ego-vehicle. </p>
+<h3 id="trajectory-sampling"><a href="#trajectory-sampling" class="headerlink" title="trajectory sampling"></a>trajectory sampling</h3><p>the exact obstacle domain is not computing time efficent, instead here use a sampling strategy around <code>theta</code> and <code>v</code> to determin a feasible control. each sample is referred to as a candidata control <code>u_c</code>.</p>
+<h3 id="trajectory-cost-function"><a href="#trajectory-cost-function" class="headerlink" title="trajectory cost function"></a>trajectory cost function</h3><p>once the set of suitable control candidates has been computed, the most feasible control will be selected by minimizing the cost function for each sample point <code>i</code> : </p>
+<p><code>C = sum_i{ C_path(i) + C_cmft(i) + C_mnvr(i) + C_prox(i)</code> </p>
+<p>1) path cost, defined as success at tracking its path and the global route.</p>
+<p>2) comfort cost, <code>C_cmfg = ||vel_acc|| +  ||theta_acc||</code> </p>
+<p>3) maneuver cost, penalize lane changes <code>C_mnvr = lane_change</code> </p>
+<p>4)  proximity cost, prevent the ego vehicle from passing close to neighbors. </p>
+<h3 id="control-input"><a href="#control-input" class="headerlink" title="control input"></a>control input</h3><p>one PID controller to driven current speed to match the target speed;  another PID controller drives the current steering angle to match the target.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/未来5年在哪里-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1708,391 +1851,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/26/自驾初创团队/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/26/自驾初创团队/" itemprop="url">自驾初创团队</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-26T09:25:39-05:00">
-                2019-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/26/自驾初创团队/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/26/自驾初创团队/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <table>
-<thead>
-<tr>
-<th>name</th>
-<th>CEO</th>
-<th>start-date</th>
-<th>business</th>
-<th>funding</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>宏景智驾</td>
-<td>刘飞龙(北美oem 背景）</td>
-<td>2018-8</td>
-<td>L4 Tier1供应商</td>
-<td>天使轮 ¥4千万</td>
-</tr>
-<tr>
-<td>赢彻科技</td>
-<td>翟学魂</td>
-<td>2018-9</td>
-<td>临港物流</td>
-<td>-</td>
-</tr>
-<tr>
-<td>拓疆者</td>
-<td>隋少龙（北美背景）</td>
-<td>2018-4</td>
-<td>无人挖掘机</td>
-<td>-</td>
-</tr>
-<tr>
-<td>驰加科技</td>
-<td>王明彦（国内oem 背景）</td>
-<td>2017-10</td>
-<td>低成本后装解决方案</td>
-<td>-  </td>
-</tr>
-<tr>
-<td>plus ai</td>
-<td>刘万千</td>
-<td>2017-3</td>
-<td>AI 方案？</td>
-<td>-</td>
-</tr>
-<tr>
-<td>纽励科技</td>
-<td>徐雷（特斯拉）</td>
-<td>2017—1</td>
-<td>视觉方案 ？</td>
-<td>-</td>
-</tr>
-<tr>
-<td>momenta</td>
-<td>曹旭东</td>
-<td>2016-7</td>
-<td>视觉方案</td>
-<td>c轮 $2亿 </td>
-</tr>
-<tr>
-<td>极木科技</td>
-<td>祁卫（亿航）</td>
-<td>2016-7</td>
-<td>机器人方案</td>
-<td>- </td>
-</tr>
-<tr>
-<td>驭势科技</td>
-<td>吴甘沙(intel)</td>
-<td>2016</td>
-<td>芯片方案 ？</td>
-<td>-</td>
-</tr>
-<tr>
-<td>易航智能</td>
-<td>陈禹行（吉大）</td>
-<td>2015-8</td>
-<td>汽车动力学、控制软件</td>
-<td>b轮 ¥2.2亿 </td>
-</tr>
-<tr>
-<td>青飞智能</td>
-<td>孙一飞（上交）</td>
-<td>-</td>
-<td>园区短距自驾解决方案</td>
-<td>天使轮 ¥千万</td>
-</tr>
-<tr>
-<td>环宇智行  李明（武大）</td>
-<td>自驾解决方案</td>
-<td>天使轮 ¥千万 </td>
-</tr>
-<tr>
-<td>行深智能</td>
-<td>安向京</td>
-<td>-</td>
-<td>自驾整体解决方案</td>
-<td>- </td>
-</tr>
-<tr>
-<td>畅行智能</td>
-<td>张祖峰（苏州清华）</td>
-<td>物流自驾解决方案</td>
-<td>天使轮 ¥千万</td>
-</tr>
-<tr>
-<td>图森未来</td>
-<td>陈默</td>
-<td>2015-8</td>
-<td>自驾卡车、视觉、ai</td>
-<td>d轮 $0.95亿 </td>
-</tr>
-<tr>
-<td>纵目科技</td>
-<td>唐锐</td>
-<td>2013</td>
-<td>环视adas供应商</td>
-<td>c轮 ¥1亿</td>
-</tr>
-<tr>
-<td>禾多科技</td>
-<td>倪凯（清华）</td>
-<td>2017-3</td>
-<td>L3.5 自驾解决方案</td>
-<td>a轮 $千万</td>
-</tr>
-<tr>
-<td>牧月科技</td>
-<td>杨庆雄（景驰）</td>
-<td>2018-6</td>
-<td>-</td>
-<td>天使轮 ¥5千万</td>
-</tr>
-<tr>
-<td>深兰科技</td>
-<td>陈海波</td>
-<td>2012-8</td>
-<td>?</td>
-<td>a+轮 ¥3亿</td>
-</tr>
-<tr>
-<td>武汉光庭</td>
-<td>朱敦尧</td>
-<td>2011</td>
-<td>智能网联</td>
-<td>上汽并购</td>
-</tr>
-<tr>
-<td>主线科技</td>
-<td>张天雷</td>
-<td>2017-3</td>
-<td>港口卡车（天津港）</td>
-<td>- </td>
-</tr>
-<tr>
-<td>创昂tron</td>
-<td>邓恒（国内oem 背景）</td>
-<td>2018-4</td>
-<td>天使轮 $百万 </td>
-</tr>
-<tr>
-<td>畅风加行</td>
-<td>？</td>
-<td>2018-4</td>
-<td>L3 解决方案</td>
-<td>- </td>
-</tr>
-<tr>
-<td>小马智行</td>
-<td>楼天城</td>
-<td>2016-12</td>
-<td>ai ?</td>
-<td>a+ 轮</td>
-</tr>
-<tr>
-<td>智行者</td>
-<td>韦忠亚</td>
-<td>2015-5</td>
-<td>？</td>
-<td>b+ 轮</td>
-</tr>
-<tr>
-<td>鹰驾科技</td>
-<td>郑智宇</td>
-<td>2015-8</td>
-<td>adas 视觉软硬件</td>
-<td>a轮 ¥千万</td>
-</tr>
-<tr>
-<td>盟识科技</td>
-<td>邱长伍</td>
-<td>-</td>
-<td>矿山、港口、园区自驾解决方案</td>
-<td>-</td>
-</tr>
-<tr>
-<td>飞步科技</td>
-<td>何晓飞（滴滴）</td>
-<td>2018-4</td>
-<td>车载 ai 系统</td>
-<td>-</td>
-</tr>
-<tr>
-<td>文远知行</td>
-<td>韩旭（百度）</td>
-<td>-</td>
-<td>-</td>
-<td>a+$千万</td>
-</tr>
-<tr>
-<td>拿森电子</td>
-<td>陶喆</td>
-<td>2016-3</td>
-<td>汽车电控</td>
-<td>b轮 $1亿</td>
-</tr>
-<tr>
-<td>auto brain</td>
-<td>李明喜</td>
-<td>2017-5</td>
-<td>自驾解决方案（长城合作）</td>
-<td>- </td>
-</tr>
-<tr>
-<td>踏歌智行</td>
-<td>余贵珍（北航）</td>
-<td>-</td>
-<td>特定场景自驾解决方案</td>
-<td>pre-a ¥千万</td>
-</tr>
-<tr>
-<td>云天励飞</td>
-<td>陈宁</td>
-<td>-</td>
-<td>视觉 ai 芯片</td>
-<td>-</td>
-</tr>
-<tr>
-<td>有光科技</td>
-<td>朱积祥</td>
-<td>-</td>
-<td>图像方案</td>
-<td>-</td>
-</tr>
-<tr>
-<td>云洲智能</td>
-<td>张云飞</td>
-<td>-</td>
-<td>无人船</td>
-<td>c轮 ¥4亿</td>
-</tr>
-<tr>
-<td>西井科技</td>
-<td>谭黎敏</td>
-<td>-</td>
-<td>ai 芯片，智能医疗、港口</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>自动驾驶供应链中，ai算法、芯片、传感器（毫米波、激光、相机）等创业公司不计，传统主机厂、供应商内部相关团队不计。独立的小股团队也不计。直接把自动驾驶解决方案当作团队vision的有将近40家公司，分别来自电子芯片、人工智能、传统主机厂等不同背景。</p>
-<p>每年估计烧十几个亿，市场还是有很多热情。2019年也许会死掉很多。另外，对市场时机需要敏感。几个海龟团队都是2018年才开始的。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2143,7 +1901,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

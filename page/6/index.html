@@ -291,6 +291,140 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-recursive-works-with-passing-reference-variables/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/29/how-recursive-works-with-passing-reference-variables/" itemprop="url">how recursive works with passing reference variables</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:56:44-04:00">
+                2018-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/29/how-recursive-works-with-passing-reference-variables/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/29/how-recursive-works-with-passing-reference-variables/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>leetCode 62(unique paths):<br>        A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below). The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked ‘Finish’ in the diagram below). How many possible unique paths are there?</p>
+<p>solution: it’s easy to model as a math combination problem, assume the  right-step has m; the down-step has n. so each path from top left to bottom right, has (m+n) steps totally. the total unique paths is   C_(m+n)^m </p>
+<p>passing by value: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span> rm, <span class="keyword">int</span> rn)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> rm==<span class="number">0</span> ? <span class="number">1</span> : (rm+rn)/rm * sol(rm<span class="number">-1</span>, rn);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>what happened if rm-1 changed to  rm–?  </p>
+<pre><code>warning: unsequenced modification and access to &apos;rm&apos;
+</code></pre><p>what about passing as reference ? </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span>&amp; m, <span class="keyword">int</span>&amp; n)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> m==<span class="number">0</span> ? <span class="number">1</span> : (m+n)/(<span class="keyword">float</span>)m * sol(--m, n);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>if using m– :</p>
+<pre><code>error:  expects an l-value for 1st argument of sol(int&amp;, int&amp;)
+</code></pre><p>m– is only r-value, can’t be used as reference varaible; but –m is r-value. </p>
+<p>for m as a reference variable,  –m is the way to update the content of the address. while m– more like move to the next address?</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-backtracks-work/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1525,146 +1659,6 @@ thpool_add_work(callback, args);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/26/Pure-C-structure/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/26/Pure-C-structure/" itemprop="url">pure C structure</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-26T00:03:29-04:00">
-                2018-07-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/26/Pure-C-structure/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/26/Pure-C-structure/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="definition"><a href="#definition" class="headerlink" title="definition"></a>definition</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">gid_</span> &#123;</span></div><div class="line">			<span class="keyword">double</span> x;</div><div class="line">			<span class="keyword">double</span> y;</div><div class="line">			<span class="keyword">char</span>* name ;</div><div class="line">		&#125; gid ;</div></pre></td></tr></table></figure>
-<p>typedef defines “gid” as an alias name to “struct gid_ “. typedef also alias function handle/pointer, which is often used in asynchronous/event callback programming. other data encapsulation are:<br>    enum : map a list of const names to integral constants<br>    union: store many data type in one memory address</p>
-<h2 id="initialization"><a href="#initialization" class="headerlink" title="initialization"></a>initialization</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gid g1=&#123;<span class="number">2.0</span>, <span class="number">3.0</span>, <span class="string">"g1"</span>&#125;;</div><div class="line">gid g2=&#123;.x=<span class="number">2.0</span>, .y=<span class="number">3.0</span>, .name=<span class="string">"g2"</span>&#125;;</div><div class="line">gid g3=(gid)&#123;<span class="number">2.0</span>, <span class="number">3.0</span>, <span class="string">"g3"</span>&#125;;</div></pre></td></tr></table></figure>
-<p>in C++, structure initialization can also be done in constructor. </p>
-<h2 id="memory-alignment"><a href="#memory-alignment" class="headerlink" title="memory alignment"></a>memory alignment</h2><p>for better memory access in CPU architecture, <a href="http://www.catb.org/esr/structure-packing/" target="_blank" rel="external">memory alignment</a> in structure is considered. namely:</p>
-<pre><code>chars can start on any byte address
-2-bytes shorts must start on an even address 
-4-bytes ints/floats must start on an address divisible by 4
-8-bytes doubles/longs must start on an address divisible by 8 
-</code></pre><p>the size of the whole structure, is aligned to intergeral times of the max size of its member variable. e.g. sizeof(gid) = 24, not 8+8+4.</p>
-<p>to put the member variables in ascending/descending order is good practice.</p>
-<h2 id="structure-pointer-arithmetic"><a href="#structure-pointer-arithmetic" class="headerlink" title="structure pointer arithmetic"></a>structure pointer arithmetic</h2><p>“gid++” will step forward the sizeof(gid); structure also supports self-reference:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">gid_</span> &#123;</span></div><div class="line">		<span class="keyword">char</span> *name ;</div><div class="line">		<span class="keyword">double</span> x;</div><div class="line">		<span class="keyword">double</span> y;</div><div class="line">		gid_ *next_gid ; </div><div class="line">	&#125; gid ;</div></pre></td></tr></table></figure>
-<p>another common utils is structure array: </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gid gid_list[MAX_SIZE]; </div><div class="line">gid **gid_list_p ;</div></pre></td></tr></table></figure>
-<h2 id="structure-as-function-parameters"><a href="#structure-as-function-parameters" class="headerlink" title="structure as function parameters"></a>structure as function parameters</h2><p>in general, structure can be passing to function by value or by pointer, but not by reference in pure C. also structure as return value from function can be value or a pointer</p>
-<h2 id="structure-in-C"><a href="#structure-in-C" class="headerlink" title="structure in C++"></a>structure in C++</h2><p>in C++, structure supports member functions, is same as a public class. and the initialization can be done either in constructor function or direct initialization during definition. see <a href="https://www.quora.com/What-is-the-difference-between-C-structure-C++-structure" target="_blank" rel="external">the difference of struct between C and C++</a></p>
-<h2 id="stdlib-h"><a href="#stdlib-h" class="headerlink" title="stdlib.h"></a>stdlib.h</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> /* convert string s1 to an int*/	</div><div class="line">	int atoi(const char* s1);</div><div class="line"> </div><div class="line"> /* memory op */</div><div class="line">	void* malloc(size_t size); </div><div class="line">	void free(void *ptr);</div><div class="line">	</div><div class="line"> /* system level op */</div><div class="line">	char* getenv(const char *name);</div><div class="line">	int system(const char *command); </div><div class="line"></div><div class="line">/* algorithms */</div><div class="line">	void* bsearch(const void* key, const void* base,</div><div class="line">	size_t nitems, size_t size,  int(*compar)(const void*, const void*))  </div><div class="line"></div><div class="line">	void qsort(void *base, size_t nitems, size_t size, </div><div class="line">int(*compar)(const void*, const void*))</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1715,7 +1709,7 @@ thpool_add_work(callback, args);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">77</span>
+                <span class="site-state-item-count">78</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
