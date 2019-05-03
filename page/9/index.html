@@ -96,7 +96,7 @@
 <meta name="description" content="what I don&apos;t know">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/archives/2018/09/index.html">
+<meta property="og:url" content="http://yoursite.com/page/9/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="what I don&apos;t know">
 <meta property="og:locale" content="en">
@@ -130,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/09/"/>
+  <link rel="canonical" href="http://yoursite.com/page/9/"/>
 
 
 
 
 
-  <title>Archive | Serious Autonomous Vehicles</title>
+  <title>Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +161,9 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -278,287 +280,167 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
+  <section id="posts" class="posts-expand">
+    
       
-      
-       
-        
-      Good! 81 posts in total. Keep on posting.
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/24/CNN-demo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
     </span>
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2018">2018</h2>
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/24/CNN-demo/" itemprop="url">cs231 -- CNN in computer vision</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-24T16:57:46-04:00">
+                2017-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/07/24/CNN-demo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/07/24/CNN-demo/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
         </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/09/24/construct-a-self-balanced-BStree/" itemprop="url">
-              
-                <span itemprop="name">construct a self balanced BStree</span>
-              
-            </a>
+          
+            <h2 id="what-happend-in-high-dimensional-space"><a href="#what-happend-in-high-dimensional-space" class="headerlink" title="what happend in high dimensional space?"></a>what happend in high dimensional space?</h2><p>Pixel-based distance on high-dimensional data can be very unintuitive.</p>
+<h2 id="Linear-Classification"><a href="#Linear-Classification" class="headerlink" title="Linear Classification"></a>Linear Classification</h2><p>1) define a score function from image pixels to class scores. benefits, no need to store all data</p>
+<p>2) SVM and Softmax </p>
+<p>3) a loss function, measure the quality of a paricular set of parameters based on how well the induced scores agreed with the ground truth labels</p>
+<h2 id="optimization-SGD"><a href="#optimization-SGD" class="headerlink" title="optimization (SGD)"></a>optimization (SGD)</h2><p>the loss function as a hihg-dimeonsional optimization landscape, in which trying to reach the bottom</p>
+<h2 id="BP"><a href="#BP" class="headerlink" title="BP"></a>BP</h2><h2 id="Rectified-linear-unit-ReLU"><a href="#Rectified-linear-unit-ReLU" class="headerlink" title="Rectified linear unit (ReLU)"></a>Rectified linear unit (ReLU)</h2><h2 id="Neural-Networks"><a href="#Neural-Networks" class="headerlink" title="Neural Networks"></a>Neural Networks</h2><p>train a small network, the final loss are relatively few local minima, and easy to converge, but they are high loss; if train large network, there may many different solutions, but the variance in final loss is much smaller. –&gt; all solutions are equally as good, rely less on the random initialization </p>
+<p>in practice, use regularization tech to control overfit on large train network</p>
+<h2 id="Data-Preprocessing"><a href="#Data-Preprocessing" class="headerlink" title="Data Preprocessing"></a>Data Preprocessing</h2><p>1) mean subtraction</p>
+<p>2) normalization</p>
+<p>3) PCA &amp; whitening</p>
+<p>4) weight initialization</p>
+<p>5) regularization</p>
+<pre><code>5.1) L-norm regularization
+
+5.2) Dropout
+</code></pre><h2 id="Hyperparamter-optimization"><a href="#Hyperparamter-optimization" class="headerlink" title="Hyperparamter optimization"></a>Hyperparamter optimization</h2><p>1) initial learning rate</p>
+<p>2) learning rate decay schedule </p>
+<p>3) regularization strength (L2 penalty)</p>
+<p>tips:  decay learning rate over the period of training; search for good hyperparameters with random search</p>
+<h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><p>layers used to build ConvNet architectures:</p>
+<p>1)    Convolutional layer</p>
+<p>2)  ReLU layer</p>
+<p>3)  Pooling layer</p>
+<p>4)    Fully-connected layer</p>
+<p>case study:</p>
+<pre><code>LeNet    
+AlexNet
+ZF Net
+GoogleNet
+VGGNet
+ResNet
+</code></pre><h2 id="Visulization-CNN"><a href="#Visulization-CNN" class="headerlink" title="Visulization CNN"></a>Visulization CNN</h2><h2 id="Transfer-learning"><a href="#Transfer-learning" class="headerlink" title="Transfer learning"></a>Transfer learning</h2>
+          
         
-      </h2>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-24T17:59:21-04:00"
-              content="2018-09-24" >
-          09-24
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
-
     
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="url">
-              
-                <span itemprop="name">construct BTree from pre/in/post-order input</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:33:49-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/construct-BTree-from-breadth-order-input/" itemprop="url">
-              
-                <span itemprop="name">construct BTree from breadth-order input</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:32:22-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/print-combinatorics/" itemprop="url">
-              
-                <span itemprop="name">print combinatorics</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:30:23-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/11/object-creating-in-C-C/" itemprop="url">
-              
-                <span itemprop="name">object creating in C/C++</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-11T21:09:08-04:00"
-              content="2018-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/11/scrabmle-string/" itemprop="url">
-              
-                <span itemprop="name">scrabmle string</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-11T21:07:03-04:00"
-              content="2018-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/04/how-dynamic-programming-works/" itemprop="url">
-              
-                <span itemprop="name">how dynamic programming works</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-04T18:07:36-04:00"
-              content="2018-09-04" >
-          09-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
   </section>
 
   
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span>
+  </nav>
 
 
 
@@ -774,12 +656,10 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
+  
 
   
 

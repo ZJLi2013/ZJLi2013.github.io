@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="apollo," />
 
 
 
@@ -93,16 +93,18 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/archives/2018/09/index.html">
+<meta name="description" content="there are two localization methods: RTK and multi-sensor fusion(MSF).  RTK using GPS and IMU inputs, MSF using GPS, IMU and Lidar sensor and HD map as inputs. the output is the localization estimated">
+<meta name="keywords" content="apollo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apollo 2.0 Localization 源码">
+<meta property="og:url" content="http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="there are two localization methods: RTK and multi-sensor fusion(MSF).  RTK using GPS and IMU inputs, MSF using GPS, IMU and Lidar sensor and HD map as inputs. the output is the localization estimated">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-05-03T06:37:20.071Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="Apollo 2.0 Localization 源码">
+<meta name="twitter:description" content="there are two localization methods: RTK and multi-sensor fusion(MSF).  RTK using GPS and IMU inputs, MSF using GPS, IMU and Lidar sensor and HD map as inputs. the output is the localization estimated">
 
 
 
@@ -130,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/09/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/"/>
 
 
 
 
 
-  <title>Archive | Serious Autonomous Vehicles</title>
+  <title>Apollo 2.0 Localization 源码 | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +163,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,287 +281,163 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-       
-        
-      Good! 81 posts in total. Keep on posting.
-    </span>
-
+  <div id="posts" class="posts-expand">
     
-
-      
-      
-      
-
-      
-        
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2018">2018</h2>
-        </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/24/construct-a-self-balanced-BStree/" itemprop="url">
-              
-                <span itemprop="name">construct a self balanced BStree</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-24T17:59:21-04:00"
-              content="2018-09-24" >
-          09-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="url">
-              
-                <span itemprop="name">construct BTree from pre/in/post-order input</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:33:49-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/construct-BTree-from-breadth-order-input/" itemprop="url">
-              
-                <span itemprop="name">construct BTree from breadth-order input</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:32:22-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/print-combinatorics/" itemprop="url">
-              
-                <span itemprop="name">print combinatorics</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:30:23-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/11/object-creating-in-C-C/" itemprop="url">
-              
-                <span itemprop="name">object creating in C/C++</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-11T21:09:08-04:00"
-              content="2018-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/11/scrabmle-string/" itemprop="url">
-              
-                <span itemprop="name">scrabmle string</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-11T21:07:03-04:00"
-              content="2018-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/04/how-dynamic-programming-works/" itemprop="url">
-              
-                <span itemprop="name">how dynamic programming works</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-04T18:07:36-04:00"
-              content="2018-09-04" >
-          09-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
 
   
 
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Apollo 2.0 Localization 源码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-03T02:36:43-04:00">
+                2019-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/03/Apollo-2-0-Localization-源码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/03/Apollo-2-0-Localization-源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>there are two localization methods: RTK and multi-sensor fusion(MSF).  RTK using GPS and IMU inputs, MSF using GPS, IMU and Lidar sensor and HD map as inputs. the output is the localization estimated object instance.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Status Localization::Start()</div><div class="line">&#123;</div><div class="line">	localization_ = localization_factory_.CreateObject(cofig_.type());</div><div class="line">	localization_-&gt;Start();</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status RTKLocalization::Start()&#123;</div><div class="line">	AdapterManager::Init(FLAGS_rtk_adapter_config_file);</div><div class="line">	timer_ = AdapterManager::CreateTimer(ros::Duration(duration), &amp;RTKLocalization::OnTimer, <span class="keyword">this</span>); </div><div class="line">	AdapterManager::GetGps();</div><div class="line">	AdapterManager::GetImu();	</div><div class="line">	tf2_broadcaster_ = <span class="keyword">new</span> tf2_ros::TransformBroadcaster() ;</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::OnTimer(<span class="keyword">const</span> ros::TimerEvent &amp;event)</div><div class="line">&#123;</div><div class="line">	AdapterManager::Observe();</div><div class="line">	PublishLocalization(); </div><div class="line">	RunWatchDog();	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PublishLocalization()&#123;</div><div class="line">	LocalizationEstimate localization ;</div><div class="line">	PrepareLocalizationMsg(&amp;localization);</div><div class="line">	AdapterManager::PublishLocalization(localization);</div><div class="line">	PublishPoseBroadcastTF(localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PrepareLocalizationMsg(LocalizationEstimate *localization)&#123;</div><div class="line">	<span class="keyword">const</span> <span class="keyword">auto</span> &amp;gps_msg = AdapterManager::GetGps()-&gt;GetLatestObserved();</div><div class="line">	Imu imu_msg = AdapterManager::GetImu()-&gt;GetLatestObserved();</div><div class="line">	ComposeLocalizationMsg(gps_msg, imu_msg, localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::ComposeLocalizationMsg(<span class="keyword">const</span> localization::Gps&amp; gps_msg, <span class="keyword">const</span> localization::Imu &amp;img_msg, LocalizationEstimate* localization)</div><div class="line">&#123;</div><div class="line">	<span class="comment">// add header </span></div><div class="line">	<span class="comment">// set measurement time </span></div><div class="line">	<span class="comment">// combine gps and imu </span></div><div class="line">	</div><div class="line">	<span class="keyword">auto</span> mutable_pose = localization-&gt;mutable_pose(); </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(gps_msg.has_localization())&#123;</div><div class="line">		<span class="keyword">const</span> <span class="keyword">auto</span> &amp;pose = gps_msg.localization();</div><div class="line">		<span class="keyword">if</span>(pose.has_position())&#123; <span class="comment">// update mutable_pose &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_orientation()) &#123; <span class="comment">//update mutable orientation &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_linear_velocity())&#123;&#125;;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(imu.has_linear_acceleration())&#123;	<span class="comment">//update mutable_pose acc &#125;;</span></div><div class="line">	<span class="keyword">if</span>(imu.has_angular_velocity())&#123;&#125;;</div><div class="line">	<span class="keyword">if</span>(imu.has_euler_angles())&#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h2><p><a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf" target="_blank" rel="external">vehicle localization based on multi-sensor fusion</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MSFLocalization</span> &#123;</span>	</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">InitParams</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnPointCloud</span><span class="params">(<span class="keyword">const</span> sensor_msgs::PointCloud2 &amp;message)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnRawImu</span><span class="params">(<span class="keyword">const</span> drivers::gnss::Imu &amp;imu_msg)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnGnssRtkObs</span><span class="params">(<span class="keyword">const</span> EpochObservation &amp;raw_obs_msg)</span></span>;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">PublishPoseBroadcastTF</span><span class="params">(<span class="keyword">const</span> LocalizationEstimate&amp; localization)</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status MSFLocalization::Start()</div><div class="line">&#123;</div><div class="line">	AdapterManager::Init(FLAGS_msf_adapter_config_file);</div><div class="line">	Status &amp;&amp;status = Init();</div><div class="line">	</div><div class="line">	AdapterManager::GetRawImu();</div><div class="line">	AdapterManager::ADDRawImuCallback(&amp;MSFLocalization::OnRawImu, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	AdapterManager::GetPointCloud();</div><div class="line">	AdapterManager::AddPointCloudCallback(&amp;MSFLocalization::OnPointCloud, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>there is addtional <a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf/local_map" target="_blank" rel="external"><code>local_map</code></a> module, which will be review later.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/apollo/" rel="tag"># apollo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/03/Apollo-2-0-Prediction源码/" rel="next" title="Apollo 2.0 Prediction源码">
+                <i class="fa fa-chevron-left"></i> Apollo 2.0 Prediction源码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -567,6 +445,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -587,8 +476,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -661,6 +559,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MSF"><span class="nav-number">1.</span> <span class="nav-text">MSF</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -774,11 +688,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
 
 
   
@@ -797,6 +709,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/';
+          this.page.identifier = '2019/05/03/Apollo-2-0-Localization-源码/';
+          this.page.title = 'Apollo 2.0 Localization 源码';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

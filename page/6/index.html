@@ -291,6 +291,143 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/object-creating-in-C-C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/object-creating-in-C-C/" itemprop="url">object creating in C/C++</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T21:09:08-04:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/11/object-creating-in-C-C/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/11/object-creating-in-C-C/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="construct-an-object"><a href="#construct-an-object" class="headerlink" title="construct an object"></a>construct an object</h2><p>the compiler will define a default constructor with no parameters, if there is no user defined default constructors. usually the parameters for user defined(UD) default constructors should have default values. </p>
+<p>directly call the UD constructor will create an object; call the UD through new keyword will create an object pointer.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span>&#123;</span></div><div class="line">	<span class="keyword">int</span> val; </div><div class="line">	TreeNode *right ;</div><div class="line">	TreeNode *left;</div><div class="line">	TreeNode(<span class="keyword">int</span> x=<span class="number">0</span>): val(x), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>)&#123;&#125;; <span class="comment">//user defined constructor </span></div><div class="line">	TreeNode(<span class="keyword">const</span> TreeNode *cp) <span class="comment">//copy constructor </span></div><div class="line">	&#123;</div><div class="line">		val = cp-&gt;val;</div><div class="line">		right = cp-&gt;right;</div><div class="line">		left = cp-&gt;left;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">TreeNode node1; </div><div class="line"><span class="function">TreeNode <span class="title">node2</span><span class="params">(<span class="number">100</span>)</span></span>;</div><div class="line">TreeNode *node_p = <span class="keyword">new</span> TreeNode(<span class="number">10</span>);</div></pre></td></tr></table></figure>
+<h2 id="create-an-object-in-pure-C"><a href="#create-an-object-in-pure-C" class="headerlink" title="create an object in pure C"></a>create an object in pure C</h2><p><code>new</code> operator do two things: allocate memory for a C++ class object, then call the object’s constructor to initialize this object. basically, <code>new</code> packages memory management of objects and objects initialization.</p>
+<p>while in pure C,  since there is no object constructor, after <code>malloc</code>  memory for the structure, either call an initial function or manually initialize this structure member variables.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">TreeNode </div><div class="line">&#123;</div><div class="line">	int val; </div><div class="line">	TreeNode *right ;</div><div class="line">	TreeNode *left;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   TreeNode *p =  (TreeNode*) malloc( sizeof(struct TreeNode)); </div><div class="line">   p-&gt;val = 0;</div><div class="line">   p-&gt;right = NULL; </div><div class="line">   p-&gt;left = NULL ; </div><div class="line">&#125;</div><div class="line">``` </div><div class="line">  </div><div class="line">## construct an object array </div><div class="line"></div><div class="line">beyond creating one object (pointer), how to create object array.  </div><div class="line"></div><div class="line">```c </div><div class="line">int nums = 5;</div><div class="line">TreeNode tree_array[nums];</div><div class="line">TreeNode *tree_p = (TreeNode*) new TreeNode[nums];</div></pre></td></tr></table></figure>
+<p>be aware, each element in tree_array has the whole memory of TreeNode structure; and tree_p++ will go to next TreeNode structure, tree_p[i] is also a whole memory of TreeNode structure. </p>
+<h2 id="create-an-object-array-in-pure-C"><a href="#create-an-object-array-in-pure-C" class="headerlink" title="create an object array in pure C"></a>create an object array in pure C</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> nums = <span class="number">5</span>;</div><div class="line">TreeNode *tree_p = (TreeNode*) <span class="built_in">malloc</span>(nums * <span class="keyword">sizeof</span>(TreeNode));</div></pre></td></tr></table></figure>
+<p>basically <code>malloc</code> will return a pointer to a block of memory, but it’s not responsible to initialize this block of memory. </p>
+<h2 id="the-rule-of-five"><a href="#the-rule-of-five" class="headerlink" title="the rule of five"></a>the rule of five</h2><p><a href="https://cpppatterns.com/patterns/rule-of-five.html" target="_blank" rel="external">rule of three</a> is about how to manage dynamically allocated resources in C++.</p>
+<p>why it is necessary? </p>
+<p>1) when parameter B is copying by value from A, if no user defined copy constructor, the compiler will do a shallow copy from A to B by default, in which  a new pointer point to the same content address. at the end of function call, the parameter B is out of scope, so destructor is called, and A is still there. but at the end of the main function, A is out of scope, need deallocating, then error is B already deallocate the content of A. </p>
+<p>with a user defined copy constructor, B will get a deep copy of A, so no sharing content, no problems when deallocating either B or A.</p>
+<p>2) if no user specified assignment constructor, a shallow copy happens, then error-potential. and assignment constructor (operator=) can be implemented with copy constructor. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	TreeNode node1;</div><div class="line">	TreeNode node2 = node1; <span class="comment">//actually a copy-construct, same as node2(node1)</span></div><div class="line">	TreeNode node3 ;</div><div class="line">	node3 = node1 ; <span class="comment">//a compiler assignment-construct by default(shallow copy)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/scrabmle-string/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1486,136 +1623,11 @@ thpool_add_work(callback, args);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-socket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/31/pure-C-socket/" itemprop="url">pure C socket</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T19:26:58-04:00">
-                2018-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/31/pure-C-socket/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/31/pure-C-socket/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>this is a review from <a href="https://www.gnu.org/software/libc/manual/html_node/Sockets.html" target="_blank" rel="external">GNU C lib</a>. socket is a two-way communication channel, both read and write can be performed at either end.  </p>
-<h2 id="sys-socket-h"><a href="#sys-socket-h" class="headerlink" title="sys/socket.h"></a>sys/socket.h</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(AF_INET, SOCK_STREAM, protocol)</span></span>; </div><div class="line"><span class="comment">/* return fd for this new socket, or -1 as error */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> socket_fd)</span></span>; </div><div class="line"><span class="comment">/* return 0 when close successfuly, else return -1 */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr, <span class="keyword">socketlen_t</span> len)</span></span>;</div><div class="line"><span class="comment">/* initiate a connection from (client) socket to (server) address; by default, the connection is blocking untill server respond */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> socket, <span class="keyword">int</span> n)</span></span>;</div><div class="line"><span class="comment">/* n specifies the length of queue for pending connections; when the queue fills up, new clients attempting to connect will fail */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr,  <span class="keyword">socketlen_t</span> *len_ptr)</span></span>;</div><div class="line"><span class="comment">/* if successfully, accept return a new socket fd, the original (server) socket remains open and unconnected;  the address and len_ptr are used to return information about the name of client socket that initiated this connection */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> send(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current sending socket. no receiver socket explicitly defined, since connection-oriented(TCP)protocol will connect first prior to send/receive  */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> recv(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current receiving socket */</span></div><div class="line"></div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">#<span class="meta"># network socket </span></div><div class="line"></div><div class="line">I didn't realize GNU C socket I/O is so related to network socket. the missing part when reading muduo, libuv is here. </div><div class="line"></div><div class="line">The server listens the connection requests on the special server socket, then accept each incoming connection. select() blocks/sleeps the program until input is available/ready on the special server socket/fd. </div><div class="line"></div><div class="line">```<span class="function">c</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *<span class="built_in">set</span>)</span> </div><div class="line"><span class="comment">/* initialized the file descriptor set to empty set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span> <span class="comment">/* add fd to set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd,  fd_set *<span class="built_in">set</span>)</span> <span class="comment">/*remove fd from set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> fd_set * <span class="built_in">set</span>)</span>  </div><div class="line"><span class="comment">/* return true(non-zero) if fd is in  set; else return 0 */</span></div><div class="line">STDIN_FILENO ; <span class="comment">/*  file descriptor for std input “1” */</span></div></pre></td></tr></table></figure>
-<p>how to debug server/client code? <a href="https://github.com/alphadose/Alpha-Chat/blob/master/" target="_blank" rel="external">chatRoom</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1661,7 +1673,7 @@ thpool_add_work(callback, args);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-count">81</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
