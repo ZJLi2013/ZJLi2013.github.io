@@ -291,6 +291,186 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/04/PID-control/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/04/PID-control/" itemprop="url">PID control</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-04T04:27:21-04:00">
+                2019-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/04/PID-control/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/04/PID-control/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="closed-loop-system"><a href="#closed-loop-system" class="headerlink" title="closed loop system"></a>closed loop system</h2><p><code>set point</code> is the desired or command value for the process variable. at any given moment, the difference between the process variable and the set point is used by the control system algorithm to determine the desired actuator output to drive the system.</p>
+<p><code>closed loop system</code>, the process of reading sensors to provide constant feedback and calculating the desired actuator output is repeated continuously and at a fixed loop rate.</p>
+<p><code>control system performance</code> is measured by applying a step fuction as the set point command variable, and then measuring the response of the process variable.</p>
+<p><code>rise time</code> is the amount of time that the system takes to go from 10% to 90% of the steady-state/final.</p>
+<p><code>percent overshoot</code> is the amout that the process variable overshoots the final value, expressed as a percentage of the final value.</p>
+<p><code>settling time</code> is the time required for the process variable to settle to within a certain percentage(5%) of the finla value</p>
+<p><code>steady state error</code> is the final difference between the process variable and set point</p>
+<p><code>disturbance rejection</code> is the measure of how well the control system is able to overcome the effects of disturbances. often there is a disturbance in the system that affects the process variables or the measurements of these variables, it’s important to design a control system that performs satisfactorily during the worst case conditions.</p>
+<p><code>nonlinear system</code> , in which the control parameters that produe a desired response at one operating point might not produce a satisfactory response at another operating point.</p>
+<p><code>deadtime</code> is the delay between when a process variable changes, and when that change can be observed.</p>
+<p><code>loop cycle</code> the interval of time between calls to a control system, system that change quickly or have complex behavior requires faster control loop rates.</p>
+<h2 id="PID-theory"><a href="#PID-theory" class="headerlink" title="PID theory"></a>PID theory</h2><h3 id="proportional-response"><a href="#proportional-response" class="headerlink" title="proportional response"></a>proportional response</h3><p><code>error</code> the difference between the set point and the process variable. the proportional gain(K_g) determins the ratio of the output response to the error signal.</p>
+<p>e.g. the error term has a magnitude of 10, and the K_g is 5, then the proportional response is 50.</p>
+<p>increasing K_g will increase the speed of the control system response, but if K_g is too large, the process variable will oscillate(why?)</p>
+<h3 id="integral-response"><a href="#integral-response" class="headerlink" title="integral response"></a>integral response</h3><p>the integral component sums the error term over time. the result is that even a small error term will cause the integral component to increase slowly. the integral response will continually increase unless the error is zero, so the effect is to driven the steady-state-zero to zero.</p>
+<p><code>integral windup</code> when integral action saturates, still without the controller driving the error signal toward zero</p>
+<h3 id="derivative-response"><a href="#derivative-response" class="headerlink" title="derivative response"></a>derivative response</h3><p>the response is portortional to the rate of change of the process variable. increasing the <code>derivative time</code> will cause the control sytem to react more strongly to changes in the error, and react more quickly.</p>
+<p>in practice, most control system use very small derivative time, since the derivative response is highly sensitive to noise. </p>
+<h2 id="turning"><a href="#turning" class="headerlink" title="turning"></a>turning</h2><p>which is the process of setting the optimal gains of P, I, D to get an ideal response. </p>
+<h3 id="trial-and-error"><a href="#trial-and-error" class="headerlink" title="trial and error"></a>trial and error</h3><p>set I, D as zero, and increas P gain.  Once P has been set to obtain a desired fast response, I starts to increase to stop the oscillatins to achieve a minimal steady state error. once P and I have been set, the D is increased untill the loop is acceptably quick to its set point.</p>
+<h3 id="filtering"><a href="#filtering" class="headerlink" title="filtering"></a>filtering</h3><p>assume a sinusoidla noise with frequency w, the direvative is:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;y(t)&space;=&space;f(t)&space;&plus;&space;a&space;sin(wt)&space;\\&space;dy/dt&space;=&space;df/dt&space;&plus;&space;aw&space;cos(wt)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;y(t)&space;=&space;f(t)&space;&plus;&space;a&space;sin(wt)&space;\\&space;dy/dt&space;=&space;df/dt&space;&plus;&space;aw&space;cos(wt)" title="y(t) = f(t) + a sin(wt) \\ dy/dt = df/dt + aw cos(wt)"></a></p>
+<p>so in practice it’s necessary to limit the high frequency gain of the derivative term, either by adding a low pass filtering of the control signal, or implement the derivative term in a cut-off way.</p>
+<h2 id="Udacity-Self-driving-Car-project-9"><a href="#Udacity-Self-driving-Car-project-9" class="headerlink" title="Udacity Self driving Car project 9"></a>Udacity Self driving Car project 9</h2><pre><code class="c">
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+    uWS::Hub h ;
+    PID pid ; 
+    pid.Init(pinit, iinit, dinit);
+    h.onMessage(    <span class="comment">// cte, the error </span>
+    {
+        <span class="keyword">double</span> diff = <span class="built_in">fabs</span>(pid.p_error - cte) ; 
+        <span class="keyword">if</span>( diff &gt; <span class="number">0.1</span> &amp;&amp; diff &lt; <span class="number">0.2</span>)
+            thr = <span class="number">0.0</span>; 
+        <span class="keyword">else</span> <span class="keyword">if</span>( diff &gt; <span class="number">0.2</span> &amp;&amp; speed &gt; <span class="number">30</span>)
+            thr = <span class="number">-0.2</span>;
+
+        pid.UpdateError(cte, dt);
+        steer_value = -pid.TotalError(speed);
+    }
+}
+
+<span class="keyword">void</span> PID::UpdateError(<span class="keyword">double</span> cte, <span class="keyword">double</span> dt)
+{
+    d_error = (cte - p_error) /dt ;
+    p_error = cte ;
+    i_error = integral(cte * dt);
+}
+
+<span class="keyword">double</span> PID::TotalError(<span class="keyword">double</span> speed)
+{
+    <span class="keyword">return</span> (Kp - <span class="number">0.0032</span> * speed) * p_error + Ki * i_error + (Kd + <span class="number">0.002</span> * speed) * d_error ;
+}
+</code></pre>
+<p>in real self driving control system, usually divide as latitual and longitual control. and in different scenarios, there are plenty of PID controls. in the future will expose: highway autopilot, auto parking, urban L4 </p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="http://www.ni.com/en-us/innovations/white-papers/06/pid-theory-explained.html" target="_blank" rel="external">PID theory explained</a></p>
+<p><a href="https://www.cds.caltech.edu/~murray/courses/cds101/fa02/caltech/astrom-ch6.pdf" target="_blank" rel="external">PID control from Caltech</a></p>
+<p><a href="https://github.com/NikolasEnt/PID-controller/blob/master/src/PID.cpp" target="_blank" rel="external">udacity pid control</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1634,162 +1814,6 @@ z = h(x, w)             (2)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/无迹卡尔曼滤波/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/31/无迹卡尔曼滤波/" itemprop="url">无迹卡尔曼滤波</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-31T10:29:26-04:00">
-                2019-03-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/31/无迹卡尔曼滤波/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/31/无迹卡尔曼滤波/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>非线性系统：</p>
-<pre><code>x = f(x, w)         （1）
-
-z = h(x) + v                 （2）
-</code></pre><p>随机信号 <code>w</code>, <code>v</code>分别是过程噪声和观测噪声    </p>
-<h2 id="CTRV-状态方程"><a href="#CTRV-状态方程" class="headerlink" title="CTRV 状态方程"></a>CTRV <a href="https://winfriedauner.de/projects/" target="_blank" rel="external">状态方程</a></h2><p>对于const turn rate and velocity magnitude (<a href="https://fevemania.github.io/blog/mathematic-formula-note-of-unscented-kalman-filter/" target="_blank" rel="external">CTRV</a> )场景：</p>
-<pre><code>x = (px, py, v, phi, \dot{phi})
-</code></pre><p>固定速度和转动速率约束，即：</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\dot{x}&space;=&space;(\dot{p_x},&space;\dot{p_y},&space;\dot{v},&space;\dot{\psi},&space;\ddot{\psi})&space;=&space;(vcos(\psi&space;),&space;vsin(\psi),&space;0,&space;\dot{\psi},&space;0)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{x}&space;=&space;(\dot{p_x},&space;\dot{p_y},&space;\dot{v},&space;\dot{\psi},&space;\ddot{\psi})&space;=&space;(vcos(\psi&space;),&space;vsin(\psi),&space;0,&space;\dot{\psi},&space;0)" title="\dot{x} = (\dot{p_x}, \dot{p_y}, \dot{v}, \dot{\psi}, \ddot{\psi}) = (vcos(\psi ), vsin(\psi), 0, \dot{\psi}, 0)"></a>  </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=x_{k&plus;1}&space;=&space;x_k&space;&plus;&space;\int_{t_k}^{t_{k&plus;1}}&space;\dot{x}&space;dt&space;&plus;&space;v" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_{k&plus;1}&space;=&space;x_k&space;&plus;&space;\int_{t_k}^{t_{k&plus;1}}&space;\dot{x}&space;dt&space;&plus;&space;v" title="x_{k+1} = x_k + \int_{t_k}^{t_{k+1}} \dot{x} dt + w"></a>      </p>
-<p>考虑 <code>dv/dt == 0</code> , <code>dphi^2\dt^2==0</code> 且<code>\psi</code>是时间的函数, 上述第一项即：</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=px_{k&plus;1}&space;=&space;px_k&space;&plus;&space;\int_{t_k}^{t_{k&plus;1}}&space;v&space;cos\psi)&space;dt&space;&plus;&space;v&space;\\&space;=&space;px_k&space;&plus;&space;{\frac{sin\psi}{\dot{\psi}}}_{t_k}^{t_{k&plus;1}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?px_{k&plus;1}&space;=&space;px_k&space;&plus;&space;\int_{t_k}^{t_{k&plus;1}}&space;v&space;cos\psi)&space;dt&space;&plus;&space;v&space;\\&space;=&space;px_k&space;&plus;&space;{\frac{sin\psi}{\dot{\psi}}}_{t_k}^{t_{k&plus;1}}" title="px_{k+1} = px_k + \int_{t_k}^{t_{k+1}} v cos\psi) dt + w \\ = px_k + {\frac{sin\psi}{\dot{\psi}}}_{t_k}^{t_{k+1}}"></a>     </p>
-<p>从原状态空间到预测空间，由方程（1),（2）可见，过程噪声<code>w</code>是状态<code>x</code>的非线性项；而<code>z</code>关于观测噪声<code>v</code>是线性的。ukf实际采用增广状态变量<code>sigmax = [x, w]</code>. 过程噪声<code>w</code>包括径向加速度和角加速度 <code>[w_a, w_phi]</code>， 且<code>w</code>不是时间的函数 , 对上述第一项可展开：</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=px_{k&plus;1}&space;=&space;px_k&space;&plus;&space;\int_{t_k}^{t_{k&plus;1}}&space;\dot{px}&space;dt&space;&plus;&space;\int_{0}^{\Delta&space;t}&space;w_a&space;\Delta&space;t&space;\cos{\psi}dt&space;=&space;px_k&space;&plus;&space;\frac{sin{\psi}}{\dot{\psi}}_{t_{k&plus;1}}^{t_k}&space;&plus;&space;0.5&space;w_a&space;cos{\psi}&space;\Delta&space;t^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?px_{k&plus;1}&space;=&space;px_k&space;&plus;&space;\int_{t_k}^{t_{k&plus;1}}&space;\dot{px}&space;dt&space;&plus;&space;\int_{0}^{\Delta&space;t}&space;w_a&space;\Delta&space;t&space;\cos{\psi}dt&space;=&space;px_k&space;&plus;&space;\frac{sin{\psi}}{\dot{\psi}}_{t_{k&plus;1}}^{t_k}&space;&plus;&space;0.5&space;w_a&space;cos{\psi}&space;\Delta&space;t^2" title="px_{k+1} = px_k + \int_{t_k}^{t_{k+1}} \dot{px} dt + \int_{0}^{\Delta t} w_a \Delta t \cos{\psi}dt = px_k + \frac{sin{\psi}}{\dot{\psi}}_{t_{k+1}}^{t_k} + 0.5 w_a cos{\psi} \Delta t^2"></a></p>
-<h2 id="预测空间"><a href="#预测空间" class="headerlink" title="预测空间"></a>预测空间</h2><p>对比<a href="https://zjli2013.github.io/2019/03/30/卡尔曼滤波/" target="_blank" rel="external">扩展卡尔曼</a> ekf采用一阶线性化近似。无迹卡尔曼ukf，将原状态空间的特征采样点(sigmax)映射到预测空间，采用预测空间里的状态变量<code>f(sigmax)</code>的均值、方差的加权推广作为先验状态估计<code>x^-</code> 和先验误差<code>P^-</code>。</p>
-<p>其中权值表述：</p>
-<pre><code>$$ w = lamda / ( lamda + ns) when i==1 $$ 
-$$ w_i = 0.5/(lamba + ns)       when i!=1 $$
-
-$$ X^- =  sum(w_i * f(sigmax) ) $$
-$$ P^- =  sum(w_i * (f(sigmax) - x).^2) $$  
-</code></pre><h2 id="观测空间"><a href="#观测空间" class="headerlink" title="观测空间"></a>观测空间</h2><p>将原状态空间的特征采样点(sigmax)映射到观测空间，采用观测空间里的状态变量<code>h(sigmax)</code>的均值、方差的加权作为先验观测值<code>Z^-</code> 和观测值先验误差<code>S^-</code>，使用与预测空间同样的权值。</p>
-<pre><code>$$ Z^- =  sum(w_i * h(sigmax) ) $$
-$$ S^- =  sum(w_i * (Z^- - z).^2) + R $$  
-</code></pre><p>卡尔曼滤波表示： 后验估计（真实状态变量值）与先验估计（预测空间的状态变量值）的差异，可表示为真实观测值与观测空间里的先验观测值的差异的增益 K。</p>
-<pre><code>$$ x - x^-  = K (z - Z^-) $$   （3）
-</code></pre><p>可见，卡尔曼增益<code>K</code>在衡量状态误差与观测误差之间的相关性。定义预测空间与观测空间的相关系数：</p>
-<pre><code>T =  sum(w_i * (X^- - x)(Z^- - z))
-K =  T /  S^-                   （4）
-</code></pre><h2 id="ukf算法"><a href="#ukf算法" class="headerlink" title="ukf算法"></a>ukf算法</h2><p>有（4）， （3） 分别更新卡尔曼增益和状态变量， 预测空间里的先验误差更新由：</p>
-<pre><code>P = P - KSK^t
-</code></pre><p>ps: 在非线性的处理上，线性化或者布点采样都是常用的思路。也是ekf与ukf的区别。 </p>
-<p><a href="https://starsmydestination.github.io/2017/05/09/UKF/" target="_blank" rel="external">link1</a></p>
-<p><a href="https://blog.csdn.net/Young_Gy/article/details/78542754" target="_blank" rel="external">link2</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1840,7 +1864,7 @@ K =  T /  S^-                   （4）
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-count">82</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
