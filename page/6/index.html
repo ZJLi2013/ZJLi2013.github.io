@@ -291,6 +291,395 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/24/construct-a-self-balanced-BStree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/24/construct-a-self-balanced-BStree/" itemprop="url">construct a self balanced BStree</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-24T17:59:21-04:00">
+                2018-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/24/construct-a-self-balanced-BStree/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/24/construct-a-self-balanced-BStree/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/description/" target="_blank" rel="external">leetCode 109</a> construct a height-balanced Binary Search tree from input array(sorted or not).</p>
+<p>a self-balanced BStree, which means the left and right kid of each node have no more than 1 height difference, also named as AVL tree. There are three basic routines in implementation of AVL tree:  right <a href="https://en.wikipedia.org/wiki/Tree_rotation" target="_blank" rel="external">tree rotate</a>, left tree rotate, and insert. and each TreeNode requires an additionly <code>height</code> value.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode*  <span class="title">rightRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode*  root_left =  leaf-&gt;left ;</div><div class="line">	TreeNode*  left_right = root_left-&gt;right ;</div><div class="line">	root_left-&gt;right = leaf;</div><div class="line">	leaf-&gt;left = left_right;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_left; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">leftRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode* root_right = leaf-&gt;right; </div><div class="line">	TreeNode* right_left = root_right-&gt;left; </div><div class="line">	root_right-&gt;left = leaf;</div><div class="line">	leaf-&gt;right =  right_left;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_right;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">insert</span><span class="params">(TreeNode* root, <span class="keyword">int</span> key)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(root==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(key));</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(key &gt; root-&gt;val)</div><div class="line">		root-&gt;right = insert(root-&gt;right, key);</div><div class="line">	</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(key &lt; root-&gt;val)</div><div class="line">			root-&gt;left = insert(root-&gt;left, key);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="keyword">return</span> root; </div><div class="line">	</div><div class="line">	root-&gt;height = <span class="built_in">std</span>::max(height(root-&gt;left), height(root-&gt;right)) + <span class="number">1</span> ; </div><div class="line">	<span class="keyword">int</span> balance = height_dif(root); </div><div class="line">	<span class="keyword">if</span>(balance &gt; <span class="number">1</span> &amp;&amp; key &lt; root-&gt;val )  <span class="comment">//new key inserted in left sub </span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> rightRotate(root); </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">/* keep in mind,    -1 &lt;= last_balance &lt;= 1 </span></div><div class="line">	   only  key &lt; root-&gt;val, will it possible that current_balance &gt; 1 */</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(balance &lt; <span class="number">-1</span> &amp;&amp; key &gt; root-&gt;val )</div><div class="line">	&#123;	</div><div class="line">		<span class="keyword">return</span> leftRotate(root);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>at the very first coding I natively pass node pointer by reference:</p>
+<pre><code>TreeNode* insert(TreeNode* &amp;root, int key)
+root-&gt;right = insert(root-&gt;right, key);
+</code></pre><p>since assigned insert() back to the same node pointer again, if passing by reference, each insert will clear the memory-write the same memory all the time, and can’t generate. what actually happen in <code>insert</code> is creating a new object. </p>
+<p>the structure pointer inside structure definition is the trick here. when define <code>root</code> node, both <code>left</code>and <code>right</code> nodes are <code>nullptr</code>, so argument <code>root-&gt;right</code> is <code>nullptr</code>, but the returning <code>root-&gt;right</code> is actually pointing to a node structure memory. </p>
+<p>also <a href="https://en.wikipedia.org/wiki/Null_pointer#Null_Dereferencing" target="_blank" rel="external">nullptr can’t be dereferring</a>,  basically since nullptr doesn’t point to any meaningful object, to dereference a null pointer will cause runtime or immediate crash.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/construct-BTree-from-pre-in-post-order-input/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="url">construct BTree from pre/in/post-order input</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-19T17:33:49-04:00">
+                2018-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="pre-amp-in-order-input"><a href="#pre-amp-in-order-input" class="headerlink" title="pre&amp;in-order input"></a>pre&amp;in-order input</h2><p><a href="https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/" target="_blank" rel="external">leetCode105</a> :  given preorder and inorder traversal of a tree, construct the binary tree. </p>
+<p>sol: each top node in Btree, has left-branch and right-branch, and each branch is a similar-structure subtree. so every time pop out the top node, and recursive the two subtrees, which return as the left kid and right kid of current top node.</p>
+<p>the recursive stopped when the list is empty(in real case, this means the node has only either left or right kid);  or stopped when only one element in the list(in real case, the node has both kids, so left or right subtree has only one element).</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode* <span class="title">sol</span><span class="params">(<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; pre,  <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; in)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="keyword">if</span>(pre.empty() || in.empty())</div><div class="line">	 &#123;</div><div class="line">		 <span class="keyword">return</span> <span class="literal">nullptr</span>; <span class="comment">//empty left/right node </span></div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">if</span>(pre.size() == <span class="number">1</span> &amp;&amp; in.size() == <span class="number">1</span>) </div><div class="line">	 &#123;</div><div class="line">			 <span class="keyword">return</span> <span class="keyword">new</span> TreeNode(pre.front());</div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">int</span> root = pre.front(); </div><div class="line">	 pre.pop_front(); </div><div class="line">	 TreeNode* root_node = <span class="keyword">new</span> TreeNode(root); </div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator in_it, pre_it; </div><div class="line">	 in_it =  <span class="built_in">std</span>::find(in.begin(), in.end(), root);</div><div class="line">	 <span class="keyword">if</span>(in_it == in.end()) <span class="comment">//only one node in inorder list now, wont happen</span></div><div class="line">	 &#123;</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(in.front()));</div><div class="line">	 &#125;</div><div class="line">	 <span class="keyword">int</span> idx =  <span class="built_in">std</span>::distance(in.begin(), in_it);</div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_left_subtree(in.begin(), in_it);</div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_right_subtree(++in_it, in.end());	</div><div class="line">	 in.erase(in_it);</div><div class="line">	 </div><div class="line">	pre_it = pre.begin(); </div><div class="line">	<span class="built_in">std</span>::advance(pre_it, idx); </div><div class="line">	</div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; pre_left_subtree(pre.begin(), pre_it); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; pre_right_subtree(pre_it, pre.end()); 	</div><div class="line">	</div><div class="line">	root_node-&gt;left = sol(pre_left_subtree, in_left_subtree);</div><div class="line">	root_node-&gt;right = sol(pre_right_subtree, in_right_subtree);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> root_node; 	 </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>in each recursive step, I am using exteral containers, same stragey in <a href="https://zjli2013.github.io/2018/09/11/scrabmle-string/" target="_blank" rel="external">scramble string</a>. is there a one-swap way? </p>
+<h2 id="post-in-order-input"><a href="#post-in-order-input" class="headerlink" title="post/in-order input"></a>post/in-order input</h2><p><a href="https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/description/" target="_blank" rel="external">leetCode106</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode*  <span class="title">sol</span><span class="params">(<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; in,  <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; post)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(in.empty() || post.empty())</div><div class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>; </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(in.size() == <span class="number">1</span> || post.size() == <span class="number">1</span>)</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(in.front())); <span class="comment">// return the left || right kid </span></div><div class="line">	</div><div class="line">	<span class="comment">//first find out the tree root, the last element in post-order </span></div><div class="line">	<span class="keyword">int</span> root_v =  post.back();</div><div class="line">	TreeNode* root = <span class="keyword">new</span> TreeNode(root_v); </div><div class="line">	post.pop_back(); </div><div class="line">	<span class="comment">//find root_v in  inorder </span></div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator  in_lit =  <span class="built_in">std</span>::find(in.begin(), in.end(), root_v); </div><div class="line">	</div><div class="line">	<span class="comment">//create subtrees recursive </span></div><div class="line">	<span class="keyword">int</span> left_length =  <span class="built_in">std</span>::distance(in.begin(), in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_left_sub(in.begin(), in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_right_sub(++in_lit, in.end()); </div><div class="line">	in.erase(in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator post_lit = <span class="built_in">std</span>::next(post.begin(), left_length); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; post_left_sub(post.begin(), post_lit);</div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; post_right_sub(post_lit, post.end()); </div><div class="line">	</div><div class="line">	root-&gt;left = sol(in_left_sub, post_left_sub); </div><div class="line">	root-&gt;right = sol(in_right_sub, post_right_sub);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> root ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/construct-BTree-from-breadth-order-input/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/19/construct-BTree-from-breadth-order-input/" itemprop="url">construct BTree from breadth-order input</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-19T17:32:22-04:00">
+                2018-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/19/construct-BTree-from-breadth-order-input/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/19/construct-BTree-from-breadth-order-input/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>first there should be a queue or stack to store the next layer elements, as the tree go deeper, there are many branches, which requires a contianer to track what’s the elements in next layer. stack always pop out the top element(FILO), which actually set the input elements in a reversed order as tree elements; queue can pop out the first element(FIFO), which can set the input elements in the same order in tree elements. so here pick std::queue. </p>
+<p>the input array can used std::vector, each time pop_front(), which basically read the array in order. and each pop_front element constructs a new <code>TreeNode</code>. if the layer container is empty(), then it’s the root layer; else it’s a branch layer. growing the tree in each branch layer, need update the next layer container.</p>
+<p>for each new inserting element, either insert to left or right of node A in  parent layer  or insert to the A’s sibling node B. then pop out the node which already has both kids. </p>
+<p>when traversling to the last node in parent layer, and if both the kids are filled-in, then there is a turning point, need to swap next_parent layer as parent layer.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert_kids</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">queue</span>&lt;TreeNode*&gt;&amp; parents, <span class="built_in">std</span>::<span class="built_in">queue</span>&lt;TreeNode*&gt;&amp; next_parents, TreeNode* p)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(parents.empty())</div><div class="line">		<span class="keyword">return</span> ;</div><div class="line"></div><div class="line">	TreeNode* father = parents.front();</div><div class="line">	<span class="keyword">if</span>(!father-&gt;left)</div><div class="line">	&#123;</div><div class="line">		father-&gt;left = p;</div><div class="line">		<span class="keyword">if</span>(p)</div><div class="line">			next_parents.push(p);</div><div class="line">	&#125;<span class="keyword">else</span> <span class="keyword">if</span>(!father-&gt;right)</div><div class="line">	&#123;</div><div class="line">		father-&gt;right = p;</div><div class="line">		<span class="keyword">if</span>(p)</div><div class="line">			next_parents.push(p);</div><div class="line">	&#125;<span class="keyword">else</span></div><div class="line">	&#123;</div><div class="line">		parents.pop(); </div><div class="line">		<span class="keyword">if</span>(parents.empty())  <span class="comment">// turning point, if returned then p will be lost </span></div><div class="line">		&#123;</div><div class="line">			parents.swap(next_parents);  </div><div class="line">		&#125;		</div><div class="line">		insert_kids(parents, next_parents, p); 	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">breadth_construct</span><span class="params">(<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; arr)</span></span></div><div class="line">&#123;</div><div class="line">	TreeNode *p, *root ; </div><div class="line">	<span class="keyword">int</span> x ; </div><div class="line">	<span class="built_in">std</span>::<span class="built_in">queue</span>&lt;TreeNode*&gt; parents, next_parents; </div><div class="line">	</div><div class="line">	<span class="keyword">while</span>(!arr.empty())</div><div class="line">	&#123;</div><div class="line">		x = arr.front();	</div><div class="line">		arr.pop_front();</div><div class="line">		</div><div class="line">		p = (TreeNode*) <span class="keyword">new</span> TreeNode(x); </div><div class="line">			</div><div class="line">		<span class="keyword">if</span>(parents.empty())</div><div class="line">		&#123;</div><div class="line">			parents.push(p);</div><div class="line">			root = p ; </div><div class="line">			<span class="keyword">continue</span>; </div><div class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>( !parents.empty())  <span class="comment">//at this step, parents still has 1 element, but after insert_kids, parents is empty. then </span></div><div class="line">		&#123;</div><div class="line">			insert_kids(parents, next_parents, p); </div><div class="line">			<span class="keyword">continue</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> root; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>how to deal with <code>NULL</code> during struct constructure? if both <code>(int x)</code> and <code>(TreeNode* p)</code> constructor are defined, which will lead to ambisious when new TreeNode(NULL).</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></div><div class="line">	<span class="keyword">int</span> value ;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">left</span> ;</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">right</span>;</span></div><div class="line">	<span class="comment">//<span class="doctag">TODO:</span> how to implement copy assignment in structure ?</span></div><div class="line">	TreeNode(TreeNode* p)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(p == <span class="literal">NULL</span>)</div><div class="line">		&#123;</div><div class="line">			value = <span class="number">0</span>;</div><div class="line">			left = <span class="literal">NULL</span>;</div><div class="line">			right = <span class="literal">NULL</span>;</div><div class="line">		&#125;<span class="keyword">else</span></div><div class="line">		&#123;</div><div class="line">			value = p-&gt;value;</div><div class="line">			left = p-&gt;left;</div><div class="line">			right = p-&gt;right; </div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	TreeNode(<span class="keyword">int</span> x):</div><div class="line">		value(x), </div><div class="line">		left(<span class="literal">NULL</span>),	</div><div class="line">		right(<span class="literal">NULL</span>)</div><div class="line">		&#123;</div><div class="line">		&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/print-combinatorics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1205,420 +1594,6 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-recursive-works/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/29/how-recursive-works/" itemprop="url">how recursive works</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:31:12-04:00">
-                2018-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/29/how-recursive-works/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/29/how-recursive-works/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>leetCode 46 Permutations: given a collection of distinct integers, return all possible permutations.</p>
-<pre><code>Input: [1, 2, 3]
-
-Output:
-[ [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3, 1,2], 
-[3,2,1] ] 
-</code></pre><p>At first glipmse, it’s middle difficult, jump to recursive implementation. But there always confused failures, e.g. passing vector as reference to the recursive calls, and even do a deep copy of that vector, the base vector is always modified by the copied vector. This problem blocks me a whole day, actually I don’t know how to make a recursive calls work.</p>
-<p>tip1) each recursive fun has its independent local variables ;</p>
-<p>tip2) recursive calls are serialized, namely only when inside recursive fun is done, then the outside recursive will continue.</p>
-<p>tip1 helps to explain when local variables changed unexpected; tip2 helps cause I trend to think all recursive calls are parallezed running, but the real running order is serialized, so no twist.</p>
-<p>simulate how human brain solve this problem:</p>
-<pre><code>&lt;1(fix), 2(fix), 3&gt; ;  &lt;1(fix), 3(fix), 2&gt; …
-</code></pre><p>the first position has n potentional values, then the second position has (n-1) potentional values, etc. so design the very first implementation as:  traverse all potentional values in first position, and push it; then travers all potentional values in next position, and push it; till the last position, while only one element left, and push it. so a new combination is created. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; sol1(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; idx_vector ;</div><div class="line">		</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; nums.size(); i++) </div><div class="line">	&#123;</div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp ;</div><div class="line">		tmp.push_back(nums[i]);  <span class="comment">//the first element in new created vector </span></div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums1 =  nums ;</div><div class="line">		nums1.erase(nums1.begin()+i);  <span class="comment">//the second element in new created vector  </span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt; nums1.size(); j++)</div><div class="line">		&#123;</div><div class="line">			tmp.push_back(nums1[j]);</div><div class="line">			<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums2 = nums1; </div><div class="line">			nums2.erase(nums2.begin() + j);</div><div class="line">			<span class="keyword">if</span>(nums2.size() == <span class="number">1</span>)</div><div class="line">			&#123;</div><div class="line">					tmp.push_back(nums2[<span class="number">0</span>]);</div><div class="line">					idx_vector.push_back(tmp); 	</div><div class="line">					tmp.pop_back();</div><div class="line">			&#125;</div><div class="line">		tmp.pop_back(); </div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> idx_vector; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>the first implmenation only works for fixed input <1, 3="" 2,="">, so how to design a recursive fun to make this idea more general ? it’s easy to abstract the process above: for ith position in the new combination vector, the potentional values is one less from (i-1)th position, traverse all possible values in ith position and push it, don’t forget pop it out for traversing to the next possible value; and the end of recursive is when only one element left.</1,></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sol</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; tmp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; idx_vector )</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(nums.size() == <span class="number">1</span>)</div><div class="line">	&#123;</div><div class="line">		tmp.push_back(nums[<span class="number">0</span>]);</div><div class="line">		idx_vector.push_back(tmp);</div><div class="line">		tmp.pop_back();</div><div class="line">		<span class="keyword">return</span> ;</div><div class="line">	&#125;</div><div class="line">		</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; nums.size(); i++)</div><div class="line">	&#123;</div><div class="line">		tmp.push_back(nums[i]);</div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums2 = nums; </div><div class="line">		nums2.erase(nums2.begin()+i);</div><div class="line">		sol(nums2, tmp, idx_vector);</div><div class="line">		tmp.pop_back();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>test:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;; 	</div><div class="line">	<span class="keyword">int</span> size =  nums.size(); </div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; outs;</div><div class="line">	sol(nums, tmp, outs);</div><div class="line">	</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it ;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; size*(size<span class="number">-1</span>); i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(it = outs[i].begin();  it != outs[i].end(); it++)</div><div class="line">			<span class="built_in">cout</span>&lt;&lt; *it &lt;&lt; <span class="string">' '</span> ; </div><div class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"\n"</span> &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/10/MIT-s094/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/10/MIT-s094/" itemprop="url">MIT 6.S094 Deep Learning for Self Driving Cars</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-10T16:45:19-04:00">
-                2018-08-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/10/MIT-s094/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/10/MIT-s094/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="1-Deep-Reinforcement-Learning-link"><a href="#1-Deep-Reinforcement-Learning-link" class="headerlink" title="1 Deep Reinforcement Learning link"></a>1 Deep Reinforcement Learning <a href="https://www.dropbox.com/s/2z7276330jaw37k/lecture2.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps:  motion planning 
-</code></pre><h2 id="2-Convolutional-Neural-Networks-link"><a href="#2-Convolutional-Neural-Networks-link" class="headerlink" title="2 Convolutional Neural Networks link"></a>2 Convolutional Neural Networks <a href="https://www.dropbox.com/s/q34bi7t0udms01x/lecture3.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps: End-2-end driving task(pedestrian detect)
-</code></pre><h2 id="3-Recurrent-Neural-Networks-link"><a href="#3-Recurrent-Neural-Networks-link" class="headerlink" title="3 Recurrent Neural Networks link"></a>3 Recurrent Neural Networks <a href="https://goo.gl/qG4Ys9" target="_blank" rel="external">link</a></h2><pre><code>apps: steering control through time
-</code></pre><h3 id="CNN-Project-DeepTesla"><a href="#CNN-Project-DeepTesla" class="headerlink" title="CNN Project: DeepTesla"></a>CNN Project: <a href="http://selfdrivingcars.mit.edu/deeptesla/" target="_blank" rel="external">DeepTesla</a></h3><h3 id="DRL-Project-DeepTraffic"><a href="#DRL-Project-DeepTraffic" class="headerlink" title="DRL Project: DeepTraffic"></a>DRL Project: <a href="http://selfdrivingcars.mit.edu/deeptraffic/" target="_blank" rel="external">DeepTraffic</a></h3><h3 id="Framework-ConvNetJS"><a href="#Framework-ConvNetJS" class="headerlink" title="Framework:  ConvNetJS"></a>Framework:  <a href="https://github.com/karpathy/convnetjs" target="_blank" rel="external">ConvNetJS</a></h3>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/10/C-template-and-STL-containers/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/10/C-template-and-STL-containers/" itemprop="url">C++ template and STL containers</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-10T16:36:52-04:00">
-                2018-08-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/10/C-template-and-STL-containers/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/10/C-template-and-STL-containers/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>I used C++ couple years already, but never take a close look at it. when looking back to few C++ demo works at school, I had a strong feeling at that time, to make the code running is my only goal, how it work or how to improve it, is always ignored, I am afraid in the language details, as the wisdom say: the evil is in details.</p>
-<p>after working for three years, I feel the necessary and urgent to back to the language itself(e.g. Linux, C/C++) as the first step to move forward in application development. Frameworks, engineering-based APIs are more close to final products, making them easy to be attracted, compared to how the details implemented. like the mechanical undergradute students, who first-time run ABAQUS with beatiful visulized results, feels so good. </p>
-<p>anyway I have to delay the short satification or self-feeling-good. C is clean and the applications have clear structure, C++ is more metaphysics, I even don’t know where to start. even I thought I knew C++ well, but actualy there are many details behind, e.g. allocator in STL.</p>
-<h2 id="template"><a href="#template" class="headerlink" title="template"></a>template</h2><p>template is used for generic programming, e.g. both vector<int> and vector<user-define-object> smell same at compiler time. Template reels off or abstract the common part “vector” as a container, and whatever type is ok to store in.  </user-define-object></int></p>
-<h3 id="function-template"><a href="#function-template" class="headerlink" title="function template"></a>function template</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line">	<span class="title">void</span> <span class="title">func</span>(<span class="title">T</span> <span class="title">arg</span>)</div><div class="line"></div><div class="line"><span class="title">template</span> &lt;typename T&gt;</div><div class="line">	<span class="title">void</span> <span class="title">func</span>(<span class="title">T</span> <span class="title">arg</span>)</div><div class="line"></div><div class="line"><span class="title">template</span> &lt;class T&gt;</div><div class="line">	<span class="title">T</span> <span class="title">add</span>(<span class="title">T</span> <span class="title">n1</span>, <span class="title">int</span> <span class="title">v</span>)&#123;&#125;;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T1</span>, <span class="title">class</span> <span class="title">T2</span>, <span class="title">class</span> <span class="title">T3</span>&gt;</span></div><div class="line">	<span class="title">T3</span> <span class="title">func</span>(<span class="title">T1</span> <span class="title">a1</span>, <span class="title">T2</span> <span class="title">a2</span>, <span class="title">int</span> <span class="title">arg3</span>=3)&#123;&#125;;</div></pre></td></tr></table></figure>
-<p>the actual meaning of TYPE is deduced by compiler depending on the arg passed to this function.  “class” or “typename” is similar.</p>
-<p>template supports default parameters, once the i-th argument is set with default value, all arguments after it must using default values.</p>
-<h3 id="class-template"><a href="#class-template" class="headerlink" title="class template"></a>class template</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>, <span class="title">class</span> _<span class="title">Ref</span>, <span class="title">class</span> _<span class="title">Ptr</span>&gt;</span></div><div class="line"><span class="title">class</span> _<span class="title">list_iterator</span> &#123;</div><div class="line">	<span class="keyword">typedef</span> _List_iterator&lt;_Tp, _Tp&amp;, _Tp*&gt;  iterator ;</div><div class="line">	<span class="keyword">typedef</span> _List_iterator&lt;_Tp, <span class="keyword">const</span> _Tp&amp;, <span class="keyword">const</span> _Tp*&gt;  const_iterator ;</div><div class="line">	<span class="keyword">typedef</span> _List_iterator&lt;_Tp, _Ref, _Ptr&gt;  _Self ;</div><div class="line"></div><div class="line">	<span class="keyword">typedef</span> _Tp value_type ;</div><div class="line">	<span class="keyword">typedef</span> _Ptr  pointer;</div><div class="line">	<span class="keyword">typedef</span> _Ref  reference ;</div><div class="line">	<span class="keyword">typedef</span> _List_node&lt;_Tp&gt;  _Node; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>feel the power of template in STL source code. </p>
-<h2 id="STL-containers"><a href="#STL-containers" class="headerlink" title="STL containers"></a>STL containers</h2><p>references:<br>&lt;&lt; the annotated STL source using SGI STL &gt;&gt; by jjHou<br><a href="https://rawgit.com/google/cxx-std-draft/allocator-paper/allocator_user_guide.html" target="_blank" rel="external">a visitor guide to C++ allocator</a><br><a href="https://www.kancloud.cn/digest/stl-sources/177262" target="_blank" rel="external">the annotated STL source</a><br>I took several days to start, cause the first section on allocator already blocked me.</p>
-<h3 id="why-allocator"><a href="#why-allocator" class="headerlink" title="why allocator ?"></a>why allocator ?</h3><p>The logic of a dynamic container doesn’t depend on the specifies of how memory is obtained; namely, the design of container classes should be decoupled from the memory allocation policy. </p>
-<h3 id="how-allocator-works"><a href="#how-allocator-works" class="headerlink" title="how allocator works ?"></a>how allocator works ?</h3><p>memory allocation and object construction is separated, allocator has four operations: allocate(), deallocate(), construct(), destroy(). there are std interface to allocators</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">AllocTraits = <span class="built_in">std</span>::allocator_traits&lt;alloc&gt; </div><div class="line"><span class="comment">// define an allocator of type "alloc" </span></div><div class="line">AllocTraits::pointer  p = AllocTraits::allocate(a, n)  </div><div class="line"><span class="comment">//get memory space for n objects of type T, but not construct yet </span></div><div class="line">AllocTraits::construct(a, trueaddress(ptr), x, y, z) ;    <span class="comment">//construct a T(x, y, z)</span></div><div class="line">AllocTraits::destroy(a, trueaddress(ptr));  <span class="comment">// ~T()</span></div><div class="line">AllocTraits::deallocate(a, ptr, <span class="number">1</span>) ;   <span class="comment">// deallocate the space for one T object</span></div></pre></td></tr></table></figure>
-<p>WHEN we say A is an allocator for T , where T is a type e.g. AllocatTraits::value_type. we mean, A knows how to obtain and release memory to store objects of type T. <a href="https://github.com/cacay/MemoryPool/blob/master/C-11/" target="_blank" rel="external">git:allocator</a></p>
-<h3 id="iterator"><a href="#iterator" class="headerlink" title="iterator"></a>iterator</h3><p>iterator is used to build algorithms in containers. while I don’t really get the traits </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> _<span class="title">Iterator</span>&gt;</span></div><div class="line"><span class="title">struct</span> <span class="title">iterator_traits</span> &#123;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::iterator_category  iterator_category ;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::value_type	 value_type ;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::difference_type  difference_type ;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::pointer	pointer;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Iterator::reference reference ;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> _<span class="title">Tp</span>&gt;</span></div><div class="line"><span class="title">struct</span> <span class="title">iterator_traits</span>&lt;_Tp*&gt; &#123;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> random_access_iterator_tag  iterator_category ;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Tp	 value_type ;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="keyword">ptrdiff_t</span>  difference_type ;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Tp*	pointer;</div><div class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> _Tp&amp; eference ;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h3><p>std::vector is dynamic, continous.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">template &lt;class _Tp,  class _Alloc = __STL_DEFAULT_ALLOCATOR(_Tp)&gt;</div><div class="line">class vector:: protected _Vector_base&lt;_Tp,  _Alloc&gt;</div><div class="line">&#123;</div><div class="line">	public:</div><div class="line">		typedef  _Tp value_type ;</div><div class="line">		typedef  value_type*  pointer ;</div><div class="line">		typedef  const value_type*  const_pointer ;</div><div class="line">		typedef value_type* iterator ;</div><div class="line">		typedef const value_type*  const_iterator ;</div><div class="line"></div><div class="line">		iterator begin() &#123;return _M_start;&#125;;</div><div class="line">		iterator end() &#123;return _M_finish ;&#125;;</div><div class="line"></div><div class="line">	protected:</div><div class="line">		_Tp* _M_start ; // the starting point of current used space </div><div class="line">		_Tp* _M_finish; // the ending point of current sued space </div><div class="line">	      _Tp*  _M_end_of_storage; // the end of total avialable space(capacity)</div><div class="line"></div><div class="line">	public:</div><div class="line">		explicit vector(const allocator_type&amp; __a = allocator_type())</div><div class="line">			: _Base(__a)&#123;&#125;  //default constructor </div><div class="line"></div><div class="line">		// construt of n elements of initial-value </div><div class="line">		vector(size_type __n, const _Tp&amp; __value, const allocator_type&amp; __a = allocator_type())</div><div class="line">			: _Base(__n, __a)</div><div class="line">		&#123;</div><div class="line">			_M_finish = uninitialized_fill_n(_M_start, __n, __value);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		//copy construtor</div><div class="line">		vector(const vector&lt;_Tp, _Alloc&gt;&amp; __x)</div><div class="line">			:_Base(__x.size(),  __x.get_allocator())</div><div class="line">		&#123;</div><div class="line">			_M_finish = uninitialized_copy(__x.begin(),  __x.end(), _M_start);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		size_type  size() const &#123;return size_type(end() - begin());&#125;</div><div class="line">		size_type capacity() const &#123;return size_type(_M_end_of_storage - begin()); </div><div class="line">		bool empty() const&#123;return begin() == end();&#125;</div><div class="line">		reference operator[](size_type __n)&#123;return *(begin() + __n);&#125;</div><div class="line">		void reserve(size_type __n)&#123;</div><div class="line">			if (capacity() &lt; __n)</div><div class="line">			&#123;</div><div class="line">				const size_type __old_size = size(); </div><div class="line">				iterator __tmp = _M_allocate_and_copy(__n, _M_start, _M_finish);</div><div class="line">				destroy(_M_start, _M_finish);</div><div class="line">				_M_deallocate(_M_start, _M_end_of_storage-_M_start); </div><div class="line"></div><div class="line">				_M_start = __tmp;</div><div class="line">				_M_finish = __tmp + __old_size ;</div><div class="line">				_M_end_of_storage = _M_start + __n ;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		void push_back(const _Tp&amp; __x)</div><div class="line">		&#123;</div><div class="line">			if(_M_finish != _M_end_of_storage)</div><div class="line">			&#123;</div><div class="line">				construct(_M_finish, __x);</div><div class="line">				++_M_finish;</div><div class="line">			&#125;else</div><div class="line">				_M_insert_aux(end(), __x);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		template&lt;class _Tp,  class _Alloc&gt;</div><div class="line">		inline bool operator==(const vector&lt;_Tp, _Alloc&gt;&amp; __x, const vector&lt;_Tp, _Alloc&gt;&amp; __y)</div><div class="line">		&#123;</div><div class="line">			return __x.size() == __y.size() &amp;&amp; </div><div class="line">			equal(__x.begin(), __x.end(), __y.begin());</div><div class="line">		&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><p>std::list is cycling double-direction link list.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">struct _List_node_base </div><div class="line">&#123;</div><div class="line">	_List_node_base * _M_next ;</div><div class="line">	_List_node_base * _M_prev ;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">template &lt;class _Tp&gt;</div><div class="line">struct _List_node : public _List_node_base </div><div class="line">&#123;</div><div class="line">	_Tp _M_data;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">struct _List_iterator_base </div><div class="line">&#123;</div><div class="line">	typedef size_t   size_type ;</div><div class="line">	typedef ptrdiff_t   difference_type ;</div><div class="line">	typedef bidirectional_iterator_tag  iterator_category; </div><div class="line"></div><div class="line">	_List_node_base*  _M_node ;</div><div class="line"></div><div class="line">	//constructor </div><div class="line">	_List_iterator_base(_List_node_base* __x) : _M_node(__x)&#123;&#125;</div><div class="line">	_List_iterator_base()&#123;&#125;;</div><div class="line"></div><div class="line">	void _M_incr() &#123; _M_node = _M_node-&gt;_M_next; &#125;;</div><div class="line">	void _M_decr() &#123; _M_node = _M_node-&gt;_M_prev; &#125;;</div><div class="line">	bool operator==(const _List_iterator_base&amp; __x) const</div><div class="line">	&#123;</div><div class="line">		return _M_node == __x.M_node ;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">template&lt;class _Tp,  class _Ref,  class _Ptr&gt;</div><div class="line">struct _List_iterator : public _List_iterator_base </div><div class="line">&#123;</div><div class="line">	typedef _List_iterator&lt;_Tp, _Tp&amp;, _Tp*&gt;  iterator ;</div><div class="line">	typedef _List_iterator&lt;_Tp, const _Tp&amp;, const _Tp*&gt;  const_iterator ;</div><div class="line">	typedef _List_iterator&lt;_Tp, _Ref, _Ptr&gt;  _Self ;</div><div class="line"></div><div class="line">	typedef _Tp value_type ;</div><div class="line">	typedef _Ptr  pointer;</div><div class="line">	typedef _Ref  reference ;</div><div class="line">	typedef _List_node&lt;_Tp&gt;  _Node; </div><div class="line"></div><div class="line">	//constructor </div><div class="line">	_List_iterator(_Node* __x): _List_iterator_base(__x)&#123;&#125;</div><div class="line">	_List_iterator()&#123;&#125;</div><div class="line"></div><div class="line">	reference operator*() const &#123;return ( (_Node*) _M_node)-&gt;_M_data; &#125;</div><div class="line"></div><div class="line">	_Self&amp;  operator++()</div><div class="line">	&#123;</div><div class="line">		this-&gt;_M_incr();</div><div class="line">		return *this;</div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">template &lt;class _Tp,  class _Alloc=_STL_DEFAULT_ALLOCATOR(_Tp)&gt;</div><div class="line">class list : protected _List_base&lt;_Tp, _Alloc&gt;</div><div class="line">&#123;</div><div class="line">	public:</div><div class="line">		typedef _List_node&lt;_Tp&gt; _Node;</div><div class="line">	protected:</div><div class="line">		_List_node&lt;_Tp&gt; * _M_node; </div><div class="line">	public:</div><div class="line">		list(size_type __n,   const _Tp&amp;  __value,</div><div class="line">			const allocator_type&amp; __a = allocator_type())</div><div class="line">			: Base_(__a)</div><div class="line">		&#123;</div><div class="line">			insert(begin(), __n, __value);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		explicit list(size_type __n)</div><div class="line">			:_Base(allocator_type())</div><div class="line">		&#123;</div><div class="line">			insert(begin(), __n, _Tp());</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	protected:</div><div class="line">		_Node* _M_create_node(const _Tp&amp; __x)</div><div class="line">		&#123;</div><div class="line">			_Node* __p = _M_get_node(); </div><div class="line">			__STL_TRY</div><div class="line">			&#123;</div><div class="line">				_Construct(&amp;_p-&gt;_M_data, __x);</div><div class="line">			&#125;</div><div class="line">			return __p;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	public:</div><div class="line">		iterator begin() &#123; return (_Node*)(_M_node-&gt;_M_next);&#125;</div><div class="line">		iterator end() &#123; return _M_node; &#125;</div><div class="line">		bool empty() const &#123;return _M_node-&gt;_M_next == _M_node ;&#125; </div><div class="line">		size_type size() const &#123;</div><div class="line">			size_type  __result = 0;</div><div class="line">			distance( begin(),  end(), __result);</div><div class="line">			return __result;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		size_type max_size() const &#123;return size_type(-1);&#125;</div><div class="line">		reference front() &#123;return *begin();&#125;</div><div class="line">		reference back() &#123;return *(--end());&#125;</div><div class="line">		void swap(list&lt;_Tp, _Alloc&gt;&amp; __x)</div><div class="line">		&#123;</div><div class="line">			__STD::swap(_M_node, __x._M_node);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		interator insert(iterator __position,  const _Tp&amp; __x)</div><div class="line">		&#123;</div><div class="line">			_Node* __tmp = _M_create_node(__x);</div><div class="line"></div><div class="line">			__tmp-&gt;_M_next = __position._M_node ;</div><div class="line">			__tmp-&gt;_M_prev = __position._M_node-&gt;_M_prev ;</div><div class="line">			</div><div class="line">			__position._M_node-&gt;_M_prev-&gt;_M_next = __tmp;</div><div class="line">			__position._M_node-&gt;_M_prev  = __tmp;</div><div class="line">			</div><div class="line">			return __tmp;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		void push_front(const _Tp&amp; __x)&#123;insert(begin(), __x);&#125;</div><div class="line">		void push_back(const _Tp&amp; __x)&#123;insert(end(), __x);&#125;</div><div class="line"></div><div class="line">		iterator erase(iterator __position)</div><div class="line">		&#123;</div><div class="line">			_List_node_base* __next_node = __position._M_node-&gt;_M_next ;</div><div class="line">			_List_node_base* __prev_node = __position._M_node-&gt;_M_prev ;</div><div class="line"></div><div class="line">			_Node* __n = (_Node*) __position._M_node ;</div><div class="line"></div><div class="line">			__prev_node-&gt;next = __next_node ;</div><div class="line">			__next_node-&gt;prev = __prev_node;</div><div class="line">	</div><div class="line">			_Destroy(&amp;__n-&gt;_M_data);</div><div class="line">			_M_put_data(__n);</div><div class="line">			return iterator((_Node*) __next_node);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="dequeue"><a href="#dequeue" class="headerlink" title="dequeue"></a>dequeue</h3><p>std::dequeue can operate elements at both ends, and the memory is multi-sectional, in each memory section is linear continous, with advantage of vector and list.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div></pre></td><td class="code"><pre><div class="line">template &lt;class _Tp,  class _Ref,  class _Ptr&gt;</div><div class="line">struct _Deque_iterator &#123;</div><div class="line">	typedef _Deque_iterator&lt;_Tp, _Tp&amp;, _Tp*&gt;   iterator ;</div><div class="line">	typedef _Deque_iterator&lt;_Tp, const _Tp&amp;, const  _Tp*&gt;  const_iterator ;</div><div class="line">	static size_t _S_buffer_size() &#123;return __deque_buf_size(sizeof(_Tp));&#125;</div><div class="line"></div><div class="line">	typedef random_access_iterator_tag  iterator_category;</div><div class="line">	typedef _Tp value_type ;</div><div class="line">	typedef _Ptr  pointer;</div><div class="line">	typedef _Ref reference;</div><div class="line">	typedef size_t  size_type ;</div><div class="line">	typedef ptrdiff_t  difference_type ;</div><div class="line">	typedef _Tp** _Map_pointer ;</div><div class="line"></div><div class="line">	typedef _Deque_iterator _Self; </div><div class="line"></div><div class="line"></div><div class="line">	_Tp* _M_cur ; //current point in cache</div><div class="line">	_Tp* _M_first; //first point in cache</div><div class="line">	_Tp* _M_last; </div><div class="line">	_Map_pointer _M_node ; </div><div class="line">	/* deque support multi-section memory space, in each memory section is linear continous</div><div class="line">	 * Map index is used to point to the memory sections</div><div class="line">	 */</div><div class="line">	</div><div class="line">	_Deque_iterator(_Tp* __x, _Map_pointer __y)</div><div class="line">		:_M_cur(__x), </div><div class="line">		 _M_first(*__y),</div><div class="line">		 _M_last(*__y + _S_buffer_size()), </div><div class="line">		 _M_node(__y)</div><div class="line">	&#123;&#125;</div><div class="line"></div><div class="line">	//default </div><div class="line">	//copy</div><div class="line">	</div><div class="line">	difference_type operator-(const _Self&amp; __x) const</div><div class="line">	&#123;</div><div class="line">		return difference_type(_S_buffer_size()) *  (_M_node - __x.M_node - 1) + </div><div class="line">			(_M_cur - _M_first) + (__x._M_last - __x._M_cur);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	_Self&amp; operator++()</div><div class="line">	&#123;</div><div class="line">		++_M_cur ; </div><div class="line">		if(_M_cur == _M_last)&#123;</div><div class="line">			_M_set_node(_M_node + 1);</div><div class="line">			_M_cur = _M_first;</div><div class="line">		&#125;</div><div class="line">		return *this;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	_Self&amp; operator--()</div><div class="line">	&#123;</div><div class="line">		if(_M_cur == _M_first)&#123;</div><div class="line">			_M_set_node(_M_node - 1);</div><div class="line">			_M_cur = _M_last;</div><div class="line">		&#125;</div><div class="line">		--_M_cur ;</div><div class="line">		return *this;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">	</div><div class="line">/*  deque has two iterator:</div><div class="line">   start -&gt; the first element in first cache space;  </div><div class="line">   finish -&gt; the last element in last cache space */</div><div class="line"></div><div class="line">template &lt;class _Tp,  class _Alloc&gt;</div><div class="line">class _Deque_base &#123;</div><div class="line">	protected:		</div><div class="line">		_Tp** _M_map ;</div><div class="line">		size_t _M_map_size; </div><div class="line">		iterator _M_start;</div><div class="line">		iterator _M_finish;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">template &lt;class _Tp,  class _Alloc = __STL_DEFAULT_ALLOCATOR(_Tp)&gt;</div><div class="line">class deque : protected _Deque_base&lt;_Tp, _Alloc&gt;</div><div class="line">&#123;</div><div class="line">	public:</div><div class="line">		typedef typename _Base::iterator  iterator ;</div><div class="line">		typedef typename _Base::const_iterator  const_iterator ;</div><div class="line">	protected:</div><div class="line">		using _Base::_M_map ; </div><div class="line">		using _Base::_M_map_size ;</div><div class="line">		using _Base::_M_start ; </div><div class="line">		using _Base::_M_finish ;</div><div class="line"></div><div class="line">	public:</div><div class="line">		explicit deque(const allocator_type&amp; __a = allocator_type())</div><div class="line">			:_Base(__a, 0)</div><div class="line">		&#123;&#125;</div><div class="line"></div><div class="line">		deque(const deque&amp; __x):</div><div class="line">			_Base(__x.get_allocator(), __x.size())</div><div class="line">		&#123;</div><div class="line">			uninitialized_copy(__x.begin(),  __x.end(), _M_start);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		~deque()&#123; destroy(_M_start, _M_finish);&#125;</div><div class="line"></div><div class="line">		void push_back(const value_type&amp; __t)</div><div class="line">		&#123;</div><div class="line">			if(_M_finish._M_cur != _M_finish._M_last - 1)</div><div class="line">			&#123;</div><div class="line">				construct(_M_finish._M_cur, __t);</div><div class="line">				++_M_finish._M_cur ;</div><div class="line">			&#125;else</div><div class="line">				_M_push_back_aux(__t);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		void push_front(const value_type&amp;  __t)</div><div class="line">		&#123;</div><div class="line">			if(_M_start._M_cur != _M_start._M_first)</div><div class="line">			&#123;</div><div class="line">				construct(_M_start._M_cur - 1,  __t);</div><div class="line">				--_M_start._M_cur;</div><div class="line">			&#125;else</div><div class="line">				_M_push_front_aux(__t);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		void pop_back()</div><div class="line">		&#123;</div><div class="line">			if(_M_finish._M_cur != _M_finish._M_first)</div><div class="line">			&#123;</div><div class="line">				--_M_finish._M_cur;</div><div class="line">				destroy(_M_finish._M_cur);</div><div class="line">			&#125;else</div><div class="line">				_M_pop_back_aux();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		void pop_front()</div><div class="line">		&#123;</div><div class="line">			if(_M_start._M_cur != _M_start._M_last -1)</div><div class="line">			&#123;</div><div class="line">				destroy(_M_start._M_cur);</div><div class="line">				++_M_start._M_cur;</div><div class="line">			&#125;else</div><div class="line">				_M_pop_back_aux();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		iterator insert(iterator position, const value_type&amp;  __x)</div><div class="line">		&#123;</div><div class="line">			if(position._M_cur == _M_start._M_cur)</div><div class="line">			&#123;</div><div class="line">				push_front(__x);</div><div class="line">				return _M_start;</div><div class="line">			&#125;else if(position._M_cur == _M_finish._M_cur)</div><div class="line">			&#123;</div><div class="line">				push_back(__x);</div><div class="line">				iterator __tmp = _M_finish;</div><div class="line">				--__tmp;</div><div class="line">				return __tmp;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h3><p>std::stack only operate on the top element (first in last out), can’t iterate the container, the default container for stack is deque. </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">temlate &lt;class _Tp, class _Sequence&gt;</div><div class="line">class stack</div><div class="line">&#123;</div><div class="line">	public:</div><div class="line">		typedef typname _Sequence::value_type  value_type ;</div><div class="line">		typedef typname _Sequence::size_type   size_type ;</div><div class="line">		typedef typname _Sequence	  container_type ;</div><div class="line">		typedef typname _Sequence::reference  reference ;</div><div class="line">		typedef typname _Sequence::const_reference const_reference;</div><div class="line">	protected:</div><div class="line">		_Sequence c;  // the fundmental container:  deque by default</div><div class="line">	public:</div><div class="line">		stack() : c() &#123;&#125;</div><div class="line">		explicit stack(const _Sequence&amp; __s) : c(__s) &#123;&#125;</div><div class="line">		</div><div class="line">		bool empty() const &#123; return c.empty();&#125;</div><div class="line">		size_type size() const &#123;return c.size();&#125;</div><div class="line">		reference top() &#123;return c.back(); &#125;</div><div class="line">		void push(const value_type&amp; __x)&#123; c.push_back(__x);&#125;</div><div class="line">		void pop() &#123; c.pop_back();&#125;</div><div class="line">	</div><div class="line">		template&lt;class _Tp,  class _Seq&gt;</div><div class="line">			bool operator==(const stack&lt;_Tp, _Seq&gt;&amp; __x, const stack&lt;_Tp, _Seq&gt;&amp; __y)</div><div class="line">			&#123;</div><div class="line">				return __x.c == __y.c ;</div><div class="line">			&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h2><p>std::queue supports only pop element from front, and push element into end, the default container is dequeue </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">template &lt;class _Tp, class _Sequence&gt;</div><div class="line">class queue</div><div class="line">&#123;</div><div class="line">	public:</div><div class="line">		typedef typname _Sequence::value_type  value_type ;</div><div class="line">		typedef typname _Sequence::size_type   size_type ;</div><div class="line">		typedef typname _Sequence	  container_type ;</div><div class="line">		typedef typname _Sequence::reference  reference ;</div><div class="line">		typedef typname _Sequence::const_reference const_reference;</div><div class="line">	protected:</div><div class="line">		_Sequence c;  // the fundmental container:  deque by default</div><div class="line">	public:</div><div class="line">		queue() : c() &#123;&#125;</div><div class="line">		explicit queue(const _Sequence&amp; __s) : c(__s) &#123;&#125;</div><div class="line"></div><div class="line">		bool empty() const &#123; return c.empty();&#125;</div><div class="line">		size_type size() const &#123;return c.size();&#125;</div><div class="line">		reference top() &#123;return c.back(); &#125;</div><div class="line">		void push(const value_type&amp; __x)&#123; c.push_back(__x);&#125;</div><div class="line">		void pop() &#123; c.pop_front();&#125;</div><div class="line">	</div><div class="line">		template&lt;class _Tp,  class _Seq&gt;</div><div class="line">			bool operator==(const queue&lt;_Tp, _Seq&gt;&amp; __x, const queue&lt;_Tp, _Seq&gt;&amp; __y)</div><div class="line">			&#123;</div><div class="line">				return __x.c == __y.c ;</div><div class="line">			&#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="priority-queue"><a href="#priority-queue" class="headerlink" title="priority queue"></a>priority queue</h3><p>std::priority_queue is queue with priority.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1669,7 +1644,7 @@ Output:
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">82</span>
+                <span class="site-state-item-count">85</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
