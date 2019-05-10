@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="automotive software," />
+  <meta name="keywords" content="control," />
 
 
 
@@ -93,18 +93,20 @@
 
 
 
-<meta name="description" content="during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up. After jumped into the source">
-<meta name="keywords" content="automotive software">
+<meta name="description" content="this is a review from cmu refer  state variable methodany Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in t">
+<meta name="keywords" content="control">
 <meta property="og:type" content="article">
-<meta property="og:title" content="coding is the system engineering">
-<meta property="og:url" content="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/index.html">
+<meta property="og:title" content="robust control theory">
+<meta property="og:url" content="http://yoursite.com/2019/05/10/robust-control-theory/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up. After jumped into the source">
+<meta property="og:description" content="this is a review from cmu refer  state variable methodany Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in t">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-10T20:43:02.000Z">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;+&space;Bu&space;\\&space;Y&space;=&space;CX&space;+&space;Du">
+<meta property="og:updated_time" content="2019-05-10T14:54:29.130Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="coding is the system engineering">
-<meta name="twitter:description" content="during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up. After jumped into the source">
+<meta name="twitter:title" content="robust control theory">
+<meta name="twitter:description" content="this is a review from cmu refer  state variable methodany Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in t">
+<meta name="twitter:image" content="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;+&space;Bu&space;\\&space;Y&space;=&space;CX&space;+&space;Du">
 
 
 
@@ -132,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/05/10/robust-control-theory/"/>
 
 
 
 
 
-  <title>coding is the system engineering | Serious Autonomous Vehicles</title>
+  <title>robust control theory | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +293,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/robust-control-theory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">coding is the system engineering</h1>
+          <h1 class="post-title" itemprop="name headline">robust control theory</h1>
         
 
         <div class="post-meta">
@@ -320,8 +322,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-05T23:04:36-04:00">
-                2018-06-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T10:54:01-04:00">
+                2019-05-10
               </time>
             
 
@@ -339,9 +341,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/06/05/coding-is-the-system-engineering/#comments" itemprop="discussionUrl">
+                <a href="/2019/05/10/robust-control-theory/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/05/coding-is-the-system-engineering/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/05/10/robust-control-theory/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,16 +368,22 @@
       
 
       
-        <p>during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up.</p>
-<p>After jumped into the source code, soonly I found the dependent third-party libs, e.t. Qt, Glib, libwebsockets. None of these basis libs looks familiar, that’s really headache. </p>
-<p>So had to jump to learn a little about these libs first. Qt is heavy, give up on reading source code, basically to know what’s used for; Glib has a core on eventloop, after review the concept: nonblocking event I/O; and few lighter projects are found, e.g. event.js in RocketEngine. so I was happy to read js source code, but after reading nothing really keep in my head due to don’t know where to use them, neither don’t understand why these implement is necessary. </p>
-<p>maybe a bigger project with more details, so picked moduo, written by a Chinese. there is a book on this project, which started with multi-thread programming issues, no help. same problem, I am not familar with the application scenario, so can’t really catch the essential. </p>
-<p>back to the question: how to effciently read source code?<br>1) I suppose, first to understand the application scenario<br>2) compile and run in debug to track the data flow for projects, which you can’t see the flow by once<br>3) if it’s a framework/foundmental libs, write demo</p>
-<p>The company IT system is not developer-friendly, git, cmake, npm, python lib are missing. that’s maybe the reason I am becoming lazy, if tools at-hand, may give a try; if not, nothing really do. The company has itself gmake system, but the bottom code never been touched. </p>
-<p>Then I compiled the demo libwebsocket, many failures bump out, during school time, I used a lot cmake, g++ with local headers, link to LD/_LIBRARY/_PATH, all out of practice for couple years. </p>
-<p>Anyway, at this moment, I realize that coding is a system enginnering. first to be really familar with OS, then the basic libs, then think about to write applications. </p>
-<p>For me, the first occupy with software is from (industry) application layer, lack of foundmental. now when to do sth, I feel hands are bounded, that push me to the root.</p>
-<p>Rome is not built in one day, OMG.</p>
+        <hr>
+<p>this is a review from <a href="https://users.ece.cmu.edu/~koopman/des_s99/control_theory/" target="_blank" rel="external">cmu refer</a></p>
+<hr>
+<h2 id="state-variable-method"><a href="#state-variable-method" class="headerlink" title="state variable method"></a>state variable method</h2><p>any Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in the form of matrix equations. </p>
+<p>define <code>x</code> as system state,  <code>y</code> as output, <code>u</code> as input: </p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" title="\dot{X} = AX + Bu \\ Y = CX + Du"></a></p>
+<p>modern control methods(ODEs) can handle multiple-input-multiple-outputs, and they can be optimized, and they allow to design performance and cost model. </p>
+<h2 id="effects-of-uncertainty"><a href="#effects-of-uncertainty" class="headerlink" title="effects of uncertainty"></a>effects of uncertainty</h2><h4 id="observability"><a href="#observability" class="headerlink" title="observability"></a>observability</h4><p>the ability to observe all of the parameters or state variables in the system</p>
+<h4 id="controllability"><a href="#controllability" class="headerlink" title="controllability"></a>controllability</h4><p>the ability to move a system from any given state to any desired state </p>
+<h4 id="stability"><a href="#stability" class="headerlink" title="stability"></a>stability</h4><p>the bounded response to any bounded input </p>
+<p>robust control theory might be stated as a worst-case analysis, to bound the uncertantiy.</p>
+<h2 id="metircs"><a href="#metircs" class="headerlink" title="metircs"></a>metircs</h2><p>how to model the behavior of the test system is one most difficult challenge in design a good control system.</p>
+<h4 id="adaptive-control"><a href="#adaptive-control" class="headerlink" title="adaptive control"></a>adaptive control</h4><p>set up observers for each significant state variable. at each iteration loop, the system learns about the changes in the system parameters, and getting closer to the desired. while the method may suffer from convergence issues</p>
+<h4 id="H2-or-H-infinity"><a href="#H2-or-H-infinity" class="headerlink" title="H2 or H-infinity"></a>H2 or H-infinity</h4><p>H2 control seeks to bound the power gain of the system, H-infinity seeks to bound the energy gain of the system. gains in power or energy indicate operation of the system near a pole in the transfer function.</p>
+<h4 id="parameter-estimation"><a href="#parameter-estimation" class="headerlink" title="parameter estimation"></a>parameter estimation</h4><p>by establishing boundaries in the frequency domain that cannot be crossed to maintain stability. </p>
+<h4 id="Lyapanov"><a href="#Lyapanov" class="headerlink" title="Lyapanov"></a>Lyapanov</h4><p>the only universal tech for assessing non-linear systems, the method focus on stability. Lyapanov functions are constructed, which are described as energy-like functions, to model the behavior of real system. </p>
 
       
     </div>
@@ -405,7 +413,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/automotive-software/" rel="tag"># automotive software</a>
+            <a href="/tags/control/" rel="tag"># control</a>
           
         </div>
       
@@ -418,8 +426,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/31/open-source-project-checked/" rel="next" title="open source project checked">
-                <i class="fa fa-chevron-left"></i> open source project checked
+              <a href="/2019/05/10/Carmaker-8-0/" rel="next" title="Carmaker 8.0">
+                <i class="fa fa-chevron-left"></i> Carmaker 8.0
               </a>
             
           </div>
@@ -427,10 +435,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/14/muduo1/" rel="prev" title="moduo 1">
-                moduo 1 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -485,8 +489,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -559,6 +572,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#state-variable-method"><span class="nav-number">1.</span> <span class="nav-text">state variable method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#effects-of-uncertainty"><span class="nav-number">2.</span> <span class="nav-text">effects of uncertainty</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#observability"><span class="nav-number">2.0.1.</span> <span class="nav-text">observability</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#controllability"><span class="nav-number">2.0.2.</span> <span class="nav-text">controllability</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stability"><span class="nav-number">2.0.3.</span> <span class="nav-text">stability</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metircs"><span class="nav-number">3.</span> <span class="nav-text">metircs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#adaptive-control"><span class="nav-number">3.0.1.</span> <span class="nav-text">adaptive control</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#H2-or-H-infinity"><span class="nav-number">3.0.2.</span> <span class="nav-text">H2 or H-infinity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#parameter-estimation"><span class="nav-number">3.0.3.</span> <span class="nav-text">parameter estimation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Lyapanov"><span class="nav-number">3.0.4.</span> <span class="nav-text">Lyapanov</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -696,9 +725,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/06/05/coding-is-the-system-engineering/';
-          this.page.identifier = '2018/06/05/coding-is-the-system-engineering/';
-          this.page.title = 'coding is the system engineering';
+          this.page.url = 'http://yoursite.com/2019/05/10/robust-control-theory/';
+          this.page.identifier = '2019/05/10/robust-control-theory/';
+          this.page.title = 'robust control theory';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';

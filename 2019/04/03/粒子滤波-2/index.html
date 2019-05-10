@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="self-driving," />
+  <meta name="keywords" content="control," />
 
 
 
@@ -94,7 +94,7 @@
 
 
 <meta name="description" content="前一篇 介绍贝叶斯滤波的数学原理和蒙特卡洛定位的算法。本篇将介绍基于序贯重要性采样。粒子滤波的思想就是采用一个加权粒子分布去近似后验概率分布p(x) 蒙特卡洛积分定义一连续随机变量X, 其概率密度分布函数为 p(X); 定义Y=f(X)， 则随机变量Y的数学期望：  实际中，概率密度分布p(X)未知，如何保障所采样的点服从p(X) 直接采样通过对均匀分布采样，实现对任意分布的采样。  任何未知概率">
-<meta name="keywords" content="self-driving">
+<meta name="keywords" content="control">
 <meta property="og:type" content="article">
 <meta property="og:title" content="particle filter (2)">
 <meta property="og:url" content="http://yoursite.com/2019/04/03/粒子滤波-2/index.html">
@@ -114,7 +114,7 @@
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?\inline&space;q(x_{0:k}|&space;z_{1:k})&space;=&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})">
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?\inline&space;w^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;}">
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?\inline&space;w_k^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;}&space;w_{k-1}^i">
-<meta property="og:updated_time" content="2019-05-03T16:14:46.170Z">
+<meta property="og:updated_time" content="2019-05-10T14:57:19.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="particle filter (2)">
 <meta name="twitter:description" content="前一篇 介绍贝叶斯滤波的数学原理和蒙特卡洛定位的算法。本篇将介绍基于序贯重要性采样。粒子滤波的思想就是采用一个加权粒子分布去近似后验概率分布p(x) 蒙特卡洛积分定义一连续随机变量X, 其概率密度分布函数为 p(X); 定义Y=f(X)， 则随机变量Y的数学期望：  实际中，概率密度分布p(X)未知，如何保障所采样的点服从p(X) 直接采样通过对均匀分布采样，实现对任意分布的采样。  任何未知概率">
@@ -449,7 +449,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/self-driving/" rel="tag"># self-driving</a>
+            <a href="/tags/control/" rel="tag"># control</a>
           
         </div>
       
@@ -554,7 +554,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">85</span>
+                <span class="site-state-item-count">86</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -567,7 +567,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
