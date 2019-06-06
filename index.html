@@ -291,6 +291,142 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/how-simulation-helps-for-autonomous-vehicle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/06/how-simulation-helps-for-autonomous-vehicle/" itemprop="url">how simulation helps for autonomous vehicle</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-06T05:50:37-04:00">
+                2019-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/06/how-simulation-helps-for-autonomous-vehicle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/06/06/how-simulation-helps-for-autonomous-vehicle/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="prefare"><a href="#prefare" class="headerlink" title="prefare"></a>prefare</h2><p>recently joined another Chinese auto OEM, still work in simulation platform for autonomous vehicle. this experience is a different pratice from GM or Ford. </p>
+<p>at first, it’s the mindset update, once for a long time, or even take for granted that I was looking for to be treated greatly, like in NA companies, what the company can offer me. it’s about freedom and responsibility. To have the freedom/right to make a difference in project direction, contents, and methods to achieve sth, first prove that I can take it, which is responsibility.</p>
+<p>“ you can you up” that kind of phylosphy is very common and actually I’d love it in some point.</p>
+<h2 id="beta-version"><a href="#beta-version" class="headerlink" title="beta version"></a>beta version</h2><p>there are ways to make a virtual simulator. traditional tool vendors include Matlab/Simulink, Prescan, VTD, ANSYS e.t.c. and as the beta version of simulator tool-chain, they are common in most OEMs in China. while have to say, in China, cause most software tools, from engineering tools to modern HR managment tools to product managment tools are kind of in practice process in Chinese companies as I can see, rather than as a matured segment pluged-in the company’s DNA. e.g.  the product development tools are pretty in trial and error, occasionaly some PLM vendors come to introduce their products. and actually except the CAD/CAE tools, which were introduced in China since 80’s, and which sounds matured right now, the simulation tools for autonomous vehicle is pretty new-things, from map, sensor to all kinds of internal algorithms.</p>
+<p>the beta version of simulation tools has its DNAs as well. first they are charged by license fee, which is a pretty old way like IBM days. not many modern Internet mobility companies live in this way anymore.  </p>
+<p>secondly, they can’t update frequently, once or twice a year with a new version of the product is common, which maybe OK in CAD/CAE tools, since the engineering analysis process are pretty matured and few exceptional requirements jump out in daily work, and there update is sometime by the vendor itself, which is not a required update, maybe optimized the algorithms, maybe added a third-party function, and sometime is from the users conference, usually the tool vendor will organize this kind of user conference to group users together, one way to get some connections, as well as to get some end-user requirements to fix the next version product, which is also a drawback compared to open source tool community, in where the user is more active.</p>
+<p>thirdly, the beta version tools are excluding the users someway, who can’t actually manage the tool as part of its whole functions. assuming simulation will be the key to make a difference in future auto product, then this excluding is unacceptable. on the other side, if autonomous simulation tool are at most aided to develop new product, then it becomes a piece of chicken neck either to take or to throw. <strong>from a product view, what is the role of simulation tool or as  a product itself, where it is blooming point</strong></p>
+<h2 id="alpha-version"><a href="#alpha-version" class="headerlink" title="alpha version"></a>alpha version</h2><p>why simulation tool become a role in autonomous, except the traditional vendors, mostly coming from Internet companies, e.g. Google, Uber, Baidu, Tecent etc. they are pretty strong to make a software product, including the simulation software in auto industry.  <strong>interesting, these Internet companines never go to make a CAD/CAE software, but they actually prefer to support the cloud/HPC infrastructures for CAD/CAE simulation.</strong></p>
+<p>these big mobility companines make their simulation tools now and well cowork with their existing IT development methodlogy, software product ideas as well as all ICT infrastures, which make these tools sounds huge great, and which also make themselves as the core role, rather than the OEMs, few are free or not yet open-sourced.  </p>
+<p>and there are a few popular open source simulation tools, e.g. Carla, Airsim, LG simulator e.t.c. I actually get a chance with Carla at GM research team, which even now still great, but does’t study deeper, and for me it is a great tool for AI training, which should be the key role of simulation tool in future, since L3 or below, really cares little environment info, and its rule-based decision has no need for a large chunk of virtual test. that’s also <strong>a difference between Chinese and NA team</strong>,  NA teams have the trend to invest in new tech even without immeditaly money back, but Chinese companies would prefer in immediate invest. </p>
+<h3 id="lg-simulator"><a href="#lg-simulator" class="headerlink" title="lg simulator"></a>lg simulator</h3><p>Unreal never tried, but Unity looks pretty easy to use, while still need sometime to get familiar with the editor and play with scenes. lg simulator has give a great reference to build the virtual city and make autonomous vehicles running. the real problem actually for most team is how to make this tool useful in product development. </p>
+<p>we can think about the tool strucutre itself, like cloud running features, implement measure/verified methods, and build scenes database as we can think about or from the sort of system engineering port. </p>
+<p>as for a L3 or below usage, the whole meaning of simualtion is not driven, but at most additional support of product development, as I can see. so what simulation for ?  L4+, which leads to AI, or data driven product development!</p>
+<p>from this point, the simlation itself is not the core, but the AI, so think about that in career development. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/robust-control-theory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -370,9 +506,7 @@
       
         
           
-            <hr>
-<p>this is a review from <a href="https://users.ece.cmu.edu/~koopman/des_s99/control_theory/" target="_blank" rel="external">cmu refer</a></p>
-<hr>
+            <p>this is a review from <a href="https://users.ece.cmu.edu/~koopman/des_s99/control_theory/" target="_blank" rel="external">cmu refer</a></p>
 <h2 id="state-variable-method"><a href="#state-variable-method" class="headerlink" title="state variable method"></a>state variable method</h2><p>any Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in the form of matrix equations. </p>
 <p>define <code>x</code> as system state,  <code>y</code> as output, <code>u</code> as input: </p>
 <p><a href="https://www.codecogs.com/eqnedit.php?latex=\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" title="\dot{X} = AX + Bu \\ Y = CX + Du"></a></p>
@@ -641,269 +775,6 @@ flash
 <p>parallel sim core +  simulation monitor (data exchange service)</p>
 <p>data processing + labelling + case management + traffic model training </p>
 <p>(replay,  SIL, REMODEL, Visuliazation )</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/06/robust control theory /">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/06/robust control theory /" itemprop="url">Untitled</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-06T11:10:50-04:00">
-                2019-05-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/06/robust control theory /#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/06/robust control theory /" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="robust-control-theory"><a href="#robust-control-theory" class="headerlink" title="robust control theory"></a>robust control theory</h1><hr>
-<p>this is a review from <a href="https://users.ece.cmu.edu/~koopman/des_s99/control_theory/" target="_blank" rel="external">cmu refer</a></p>
-<hr>
-<h2 id="state-variable-method"><a href="#state-variable-method" class="headerlink" title="state variable method"></a>state variable method</h2><p>any Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in the form of matrix equations. </p>
-<p>define <code>x</code> as system state,  <code>y</code> as output, <code>u</code> as input: </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" title="\dot{X} = AX + Bu \\ Y = CX + Du"></a></p>
-<p>modern control methods(ODEs) can handle multiple-input-multiple-outputs, and they can be optimized, and they allow to design performance and cost model. </p>
-<h2 id="effects-of-uncertainty"><a href="#effects-of-uncertainty" class="headerlink" title="effects of uncertainty"></a>effects of uncertainty</h2><h4 id="observability"><a href="#observability" class="headerlink" title="observability"></a>observability</h4><p>the ability to observe all of the parameters or state variables in the system</p>
-<h4 id="controllability"><a href="#controllability" class="headerlink" title="controllability"></a>controllability</h4><p>the ability to move a system from any given state to any desired state </p>
-<h4 id="stability"><a href="#stability" class="headerlink" title="stability"></a>stability</h4><p>the bounded response to any bounded input </p>
-<p>robust control theory might be stated as a worst-case analysis, to bound the uncertantiy.</p>
-<h2 id="metircs"><a href="#metircs" class="headerlink" title="metircs"></a>metircs</h2><p>how to model the behavior of the test system is one most difficult challenge in design a good control system.</p>
-<h4 id="adaptive-control"><a href="#adaptive-control" class="headerlink" title="adaptive control"></a>adaptive control</h4><p>set up observers for each significant state variable. at each iteration loop, the system learns about the changes in the system parameters, and getting closer to the desired. while the method may suffer from convergence issues</p>
-<h4 id="H2-or-H-infinity"><a href="#H2-or-H-infinity" class="headerlink" title="H2 or H-infinity"></a>H2 or H-infinity</h4><p>H2 control seeks to bound the power gain of the system, H-infinity seeks to bound the energy gain of the system. gains in power or energy indicate operation of the system near a pole in the transfer function.</p>
-<h4 id="parameter-estimation"><a href="#parameter-estimation" class="headerlink" title="parameter estimation"></a>parameter estimation</h4><p>by establishing boundaries in the frequency domain that cannot be crossed to maintain stability. </p>
-<h4 id="Lyapanov"><a href="#Lyapanov" class="headerlink" title="Lyapanov"></a>Lyapanov</h4><p>the only universal tech for assessing non-linear systems, the method focus on stability. Lyapanov functions are constructed, which are described as energy-like functions, to model the behavior of real system. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/06/MPC control /">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/06/MPC control /" itemprop="url">Untitled</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-06T09:58:04-04:00">
-                2019-05-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/06/MPC control /#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/06/MPC control /" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="MPC-control"><a href="#MPC-control" class="headerlink" title="MPC control"></a>MPC control</h1><p>MPC control is numerically solving an open-loop constrained optimization problem for prediction horizon at each step. </p>
-<p>model predictive or model based control. </p>
-<h2 id="state-based-control"><a href="#state-based-control" class="headerlink" title="state based control"></a>state based control</h2><h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="https://web.stanford.edu/class/archive/ee/ee392m/ee392m.1056/Lecture14_MPC.pdf" target="_blank" rel="external">MPC tutorial Stanford</a></p>
 
           
         
@@ -1787,6 +1658,134 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/28/apollo-planning-源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/28/apollo-planning-源码/" itemprop="url">Apollo 2.0  Planning 源码(1)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-28T11:30:06-04:00">
+                2019-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/28/apollo-planning-源码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/28/apollo-planning-源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line">APOLLO_MAIN(apollo::planning::Planning)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">	google::InitGoogleLogging(argv[<span class="number">0</span>]);</div><div class="line">	google::ParseCommandLineFlags(&amp;argc, &amp;argv, <span class="literal">true</span>); </div><div class="line">	signal(SIGINT, apollo::common::apollo_app_sigint_handler);</div><div class="line">	apollo::planning::Planning apollo_app_ ;</div><div class="line">	ros::init(argc, argv, apollo_app_.Name());</div><div class="line">	apollo_app_.Spin();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> ApolloApp::Spin()</div><div class="line">&#123;</div><div class="line">	ros::<span class="function">AsyncSpinner <span class="title">spinner</span><span class="params">(callback_thread_num_)</span></span>;</div><div class="line">	<span class="keyword">auto</span> status = Init();</div><div class="line">	status = Start(); </div><div class="line">	</div><div class="line">	spinner.start();</div><div class="line">	ros::waitForShutdown();</div><div class="line">	Stop();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"></div><div class="line">Status Planning::Init()</div><div class="line">&#123;</div><div class="line">	hdmap_ = apollo::hdmap::HDMapUtil::BaseMapPtr();</div><div class="line">	</div><div class="line">apollo::common::util::GetProtoFromFile(FLAGS_planning_config_file, &amp;config);</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(!AdapterManager::Initialized())&#123;</div><div class="line">		AdaapterManager::Init(FLAGS_planning_adapter_config_filename);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	AdapterManager::GetLocalization();</div><div class="line">	AdapterManager::GetChassis();</div><div class="line">	AdapterManager::GetRoutingResponse();</div><div class="line">	AdapterManager::GetRoutingRequest();</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_prediction)</div><div class="line">		AdapterManager::GetPrediction();</div><div class="line">		</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_traffic_light)</div><div class="line">		AdapterManager::GetTrafficLightDetection();</div><div class="line">		</div><div class="line">	ReferenceLineProvider::instance()-&gt;Init(hdmap_, config_.qp_spline_reference_line_smoother_config()); </div><div class="line">	</div><div class="line">	RegisterPlanners();</div><div class="line">	</div><div class="line">	planner_ = planner_factory_.CreateObject(config_.planner_type());</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> planner_-&gt;Init(config_);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* DEFINE_string(planning_adapter_config_filename,</span></div><div class="line">	"modules/planning/conf/adapter.conf",</div><div class="line">	"The adapter configuration file")</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;adapter_config_filename)</div><div class="line">&#123;</div><div class="line">	AdapterManagerConfig configs;</div><div class="line">	util::GetProtoFromFile(adapter_config_filename, &amp;configs);</div><div class="line">	Init(configs);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> AdapterManagerConfig&amp; configs)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(Initialized())	<span class="keyword">return</span>;</div><div class="line">	instance()-&gt;initialized_ = <span class="literal">true</span>; </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(configs.is_ros())&#123;</div><div class="line">		instance()-&gt;node_handle_.reset(<span class="keyword">new</span> ros::NodeHandle());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;config : configs.config())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::CHASSIS:</div><div class="line">			EnableChassis(FLAGS_chassis_topic, config);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::LOCALIZATION:</div><div class="line">			EnableLocalization(FLAGS_localization_topic, config);</div><div class="line">			<span class="keyword">break</span>;	</div><div class="line">			<span class="comment">// ...</span></div><div class="line">	&#125;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"><span class="comment">/* DEFINE_string 宏</span></div><div class="line">	FLAGS_chassis_topic -&gt;  /apollo/canbus/chassis</div><div class="line">	FLAGS_localization_topic -&gt; /apollo/localization/pose</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>where is <code>EnableChassis</code> ? </p>
+<p>in /apollo/modules/common/adapters/message_adapters.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> ChassisAdapter=Adapter&lt;::apollo::canbus::Chassis&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> GpsAdapter = Adapter&lt;apollo::localization::Gps&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> PlanningAdapter = Adapter&lt;planning::ADCTrajectory&gt;;</div></pre></td></tr></table></figure>
+<p>in /apollo/modules/common/adapters/adapter_manager.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> REGISTER_ADAPTER(name)</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> Enable#<span class="meta">#name(const std::string &amp;topic_name, const AdapterConfig&amp; config)</span></div><div class="line">	&#123;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h5 id="continue-tomorrow"><a href="#continue-tomorrow" class="headerlink" title="continue tomorrow"></a>continue tomorrow</h5>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -1837,7 +1836,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">86</span>
+                <span class="site-state-item-count">85</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
