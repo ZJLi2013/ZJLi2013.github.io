@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="leetCode," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,17 @@
 
 
 
-<meta name="description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
-<meta name="keywords" content="leetCode">
+<meta name="description" content="novatel introduction GNSS architecturea) space segment the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status. b) control segment  a ground-b">
 <meta property="og:type" content="article">
-<meta property="og:title" content="lru cache design">
-<meta property="og:url" content="http://yoursite.com/2018/12/18/lru-cache-design/index.html">
+<meta property="og:title" content="principles of GNSS positioning">
+<meta property="og:url" content="http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
+<meta property="og:description" content="novatel introduction GNSS architecturea) space segment the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status. b) control segment  a ground-b">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-12-18T21:21:30.000Z">
+<meta property="og:updated_time" content="2019-06-17T14:36:01.229Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lru cache design">
-<meta name="twitter:description" content="leetCode 146, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements: first a hash map data">
+<meta name="twitter:title" content="principles of GNSS positioning">
+<meta name="twitter:description" content="novatel introduction GNSS architecturea) space segment the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status. b) control segment  a ground-b">
 
 
 
@@ -132,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/18/lru-cache-design/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/"/>
 
 
 
 
 
-  <title>lru cache design | Serious Autonomous Vehicles</title>
+  <title>principles of GNSS positioning | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +290,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/lru-cache-design/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">lru cache design</h1>
+          <h1 class="post-title" itemprop="name headline">principles of GNSS positioning</h1>
         
 
         <div class="post-meta">
@@ -320,8 +319,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-18T16:21:01-05:00">
-                2018-12-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-17T10:35:26-04:00">
+                2019-06-17
               </time>
             
 
@@ -339,9 +338,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/18/lru-cache-design/#comments" itemprop="discussionUrl">
+                <a href="/2019/06/17/principles-of-GNSS-positioning/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/18/lru-cache-design/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/06/17/principles-of-GNSS-positioning/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,22 +365,44 @@
       
 
       
-        <p><a href="https://leetcode.com/problems/lru-cache/" target="_blank" rel="external">leetCode 146</a>, for non-CS background, this kind of problem is out of mind, what is talking about, but I know at all it is about design a data structure to meet some requirements:</p>
-<p>first a hash map data structure for key, value operations, e.g. get(), put(); but normal hash map can’t track the most recent used element, so either find a data structure, which can track the recently used element in the hash map; or define some routines to do it.</p>
-<h2 id="a-data-structure-to-catch-recently-used"><a href="#a-data-structure-to-catch-recently-used" class="headerlink" title="a data structure to catch recently used"></a>a data structure to catch recently used</h2><p>each get(), put() will operate on one special element, and that element should be marked as recently used, and the next element is the least recently used element, which can be overlapped in next operation.</p>
-<p><code>stack</code> and  <code>queue</code> have some property to track the most recent element, but they are one-way, not straight forward to manage two neighbor elements. </p>
-<p><code>double linked list</code> is a good choice to track both the most recent element and the least most recent element. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span>&#123;</span></div><div class="line">	<span class="keyword">int</span> val ;</div><div class="line">	<span class="keyword">int</span> key ;</div><div class="line">	Node *pre ;</div><div class="line">	Node *next ;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value_, <span class="keyword">int</span> key_)</span></span></div><div class="line">	&#123;</div><div class="line">		val = value_;</div><div class="line">		key = key_ ; </div><div class="line">		pre = <span class="literal">NULL</span> ;</div><div class="line">		next = <span class="literal">NULL</span>;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LRUCache</span> &#123;</span></div><div class="line">	<span class="keyword">public</span>: </div><div class="line">		<span class="built_in">list</span>&lt;node*&gt; recent ;</div><div class="line">		unorder_map&lt;<span class="keyword">int</span>, node*&gt;  hash ;</div><div class="line">		<span class="keyword">int</span> capacity ;</div><div class="line">		</div><div class="line">		LRUCache(<span class="keyword">int</span> cap): capacity(cap) &#123;&#125;</div><div class="line">		</div><div class="line">		<span class="function">node* <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key])</div><div class="line">				recent.push_front(hash[key]); </div><div class="line">				<span class="keyword">return</span> hash[key] ;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> <span class="number">-1</span> ;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>(hash.find(key) != hash.end())&#123;</div><div class="line">				recent.remove(hash[key]);</div><div class="line">				hash[key] =  value; </div><div class="line">				recent.push_front(hash[key]);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			node* tmp = <span class="keyword">new</span> node(value, key); </div><div class="line">			hash[key] = tmp ; </div><div class="line">			recent.remove(tmp); </div><div class="line">			recent.push_front(tmp);</div><div class="line">	</div><div class="line">			<span class="keyword">if</span>(hash.size() &gt;= capacity)&#123;</div><div class="line">				node *tmp2 = recent.back(); </div><div class="line">				hash.erase(tmp2-&gt;key); </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<h2 id="routines-to-track-recently-used"><a href="#routines-to-track-recently-used" class="headerlink" title="routines to track recently used"></a>routines to track recently used</h2><p>in this way, the hash is still needed, but define <a href="http://rainykat.blogspot.com/2017/02/leetcode-146-lru-cachehashmap-doubly.html" target="_blank" rel="external">routine</a> to set the latest updated node always at front.</p>
-<pre><code class="c"><span class="function"><span class="keyword">void</span> <span class="title">setHead</span><span class="params">(Node* n)</span></span>{
-    n.next = head ; 
-    n.pre = null ;
-    <span class="keyword">if</span>(head != null) head.pre = n ;
-    head = n ; 
-    <span class="keyword">if</span>(end == null) end = head;  <span class="comment">//only 1 element </span>
-}
-</code></pre>
-<p>when solving real problems, either has a good understand about special data structure, which can solve this problem, or the raw way is to implement routines based on the exisiting input</p>
+        <p><a href="https://www.novatel.com/an-introduction-to-gnss/chapter-1-gnss-overview/" target="_blank" rel="external">novatel introduction</a></p>
+<h3 id="GNSS-architecture"><a href="#GNSS-architecture" class="headerlink" title="GNSS architecture"></a>GNSS architecture</h3><p>a) space segment</p>
+<p>the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status.</p>
+<p>b) control segment </p>
+<p>a ground-based network of master control stations, data uploading stations adn monitor stations. in case of GPS, 2 master control stations(one primary and one backup),  4 data uploading stations, and 16 monitor stations</p>
+<p>c) user segment </p>
+<p>the user equipment that process the received signals. </p>
+<h3 id="GNSS-propagation"><a href="#GNSS-propagation" class="headerlink" title="GNSS propagation"></a>GNSS propagation</h3><p>the layer of atmoshpere that most influcences the transmission of GPS signals is the ionosphere(电离层), ionoshperic delays are frequency dependent; and the other layer is troposphere(平流层), whose delay is a function of local temperature, pressure and relative humidity. </p>
+<p>some singal energy is reflected on the way to the receiver, called “multipath propagation”. </p>
+<h3 id="Antenna"><a href="#Antenna" class="headerlink" title="Antenna"></a>Antenna</h3><p>each GNSS constellation has its own signal frequencies and bandwidths, an antenan must cover the signal frequencies and bandwidth.</p>
+<p>antenna gain is defined as the relative measure of an antenna’s ability to direct or concentrate radio frequency energy in a particular direction or pattern. A minimum gain is required to achieve a minimum carrier : power-noise-ratio to track GNSS satellites.</p>
+<h3 id="GNSS-error-sources"><a href="#GNSS-error-sources" class="headerlink" title="GNSS error sources"></a>GNSS error sources</h3><pre><code>contributing sources         error range
+
+satellite clocks             +- 2m
+
+orbit errors                       +-2.5m
+
+inospheric delays            +-5m
+
+tropospheric delays            +-0.5m
+
+receiver noies                +-0.3m
+
+multi path                     +-1m
+</code></pre><h3 id="Resolving-errors"><a href="#Resolving-errors" class="headerlink" title="Resolving errors"></a>Resolving errors</h3><h4 id="multi-constellation-amp-multi-frequency"><a href="#multi-constellation-amp-multi-frequency" class="headerlink" title="multi-constellation &amp; multi-frequency"></a>multi-constellation &amp; multi-frequency</h4><p>multi-frequency is the most effective way to remove ionospheric error,  by comparing the delays of two GNSS signals, L1 &amp; L2, the receiver can correct for the impact of ionospheric errors.</p>
+<p>multi-constellation has benefits:  reduce signal acquisition time,  improve position and time accuracy.</p>
+<h4 id="D-GNSS"><a href="#D-GNSS" class="headerlink" title="D-GNSS"></a>D-GNSS</h4><p>in differential GNSS(D-GNSS), the position of a fixed GNSS receiver, refered as a base station, which sends the atmospheric delay related errors to receivers, which incorporate the corrections into their positoin calculations.</p>
+<p>differential positiong requires a data link betwen the base station and rovers, if corrections need to be applied in real-time. and D-GNSS works very well with base station-to-rover separations of up to 10km.</p>
+<h4 id="Real-time-kinematic-RTK"><a href="#Real-time-kinematic-RTK" class="headerlink" title="Real time kinematic(RTK)"></a>Real time kinematic(RTK)</h4><p>it uses measurements of the phase of the signal’s carrier wave, in addition to the information content of the signal and relies on a single fixed reference station to provide real-time corrections, up to centimetre-level accuracy. </p>
+<p>the range to a satellite is calculated by multiplying the carrier wavelength times the number of whole cycles between the satellite and the rover and adding the phase difference. the results in an error equal to the error in the estimated number of cycles times the wavelength, so-called integer ambiguity search, which is 19cm for L1 signal. </p>
+<h4 id="Precise-Point-Positioning-PPP"><a href="#Precise-Point-Positioning-PPP" class="headerlink" title="Precise Point Positioning(PPP)"></a>Precise Point Positioning(PPP)</h4><p>PPP solution depends on GNSS satellite clock and orbit corrections, generated from a network of global reference stations. </p>
+<h3 id="GNSS-IMU"><a href="#GNSS-IMU" class="headerlink" title="GNSS + IMU"></a>GNSS + IMU</h3><p>the external reference can quite effectively be provided by GNSS, and GNSS provides an absolute set of coordinates that can be used as the initial start point, as well, GNSS provides continuous positions adn velocities thereafter which are used to update the IMU/INS filter estimates.</p>
+<p>for additional combined sensors, such as odometers, cameras vision.</p>
+<h3 id="challenges-of-GNSS-in-AV"><a href="#challenges-of-GNSS-in-AV" class="headerlink" title="challenges of GNSS in AV"></a>challenges of GNSS in AV</h3><p>talk from iMorpheus.ai </p>
+<p>1)  antenna</p>
+<p>2)  multipath mitigation</p>
+<p>3)  multi-band, multi-constellation signals</p>
+<p>4)  integrated navigation (camera )</p>
 
       
     </div>
@@ -409,12 +430,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
-          
-        </div>
-      
 
       
       
@@ -424,8 +439,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/18/where-are-you-in-next-5-years-4/" rel="next" title="where are you in next 5 years (4)">
-                <i class="fa fa-chevron-left"></i> where are you in next 5 years (4)
+              <a href="/2019/06/12/Manhanton-SC-review/" rel="next" title="Manhanton SC review">
+                <i class="fa fa-chevron-left"></i> Manhanton SC review
               </a>
             
           </div>
@@ -433,10 +448,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/18/insertion-sort-list/" rel="prev" title="insertion sort list">
-                insertion sort list <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -584,7 +595,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-data-structure-to-catch-recently-used"><span class="nav-number">1.</span> <span class="nav-text">a data structure to catch recently used</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#routines-to-track-recently-used"><span class="nav-number">2.</span> <span class="nav-text">routines to track recently used</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GNSS-architecture"><span class="nav-number">1.</span> <span class="nav-text">GNSS architecture</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GNSS-propagation"><span class="nav-number">2.</span> <span class="nav-text">GNSS propagation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Antenna"><span class="nav-number">3.</span> <span class="nav-text">Antenna</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GNSS-error-sources"><span class="nav-number">4.</span> <span class="nav-text">GNSS error sources</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Resolving-errors"><span class="nav-number">5.</span> <span class="nav-text">Resolving errors</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#multi-constellation-amp-multi-frequency"><span class="nav-number">5.1.</span> <span class="nav-text">multi-constellation & multi-frequency</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#D-GNSS"><span class="nav-number">5.2.</span> <span class="nav-text">D-GNSS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Real-time-kinematic-RTK"><span class="nav-number">5.3.</span> <span class="nav-text">Real time kinematic(RTK)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Precise-Point-Positioning-PPP"><span class="nav-number">5.4.</span> <span class="nav-text">Precise Point Positioning(PPP)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GNSS-IMU"><span class="nav-number">6.</span> <span class="nav-text">GNSS + IMU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#challenges-of-GNSS-in-AV"><span class="nav-number">7.</span> <span class="nav-text">challenges of GNSS in AV</span></a></li></ol></div>
             
 
           </div>
@@ -727,9 +738,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/12/18/lru-cache-design/';
-          this.page.identifier = '2018/12/18/lru-cache-design/';
-          this.page.title = 'lru cache design';
+          this.page.url = 'http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/';
+          this.page.identifier = '2019/06/17/principles-of-GNSS-positioning/';
+          this.page.title = 'principles of GNSS positioning';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
