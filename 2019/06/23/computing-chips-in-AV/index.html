@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="leetCode," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,21 @@
 
 
 
-<meta name="description" content="leetCode 46 Permutations: given a collection of distinct integers, return all possible permutations. Input: [1, 2, 3]  Output: [ [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3, 1,2],  [3,2,1] ]  At first">
-<meta name="keywords" content="leetCode">
+<meta name="description" content="chips requirements in vehicleBosch : BMW: the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take">
 <meta property="og:type" content="article">
-<meta property="og:title" content="how recursive works">
-<meta property="og:url" content="http://yoursite.com/2018/08/29/how-recursive-works/index.html">
+<meta property="og:title" content="computing chips in AV">
+<meta property="og:url" content="http://yoursite.com/2019/06/23/computing-chips-in-AV/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="leetCode 46 Permutations: given a collection of distinct integers, return all possible permutations. Input: [1, 2, 3]  Output: [ [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3, 1,2],  [3,2,1] ]  At first">
+<meta property="og:description" content="chips requirements in vehicleBosch : BMW: the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-30T03:32:30.000Z">
+<meta property="og:image" content="http://yoursite.com/Users/zhengjia/Desktop/Evolution%20of%20EE%20architecture%20at%20Bosch.jpg">
+<meta property="og:image" content="http://yoursite.com/Users/zhengjia/Desktop/BMW%20next%20EE%20architecture.jpg">
+<meta property="og:image" content="http://yoursite.com/Users/zhengjia/Desktop/r-car-h3-block-diagram.jpg">
+<meta property="og:updated_time" content="2019-06-23T08:17:07.440Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="how recursive works">
-<meta name="twitter:description" content="leetCode 46 Permutations: given a collection of distinct integers, return all possible permutations. Input: [1, 2, 3]  Output: [ [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3, 1,2],  [3,2,1] ]  At first">
+<meta name="twitter:title" content="computing chips in AV">
+<meta name="twitter:description" content="chips requirements in vehicleBosch : BMW: the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take">
+<meta name="twitter:image" content="http://yoursite.com/Users/zhengjia/Desktop/Evolution%20of%20EE%20architecture%20at%20Bosch.jpg">
 
 
 
@@ -132,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/29/how-recursive-works/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/23/computing-chips-in-AV/"/>
 
 
 
 
 
-  <title>how recursive works | Serious Autonomous Vehicles</title>
+  <title>computing chips in AV | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +294,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-recursive-works/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/23/computing-chips-in-AV/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">how recursive works</h1>
+          <h1 class="post-title" itemprop="name headline">computing chips in AV</h1>
         
 
         <div class="post-meta">
@@ -320,8 +323,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:31:12-04:00">
-                2018-08-29
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-23T04:16:37-04:00">
+                2019-06-23
               </time>
             
 
@@ -339,9 +342,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/29/how-recursive-works/#comments" itemprop="discussionUrl">
+                <a href="/2019/06/23/computing-chips-in-AV/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/29/how-recursive-works/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/06/23/computing-chips-in-AV/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,24 +369,296 @@
       
 
       
-        <p>leetCode 46 Permutations: given a collection of distinct integers, return all possible permutations.</p>
-<pre><code>Input: [1, 2, 3]
-
-Output:
-[ [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3, 1,2], 
-[3,2,1] ] 
-</code></pre><p>At first glipmse, it’s middle difficult, jump to recursive implementation. But there always confused failures, e.g. passing vector as reference to the recursive calls, and even do a deep copy of that vector, the base vector is always modified by the copied vector. This problem blocks me a whole day, actually I don’t know how to make a recursive calls work.</p>
-<p>tip1) each recursive fun has its independent local variables ;</p>
-<p>tip2) recursive calls are serialized, namely only when inside recursive fun is done, then the outside recursive will continue.</p>
-<p>tip1 helps to explain when local variables changed unexpected; tip2 helps cause I trend to think all recursive calls are parallezed running, but the real running order is serialized, so no twist.</p>
-<p>simulate how human brain solve this problem:</p>
-<pre><code>&lt;1(fix), 2(fix), 3&gt; ;  &lt;1(fix), 3(fix), 2&gt; …
-</code></pre><p>the first position has n potentional values, then the second position has (n-1) potentional values, etc. so design the very first implementation as:  traverse all potentional values in first position, and push it; then travers all potentional values in next position, and push it; till the last position, while only one element left, and push it. so a new combination is created. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; sol1(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; idx_vector ;</div><div class="line">		</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; nums.size(); i++) </div><div class="line">	&#123;</div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp ;</div><div class="line">		tmp.push_back(nums[i]);  <span class="comment">//the first element in new created vector </span></div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums1 =  nums ;</div><div class="line">		nums1.erase(nums1.begin()+i);  <span class="comment">//the second element in new created vector  </span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt; nums1.size(); j++)</div><div class="line">		&#123;</div><div class="line">			tmp.push_back(nums1[j]);</div><div class="line">			<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums2 = nums1; </div><div class="line">			nums2.erase(nums2.begin() + j);</div><div class="line">			<span class="keyword">if</span>(nums2.size() == <span class="number">1</span>)</div><div class="line">			&#123;</div><div class="line">					tmp.push_back(nums2[<span class="number">0</span>]);</div><div class="line">					idx_vector.push_back(tmp); 	</div><div class="line">					tmp.pop_back();</div><div class="line">			&#125;</div><div class="line">		tmp.pop_back(); </div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> idx_vector; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>the first implmenation only works for fixed input <1, 3="" 2,="">, so how to design a recursive fun to make this idea more general ? it’s easy to abstract the process above: for ith position in the new combination vector, the potentional values is one less from (i-1)th position, traverse all possible values in ith position and push it, don’t forget pop it out for traversing to the next possible value; and the end of recursive is when only one element left.</1,></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sol</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; tmp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; idx_vector )</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(nums.size() == <span class="number">1</span>)</div><div class="line">	&#123;</div><div class="line">		tmp.push_back(nums[<span class="number">0</span>]);</div><div class="line">		idx_vector.push_back(tmp);</div><div class="line">		tmp.pop_back();</div><div class="line">		<span class="keyword">return</span> ;</div><div class="line">	&#125;</div><div class="line">		</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; nums.size(); i++)</div><div class="line">	&#123;</div><div class="line">		tmp.push_back(nums[i]);</div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums2 = nums; </div><div class="line">		nums2.erase(nums2.begin()+i);</div><div class="line">		sol(nums2, tmp, idx_vector);</div><div class="line">		tmp.pop_back();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>test:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;; 	</div><div class="line">	<span class="keyword">int</span> size =  nums.size(); </div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; outs;</div><div class="line">	sol(nums, tmp, outs);</div><div class="line">	</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it ;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; size*(size<span class="number">-1</span>); i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(it = outs[i].begin();  it != outs[i].end(); it++)</div><div class="line">			<span class="built_in">cout</span>&lt;&lt; *it &lt;&lt; <span class="string">' '</span> ; </div><div class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"\n"</span> &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h3 id="chips-requirements-in-vehicle"><a href="#chips-requirements-in-vehicle" class="headerlink" title="chips requirements in vehicle"></a>chips requirements in vehicle</h3><p>Bosch :<br><img src="/Users/zhengjia/Desktop/Evolution of EE architecture at Bosch.jpg" alt="Bosch"></p>
+<p>BMW:<br><img src="/Users/zhengjia/Desktop/BMW next EE architecture.jpg" alt="BMW"></p>
+<p>the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take an example with <a href="http://www.sohu.com/a/291472706_391994" target="_blank" rel="external">Singulato iS6</a>, which has five domains: smart driving,  powertrain, chassis, smart body, smart seat. </p>
+<p>each domain need support by a domain controller unit(DCU), the core of which is a powerful computing chip, which is usually more powerful than traditional ECUs. in average, L2 requires computing power about 10TOPS , L3 needs 60TOPS, L4 needs 100TOPS.</p>
+<h3 id="computing-chips"><a href="#computing-chips" class="headerlink" title="computing chips"></a>computing chips</h3><table>
+<thead>
+<tr>
+<th>product</th>
+<th>MDC600</th>
+<th>Driver PX Pegasus</th>
+<th>EyeQ 4</th>
+<th>BlueBox</th>
+<th>R-car H3</th>
+<th>Journey2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>company</td>
+<td>Huawei</td>
+<td>Nvidia</td>
+<td>Mobileye</td>
+<td>NXP</td>
+<td>Renesas</td>
+<td>Horizon</td>
+<td></td>
+<td>computing TOPS</td>
+<td>352</td>
+<td>320</td>
+<td>2.5</td>
+<td></td>
+<td></td>
+<td>10</td>
+<td>128</td>
+</tr>
+<tr>
+<td>main cores</td>
+<td>8 * 晟腾310</td>
+<td>16 ARM</td>
+<td>VMP</td>
+<td>LS2084A</td>
+<td>4*Arm/A57</td>
+<td>BPU2.0</td>
+</tr>
+<tr>
+<td>other cores</td>
+<td>Ascend 310</td>
+<td>2 TensorCore GPU</td>
+<td></td>
+<td>S32V234</td>
+<td>4*Arm/A53</td>
+<td>FPGA</td>
+<td>Cambricon MULv01</td>
+</tr>
+<tr>
+<td>AV-level</td>
+<td>L3+</td>
+<td>L5</td>
+<td>L3</td>
+<td>L4(target)</td>
+<td>IVI</td>
+<td>L3</td>
+<td>AI</td>
+</tr>
+<tr>
+<td>Camera support</td>
+<td>16</td>
+<td>10</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Lidar support</td>
+<td>8</td>
+<td>6</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>function safety</td>
+<td>ASIL-D</td>
+<td>ASIL-B</td>
+<td>ASIL-D</td>
+<td>ASIL-D(target)</td>
+<td>ASIL-B</td>
+<td>ASIL-B</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/Users/zhengjia/Desktop/r-car-h3-block-diagram.jpg" alt="R-car H3"></p>
+<h3 id="products-timeline"><a href="#products-timeline" class="headerlink" title="products timeline"></a>products timeline</h3><h4 id="Tier1s-Tier2s-timeline"><a href="#Tier1s-Tier2s-timeline" class="headerlink" title="Tier1s/Tier2s timeline"></a>Tier1s/Tier2s timeline</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>2018</th>
+<th>2019</th>
+<th>2020</th>
+<th>2021</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aptive</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Bosch</td>
+<td>level2</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Conti</td>
+<td>level2</td>
+<td></td>
+<td></td>
+<td>level3+</td>
+</tr>
+<tr>
+<td>Autoliv</td>
+<td>level2</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Intel</td>
+<td>level3</td>
+<td></td>
+<td>level4+</td>
+</tr>
+<tr>
+<td>Nvidia</td>
+<td>level3</td>
+<td>level4+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Chinese-OEMs-timeline"><a href="#Chinese-OEMs-timeline" class="headerlink" title="Chinese OEMs timeline"></a>Chinese OEMs timeline</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>2019</th>
+<th>2020</th>
+<th>2021</th>
+<th>2022+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>changan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>FAW</td>
+<td></td>
+<td></td>
+<td>level4</td>
+<td></td>
+</tr>
+<tr>
+<td>GAC</td>
+<td>level3</td>
+<td></td>
+<td></td>
+<td>level5</td>
+</tr>
+<tr>
+<td>Geely</td>
+<td></td>
+<td>level3</td>
+<td></td>
+<td>level5</td>
+</tr>
+<tr>
+<td>GWM</td>
+<td></td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>SAIC</td>
+<td>level3</td>
+</tr>
+<tr>
+<td>xiaoPeng</td>
+<td></td>
+<td>level3</td>
+</tr>
+<tr>
+<td>WeiMa</td>
+<td></td>
+<td></td>
+<td>level3</td>
+</tr>
+<tr>
+<td>Nio</td>
+<td>level2</td>
+<td></td>
+<td>level4+ </td>
+</tr>
+</tbody>
+</table>
+<h4 id="global-OEMs-timeline"><a href="#global-OEMs-timeline" class="headerlink" title="global OEMs timeline"></a>global OEMs timeline</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>2018</th>
+<th>2019</th>
+<th>2020</th>
+<th>2021</th>
+<th>2022+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ford</td>
+<td>level2</td>
+<td></td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>GM</td>
+<td>level2</td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Fiat-Crysler</td>
+<td></td>
+<td></td>
+<td></td>
+<td>level3+</td>
+</tr>
+<tr>
+<td>Audi</td>
+<td>level2</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Mercedze</td>
+<td>level2</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Toyota</td>
+<td>level2</td>
+<td></td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Honda</td>
+<td></td>
+<td></td>
+<td>level3</td>
+<td>level4</td>
+</tr>
+</tbody>
+</table>
+<h4 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h4><p><a href="http://www.cheyun.com/content/21571" target="_blank" rel="external">Matrix 1.0</a></p>
+<p><a href="http://www.cheyun.com/content/15377" target="_blank" rel="external">the five chip vendors</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/48679466" target="_blank" rel="external">from GPU to ASIC</a></p>
+<p><a href="http://www.sohu.com/a/315849896_100044558" target="_blank" rel="external">hauwei and the others</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/57378600" target="_blank" rel="external">global chips vendors</a></p>
+<p><a href="https://blog.csdn.net/weixin_42229404/article/details/84306658" target="_blank" rel="external">L4 AI chips</a></p>
+<p><a href="https://www.mobileye.com/our-technology/evolution-eyeq-chip/" target="_blank" rel="external">the evolution of EyeQ</a></p>
+<p><a href="https://www.mobileye.com/our-technology/" target="_blank" rel="external">Mobileye tech</a></p>
+<p><a href="https://autonomoustuff.com/wp-content/uploads/2019/05/nxp_bluebox_fact_sheet-whitelabel.pdf" target="_blank" rel="external">NXP bluebox</a></p>
+<p><a href="https://www.renesas.com/us/en/solutions/automotive/soc/r-car-h3.html" target="_blank" rel="external">R-car H3 soc</a></p>
+<p><a href="https://www.nxp.com/products/product-information/functional-safety-for-iso-26262-and-iec-61508:FNCTNLSFTY" target="_blank" rel="external">NXP function safety</a></p>
+<p><a href="http://www.cheyun.com/content/24350" target="_blank" rel="external">horizontal AI matrix2.0</a></p>
+<p><a href="https://community.plm.automation.siemens.com/t5/Digital-Transformations/Cars-mobility-chip-to-city-design-and-the-iPhone-4/ba-p/562778" target="_blank" rel="external">cars, mobility, chip-to-city design and the Iphone4</a></p>
+<p><a href="">2018-2019 汽车域控制器产业研究报告</a></p>
+<p><a href="http://www.sohu.com/a/283587948_607980" target="_blank" rel="external">汽车电子演化</a></p>
+<p><a href="">Global L3 self-driving vehicle market insights 2019</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/65273004" target="_blank" rel="external">self-driving car research report</a></p>
 
       
     </div>
@@ -411,12 +686,6 @@ Output:
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/leetCode/" rel="tag"># leetCode</a>
-          
-        </div>
-      
 
       
       
@@ -426,8 +695,8 @@ Output:
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/10/MIT-s094/" rel="next" title="MIT 6.S094 Deep Learning for Self Driving Cars">
-                <i class="fa fa-chevron-left"></i> MIT 6.S094 Deep Learning for Self Driving Cars
+              <a href="/2019/06/22/Lidar-in-AV/" rel="next" title="Lidar in  AV">
+                <i class="fa fa-chevron-left"></i> Lidar in  AV
               </a>
             
           </div>
@@ -435,10 +704,6 @@ Output:
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/08/29/how-broad-first-search-works/" rel="prev" title="how broad first search works">
-                how broad first search works <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -493,8 +758,17 @@ Output:
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -567,6 +841,22 @@ Output:
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#chips-requirements-in-vehicle"><span class="nav-number">1.</span> <span class="nav-text">chips requirements in vehicle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#computing-chips"><span class="nav-number">2.</span> <span class="nav-text">computing chips</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#products-timeline"><span class="nav-number">3.</span> <span class="nav-text">products timeline</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tier1s-Tier2s-timeline"><span class="nav-number">3.1.</span> <span class="nav-text">Tier1s/Tier2s timeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chinese-OEMs-timeline"><span class="nav-number">3.2.</span> <span class="nav-text">Chinese OEMs timeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#global-OEMs-timeline"><span class="nav-number">3.3.</span> <span class="nav-text">global OEMs timeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reference"><span class="nav-number">3.4.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -704,9 +994,9 @@ Output:
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/08/29/how-recursive-works/';
-          this.page.identifier = '2018/08/29/how-recursive-works/';
-          this.page.title = 'how recursive works';
+          this.page.url = 'http://yoursite.com/2019/06/23/computing-chips-in-AV/';
+          this.page.identifier = '2019/06/23/computing-chips-in-AV/';
+          this.page.title = 'computing chips in AV';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
