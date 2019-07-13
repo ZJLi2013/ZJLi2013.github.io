@@ -291,6 +291,297 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/13/simulation-at-Cruise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/13/simulation-at-Cruise/" itemprop="url">simulation at Cruise</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-13T11:43:26-04:00">
+                2019-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/13/simulation-at-Cruise/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/13/simulation-at-Cruise/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this is a speak at Google Cloud <code>How to Run Millions of Self-Driving Car Simulations on GCP</code>, with <a href="https://www.youtube.com/watch?v=NGXZ-mYqyUo" target="_blank" rel="external">youtube link</a></p>
+<p><img src="cruise/why_simulation.jpg" alt=""></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/13/play-with-ros/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/13/play-with-ros/" itemprop="url">play with ros</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-13T11:31:42-04:00">
+                2019-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/13/play-with-ros/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/13/play-with-ros/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="ros-filesystem-tools"><a href="#ros-filesystem-tools" class="headerlink" title="ros filesystem tools"></a>ros filesystem tools</h2><p>first check ROS_PACKAGE_PATH, where defines all ROS packages that are within the directories.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rospack find [package-name]</div><div class="line">rospack list </div><div class="line">roscd [package-name]</div><div class="line">``` </div><div class="line"></div><div class="line">take an example, to locate `rosbridge_websocket.launch` </div><div class="line"></div><div class="line">```shell </div><div class="line">rospack find rosbridge*    #rosbridge_server</div><div class="line">roscd rosbridge_server</div><div class="line">cd launch</div></pre></td></tr></table></figure>
+<p>another tool to view ros-launch: <code>roslaunch-logs</code></p>
+<h2 id="write-a-launch-file"><a href="#write-a-launch-file" class="headerlink" title="write a .launch file"></a>write a .launch file</h2><p>launch files, which uses XML format, usually make a directory named “launch” inside the workspace to organize all launch files, and it provides a convenient way to start up multiple nodes and master, it processs in a <a href="http://wiki.ros.org/roslaunch/XML" target="_blank" rel="external">depth-first tarversal order</a>. usually launch files can be put a <code>launch</code> folder under a ros node project. </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">roslaunch package_name launch_file</div><div class="line"><span class="meta">#</span>or </div><div class="line">roslaunch /path/to/launch_file</div></pre></td></tr></table></figure>
+<p>an sample launch file:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">launch</span>&gt;</span> </div><div class="line">   <span class="tag">&lt;<span class="name">node</span> <span class="attr">pkg</span>=<span class="string">"package_name"</span>  <span class="attr">type</span>=<span class="string">" "</span>   <span class="attr">name</span>=<span class="string">" "</span>  <span class="attr">output</span>=<span class="string">" "</span> <span class="attr">args</span>=<span class="string">" "</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">launch</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>args</code> can define either env variables or a command.</p>
+<p><a href="http://wiki.ros.org/roslaunch/XML/node" target="_blank" rel="external">node/type</a> There must be a corresponding executable with the same name.</p>
+<h2 id="rviz"><a href="#rviz" class="headerlink" title="rviz"></a>rviz</h2><p>rviz can help to playback sensor rosbag at lab. and also the visualization tool in algorithm/simulation development. </p>
+<p>someone(at 2014) said Google’s self-driving simulation has used rviz:</p>
+<p><img src="http://community.bwbot.org/assets/uploads/files/1472264009114-3.png?v=qboavrogdv4" alt="google simulation"> </p>
+<p><a href="http://stevenshi.me/2017/07/11/ros-intermediate-tutorial-2/" target="_blank" rel="external">a sample</a> with rviz to visualize rosbag info: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> terminal 1 </div><div class="line">roscore </div><div class="line"><span class="meta">#</span> terminal 2 </div><div class="line">rosbag play kitti.bag -l </div><div class="line">rosrun rviz rviz -f kitti-velodyne</div></pre></td></tr></table></figure>
+<h2 id="rosbag"><a href="#rosbag" class="headerlink" title="rosbag"></a>rosbag</h2><p>the sensor ros node will collect data in rosbag during physical or vitual test, then playback rosbag to develop or verify the sensing algorithms. or use to build simulation scene. </p>
+<p>a few <a href="http://wiki.ros.org/rosbag/Commandline" target="_blank" rel="external">common commands</a>, and also rosbag support interactive <a href="http://wiki.ros.org/rosbag/Code%20API" target="_blank" rel="external">C++/Python APIs</a>. </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rosbag record #use to write a bag file wit contents on the specified topics</div><div class="line">rosbag info #display the contents of bag files </div><div class="line">rosbag play #play back bag file in a time-synchronized fashion</div></pre></td></tr></table></figure>
+<h2 id="kitti-dataset"><a href="#kitti-dataset" class="headerlink" title="kitti dataset"></a>kitti dataset</h2><p><code>are we ready for autonoous driving?</code> – the KITTI vision benchmark suite, which is a famous test dataset in self-driving sensing, prediction also mapping and SLAM algorithm development. </p>
+<p>there are a few benchmars includes:</p>
+<ul>
+<li><p>stereo,  basically rebuild the 3D object from multi 2D images.</p>
+</li>
+<li><p>optical flow, used to detect object movement(speed, direction)</p>
+</li>
+<li>scene flow, include other 3D env info, and  objects from optical flow </li>
+<li>depth </li>
+<li>visual odometry</li>
+<li>object detection </li>
+<li>object tracking </li>
+<li>road/lane detection </li>
+<li>semantic evaluation </li>
+</ul>
+<h2 id="catkin-package"><a href="#catkin-package" class="headerlink" title="catkin package"></a>catkin package</h2><p>catkin is ros package build/manage tool. </p>
+<pre><code class="shell">mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_create_pgk demo std_msgs rviz 
+cd demo
+mkdir launch
+cat "&lt;launch&gt; &lt;node  name="demo"  type="rviz" -d="ls `pwd`" /&gt; &lt;/launch&gt; " &gt;  demo.launch
+cd ~/catkin_ws
+catkin_make --pkg demo
+<span class="meta">
+#</span> add catkin_ws to 
+cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.bashrc
+</code></pre>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker-swarm-compose/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1847,397 +2138,6 @@ multi path                     +-1m
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/robust-control-theory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/10/robust-control-theory/" itemprop="url">robust control theory</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T10:54:01-04:00">
-                2019-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/10/robust-control-theory/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/10/robust-control-theory/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>this is a review from <a href="https://users.ece.cmu.edu/~koopman/des_s99/control_theory/" target="_blank" rel="external">cmu refer</a></p>
-<h2 id="state-variable-method"><a href="#state-variable-method" class="headerlink" title="state variable method"></a>state variable method</h2><p>any Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in the form of matrix equations. </p>
-<p>define <code>x</code> as system state,  <code>y</code> as output, <code>u</code> as input: </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" title="\dot{X} = AX + Bu \\ Y = CX + Du"></a></p>
-<p>modern control methods(ODEs) can handle multiple-input-multiple-outputs, and they can be optimized, and they allow to design performance and cost model. </p>
-<h2 id="effects-of-uncertainty"><a href="#effects-of-uncertainty" class="headerlink" title="effects of uncertainty"></a>effects of uncertainty</h2><h4 id="observability"><a href="#observability" class="headerlink" title="observability"></a>observability</h4><p>the ability to observe all of the parameters or state variables in the system</p>
-<h4 id="controllability"><a href="#controllability" class="headerlink" title="controllability"></a>controllability</h4><p>the ability to move a system from any given state to any desired state </p>
-<h4 id="stability"><a href="#stability" class="headerlink" title="stability"></a>stability</h4><p>the bounded response to any bounded input </p>
-<p>robust control theory might be stated as a worst-case analysis, to bound the uncertantiy.</p>
-<h2 id="metircs"><a href="#metircs" class="headerlink" title="metircs"></a>metircs</h2><p>how to model the behavior of the test system is one most difficult challenge in design a good control system.</p>
-<h4 id="adaptive-control"><a href="#adaptive-control" class="headerlink" title="adaptive control"></a>adaptive control</h4><p>set up observers for each significant state variable. at each iteration loop, the system learns about the changes in the system parameters, and getting closer to the desired. while the method may suffer from convergence issues</p>
-<h4 id="H2-or-H-infinity"><a href="#H2-or-H-infinity" class="headerlink" title="H2 or H-infinity"></a>H2 or H-infinity</h4><p>H2 control seeks to bound the power gain of the system, H-infinity seeks to bound the energy gain of the system. gains in power or energy indicate operation of the system near a pole in the transfer function.</p>
-<h4 id="parameter-estimation"><a href="#parameter-estimation" class="headerlink" title="parameter estimation"></a>parameter estimation</h4><p>by establishing boundaries in the frequency domain that cannot be crossed to maintain stability. </p>
-<h4 id="Lyapanov"><a href="#Lyapanov" class="headerlink" title="Lyapanov"></a>Lyapanov</h4><p>the only universal tech for assessing non-linear systems, the method focus on stability. Lyapanov functions are constructed, which are described as energy-like functions, to model the behavior of real system. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/Carmaker-8-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/10/Carmaker-8-0/" itemprop="url">Carmaker 8.0</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T10:47:35-04:00">
-                2019-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/10/Carmaker-8-0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/10/Carmaker-8-0/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>this is from IPG open house Shang Hai </p>
-<h2 id="scenario-generation-task"><a href="#scenario-generation-task" class="headerlink" title="scenario generation task"></a>scenario generation task</h2><h3 id="data-record"><a href="#data-record" class="headerlink" title="data record"></a>data record</h3><p>tracking vehicles, roads, tobstacles</p>
-<p>obj:  lane, road, barries, GPS input, vehicle position/orientation, fixed ID, type</p>
-<p>the goal of recoding is for road building, which will be used in replay.</p>
-<h4 id="road-build"><a href="#road-build" class="headerlink" title="road build"></a>road build</h4><p>GPS input + lane mark info +  vehicle location –&gt;  vehicle  trajectory </p>
-<h3 id="replay"><a href="#replay" class="headerlink" title="replay"></a>replay</h3><p>run config, input as tranversal and longitudial position</p>
-<p>traffic vehicle location, speed </p>
-<h3 id="rearrange"><a href="#rearrange" class="headerlink" title="rearrange"></a>rearrange</h3><p>input as :  traffic vehile info + ego info , list of traffic vehicle info</p>
-<p>traffic vehicle manage:</p>
-<pre><code>1) manuevor control:  free move 
-
-2) spawn control:  lati +   longi --&gt;  23 cases 
-
-3) support external plugins +   manuevor trigger
-</code></pre><h2 id="Synthetic-Scenario"><a href="#Synthetic-Scenario" class="headerlink" title="Synthetic Scenario"></a>Synthetic Scenario</h2><p>junction assistant</p>
-<p>road type + traffic rules +  scenario –&gt;</p>
-<p>support road topology modification</p>
-<p>support different envs: day of time,  weather, </p>
-<p>scenario editor to support opendrive import </p>
-<h3 id="standardization"><a href="#standardization" class="headerlink" title="standardization"></a>standardization</h3><p>PEGASUS  +  ASAM simulation standards </p>
-<p>roads, scenarios, simulation interfaces </p>
-<p>Opendrive –&gt;  road topology </p>
-<p>opENScenario –&gt;  maneuver &amp; anction abstract definitions </p>
-<p>Open simulation interface –&gt; interface developed for PEGASUS </p>
-<h3 id="limitations"><a href="#limitations" class="headerlink" title="limitations"></a>limitations</h3><p>pre-define route for vehicle ? </p>
-<p>the ego car has AI maneuvor ? </p>
-<h2 id="Vitual-Prototype"><a href="#Vitual-Prototype" class="headerlink" title="Vitual Prototype"></a>Vitual Prototype</h2><p>including gearbox loss mode, gas mode,  through look-up table </p>
-<p>including hybrid powertrain architectures:  automatic gearbox + parallel hybrid</p>
-<p>including powertrain masses(engine, tank, gearbox, battery, motor) </p>
-<p>including trailer data set generator </p>
-<p>including damping top mount </p>
-<h2 id="Simulation-test"><a href="#Simulation-test" class="headerlink" title="Simulation test"></a>Simulation test</h2><p>support:: ADAS/AD, POWERTRAIN, Vehicle Dynamics </p>
-<h3 id="steering-system-visual-case"><a href="#steering-system-visual-case" class="headerlink" title="steering system visual case"></a>steering system visual case</h3><p>for less steering will overall comfort and vehicle dynamics </p>
-<p>reference measurements(steering-in-loop simulator) -&gt;  model parameter id +  softare + ECU integration –&gt;  parameterization &amp; validation  -&gt; training </p>
-<h4 id="how-the-steering-system-works"><a href="#how-the-steering-system-works" class="headerlink" title="how the steering system works"></a>how the steering system works</h4><p>open loop to get mechanical characteristics(stiffness, friction..)</p>
-<p>system performance with or without EPS </p>
-<p>1) ideal(basis) model vs  physical model</p>
-<p>how to cowok the physical model with autopilot control model ?</p>
-<h3 id="test-bed"><a href="#test-bed" class="headerlink" title="test bed"></a>test bed</h3><p>to support electrification, durability,  balancing,  driveability,  powertain caillbratio,  connected powertrain </p>
-<h3 id="AI-training-with-synthetic-scenario"><a href="#AI-training-with-synthetic-scenario" class="headerlink" title="AI training with synthetic scenario"></a>AI training with synthetic scenario</h3><p>decion making</p>
-<p>trajectory planning </p>
-<p>image perception </p>
-<p>q: how to make sure AI robost ? –&gt; </p>
-<p>what CarMaker can do for AI? </p>
-<p>1) obj annotation (vehicles, pedestrains) –&gt; auto annotation</p>
-<p>2) semantic segmentation </p>
-<p>e.g. IPG Movier for auto semantic segmentation </p>
-<p>Q: what’s the hardware for ? </p>
-<h2 id="Cloud-amp-CPU-GPU-for-Parallelization"><a href="#Cloud-amp-CPU-GPU-for-Parallelization" class="headerlink" title="Cloud &amp; CPU/GPU for Parallelization"></a>Cloud &amp; CPU/GPU for Parallelization</h2><p>q: how to parallel in docker ? </p>
-<p>1)  test case in each CPUs </p>
-<p>2) even for single test run(with multi sensors, multi cars ) </p>
-<pre><code>resources &amp; distribution 
-</code></pre><p>CPU: vehile model,  drivel model, envs, ideal sensors </p>
-<p>GPU; visual, camera RIS, radar ris, lidar rs </p>
-<h3 id="Test-run-in-prallel"><a href="#Test-run-in-prallel" class="headerlink" title="Test run in prallel"></a>Test run in prallel</h3><p>sensor setup(10 ultra,  5 Radar,  1 Lidar, 1 Camera)</p>
-<p>host pc (with test manager)  +  4 virtual machines  </p>
-<p>output:  key figures,  reports,  statistics,  queries </p>
-<p>open archi for scalable processing( on-premise and cloud)</p>
-<p>big data anaysis with DaSense by NorCom </p>
-<ul>
-<li>how it works ?</li>
-<li>external scheduler mananger, PBS</li>
-<li>HPC light to support local PC parallel</li>
-</ul>
-<h2 id="new-features-in-8-0"><a href="#new-features-in-8-0" class="headerlink" title="new features in 8.0"></a>new features in 8.0</h2><p>virtual test driving 8.0 </p>
-<ul>
-<li>simulink lib (through Simscape) </li>
-<li>Scenario Editor:  vege geenration,  animated 3D objs, new models(vehicles, trailers, trucks, bus, buildings, houses, street furniture, pedestrains)</li>
-<li>visulize road surfaces .. </li>
-<li>ipg movie</li>
-<li>fisheye distortion from external file </li>
-<li>new sensor models(Lidar RSI)</li>
-</ul>
-<p>q: what’s the difference of open source tool vs  commericial ?  </p>
-<h3 id="Lidar-RSI"><a href="#Lidar-RSI" class="headerlink" title="Lidar RSI"></a>Lidar RSI</h3><p>Ideal perfect world –&gt; ground truth </p>
-<p>HiFi –&gt;  false positives &amp; negatives </p>
-<p>raw data –&gt;   RSI </p>
-<p>supporting Lidar type: </p>
-<pre><code>moving laser &amp; photot diode
-
-moving mirrors 
-
-solid state 
-
-flash
-</code></pre><p>input features :</p>
-<ul>
-<li><p>Laser beam, including custom beam pattern, Raytracing rays </p>
-</li>
-<li><p>Scene Interaction, including atmoshpere attenuation, color or material or surface or transparent dependency </p>
-</li>
-<li><p>detection, including threashold, multiple echoes per beam, separability</p>
-</li>
-</ul>
-<p>output features:</p>
-<ul>
-<li>sending &amp; receiving direction of every beam </li>
-<li>light intensity of every beam</li>
-<li>time &amp; lenght of light</li>
-<li>pluse width</li>
-<li>number of interactions </li>
-</ul>
-<h2 id="User-Case-Nio-Pilot"><a href="#User-Case-Nio-Pilot" class="headerlink" title="User Case : Nio Pilot"></a>User Case : Nio Pilot</h2><p>by sun peng </p>
-<h3 id="cases"><a href="#cases" class="headerlink" title="cases"></a>cases</h3><p>inter-city,  parking, closed space, crowded space </p>
-<p>sensors:  3 front camera, 4 surround camera, 4 mm RADARS,  12 Ultra, 1 driver monitor camera </p>
-<p>higway pilot in June </p>
-<p>perception:  camera, radar,  ult, hd map, location  </p>
-<p>planning :  path planning,  maneuvor decsion, system control </p>
-<p>cloud &amp; AI </p>
-<h3 id="simulation-usage"><a href="#simulation-usage" class="headerlink" title="simulation usage"></a>simulation usage</h3><ul>
-<li><p>FDS -&gt; cases -&gt; SIL </p>
-</li>
-<li><p>platform –&gt;  cases -&gt;  regression test,  abstraction &amp; instantiation ;  scene reconsturction(in-house) /  close loop SIL ;  traffic model training(to do) </p>
-</li>
-<li><p>integration -&gt;  HIL </p>
-</li>
-</ul>
-<p>what about vd ? –&gt;  co-work with simulation and physical test, the cover percentage of simulation is about 80%, the left is from </p>
-<h3 id="data-platform"><a href="#data-platform" class="headerlink" title="data platform"></a>data platform</h3><p>upload nodes -&gt; cloud </p>
-<p>med usa API server -&gt; fleet mgmt</p>
-<p>log stash –&gt;  elastic search –&gt; Kibana &amp;  Admin (tensn  and spark )</p>
-<p>I think they are collecting data, and this data for scene building and simulation usage in future </p>
-<h3 id="data-visulazation"><a href="#data-visulazation" class="headerlink" title="data visulazation"></a>data visulazation</h3><h2 id="HIL"><a href="#HIL" class="headerlink" title="HIL"></a>HIL</h2><ul>
-<li><p>lane model simualtion on HIL </p>
-</li>
-<li><p>fusion simulation on HIL </p>
-</li>
-</ul>
-<h2 id="automation-test"><a href="#automation-test" class="headerlink" title="automation test"></a>automation test</h2><p>jenkins master –&gt; jenkins slave (agent IPG) –&gt;   cloud </p>
-<h2 id="goal"><a href="#goal" class="headerlink" title="goal"></a>goal</h2><p>simulation server  &lt;—&gt;  data center </p>
-<p>parallel sim core +  simulation monitor (data exchange service)</p>
-<p>data processing + labelling + case management + traffic model training </p>
-<p>(replay,  SIL, REMODEL, Visuliazation )</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2288,7 +2188,7 @@ flash
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">94</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2301,7 +2201,7 @@ flash
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
