@@ -291,6 +291,142 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/robust-control-theory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/10/robust-control-theory/" itemprop="url">robust control theory</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T10:54:01-04:00">
+                2019-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/10/robust-control-theory/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/10/robust-control-theory/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this is a review from <a href="https://users.ece.cmu.edu/~koopman/des_s99/control_theory/" target="_blank" rel="external">cmu refer</a></p>
+<h2 id="state-variable-method"><a href="#state-variable-method" class="headerlink" title="state variable method"></a>state variable method</h2><p>any Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in the form of matrix equations. </p>
+<p>define <code>x</code> as system state,  <code>y</code> as output, <code>u</code> as input: </p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" title="\dot{X} = AX + Bu \\ Y = CX + Du"></a></p>
+<p>modern control methods(ODEs) can handle multiple-input-multiple-outputs, and they can be optimized, and they allow to design performance and cost model. </p>
+<h2 id="effects-of-uncertainty"><a href="#effects-of-uncertainty" class="headerlink" title="effects of uncertainty"></a>effects of uncertainty</h2><h4 id="observability"><a href="#observability" class="headerlink" title="observability"></a>observability</h4><p>the ability to observe all of the parameters or state variables in the system</p>
+<h4 id="controllability"><a href="#controllability" class="headerlink" title="controllability"></a>controllability</h4><p>the ability to move a system from any given state to any desired state </p>
+<h4 id="stability"><a href="#stability" class="headerlink" title="stability"></a>stability</h4><p>the bounded response to any bounded input </p>
+<p>robust control theory might be stated as a worst-case analysis, to bound the uncertantiy.</p>
+<h2 id="metircs"><a href="#metircs" class="headerlink" title="metircs"></a>metircs</h2><p>how to model the behavior of the test system is one most difficult challenge in design a good control system.</p>
+<h4 id="adaptive-control"><a href="#adaptive-control" class="headerlink" title="adaptive control"></a>adaptive control</h4><p>set up observers for each significant state variable. at each iteration loop, the system learns about the changes in the system parameters, and getting closer to the desired. while the method may suffer from convergence issues</p>
+<h4 id="H2-or-H-infinity"><a href="#H2-or-H-infinity" class="headerlink" title="H2 or H-infinity"></a>H2 or H-infinity</h4><p>H2 control seeks to bound the power gain of the system, H-infinity seeks to bound the energy gain of the system. gains in power or energy indicate operation of the system near a pole in the transfer function.</p>
+<h4 id="parameter-estimation"><a href="#parameter-estimation" class="headerlink" title="parameter estimation"></a>parameter estimation</h4><p>by establishing boundaries in the frequency domain that cannot be crossed to maintain stability. </p>
+<h4 id="Lyapanov"><a href="#Lyapanov" class="headerlink" title="Lyapanov"></a>Lyapanov</h4><p>the only universal tech for assessing non-linear systems, the method focus on stability. Lyapanov functions are constructed, which are described as energy-like functions, to model the behavior of real system. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/Carmaker-8-0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1755,168 +1891,6 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/03/粒子滤波-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/03/粒子滤波-2/" itemprop="url">particle filter (2)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-03T11:51:48-04:00">
-                2019-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/03/粒子滤波-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/04/03/粒子滤波-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://zjli2013.github.io/2019/04/02/partical-filter/" target="_blank" rel="external">前一篇</a> 介绍贝叶斯滤波的数学原理和蒙特卡洛定位的算法。本篇将介绍基于序贯重要性采样。粒子滤波的思想就是采用一个加权粒子分布去近似后验概率分布<code>p(x)</code></p>
-<h2 id="蒙特卡洛积分"><a href="#蒙特卡洛积分" class="headerlink" title="蒙特卡洛积分"></a>蒙特卡洛积分</h2><p>定义一连续随机变量X, 其概率密度分布函数为 <code>p(X)</code>; 定义<code>Y=f(X)</code>， 则随机变量Y的数学期望：</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)&space;p(x_i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)&space;p(x_i)" title="E(Y) = \int f(x)p(x) dx \approx \frac{1}{N} \sum_{i=1}^{N} f(x_i) p(x_i)"></a></p>
-<p>实际中，概率密度分布<code>p(X)</code>未知，如何保障所采样的点服从<code>p(X)</code></p>
-<h3 id="直接采样"><a href="#直接采样" class="headerlink" title="直接采样"></a>直接采样</h3><p>通过对均匀分布采样，实现对任意分布的采样。 </p>
-<p>任何未知概率密度分布的累积概率函数cdf都映射在[0-1]区间，通过在[0-1]区间的均匀采样，再函数<code>z = cdf(y)</code>求逆，即是符合真实 <code>y</code>的概率密度分布的采样点。</p>
-<p>但如果cdf()函数未知或无法求逆，直接采样不可行。</p>
-<h3 id="接受-拒绝采样"><a href="#接受-拒绝采样" class="headerlink" title="接受-拒绝采样"></a>接受-拒绝采样</h3><p>用一个已知概率分布函数<code>q(X)</code>去采样，然后按照一定的方法拒绝某些样本，达到近似<code>p(X)</code>分布: </p>
-<pre><code>p(x_i) &lt;= k p(x_i)
-</code></pre><p>该采样的限制是确定参数k。</p>
-<h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3><p>在一定的抽样数量基础上，增加准确度。未知<code>p(x)</code>, 在已知概率密度分布的<code>q(x)</code>上采样{x_1, x_2, … x_n}后估计f的期望：</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)" title="E(Y) = \int f(x)p(x) dx \approx \frac{1}{N} \sum_{i=1}^{N} f(x_i)"></a></p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=E(Y)&ace;=&space;\int&space;\frac{p(x)}{q(x)}&space;q(x)&space;f(x)&space;dx" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(Y)&space;=&space;\int&space;\frac{p(x)}{q(x)}&space;q(x)&space;f(x)&space;dx" title="E(Y) = \int \frac{p(x)}{q(x)} q(x) f(x) dx"></a></p>
-<p>定义新的随机变量：<br>        <a href="https://www.codecogs.com/eqnedit.php?latex=Z&space;=&space;\frac{p(x)}{q(x)}&space;f(x)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Z&space;=&space;\frac{p(x)}{q(x)}&space;f(x)" title="Z = \frac{p(x)}{q(x)} f(x)"></a></p>
-<p>关于原随机变量<code>Y</code>在未知概率分布<code>p(x)</code>下的期望，转化为新的随机变量<code>Z</code>在已知概率分布<code>q(x)</code>下的期望。已知概率分布，即知道如何采样。这里 <code>p(x)/q(x)</code> 就是权值。</p>
-<p>so the <a href="https://users.aalto.fi/~ssarkka/course_k2012/handout6.pdf" target="_blank" rel="external">posterior expectations</a> can be computed as:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;Z(x^i)&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}&space;f(x^i)&space;\\&space;E[Y]&space;=&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;Z(x^i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;Z(x^i)&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}&space;f(x^i)&space;\\&space;E[Y]&space;=&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;Z(x^i)" title="Z(x^i) = \frac{p(x^i | z_{1:t})}{q(x^i | z_{1:t})} f(x^i) \\ E[Y] = \frac{1}{N} \sum_{i=1}^{N} Z(x^i)"></a></p>
-<p>as the importance weights can be defined as: </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w^i&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w^i&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}" title="w^i = \frac{p(x^i | z_{1:t})}{q(x^i | z_{1:t})}"></a></p>
-<p>the problem is we can’t get <code>p(x|z)</code> ,  but a loosed (unnormalized) importance weights as:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\tilde{w^i}&space;=&space;\frac{p(x^i)&space;p(z_{1:t}&space;|&space;x^i)}{q(x^i&space;|&space;z_{1:t})}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\tilde{w^i}&space;=&space;\frac{p(x^i)&space;p(z_{1:t}&space;|&space;x^i)}{q(x^i&space;|&space;z_{1:t})}" title="\tilde{w^i} = \frac{p(x^i) p(z_{1:t} | x^i)}{q(x^i | z_{1:t})}"></a></p>
-<p>then do normalized from it:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w^i&space;=&space;\frac{\tilde{w^i}}{\sum_{j}&space;\tilde{w^j}&space;}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w^i&space;=&space;\frac{\tilde{w^i}}{\sum_{j}&space;\tilde{w^j}&space;}" title="w^i = \frac{\tilde{w^i}}{\sum_{j} \tilde{w^j} }"></a></p>
-<p>so the posterior expectation is approximated as: </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;E[Y&space;|&space;z_{1:t}]&space;\approx&space;\sum_{i=1}^{N}&space;w^i&space;f(x^i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;E[Y&space;|&space;z_{1:t}]&space;\approx&space;\sum_{i=1}^{N}&space;w^i&space;f(x^i)" title="E[Y | z_{1:t}] \approx \sum_{i=1}^{N} w^i f(x^i)"></a></p>
-<h2 id="sequential-importance-sampling-SIS"><a href="#sequential-importance-sampling-SIS" class="headerlink" title="sequential importance sampling(SIS)"></a>sequential importance sampling(SIS)</h2><p>consider the full posterior distribution of states <code>X_{0:k}</code> given measurements <code>y_{1:k}</code> :</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;p(x_{0:k}&space;|&space;z_{1:k})&space;\approx&space;p(z_k&space;|&space;x_{0:k},&space;z_{1:k-1})&space;p(x_{0:k}&space;|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{0:k-1},&space;z_{1:k-1})&space;p(x_{0:k-1}|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;p(x_{0:k}&space;|&space;z_{1:k})&space;\approx&space;p(z_k&space;|&space;x_{0:k},&space;z_{1:k-1})&space;p(x_{0:k}&space;|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{0:k-1},&space;z_{1:k-1})&space;p(x_{0:k-1}|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})" title="p(x_{0:k} | z_{1:k}) \approx p(z_k | x_{0:k}, z_{1:k-1}) p(x_{0:k} | z_{1:k-1}) \\ = p(z_k | x_k) p(x_k | x_{0:k-1}, z_{1:k-1}) p(x_{0:k-1}| z_{1:k-1}) \\ = p(z_k | x_k) p(x_k | x_{k-1}) p(x_{0:k-1} | z_{1:k-1})"></a></p>
-<p>consider the sequential of <code>q(x)</code>:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;q(x_{0:k}|&space;z_{1:k})&space;=&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;q(x_{0:k}|&space;z_{1:k})&space;=&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})" title="q(x_{0:k}| z_{1:k}) = q(x_{0:k-1} | z_{1:k-1}) q(x_k | x_{0:k-1}, z_{1:k})"></a></p>
-<p>then the unnormalized importance weights can be as:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;}" title="w^i \approx \frac{p(z_k|x_k)p(x_k|x_{k-1}) p(x_{0:k-1} | z_{1:k-1})}{ q(x_k | x_{0:k-1}, z_{1:k}) q(x_{0:k-1} | z_{1:k-1}) }"></a></p>
-<p>namely:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w_k^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;}&space;w_{k-1}^i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w_k^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;}&space;w_{k-1}^i" title="w_k^i \approx \frac{p(z_k|x_k)p(x_k|x_{k-1})}{ q(x_k | x_{0:k-1}, z_{1:k}) } w_{k-1}^i"></a></p>
-<p>the problem in SIS is the algorithm is degenerate, that variance of the weights increases at every step, which means the algorithm will converget to single none-zero (w=1) weight and the rest being zero. </p>
-<p>so resampling.</p>
-<h2 id="sequential-importance-resampling-SER"><a href="#sequential-importance-resampling-SER" class="headerlink" title="sequential importance resampling(SER)"></a>sequential importance resampling(SER)</h2><p>resampling process: </p>
-<p>1) interpret each weight as the probability of obtaining the sample index <code>i</code> in the set <code>x^i</code></p>
-<p>2) draw <code>N</code> samples from that discrete distribtuion and replace the old sample set with the new one.</p>
-<p>SER process:</p>
-<p>1) draw point <code>x_i</code> from the     <code>q</code> distribution.<br>2) calculate the weights in iteration SIS and normalized the weights to sum to unity<br>3) if the effective number of particles is too low, go to resampling process</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1967,7 +1941,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">93</span>
+                <span class="site-state-item-count">94</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1980,7 +1954,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="AUTOSAR," />
 
 
 
@@ -93,21 +93,20 @@
 
 
 
-<meta name="description" content="chips requirements in vehicleBosch : BMW: the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take">
+<meta name="description" content="what is AUTOSARbasically it’s an micro-service architecture for vehicle EE system.  Each micro-service is called software component(swc), and it has uniform interfaces, while of which the implementati">
+<meta name="keywords" content="AUTOSAR">
 <meta property="og:type" content="article">
-<meta property="og:title" content="computing chips in AV">
-<meta property="og:url" content="http://yoursite.com/2019/06/23/computing-chips-in-AV/index.html">
+<meta property="og:title" content="autosar sucks">
+<meta property="og:url" content="http://yoursite.com/2019/07/15/autosar-sucks/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="chips requirements in vehicleBosch : BMW: the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take">
+<meta property="og:description" content="what is AUTOSARbasically it’s an micro-service architecture for vehicle EE system.  Each micro-service is called software component(swc), and it has uniform interfaces, while of which the implementati">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/images/evolution_ee_architecture_bosch.jpg">
-<meta property="og:image" content="http://yoursite.com/images/bmw_ee_%20architecture.jpg">
-<meta property="og:image" content="http://yoursite.com/2019/06/23/computing-chips-in-AV/computing-chips-in-AV/r-car-h3-block-diagram.jpg">
-<meta property="og:updated_time" content="2019-06-23T14:24:40.971Z">
+<meta property="og:image" content="https://automotivetechis.files.wordpress.com/2012/05/untitled2.jpg">
+<meta property="og:updated_time" content="2019-07-15T14:30:25.272Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="computing chips in AV">
-<meta name="twitter:description" content="chips requirements in vehicleBosch : BMW: the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take">
-<meta name="twitter:image" content="http://yoursite.com/images/evolution_ee_architecture_bosch.jpg">
+<meta name="twitter:title" content="autosar sucks">
+<meta name="twitter:description" content="what is AUTOSARbasically it’s an micro-service architecture for vehicle EE system.  Each micro-service is called software component(swc), and it has uniform interfaces, while of which the implementati">
+<meta name="twitter:image" content="https://automotivetechis.files.wordpress.com/2012/05/untitled2.jpg">
 
 
 
@@ -135,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/06/23/computing-chips-in-AV/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/15/autosar-sucks/"/>
 
 
 
 
 
-  <title>computing chips in AV | Serious Autonomous Vehicles</title>
+  <title>autosar sucks | Serious Autonomous Vehicles</title>
   
 
 
@@ -294,7 +293,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/23/computing-chips-in-AV/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/15/autosar-sucks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -311,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">computing chips in AV</h1>
+          <h1 class="post-title" itemprop="name headline">autosar sucks</h1>
         
 
         <div class="post-meta">
@@ -323,8 +322,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-23T04:16:37-04:00">
-                2019-06-23
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-15T10:29:53-04:00">
+                2019-07-15
               </time>
             
 
@@ -342,9 +341,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/06/23/computing-chips-in-AV/#comments" itemprop="discussionUrl">
+                <a href="/2019/07/15/autosar-sucks/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/23/computing-chips-in-AV/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/07/15/autosar-sucks/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -369,294 +368,33 @@
       
 
       
-        <h3 id="chips-requirements-in-vehicle"><a href="#chips-requirements-in-vehicle" class="headerlink" title="chips requirements in vehicle"></a>chips requirements in vehicle</h3><p>Bosch :<br><img src="/images/evolution_ee_architecture_bosch.jpg" alt="Bosch"></p>
-<p>BMW:<br><img src="/images/bmw_ee_ architecture.jpg" alt="BMW"></p>
-<p>the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take an example with <a href="http://www.sohu.com/a/291472706_391994" target="_blank" rel="external">Singulato iS6</a>, which has five domains: smart driving,  powertrain, chassis, smart body, smart seat. </p>
-<p>each domain need support by a domain controller unit(DCU), the core of which is a powerful computing chip, which is usually more powerful than traditional ECUs. in average, L2 requires computing power about 10TOPS , L3 needs 60TOPS, L4 needs 100TOPS.</p>
-<h3 id="computing-chips"><a href="#computing-chips" class="headerlink" title="computing chips"></a>computing chips</h3><table>
-<thead>
-<tr>
-<th>product</th>
-<th>MDC600</th>
-<th>Driver PX Pegasus</th>
-<th>EyeQ 4</th>
-<th>BlueBox</th>
-<th>R-car H3</th>
-<th>Journey2.0</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>Huawei</td>
-<td>Nvidia</td>
-<td>Mobileye</td>
-<td>NXP</td>
-<td>Renesas</td>
-<td>Horizon</td>
-</tr>
-<tr>
-<td>TOPS</td>
-<td>352</td>
-<td>320</td>
-<td>2.5</td>
-<td></td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>main cores</td>
-<td>8 * 晟腾310</td>
-<td>16 ARM</td>
-<td>VMP</td>
-<td>LS2084A</td>
-<td>4*Arm/A57</td>
-<td>BPU2.0</td>
-</tr>
-<tr>
-<td>other cores</td>
-<td>Ascend 310</td>
-<td>2 TensorCore GPU</td>
-<td></td>
-<td>S32V234</td>
-<td>4*Arm/A53</td>
-<td>FPGA</td>
-</tr>
-<tr>
-<td>AV-level</td>
-<td>L3+</td>
-<td>L5</td>
-<td>L3</td>
-<td>L4(target)</td>
-<td>IVI</td>
-<td>L3</td>
-</tr>
-<tr>
-<td>Camera support</td>
-<td>16</td>
-<td>10</td>
-<td>8</td>
-<td>8</td>
-<td>8</td>
-<td>4</td>
-</tr>
-<tr>
-<td>Lidar support</td>
-<td>8</td>
-<td>6</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>function safety</td>
-<td>ASIL-D</td>
-<td>ASIL-B</td>
-<td>ASIL-D</td>
-<td>ASIL-D(target)</td>
-<td>ASIL-B</td>
-<td>ASIL-B</td>
-</tr>
-</tbody>
-</table>
-<p><img src="computing-chips-in-AV/r-car-h3-block-diagram.jpg" alt="R-car H3"></p>
-<h3 id="products-timeline"><a href="#products-timeline" class="headerlink" title="products timeline"></a>products timeline</h3><h4 id="Tier1s-Tier2s-timeline"><a href="#Tier1s-Tier2s-timeline" class="headerlink" title="Tier1s/Tier2s timeline"></a>Tier1s/Tier2s timeline</h4><table>
-<thead>
-<tr>
-<th></th>
-<th>2018</th>
-<th>2019</th>
-<th>2020</th>
-<th>2021</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Aptive</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Bosch</td>
-<td>level2</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Conti</td>
-<td>level2</td>
-<td></td>
-<td></td>
-<td>level3+</td>
-</tr>
-<tr>
-<td>Autoliv</td>
-<td>level2</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Intel</td>
-<td>level3</td>
-<td></td>
-<td>level4+</td>
-</tr>
-<tr>
-<td>Nvidia</td>
-<td>level3</td>
-<td>level4+</td>
-</tr>
-</tbody>
-</table>
-<h4 id="Chinese-OEMs-timeline"><a href="#Chinese-OEMs-timeline" class="headerlink" title="Chinese OEMs timeline"></a>Chinese OEMs timeline</h4><table>
-<thead>
-<tr>
-<th></th>
-<th>2019</th>
-<th>2020</th>
-<th>2021</th>
-<th>2022+</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>changan</td>
-<td></td>
-<td></td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>FAW</td>
-<td></td>
-<td></td>
-<td>level4</td>
-<td></td>
-</tr>
-<tr>
-<td>GAC</td>
-<td>level3</td>
-<td></td>
-<td></td>
-<td>level5</td>
-</tr>
-<tr>
-<td>Geely</td>
-<td></td>
-<td>level3</td>
-<td></td>
-<td>level5</td>
-</tr>
-<tr>
-<td>GWM</td>
-<td></td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>SAIC</td>
-<td>level3</td>
-</tr>
-<tr>
-<td>xiaoPeng</td>
-<td></td>
-<td>level3</td>
-</tr>
-<tr>
-<td>WeiMa</td>
-<td></td>
-<td></td>
-<td>level3</td>
-</tr>
-<tr>
-<td>Nio</td>
-<td>level2</td>
-<td></td>
-<td>level4+ </td>
-</tr>
-</tbody>
-</table>
-<h4 id="global-OEMs-timeline"><a href="#global-OEMs-timeline" class="headerlink" title="global OEMs timeline"></a>global OEMs timeline</h4><table>
-<thead>
-<tr>
-<th></th>
-<th>2018</th>
-<th>2019</th>
-<th>2020</th>
-<th>2021</th>
-<th>2022+</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ford</td>
-<td>level2</td>
-<td></td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>GM</td>
-<td>level2</td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Fiat-Crysler</td>
-<td></td>
-<td></td>
-<td></td>
-<td>level3+</td>
-</tr>
-<tr>
-<td>Audi</td>
-<td>level2</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Mercedze</td>
-<td>level2</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Toyota</td>
-<td>level2</td>
-<td></td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Honda</td>
-<td></td>
-<td></td>
-<td>level3</td>
-<td>level4</td>
-</tr>
-</tbody>
-</table>
-<h4 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h4><p><a href="http://www.cheyun.com/content/21571" target="_blank" rel="external">Matrix 1.0</a></p>
-<p><a href="http://www.cheyun.com/content/15377" target="_blank" rel="external">the five chip vendors</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/48679466" target="_blank" rel="external">from GPU to ASIC</a></p>
-<p><a href="http://www.sohu.com/a/315849896_100044558" target="_blank" rel="external">hauwei and the others</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/57378600" target="_blank" rel="external">global chips vendors</a></p>
-<p><a href="https://blog.csdn.net/weixin_42229404/article/details/84306658" target="_blank" rel="external">L4 AI chips</a></p>
-<p><a href="https://www.mobileye.com/our-technology/evolution-eyeq-chip/" target="_blank" rel="external">the evolution of EyeQ</a></p>
-<p><a href="https://www.mobileye.com/our-technology/" target="_blank" rel="external">Mobileye tech</a></p>
-<p><a href="https://autonomoustuff.com/wp-content/uploads/2019/05/nxp_bluebox_fact_sheet-whitelabel.pdf" target="_blank" rel="external">NXP bluebox</a></p>
-<p><a href="https://www.renesas.com/us/en/solutions/automotive/soc/r-car-h3.html" target="_blank" rel="external">R-car H3 soc</a></p>
-<p><a href="https://www.nxp.com/products/product-information/functional-safety-for-iso-26262-and-iec-61508:FNCTNLSFTY" target="_blank" rel="external">NXP function safety</a></p>
-<p><a href="http://www.cheyun.com/content/24350" target="_blank" rel="external">horizontal AI matrix2.0</a></p>
-<p><a href="https://community.plm.automation.siemens.com/t5/Digital-Transformations/Cars-mobility-chip-to-city-design-and-the-iPhone-4/ba-p/562778" target="_blank" rel="external">cars, mobility, chip-to-city design and the Iphone4</a></p>
-<p><a href="">2018-2019 汽车域控制器产业研究报告</a></p>
-<p><a href="http://www.sohu.com/a/283587948_607980" target="_blank" rel="external">汽车电子演化</a></p>
-<p><a href="">Global L3 self-driving vehicle market insights 2019</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/65273004" target="_blank" rel="external">self-driving car research report</a></p>
+        <h2 id="what-is-AUTOSAR"><a href="#what-is-AUTOSAR" class="headerlink" title="what is AUTOSAR"></a>what is AUTOSAR</h2><p>basically it’s an micro-service architecture for vehicle EE system. </p>
+<p>Each micro-service is called software component(<code>swc</code>), and it has uniform interfaces, while of which the implementation is varied. as the goal of AUTOSAR said: share on the standard (interface), compete in the implementation. </p>
+<p>the inter-connect of micro-services is through virtual function bus(<code>vfb</code>),  which works as a gateway, guiding data flow from port A, from micro-serviceA to port B, from micro-serviceB</p>
+<p>the benefits of AUTOSAR is obvious, to design the interface at system level first, if any changed need, it can be updated quickly. after the system architecture is fixed, then go to the implementation details.</p>
+<p><a href="https://automotivetechis.wordpress.com/autosar-concepts/" target="_blank" rel="external">refer</a> </p>
+<h3 id="input-description"><a href="#input-description" class="headerlink" title="input description"></a>input description</h3><ul>
+<li><p>software components(micro-services) description, only define the data flow, interface functions</p>
+</li>
+<li><p>system, system topology(interconnection among ECUs, and available data buses, protocols etc)</p>
+</li>
+<li><p>hardware, the available hardware(processors, sensors, actuators etc) </p>
+</li>
+</ul>
+<h3 id="system-configuration"><a href="#system-configuration" class="headerlink" title="system configuration"></a>system configuration</h3><p>used to distributes the software component descritpions to different ECU</p>
+<h3 id="ECU-configuration"><a href="#ECU-configuration" class="headerlink" title="ECU configuration"></a>ECU configuration</h3><p>the basic software(BST) and run-time environment(<code>rte</code>) of each ECU has been configured, this is based on the dedication of the application software components to each ECU.</p>
+<h3 id="generation-of-executables"><a href="#generation-of-executables" class="headerlink" title="generation of executables"></a>generation of executables</h3><p>in this step to implement the software components, then build.  this can be automated done by tool-chains. </p>
+<p>all steps up to now are supported by defining exchange formats(xml) and work methods.</p>
+<p><img src="https://automotivetechis.files.wordpress.com/2012/05/untitled2.jpg" alt="image"></p>
+<h2 id="basic-software"><a href="#basic-software" class="headerlink" title="basic software"></a>basic software</h2><p>each swc has well-defined ports, either provider port(PPort) or request port(RPort), the swc interface can either be a client-server interface or sender-receiver interface. </p>
+<p>with a PPort, the swc will impelment data generation; with a RPort, the swc will implement data read.</p>
+<p><code>communication manager</code> (ComM), is a resource mananger to encapsulates communication related basic software modules. </p>
+<p>the actual bus states are controlled by the corresponding <code>bus state manager</code>, e.g.  CAN/FlexRay/Lin bus. when ComM request a specific commmunication mode from the state manager, it will map the communication mode to a special bus state.</p>
+<p><code>network management modules</code> (NM) works in bus-sleep mode and only support broadcast communication.</p>
+<p><code>diagnostic communication manager</code>(DCM), a common API for diagnostic services. </p>
+<p><code>CAN driver</code> performs the hardware access and provides a hardware-independent API to upper layers; it can access hardware resources and converts the given information for transmission into a hardware specic format and triggers the transmission.</p>
+<h3 id="runtime-environment-RTE"><a href="#runtime-environment-RTE" class="headerlink" title="runtime environment(RTE)"></a>runtime environment(RTE)</h3><p>between basic software to upper application softwares, I think it’s mostly <code>vfb</code>. </p>
+<h3 id="application-software-components"><a href="#application-software-components" class="headerlink" title="application software components"></a>application software components</h3><p>for now, e.g. ADAS, traditional EE.</p>
 
       
     </div>
@@ -684,6 +422,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/AUTOSAR/" rel="tag"># AUTOSAR</a>
+          
+        </div>
+      
 
       
       
@@ -693,8 +437,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/22/Lidar-in-AV/" rel="next" title="Lidar in  AV">
-                <i class="fa fa-chevron-left"></i> Lidar in  AV
+              <a href="/2019/07/13/play-with-ros/" rel="next" title="play with ros">
+                <i class="fa fa-chevron-left"></i> play with ros
               </a>
             
           </div>
@@ -702,10 +446,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/07/09/where-are-you-in-next-5-years-8/" rel="prev" title="where are you in next 5 years 8">
-                where are you in next 5 years 8 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -853,7 +593,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#chips-requirements-in-vehicle"><span class="nav-number">1.</span> <span class="nav-text">chips requirements in vehicle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#computing-chips"><span class="nav-number">2.</span> <span class="nav-text">computing chips</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#products-timeline"><span class="nav-number">3.</span> <span class="nav-text">products timeline</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tier1s-Tier2s-timeline"><span class="nav-number">3.1.</span> <span class="nav-text">Tier1s/Tier2s timeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chinese-OEMs-timeline"><span class="nav-number">3.2.</span> <span class="nav-text">Chinese OEMs timeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#global-OEMs-timeline"><span class="nav-number">3.3.</span> <span class="nav-text">global OEMs timeline</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reference"><span class="nav-number">3.4.</span> <span class="nav-text">reference</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-AUTOSAR"><span class="nav-number">1.</span> <span class="nav-text">what is AUTOSAR</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#input-description"><span class="nav-number">1.1.</span> <span class="nav-text">input description</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system-configuration"><span class="nav-number">1.2.</span> <span class="nav-text">system configuration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ECU-configuration"><span class="nav-number">1.3.</span> <span class="nav-text">ECU configuration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generation-of-executables"><span class="nav-number">1.4.</span> <span class="nav-text">generation of executables</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#basic-software"><span class="nav-number">2.</span> <span class="nav-text">basic software</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-environment-RTE"><span class="nav-number">2.1.</span> <span class="nav-text">runtime environment(RTE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#application-software-components"><span class="nav-number">2.2.</span> <span class="nav-text">application software components</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -996,9 +736,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/06/23/computing-chips-in-AV/';
-          this.page.identifier = '2019/06/23/computing-chips-in-AV/';
-          this.page.title = 'computing chips in AV';
+          this.page.url = 'http://yoursite.com/2019/07/15/autosar-sucks/';
+          this.page.identifier = '2019/07/15/autosar-sucks/';
+          this.page.title = 'autosar sucks';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
