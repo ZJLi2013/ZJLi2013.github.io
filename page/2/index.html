@@ -291,6 +291,142 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/how-simulation-helps-for-autonomous-vehicle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/06/how-simulation-helps-for-autonomous-vehicle/" itemprop="url">how simulation helps for autonomous vehicle</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-06T05:50:37-04:00">
+                2019-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/06/how-simulation-helps-for-autonomous-vehicle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/06/06/how-simulation-helps-for-autonomous-vehicle/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="prefare"><a href="#prefare" class="headerlink" title="prefare"></a>prefare</h2><p>recently joined another Chinese auto OEM, still work in simulation platform for autonomous vehicle. this experience is a different pratice from GM or Ford. </p>
+<p>at first, it’s the mindset update, once for a long time, or even take for granted that I was looking for to be treated greatly, like in NA companies, what the company can offer me. it’s about freedom and responsibility. To have the freedom/right to make a difference in project direction, contents, and methods to achieve sth, first prove that I can take it, which is responsibility.</p>
+<p>“ you can you up” that kind of phylosphy is very common and actually I’d love it in some point.</p>
+<h2 id="beta-version"><a href="#beta-version" class="headerlink" title="beta version"></a>beta version</h2><p>there are ways to make a virtual simulator. traditional tool vendors include Matlab/Simulink, Prescan, VTD, ANSYS e.t.c. and as the beta version of simulator tool-chain, they are common in most OEMs in China. while have to say, in China, cause most software tools, from engineering tools to modern HR managment tools to product managment tools are kind of in practice process in Chinese companies as I can see, rather than as a matured segment pluged-in the company’s DNA. e.g.  the product development tools are pretty in trial and error, occasionaly some PLM vendors come to introduce their products. and actually except the CAD/CAE tools, which were introduced in China since 80’s, and which sounds matured right now, the simulation tools for autonomous vehicle is pretty new-things, from map, sensor to all kinds of internal algorithms.</p>
+<p>the beta version of simulation tools has its DNAs as well. first they are charged by license fee, which is a pretty old way like IBM days. not many modern Internet mobility companies live in this way anymore.  </p>
+<p>secondly, they can’t update frequently, once or twice a year with a new version of the product is common, which maybe OK in CAD/CAE tools, since the engineering analysis process are pretty matured and few exceptional requirements jump out in daily work, and there update is sometime by the vendor itself, which is not a required update, maybe optimized the algorithms, maybe added a third-party function, and sometime is from the users conference, usually the tool vendor will organize this kind of user conference to group users together, one way to get some connections, as well as to get some end-user requirements to fix the next version product, which is also a drawback compared to open source tool community, in where the user is more active.</p>
+<p>thirdly, the beta version tools are excluding the users someway, who can’t actually manage the tool as part of its whole functions. assuming simulation will be the key to make a difference in future auto product, then this excluding is unacceptable. on the other side, if autonomous simulation tool are at most aided to develop new product, then it becomes a piece of chicken neck either to take or to throw. <strong>from a product view, what is the role of simulation tool or as  a product itself, where it is blooming point</strong></p>
+<h2 id="alpha-version"><a href="#alpha-version" class="headerlink" title="alpha version"></a>alpha version</h2><p>why simulation tool become a role in autonomous, except the traditional vendors, mostly coming from Internet companies, e.g. Google, Uber, Baidu, Tecent etc. they are pretty strong to make a software product, including the simulation software in auto industry.  <strong>interesting, these Internet companines never go to make a CAD/CAE software, but they actually prefer to support the cloud/HPC infrastructures for CAD/CAE simulation.</strong></p>
+<p>these big mobility companines make their simulation tools now and well cowork with their existing IT development methodlogy, software product ideas as well as all ICT infrastures, which make these tools sounds huge great, and which also make themselves as the core role, rather than the OEMs, few are free or not yet open-sourced.  </p>
+<p>and there are a few popular open source simulation tools, e.g. Carla, Airsim, LG simulator e.t.c. I actually get a chance with Carla at GM research team, which even now still great, but does’t study deeper, and for me it is a great tool for AI training, which should be the key role of simulation tool in future, since L3 or below, really cares little environment info, and its rule-based decision has no need for a large chunk of virtual test. that’s also <strong>a difference between Chinese and NA team</strong>,  NA teams have the trend to invest in new tech even without immeditaly money back, but Chinese companies would prefer in immediate invest. </p>
+<h3 id="lg-simulator"><a href="#lg-simulator" class="headerlink" title="lg simulator"></a>lg simulator</h3><p>Unreal never tried, but Unity looks pretty easy to use, while still need sometime to get familiar with the editor and play with scenes. lg simulator has give a great reference to build the virtual city and make autonomous vehicles running. the real problem actually for most team is how to make this tool useful in product development. </p>
+<p>we can think about the tool strucutre itself, like cloud running features, implement measure/verified methods, and build scenes database as we can think about or from the sort of system engineering port. </p>
+<p>as for a L3 or below usage, the whole meaning of simualtion is not driven, but at most additional support of product development, as I can see. so what simulation for ?  L4+, which leads to AI, or data driven product development!</p>
+<p>from this point, the simlation itself is not the core, but the AI, so think about that in career development. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/robust-control-theory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1650,247 +1786,6 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/08/自动驾驶职位介绍/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/08/自动驾驶职位介绍/" itemprop="url">自动驾驶职位介绍</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-08T09:07:04-04:00">
-                2019-04-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/08/自动驾驶职位介绍/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/04/08/自动驾驶职位介绍/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="光庭科技（武汉）"><a href="#光庭科技（武汉）" class="headerlink" title="光庭科技（武汉）"></a>光庭科技（武汉）</h2><p>智能网联汽车车载终端产品，汽车IT公司，自主研发、产品设计、制造和销售。e.g. 自动驾驶控制器，远程无线通信终端，立体相机、地图传感器、”光谷梦4.0”自动驾驶系统</p>
-<p>职位：感知算法工程师</p>
-<p>要求：图像/点云目标检测、跟踪；slam算法；Camera/Lidar/Radar传感器融合算法；系统集成和调试</p>
-<p>加分项：ROS开发经验，视觉SLAM算法，深度学习算法</p>
-<p>职位：控制算法工程师</p>
-<p>要求：控制系统设计、信号处理、动态系统建模； 时域/频域控制器设计和稳定性分析；汽车速度和方向控制</p>
-<p>职位：测试主管</p>
-<p>要求： 产品测试方案、管理。软件测试及自动化测试工具</p>
-<h2 id="华砺智行（武汉）"><a href="#华砺智行（武汉）" class="headerlink" title="华砺智行（武汉）"></a>华砺智行（武汉）</h2><p>智能基础设施平台，为智能驾驶、智慧城市提供软硬件解决方案。产品：智能网联汽车终端、交通行业、无线通信、云平台、交通应用等</p>
-<h2 id="天迈科技（郑州）"><a href="#天迈科技（郑州）" class="headerlink" title="天迈科技（郑州）"></a>天迈科技（郑州）</h2><p>城市公交运营、管理及服务提供综合解决方案。车联网产品：智能公交调度系统、远程监控系统、智能公交收银系统、充电运营管理。</p>
-<p>职位：视频算法工程师</p>
-<p>要求： 驾驶员行为状态检测算法，机器学习检测效果</p>
-<h2 id="赢彻科技"><a href="#赢彻科技" class="headerlink" title="赢彻科技"></a>赢彻科技</h2><p>物流</p>
-<h2 id="纵目科技"><a href="#纵目科技" class="headerlink" title="纵目科技"></a>纵目科技</h2><p>环视ADAS解决方案</p>
-<p>职位：  车身控制算法工程师</p>
-<p>要求： 车身横向、侧向控制算法设计、仿真、测试。自动控制理论，车辆底盘控制，车身动力学，Carsim, Simulink</p>
-<h2 id="西井科技（上海）"><a href="#西井科技（上海）" class="headerlink" title="西井科技（上海）"></a>西井科技（上海）</h2><p>职位： 仿真平台开发工程师</p>
-<p>要求： 设计仿真平台架构，传感器仿真模型，3D物理引擎(unreal, unity)，熟悉开源仿真平台(carla, airsim)，构建场景环境</p>
-<h2 id="小鹏汽车（广州）"><a href="#小鹏汽车（广州）" class="headerlink" title="小鹏汽车（广州）"></a>小鹏汽车（广州）</h2><p>职位： SLAM专家</p>
-<p>要求： 视觉定位算法；与感知、地图模块结合做3d视觉系统；</p>
-<p>职位：HD Map工程师</p>
-<p>要求： 大规模多层高精地图框架，地图API, 地图数据质量评估，地图数据格式</p>
-<p>职位：运动控制算法专家</p>
-<p>要求：转向、制动、动力系统的主动控制，对底盘、执行器的控制需求；车道保持、自适应巡航、自动变道等功能运动控制，现场调试</p>
-<p>职位：规划与控制专家</p>
-<p>要求：算法开发、测试，提出硬件设计和集成要求</p>
-<p>职位： 雷达算法工程师</p>
-<p>要求： 算法仿真验证、数据分析、算法嵌入式平台实现、维护</p>
-<p>职位：计算机视觉</p>
-<p>要求：场景元素识别；道路、停车场环境寓意分割；算法验证</p>
-<p>职位：传感器融合</p>
-<p>要求： 毫米波、超声波、摄像头、激光雷达测试开发； 感知数据处理、实时地图构建及应用；目标实时跟踪与预测</p>
-<p>职位：项目经理</p>
-<p>要求： l2-l4产品解决方案项目管理</p>
-<h2 id="宇通汽车（深圳）"><a href="#宇通汽车（深圳）" class="headerlink" title="宇通汽车（深圳）"></a>宇通汽车（深圳）</h2><p>职位： 控制工程师</p>
-<p>要求： 轨迹跟踪、车辆控制、 仿真优化</p>
-<p>职位：行为决策工程师</p>
-<p>要求：行为决策算法开发，碰撞预测、行为预测、驾驶经验库、交通安全规则库等，基于强化学习的跟踪(?)</p>
-<p>职位：首席工程师</p>
-<p>要求：自驾客车架构规划、设计；核心算法开发和测试；自动驾驶技术跟踪。熟悉人工智能、机器视觉、深度学习、高精地图、定位等， 熟悉滤波算法、轨迹规划</p>
-<h2 id="纽励科技"><a href="#纽励科技" class="headerlink" title="纽励科技"></a>纽励科技</h2><p>职位：ADAS产品经理</p>
-<p>要求：产品客户需求调研、项目收集整理， 与主机厂沟通技术方案，产品改进。熟悉AEB, ACC, LKA, FCW, 自动泊车，熟悉汽车电子软硬件设计、嵌入式开发标准，熟悉传感器</p>
-<h2 id="光束汽车"><a href="#光束汽车" class="headerlink" title="光束汽车"></a>光束汽车</h2><p>职位： 控制算法</p>
-<h2 id="华人运通"><a href="#华人运通" class="headerlink" title="华人运通"></a>华人运通</h2><p>职位： 控制工程师</p>
-<p>要求： 运动控制算法的设计开发、仿真、优化，测试； 基于驾驶员操作数据的车辆运动控制算法</p>
-<h2 id="恒大汽车"><a href="#恒大汽车" class="headerlink" title="恒大汽车"></a>恒大汽车</h2><p>自行开发，现有汽车平台及产品 </p>
-<p>职位： 仿真验证经理</p>
-<p>要求：汽车电子网络、诊断开发测试、</p>
-<p>研发中心结构： 造型中心，动力总成中心， 车联网中心，整车工程中心，自动驾驶中心</p>
-<h2 id="上海电气"><a href="#上海电气" class="headerlink" title="上海电气"></a>上海电气</h2><p>轨道公交智能系统</p>
-<p>职位： 控制算法工程师</p>
-<p>要求：车辆控制实时数据采集、理论模型、系统仿真和实测验证算法</p>
-<h2 id="Magna-Steyr-麦格纳斯太尔汽车技术"><a href="#Magna-Steyr-麦格纳斯太尔汽车技术" class="headerlink" title="Magna Steyr 麦格纳斯太尔汽车技术"></a>Magna Steyr 麦格纳斯太尔汽车技术</h2><p>职位： L4 ADAS电子专家</p>
-<p>要求： ADAS SE团队</p>
-<p>职位： GNSS测试验证首席工程师</p>
-<h2 id="牧月科技"><a href="#牧月科技" class="headerlink" title="牧月科技"></a>牧月科技</h2><p>职位：仿真系统工程师</p>
-<p>要求： 负责仿真系统开发、测试，及各种传感器的仿真软件库，利用已有数据构建仿真场景；开发自动化仿真分析平台</p>
-<h2 id="景驰科技（文远知行）"><a href="#景驰科技（文远知行）" class="headerlink" title="景驰科技（文远知行）"></a>景驰科技（文远知行）</h2><p>职位： 仿真算法工程师</p>
-<p>要求： 开发场景自动化生成算法、人机交互仿真软件工具集、可扩展计算框架</p>
-<h2 id="腾讯CSIG事业部"><a href="#腾讯CSIG事业部" class="headerlink" title="腾讯CSIG事业部"></a>腾讯CSIG事业部</h2><h2 id="伟世通"><a href="#伟世通" class="headerlink" title="伟世通"></a>伟世通</h2><p>职位： 软件测试</p>
-<p>要求： ADAS软件测试、竞品分析</p>
-<h2 id="博世（苏州）"><a href="#博世（苏州）" class="headerlink" title="博世（苏州）"></a>博世（苏州）</h2><p>职位： 控制算法工程师</p>
-<p>要求： ADAS自动泊车系统</p>
-<h2 id="亿伽通（吉利系）"><a href="#亿伽通（吉利系）" class="headerlink" title="亿伽通（吉利系）"></a>亿伽通（吉利系）</h2><p>职位：算法工程师<br>要求：定位产品场景、需求分析； 参与搭建自动驾驶数据智能服务平台；熟悉基于视觉的slam方案</p>
-<h2 id="奥迪中国（北京）"><a href="#奥迪中国（北京）" class="headerlink" title="奥迪中国（北京）"></a>奥迪中国（北京）</h2><p>车联网团队</p>
-<p>职位： 测试工程师</p>
-<p>要求： ADAS/HAD功能测试</p>
-<p>职位：仿真工程师</p>
-<p>要求： SiL环境搭建，adas功能仿真测试</p>
-<h2 id="斑马智行（阿里、上汽）"><a href="#斑马智行（阿里、上汽）" class="headerlink" title="斑马智行（阿里、上汽）"></a>斑马智行（阿里、上汽）</h2><h2 id="智加科技（苏州）"><a href="#智加科技（苏州）" class="headerlink" title="智加科技（苏州）"></a>智加科技（苏州）</h2><p>职位： 传感器标定工程师</p>
-<p>要求： 传感器选型、数据读取、内外参标定、在线检测</p>
-<p>职位：感知算法工程师</p>
-<p>要求： 对图像、点云等的静态场景要素检测和追踪；融合传感器数据后的目标检测和跟踪；服务地图自建、预测规划决策系统</p>
-<p>职位： 地图定位工程师</p>
-<p>要求： 开发多传感器融合算法以提高地图精度，自动化地图的大规模采集、生成、标注、校政。</p>
-<p>职位： 决策规划工程师 </p>
-<p>要求： 预测、决策、规划等系统</p>
-<p>职位： 仿真工程师</p>
-<p>要求： 利用真实数据或合成数据搭建动态环境的仿真框架；设计场景，为感知、规划、预测等模块开发仿真测试接口；开发基于仿真测试的自动化分析平台；构建可扩展的仿真框架</p>
-<h2 id="魔视智能（上海）"><a href="#魔视智能（上海）" class="headerlink" title="魔视智能（上海）"></a>魔视智能（上海）</h2><h2 id="极目智能"><a href="#极目智能" class="headerlink" title="极目智能"></a>极目智能</h2><p>职位： 车辆决策算法工程师 </p>
-<h2 id="零跑科技"><a href="#零跑科技" class="headerlink" title="零跑科技"></a>零跑科技</h2><p>职位： 算法工程师</p>
-<p>要求： 定位算法模块，基于GPS/IMU的航伟推算算法，视觉定位算法</p>
-<h2 id="阿里巴巴（人工智能实验室）"><a href="#阿里巴巴（人工智能实验室）" class="headerlink" title="阿里巴巴（人工智能实验室）"></a>阿里巴巴（人工智能实验室）</h2><p>职位： 仿真算法工程师 </p>
-<h2 id="吉利"><a href="#吉利" class="headerlink" title="吉利"></a>吉利</h2><h2 id="Volvo上海研发中心"><a href="#Volvo上海研发中心" class="headerlink" title="Volvo上海研发中心"></a>Volvo上海研发中心</h2><h2 id="中智行（南京）"><a href="#中智行（南京）" class="headerlink" title="中智行（南京）"></a>中智行（南京）</h2><p>l4 解决方案</p>
-<h2 id="同元软控（苏州）"><a href="#同元软控（苏州）" class="headerlink" title="同元软控（苏州）"></a>同元软控（苏州）</h2><p>国产CAD/CAE产品供应商</p>
-<h2 id="华为2012"><a href="#华为2012" class="headerlink" title="华为2012"></a>华为2012</h2><h2 id="华为海思（上海）"><a href="#华为海思（上海）" class="headerlink" title="华为海思（上海）"></a>华为海思（上海）</h2><p>职位： 软件测试 </p>
-<h2 id="一汽红旗"><a href="#一汽红旗" class="headerlink" title="一汽红旗"></a>一汽红旗</h2><p>职位： 车联网构架设计师</p>
-<p>要求： T-box端-云构架，v2x</p>
-<p>潜在人选：</p>
-<ul>
-<li>车联网企业： 斑马、亿伽通、博泰、百度车联网团队、飞驰镁物、哈曼、四维图新、梧桐车联</li>
-<li>新势力： 蔚来、小鹏、威马</li>
-</ul>
-<p>职位：软件算法、系统工程师</p>
-<p>潜在人选：</p>
-<ul>
-<li>上汽人工智能实验室</li>
-<li>英伟达</li>
-<li>福特-argo ai </li>
-<li>momenta, plusai</li>
-</ul>
-<p>职位： 数据挖掘工程师</p>
-<p>要求： 大数据建模分析，用户数据、车辆数据、驾驶员数据等</p>
-<p>潜在人选：</p>
-<ul>
-<li>浪潮</li>
-<li>曙光</li>
-<li>华为云</li>
-<li>阿里云</li>
-<li>百度</li>
-</ul>
-<h2 id="华域汽车"><a href="#华域汽车" class="headerlink" title="华域汽车"></a>华域汽车</h2><h2 id="滴滴无人车"><a href="#滴滴无人车" class="headerlink" title="滴滴无人车"></a>滴滴无人车</h2><h2 id="美团无人车"><a href="#美团无人车" class="headerlink" title="美团无人车"></a>美团无人车</h2><p>职位： 仿真工程师</p>
-<h2 id="一汽大众"><a href="#一汽大众" class="headerlink" title="一汽大众"></a>一汽大众</h2><p>职位：决策算法工程师</p>
-<h2 id="veoneer"><a href="#veoneer" class="headerlink" title="veoneer"></a>veoneer</h2><p>职位：adas软件开发工程师 </p>
-<h2 id="易航智能"><a href="#易航智能" class="headerlink" title="易航智能"></a>易航智能</h2><p>职位： 控制算法工程师</p>
-<h2 id="三一无人驾驶"><a href="#三一无人驾驶" class="headerlink" title="三一无人驾驶"></a>三一无人驾驶</h2><p>无人码头</p>
-<p>职位： 算法工程师</p>
-<h2 id="易高美"><a href="#易高美" class="headerlink" title="易高美"></a>易高美</h2><p>职位： hpmap仿真工程师</p>
-<p>要求： 大批量仿真数据自动化生成；设计分布式仿真系统底层架构，3D引擎编辑器工具链开发；实现仿真系统场景渲染；对大批量及各种随机虚拟数据自动化脚本工具开发。OpenGL/Direct3D图形接口; unreal, unity引擎</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1941,7 +1836,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">94</span>
+                <span class="site-state-item-count">95</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
