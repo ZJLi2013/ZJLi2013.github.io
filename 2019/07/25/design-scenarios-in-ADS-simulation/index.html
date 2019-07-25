@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="apollo," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,17 @@
 
 
 
-<meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364// 模块入口APOLLO_MAIN(apollo::routing::Routing) int main(int argc, char** argv)&amp;#123">
-<meta name="keywords" content="apollo">
+<meta name="description" content="to design scenarios in self-driving test, one reference is: a framework for automated driving system testable cases and sceanrios, most other scenario classifications have almost the same elements: OD">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Apollo2.0 Routing源码(2)">
-<meta property="og:url" content="http://yoursite.com/2019/05/01/Apollo2-0-Routing源码-2/index.html">
+<meta property="og:title" content="design scenarios in ADS simulation">
+<meta property="og:url" content="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364// 模块入口APOLLO_MAIN(apollo::routing::Routing) int main(int argc, char** argv)&amp;#123">
+<meta property="og:description" content="to design scenarios in self-driving test, one reference is: a framework for automated driving system testable cases and sceanrios, most other scenario classifications have almost the same elements: OD">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-05-01T08:19:04.734Z">
+<meta property="og:updated_time" content="2019-07-25T14:16:23.717Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Apollo2.0 Routing源码(2)">
-<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364// 模块入口APOLLO_MAIN(apollo::routing::Routing) int main(int argc, char** argv)&amp;#123">
+<meta name="twitter:title" content="design scenarios in ADS simulation">
+<meta name="twitter:description" content="to design scenarios in self-driving test, one reference is: a framework for automated driving system testable cases and sceanrios, most other scenario classifications have almost the same elements: OD">
 
 
 
@@ -132,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/01/Apollo2-0-Routing源码-2/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/"/>
 
 
 
 
 
-  <title>Apollo2.0 Routing源码(2) | Serious Autonomous Vehicles</title>
+  <title>design scenarios in ADS simulation | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +290,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/01/Apollo2-0-Routing源码-2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Apollo2.0 Routing源码(2)</h1>
+          <h1 class="post-title" itemprop="name headline">design scenarios in ADS simulation</h1>
         
 
         <div class="post-meta">
@@ -320,8 +319,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-01T04:18:22-04:00">
-                2019-05-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-25T10:15:24-04:00">
+                2019-07-25
               </time>
             
 
@@ -339,9 +338,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/05/01/Apollo2-0-Routing源码-2/#comments" itemprop="discussionUrl">
+                <a href="/2019/07/25/design-scenarios-in-ADS-simulation/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/01/Apollo2-0-Routing源码-2/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,14 +365,56 @@
       
 
       
-        <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line">APOLLO_MAIN(apollo::routing::Routing) </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></div><div class="line">&#123;</div><div class="line">	google::InitGoogleLogging(arg[<span class="number">0</span>]) ;</div><div class="line">	google::ParseCommandLineFlags(&amp;argc, &amp;argv, <span class="literal">true</span>);</div><div class="line">	signal(SIGINT, apollo::common::apollo_app_sigint_handler);</div><div class="line">	apollo::routing::Routing apollo_app_ ; </div><div class="line">	ros::init(argc, argv, apollo_app_.Name());</div><div class="line">	apollo_app_.Spin();</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">`appollo_app_.Spin()` can be found [here](https:<span class="comment">//zjli2013.github.io/2019/04/28/apollo-planning-源码/)</span></div><div class="line"></div><div class="line"></div><div class="line">```c </div><div class="line"></div><div class="line">apollo::common:Status Routing::Init()</div><div class="line">&#123;</div><div class="line">	<span class="keyword">const</span> <span class="keyword">auto</span> routing_map_file = apollo::hdmap::RoutingMapFile() ;</div><div class="line">	navigator_ptr_.reset(<span class="keyword">new</span> Navigator(routing_map_file)) ;</div><div class="line">	common::util::GetProtoFromFile(FLAGS_routing_conf_file, &amp;routing_conf_);</div><div class="line">	hdmap_ = apollo::hdmap::HDMapUtil::BaseMapPtr();</div><div class="line">	AdapterManager::Init(FLAGS_routing_adapter_config_filename); </div><div class="line">	AdapterManager::AddRoutingRequestCallback(&amp;Routing::OnRoutingRequest, <span class="keyword">this</span>);</div><div class="line">	<span class="keyword">return</span> apollo::common::Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* </span></div><div class="line"></div><div class="line">	DEFINE_string(routing_adapter_config_filename, "modules/routing/conf/adapter.conf", "the adapter config filename")</div><div class="line"></div><div class="line">*/</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init()</div><div class="line">&#123;</div><div class="line">	<span class="comment">//...</span></div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;config :: configs.config())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::ROUTING_REQUEST :</div><div class="line">			EnableRoutingRequest(FLAGS_routing_request_topic, config);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		</div><div class="line">		<span class="keyword">case</span> AdapterConfig::ROUTING_RESPONSE:</div><div class="line">			EnableRoutingResponse(FLAGS_routing_response_topic, config);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		</div><div class="line">		<span class="keyword">case</span> AdapterConfig::ROUTING_MONITOR:</div><div class="line">			EnableMonitor(FLAGS_monitor_topic, config);</div><div class="line">			<span class="keyword">break</span>; </div><div class="line">			</div><div class="line">			</div><div class="line">	    <span class="comment">//... </span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>where define <code>EnableRoutingRequest()</code> ?</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//apollo/modules/common/adapters/adapter_manager.h </span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> REGISTER_ADAPTER(name)</span></div><div class="line">	<span class="keyword">static</span> <span class="keyword">void</span> Enable#<span class="meta">#name(const std::string &amp;topic_name, const AdapterConfig &amp;config)</span></div><div class="line">	&#123;</div><div class="line">		instance()-&gt;InternalEnable#<span class="meta">#name(topic_name, config);</span></div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt; <span class="title">static</span> <span class="title">void</span> <span class="title">Add</span>##<span class="title">name</span>##<span class="title">Callback</span>(</span></div><div class="line">		<span class="title">void</span>(<span class="title">T</span>::*fp)(<span class="keyword">const</span> name##Adapter::DataType &amp;data), T *obj)&#123;</div><div class="line">			Add#<span class="meta">#name##Callback(std::bind(fp, obj, std::placeholders::_1));</span></div><div class="line">		&#125;</div><div class="line">		</div><div class="line">	tempalate&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt; <span class="title">static</span> <span class="title">void</span> <span class="title">Add</span>##<span class="title">name</span>##<span class="title">Callback</span>(<span class="title">void</span> (<span class="title">T</span>:</span>:*fp)(<span class="keyword">const</span> name##Adapter::DataType &amp;data))&#123;</div><div class="line">		Add#<span class="meta">#name##Callback(fp);</span></div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	</div><div class="line"><span class="comment">// apollo/modules/common/adapters/message_adapters.h</span></div><div class="line"></div><div class="line"><span class="keyword">using</span> RoutingRequestAdapter = Adapter&lt;routing::RoutingRequest&gt; ;</div><div class="line"><span class="keyword">using</span> RoutingResponseAdapter = Adapter&lt;routing::RoutingResponse&gt;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// apollo/moduels/common/adapters/adapter.h </span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="built_in">std</span>::function&lt;<span class="keyword">void</span>(<span class="keyword">const</span> D&amp;)&gt; Callback ;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// apollo/modules/common/adapters/adapter.h </span></div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">D</span>&gt; <span class="title">void</span> <span class="title">Adapter</span>&lt;D&gt;:</span>OnReceive(<span class="keyword">const</span> D&amp; message)</div><div class="line">&#123;</div><div class="line">	last_receive_time_ = apollo::common::time::Clock::NowInSeconds();</div><div class="line">	EnqueueData(message);</div><div class="line">	FireCallbacks(message);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">AddCallback</span><span class="params">(Callback callback)</span></span></div><div class="line">&#123;</div><div class="line">	receive_callbacks_.push_back(callback);</div><div class="line">&#125;</div><div class="line"></div><div class="line">tempplate&lt;<span class="class"><span class="keyword">class</span> <span class="title">D</span>&gt; <span class="title">void</span> <span class="title">Adapter</span>&lt;D&gt;:</span>:FireCallbacks(<span class="keyword">const</span> D&amp; data)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; callback : receive_callbacks_)</div><div class="line">	&#123;</div><div class="line">		callback(data);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Dreamview and Planning modules have message publish API. e.g. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">SimulationWorldUpdater::(WebSocketHandler *websocket, SimControl *sim_control, <span class="keyword">const</span> MapSerivce *map_service, <span class="keyword">bool</span> routing_from_file) : sim_world_service_(map_service, routing_from_file), </div><div class="line">map_service_(map_service), </div><div class="line">websocket_(websocket),</div><div class="line">sim_control_(sim_control)</div><div class="line">&#123;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	websocket_-&gt;RegisterMessageHandler(<span class="string">"SendRoutingRequest"</span>, [<span class="keyword">this</span>][cosnt Json &amp;json, WebSocketHandler::Connection *conn)</div><div class="line">	&#123;</div><div class="line">		RoutingRequest routing_request, </div><div class="line">		</div><div class="line">		<span class="keyword">bool</span> succed = ConstructRoutingRequest(json, &amp;routing_request);</div><div class="line">		<span class="keyword">if</span>(succed)&#123;</div><div class="line">			AdapterManager::FillRoutingRequestHeader(FLAGS_dreamview_module_name, &amp;routing_request); </div><div class="line">			AdapterManager::PublishRoutingRequest(routing_request);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<p>ApapterManager class is used to make sure the connection among each module in ROS message type.</p>
-<p>Routing class has GPS and IMU input and generate routing and velocity info as output. </p>
-<p>Navigator class is using A start algorthm with hd map, start point and end point as input to generate a navigation route.</p>
+        <p>to design scenarios in self-driving test, one reference is: <a href="https://www.nhtsa.gov/document/framework-automated-driving-system-testable-cases-and-scenarios" target="_blank" rel="external">a framework for automated driving system testable cases and sceanrios</a>, most other scenario classifications have almost the same elements: ODD, e.g. road types, road surfaces; OEDR, namely object and event detection and response, e.g. static obstacles, other road actors, traffic signature, environment conditions, special zones; and failure mode behaviors.</p>
+<p>in general, test cases can be grouped as black box test, in which the scenario parterners’ behavior is not pre-defined or unpredictable, e.g. random traffic flow(npcs) scenario, or white box test, where the npcs behavior is pre-defined, e.g. following user-define routings. white box testing is helpful to support performance metrics; while black-box testing is helpful to verify the system completeness and robust.</p>
+<p>as for ADS test, there are a few chanllenges coming from:</p>
+<ul>
+<li><p>heuristics decision-making algorithms, deep-learning algorithms, which is not mathematically completed</p>
+</li>
+<li><p>the test case completeness, as the number of tests required to achieve statistically significant to claim safe would be staggering</p>
+</li>
+<li><p>undefined conditions or assumptions</p>
+</li>
+</ul>
+<p>a sample test scenario set maybe looks like: </p>
+<table>
+<thead>
+<tr>
+<th>ODD</th>
+<th>OEDR-obj</th>
+<th>OEDR-loc</th>
+<th>maneuver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>in rump</td>
+<td>static obstacles</td>
+<td>in front of current lane</td>
+<td></td>
+</tr>
+<tr>
+<td>in rump</td>
+<td>static obstacles</td>
+<td>in front of targe lane</td>
+<td></td>
+</tr>
+<tr>
+<td>in rump</td>
+<td>dynamic obstacles</td>
+<td>in front of current lane</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scenarios-runner"><a href="#scenarios-runner" class="headerlink" title="scenarios_runner"></a>scenarios_runner</h3><p><a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external">carla</a> has offered an scenario engine, which is helpful to define scenarios by test_criteria and behaviors, of course the timeout as well.</p>
+<p><code>test_criteria</code>, is like an underline boundary for the scenario to keep, if not, the scenario failed. e.g. max_speed_limitation, collision e.t.c. these are test criterias, no matter simualtion test or physical test, that have to follow the same criterias; in old ways, we always try to find a way to evaluate the simulation result, and thought this may be very complex, but as no clue to go complex further, simple criterias actually is good. even for reinforcement learning, the simple criterias is good enough for the agent to learn the drive policy. </p>
+<p>of course, I can expect there are some expert system about test criterias.  </p>
+<p>For simulation itself, there has another metric to descibe how close the simulation itself to physical world, namley to performance how well the simulator is, which is beyond here.</p>
+<p><code>behaivor</code> is a good way to describe the dynamic processing in the scenario. e.g. npc follow lane to next intersection, and stop in right lane, ego follow npc till the stop area.</p>
+<p>OpenScenario has similar ideas to descibe the dynamic. to support <code>behaivor</code>, the simulator should have the features to control ego and npc with the atomic behaviors, e.g. lane-follow, lane-change, stop at intersection e.t.c. </p>
+<p>in lg simulator, npc has simple AI routing and lane-following API, basically is limited to follow pre-defined behaviors; ego has only cruise-control, but external planner is avialable through ROS.</p>
+<p>for both <code>test_criteria</code> and <code>behavior</code>, carla has a few existing atomic elements, which is a good idea to build up complex scenarios. </p>
+<h3 id="OpenScenario"><a href="#OpenScenario" class="headerlink" title="OpenScenario"></a>OpenScenario</h3><p>not sure if this is a project still on-going, carla has interface and a few other open source parsers there, but as it is a standard in popular projects, e.g. PEGUS, should be worthy to take further study.  </p>
 
       
     </div>
@@ -401,12 +442,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/apollo/" rel="tag"># apollo</a>
-          
-        </div>
-      
 
       
       
@@ -416,8 +451,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/30/未来5年在哪里-7/" rel="next" title="未来5年在哪里(7)">
-                <i class="fa fa-chevron-left"></i> 未来5年在哪里(7)
+              <a href="/2019/07/18/model-based-design-sucks/" rel="next" title="model based design sucks">
+                <i class="fa fa-chevron-left"></i> model based design sucks
               </a>
             
           </div>
@@ -425,10 +460,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/05/01/Apollo2-0-Control-源码-3/" rel="prev" title="Apollo2.0 Control 源码 (3)">
-                Apollo2.0 Control 源码 (3) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -483,8 +514,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -557,6 +597,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#scenarios-runner"><span class="nav-number">1.</span> <span class="nav-text">scenarios_runner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenScenario"><span class="nav-number">2.</span> <span class="nav-text">OpenScenario</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -694,9 +750,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/05/01/Apollo2-0-Routing源码-2/';
-          this.page.identifier = '2019/05/01/Apollo2-0-Routing源码-2/';
-          this.page.title = 'Apollo2.0 Routing源码(2)';
+          this.page.url = 'http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/';
+          this.page.identifier = '2019/07/25/design-scenarios-in-ADS-simulation/';
+          this.page.title = 'design scenarios in ADS simulation';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
