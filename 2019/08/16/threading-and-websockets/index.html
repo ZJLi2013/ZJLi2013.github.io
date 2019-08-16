@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="pure C," />
+  <meta name="keywords" content="network," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="this is a review from GNU C programming streamtwo basic mechanism for representing the connection between your program and the file: streams &amp;amp;  file descriptors.  FD is represented as objects of t">
-<meta name="keywords" content="pure C">
+<meta name="description" content="threading.Thread123456789101112run()start()join([time])isAlive()getName()setName() to initialize a thread with:  threadID, name, counter start() and run()start() once for each thread, run() will not s">
+<meta name="keywords" content="network">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pure C I&#x2F;O">
-<meta property="og:url" content="http://yoursite.com/2018/07/31/pure-C-i-o/index.html">
+<meta property="og:title" content="threading and websockets">
+<meta property="og:url" content="http://yoursite.com/2019/08/16/threading-and-websockets/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="this is a review from GNU C programming streamtwo basic mechanism for representing the connection between your program and the file: streams &amp;amp;  file descriptors.  FD is represented as objects of t">
+<meta property="og:description" content="threading.Thread123456789101112run()start()join([time])isAlive()getName()setName() to initialize a thread with:  threadID, name, counter start() and run()start() once for each thread, run() will not s">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-07-31T23:35:28.000Z">
+<meta property="og:updated_time" content="2019-08-16T13:30:59.818Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pure C I&#x2F;O">
-<meta name="twitter:description" content="this is a review from GNU C programming streamtwo basic mechanism for representing the connection between your program and the file: streams &amp;amp;  file descriptors.  FD is represented as objects of t">
+<meta name="twitter:title" content="threading and websockets">
+<meta name="twitter:description" content="threading.Thread123456789101112run()start()join([time])isAlive()getName()setName() to initialize a thread with:  threadID, name, counter start() and run()start() once for each thread, run() will not s">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/31/pure-C-i-o/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/08/16/threading-and-websockets/"/>
 
 
 
 
 
-  <title>pure C I/O | Serious Autonomous Vehicles</title>
+  <title>threading and websockets | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-i-o/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/threading-and-websockets/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pure C I/O</h1>
+          <h1 class="post-title" itemprop="name headline">threading and websockets</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T19:14:28-04:00">
-                2018-07-31
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T09:30:00-04:00">
+                2019-08-16
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/07/31/pure-C-i-o/#comments" itemprop="discussionUrl">
+                <a href="/2019/08/16/threading-and-websockets/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/31/pure-C-i-o/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/08/16/threading-and-websockets/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,21 +366,42 @@
       
 
       
-        <p>this is a review from <a href="https://www.gnu.org/software/libc/manual/html_node/I_002fO-Overview.html#I_002fO-Overview" target="_blank" rel="external">GNU C programming</a></p>
-<h1 id="stream"><a href="#stream" class="headerlink" title="stream"></a>stream</h1><p>two basic mechanism for representing the connection between your program and the file: streams &amp;  file descriptors.  FD is represented as objects of type int; streams are represented as FILE * objects </p>
-<p>a stream is an abstract concept reprensenting a communication channel to a file, a device, or consider it as a sequence of characters with functions to take characters out of one end, and put characters into the other end, like a pipe. </p>
-<h1 id="file-position"><a href="#file-position" class="headerlink" title="file position"></a>file position</h1><p>an integer representing the number of bytes from the beginning of the file; each time a character read or written, the file position is incremented, namely, access to a file is sequential.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">int</span> <span class="title">ftell</span><span class="params">(FILE \* stream)</span></span>; <span class="comment">//return file position </span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fseek</span><span class="params">(FILE \*stream, <span class="keyword">long</span> <span class="keyword">int</span> offset, <span class="keyword">int</span> whence)</span></span>;</div><div class="line">/\* whence is SEEK\_SET |  SEEK\_CUR | SEEK\_END \*/</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">“write to a file” is always appended sequentially to the end of the file, regardless of the file position; but “read from a file” is used the current file position. which means multiple reading can happens simultaneously with an independent file pointer. In fact, each opening creates an independent file position pointer, even in the same program to open a file twice.  </div><div class="line"></div><div class="line">#<span class="meta"># std streams</span></div><div class="line"></div><div class="line">```c</div><div class="line"></div><div class="line">	FILE *<span class="built_in">stdin</span> ;</div><div class="line">	FILE *<span class="built_in">stdout</span>;</div><div class="line">	FILE *<span class="built_in">stderr</span>;</div><div class="line">	<span class="function">FILE *<span class="title">fopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *openMode)</span></span>;  </div><div class="line">	<span class="comment">/* create a new stream connected to the file */</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">int</span> <span class="title">fclose</span><span class="params">(FILE *stream)</span></span></div><div class="line">	<span class="comment">/* disconnected between the stream and the file, any buffered output is written and any buffered input will discarded */</span></div></pre></td></tr></table></figure>
-<h2 id="ASCII-IO"><a href="#ASCII-IO" class="headerlink" title="ASCII IO"></a>ASCII IO</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, FILE *stream)</span> </span>;</div><div class="line"><span class="comment">/* write a char array into stream. this call doesn't add a newline or terminal null character */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">fgets</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">int</span> n, FILE *stream)</span></span>;</div><div class="line"><span class="comment">/* read n number of char array from stream, default add a newline character */</span></div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> getline(<span class="keyword">char</span> **lineptr, <span class="keyword">size_t</span> *n, FILE *stream);</div><div class="line"><span class="comment">/* read a whole line from stream */</span></div></pre></td></tr></table></figure>
-<h2 id="block-IO"><a href="#block-IO" class="headerlink" title="block IO"></a>block IO</h2><p>usually block stands for either block data or text in fixed-size, instead of characters or lines</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">size_t</span> fread(<span class="keyword">void</span> *data, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> n, FILE *stream);</div><div class="line"><span class="comment">/* read #n block, each block has size from stream, and store in data */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> fwrite(<span class="keyword">const</span> <span class="keyword">void</span> *data, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> n, FILE *stream);</div><div class="line"><span class="comment">/* write #n block, each block has size from buffer data to stream */</span></div></pre></td></tr></table></figure>
-<h2 id="formatted-IO"><a href="#formatted-IO" class="headerlink" title="formatted IO"></a>formatted IO</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span></span>;  <span class="comment">//write to std output</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fprintf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, ...)</span></span>; <span class="function">write to stream</span></div><div class="line"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, ...)</span>; <span class="comment">//write to a string</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">//formatted read from stdin</span></span></div><div class="line"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">// read from stream </span></div><div class="line"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">// read from a string</span></div></pre></td></tr></table></figure>
-<h2 id="EOF"><a href="#EOF" class="headerlink" title="EOF"></a>EOF</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">feof</span><span class="params">(FILE* stream)</span> </span>; </div><div class="line"><span class="comment">/* return nonzero iff end of file indicator is set for stream */</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">ferror</span><span class="params">(FILE* stream)</span> </span>; </div><div class="line"><span class="comment">/* return nonzero iff error indicator is set for stream */</span></div></pre></td></tr></table></figure>
-<h2 id="stream-buffer"><a href="#stream-buffer" class="headerlink" title="stream buffer"></a>stream buffer</h2><p>stream and file is not communicated character-by-character, there is a buffer for I/O.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *stream)</span> </span></div><div class="line"><span class="comment">/* take any buffered output on stream to be delivered to the file */</span></div></pre></td></tr></table></figure>
-<h2 id="file-descriptor"><a href="#file-descriptor" class="headerlink" title="file descriptor"></a>file descriptor</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open64</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename,  <span class="keyword">int</span> flags)</span> </span>;</div><div class="line"><span class="comment">// allow large file mode </span></div><div class="line"><span class="keyword">size_t</span> read(<span class="keyword">int</span> fd,  <span class="keyword">void</span> *buffer, <span class="keyword">size_t</span> size) </div><div class="line"><span class="comment">//  read from fd  size bytes into buffer </span></div><div class="line"><span class="keyword">size_t</span> pread(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size, <span class="keyword">off_t</span>  offset) </div><div class="line"><span class="comment">// start reading from position “offset” </span></div><div class="line"><span class="keyword">size_t</span>  write(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size) </div><div class="line"><span class="keyword">off_t</span>  lseek(<span class="keyword">int</span> fd,  <span class="keyword">off_t</span> offset,  <span class="keyword">int</span> whence)  </div><div class="line"><span class="comment">// change the file position of fd </span></div><div class="line"><span class="function">FILE *<span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *opentype)</span> </span></div><div class="line"><span class="comment">// return a new stream for this fd</span></div></pre></td></tr></table></figure>
-<h2 id="synchronizing-I-O"><a href="#synchronizing-I-O" class="headerlink" title="synchronizing I/O"></a>synchronizing I/O</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sync</span><span class="params">(<span class="keyword">void</span>)</span> </span>;</div><div class="line"><span class="comment">// to ensure all operations finished before they return </span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fsync</span><span class="params">(<span class="keyword">int</span> fd)</span> </span>;</div><div class="line"><span class="comment">// to ensure all data associated with the fd is written to the device</span></div></pre></td></tr></table></figure>
-<h2 id="not-yet"><a href="#not-yet" class="headerlink" title="not yet"></a>not yet</h2><p>async I/O, event I/O, interrupt driven I/O, GPIO …</p>
+        <h2 id="threading-Thread"><a href="#threading-Thread" class="headerlink" title="threading.Thread"></a>threading.Thread</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">run()</div><div class="line"></div><div class="line">start()</div><div class="line"></div><div class="line">join([time])</div><div class="line"></div><div class="line">isAlive()</div><div class="line"></div><div class="line">getName()</div><div class="line"></div><div class="line">setName()</div></pre></td></tr></table></figure>
+<p>to initialize a thread with:  threadID, name, counter</p>
+<h3 id="start-and-run"><a href="#start-and-run" class="headerlink" title="start() and run()"></a>start() and run()</h3><p>start() once for each thread, run() will not spawn a separate thread, but run in current thread </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">myThread</span><span class="params">(threading.Thread)</span>:</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></div><div class="line">		super(myThread, self).__init__(*args, **kwargs)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></div><div class="line">		print(<span class="string">"run ... from start()"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">	demo = myThread()</div><div class="line">	demo.start()</div><div class="line">	demo.join()</div></pre></td></tr></table></figure>
+<h3 id="lock-objects"><a href="#lock-objects" class="headerlink" title="lock objects"></a>lock objects</h3><p>a primitive lock does not belongto a certain thread when locked. by default, when constructed, the lock is in <code>unlocked</code> state.</p>
+<ul>
+<li><code>acquire()</code>, will set the lock to <code>locked</code> and return the lock immediately(atom operator); if current lock is <code>locked</code>, then <code>acquire()</code> blocks (the thread) untill the occuping-lock thread calls release().</li>
+</ul>
+<p>if multi-thread blocked by <code>acquire()</code>, only one thread will get the lock when release() is called, but can’t sure which one from the suspended threads</p>
+<h3 id="condition-objects"><a href="#condition-objects" class="headerlink" title="condition objects"></a>condition objects</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">threading.Condition(lock=None)</div><div class="line"></div><div class="line">acquire()</div><div class="line"></div><div class="line">wait()</div><div class="line"></div><div class="line">notify()</div><div class="line"></div><div class="line">release()</div></pre></td></tr></table></figure>
+<p>thread A aquire() the condition variable, to check if condition satification, if not, thread A wait; if satisfied, update the condition variable status and notify all other threads in waiting.</p>
+<h2 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h2><h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p>webocket is better than http when the server need actively push message to client, rather than waiting client request first.</p>
+<p><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html" target="_blank" rel="external"></a></p>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><p>usually webSocket client has two methods:  <code>send()</code> to send data to server; <code>close()</code> to close websocket connection, as well a few event callbacks:</p>
+<ul>
+<li>onopen(): triggered when websocket instance get connected</li>
+<li>onerror(),</li>
+<li>onclose(), </li>
+<li>onmessage(), which triggered when received data from server.</li>
+</ul>
+<p>when constructing a webSocket instance, a connection is built between server and client. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// client connect to server </span></div><div class="line"><span class="keyword">var</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8181'</span>);</div><div class="line">ws.onopen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   ws.send(<span class="string">"hello server"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">// if need run multi callback</span></div><div class="line">ws.addEventListener(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">	ws.send(<span class="string">'hello server'</span>);</div><div class="line">	&#125;); </div><div class="line">ws.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> data = event.data ;</div><div class="line">&#125;;</div><div class="line">ws.addEventListener(<span class="string">"message"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> data = event.data ;</div><div class="line">&#125;); </div><div class="line">ws.send(<span class="string">'client message'</span>);</div></pre></td></tr></table></figure>
+<h4 id="onmessage"><a href="#onmessage" class="headerlink" title="onmessage()"></a>onmessage()</h4><p>whenever the server send data, onmessage() events get fired.</p>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><ul>
+<li>onOpen(), triggered when a new client-server connection setup</li>
+<li>onMessage(), triggered when message received </li>
+<li>onClose(), </li>
+<li>onError(), </li>
+</ul>
+<h3 id="implementation"><a href="#implementation" class="headerlink" title="implementation"></a>implementation</h3><p>in c#, there is websocket-sharp, in python is python-websockets, in js is nodejs-websocket. as well as websocket protocol is satisified, server can write using websocket-sharp, and client in python-websockets. an example is in lg-simulator.</p>
+<p>the message type in websocket can be json or binary, so there should be json parse in c#(SimpleJSON), python(json module) and js (JSON).</p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://stackoverflow.com/questions/16280747/sending-message-to-a-specific-connected-users-using-websocket" target="_blank" rel="external">sending message to a client</a></p>
+<p><a href="https://stackoverflow.com/questions/50618425/websockets-get-message-from-a-websocket-server-and-send-it-to-client" target="_blank" rel="external">sent message from server to client</a></p>
+<p><a href="https://websockets.readthedocs.io/en/stable/" target="_blank" rel="external">python websockets</a></p>
+<p><a href="https://github.com/websockets/ws#server-broadcast" target="_blank" rel="external">nodjs websocket</a></p>
+<p><a href="https://www.vcblog.top/article/494/" target="_blank" rel="external">c# websocket</a></p>
 
       
     </div>
@@ -410,7 +431,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/pure-C/" rel="tag"># pure C</a>
+            <a href="/tags/network/" rel="tag"># network</a>
           
         </div>
       
@@ -423,8 +444,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/26/Linux-at-work/" rel="next" title="Linux at work">
-                <i class="fa fa-chevron-left"></i> Linux at work
+              <a href="/2019/08/16/Unet-intro/" rel="next" title="Unet intro">
+                <i class="fa fa-chevron-left"></i> Unet intro
               </a>
             
           </div>
@@ -432,10 +453,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/31/pure-C-socket/" rel="prev" title="pure C socket">
-                pure C socket <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -583,7 +600,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#stream"><span class="nav-number">1.</span> <span class="nav-text">stream</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#file-position"><span class="nav-number">2.</span> <span class="nav-text">file position</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ASCII-IO"><span class="nav-number">2.1.</span> <span class="nav-text">ASCII IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#block-IO"><span class="nav-number">2.2.</span> <span class="nav-text">block IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#formatted-IO"><span class="nav-number">2.3.</span> <span class="nav-text">formatted IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EOF"><span class="nav-number">2.4.</span> <span class="nav-text">EOF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-buffer"><span class="nav-number">2.5.</span> <span class="nav-text">stream buffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#file-descriptor"><span class="nav-number">2.6.</span> <span class="nav-text">file descriptor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronizing-I-O"><span class="nav-number">2.7.</span> <span class="nav-text">synchronizing I/O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#not-yet"><span class="nav-number">2.8.</span> <span class="nav-text">not yet</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#threading-Thread"><span class="nav-number">1.</span> <span class="nav-text">threading.Thread</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#start-and-run"><span class="nav-number">1.1.</span> <span class="nav-text">start() and run()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lock-objects"><span class="nav-number">1.2.</span> <span class="nav-text">lock objects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#condition-objects"><span class="nav-number">1.3.</span> <span class="nav-text">condition objects</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket"><span class="nav-number">2.</span> <span class="nav-text">websocket</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#background"><span class="nav-number">2.1.</span> <span class="nav-text">background</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#client"><span class="nav-number">2.2.</span> <span class="nav-text">client</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#onmessage"><span class="nav-number">2.2.1.</span> <span class="nav-text">onmessage()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#server"><span class="nav-number">2.3.</span> <span class="nav-text">server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#implementation"><span class="nav-number">2.4.</span> <span class="nav-text">implementation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">2.5.</span> <span class="nav-text">refer</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -726,9 +743,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/07/31/pure-C-i-o/';
-          this.page.identifier = '2018/07/31/pure-C-i-o/';
-          this.page.title = 'pure C I/O';
+          this.page.url = 'http://yoursite.com/2019/08/16/threading-and-websockets/';
+          this.page.identifier = '2019/08/16/threading-and-websockets/';
+          this.page.title = 'threading and websockets';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';

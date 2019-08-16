@@ -291,6 +291,130 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/insertion-sort-list/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/18/insertion-sort-list/" itemprop="url">insertion sort list</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-18T18:00:29-05:00">
+                2018-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/18/insertion-sort-list/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/18/insertion-sort-list/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/insertion-sort-list/" target="_blank" rel="external">leetCode 147</a>, this is  another example when solving problem, either find a good data structure, which looks like stand in a higher dimensions with additional DOF, or define the routines on the given data structure.</p>
+<h2 id="additional-set"><a href="#additional-set" class="headerlink" title="additional set"></a>additional set</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">classcomp</span> &#123;</span></div><div class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span> <span class="params">(<span class="keyword">const</span> ListNode* lhs, <span class="keyword">const</span> ListNode* rhs)</span> <span class="keyword">const</span></span></div><div class="line">  &#123;<span class="keyword">return</span> lhs-&gt;val &lt; rhs-&gt;val;&#125;</div><div class="line">&#125;;  </div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="built_in">set</span>&lt;ListNode*, classcomp&gt;  labels ; </div><div class="line">    <span class="function">ListNode* <span class="title">insertionSortList</span><span class="params">(ListNode* head)</span> </span>&#123;</div><div class="line">            <span class="keyword">while</span>(head)&#123;</div><div class="line">                labels.insert(head); </div><div class="line">                head = head-&gt;next ;</div><div class="line">            &#125;</div><div class="line">     </div><div class="line">            head = labels[<span class="number">0</span>]; </div><div class="line">            ListNode* node = labels[<span class="number">0</span>]; </div><div class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;labels.size(); i++)&#123;</div><div class="line">                node-&gt;next =  labels[i]; </div><div class="line">                node = node-&gt;next ; </div><div class="line">            &#125;</div><div class="line">            </div><div class="line">            <span class="keyword">return</span> head; </div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">basically `<span class="built_in">unordered_set</span>` has ordering by <span class="keyword">default</span>, so how about first inserting each element from the <span class="built_in">list</span> to <span class="built_in">set</span>, then <span class="built_in">set</span> the next pointer <span class="keyword">for</span> each element, which take additional space, but did the job straight forward </div><div class="line"></div><div class="line"></div><div class="line">#<span class="meta"># single linked list</span></div><div class="line"></div><div class="line">since single linked <span class="built_in">list</span> can't access the previous node, so define prev pointer <span class="keyword">and</span> current pointer, <span class="keyword">and</span> every insertaion needs <span class="keyword">do</span> the compare from frist element to the previous element. </div><div class="line"></div><div class="line">```c </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line">  <span class="function"><span class="keyword">public</span>  ListNode *<span class="title">insertionoSortList</span><span class="params">(ListNode *head)</span></span>&#123;</div><div class="line">    ListNode *result = <span class="literal">nullptr</span> ;</div><div class="line">    <span class="keyword">if</span>(head == nullprt || head.next = null)&#123;</div><div class="line">      result = head ;</div><div class="line">      <span class="keyword">return</span> result ;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ListNode *dummy = <span class="keyword">new</span> ListNode(<span class="number">0</span>); </div><div class="line">    ListNode *cur = head ; </div><div class="line">    ListNode *next, *pre;</div><div class="line">    <span class="keyword">while</span>(cur != <span class="literal">nullptr</span>)&#123;</div><div class="line">        next = cur-&gt;next ;</div><div class="line">        pre = dummy ; </div><div class="line">        <span class="keyword">while</span>(pre.next != <span class="literal">nullptr</span> &amp;&amp; pre.next-&gt;val &lt;  cur-&gt;val)&#123;</div><div class="line">          pre = pre.next ; </div><div class="line">        &#125;  <span class="comment">//return the position where cur node should insert </span></div><div class="line">        cur-&gt;next = pre-&gt;next ; </div><div class="line">        pre-&gt;next = cur ; </div><div class="line">        cur = next ; </div><div class="line">      &#125;       </div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/18/lru-cache-design/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1565,144 +1689,6 @@ Deletion time   | log(n) + Rebalance  | Same as search
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/27/pYTHON-again/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/27/pYTHON-again/" itemprop="url">pYTHON again</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-27T00:05:45-04:00">
-                2018-10-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/27/pYTHON-again/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/27/pYTHON-again/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Pick python up from a <a href="https://www.liaoxuefeng.com/" target="_blank" rel="external">link</a> for new position: </p>
-<h2 id="type"><a href="#type" class="headerlink" title="type"></a>type</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">type(<span class="number">123</span>)</div><div class="line">isinstance(instance_name, class_name)</div></pre></td></tr></table></figure>
-<h2 id="property"><a href="#property" class="headerlink" title="@property"></a>@property</h2><p>transfer <code>get()</code>method in a class to a decorator</p>
-<h2 id="define-function"><a href="#define-function" class="headerlink" title="define function"></a>define function</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_abs</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(x, (int, float)):</div><div class="line">        <span class="keyword">raise</span> TypeError(<span class="string">'bad operand type'</span>)</div></pre></td></tr></table></figure>
-<h2 id="fun-decorator"><a href="#fun-decorator" class="headerlink" title="fun decorator"></a>fun decorator</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@decorator</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">()</span></span></div></pre></td></tr></table></figure>
-<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_odd</span><span class="params">(n)</span>:</span></div><div class="line">	<span class="keyword">return</span> n%<span class="number">2</span> == <span class="number">1</span> </div><div class="line">	</div><div class="line">list(filter(is_odd, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</div></pre></td></tr></table></figure>
-<h2 id="lambda"><a href="#lambda" class="headerlink" title="lambda"></a>lambda</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">list(map(<span class="keyword">lambda</span> x: x*<span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]))</div></pre></td></tr></table></figure>
-<h2 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">L = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</div><div class="line">L[<span class="number">-2</span>:]  <span class="comment">#[4, 5]</span></div></pre></td></tr></table></figure>
-<h2 id="list-generation"><a href="#list-generation" class="headerlink" title="list generation"></a>list generation</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[x*<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">5</span>)]</div></pre></td></tr></table></figure>
-<h2 id="class-amp-instance"><a href="#class-amp-instance" class="headerlink" title="class &amp; instance"></a>class &amp; instance</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">s</span><span class="params">(object)</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__init__</span><span class="params">(self, name)</span>:</span></div><div class="line">		self.name = name</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">print_s</span><span class="params">(self)</span>:</span></div><div class="line">		print(<span class="string">'%s:'</span> %(self.name))</div><div class="line">		</div><div class="line">s1 = s(<span class="string">"john"</span>)</div><div class="line">s1.print_s()</div></pre></td></tr></table></figure>
-<h2 id="customized-class"><a href="#customized-class" class="headerlink" title="customized class"></a>customized class</h2><p>dynamic language, so the instance of any class can be added any other attributes. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">s</span><span class="params">(object)</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__init__</span><span class="params">(self, name)</span>:</span></div><div class="line">			self._name = name</div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__str__</span><span class="params">(self)</span>:</span></div><div class="line">		<span class="keyword">return</span> <span class="string">'s object(name: %s)'</span> % self._name</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__getattr__</span><span class="params">(self, attr)</span>:</span></div><div class="line">		<span class="keyword">if</span> attr == <span class="string">'attr1'</span>:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">lambda</span>: attr1.value</div></pre></td></tr></table></figure>
-<h2 id="raise-amp-except"><a href="#raise-amp-except" class="headerlink" title="raise &amp; except"></a>raise &amp; except</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">	print(<span class="string">'try...'</span>)</div><div class="line">	r = <span class="number">10</span>/<span class="number">0</span> </div><div class="line">	print(<span class="string">'result: '</span>, r)</div><div class="line"><span class="keyword">except</span> ZeroDiisionError <span class="keyword">as</span> e:</div><div class="line">	print(<span class="string">'except'</span>, e)</div><div class="line">	logging.exception(e)</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">	print(<span class="string">'finally..'</span>)</div></pre></td></tr></table></figure>
-<h2 id="IO-stream"><a href="#IO-stream" class="headerlink" title="IO stream"></a>IO stream</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">f = open(<span class="string">'test.log'</span>, <span class="string">'r'</span>)</div><div class="line">print(f.read(size))</div><div class="line">f.close() </div><div class="line"></div><div class="line"><span class="comment">#or </span></div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="string">'test.log'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</div><div class="line">	printf(f.read(size)) </div><div class="line"></div><div class="line">	<span class="keyword">for</span> line <span class="keyword">in</span> f.readlines():</div><div class="line">		print(line.strip())</div></pre></td></tr></table></figure>
-<h2 id="pickling"><a href="#pickling" class="headerlink" title="pickling"></a>pickling</h2><p>serializaion/marshalling/flattening and reverse</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pickle</div><div class="line"><span class="keyword">import</span> json</div><div class="line"></div><div class="line">d = dic(name=<span class="string">'zj'</span>, age=<span class="string">'18'</span>)</div><div class="line">pickle.dumps(d)</div><div class="line">json.dumps(d)</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1753,7 +1739,7 @@ Deletion time   | log(n) + Rebalance  | Same as search
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">99</span>
+                <span class="site-state-item-count">100</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
