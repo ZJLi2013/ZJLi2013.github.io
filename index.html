@@ -291,6 +291,306 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/reactjs-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/30/reactjs-introduction/" itemprop="url">reactjs introduction</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T11:07:50-04:00">
+                2019-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/30/reactjs-introduction/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/30/reactjs-introduction/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>React is the front-end framework used in lg-sim WebUI(version 2019.07). as well for Cruise webviz, Uber visualization, Apollo, they all choose a web UI design, there is something great about web framework.</p>
+<h3 id="what-is-React"><a href="#what-is-React" class="headerlink" title="what is React"></a>what is React</h3><p>used to build complex UI from small and isolated pieces of code “components” </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">vehicleManager</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">	render()</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></div><div class="line">	&#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>React will render the html on screen, and any changes in data will update and rerender. <code>render()</code> returns a description(React element) of what you want to see on the screen, React takes the descriptions and displays the result.  </p>
+<h3 id="build-a-react-hello-world-app"><a href="#build-a-react-hello-world-app" class="headerlink" title="build a react hello-world app"></a>build a react hello-world app</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npx create-react-app react-demo</div><div class="line"></div><div class="line">cd react-demo</div><div class="line"></div><div class="line">npm start</div></pre></td></tr></table></figure>
+<h3 id="index-js"><a href="#index-js" class="headerlink" title="index.js"></a>index.js</h3><p><code>index.js</code> is the traditional and actual entry point for all Node apps. in React, it tells what to render and where to render. </p>
+<h3 id="components"><a href="#components" class="headerlink" title="components"></a>components</h3><p>components works as a func, and props is the func’s paramters, the func will return a React element which then rendered in view</p>
+<p>components can be either class, derived from <code>React.Component</code>, which then has <code>this.state</code> and <code>this.setState()</code> ;</p>
+<p>or a function, which need use <code>Hook</code> to keep its state. </p>
+<p>the design advantage of components is obvious: to make components/modules reuseable. usually in <code>route.js</code> will define the logic switch to each component based on the HTTP request. </p>
+<h3 id="setState"><a href="#setState" class="headerlink" title="setState"></a>setState</h3><p>whenever <code>this.setState()</code> takes an object or a function as its parameter, update it, and React rerender this component. when need to change a component state, <code>setState()</code> is the right way, rather than to use <code>this.state = xx</code>, which won’t register in React. </p>
+<h3 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h3><p>example from <a href="https://github.com/xiaohesong/TIL/blob/master/front-end/react/hooks/state-hook.md" target="_blank" rel="external">stateHoook</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> &#123; useState &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Example</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// Declare a new state variable, which we'll call "count"</span></div><div class="line">  <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> (</div><div class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></div><div class="line">      <span class="tag">&lt;<span class="name">p</span>&gt;</span>You clicked &#123;count&#125; times<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> setCount(count + 1)&#125;&gt;</div><div class="line">        Click me</div><div class="line">      <span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="string">``</span><span class="string">` </span></div><div class="line"></div><div class="line">Hook is a speicial feature, used to share sth with React function. e.g. `useState<span class="string">` is a way to keep React state in function, which by default has no `</span><span class="keyword">this</span>.state<span class="string">` </span></div><div class="line"></div><div class="line">in Hook way, even afer function() is executed,  the function's variable is not clear, but keep until next render. so basically Hook give a way to make function stateable. </div><div class="line"></div><div class="line">* intial hook</div><div class="line"></div><div class="line">the only parameter pass in hook::useState(new Map()) is  the initial state.   useState(initState)</div><div class="line"></div><div class="line">* return from useState</div><div class="line"></div><div class="line">it returns a pair [currentState, setStatefunc], e.g.  [maps, setMaps],  setStatefunc here is similar as `<span class="keyword">this</span>.setState<span class="string">` in class component</span></div><div class="line"></div><div class="line"></div><div class="line">* access state</div><div class="line"></div><div class="line">directly  &#123;currentState&#125;</div><div class="line"></div><div class="line">* update state</div><div class="line"></div><div class="line">&#123;() =&gt; setStatefunc(currentState)&#125; </div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">### Context </div><div class="line"></div><div class="line">![image](https://upload-images.jianshu.io/upload_images/1457831-1b8e3c5ce88f7758)</div><div class="line"></div><div class="line">context gives the way to access data, not in the strict hierachy way. the top &lt;App&gt; is the context Provider, and the &lt;Child&gt; is the context consumer, there can be multi consumers. </div><div class="line"></div><div class="line">#### createContext </div><div class="line"></div><div class="line">as in [react context official doc](https://react.docschina.org/docs/context.html#reactcreatecontext)</div><div class="line"></div><div class="line">`<span class="string">``</span>js </div><div class="line"><span class="keyword">const</span> Context = React.createContext(defaultValue);</div></pre></td></tr></table></figure>
+<p>during <code>render</code>, the component which subscribe this context will get the context content from its context provider and put in rendering, only when no avialable provider is found, <code>defaultValue</code> is used.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Context.Provider value=&#123;/xx/&#125; &gt;</div></pre></td></tr></table></figure>
+<p>whenever the value in Provider changes, all consumers will rerender. </p>
+<h3 id="EventSource"><a href="#EventSource" class="headerlink" title="EventSource"></a>EventSource</h3><p>EventSource is HTTP based one-way communication from server to client, which is lighter than Websocket <a href="https://juejin.im/post/5c121c77f265da614a3a5e07" target="_blank" rel="external">eventsource vs websocket</a>, also the message  type is only txt in EventSource, while in Websocekt it can be either txt or binary stream. </p>
+<p>by default, when client received a [“/event”] message, will trigger  <code>onMessage()</code>. but EveentSource allow to define user-speicial event type, e.g. <code>VehicleDownload</code>, so in client need to a new listener: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myEventSource.addEventListener(<span class="string">'VehicleDownload'</span>, (e)=&gt;handleVehicleEvents(e))</div></pre></td></tr></table></figure>
+<h3 id="react-route"><a href="#react-route" class="headerlink" title="react route"></a>react route</h3><h2 id="js-special"><a href="#js-special" class="headerlink" title="js special"></a>js special</h2><h3 id="first-class-object"><a href="#first-class-object" class="headerlink" title="first class object"></a>first class object</h3><ul>
+<li>a function is an instance of the Object type</li>
+<li>a function can have properties and has a link back to its constructor method</li>
+<li>can store a function in a variable</li>
+<li>pass a function as a parameter to another function</li>
+<li>return a function from another function</li>
+</ul>
+<h3 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h3><h3 id="arrow-function"><a href="#arrow-function" class="headerlink" title="arrow function"></a>arrow function</h3>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/nancyfx-study/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/30/nancyfx-study/" itemprop="url">nancyfx study</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T09:11:39-04:00">
+                2019-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/30/nancyfx-study/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/30/nancyfx-study/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://github.com/NancyFx/Nancy/wiki/Documentation" target="_blank" rel="external">document</a>, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Nancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is designed to handle <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and     <code>PATCH</code> request and provides  a simple, elegant Domain Specific Language(DSL) for returning a response. </p>
+<h3 id="build-to-run-anywhere"><a href="#build-to-run-anywhere" class="headerlink" title="build to run anywhere"></a>build to run anywhere</h3><p>Nancy was designed to not have any dependenceis on existing frameworks, it’s used pretty much wherever you want to. <code>host</code> in Nancy acts as an <code>adaptor</code> for a hosting environment, thus enabling Nancy to run on existing techs, such as ASP.NET, WCF.</p>
+<p>the bare minimum requires to build a Nancy service are the core framework and a host. </p>
+<h3 id="helloworld-service"><a href="#helloworld-service" class="headerlink" title="helloworld service"></a>helloworld service</h3><p>all module should be derived from <code>NancyModule</code>, and define a route handler.  tips: always make the module <code>public</code>, so NancyFx can discover it. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class HelloWorld : NancyModule </div><div class="line">&#123;</div><div class="line">	public HelloModule()</div><div class="line">	&#123;</div><div class="line">		Get[&quot;/&quot;] = parameters =&gt; &quot;Hello World&quot; ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="exploring-modules"><a href="#exploring-modules" class="headerlink" title="exploring modules"></a>exploring modules</h2><p>module is where you define the logic, is the minimum requirement for any Nancy app. module should inherit from <code>NancyModule</code>, then define the behaviors, with <code>routes</code> and <code>actions</code>.</p>
+<h3 id="modules-are-globally-discovered"><a href="#modules-are-globally-discovered" class="headerlink" title="modules are globally discovered"></a>modules are globally discovered</h3><p>the global discovery of modules will perform once and the information is then cached, so not expensive.</p>
+<h2 id="Define-routes"><a href="#Define-routes" class="headerlink" title="Define routes"></a>Define routes</h2><p>to define a <code>Route</code> need to specify a     <code>Method</code> + <code>Pattern</code> + <code>Action</code> + (optional) <code>Condition</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;] = _ =&gt; &#123;</div><div class="line">     	// do sth</div><div class="line">     &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>or async run:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;, runAsnyc: true ] = async(_, token) =&gt; 	  &#123;</div><div class="line">     	// do sth long and tedious</div><div class="line">      &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h3 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h3><p>method is the <code>HTTP method</code> used to access the resource, Nancy support:  <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code>.</p>
+<h3 id="secret-for-selecting-the-right-route-to-invoke"><a href="#secret-for-selecting-the-right-route-to-invoke" class="headerlink" title="secret for selecting the right route to invoke"></a>secret for selecting the right route to invoke</h3><p>in case when two routes capture the same request, remember :</p>
+<ul>
+<li><p>the order in which modules are loaded are non-deterministic </p>
+</li>
+<li><p>routes in a given module are discovered in the order in which they are defined </p>
+</li>
+<li><p>if several possible matches found, the most specific match.</p>
+</li>
+</ul>
+<h3 id="root-path"><a href="#root-path" class="headerlink" title="root path"></a>root path</h3><p>all pathes used in Nancy are relative to <code>root path</code>, which tell Nancy where its resources are stored on the file system, which is defined in <code>IRootPathProvider</code></p>
+<h3 id="static-content"><a href="#static-content" class="headerlink" title="static content"></a>static content</h3><p><code>static content</code> is things e.g. javascript files, css, images etc. Nancy uses a convention based approach to figure out what static content it is able to serve at runtime.</p>
+<p>Nancy supports the notion of having multiple conventions for static content and each convention is represented by a <code>delegate</code> with the signature <code>Func&lt;NancyContext, string, Response&gt;</code> </p>
+<p>the delegate accepts two parameters: the context of the current request and the application root path, the output of the delegate is a standard Nancy <code>Response</code> object or <code>null</code>, which means the convention has no static content.</p>
+<h4 id="define-your-own-conventions-usign-the-bootstrapper"><a href="#define-your-own-conventions-usign-the-bootstrapper" class="headerlink" title="define your own conventions usign the bootstrapper"></a>define your own conventions usign the bootstrapper</h4><p><a href="https://github.com/NancyFx/Nancy/wiki/Managing-static-content" target="_blank" rel="external">link</a></p>
+<h2 id="View-engines"><a href="#View-engines" class="headerlink" title="View engines"></a>View engines</h2><p>view engine, takes a <code>template</code>  and an optional <code>model</code>(the data) and outputs(usually) <code>HTML</code> to be rendered into the browser. in lg-sim, the <code>view</code> is rendered in nodejs. </p>
+<h2 id="Nancy-in-lg-sim-WebUI"><a href="#Nancy-in-lg-sim-WebUI" class="headerlink" title="Nancy in lg-sim WebUI"></a>Nancy in lg-sim WebUI</h2><p><a href="https://github.com/lgsvl/simulator/tree/master/Assets/Scripts/Web" target="_blank" rel="external">/Assets/Scripts/Web</a></p>
+<p>`</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/where-are-you-in-next-5-years-9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1478,322 +1778,6 @@ nslookup  10.20.101.119   #reverse (ip 2 domain)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/15/autosar-sucks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/15/autosar-sucks/" itemprop="url">autosar sucks</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-15T10:29:53-04:00">
-                2019-07-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/15/autosar-sucks/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/15/autosar-sucks/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="what-is-AUTOSAR"><a href="#what-is-AUTOSAR" class="headerlink" title="what is AUTOSAR"></a>what is AUTOSAR</h2><p>basically it’s an micro-service architecture for vehicle EE system. </p>
-<p>Each micro-service is called software component(<code>swc</code>), and it has uniform interfaces, while of which the implementation is varied. as the goal of AUTOSAR said: share on the standard (interface), compete in the implementation. </p>
-<p>the inter-connect of micro-services is through virtual function bus(<code>vfb</code>),  which works as a gateway, guiding data flow from port A, from micro-serviceA to port B, from micro-serviceB</p>
-<p>the benefits of AUTOSAR is obvious, to design the interface at system level first, if any changed need, it can be updated quickly. after the system architecture is fixed, then go to the implementation details.</p>
-<p><a href="https://automotivetechis.wordpress.com/autosar-concepts/" target="_blank" rel="external">refer</a> </p>
-<h3 id="input-description"><a href="#input-description" class="headerlink" title="input description"></a>input description</h3><ul>
-<li><p>software components(micro-services) description, only define the data flow, interface functions</p>
-</li>
-<li><p>system, system topology(interconnection among ECUs, and available data buses, protocols etc)</p>
-</li>
-<li><p>hardware, the available hardware(processors, sensors, actuators etc) </p>
-</li>
-</ul>
-<h3 id="system-configuration"><a href="#system-configuration" class="headerlink" title="system configuration"></a>system configuration</h3><p>used to distributes the software component descritpions to different ECU</p>
-<h3 id="ECU-configuration"><a href="#ECU-configuration" class="headerlink" title="ECU configuration"></a>ECU configuration</h3><p>the basic software(BST) and run-time environment(<code>rte</code>) of each ECU has been configured, this is based on the dedication of the application software components to each ECU.</p>
-<h3 id="generation-of-executables"><a href="#generation-of-executables" class="headerlink" title="generation of executables"></a>generation of executables</h3><p>in this step to implement the software components, then build.  this can be automated done by tool-chains. </p>
-<p>all steps up to now are supported by defining exchange formats(xml) and work methods.</p>
-<p><img src="https://automotivetechis.files.wordpress.com/2012/05/untitled2.jpg" alt="image"></p>
-<h2 id="basic-software"><a href="#basic-software" class="headerlink" title="basic software"></a>basic software</h2><p>each swc has well-defined ports, either provider port(PPort) or request port(RPort), the swc interface can either be a client-server interface or sender-receiver interface. </p>
-<p>with a PPort, the swc will impelment data generation; with a RPort, the swc will implement data read.</p>
-<p><code>communication manager</code> (ComM), is a resource mananger to encapsulates communication related basic software modules. </p>
-<p>the actual bus states are controlled by the corresponding <code>bus state manager</code>, e.g.  CAN/FlexRay/Lin bus. when ComM request a specific commmunication mode from the state manager, it will map the communication mode to a special bus state.</p>
-<p><code>network management modules</code> (NM) works in bus-sleep mode and only support broadcast communication.</p>
-<p><code>diagnostic communication manager</code>(DCM), a common API for diagnostic services. </p>
-<p><code>CAN driver</code> performs the hardware access and provides a hardware-independent API to upper layers; it can access hardware resources and converts the given information for transmission into a hardware specic format and triggers the transmission.</p>
-<h3 id="runtime-environment-RTE"><a href="#runtime-environment-RTE" class="headerlink" title="runtime environment(RTE)"></a>runtime environment(RTE)</h3><p>between basic software to upper application softwares, I think it’s mostly <code>vfb</code>. </p>
-<h3 id="application-software-components"><a href="#application-software-components" class="headerlink" title="application software components"></a>application software components</h3><p>for now, e.g. ADAS, traditional EE.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/13/play-with-ros/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/13/play-with-ros/" itemprop="url">play with ros</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-13T11:31:42-04:00">
-                2019-07-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/13/play-with-ros/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/13/play-with-ros/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="ros-filesystem-tools"><a href="#ros-filesystem-tools" class="headerlink" title="ros filesystem tools"></a>ros filesystem tools</h2><p>first check ROS_PACKAGE_PATH, where defines all ROS packages that are within the directories.</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rospack find [package-name]</div><div class="line">rospack list </div><div class="line">roscd [package-name]</div><div class="line">``` </div><div class="line"></div><div class="line">take an example, to locate `rosbridge_websocket.launch` </div><div class="line"></div><div class="line">```shell </div><div class="line">rospack find rosbridge*    #rosbridge_server</div><div class="line">roscd rosbridge_server</div><div class="line">cd launch</div></pre></td></tr></table></figure>
-<p>another tool to view ros-launch: <code>roslaunch-logs</code></p>
-<h2 id="write-a-launch-file"><a href="#write-a-launch-file" class="headerlink" title="write a .launch file"></a>write a .launch file</h2><p>launch files, which uses XML format, usually make a directory named “launch” inside the workspace to organize all launch files, and it provides a convenient way to start up multiple nodes and master, it processs in a <a href="http://wiki.ros.org/roslaunch/XML" target="_blank" rel="external">depth-first tarversal order</a>. usually launch files can be put a <code>launch</code> folder under a ros node project. </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">roslaunch package_name launch_file</div><div class="line"><span class="meta">#</span>or </div><div class="line">roslaunch /path/to/launch_file</div></pre></td></tr></table></figure>
-<p>an sample launch file:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">launch</span>&gt;</span> </div><div class="line">   <span class="tag">&lt;<span class="name">node</span> <span class="attr">pkg</span>=<span class="string">"package_name"</span>  <span class="attr">type</span>=<span class="string">" "</span>   <span class="attr">name</span>=<span class="string">" "</span>  <span class="attr">output</span>=<span class="string">" "</span> <span class="attr">args</span>=<span class="string">" "</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">launch</span>&gt;</span></div></pre></td></tr></table></figure>
-<p><code>args</code> can define either env variables or a command.</p>
-<p><a href="http://wiki.ros.org/roslaunch/XML/node" target="_blank" rel="external">node/type</a> There must be a corresponding executable with the same name.</p>
-<h2 id="rviz"><a href="#rviz" class="headerlink" title="rviz"></a>rviz</h2><p>rviz can help to playback sensor rosbag at lab. and also the visualization tool in algorithm/simulation development. </p>
-<p>someone(at 2014) said Google’s self-driving simulation has used rviz:</p>
-<p><img src="http://community.bwbot.org/assets/uploads/files/1472264009114-3.png?v=qboavrogdv4" alt="google simulation"> </p>
-<p><a href="http://stevenshi.me/2017/07/11/ros-intermediate-tutorial-2/" target="_blank" rel="external">a sample</a> with rviz to visualize rosbag info: </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> terminal 1 </div><div class="line">roscore </div><div class="line"><span class="meta">#</span> terminal 2 </div><div class="line">rosbag play kitti.bag -l </div><div class="line">rosrun rviz rviz -f kitti-velodyne</div></pre></td></tr></table></figure>
-<h2 id="rosbag"><a href="#rosbag" class="headerlink" title="rosbag"></a>rosbag</h2><p>the sensor ros node will collect data in rosbag during physical or vitual test, then playback rosbag to develop or verify the sensing algorithms. or use to build simulation scene. </p>
-<p>a few <a href="http://wiki.ros.org/rosbag/Commandline" target="_blank" rel="external">common commands</a>, and also rosbag support interactive <a href="http://wiki.ros.org/rosbag/Code%20API" target="_blank" rel="external">C++/Python APIs</a>. </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rosbag record #use to write a bag file wit contents on the specified topics</div><div class="line">rosbag info #display the contents of bag files </div><div class="line">rosbag play #play back bag file in a time-synchronized fashion</div></pre></td></tr></table></figure>
-<h2 id="kitti-dataset"><a href="#kitti-dataset" class="headerlink" title="kitti dataset"></a>kitti dataset</h2><p><code>are we ready for autonoous driving?</code> – the KITTI vision benchmark suite, which is a famous test dataset in self-driving sensing, prediction also mapping and SLAM algorithm development. </p>
-<p>there are a few benchmars includes:</p>
-<ul>
-<li><p>stereo,  basically rebuild the 3D object from multi 2D images.</p>
-</li>
-<li><p>optical flow, used to detect object movement(speed, direction)</p>
-</li>
-<li>scene flow, include other 3D env info, and  objects from optical flow </li>
-<li>depth </li>
-<li>visual odometry</li>
-<li>object detection </li>
-<li>object tracking </li>
-<li>road/lane detection </li>
-<li>semantic evaluation </li>
-</ul>
-<h2 id="catkin-package"><a href="#catkin-package" class="headerlink" title="catkin package"></a>catkin package</h2><p>catkin is ros package build/manage tool. </p>
-<pre><code class="shell">mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/src
-catkin_create_pgk demo std_msgs rviz 
-cd demo
-mkdir launch
-cat "&lt;launch&gt; &lt;node  name="demo"  type="rviz" -d="ls `pwd`" /&gt; &lt;/launch&gt; " &gt;  demo.launch
-cd ~/catkin_ws
-catkin_make --pkg demo
-<span class="meta">
-#</span> add catkin_ws to 
-cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.bashrc
-</code></pre>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1844,7 +1828,7 @@ cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">101</span>
+                <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1857,7 +1841,7 @@ cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

@@ -291,6 +291,395 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" itemprop="url">paper reading-perception, planning, control and coordination for autonomous vehicles</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T05:41:05-04:00">
+                2019-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Lidar-Perception"><a href="#Lidar-Perception" class="headerlink" title="Lidar Perception"></a>Lidar Perception</h2><ul>
+<li><p>point cloud based approach, directly use the raw sensor data for further processing. usually applied a voxel-based filtering to reduce the number of points </p>
+</li>
+<li><p>feature based approach, extract parametric features out of the point cloud, and represent the environment usign extracted features (out of date)</p>
+</li>
+<li><p>grid based approach</p>
+</li>
+</ul>
+<h3 id="segmentation-algorithms"><a href="#segmentation-algorithms" class="headerlink" title="segmentation algorithms"></a>segmentation algorithms</h3><p>cluster points into multiple homogeneous groups.</p>
+<ul>
+<li>edge based method</li>
+<li>region based method, cluster neighborhood points based on certain criteria</li>
+<li>model-based / parametric method,</li>
+<li>graph based method </li>
+</ul>
+<h3 id="detection-algorithms"><a href="#detection-algorithms" class="headerlink" title="detection algorithms"></a>detection algorithms</h3><p>categorize each cluster into different objects, the information in each cluster is mainly from spatial relationship and Lidar intensity of the points. </p>
+<h2 id="Vision"><a href="#Vision" class="headerlink" title="Vision"></a>Vision</h2><p>usually deal with road detection and on-road object detection. </p>
+<h2 id="Road-Detection"><a href="#Road-Detection" class="headerlink" title="Road Detection"></a>Road Detection</h2><h3 id="lane-mark-detection"><a href="#lane-mark-detection" class="headerlink" title="lane mark detection"></a>lane mark detection</h3><ul>
+<li><p>lane line feature extraction<br>basically identify the pixels that belong to lane line marks. </p>
+</li>
+<li><p>fitting the pixels into different models</p>
+</li>
+</ul>
+<ul>
+<li>estimate the vehicle pose(lateral position and moving orientation) based on the fitted model. </li>
+</ul>
+<h3 id="road-surface-detection"><a href="#road-surface-detection" class="headerlink" title="road surface detection"></a>road surface detection</h3><p>inform the self-driving car on the location of free space where it can drive without collision. usually three ways:</p>
+<ul>
+<li>feature based detection</li>
+</ul>
+<p>first identify the feature points or patches in the original image; based on the identified features, either model fitting or segmentation kind of algorithms will be applied to identify the road surfaces. </p>
+<ul>
+<li>feature based learning<br>first extract a set of features associated to pixels or image patches, then train a classifier based on the features to assign a road or non-road label to the pixels or patches</li>
+</ul>
+<ul>
+<li>deep learning</li>
+</ul>
+<h3 id="on-road-object-detection"><a href="#on-road-object-detection" class="headerlink" title="on-road object detection"></a>on-road object detection</h3><p>mainly concerns vehicle and pedestrain object classes, and mainly with deep learning based approaches, whose pipeline usually like:</p>
+<p>1) the proposal bounding boxes needs to be generated around the input image</p>
+<p>2) each proposal box will be sent through the CNN network to determine a classification and fine tune its bounding box location </p>
+<h2 id="Fusion"><a href="#Fusion" class="headerlink" title="Fusion"></a>Fusion</h2><p>sensor fusion betweeen Lidar and camera is necessary to make the best use of these devices and achive a robust environment perception result. </p>
+<h2 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h2><p>the problem of estimating the ego vehicle’s pose, can divided into 2 sub-problems:  pose fixing problem and dead reckoning problem. </p>
+<ul>
+<li><p>pose fixing problem is to predict a measurement given a pose, e.g. a map. </p>
+</li>
+<li><p>dead reckoning problem, the state is related to the observation by a set of differential equations, and these equations has to be integrated in order to navigate. </p>
+</li>
+</ul>
+<p>map aided localization algorithm use local features to achieve highly precise localization.  e.g. SLAM.</p>
+<p>a key event in smoothing based SLAM is loop closure, basically when features that have not been seen for a while are observed again from the sensor readings. when a loop closure is detected, the error caused by imperfect odometry can then be removed, and a substantial portion of the map can be updated. </p>
+<p>approaches to semantic mapping can be categorized into three ways:  object based, appearance based, and activity based. </p>
+<ul>
+<li><p>appearance based semantic mapping, interpret sensor readings to construct semantic information of the environment</p>
+</li>
+<li><p>object based semantic mapping, use the occurrence of key objects to build a semantic understanding of the environments, where object recognition and classification is important. </p>
+</li>
+<li><p>activity based semantic mapping, relies on information about the activities of the agents around the ego vehicle. </p>
+</li>
+</ul>
+<h2 id="Planning"><a href="#Planning" class="headerlink" title="Planning"></a>Planning</h2><h3 id="mission-planning"><a href="#mission-planning" class="headerlink" title="mission planning"></a>mission planning</h3><p>performed through graph search over a directed graph network, which reflects road/path network connectivity. </p>
+<h3 id="behavioral-planning"><a href="#behavioral-planning" class="headerlink" title="behavioral planning"></a>behavioral planning</h3><p>decision making to ensure the vehicle follows any road rules and interacts with other agents in a conventional, safe manner. </p>
+<h3 id="motion-planning"><a href="#motion-planning" class="headerlink" title="motion planning"></a>motion planning</h3><p>the process of deciding on a sequence of actions to reach a specified goal, typically based on avoiding colisions on a sequence of actions to reach a specified goal. </p>
+<ul>
+<li>combinatorial planning, builds a discrete representation of the real environment, and finds a complete solution. </li>
+</ul>
+<ul>
+<li>sampling-based planning, utilizes a collision checking module to conduct discrete searching over samples drawn from the configuration space, which rely on random sampling of continuous spaces and the generation of  a feasible trajectory graph where feasibility is verified through collision checking of nodes and edges to connect these nodes .</li>
+</ul>
+<h3 id="planning-in-dynamic-environments"><a href="#planning-in-dynamic-environments" class="headerlink" title="planning in dynamic environments"></a>planning in dynamic environments</h3><ul>
+<li><p>decision making structures for obstacle avoidance </p>
+<p>  to monitor regions along the intended path for potential obstacle collisions, where these regions are labeled as “critial zones”, and checking against the trajectories of all nearby vehicles to determine a “time to collision”. </p>
+</li>
+</ul>
+<ul>
+<li>planning in space-time </li>
+</ul>
+<ul>
+<li><p>control space obstacle represnetations </p>
+<p>  rather than checking for collisions directly in robot’s configuration space, directly plan in the control space by prohibiting certain control actions which are predicted to lead to collision.</p>
+</li>
+</ul>
+<h3 id="incremental-planning-and-replanning"><a href="#incremental-planning-and-replanning" class="headerlink" title="incremental planning and replanning"></a>incremental planning and replanning</h3><p>a means of incrementally generating sub-goals, a new plan is generated as often as a new sub-goal is defined. iteratively replanning to generate new solution trajectories presents a potential opportunity to carry over knowledge from previous planning iterations to subsequent planning iterations.</p>
+<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><h3 id="feedback-control"><a href="#feedback-control" class="headerlink" title="feedback control"></a>feedback control</h3><p>e.g. proportional-integral-derivative(PID) controller, the limitation of feedback-only control, is has delayed response to errors.</p>
+<h3 id="model-predictive-control"><a href="#model-predictive-control" class="headerlink" title="model predictive control"></a>model predictive control</h3><h3 id="trajectory-generation"><a href="#trajectory-generation" class="headerlink" title="trajectory generation"></a>trajectory generation</h3><ul>
+<li><p>combined trajectory generation and tracking </p>
+</li>
+<li><p>separate trajectory generation and tracking </p>
+<p>  1) trajectory generation, to find an entire control input, which corresponds to some desired state trajectory. can be dealed as a two point boundary value problem, with a starting state and a final state. </p>
+<p>  1.1) sensor based trajectory generation</p>
+<p>  1.2) dynamic based trajectory generation </p>
+</li>
+</ul>
+<h3 id="trajectory-tracking"><a href="#trajectory-tracking" class="headerlink" title="trajectory tracking"></a>trajectory tracking</h3><ul>
+<li><p>geometric methods</p>
+<p>  pursues a point along the path that is located at a certain lookahead distance away from the vehicle’s current position. the input is waypoints, rather than smooth curves. </p>
+</li>
+<li><p>model based methods </p>
+<p>  kinematic model based controllers performs well at low speed applications, but the error increase as the vehicle speed and curvature rate of path increases.</p>
+<p>  dynamic model based controllers performs well for higher speed driving applications</p>
+</li>
+</ul>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>this is an overview of self-driving car system. From a job-hunting view, the algorithms details are more important and better with some practial experience.</p>
+<p><a href="https://www.mdpi.com/2075-1702/5/1/6/htm" target="_blank" rel="external">paper link</a> </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/book-reading-第一本无人驾驶技术书/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/27/book-reading-第一本无人驾驶技术书/" itemprop="url">book reading: 第一本无人驾驶技术书</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T05:39:51-04:00">
+                2019-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/27/book-reading-第一本无人驾驶技术书/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/27/book-reading-第一本无人驾驶技术书/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="一些方案"><a href="#一些方案" class="headerlink" title="一些方案"></a>一些方案</h2><ul>
+<li>基于gps/imu融合的定位</li>
+<li>基于视觉的定位</li>
+<li>基于点云的定位</li>
+<li>基于视觉的物体识别与跟踪</li>
+<li>基于lidar的物体识别与跟踪</li>
+</ul>
+<h2 id="基于点云的定位"><a href="#基于点云的定位" class="headerlink" title="基于点云的定位"></a>基于点云的定位</h2><p>简化概率问题：已知t_0 时刻的点云信息，以及t_1时刻，无人车位置的先验概率分布，求无人车位置的概率分布。</p>
+<p>贝叶斯法则:</p>
+<p>  $$ P(X_t) =  P(Z_t | X_t ) \cdot \ \vec(P(X_t)) $$ </p>
+<p>$\vec(P(X_t))$ 是汽车当前位置的概率分布； $P(Z_t | X_t)$ 是当前位置下观察的点云概率分布。</p>
+<h2 id="ROS-based-system"><a href="#ROS-based-system" class="headerlink" title="ROS based system"></a>ROS based system</h2><p>ROS是基于消息传递通信的、分布式多进程框架。Topic发布、接受是一种异步通信方式； Service服务是一种利用同步通信请求/回复交互的分布式系统。</p>
+<h2 id="传感器"><a href="#传感器" class="headerlink" title="传感器"></a>传感器</h2><h3 id="Lidar"><a href="#Lidar" class="headerlink" title="Lidar"></a>Lidar</h3><ul>
+<li>环境感知： 通过雷达扫描汽车周围的环境3d模型。运用相关算法比对上一帧和下一帧，从而匹配环境中的其他车辆或行人</li>
+<li>slam定位：实时扫描地图，与高精地图中的特征物比对，实现导航及精准定位。</li>
+<li>供应商： Velodyne </li>
+</ul>
+<h3 id="毫米波雷达"><a href="#毫米波雷达" class="headerlink" title="毫米波雷达"></a>毫米波雷达</h3><ul>
+<li><p>可用工作频段 24ghz、77ghz, 波长 1 ～ 10 mm。77ghz物体分辨率较24ghz提高2～4倍，测速和测距精度提高3~5倍。电磁波频率越高，距离和速度的检测解析度越高。</p>
+</li>
+<li><p>供应商</p>
+<p>   射频芯片：24ghz成熟供应（博世、飞思卡尔）； 77ghz没有对中国开放</p>
+<p>   雷达数据处理芯片：恩智浦，意行半导体</p>
+</li>
+</ul>
+<h3 id="摄像头"><a href="#摄像头" class="headerlink" title="摄像头"></a>摄像头</h3><ul>
+<li>高动态</li>
+<li>中低像素</li>
+<li>适合温度范围 -40 ～ 80 度</li>
+<li>防磁抗振 </li>
+<li>寿命长</li>
+</ul>
+<h2 id="计算平台"><a href="#计算平台" class="headerlink" title="计算平台"></a>计算平台</h2><ul>
+<li><p>计算单元与计算负载</p>
+<p>  GPU执行卷积任务最有效，DSP执行特征提取最有效。</p>
+</li>
+<li><p>移动端soc架构</p>
+<p>  I/O子系统与前端传感器交互；DSP负责图像处理流以进行特征提取；由GPU进行目标识别和其他深度学习任务；由一个多核CPU完成规划、控制和互动的子任务；由FPGA进行动态重构以分时共享的方式完成传感器数据压缩上传，物体跟踪和流量预测等。计算部件和I/O部件之间通过共享内存进行数据通信。</p>
+</li>
+</ul>
+<h2 id="系统安全"><a href="#系统安全" class="headerlink" title="系统安全"></a>系统安全</h2><p>安全问题：强磁场干扰IMU；假大功率的gps信号；干扰激光雷达，在无人处周围放置强反光物；干扰高精地图的更新； ros系统劫持、通信修改。obd-2入侵， 充电桩入侵，车载cd入侵，蓝牙入侵。</p>
+<h2 id="Spark与ROS的分布式模拟平台"><a href="#Spark与ROS的分布式模拟平台" class="headerlink" title="Spark与ROS的分布式模拟平台"></a>Spark与ROS的分布式模拟平台</h2><p>基于合成数据的模拟；基于真实数据回放的模拟。</p>
+<h2 id="高精地图"><a href="#高精地图" class="headerlink" title="高精地图"></a>高精地图</h2>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/26/未来5年在哪里-5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1658,264 +2047,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/where-am-I-in-next-5-years/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/21/where-am-I-in-next-5-years/" itemprop="url">where am I in next 5 years</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-21T15:12:17-05:00">
-                2019-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/21/where-am-I-in-next-5-years/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/21/where-am-I-in-next-5-years/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>I love reading autographies, especially these with life-time stories. it’s a window to explore kinds of life possibilites. and recently I readed &lt;&lt; the only girl &gt;&gt;, Robbin at Rolling Stone magazines in 1970s. </p>
-<p>I remember <a href="https://coolshell.cn/articles/17583.html" target="_blank" rel="external">some toughts</a> about life meanings. there are three kinds:  1) to crazy satisfy yourself, or pursue a free life, live the way you really want. e.g the freelancer;  2) ladder up to the higher social class, which is happening a lot in developing countries, and to be rich and success is the guarantee; 3) enjoy the beauty of nature and civilazation in this short period of life time.</p>
-<p>the last two meanings can not be done immediately, to crazily or desperately satisfy self, is then the easiest way to fight against the fucking environment. like when getting tired of this busy world, I behave more like a hippie, no big deal to anything, and kill time on drama, books, or drugs or sex. </p>
-<p>the hippie lifestyle is momental, it creats a space to seperate from daily troubles; after a few days or nights, I am back to real life, continuing on career stuff.  </p>
-<p>so take it, the reality for me, as born in Asian developing country, with traditional family responsibility, is pursuing career, and of course it helps to take a break, and enjoying hippies, but don’t take it as the life-time way.</p>
-<p>mostly of my inner voices are:  either busy to live or busy to die; problem-solving skills, leadership; to figure out how the economy machine functions in small and big roles; and be the smart guy in market and at office. </p>
-<p>and no need with another degree or matured platform to be problem-solvingable or leadershipable. these skills are in everywhere.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/13/未来五年在哪里（3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/13/未来五年在哪里（3/" itemprop="url">未来五年在哪里（3)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-13T23:10:31-05:00">
-                2019-01-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/13/未来五年在哪里（3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/13/未来五年在哪里（3/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在美国开长途，沿途总是遇见wendy’s, McDonald’s， auto zone 等等连锁店。也不论在toledo等中部小城市，还是芝加哥、纽约等国际大城市，这些店也到处都有。甚至costco商店在底特律，布法罗，哥伦布，三番等城市的商品布局摆放都是一摸一样的。</p>
-<p>中国很少有这种在从三四线城市到一线城市都连锁的服务品牌，除了重资产的，比如商业地产（万达广场）， 酒店，大型购物超市，阿里仓库，烟草局等。而餐饮、汽修、家装等等基本都是地方特色。</p>
-<p>美国各州相对很独立。比如，buffalo wings 从布法罗开到了全美国， kfc 从肯塔基开到了全美国。把产品、模式从一个地方复制到另一个地方很容易实现。而且不仅产品本身，其背后的供应链也同样反映了平坦。所以是整个体系很成熟，容易实现规模效益，从而正向强化成功。</p>
-<p>中国地方性壁垒比较高，一个成功的产品、模式难轻松复制。好处是发展了很多地方性的特色服务。当然对资本而言是不经济的。好奇麦当劳进入中国，是怎么做供应链的，如何在不规范、体系不成熟的环境下复制美国模式的。</p>
-<p>一个顶级成功的商业，应该是建立系统。然后，利润就在系统运营和管理中流淌出来。就像顶级的造车公司，是能够把研发、生产、销售等subsystem打通，建立一个造车system的公司。这也是matured market 的特征，系统成熟运作，利润稳定地流淌。emerging market 就处于探索建立系统的过程。一般是从新科技、产品subsystem出发，因为商业模式、市场等subsystem比较好从已经有的成熟体系里借鉴，然后融合、打通。</p>
-<p>中国出现了两种特有的经济行为：外卖和淘宝。他们的价值就是打通原本因为地域壁垒很难复制的产品。互联网不存在地域壁垒，所以有效最优化资源，并实现规模效益。相比，美国不存在大范围的外卖、淘宝，因为产品复制在地域上很容易。</p>
-<p>商业的本质，就是建立一套稳定运转的系统，不论中美。因为美国的资本、商业环境、企业规范、地方行政等方面的成熟，即游戏规则已经稳固且清晰，成功是更容易的。相比，在中国，就需要官商结合重资本打开局面。因此在中国，赚大钱更容易。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1966,7 +2097,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">101</span>
+                <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1979,7 +2110,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
