@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="document, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me. IntroductionNancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-30T13:15:25.971Z">
+<meta property="og:updated_time" content="2019-08-30T15:14:59.806Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nancyfx study">
 <meta name="twitter:description" content="document, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me. IntroductionNancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is">
@@ -394,7 +394,43 @@
 <p>the delegate accepts two parameters: the context of the current request and the application root path, the output of the delegate is a standard Nancy <code>Response</code> object or <code>null</code>, which means the convention has no static content.</p>
 <h4 id="define-your-own-conventions-usign-the-bootstrapper"><a href="#define-your-own-conventions-usign-the-bootstrapper" class="headerlink" title="define your own conventions usign the bootstrapper"></a>define your own conventions usign the bootstrapper</h4><p><a href="https://github.com/NancyFx/Nancy/wiki/Managing-static-content" target="_blank" rel="external">link</a></p>
 <h2 id="View-engines"><a href="#View-engines" class="headerlink" title="View engines"></a>View engines</h2><p>view engine, takes a <code>template</code>  and an optional <code>model</code>(the data) and outputs(usually) <code>HTML</code> to be rendered into the browser. in lg-sim, the <code>view</code> is rendered in nodejs. </p>
+<h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p><a href="https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/overview/understanding-models-views-and-controllers-cs" target="_blank" rel="external">model view controller</a></p>
+<ul>
+<li>understand controller </li>
+</ul>
+<p>a controller is reponsible for controlling the flow logic in the app. e.g. what reponse to send back to a user when a user makes a browser request.</p>
+<p>any public method in a controller is exposed as a controller action. </p>
+<ul>
+<li>understand view</li>
+</ul>
+<p>a view contains the HTML markup and content that is send to the browser. in general to return a view for a controller action, need to create a subfolder in the <code>Views</code> folder with the same name as the controller.</p>
+<ul>
+<li>understand model</li>
+</ul>
+<p>the model is anything not inside a controller or a view. e.g. validation logic, database access. the view should only contain logic related to generating the user interface. the controller should only contain the bare minimum of logic required to return the right view. </p>
+<h2 id="C-anonymous"><a href="#C-anonymous" class="headerlink" title="C# anonymous"></a>C# anonymous</h2><p><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/statements-expressions-operators/anonymous-functions" target="_blank" rel="external">c# programming guide</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(input-parameters) =&gt; expression </div><div class="line">(input-parameters) =&gt; &#123;&lt;sequence-of-statements&gt;&#125;</div><div class="line"></div><div class="line">TestDelegate testD = (x) =&gt; &#123;(Console.WriteLine(x);&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>=&gt;</code> is the <code>Lambda</code> operator, on its left is input paramters(if exist). Lambda expression/sequence is equal to a delegate class.</li>
+</ul>
+<ul>
+<li><code>delegate</code> is a refer type, used to pass one function as paramter to another function. e.g. in event handle. </li>
+</ul>
 <h2 id="Nancy-in-lg-sim-WebUI"><a href="#Nancy-in-lg-sim-WebUI" class="headerlink" title="Nancy in lg-sim WebUI"></a>Nancy in lg-sim WebUI</h2><p><a href="https://github.com/lgsvl/simulator/tree/master/Assets/Scripts/Web" target="_blank" rel="external">/Assets/Scripts/Web</a></p>
+<p>a few steps to build  Nancy server: </p>
+<ul>
+<li>Nancyhost.start() </li>
+<li>add NancyModule instance(where define route logic)  </li>
+</ul>
+<p>a few other libs used :</p>
+<ul>
+<li><p>PetaPoco, a light-weight ORM(object relational mapper) framework in C#</p>
+</li>
+<li><p>SQLite</p>
+</li>
+</ul>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://auth0.com/blog/meet-nancy-a-lightweight-web-framework-for-dot-net/" target="_blank" rel="external">meet nancy</a></p>
+<p><a href="http://liulixiang1988.github.io/nancy-webkuang-jia.html#_1" target="_blank" rel="external">nancy doc in chinese</a></p>
 <p>`</p>
 
       
@@ -600,7 +636,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#build-to-run-anywhere"><span class="nav-number">1.1.</span> <span class="nav-text">build to run anywhere</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#helloworld-service"><span class="nav-number">1.2.</span> <span class="nav-text">helloworld service</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exploring-modules"><span class="nav-number">2.</span> <span class="nav-text">exploring modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#modules-are-globally-discovered"><span class="nav-number">2.1.</span> <span class="nav-text">modules are globally discovered</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-routes"><span class="nav-number">3.</span> <span class="nav-text">Define routes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Method"><span class="nav-number">3.1.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#secret-for-selecting-the-right-route-to-invoke"><span class="nav-number">3.2.</span> <span class="nav-text">secret for selecting the right route to invoke</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#root-path"><span class="nav-number">3.3.</span> <span class="nav-text">root path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-content"><span class="nav-number">3.4.</span> <span class="nav-text">static content</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#define-your-own-conventions-usign-the-bootstrapper"><span class="nav-number">3.4.1.</span> <span class="nav-text">define your own conventions usign the bootstrapper</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View-engines"><span class="nav-number">4.</span> <span class="nav-text">View engines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nancy-in-lg-sim-WebUI"><span class="nav-number">5.</span> <span class="nav-text">Nancy in lg-sim WebUI</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#build-to-run-anywhere"><span class="nav-number">1.1.</span> <span class="nav-text">build to run anywhere</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#helloworld-service"><span class="nav-number">1.2.</span> <span class="nav-text">helloworld service</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exploring-modules"><span class="nav-number">2.</span> <span class="nav-text">exploring modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#modules-are-globally-discovered"><span class="nav-number">2.1.</span> <span class="nav-text">modules are globally discovered</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-routes"><span class="nav-number">3.</span> <span class="nav-text">Define routes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Method"><span class="nav-number">3.1.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#secret-for-selecting-the-right-route-to-invoke"><span class="nav-number">3.2.</span> <span class="nav-text">secret for selecting the right route to invoke</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#root-path"><span class="nav-number">3.3.</span> <span class="nav-text">root path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-content"><span class="nav-number">3.4.</span> <span class="nav-text">static content</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#define-your-own-conventions-usign-the-bootstrapper"><span class="nav-number">3.4.1.</span> <span class="nav-text">define your own conventions usign the bootstrapper</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View-engines"><span class="nav-number">4.</span> <span class="nav-text">View engines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC"><span class="nav-number">5.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-anonymous"><span class="nav-number">6.</span> <span class="nav-text">C# anonymous</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nancy-in-lg-sim-WebUI"><span class="nav-number">7.</span> <span class="nav-text">Nancy in lg-sim WebUI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">7.1.</span> <span class="nav-text">refer</span></a></li></ol></li></ol></div>
             
 
           </div>
