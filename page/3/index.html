@@ -291,6 +291,166 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/17/principles-of-GNSS-positioning/" itemprop="url">principles of GNSS positioning</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-17T10:35:26-04:00">
+                2019-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/17/principles-of-GNSS-positioning/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/06/17/principles-of-GNSS-positioning/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://www.novatel.com/an-introduction-to-gnss/chapter-1-gnss-overview/" target="_blank" rel="external">novatel introduction</a></p>
+<h3 id="GNSS-architecture"><a href="#GNSS-architecture" class="headerlink" title="GNSS architecture"></a>GNSS architecture</h3><p>a) space segment</p>
+<p>the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status.</p>
+<p>b) control segment </p>
+<p>a ground-based network of master control stations, data uploading stations adn monitor stations. in case of GPS, 2 master control stations(one primary and one backup),  4 data uploading stations, and 16 monitor stations</p>
+<p>c) user segment </p>
+<p>the user equipment that process the received signals. </p>
+<h3 id="GNSS-propagation"><a href="#GNSS-propagation" class="headerlink" title="GNSS propagation"></a>GNSS propagation</h3><p>the layer of atmoshpere that most influcences the transmission of GPS signals is the ionosphere(电离层), ionoshperic delays are frequency dependent; and the other layer is troposphere(平流层), whose delay is a function of local temperature, pressure and relative humidity. </p>
+<p>some singal energy is reflected on the way to the receiver, called “multipath propagation”. </p>
+<h3 id="Antenna"><a href="#Antenna" class="headerlink" title="Antenna"></a>Antenna</h3><p>each GNSS constellation has its own signal frequencies and bandwidths, an antenan must cover the signal frequencies and bandwidth.</p>
+<p>antenna gain is defined as the relative measure of an antenna’s ability to direct or concentrate radio frequency energy in a particular direction or pattern. A minimum gain is required to achieve a minimum carrier : power-noise-ratio to track GNSS satellites.</p>
+<h3 id="GNSS-error-sources"><a href="#GNSS-error-sources" class="headerlink" title="GNSS error sources"></a>GNSS error sources</h3><pre><code>contributing sources         error range
+
+satellite clocks             +- 2m
+
+orbit errors                       +-2.5m
+
+inospheric delays            +-5m
+
+tropospheric delays            +-0.5m
+
+receiver noies                +-0.3m
+
+multi path                     +-1m
+</code></pre><h3 id="Resolving-errors"><a href="#Resolving-errors" class="headerlink" title="Resolving errors"></a>Resolving errors</h3><h4 id="multi-constellation-amp-multi-frequency"><a href="#multi-constellation-amp-multi-frequency" class="headerlink" title="multi-constellation &amp; multi-frequency"></a>multi-constellation &amp; multi-frequency</h4><p>multi-frequency is the most effective way to remove ionospheric error,  by comparing the delays of two GNSS signals, L1 &amp; L2, the receiver can correct for the impact of ionospheric errors.</p>
+<p>multi-constellation has benefits:  reduce signal acquisition time,  improve position and time accuracy.</p>
+<h4 id="D-GNSS"><a href="#D-GNSS" class="headerlink" title="D-GNSS"></a>D-GNSS</h4><p>in differential GNSS(D-GNSS), the position of a fixed GNSS receiver, refered as a base station, which sends the atmospheric delay related errors to receivers, which incorporate the corrections into their positoin calculations.</p>
+<p>differential positiong requires a data link betwen the base station and rovers, if corrections need to be applied in real-time. and D-GNSS works very well with base station-to-rover separations of up to 10km.</p>
+<h4 id="Real-time-kinematic-RTK"><a href="#Real-time-kinematic-RTK" class="headerlink" title="Real time kinematic(RTK)"></a>Real time kinematic(RTK)</h4><p>it uses measurements of the phase of the signal’s carrier wave, in addition to the information content of the signal and relies on a single fixed reference station to provide real-time corrections, up to centimetre-level accuracy. </p>
+<p>the range to a satellite is calculated by multiplying the carrier wavelength times the number of whole cycles between the satellite and the rover and adding the phase difference. the results in an error equal to the error in the estimated number of cycles times the wavelength, so-called integer ambiguity search, which is 19cm for L1 signal. </p>
+<h4 id="Precise-Point-Positioning-PPP"><a href="#Precise-Point-Positioning-PPP" class="headerlink" title="Precise Point Positioning(PPP)"></a>Precise Point Positioning(PPP)</h4><p>PPP solution depends on GNSS satellite clock and orbit corrections, generated from a network of global reference stations. </p>
+<h3 id="GNSS-IMU"><a href="#GNSS-IMU" class="headerlink" title="GNSS + IMU"></a>GNSS + IMU</h3><p>the external reference can quite effectively be provided by GNSS, and GNSS provides an absolute set of coordinates that can be used as the initial start point, as well, GNSS provides continuous positions adn velocities thereafter which are used to update the IMU/INS filter estimates.</p>
+<p>for additional combined sensors, such as odometers, cameras vision.</p>
+<h3 id="challenges-of-GNSS-in-AV"><a href="#challenges-of-GNSS-in-AV" class="headerlink" title="challenges of GNSS in AV"></a>challenges of GNSS in AV</h3><p>talk from iMorpheus.ai </p>
+<p>1)  antenna</p>
+<p>2)  multipath mitigation</p>
+<p>3)  multi-band, multi-constellation signals</p>
+<p>4)  integrated navigation (camera )</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/Manhanton-SC-review/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1671,148 +1831,6 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/30/未来5年在哪里-7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/30/未来5年在哪里-7/" itemprop="url">未来5年在哪里(7)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-30T11:06:14-04:00">
-                2019-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/30/未来5年在哪里-7/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/04/30/未来5年在哪里-7/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="噱头团队"><a href="#噱头团队" class="headerlink" title="噱头团队"></a>噱头团队</h2><p>必须在有危机意识的企业中成长。靠投资活的团队，往往只展现其繁荣的一面，对内对外；而实际公司的产品、市场定位，甚至内部员工都不知情。对员工缺乏诚实，对市场客户也不会诚实。</p>
-<h2 id="民企文化"><a href="#民企文化" class="headerlink" title="民企文化"></a>民企文化</h2><p>近距离观察了一家民企（长城汽车），意识到民企都不容易迈过国际化的坎儿。为什么需要国际化？因为资本市场是赢者通吃。行业内国际企业进入，本土行业要想生存，必须主动走出去。</p>
-<p>民企的老总个人印记太深。集权的管理问题，符合中国文化传统，但与现代管理理念相差甚远。强调军事化管理的集体制，是无法调动个人主观积极性的，对于底层车间工人可能有效，但如此又会造成企业管理上的双轨制，产生内部紧张。另外，集体制会助长一些骄横的个人气息，狭隘自大，而不利于个人内在品质的培养。一个代表先进生产关系和生产力的团队，是不会容忍形式主义的。</p>
-<p>国内不错的企业要么狼性，要么艰苦奋斗。其实鼓励创业氛围没有问题，但是文化上很容易“右倾”，把规则理解的太死。</p>
-<p>另外强调艰苦奋斗又不集权的华为，给员工持股，也许才是现代优秀企业该有的特征。把员工当作“合伙人“，自然调动了员工的积极性，而不是为某个老板打工。 </p>
-<p>回国前的想法是参与一个团队的成长，而不是在一家公司打工。所以除了物质利益，现在人更渴求在工作中的身份认同：”合伙人“。</p>
-<h1 id="套路"><a href="#套路" class="headerlink" title="套路"></a>套路</h1><p>国内的套路：先放话。</p>
-<p>改革开放前，国家层面严禁私有制，结果江浙的小农户搞了“分田到户”私有承包，后来却全国推广了。面对新情况，国家领导也在摸索，但又要给广大普通人一致的声音。所以先放话。在日后的实践中，慢慢修正，甚至会产生与放话的内容完全相反的实践。至于普通人，如果把放话的内容听的太真，跟领导较劲儿，就是不懂套路。</p>
-<p>有些企业做了匪夷所思的规定，还名正言顺地称为“企业文化”，对于明显不符合人情逻辑的条例，也就是这类“放话”，企业领导并不知道怎么管理，员工明白就好，该怎么来还是怎么来；但如果因此想挑战企业领导的规定，就是不懂套路。</p>
-<h2 id="提拔-or-压制"><a href="#提拔-or-压制" class="headerlink" title="提拔 or 压制"></a>提拔 or 压制</h2><p>国内有个说法叫”站错队“：不怨能力，是没跟对人。在美国职场，管理层都至少表现比较”亲民“，另外工薪层也基本生活无忧，所以两者相安，比较容易相信对方；相对，国内的职场还没有成熟的系统，就会有”站错队“的风险。另外大家都有生活压力，难免成了隐性竞争对手，互不信任，所以国内的职场被压制可能多过受提拔。这当然是陋习。</p>
-<p>偶然看了密西根的地图，一股亲切感就涌上来。在美国的大环境会把善意当作默认的配置，工作生活上有意无意都会受到他人的帮助或有意无意地帮助别人。善意比较容易表达出来；相比，国内的环境，职场上、生活上，都有一些压制感。</p>
-<p>比如生活上的压抑感。在北美的同学都嘴上说，回国好啊，吃的多么多么好。实际上，外面的东西都不敢吃，忌讳比如肉干净吗、油干净吗、放了不该放的调料吗。办点事，老是担心哪里被骗了都不知道。社会系统不成熟，就会有这样的隐形成本。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>写完上面的内容4天后，才有机会再次打开。工作到没时间读书是对人最大的消耗。希望自己尽快适应国内工作生活节奏，而又不受制于这样的工作生活状态。</p>
-<p><a href="https://www.sohu.com/a/128114001_473283" target="_blank" rel="external">某个人的回忆</a></p>
-<p>ps 军训的时候，每天跑8km，站军姿一个半小时，在这样的环境下反而更激发我去思考，如何把高标准习成标配。</p>
-<h2 id="管理之路"><a href="#管理之路" class="headerlink" title="管理之路"></a>管理之路</h2><p>我以为自己是细节导向的，国内这个工作环境会占据太多个人时间，叫人没时间思考大方向的问题。高标准成为标配吧。</p>
-<p>越来越看到技术是平的，相比，工作流程，系统建设才是企业愿意花钱的地方。写程序、推公式、做运营、甚至做基础研究，到一定阶段都是极易取代的。“单腿走路”是high risk的。相比，任何一个领域的产品人，至少有一条粗腿，同时还有很多不错的小腿。把各个环节、各个岗位有机组合起来的，就是管理。而在工作中需要有意培养系统（管理）意识。</p>
-<p>现在的民企，管理水平还是很差的。文化层面上，虽然在推一些流程，但是也有一些制度性的限制。一方面，一边高举打破旧思维搞创新，一边又做很多行为细节上的约束，在员工心理建立墙。工作流程的建立，不是做几次讲座、参加几个培训，领导提倡几次，不是喊出来的，而是像培养一个工作习惯。需要反复练习，慢慢融入到企业文化，变成员工自然而然的行为。</p>
-<p>日常层面上，任务管理、时间管理都比较缺乏。老板会希望员工加班，但并没有定义很好的工作内容，即缺乏任务管理，缺乏日常的考核机制。然后责任不明晰，缺乏有效的工作模式，比如出现一个问题，一伙儿人都围上来了。或者一个会议讨论停不下来。当然，大的层面还是工作的流程没有建立好。</p>
-<p>今后的工作，要经常跳出来思考系统建设，而不要跟年轻人拼体力上。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1863,7 +1881,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1876,7 +1894,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

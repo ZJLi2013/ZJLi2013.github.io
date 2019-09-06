@@ -291,6 +291,135 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/17/word-break-with-dfs-bfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/17/word-break-with-dfs-bfs/" itemprop="url">word break with dfs & bfs</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T23:22:15-05:00">
+                2018-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/17/word-break-with-dfs-bfs/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/17/word-break-with-dfs-bfs/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/word-break/description/" target="_blank" rel="external">leetcode 139</a></p>
+<h2 id="dfs"><a href="#dfs" class="headerlink" title="dfs"></a>dfs</h2><p>traversing string ,and split it one char by next, if find the splited left word in dict, recursiving the remaining right substring. in this way, it will make sure find a solution, but also traversing all unnecessary possibilites. and need design a class variable to stop the dfs() </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> found = <span class="literal">false</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">dfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span>&#123;</div><div class="line">  <span class="built_in">string</span> left, right ;</div><div class="line">  <span class="keyword">if</span>(s.size() == <span class="number">0</span> || s.empty())</div><div class="line">  &#123;</div><div class="line">    found = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">return</span> found;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=s.size(); i++)</div><div class="line">  &#123;</div><div class="line">    left = s.substr(<span class="number">0</span>, i);</div><div class="line">    right = s.substr(i, s.size()-i);</div><div class="line">    <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">    &#123;</div><div class="line">      dfs(right, dict);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> found;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="bfs"><a href="#bfs" class="headerlink" title="bfs"></a>bfs</h2><p>as mentioned above, <code>dfs</code> goes to all possibile branches, which is not required. <code>bfs</code> is like a greedy way, to find out one working solution and done.</p>
+<p>also need keep track of searched left sub-strings, since the remaining right sub-strings may can not find a matched from dict, then the left sub-string is not acceptable, so the left sub-string need move one char further.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">  <span class="function"><span class="keyword">bool</span> <span class="title">bfs</span><span class="params">(<span class="built_in">string</span> s, <span class="built_in">unordered_set</span>&lt;<span class="built_in">string</span>&gt;&amp; dict)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> len = s.size();</div><div class="line">    <span class="built_in">string</span> s1, q, left, right;</div><div class="line">    <span class="built_in">queue</span>&lt;<span class="built_in">string</span>&gt; sq;</div><div class="line">    sq.push(s);</div><div class="line"></div><div class="line">    <span class="built_in">string</span> tmp ;</div><div class="line">    <span class="keyword">while</span>(!sq.empty())&#123;</div><div class="line">    tmp = sq.front(); sq.pop();</div><div class="line">    <span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line">    s1 = s ;</div><div class="line">    <span class="keyword">while</span>(!s1.empty() &amp;&amp; i &lt;= s1.size())</div><div class="line">    &#123;</div><div class="line">      <span class="keyword">if</span>(tmp == s)&#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i);</div><div class="line">        right = s1.substr(i, s1.size()-i);</div><div class="line">      &#125;<span class="keyword">else</span></div><div class="line">      &#123;</div><div class="line">        left = s1.substr(<span class="number">0</span>, i+tmp.size()); <span class="comment">///will dead-cycle </span></div><div class="line">        right = s1.substr(i+tmp.size(), s1.size()-i-tmp.size());</div><div class="line">      &#125;</div><div class="line">      i++;</div><div class="line">      <span class="keyword">if</span>(dict.find(left) !=  dict.end())</div><div class="line">      &#123;</div><div class="line">        q += left ;</div><div class="line">        sq.push(left);</div><div class="line">        s1 = right;</div><div class="line">        i = <span class="number">0</span>;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>this <code>bfs</code> is not good design.<br>a pretty simple sample <a href="https://www.jiuzhang.com/solution/word-break/#tag-highlight-lang-cpp" target="_blank" rel="external">code</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/15/where-are-you-in-next-5-years-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1554,160 +1683,6 @@ Deletion time   | log(n) + Rebalance  | Same as search
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/01/when-pure-loop-doesn-t-work-out/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/01/when-pure-loop-doesn-t-work-out/" itemprop="url">when pure loop doesn't work out</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-01T23:02:00-04:00">
-                2018-10-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/01/when-pure-loop-doesn-t-work-out/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/10/01/when-pure-loop-doesn-t-work-out/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://leetcode.com/problems/distinct-subsequences/description/" target="_blank" rel="external">leetCode 115</a>: given a string S and a string T, count the number of distinct subsequences of S which equals T.</p>
-<pre><code>Input: S = &quot;babgbag&quot;, T = &quot;bag&quot;
-Output: 5
-Explanation:
-As shown below, there are 5 ways you can generate &quot;bag&quot; from S.
-(The caret symbol ^ means the chosen letters)
-
-babgbag
-^^ ^
-babgbag
-^^    ^
-babgbag
-^    ^^
-babgbag
-   ^  ^^
-babgbag
-     ^^^
-</code></pre><h2 id="first-thought"><a href="#first-thought" class="headerlink" title="first thought"></a>first thought</h2><p>for each alpha in T, traversing S, find a match, return; then move forward for next alpha in T and traversing S again,</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">string</span>&amp; s1,  <span class="built_in">string</span>&amp; s2)</span></span></div><div class="line">&#123;</div><div class="line"> <span class="built_in">string</span>::iterator sit1, sit2, nait; </div><div class="line"> <span class="built_in">string</span> notagain; </div><div class="line"> <span class="keyword">int</span> count=<span class="number">0</span>;	 </div><div class="line"><span class="keyword">for</span>(nait = s2.begin(); nait != s2.end(); nait++)</div><div class="line">&#123;</div><div class="line">	notagain.push_back(*nait);</div><div class="line">	sit1 =  s1.begin(); </div><div class="line">	sit1_last = s1.begin(); </div><div class="line">	</div><div class="line">	<span class="keyword">while</span>( sit1 != s1.end())</div><div class="line">	&#123;	 </div><div class="line">		<span class="keyword">for</span>(sit2=s2.begin(); sit2 != s2.end(), sit1 != s1.end(); sit1++)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">if</span>(*sit1 == *sit2)</div><div class="line">			&#123;</div><div class="line">				tmp.push_back(*sit2);</div><div class="line">				sit2++; </div><div class="line">			&#125;</div><div class="line">		 </div><div class="line">			<span class="keyword">if</span>(tmp.compare(s2) == <span class="number">0</span>)</div><div class="line">			&#123;</div><div class="line">				count++;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		sit1 = st1_last++;</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>this is a failed trail. Since this kind of problem really can’t be solved by purely nested for-loop. think about, at the last level (traverse <code>S</code> to get <code>g</code>), there needs one for-loop, then the previous level or the level above (traverse <code>S</code> to get <code>a</code>) needs another loop. and each “a” needs one for-loop to traverse all possible “g” in <code>S</code> again. and the top level (travers <code>S</code> to get “b”) is another for-loop, and each “b” need another for-loop to traverse “a”. and this is only three levels (b-&gt;a-&gt;g)</p>
-<p>basically if implementing tree traversing with for-loop, since tree structure has many branches to the end, since even each sub-branch needs a for-loop, there will be exponent disaster of for-loop to cover all branches.   </p>
-<h2 id="second-thoughts"><a href="#second-thoughts" class="headerlink" title="second thoughts"></a>second thoughts</h2><p>what’s the different mindset? recursive. when dealing with many-branches-travsersing (e.g. a tree strucutre), recursive is nature to think. since recursive only consider the neighbor two level branches.</p>
-<p>for this example, inside each recursive need a for-loop to catch all possible positions of the satisfied character, and stack is need to, when visiting a new character from <code>T</code> need poush, and when find out a <code>T</code>, then need to pop out the last character. </p>
-<p>during breadth traversing tree, either using a pure recursive or  using stack with a while-loop. but here it needs a for-loop and stack inside each recursive. (a little complex)</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">rec</span><span class="params">(<span class="built_in">string</span>&amp; S, <span class="built_in">string</span>&amp; T, <span class="built_in">string</span>::iterator tc, <span class="built_in">std</span>::<span class="built_in">stack</span>&lt;<span class="keyword">char</span>&gt; ss,  <span class="keyword">int</span>&amp; nums )</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(tc == T.end())</div><div class="line">		<span class="keyword">return</span> ;</div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i= <span class="number">0</span>; i&lt;S.size(); i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(S[i] == *tc)</div><div class="line">		&#123;</div><div class="line">			ss.push(*tc);</div><div class="line">			<span class="keyword">if</span>(ss.size() != T.size())</div><div class="line">			&#123;</div><div class="line">				<span class="built_in">string</span> cur_s = S.substr(i+<span class="number">1</span>); </div><div class="line">				rec(cur_s, T,  ++tc,  ss, nums);</div><div class="line">				--tc; </div><div class="line">				ss.pop();</div><div class="line">			&#125;<span class="keyword">else</span></div><div class="line">			&#123;</div><div class="line">				<span class="built_in">cout</span> &lt;&lt; <span class="string">"found one\n"</span> ; </div><div class="line">				nums++; </div><div class="line">				ss.pop(); </div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">string</span>&amp; S,  <span class="built_in">string</span>&amp; T)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">string</span>::iterator tit = T.begin();</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">stack</span>&lt;<span class="keyword">char</span>&gt;  ss ;</div><div class="line">	<span class="keyword">int</span> nums =<span class="number">0</span>; </div><div class="line">	rec(S, T, tit, ss, nums); </div><div class="line">	</div><div class="line">	<span class="keyword">return</span> nums; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>TODO: there suppose be a general pattern for this kind of problem. </p>
-<h2 id="third-thoughts"><a href="#third-thoughts" class="headerlink" title="third thoughts"></a>third thoughts</h2><p>if the problem is too complex to handle at first, more memory always make it looks simple, using containers to split the content. with 2 for-loops to create #num of buckets to store positions of each alphaet in <code>T</code></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="built_in">string</span>&amp; s1,  <span class="built_in">string</span>&amp; s2)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> length =  s2.size(); </div><div class="line">	<span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="keyword">char</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;  smap; </div><div class="line">	<span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; pos; </div><div class="line">	<span class="built_in">string</span>::iterator sit; </div><div class="line">	<span class="keyword">char</span> alpha ; </div><div class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;s2.size(); i++)</div><div class="line">	&#123;</div><div class="line">		alpha = s2[i]; </div><div class="line">		<span class="keyword">int</span> i=<span class="number">0</span>; </div><div class="line">		pos.clear(); </div><div class="line">		<span class="keyword">for</span>(sit = s1.begin(); sit != s1.end(); sit++)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">if</span>( alpha == *sit)</div><div class="line">			&#123;</div><div class="line">				pos.push_back(i++);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		smap.insert(<span class="built_in">std</span>::pair&lt;<span class="keyword">char</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;(alpha, pos);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<pre><code>b 0, 2, 4
-a 1, 5
-g 3, 6
-</code></pre><p>after get the map, then play the combinations games. that’s actually still a recursive problem.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1758,7 +1733,7 @@ g 3, 6
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1771,7 +1746,7 @@ g 3, 6
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
