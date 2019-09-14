@@ -291,6 +291,276 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/Apollo-2-0-Prediction源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/03/Apollo-2-0-Prediction源码/" itemprop="url">Apollo 2.0 Prediction源码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-03T01:28:52-04:00">
+                2019-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/03/Apollo-2-0-Prediction源码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/03/Apollo-2-0-Prediction源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h2><p>prediction inputs are: obstacles from perception module nad localization from localization module. outputs are obstacles will predicted trajectories. </p>
+<p>there are three classes in prediction modules:</p>
+<pre><code>* container
+store input dat from subscribed channelds, e.g. perception obstacles, vehicle localization 
+* evalutor
+predicts paths and speed separately for any given obstacles
+* predictor
+generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves following the lanes),  free movement, regional moves(move in a possbile region)
+</code></pre><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line">APOLLO_MAIN(apollo::prediction::Prediction);</div><div class="line"></div><div class="line">Status Prediction::Init()</div><div class="line">&#123;</div><div class="line">	predicition_conf_.Clear();</div><div class="line">	adapter_conf_.Clear();</div><div class="line">common::util::GetProtoFromFile(FLAGS_prediction_adapter_config_filename, &amp;adapter_conf_);</div><div class="line">	</div><div class="line">	<span class="comment">//Initial managers</span></div><div class="line">	AdapterManager::Init(adapter_conf_);</div><div class="line">	ContainerManager::instance()-&gt;Init(adapter_conf_);</div><div class="line">	EvaluatorManager::instance()-&gt;Init(prediction_conf_);</div><div class="line">	PredictorManager::instance()-&gt;Init(prediction_conf_);</div><div class="line">	</div><div class="line">	AdapterManager::GetLocalization();</div><div class="line">	AdapterManager::GetPerceptionObstacles(); 	</div><div class="line">			AdapterManger::AddPerceptionObstaclesCallback(&amp;Prediction::RunOnce, <span class="keyword">this</span>);</div><div class="line">	AdapterManger::AddLocalizationCallback(&amp;Prediction::OnLocalization, <span class="keyword">this</span>);</div><div class="line"></div><div class="line">AdapterManger::AddPlanningCallback(&amp;Prediction::OnPlanning, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line"><span class="keyword">return</span> Status::OK();</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> Prediction::RunOnce(<span class="keyword">const</span> PerceptionObstacles&amp; perception_obstacles)</div><div class="line">&#123;</div><div class="line">	ObstaclesContainer* obstacles_container = <span class="keyword">dynamic_cast</span>&lt;ObstaclesContainer*&gt;(ContainerManager::instance()-&gt;GetContainer(AdapterConfig::PERCEPTION_OBSTACLES));</div><div class="line">	</div><div class="line">	obstacles_container-&gt;Insert(perception_obstacles);</div><div class="line">	EvaluatorManager::instace()-&gt;Run(perception_obstacles);</div><div class="line">	PredictorManager::instance()-&gt;Run(perception_obstacles);</div><div class="line">	</div><div class="line">	<span class="keyword">auto</span> prediction_obstacles = PredictorManager::instance()-&gt;prediction_obstacles();</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> <span class="keyword">const</span>&amp; prediction_obstacle : prediction_obstacles.prediction_obstalces())&#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> <span class="keyword">const</span>&amp; trajectory:prediction_obstacle.trajectory())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">auto</span> <span class="keyword">const</span>&amp; trajectory_point : trajectory.trajectory_point())</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">if</span>(!IsValidTrajectoryPoint(trajectory_point))&#123;</div><div class="line">				<span class="keyword">return</span> ;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125; </div><div class="line">	</div><div class="line">	Publish(&amp;prediction_obstacles);</div><div class="line">	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> Prediction::OnLocalization(<span class="keyword">const</span> LocalizationEstimate&amp; localization, ObstaclesContainer* obstacles_container)</div><div class="line"></div><div class="line"><span class="keyword">void</span> Prediction::OnPlanning(<span class="keyword">const</span> planning::ADCTrajectory&amp; adc_trajectory, ADCTrajectoryContainer* adc_trajectory_container)</div></pre></td></tr></table></figure>
+<p>Prediction interface has defined: RunOnce() and Pulish(). the Prediction class has defined listener’s callback: <code>OnLocalization</code>, <code>OnPlanning</code>, and <code>Start()</code>, <code>Stop()</code> and implemented interface functions. For both EvaluatorManager and PredictorManager, there are <code>Init()</code> and <code>Run()</code> functions, and there are bunch of apis from container class.</p>
+<h2 id="Evaluator"><a href="#Evaluator" class="headerlink" title="Evaluator"></a>Evaluator</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">void</span> EvaluatorManager::Init(<span class="keyword">const</span> PredictionConf&amp; config)</div><div class="line">&#123;</div><div class="line">	<span class="comment">//...</span></div><div class="line">	<span class="keyword">switch</span>(config.obstacle_type())&#123;</div><div class="line">		<span class="keyword">case</span> PerceptionObstacle::VEHICLE :&#123;</div><div class="line">			vehicle_on_lane_evaluator_ = obstalce_conf.evaluator_type();</div><div class="line">			<span class="keyword">break</span>; </div><div class="line">		</div><div class="line">		<span class="keyword">case</span> PerceptionObstacle::BICYCLE:&#123;</div><div class="line">			cyclist_on_lane_evaluator_ = obstlce_conf.evluator_type();</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">			</div><div class="line">		<span class="keyword">case</span> PerceptionObstacle::PEDESTRAIN:&#123;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">case</span> PerceptionObstacle::UNKNOWN:&#123;</div><div class="line">			default_on_lane_evaluator_ = obstacle_conf.evalutor_type();</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Evaluator* EvaluatorManager::Run(<span class="keyword">const</span> perception::PerceptionObstacles&amp; perception_obstacles)</div><div class="line">&#123;</div><div class="line">	ObstaclesContainer* container = <span class="keyword">dynamic_cast</span>&lt;ObstaclesContainer*&gt;();</div><div class="line">	</div><div class="line">	Evaluator* evaluator = <span class="literal">nullptr</span> ;</div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; perception_obstacle : perception_obstacles.perception_obstalce())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">int</span> id = perception_obstalce.id(); </div><div class="line">		Obstacle* obstacle = container-&gt;GetObstalce(id);</div><div class="line">		<span class="keyword">switch</span>(perception_obstalce.type())</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">case</span> PerceptionObstacle::VEHICLE: &#123;</div><div class="line">				<span class="keyword">if</span>(obstacle-&gt;IsOnLane())&#123;</div><div class="line">					evaluator = GetEvaluator(vehicle_on_lane_evaluator_); </div><div class="line">				&#125;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			<span class="keyword">case</span> PerceptionObstacle::BICYCLE:&#123;</div><div class="line">				<span class="keyword">if</span>(obstacle-&gt;IsOnLane())&#123;</div><div class="line">					evaluator = GetEvaluator(cyclist_on_lane_evaluator_);</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">	</div><div class="line">			<span class="comment">// ...</span></div><div class="line">			</div><div class="line">			<span class="keyword">if</span>(evaluator != <span class="literal">nullptr</span>)</div><div class="line">			&#123;</div><div class="line">				evaluator-&gt;Evaluate(obstacle);</div><div class="line">			&#125;</div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>and there are a few different evaluators: (multilayer perception approach) MLP and RNN(deep neural network), both will discuss in details in future.</p>
+<h2 id="Predictor"><a href="#Predictor" class="headerlink" title="Predictor"></a>Predictor</h2><p>predictor will generate trajectories, a few apis:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">virtual</span> <span class="keyword">void</span> predictor::Predict(Obstacle* obstacle) = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="keyword">void</span> predictor::TrimTrajectories(<span class="keyword">const</span> Obstacle, <span class="keyword">const</span> ADCTrajectoryContainer* );</div><div class="line"></div><div class="line"><span class="keyword">static</span> predictor::<span class="function">Trajectory <span class="title">GenerateTrajectory</span><span class="params">(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;apollo::common::TrajectoryPoint&gt;&amp; points)</span> </span>;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">void</span> PredictorManager::Init(<span class="keyword">const</span> PredictionConf&amp; config)</div><div class="line">&#123;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	<span class="keyword">switch</span>(obstacle_conf.obstacle_type())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">case</span> PerceptionObstacle::VEHICLE: &#123;</div><div class="line">			<span class="keyword">if</span>(obstacle_conf.obstacle_status() == ObstacleConfg::ON_LANE)&#123;</div><div class="line">				vehicle_on_lane_predictor_ = obstacle_conf.predictor_type();</div><div class="line">			&#125;<span class="keyword">else</span> <span class="keyword">if</span>(obstacle_conf.obstacle_status() == ObstacleConf::OFF_LANE)&#123;</div><div class="line">			vehicle_off_lane_predictor_ = obstacle_conf.predictor_type();</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">break</span>; </div><div class="line">		</div><div class="line">		<span class="comment">// ...</span></div><div class="line">		</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> <span class="keyword">void</span> PredictorManager::Run(<span class="keyword">const</span> PerceptionObstacles&amp; perception_obstacles)&#123;</div><div class="line"> 	ObstaclesContainer* obstacles_container =  <span class="keyword">dynamic_cast</span>&lt;ObstaclesContainer*&gt;(AdapterConfig::PERCEPTION_OBSTACLES) ;</div><div class="line"> 	ADCTrajectoryContainer *adc_trajectory_container = <span class="keyword">dynamic_cast</span>&lt;ADCTrajectoryContainer*&gt;(AdapterConfig::PLANNING_TRAJECTORY);</div><div class="line"> 	</div><div class="line"> 	Predictor* predictor = <span class="literal">nullptr</span> ; </div><div class="line"> 	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>* perception_obstacle : perception_obstacles.perception_obstacle())</div><div class="line"> 	&#123;</div><div class="line"> 		<span class="keyword">int</span> id = perception_obstacle.id();</div><div class="line"> 		PredictionObstacle prediction_obstacle ;</div><div class="line"> 		Obstacle* obstacle = obstacle_container-&gt;GetObstacle(id);</div><div class="line"> 		</div><div class="line"> 		<span class="keyword">if</span>(obstacle != <span class="literal">nullptr</span>)</div><div class="line"> 		&#123;</div><div class="line"> 			<span class="keyword">switch</span>(perception_obstacle.type())</div><div class="line"> 			&#123;</div><div class="line"> 				<span class="keyword">case</span> PerceptionObstacle::VEHICLE: &#123;</div><div class="line"> 					<span class="keyword">if</span>(obstacle-&gt;IsOnLane())&#123;</div><div class="line"> 						predictor = GetPredictor(vehicle_on_lane_predictor_);</div><div class="line"> 						&#125;<span class="keyword">else</span>&#123;</div><div class="line"> 							predictor = GetPredictor(vehicle_off_lane_predictor_);</div><div class="line"> 						&#125;</div><div class="line"> 						<span class="keyword">break</span>;</div><div class="line"> 					&#125;</div><div class="line"> 					</div><div class="line"> 					<span class="comment">// ...</span></div><div class="line"> 			 &#125;</div><div class="line"> 			 </div><div class="line"> 			 <span class="keyword">if</span>(predictor != <span class="literal">nullptr</span>)</div><div class="line"> 			 &#123;</div><div class="line"> 			 	predictor-&gt;Predict(obstacle);</div><div class="line"> 			 	<span class="keyword">if</span>(obstacle-&gt;type() == PerceptionObstacle::VEHICLE)&#123;</div><div class="line"> 			 		predictor-&gt;TrimTrajectories(obstacle, adc_trajectory_container);</div><div class="line"> 			 	&#125;</div><div class="line"> 			 	</div><div class="line"> 			 	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; trajectory : predictor-&gt;trajectories())</div><div class="line"> 			 	&#123;</div><div class="line"> 			 		prediction_obstacle.add_trajectory()-&gt;CopyFrom(trajectory);</div><div class="line"> 			 	&#125;</div><div class="line"> 			 &#125;</div><div class="line"> 			 </div><div class="line"> 		&#125;</div><div class="line"> 			</div><div class="line"> 		prediction_obstacle.mutable_perception_obstacle()-&gt;CopyFrom(perception_obstacle);</div><div class="line"> 		</div><div class="line"> 		prediction_obstacles_.add_prediction_obstacle()-&gt;CopyFrom(prediction_obstacle); </div><div class="line"> 	&#125;</div></pre></td></tr></table></figure>
+<p>the predictor has a few types:: regional based, free move, lane sequence e.t.c, which defined as subclasses, will discuss more in future.  </p>
+<h2 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h2><p>container manager class has a few subclass as adc_trajctory container, obstacles contianer and pose constainer, which should be discussed in details later.</p>
+<h2 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// in adapter_manager.cc </span></div><div class="line"><span class="keyword">case</span> AdapterConfig::LOCALIZATION:</div><div class="line">	EnableLocalization(FLAGS_localization_topic, config);</div><div class="line"></div><div class="line"><span class="keyword">case</span> AdatperConfig::PERCEPTION_OBSTACLES:</div><div class="line">	EnablePerceptionObstacles(FLAGS_perception_obstacle_topic, config);</div><div class="line">	</div><div class="line"><span class="comment">// in messsage_adapters.h </span></div><div class="line"><span class="keyword">using</span> PerceptionObstaclesAdapter = Adapter&lt;perception::PerceptionObstacles&gt;; </div><div class="line"><span class="keyword">using</span> LocalizationAdapter = Adapter&lt;apollo::localization::LocalizationEstimate&gt;;</div><div class="line"></div><div class="line"><span class="comment">// in adapter_manager.h </span></div><div class="line"><span class="keyword">static</span> voi Enable#<span class="meta">#name()&#123;</span></div><div class="line">	instance()-&gt;InternalEnable#<span class="meta">#name(topic_name, config);</span></div><div class="line">&#125;; </div><div class="line"></div><div class="line"><span class="keyword">static</span> name##Adapter *Get#<span class="meta">#name()&#123;</span></div><div class="line">	<span class="keyword">return</span> instance()-&gt;InternaleGet##name();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="keyword">void</span> Add#<span class="meta">#name##Callback(name##Adapter::Callback callback)&#123;</span></div><div class="line">	instance()-&gt;name##_-&gt;AddCallback(callback);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt; <span class="title">staic</span> <span class="title">void</span> <span class="title">Add</span>##<span class="title">name</span>##<span class="title">Callback</span>(<span class="title">void</span>(<span class="title">T</span>:</span>: *fp)(<span class="keyword">const</span> name##Adapter::DataType &amp;data), T* obj)</div><div class="line">&#123;</div><div class="line">	Add#<span class="meta">#name##Callback(std::bind(fp, obj, std::placeholders::_1));</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/01/Apollo2-0-Control-源码-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/01/Apollo2-0-Control-源码-3/" itemprop="url">Apollo2.0 Control 源码 (3)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-01T05:18:50-04:00">
+                2019-05-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/01/Apollo2-0-Control-源码-3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/01/Apollo2-0-Control-源码-3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>the input of Apollo control module includes: chassis info, localization info, and planning info ,the output is steering angle,  acc,  throttle.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> APOLLO_MAIN(APP)                                       </span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;                            </div><div class="line">    google::InitGoogleLogging(argv[<span class="number">0</span>]);                        </div><div class="line">    google::ParseCommandLineFlags(&amp;argc, &amp;argv, <span class="literal">true</span>);         </div><div class="line">    signal(SIGINT, apollo::common::apollo_app_sigint_handler); </div><div class="line">    APP apollo_app_;                                           </div><div class="line">    ros::init(argc, argv, apollo_app_.Name());                 </div><div class="line">    apollo_app_.Spin();    <span class="comment">//check previous blog(1)                                  </span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;                                                  </div><div class="line">  &#125;</div><div class="line"></div><div class="line">	</div><div class="line">Status Control::Init()&#123;</div><div class="line">	init_time_ = Clock::NowInSeconds(); </div><div class="line">	common::util::GetProtoFromFile(FLAGS_control_conf_file, &amp;control_conf_);</div><div class="line">	AdapterManager::Init(FLAGS_control_adapter_config_filename);</div><div class="line">	</div><div class="line">	common::monitor::<span class="function">MonitorLogBuffer <span class="title">buffer</span><span class="params">(&amp;monitor_logger_)</span></span>;</div><div class="line">	</div><div class="line">	controller_agent_.Init(&amp;control_conf_); </div><div class="line">	</div><div class="line">	AdapterManager::GetLocalization(); </div><div class="line">	AdapterManager::GetChassis();</div><div class="line">	AdapterManager::GetPlanning(); </div><div class="line">	AdpaterManager::GetControlCommand(); 	AdapterManager::GetMonitor();</div><div class="line">	</div><div class="line">	AdapterManager::AddMonitorCallback(&amp;Control::OnMonitor, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>conf_file:   /modules/control/conf/lincoln.pd/txt, </p>
+<p>which is derieved from </p>
+<p>/modules/calibration/data/mkz8/calibration_table.pd.txt</p>
+<p>the topics in control modules are :</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: LOCALIZATION</div><div class="line">	mode: RECEIVE_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: PLANNING_TRAJECTORY</div><div class="line">	mode: RECEIVE_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: CHASSIS</div><div class="line">	mode: RECEIVE_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: CONTROL_COMMAND</div><div class="line">	mode: PUBLISH_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: MONITOR</div><div class="line">	mode: DUPLEX</div><div class="line">&#125; </div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">basically, control <span class="keyword">module</span> will receive topic about /localization,  /planning,  /chassis, <span class="keyword">and</span> publish /control_command </div><div class="line"></div><div class="line"></div><div class="line">the controller_agent is an interface <span class="class"><span class="keyword">class</span>, <span class="title">so</span> <span class="title">can</span> <span class="title">support</span> <span class="title">user</span> <span class="title">defined</span> <span class="title">controller</span> <span class="title">algorithms</span>, <span class="title">which</span> <span class="title">only</span> <span class="title">need</span> <span class="title">to</span> <span class="title">configure</span> <span class="title">through</span>  `<span class="title">control_conf</span>` </span></div><div class="line"></div><div class="line">```<span class="title">c</span></div><div class="line"></div><div class="line"><span class="title">Status</span> <span class="title">ControllerAgent</span>::Init(<span class="keyword">const</span> ControlConf* control_conf)</div><div class="line">&#123;</div><div class="line">	RegisterControllers(control_conf); </div><div class="line"></div><div class="line">	InitializeConf(control_conf); </div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> &amp;controller : controller_list_)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(controller == <span class="literal">NULL</span> || !controller-&gt;Init(control_conf_).ok())</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">return</span> Status(ErrorCode);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> ControllerAgent::RegisterControllers(<span class="keyword">const</span> ControlConf *control_conf)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> active_controller : control_conf-&gt;active_controllers())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">switch</span>(active_controller)&#123;</div><div class="line">			</div><div class="line">			<span class="keyword">case</span> ControlConf::MPC_CONTROLLER:</div><div class="line">				controller_factory_.Register(</div><div class="line">					ControlConf::MPC_CONTROLLER, </div><div class="line">					[]()-&gt;Controller * &#123;<span class="keyword">return</span> <span class="keyword">new</span> MPCController();&#125;);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">			</div><div class="line">			<span class="comment">//case LAT_CONTROLLER </span></div><div class="line">			</div><div class="line">			<span class="comment">//case LON_CONTROLLER </span></div><div class="line">			</div><div class="line">		   &#125;</div><div class="line">		&#125;</div><div class="line"> 	&#125;</div><div class="line"> </div><div class="line"> </div><div class="line"> Status Control::Start()&#123;</div><div class="line"> </div><div class="line"> 	<span class="comment">//sleep for advertised channel to ready</span></div><div class="line"> 	</div><div class="line"> 	<span class="built_in">std</span>::this_thread::sleep_for(<span class="built_in">std</span>::chrono::millisecons(<span class="number">1000</span>)); 	</div><div class="line"> 	timer_ = AdapterManager::CreateTimer(ros::Duration(control_conf_.control_period()), </div><div class="line"> 	&amp;Control::OnTimer, <span class="keyword">this</span>);</div><div class="line"> 	</div><div class="line"> 	common::monitor::<span class="function">MonitorLogBuffer <span class="title">buffer</span><span class="params">(&amp;monitor_logger_)</span></span>;</div><div class="line"> 	</div><div class="line"> 	<span class="keyword">return</span> Status::OK();</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> </div><div class="line"> <span class="keyword">void</span> Control::OnTimer(<span class="keyword">const</span> ros::TimerEvent &amp;)</div><div class="line"> &#123;</div><div class="line"> 	<span class="keyword">double</span> start_timestamp = Clock::NowInSeconds();</div><div class="line"> 	</div><div class="line"> 	ControlCommand control_command ;</div><div class="line"> 	Status status = ProduceControlCommand(&amp;control_command);</div><div class="line"> 	</div><div class="line"> 	<span class="keyword">double</span> end_timestamp = Clock::NowInSeconds(); </div><div class="line"> 	</div><div class="line"> 	status.Save(control_command.mutable_header()-&gt;mutable_status());</div><div class="line"> 	</div><div class="line"> 	SendCmd(&amp;control_command);</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> </div><div class="line">  Status Control::ProduceControlCommand(ControlCommand *control_command)</div><div class="line">  &#123;</div><div class="line">  	Status status = CheckInput();</div><div class="line">  	Status status_ts = CheckTimestamp();</div><div class="line"> </div><div class="line"> 	Status status_compute = controller_agent_.ComputeControlCommand(</div><div class="line"> 		&amp;localization_, &amp;chassis_, &amp;trajectory_, control_command);</div><div class="line"> 	</div><div class="line"> 	<span class="keyword">return</span> status;</div><div class="line">  &#125;</div><div class="line"> 		</div><div class="line"> </div><div class="line"> </div><div class="line"> Status ControllerAgent::ComputeControlCommand(</div><div class="line"> 	<span class="keyword">const</span> localization::LocalizationEstimate *localization,</div><div class="line"> 	cosnt canbus::Chassis *chassis, <span class="keyword">const</span> planning::ADCTrajectory *trajectory,</div><div class="line"> 	control::ControlCommand *cmd)&#123;</div><div class="line"> 	<span class="keyword">for</span>(<span class="keyword">auto</span> &amp;controller : controller_list_)</div><div class="line"> 	&#123;</div><div class="line"> 		controller-&gt;ComputeControlCommand(localization, chassis, trajectory, cmd) ;</div><div class="line"> 	&#125;</div><div class="line"> 	<span class="keyword">return</span> status::OK();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>ControllerAgent::ComputeCmd() is the interface, the real control cmd will be computed inside each specified controller modes. there are few controller modes: MPC, Lattice e.g in Apollo.</p>
+<p>in next few days continue work on localization, prediction, and decision modules in Apollo 2.0</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/01/Apollo2-0-Routing源码-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1543,309 +1813,6 @@ kalman filter gain &apos;K&apos;
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/卡尔曼滤波/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/30/卡尔曼滤波/" itemprop="url">卡尔曼滤波</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-30T10:21:09-04:00">
-                2019-03-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/30/卡尔曼滤波/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/30/卡尔曼滤波/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="状态方程"><a href="#状态方程" class="headerlink" title="状态方程"></a>状态方程</h2><p>状态变量 <code>$x$</code> 满足, 其中 <code>u</code>为控制变量：</p>
-<pre><code>$$ x = A x_prev + B u_prev + w_prev $$    (1) 
-</code></pre><p>观测变量 <code>$z</code> 满足：</p>
-<pre><code>$$ z = H x + v $$                    (2)
-</code></pre><p>随机信号 $<code>w</code>$ 和 $<code>v</code>$ 分别表示过程激励噪声和观测噪声，假定相互独立，且服从正态分布。</p>
-<p>定义状态变量的先验估计 $<code>x^-</code>$， 即基于之前状态对当前状态的预测值； 定义后验估计 $<code>x^</code>$，即已知当前观测值所计算的当前状态变量。 定义先验误差 $<code>e^-</code>$, 后验误差 $<code>e^</code>$, 满足： </p>
-<pre><code>$$ e^- = x - x^- $$                     (3)
-
-$$ e^ = x - x^ $$                         (4)
-</code></pre><p>卡尔曼滤波表示： 后验估计（观测值所推导的状态变量值）与先验估计（预测的状态变量值）的差异，可表示为观测值与以先验估计为输入的观测值的差异的增益 <code>K</code>。</p>
-<pre><code>$$ x^ -  x^- =  K ( z - H x^- ) $$     (5)
-</code></pre><p><code>K</code>可由先验误差的协方差 <code>P</code>、观测噪声的协方差<code>R</code> 和观测增益<code>H</code>表示: </p>
-<pre><code>$$ K = P^- H^t /  (  HP^-H^t + R ) $$   (6)
-</code></pre><p>可见：</p>
-<p>1） 当<code>R</code> 趋于0时， <code>k</code> 趋近于 <code>h</code> 的逆，此时 <code>x^ = x</code>。即当观测误差很小，观测值趋近真实值。</p>
-<p>2） 当<code>P</code>趋于0时，即预测值趋近真实值。  </p>
-<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>卡尔曼滤波器用反馈控制估计过程状态（变量）：  滤波器估计某一时刻的状态（时间更新/预估），然后以（含噪声的）测量变量获得反馈（测量更新/校政）。</p>
-<p>时间更新，当前时步状态先验估计 <code>x^-</code> 及先验误差协方差近似<code>P^-</code>:</p>
-<pre><code>$$ x^- =  A x^-_prev + B u_prev $$  (7.1)
-
-$$ P^- = A P^_prev A^t + Q $$         (7.2)
-</code></pre><p>其中 $ P(w) ~ N(0, Q) $ </p>
-<p>测量更新，使用(6)更新卡尔曼增益<code>K</code>, 使用（5)更新后验状态变量<code>x^</code>和当前步先验误差协方差值 <code>P^</code>： </p>
-<pre><code>$$ P = ( I  - KH ) P^-  $$            (8)
-</code></pre><h2 id="控制器调参"><a href="#控制器调参" class="headerlink" title="控制器调参"></a>控制器调参</h2><p>测量误差一般可观测得到；而过程误差q需要通过与一个已知误差的在线滤波器对比调整系数。调参一般是离线过程。一般当过程误差和卡尔曼增益会快速收敛并保持常数。但测量误差受环境影响不易保持不变。</p>
-<h2 id="扩展卡尔曼"><a href="#扩展卡尔曼" class="headerlink" title="扩展卡尔曼"></a>扩展卡尔曼</h2><p>当观测值与系统状态变量 或 系统本身是非线性关系，方程(1), (2)变非线性函数。</p>
-<pre><code>$$  x = f(x_prev, u_prev, w) $$  (1.2) 
-$$  z =  h(x, v)    $$            (2.2) 
-</code></pre><p><a href="https://www.cs.unc.edu/~welch/kalman/media/pdf/kalman_intro_chinese.pdf" target="_blank" rel="external">link</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/" itemprop="url">paper reading-Carla an open urban driving simulator</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-30T03:32:25-04:00">
-                2019-03-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="http://carla.org" target="_blank" rel="external">CARLA</a> used to support training, prototyping, validation of self-driving models, including perception and control. CARLA is usded to study the performance of three approaches, 1)  classic modular pipeline that comprises a vision-based perception module, a rule-based planner, and a maneuver controller; 2)a deep network that maps sensory input to driving commands via imitaion learning;  3) end-to-end reinforcment learning.</p>
-<p>all approaches make use of a high-level topological planner. the planner takes the current position of the agent and the location of the goal as input, and use A* algorithm to provide a high-level plan.  this plan advises the agent to turn left/right, or keep straight at intersections, but not provide a trajectory neither geometric info. which is a weaker form of common GPS.</p>
-<h2 id="simulation-engine"><a href="#simulation-engine" class="headerlink" title="simulation engine"></a>simulation engine</h2><p>CARLA simulates a dynamic world and provide a simple interface between the world and an agent that interacts with the world. CARLA is designed as a server-client system, where the server runs the simulation and renders the scene, the client API is responsible for interaction between the agent and the server via sockets.</p>
-<p>the client send commands and meta-commands to the server and receives sensor readings in return. the comands control the vehicle and includes steering, accelerating, and braking. meta-commands controls the behavior of hte server, e.g. resetting hte simulation, modifying the sensor suite.</p>
-<h3 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h3><p>the static 3D world, such as buildings, traffic signs,  and the dynamic objects such as vehicles, pedestrains. the behavior of non-player characters is based on standard UE4 vehicle model(PhysXVehicles), and extended with a basic controller to govern NPC’s behavior: lane following, respecting traffic lights, speed limits, and decision making at intersections.</p>
-<h3 id="pedestrains"><a href="#pedestrains" class="headerlink" title="pedestrains"></a>pedestrains</h3><p>pedestrains navigate the streets according to a town-specific navigation map, which conveys a location-based cost, which is designed to encourage pedestrains to walk along sidewalkd and marked road crossing, but allows them to cross road at any point.</p>
-<h3 id="sensors"><a href="#sensors" class="headerlink" title="sensors"></a>sensors</h3><p>camera parameters include 3D location, 3D orientation with respect to the vehicle’s coordinate system, field of view, and depth of field.</p>
-<p>the semantic segmentation pseudo-sensor provides 12 semantic classes:  road, land-marking, traffic sign, sidewalk, fence, pole, wall, building, vegetation, vehicle, pedestrain, and other.</p>
-<p>a range of measurements associated with the state of the agent.  ? </p>
-<p>measurements concerning traffic rules include the percentage of vehicle’s footprint that impinges on wrong-way lanes or sidewalks, as well as states of the traffic lights and speed limit at the current location of the vehicle. </p>
-<p>CARLA provides access to exact location and bounding boxes of all dynamic objects. </p>
-<h2 id="autonomous-driving"><a href="#autonomous-driving" class="headerlink" title="autonomous driving"></a>autonomous driving</h2><p>the agent interacts with the environment over discrete time steps. at each time step, the agent gets an observation, which is a tuple of sensory inputs, and must produce an action, which represents steering, throttle, brake. </p>
-<h3 id="modular-pipeline"><a href="#modular-pipeline" class="headerlink" title="modular pipeline"></a>modular pipeline</h3><p>the pipeline includes:  perception, planning, continuous control. local planning is critical based on visual perception.</p>
-<h4 id="perception"><a href="#perception" class="headerlink" title="perception"></a>perception</h4><p>using semantic segmentation network based on RefineNet to estimate lanes, road limits, and dynamic objects. and a classification model is used to determine proximity to intersections. </p>
-<h4 id="the-local-planner"><a href="#the-local-planner" class="headerlink" title="the local planner"></a>the local planner</h4><p>coordinates low-level navigation by generating a set of waypoints, near-term goal states that represents the desired position and orientation of the car in near future.  the rule-based state:  1) road-following,  2) left-turn, 3) right-turn, 4) intersection-forward, 5) hazard-stop. transitions between states are performed based on estimates provided by the perception module and on topological info provided by the global planner.</p>
-<h4 id="continuous-controller"><a href="#continuous-controller" class="headerlink" title="continuous controller"></a>continuous controller</h4><p>using PID controller, which inputs current pose, speed, a list of waypoints, and outputs steering, throttle, and brake.</p>
-<h2 id="carla-release"><a href="#carla-release" class="headerlink" title="carla release"></a>carla release</h2><h3 id="9-1"><a href="#9-1" class="headerlink" title="9.1"></a>9.1</h3><p>1)   enable client to detect collisions and determine lane changes :  <code>sensor.other.collision</code>, <code>sensor.other.lane_detector</code>, </p>
-<p>2)  access to the road network, waypoints nearby current vehicle and define user navigation algorithms: <code>Map</code></p>
-<p>3) support new map created from external RoadRunner/VectorZero, in OpenDriven map standard </p>
-<h3 id="9-2"><a href="#9-2" class="headerlink" title="9.2"></a>9.2</h3><p>1) simulation of traffic scenarios by <a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external"><code>Scenario Runner</code></a>. e.g.  following leading vehicle,  stationary object crossing, dynamic object crossing, opposite vehicle running red light, vehicle turn right/left etc</p>
-<p>2)upgraded ROS bridge </p>
-<p>3) vehicle navigation from client side: <code>BasicAgent</code>, navigate to a point given location while dealing with other vehicles and traffic lights safely;  <code>RoamingAgent</code>, drives around making random choices when presented to multiple options</p>
-<h3 id="9-3"><a href="#9-3" class="headerlink" title="9.3"></a>9.3</h3><p>1) new town and new pedestrains </p>
-<p>2) no rendering mode, a 2D map visualization tool that display vehicles, traffic lights, speed limits, pedestrains, road, etc. help to improve the server framerate</p>
-<p>3) traffic light class in client <code>TrafficLightState</code> </p>
-<p>4) new sensors.  <code>ObstacleDetector</code>, a simple raycast sensor to detect something in front of the ego vehicle and what is it; and <code>GlobalNavigationSatelliteSystem</code>, attach to ego vehicle and get its geolocation, which is based on the geo-reference define in OpenDriven file associated with each map.</p>
-<h3 id="9-4"><a href="#9-4" class="headerlink" title="9.4"></a>9.4</h3><p>1) allow client side to change physics properties of vehicle or their components in runtime <code>WheelsPhysicsControl</code> </p>
-<p>2) logging and playback system, which includes a camera-following mode to follow a target actor while replaying the simulation, and can replay situations from different viewpoints. and the logging query engine allow users to query different types of events.</p>
-<p>3) random streaming port, which makes it possible to stream sensor data in a secondary port</p>
-<p>4) import maps,  replace maps as tar.gz files in “ExportedMaps” folder </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1896,7 +1863,7 @@ $$  z =  h(x, v)    $$            (2.2)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="c#,http," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,17 @@
 
 
 
-<meta name="description" content="document, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me. IntroductionNancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is">
-<meta name="keywords" content="c#,http">
+<meta name="description" content="when dealing with plan and control models in ADS system, there are plenty of basic math, and the understanding of these math are definitely helpful to build a better and stronger algorithm. to design">
 <meta property="og:type" content="article">
-<meta property="og:title" content="nancyfx study">
-<meta property="og:url" content="http://yoursite.com/2019/08/30/nancyfx-study/index.html">
+<meta property="og:title" content="math in ADS system">
+<meta property="og:url" content="http://yoursite.com/2019/09/14/math-in-ADS-system/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="document, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me. IntroductionNancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is">
+<meta property="og:description" content="when dealing with plan and control models in ADS system, there are plenty of basic math, and the understanding of these math are definitely helpful to build a better and stronger algorithm. to design">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-30T15:14:59.806Z">
+<meta property="og:updated_time" content="2019-09-14T10:43:33.934Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="nancyfx study">
-<meta name="twitter:description" content="document, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me. IntroductionNancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is">
+<meta name="twitter:title" content="math in ADS system">
+<meta name="twitter:description" content="when dealing with plan and control models in ADS system, there are plenty of basic math, and the understanding of these math are definitely helpful to build a better and stronger algorithm. to design">
 
 
 
@@ -132,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/30/nancyfx-study/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/09/14/math-in-ADS-system/"/>
 
 
 
 
 
-  <title>nancyfx study | Serious Autonomous Vehicles</title>
+  <title>math in ADS system | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +290,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/nancyfx-study/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/math-in-ADS-system/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">nancyfx study</h1>
+          <h1 class="post-title" itemprop="name headline">math in ADS system</h1>
         
 
         <div class="post-meta">
@@ -320,8 +319,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T09:11:39-04:00">
-                2019-08-30
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-14T06:43:04-04:00">
+                2019-09-14
               </time>
             
 
@@ -339,9 +338,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/08/30/nancyfx-study/#comments" itemprop="discussionUrl">
+                <a href="/2019/09/14/math-in-ADS-system/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/30/nancyfx-study/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/09/14/math-in-ADS-system/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,72 +365,120 @@
       
 
       
-        <p><a href="https://github.com/NancyFx/Nancy/wiki/Documentation" target="_blank" rel="external">document</a>, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me.</p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Nancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is designed to handle <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and     <code>PATCH</code> request and provides  a simple, elegant Domain Specific Language(DSL) for returning a response. </p>
-<h3 id="build-to-run-anywhere"><a href="#build-to-run-anywhere" class="headerlink" title="build to run anywhere"></a>build to run anywhere</h3><p>Nancy was designed to not have any dependenceis on existing frameworks, it’s used pretty much wherever you want to. <code>host</code> in Nancy acts as an <code>adaptor</code> for a hosting environment, thus enabling Nancy to run on existing techs, such as ASP.NET, WCF.</p>
-<p>the bare minimum requires to build a Nancy service are the core framework and a host. </p>
-<h3 id="helloworld-service"><a href="#helloworld-service" class="headerlink" title="helloworld service"></a>helloworld service</h3><p>all module should be derived from <code>NancyModule</code>, and define a route handler.  tips: always make the module <code>public</code>, so NancyFx can discover it. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class HelloWorld : NancyModule </div><div class="line">&#123;</div><div class="line">	public HelloModule()</div><div class="line">	&#123;</div><div class="line">		Get[&quot;/&quot;] = parameters =&gt; &quot;Hello World&quot; ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="exploring-modules"><a href="#exploring-modules" class="headerlink" title="exploring modules"></a>exploring modules</h2><p>module is where you define the logic, is the minimum requirement for any Nancy app. module should inherit from <code>NancyModule</code>, then define the behaviors, with <code>routes</code> and <code>actions</code>.</p>
-<h3 id="modules-are-globally-discovered"><a href="#modules-are-globally-discovered" class="headerlink" title="modules are globally discovered"></a>modules are globally discovered</h3><p>the global discovery of modules will perform once and the information is then cached, so not expensive.</p>
-<h2 id="Define-routes"><a href="#Define-routes" class="headerlink" title="Define routes"></a>Define routes</h2><p>to define a <code>Route</code> need to specify a     <code>Method</code> + <code>Pattern</code> + <code>Action</code> + (optional) <code>Condition</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;] = _ =&gt; &#123;</div><div class="line">     	// do sth</div><div class="line">     &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>or async run:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;, runAsnyc: true ] = async(_, token) =&gt; 	  &#123;</div><div class="line">     	// do sth long and tedious</div><div class="line">      &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h3 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h3><p>method is the <code>HTTP method</code> used to access the resource, Nancy support:  <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code>.</p>
-<h3 id="secret-for-selecting-the-right-route-to-invoke"><a href="#secret-for-selecting-the-right-route-to-invoke" class="headerlink" title="secret for selecting the right route to invoke"></a>secret for selecting the right route to invoke</h3><p>in case when two routes capture the same request, remember :</p>
-<ul>
-<li><p>the order in which modules are loaded are non-deterministic </p>
-</li>
-<li><p>routes in a given module are discovered in the order in which they are defined </p>
-</li>
-<li><p>if several possible matches found, the most specific match.</p>
+        <p>when dealing with plan and control models in ADS system, there are plenty of basic math, and the understanding of these math are definitely helpful to build a better and stronger algorithm.</p>
+<p>to design a ADS software system, there are two parts, the engineering background and software development. enginneering side is the core logic, while software is about how to organize the software and present, especially with new ideas, e.g. cloud based architecture, web user interface.</p>
+<h2 id="vector-analysis"><a href="#vector-analysis" class="headerlink" title="vector analysis"></a>vector analysis</h2><h3 id="coordinate-system"><a href="#coordinate-system" class="headerlink" title="coordinate system"></a>coordinate system</h3><p>asssumed a Cartesian system [O: e1, e2, e3], a vector <strong>r</strong> can be represented as (x, y, z).</p>
+<h3 id="vector-operator"><a href="#vector-operator" class="headerlink" title="vector operator"></a>vector operator</h3><ul>
+<li><p>vector add </p>
+<p>  <strong>a</strong> + <strong>b</strong> = (a_x + b_x) <strong>i</strong> + (a_y + b_y) <strong>j</strong> + (a_z + b_z) <strong>k</strong></p>
 </li>
 </ul>
-<h3 id="root-path"><a href="#root-path" class="headerlink" title="root path"></a>root path</h3><p>all pathes used in Nancy are relative to <code>root path</code>, which tell Nancy where its resources are stored on the file system, which is defined in <code>IRootPathProvider</code></p>
-<h3 id="static-content"><a href="#static-content" class="headerlink" title="static content"></a>static content</h3><p><code>static content</code> is things e.g. javascript files, css, images etc. Nancy uses a convention based approach to figure out what static content it is able to serve at runtime.</p>
-<p>Nancy supports the notion of having multiple conventions for static content and each convention is represented by a <code>delegate</code> with the signature <code>Func&lt;NancyContext, string, Response&gt;</code> </p>
-<p>the delegate accepts two parameters: the context of the current request and the application root path, the output of the delegate is a standard Nancy <code>Response</code> object or <code>null</code>, which means the convention has no static content.</p>
-<h4 id="define-your-own-conventions-usign-the-bootstrapper"><a href="#define-your-own-conventions-usign-the-bootstrapper" class="headerlink" title="define your own conventions usign the bootstrapper"></a>define your own conventions usign the bootstrapper</h4><p><a href="https://github.com/NancyFx/Nancy/wiki/Managing-static-content" target="_blank" rel="external">link</a></p>
-<h2 id="View-engines"><a href="#View-engines" class="headerlink" title="View engines"></a>View engines</h2><p>view engine, takes a <code>template</code>  and an optional <code>model</code>(the data) and outputs(usually) <code>HTML</code> to be rendered into the browser. in lg-sim, the <code>view</code> is rendered in nodejs. </p>
-<h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p><a href="https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/overview/understanding-models-views-and-controllers-cs" target="_blank" rel="external">model view controller</a></p>
+<p>the triangle inequality is:</p>
+<p>|<strong>a</strong> + <strong>b</strong>| &lt;= |<strong>a</strong>| + |<strong>b</strong>|</p>
 <ul>
-<li>understand controller </li>
-</ul>
-<p>a controller is reponsible for controlling the flow logic in the app. e.g. what reponse to send back to a user when a user makes a browser request.</p>
-<p>any public method in a controller is exposed as a controller action. </p>
-<ul>
-<li>understand view</li>
-</ul>
-<p>a view contains the HTML markup and content that is send to the browser. in general to return a view for a controller action, need to create a subfolder in the <code>Views</code> folder with the same name as the controller.</p>
-<ul>
-<li>understand model</li>
-</ul>
-<p>the model is anything not inside a controller or a view. e.g. validation logic, database access. the view should only contain logic related to generating the user interface. the controller should only contain the bare minimum of logic required to return the right view. </p>
-<h2 id="C-anonymous"><a href="#C-anonymous" class="headerlink" title="C# anonymous"></a>C# anonymous</h2><p><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/statements-expressions-operators/anonymous-functions" target="_blank" rel="external">c# programming guide</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(input-parameters) =&gt; expression </div><div class="line">(input-parameters) =&gt; &#123;&lt;sequence-of-statements&gt;&#125;</div><div class="line"></div><div class="line">TestDelegate testD = (x) =&gt; &#123;(Console.WriteLine(x);&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li><code>=&gt;</code> is the <code>Lambda</code> operator, on its left is input paramters(if exist). Lambda expression/sequence is equal to a delegate class.</li>
-</ul>
-<ul>
-<li><code>delegate</code> is a refer type, used to pass one function as paramter to another function. e.g. in event handle. </li>
-</ul>
-<h2 id="Nancy-in-lg-sim-WebUI"><a href="#Nancy-in-lg-sim-WebUI" class="headerlink" title="Nancy in lg-sim WebUI"></a>Nancy in lg-sim WebUI</h2><p><a href="https://github.com/lgsvl/simulator/tree/master/Assets/Scripts/Web" target="_blank" rel="external">/Assets/Scripts/Web</a></p>
-<p>a few steps to build  Nancy server: </p>
-<ul>
-<li>Nancyhost.start() </li>
-<li>add NancyModule instance(where define route logic)  </li>
-</ul>
-<p>a few other libs used :</p>
-<ul>
-<li><p>PetaPoco, a light-weight ORM(object relational mapper) framework in C#</p>
-</li>
-<li><p>SQLite</p>
+<li><p>multiply scalar </p>
+<p><strong>a</strong> . <strong>b</strong> =  a . b_x <strong>i</strong> + a . b_y <strong>j</strong> + a . b_z <strong>k</strong>  </p>
 </li>
 </ul>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://auth0.com/blog/meet-nancy-a-lightweight-web-framework-for-dot-net/" target="_blank" rel="external">meet nancy</a></p>
-<p><a href="http://liulixiang1988.github.io/nancy-webkuang-jia.html#_1" target="_blank" rel="external">nancy doc in chinese</a></p>
-<p>`</p>
+<p>namely, by multiplying each direction component of the vector by <code>a</code>.</p>
+<ul>
+<li><p>dot product </p>
+<p><strong>a</strong> . <strong>b</strong> = |a|.|b|. \cos<a,b> = a_x . b_x +  a_y . b_y +  a_z . b_z </a,b></p>
+</li>
+</ul>
+<p>a simple physical explaination: assume <code>a</code> is displacement, <code>b</code> is force, then the power of force in the displacement is by <code>dot product</code>.</p>
+<p>the geometric meaning of <code>dot product</code> is projection. namely, |a|cos<a,b> means project of vector <code>a</code> on vector <code>b</code>, which also gives the decomposion of <code>a</code>, which has a unique <code>projection component vector</code> and <code>vertical component vector</code>.</a,b></p>
+<p><strong>a</strong> =  <strong>a_p</strong> + <strong>a_v</strong></p>
+<p><strong>a_p</strong> = ( <strong>a</strong> . <strong>e_p</strong> ) . <strong>e_p</strong></p>
+<ul>
+<li>cross product </li>
+</ul>
+<p>assume three vectors non-co-plane, (a, b, c), rotating start from a to b, the thumb point to c, which is a right-hand-coordinate system. </p>
+<p>a simple physical meaning: assume <code>a</code> is the force, <code>b</code> is the force arm, then <code>a x b</code> gives the torque, which perpendicular to <a, b=""> plane. </a,></p>
+<p> <strong>a</strong> x <strong>b</strong> = |a||b| \sin<a, b=""> </a,></p>
+<p>the geometric meaning of <code>cross product</code> is the area of parallelogram by <a, b="">. </a,></p>
+<p>base vectors in right-hand Cartesian coordiante system satisfy:</p>
+<pre><code>ei x ej = ek (i != j)
+</code></pre><ul>
+<li><p>mixed product </p>
+<pre><code>$$ a x b \cdot c  $$
+</code></pre></li>
+</ul>
+<p>which gives the volume of parallel hexagonal propped by <a, b,="" c=""></a,></p>
+<h3 id="curve-volume-integration"><a href="#curve-volume-integration" class="headerlink" title="curve(volume) integration"></a>curve(volume) integration</h3><ul>
+<li><p>Gauss integration </p>
+</li>
+<li><p>Stokes integration </p>
+</li>
+</ul>
+<h3 id="scalar-field"><a href="#scalar-field" class="headerlink" title="scalar field"></a>scalar field</h3><ul>
+<li>directional derivative </li>
+</ul>
+<p>assuming vector <code>l</code> in space, its unitfied vector can be present as directional cosine [cos\alpha, cos\beta, cos\gamma]^T. for any function <code>u=u(x, y, z)</code>, who is derivable at <code>M0(x0, y0, z0)</code>, then:</p>
+<pre><code>\frac{\partial u}{\partial l} = dot_product(\Delta u, &lt;\cos \alpha, \cos \beta, \cos \gamme&gt; )
+</code></pre><ul>
+<li><p>gradient </p>
+<pre><code>\Delta u =  \frac{\partial u}{\parial x} \b{i} + \frac{\partial u}{\parial y} \b{j} +  \frac{\partial u}{\parial z} \b{k}
+</code></pre></li>
+</ul>
+<p>the directional derivative which gives the maximum of <code>\Delta u</code> at a point, it’s the gradient direction. the gradient direction in space, stands for the direction from lowest co-value layer to highest co-value layer, which in physical, means the most high rate of change in general. </p>
+<ul>
+<li><p>Halmilton operator </p>
+<pre><code>\Delta  =  \frac{\partial}{\parial x} \b{i} + \frac{\partial}{\parial y} \b{j} +  \frac{\partial}{\parial z} \b{k}
+</code></pre></li>
+</ul>
+<h3 id="vector-field"><a href="#vector-field" class="headerlink" title="vector field"></a>vector field</h3><ul>
+<li>directional derivative</li>
+</ul>
+<p>the gradient field of a vector field gives a tensor field, which raise the dimension one more. the dot product(inner product) of a vector field, decrease to scalar field, the cross product of a vector field keeps a vector field. for a vector field, usually talk about its flux and divergence.</p>
+<h2 id="analytical-geometry"><a href="#analytical-geometry" class="headerlink" title="analytical geometry"></a>analytical geometry</h2><h3 id="plane-equation"><a href="#plane-equation" class="headerlink" title="plane equation"></a>plane equation</h3><p>assume plane <code>\pi</code> in Cartesian coordinate system [O: X, Y, Z], <code>O</code>‘s projection in plane is <code>N</code>,  the directional cosine of <code>ON</code> is <code>(l, m, n)</code>, </p>
+<p>for any point <code>P</code> in plane, <code>NP</code> is always perpendicular to the directional cosine, namely:</p>
+<p>dot_product( <strong>NP</strong>, <strong>(l, m, n)</strong> ) = 0 </p>
+<p>as <code>l**2 + m**2 + n**2 == 1</code>, which gives:</p>
+<pre><code>lx + my + nz - p = 0            (1)
+</code></pre><p>equation 1) is the normalized plane equation. and <code>(l, m, n)</code> is the normal vector of lane <code>\pi</code>, and <code>p</code> should be no lesss than 0.</p>
+<h3 id="linear-equation"><a href="#linear-equation" class="headerlink" title="linear equation"></a>linear equation</h3><p>assumed a line  go across point <code>P_0</code> $(x_0, y_0, z_0)$ and in direction <code>\lamba</code>, then any point <code>P</code> $(x,y,z)$ on this line, satisfy:</p>
+<pre><code>x - x_0 = |PP_0| . l 
+y - y_0 = |PP_0| . m 
+z - z_0 = |PP_0| . n 
+</code></pre><p>taking |PP_0| as <code>t</code>, the equation above is the parmeterized line equation, namely:</p>
+<pre><code>\frac{x-x0}{l} =  \frac{y-y0}{m} =  \frac{z-z0}{n} 
+</code></pre><p>in general, a linear is the cross interface of two linear plane, so its genearl equation is to satisfy both plane equation:</p>
+<pre><code>A1.x + B1.y + C1.z + P1 = 0
+A2.x + B2.y + C2.z + P2 = 0
+</code></pre><h3 id="coordiante-transfer"><a href="#coordiante-transfer" class="headerlink" title="coordiante transfer"></a>coordiante transfer</h3><p>in general, coordiante transfer means <code>base vector</code> linear transfer. assuming original coordinate system [O: e1, e2, e3], and new coordinate system [O’, e1’, e2’, e3’]</p>
+<p>both the original base vector <e1, e2,="" e3=""> and new base vector &lt;e1’, e2’, e3’&gt; prop up the same 3D linear space. </e1,></p>
+<p>and there should be transfer matrix between them:</p>
+<p><strong>e</strong> = matrix[3x3] \cdot <strong>e’</strong></p>
+<p>for any point <code>P</code> transfer from original to new coordinate system, </p>
+<p>{<strong>x</strong>} = {<strong>a</strong>} + {<strong>x’</strong>} . matrix[3x3]</p>
+<p>matrix[3x3] is:</p>
+<table>
+<thead>
+<tr>
+<th>a11</th>
+<th>a21</th>
+<th>a31</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a12</td>
+<td>a22</td>
+<td>a32</td>
+</tr>
+<tr>
+<td>a13</td>
+<td>a23</td>
+<td>a33</td>
+</tr>
+</tbody>
+</table>
+<p>each raw in the matix above, stands for a <code>base vector</code> tranfer from original one to the new one, namely:</p>
+<pre><code>$$ e1&apos; = a11.e1 + a21.e2 + a31.e3 $$ 
+</code></pre><p>the component value of each coordinate, can be simply by:</p>
+<p>x1’ =  <strong>e1’</strong> . <strong>OP’</strong></p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="http://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/" target="_blank" rel="external">write mathematic fomulars in Markdown</a></p>
 
       
     </div>
@@ -459,14 +506,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/c/" rel="tag"># c#</a>
-          
-            <a href="/tags/http/" rel="tag"># http</a>
-          
-        </div>
-      
 
       
       
@@ -476,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/24/where-are-you-in-next-5-years-9/" rel="next" title="未来5年在哪里 (8).md">
-                <i class="fa fa-chevron-left"></i> 未来5年在哪里 (8).md
+              <a href="/2019/09/14/未来5年在哪里-10/" rel="next" title="未来5年在哪里 10">
+                <i class="fa fa-chevron-left"></i> 未来5年在哪里 10
               </a>
             
           </div>
@@ -485,10 +524,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/30/reactjs-introduction/" rel="prev" title="reactjs introduction">
-                reactjs introduction <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -636,7 +671,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#build-to-run-anywhere"><span class="nav-number">1.1.</span> <span class="nav-text">build to run anywhere</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#helloworld-service"><span class="nav-number">1.2.</span> <span class="nav-text">helloworld service</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exploring-modules"><span class="nav-number">2.</span> <span class="nav-text">exploring modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#modules-are-globally-discovered"><span class="nav-number">2.1.</span> <span class="nav-text">modules are globally discovered</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Define-routes"><span class="nav-number">3.</span> <span class="nav-text">Define routes</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Method"><span class="nav-number">3.1.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#secret-for-selecting-the-right-route-to-invoke"><span class="nav-number">3.2.</span> <span class="nav-text">secret for selecting the right route to invoke</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#root-path"><span class="nav-number">3.3.</span> <span class="nav-text">root path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#static-content"><span class="nav-number">3.4.</span> <span class="nav-text">static content</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#define-your-own-conventions-usign-the-bootstrapper"><span class="nav-number">3.4.1.</span> <span class="nav-text">define your own conventions usign the bootstrapper</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#View-engines"><span class="nav-number">4.</span> <span class="nav-text">View engines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC"><span class="nav-number">5.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-anonymous"><span class="nav-number">6.</span> <span class="nav-text">C# anonymous</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nancy-in-lg-sim-WebUI"><span class="nav-number">7.</span> <span class="nav-text">Nancy in lg-sim WebUI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">7.1.</span> <span class="nav-text">refer</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#vector-analysis"><span class="nav-number">1.</span> <span class="nav-text">vector analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#coordinate-system"><span class="nav-number">1.1.</span> <span class="nav-text">coordinate system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector-operator"><span class="nav-number">1.2.</span> <span class="nav-text">vector operator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#curve-volume-integration"><span class="nav-number">1.3.</span> <span class="nav-text">curve(volume) integration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scalar-field"><span class="nav-number">1.4.</span> <span class="nav-text">scalar field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector-field"><span class="nav-number">1.5.</span> <span class="nav-text">vector field</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#analytical-geometry"><span class="nav-number">2.</span> <span class="nav-text">analytical geometry</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#plane-equation"><span class="nav-number">2.1.</span> <span class="nav-text">plane equation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#linear-equation"><span class="nav-number">2.2.</span> <span class="nav-text">linear equation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#coordiante-transfer"><span class="nav-number">2.3.</span> <span class="nav-text">coordiante transfer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">2.4.</span> <span class="nav-text">refer</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -779,9 +814,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/08/30/nancyfx-study/';
-          this.page.identifier = '2019/08/30/nancyfx-study/';
-          this.page.title = 'nancyfx study';
+          this.page.url = 'http://yoursite.com/2019/09/14/math-in-ADS-system/';
+          this.page.identifier = '2019/09/14/math-in-ADS-system/';
+          this.page.title = 'math in ADS system';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';

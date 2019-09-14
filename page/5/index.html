@@ -291,6 +291,309 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/卡尔曼滤波/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/30/卡尔曼滤波/" itemprop="url">卡尔曼滤波</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-30T10:21:09-04:00">
+                2019-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/30/卡尔曼滤波/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/30/卡尔曼滤波/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="状态方程"><a href="#状态方程" class="headerlink" title="状态方程"></a>状态方程</h2><p>状态变量 <code>$x$</code> 满足, 其中 <code>u</code>为控制变量：</p>
+<pre><code>$$ x = A x_prev + B u_prev + w_prev $$    (1) 
+</code></pre><p>观测变量 <code>$z</code> 满足：</p>
+<pre><code>$$ z = H x + v $$                    (2)
+</code></pre><p>随机信号 $<code>w</code>$ 和 $<code>v</code>$ 分别表示过程激励噪声和观测噪声，假定相互独立，且服从正态分布。</p>
+<p>定义状态变量的先验估计 $<code>x^-</code>$， 即基于之前状态对当前状态的预测值； 定义后验估计 $<code>x^</code>$，即已知当前观测值所计算的当前状态变量。 定义先验误差 $<code>e^-</code>$, 后验误差 $<code>e^</code>$, 满足： </p>
+<pre><code>$$ e^- = x - x^- $$                     (3)
+
+$$ e^ = x - x^ $$                         (4)
+</code></pre><p>卡尔曼滤波表示： 后验估计（观测值所推导的状态变量值）与先验估计（预测的状态变量值）的差异，可表示为观测值与以先验估计为输入的观测值的差异的增益 <code>K</code>。</p>
+<pre><code>$$ x^ -  x^- =  K ( z - H x^- ) $$     (5)
+</code></pre><p><code>K</code>可由先验误差的协方差 <code>P</code>、观测噪声的协方差<code>R</code> 和观测增益<code>H</code>表示: </p>
+<pre><code>$$ K = P^- H^t /  (  HP^-H^t + R ) $$   (6)
+</code></pre><p>可见：</p>
+<p>1） 当<code>R</code> 趋于0时， <code>k</code> 趋近于 <code>h</code> 的逆，此时 <code>x^ = x</code>。即当观测误差很小，观测值趋近真实值。</p>
+<p>2） 当<code>P</code>趋于0时，即预测值趋近真实值。  </p>
+<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>卡尔曼滤波器用反馈控制估计过程状态（变量）：  滤波器估计某一时刻的状态（时间更新/预估），然后以（含噪声的）测量变量获得反馈（测量更新/校政）。</p>
+<p>时间更新，当前时步状态先验估计 <code>x^-</code> 及先验误差协方差近似<code>P^-</code>:</p>
+<pre><code>$$ x^- =  A x^-_prev + B u_prev $$  (7.1)
+
+$$ P^- = A P^_prev A^t + Q $$         (7.2)
+</code></pre><p>其中 $ P(w) ~ N(0, Q) $ </p>
+<p>测量更新，使用(6)更新卡尔曼增益<code>K</code>, 使用（5)更新后验状态变量<code>x^</code>和当前步先验误差协方差值 <code>P^</code>： </p>
+<pre><code>$$ P = ( I  - KH ) P^-  $$            (8)
+</code></pre><h2 id="控制器调参"><a href="#控制器调参" class="headerlink" title="控制器调参"></a>控制器调参</h2><p>测量误差一般可观测得到；而过程误差q需要通过与一个已知误差的在线滤波器对比调整系数。调参一般是离线过程。一般当过程误差和卡尔曼增益会快速收敛并保持常数。但测量误差受环境影响不易保持不变。</p>
+<h2 id="扩展卡尔曼"><a href="#扩展卡尔曼" class="headerlink" title="扩展卡尔曼"></a>扩展卡尔曼</h2><p>当观测值与系统状态变量 或 系统本身是非线性关系，方程(1), (2)变非线性函数。</p>
+<pre><code>$$  x = f(x_prev, u_prev, w) $$  (1.2) 
+$$  z =  h(x, v)    $$            (2.2) 
+</code></pre><p><a href="https://www.cs.unc.edu/~welch/kalman/media/pdf/kalman_intro_chinese.pdf" target="_blank" rel="external">link</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/" itemprop="url">paper reading-Carla an open urban driving simulator</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-30T03:32:25-04:00">
+                2019-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="http://carla.org" target="_blank" rel="external">CARLA</a> used to support training, prototyping, validation of self-driving models, including perception and control. CARLA is usded to study the performance of three approaches, 1)  classic modular pipeline that comprises a vision-based perception module, a rule-based planner, and a maneuver controller; 2)a deep network that maps sensory input to driving commands via imitaion learning;  3) end-to-end reinforcment learning.</p>
+<p>all approaches make use of a high-level topological planner. the planner takes the current position of the agent and the location of the goal as input, and use A* algorithm to provide a high-level plan.  this plan advises the agent to turn left/right, or keep straight at intersections, but not provide a trajectory neither geometric info. which is a weaker form of common GPS.</p>
+<h2 id="simulation-engine"><a href="#simulation-engine" class="headerlink" title="simulation engine"></a>simulation engine</h2><p>CARLA simulates a dynamic world and provide a simple interface between the world and an agent that interacts with the world. CARLA is designed as a server-client system, where the server runs the simulation and renders the scene, the client API is responsible for interaction between the agent and the server via sockets.</p>
+<p>the client send commands and meta-commands to the server and receives sensor readings in return. the comands control the vehicle and includes steering, accelerating, and braking. meta-commands controls the behavior of hte server, e.g. resetting hte simulation, modifying the sensor suite.</p>
+<h3 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h3><p>the static 3D world, such as buildings, traffic signs,  and the dynamic objects such as vehicles, pedestrains. the behavior of non-player characters is based on standard UE4 vehicle model(PhysXVehicles), and extended with a basic controller to govern NPC’s behavior: lane following, respecting traffic lights, speed limits, and decision making at intersections.</p>
+<h3 id="pedestrains"><a href="#pedestrains" class="headerlink" title="pedestrains"></a>pedestrains</h3><p>pedestrains navigate the streets according to a town-specific navigation map, which conveys a location-based cost, which is designed to encourage pedestrains to walk along sidewalkd and marked road crossing, but allows them to cross road at any point.</p>
+<h3 id="sensors"><a href="#sensors" class="headerlink" title="sensors"></a>sensors</h3><p>camera parameters include 3D location, 3D orientation with respect to the vehicle’s coordinate system, field of view, and depth of field.</p>
+<p>the semantic segmentation pseudo-sensor provides 12 semantic classes:  road, land-marking, traffic sign, sidewalk, fence, pole, wall, building, vegetation, vehicle, pedestrain, and other.</p>
+<p>a range of measurements associated with the state of the agent.  ? </p>
+<p>measurements concerning traffic rules include the percentage of vehicle’s footprint that impinges on wrong-way lanes or sidewalks, as well as states of the traffic lights and speed limit at the current location of the vehicle. </p>
+<p>CARLA provides access to exact location and bounding boxes of all dynamic objects. </p>
+<h2 id="autonomous-driving"><a href="#autonomous-driving" class="headerlink" title="autonomous driving"></a>autonomous driving</h2><p>the agent interacts with the environment over discrete time steps. at each time step, the agent gets an observation, which is a tuple of sensory inputs, and must produce an action, which represents steering, throttle, brake. </p>
+<h3 id="modular-pipeline"><a href="#modular-pipeline" class="headerlink" title="modular pipeline"></a>modular pipeline</h3><p>the pipeline includes:  perception, planning, continuous control. local planning is critical based on visual perception.</p>
+<h4 id="perception"><a href="#perception" class="headerlink" title="perception"></a>perception</h4><p>using semantic segmentation network based on RefineNet to estimate lanes, road limits, and dynamic objects. and a classification model is used to determine proximity to intersections. </p>
+<h4 id="the-local-planner"><a href="#the-local-planner" class="headerlink" title="the local planner"></a>the local planner</h4><p>coordinates low-level navigation by generating a set of waypoints, near-term goal states that represents the desired position and orientation of the car in near future.  the rule-based state:  1) road-following,  2) left-turn, 3) right-turn, 4) intersection-forward, 5) hazard-stop. transitions between states are performed based on estimates provided by the perception module and on topological info provided by the global planner.</p>
+<h4 id="continuous-controller"><a href="#continuous-controller" class="headerlink" title="continuous controller"></a>continuous controller</h4><p>using PID controller, which inputs current pose, speed, a list of waypoints, and outputs steering, throttle, and brake.</p>
+<h2 id="carla-release"><a href="#carla-release" class="headerlink" title="carla release"></a>carla release</h2><h3 id="9-1"><a href="#9-1" class="headerlink" title="9.1"></a>9.1</h3><p>1)   enable client to detect collisions and determine lane changes :  <code>sensor.other.collision</code>, <code>sensor.other.lane_detector</code>, </p>
+<p>2)  access to the road network, waypoints nearby current vehicle and define user navigation algorithms: <code>Map</code></p>
+<p>3) support new map created from external RoadRunner/VectorZero, in OpenDriven map standard </p>
+<h3 id="9-2"><a href="#9-2" class="headerlink" title="9.2"></a>9.2</h3><p>1) simulation of traffic scenarios by <a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external"><code>Scenario Runner</code></a>. e.g.  following leading vehicle,  stationary object crossing, dynamic object crossing, opposite vehicle running red light, vehicle turn right/left etc</p>
+<p>2)upgraded ROS bridge </p>
+<p>3) vehicle navigation from client side: <code>BasicAgent</code>, navigate to a point given location while dealing with other vehicles and traffic lights safely;  <code>RoamingAgent</code>, drives around making random choices when presented to multiple options</p>
+<h3 id="9-3"><a href="#9-3" class="headerlink" title="9.3"></a>9.3</h3><p>1) new town and new pedestrains </p>
+<p>2) no rendering mode, a 2D map visualization tool that display vehicles, traffic lights, speed limits, pedestrains, road, etc. help to improve the server framerate</p>
+<p>3) traffic light class in client <code>TrafficLightState</code> </p>
+<p>4) new sensors.  <code>ObstacleDetector</code>, a simple raycast sensor to detect something in front of the ego vehicle and what is it; and <code>GlobalNavigationSatelliteSystem</code>, attach to ego vehicle and get its geolocation, which is based on the geo-reference define in OpenDriven file associated with each map.</p>
+<h3 id="9-4"><a href="#9-4" class="headerlink" title="9.4"></a>9.4</h3><p>1) allow client side to change physics properties of vehicle or their components in runtime <code>WheelsPhysicsControl</code> </p>
+<p>2) logging and playback system, which includes a camera-following mode to follow a target actor while replaying the simulation, and can replay situations from different viewpoints. and the logging query engine allow users to query different types of events.</p>
+<p>3) random streaming port, which makes it possible to stream sensor data in a secondary port</p>
+<p>4) import maps,  replace maps as tar.gz files in “ExportedMaps” folder </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1544,313 +1847,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/03/apollo-planning-module/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/03/apollo-planning-module/" itemprop="url">apollo planning module</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-03T08:30:43-05:00">
-                2019-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/03/apollo-planning-module/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/03/apollo-planning-module/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://yq.aliyun.com/articles/691219" target="_blank" rel="external">决策规划</a>, 根据导航信息及车辆的当前状态，在有限时间内，计算出一条合适的轨迹。</p>
-<h2 id="Lattice-Planner"><a href="#Lattice-Planner" class="headerlink" title="Lattice Planner"></a><a href="https://mp.weixin.qq.com/s/YDIoVf20kybu8JEUY3GZWg?spm=a2c4e.11153940.blogcont691219.30.78693edf59tdSa" target="_blank" rel="external">Lattice Planner</a></h2><ul>
-<li>Sample candidate trajectories </li>
-<li>Assign costs </li>
-<li>Select lowest-cost trajectory, to satisfy constraint &amp; collision check in each cycle</li>
-<li>Output </li>
-</ul>
-<h3 id="Frenet-坐标"><a href="#Frenet-坐标" class="headerlink" title="Frenet 坐标"></a>Frenet 坐标</h3><p>定义沿路面的一条光滑参考线（路面中心线）， 汽车位置坐标由纵向偏移量，横向偏移量表示。纵向坐标，由汽车质心在参考线上的投影点，到参考线起点的长度s表示；横向坐标， 由投影点到汽车质心的距离l表示。</p>
-<p>在Frenet坐标下，汽车的朝向、速度、加速度可由横、纵向偏移量的一阶导、二阶导表示。另外，由车辆动力学控制方程可知，横向的偏移量变化率与纵向速度相关，即横向运动是由纵向运动诱发的。</p>
-<h3 id="生成轨迹"><a href="#生成轨迹" class="headerlink" title="生成轨迹"></a>生成轨迹</h3><p>分别由初始（当前）横向、纵向的状态信息（位置、速度、加速度），和下一时刻的横向、纵向状态信息（位置、速度、加速度），可以得到Frenet坐标下的一个轨迹点。通过一系列的时间点t0，t1, … tn, 可以得到一系列的轨迹点p0, p1, … pn， 即形成一条轨迹。</p>
-<h3 id="轨迹集合采样"><a href="#轨迹集合采样" class="headerlink" title="轨迹集合采样"></a>轨迹集合采样</h3><p>轨迹采样，本质上是通过在解空间随机布点，然后贪婪搜索，筛选最低cost function value的点，即为可行轨迹。</p>
-<p>横向偏移量由动力学方程可由纵向偏移量唯一决定，即从控制方程上，每个scenario可以变成由纵向偏移量当唯一自变量的控制方程，从而保证有唯一最优解或者无解。但实际上，由纵向偏移量唯一表示的控制方程，需要满足不同scenario的约束条件，即一个带约束条件的优化问题。随机算法是一个鲁棒性很强的方法，而且大部分情况下，至少可以得到一个可行解。apollo中横向轨迹、纵向轨迹分别采样。</p>
-<p>apollo的横向轨迹的采样，由内部自定义三种横向偏移量： -0.5， 0， 0.5； 同时，设计到达这些横向偏移量的纵向位移： 10， 20， 40， 80. 两层循环即可得到一个轨迹集合。由此定义的横向轨迹不一定符合运动学、动力学约束。</p>
-<p>apollo的纵向轨迹的采样，考虑巡航、跟车、超车、停车等scenario。</p>
-<p>比如，巡航场景，通过两层循环采样。外层循环将速度从零到速度上限按等间距均匀遍历，内层循环由1s-8s均匀遍历。对于停车的场景，末状态的速度、加速度是0.</p>
-<h3 id="ST-Graph"><a href="#ST-Graph" class="headerlink" title="ST-Graph"></a>ST-Graph</h3><p>横坐标是时刻，纵坐标是障碍车的车头、车尾的位置。st图将描绘障碍车进入当前车道到离开当前车道所占据的位置区域。自驾车必须确保与障碍车所占据位置有重合。跟车，即在被占区域的下方，或超车，即在被占区域的上方。</p>
-<p>由跟车或超车，即可采样各个时刻的纵向偏移量，然后同理横向偏移量采样，形成纵向轨迹集合。</p>
-<h3 id="轨迹cost"><a href="#轨迹cost" class="headerlink" title="轨迹cost"></a>轨迹cost</h3><p>轨迹规划的约束条件： 达到目的、 横向偏移代价（尽量沿着道路中心行驶）、碰撞代价、符合交规、平稳舒适（横向加速度代价）、 纵向加速度代价（激烈加速）、向心加速度代价（转弯场景）。</p>
-<p>对于换道场景，对当前车道、目标车道的参考线做一次采样，并找到最低cost的轨迹。可以设计换道cost 。</p>
-<h2 id="EM-planner"><a href="#EM-planner" class="headerlink" title="EM planner"></a>EM planner</h2><p>expectation maximum(EM) ， <a href="https://blog.csdn.net/yuxuan20062007/article/details/83629595" target="_blank" rel="external">最大期望算法</a>，在概率模型中寻找参数最大似然估计或最大后验估计，其概率模型依赖于无法观测的隐性变量。</p>
-<p>首先，计算期望（e)， 利用对隐藏变量的现有估计值，计算其最大似然估计值；然后，最大值m， 最大化在e步上求的的最大似然值来计算参数的值。step-2 的参数被用于下一个 step-1 的计算。</p>
-<p>em planner 会迭代对路径path、速度velocity进行优化。基于当前步的path和对其他运动物体的预测，优化当前步的速度；然后基于这个新的速度，再优化path。迭代直到收敛。</p>
-<p>EM Planner 相比 Lattice Planner，利用了更多当前时间步的状态信息，在每个local timestep 都得到一个可行解。一系列的局部解，相当于弱形式，如果解空间存在可行解，局部解的迭代最终也将给出系统的可行解</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">Plan</span><span class="params">(<span class="keyword">const</span> common::vehicle_state::VehicleState &amp;vehicle_state, </span></span></div><div class="line"><span class="keyword">const</span> <span class="keyword">bool</span> is_on_auto_mode,</div><div class="line"><span class="keyword">const</span> <span class="keyword">double</span> publish_time, </div><div class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;common::TrajectoryPoint&gt;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/02/apollo-control-module/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/02/apollo-control-module/" itemprop="url">apollo control module</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-02T05:22:51-05:00">
-                2019-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/02/apollo-control-module/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/02/apollo-control-module/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="纵向控制"><a href="#纵向控制" class="headerlink" title="纵向控制"></a><a href="https://blog.csdn.net/u013914471" target="_blank" rel="external">纵向控制</a></h2><p>通过控制刹车、油门实现对车速的控制。由一个级联控制器和标定表构成。级联控制器包括：位置PID闭环控制器，  速度PID闭环控制器。标定表即速度-加速度-刹车-油门命令 标定表。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Status LonController::ComputeControlCommand(</div><div class="line">	<span class="keyword">const</span> localization::LocalizationEstimate *localization,  </div><div class="line">	<span class="keyword">const</span> canbus::Chassis *chassis, </div><div class="line">	<span class="keyword">const</span> planning::ADCTrajectory *planning_published_trajectory,</div><div class="line">	control::ControlCommand *cmd)</div></pre></td></tr></table></figure>
-<p>其输出是油门\刹车命令cmd. </p>
-<p><img src="/home/Documents/Blog/HexoBlog/source/_posts/apollo-control-module/lon_control.png" alt="avatar"></p>
-<h3 id="位置PID闭环控制器"><a href="#位置PID闭环控制器" class="headerlink" title="位置PID闭环控制器"></a>位置PID闭环控制器</h3><p>输入变量：期望位置 + 当前实际位置 </p>
-<p>输出变量：速度补偿量</p>
-<h3 id="速度PID闭环控制器"><a href="#速度PID闭环控制器" class="headerlink" title="速度PID闭环控制器"></a>速度PID闭环控制器</h3><p>输入变量：速度补偿 + 当前位置-速度偏差</p>
-<p>输出变量：加速度补偿量</p>
-<h3 id="速度-加速度-刹车-油门命令-标定表"><a href="#速度-加速度-刹车-油门命令-标定表" class="headerlink" title="速度-加速度-刹车/油门命令 标定表"></a>速度-加速度-刹车/油门命令 标定表</h3><p>输入变量： 加速度补偿量 +  规划驾速度， 车速</p>
-<p>输出变量： 油门／刹车控制量</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> LonController::ComputeLongitudinalErrors(</div><div class="line">	<span class="keyword">const</span> TrajectoryAnalyzer *trajectory_analyzer, </div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> preview_time ,</div><div class="line">	SimpleLongitudinalDebug *debug)</div></pre></td></tr></table></figure>
-<p>CarSim/Simulink 与 apollo 连结 ？ </p>
-<h2 id="横向控制"><a href="#横向控制" class="headerlink" title="横向控制"></a>横向控制</h2><p>通过调节方向盘转角实现对航向的控制，由一个前馈控制器和反馈控制器组合，实现车辆动力学模型和lqr 模型。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Status LatController::ComputeControlCommand(</div><div class="line">	<span class="keyword">const</span> localization::LocalizationEstimate *localization,</div><div class="line">	<span class="keyword">const</span> canbus::Chassis *chassis,</div><div class="line">	<span class="keyword">const</span> planning::ADCTrajectory *planning_published_trajectory,</div><div class="line">	control::ControlCommand *cmd)</div></pre></td></tr></table></figure>
-<p><img src="/home/Documents/Blog/HexoBlog/source/_posts/apollo-control-module/lat_control.png" alt="avatar"></p>
-<h3 id="前馈控制器"><a href="#前馈控制器" class="headerlink" title="前馈控制器"></a>前馈控制器</h3><p>输入变量：道路曲率</p>
-<p>输出变量：方向盘前馈控制量</p>
-<p>前馈控制变量实现补偿道路曲率对稳态误差的影响。</p>
-<h3 id="反馈控制器"><a href="#反馈控制器" class="headerlink" title="反馈控制器"></a>反馈控制器</h3><p>输入变量： 期望航向角</p>
-<p>输出变量： 方向盘反馈控制量</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// update status matrix </span></div><div class="line"><span class="keyword">void</span> LatController::UpdateStateAnalyticalMatching(</div><div class="line">	SimpleLateralDebug *debug)</div><div class="line"></div><div class="line"><span class="comment">// cal lat error </span></div><div class="line"><span class="keyword">double</span> LatController::ComputeLateralErrors(</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> x, </div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> y,</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> theta,</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> linear_v ,</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> angular_v, </div><div class="line">	<span class="keyword">const</span> TrajectoryAnalyzer &amp;trajectory_analyzer,</div><div class="line">	SimpleLateralDebug *debug)</div><div class="line"></div><div class="line"><span class="keyword">void</span> LatController::UpdateMatrix() </div><div class="line"></div><div class="line"><span class="keyword">void</span> common::math::SolveLQRProblem()  <span class="comment">// gain matrix </span></div><div class="line"></div><div class="line">steer_angle =  steer_angle_feedback + steer_angle_feedforward</div></pre></td></tr></table></figure>
-<p>控制模块更新cmd 后，发送给canbus模块。 </p>
-<h2 id="MPC-模型"><a href="#MPC-模型" class="headerlink" title="MPC 模型"></a>MPC 模型</h2><p>mpc的实现依赖于过程的动态模型。对时域内，每个当前时刻进行优化，求取每个时刻的最优控制解，从而得到整个时域的优化解。</p>
-<ul>
-<li>基于线性化的预测</li>
-</ul>
-<p>实际系统状态-控制方程（系统状态变量、控制变量）具有时域非线性（二次项等）。首先对该系统进行线性近似，从而可以实现通过当前状态变量、控制变量对下一个时刻系统状态和控制的预测。</p>
-<ul>
-<li>滚动优化</li>
-</ul>
-<p>设计符合约束条件的目标函数，为状态、控制的离散的能量二次方程。优化的目标就是在每个时刻，寻找最优控制变量，使得目标函数最小。MPC相当于给出每个时刻的局部最优控制值，整个时域的最优控制就是一个控制序列。</p>
-<ul>
-<li>控制更新</li>
-</ul>
-<p>每个优化的输出即每个时步的控制增量，用于更新当下时步的系统控制变量。</p>
-<h2 id="LQR-模型"><a href="#LQR-模型" class="headerlink" title="LQR 模型"></a>LQR 模型</h2><p>lqr 给出时域系统的全局最优解， 其目标函数是积分函数。相比较，lqr 相当于加权伽辽金方法，给出弹性体的全局最优解，对应强形式的控制方程，解空间非常狭小，甚至不存在。而mpc 相当于有限元方法，给出弹性体每个单元的局部解，对应弱形式的控制方程，每个单元的解空间span可张。理论上弱形式在极限情况给出的解就是强形式的解。</p>
-<p>数值方法上，lqr相当于直接法，mpc相当于迭代法。直接法给出控制方程的唯一真实解；迭代法给出近似解，但近似解可收敛到系统的真实解。</p>
-<h2 id="车辆模型"><a href="#车辆模型" class="headerlink" title="车辆模型"></a>车辆模型</h2><p>运动学模型给出车辆纵向控制变量，即车辆模型刚体质心参考点及航向角的控制方程；动力学模型给出车辆横向控制变量。</p>
-<p>由运动学和动力学模型给出了整车状态-控制方程，采用mpc or lqr 算法求解控制变量，即实现车辆控制。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1901,7 +1897,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
