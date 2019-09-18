@@ -291,6 +291,156 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/CarND-term2-Extended-Kalman-Filter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/31/CarND-term2-Extended-Kalman-Filter/" itemprop="url">CarND(term2): Extended Kalman Filter</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-31T01:49:50-04:00">
+                2019-03-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/31/CarND-term2-Extended-Kalman-Filter/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/31/CarND-term2-Extended-Kalman-Filter/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="sensor-measurement"><a href="#sensor-measurement" class="headerlink" title="sensor measurement"></a>sensor measurement</h2><h3 id="Radar"><a href="#Radar" class="headerlink" title="Radar"></a>Radar</h3><p>radio detection andranging, using radio waves to measure the distance to objects as well as their velocity and angle. Radar used a lot in preventing collions, parking assistance, cruise control. and Radar isn’t affected by weather conditions. </p>
+<p>while Radar can’t tell an object’s shape correctly. and Radar can’t detect objects if they are out of their line of sight.</p>
+<p>the Radar measurement data in EKF proejcct is 3D position and velocity vector <code>(ro, theta, ro_dot)</code> in polar coordinates.</p>
+<h3 id="Lidar"><a href="#Lidar" class="headerlink" title="Lidar"></a>Lidar</h3><p>light detection and ranging, using near-infrared light to scan objects and create 3D map of the enviroment. it’s 360-degree view and can track movements and their directions. but it also depends on weather conditions and can’t detecting the speed of other vehicles well. </p>
+<p>the Lidar measurement data in EKF proeject is 2D position vector <code>(x,y)</code> in Cartesian coordinate system.  </p>
+<p><a href="https://www.intellias.com/the-ultimate-sensor-battle-lidar-vs-radar/" target="_blank" rel="external">compare Radar vs Lidar</a></p>
+<h2 id="server-client-network"><a href="#server-client-network" class="headerlink" title="server - client network"></a>server - client network</h2><p><a href="https://github.com/udacity/CarND-Extended-Kalman-Filter-Project" target="_blank" rel="external">Udacity simulator</a> communicate with EKF controller through websocket. </p>
+<p>in simulators(Udacity carsim, Carla) running time, the message channel between simulator server and external controller need to be open all the time. so the simulator feed the controller with sensor data, and the controller feedback simulator with controlling data. </p>
+<h3 id="uwebSocket"><a href="#uwebSocket" class="headerlink" title="uwebSocket"></a>uwebSocket</h3><p>built once <a href="https://zjli2013.github.io/2018/06/29/gnu-make/" target="_blank" rel="external">uwebSocket</a>, <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="external">webSocket</a> protocol providing full-duplex communication channel between server and client through a singlt TCP connection. it allows the server to send content ot the client without being first requested by the client, and allowing messages to be passed back and forth while keeping the conenction open. </p>
+<h3 id="sensor-raw-data"><a href="#sensor-raw-data" class="headerlink" title="sensor raw data"></a>sensor raw data</h3><p>every data slice includes a either Lidar or Radar raw measurement and a ground truth measurement. </p>
+<p>The state variable <code>x</code> is described in Cartesian coord, so for Radar measurement processing, there is a coordinate transfer from Cartesian to polar, and which lead it nonlinear, requiring Extended Karman Filter.</p>
+<h3 id="EKF-controller"><a href="#EKF-controller" class="headerlink" title="EKF controller"></a>EKF controller</h3><p>the client side is the EKF controller, which process the sensor measurement.</p>
+<p>define </p>
+<pre><code>system state `x_` ,
+
+  state priori covariance `P_`,
+
+   state transition matrix `F`, 
+
+process covariance `Q_`, 
+
+measurement gain matrix  &apos;H&apos;
+
+measurement covariance &apos;R_&apos; 
+
+kalman filter gain &apos;K&apos;
+</code></pre><p> as discussed in <a href="https://zjli2013.github.io/2019/03/30/卡尔曼滤波/" target="_blank" rel="external">previous blog</a>: </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"><span class="keyword">void</span> KalmanFilter::Predict()</div><div class="line">&#123;</div><div class="line">	x_ = F * x_ ;   </div><div class="line">	P_ = F * P_ * F.transpose() + Q_ ;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> KalmanFilter::Update(<span class="keyword">const</span> Vector &amp; measurement)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(EKF)</div><div class="line">		h = toPolar(x_); </div><div class="line">		y = measurement - h ;</div><div class="line">	<span class="keyword">else</span></div><div class="line">		y = measurement - H * x_ ;</div><div class="line">		 </div><div class="line">	K = P_ * Ht / (H * P_ * Ht + R_);  </div><div class="line">	x_ = x_ + K * y ; </div><div class="line">	P_ = (I - K*H) * P_ ;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/卡尔曼滤波/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1716,137 +1866,6 @@ $$  z =  h(x, v)    $$            (2.2)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/18/未来5年在哪里-4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/18/未来5年在哪里-4/" itemprop="url">未来5年在哪里(4)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-18T11:41:44-04:00">
-                2019-03-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/18/未来5年在哪里-4/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/18/未来5年在哪里-4/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>如果衣食无忧、每天和快活的人在一起，谁还去努力奋斗呢。 –  by me </p>
-<p>从北京回来写下： 在一线城市的优势就是对政策的敏感，能够提早做布局。相比，三四线更多是跟随和被影响。</p>
-<p>上层可以很自然向下扩展，但下层很难上去。不论是产品、概念、服务。比如，提到英语培训机构，会想到 新东方，而不会是 钟祥少儿英语。 新东方从北京发展到武汉市自然而然的；但定位在钟祥的少儿英语，甚至不会逆向到荆门。其他包括互联网服务业、造车新势力等等。</p>
-<p>起点决定了发展上升空间。</p>
-<p>底层会有很多直接面向终端人群的利弊。比如一个家电品牌在某村的供销商，必然跟当地人很熟。只是在中国只要发展到一定阶段，就会碰到“天花板”。造成这些地方（下层）的生意，处于一个“长不大也饿不死”的阶段。</p>
-<p>底层的生意也容易受<a href="https://zjli2013.github.io/2019/01/13/未来五年在哪里（3/" target="_blank" rel="external">壁垒保护</a>，毕竟除了概念、体制可以低成本渗透，企业运营管理要做到三四线是相当沉重的。所以，三四线可以肆无忌惮地复制品牌，或者同类小生意林立。比如，服装、餐饮等等。</p>
-<p>之前考虑，为什么中国没有像Mc Donald’s, Wendy’s的全国连锁店，只看到了模式复制的成本。其实更深应该是两国体制不同。美国整体运营环境较为平坦；而中国是有上下层的。政治模式决定经济模式，所以，美国的品牌容易横向扩展，标准在哪里都可以建立；而中国的品牌都需要从上到下，游戏规则只会在上层建立。</p>
-<p>一些不安分的理想青年，大约不想只参与游戏，被割韭菜，所以才要努力在现有的格局上捅窟窿。昌兄说，有朝一日，中国如美国，都是百年老店了，年轻人也就会逆来顺受，接受命运的安排，兴许人生也更轻松。</p>
-<p>在三四线做点小生意，不求闻达于诸侯，苟且偷生不好吗？ 作为一个无产者，犯不上考虑这些问题。作为有产者，如何保证财产安全，就是底层忧虑的根源。对个人产权缺乏保护是任何奋斗且成功的青年都会担心的。而唯一的途径，就是通过更多途径赚钱，积累财富。雪球越滚越大，像一只无形的鞭子。受益者也许是国家，兴百姓苦，亡百姓苦。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1897,7 +1916,7 @@ $$  z =  h(x, v)    $$            (2.2)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">109</span>
+                <span class="site-state-item-count">110</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
