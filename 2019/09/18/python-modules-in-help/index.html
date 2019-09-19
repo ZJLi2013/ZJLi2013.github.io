@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="unittestwhy unit test ?unit test is to test the components of a program automatically. a few good reasons of unit tests:  test driving practice  early sanity checking  for regression test, that the ne">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-18T13:11:06.303Z">
+<meta property="og:updated_time" content="2019-09-19T13:35:00.125Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python modules in help">
 <meta name="twitter:description" content="unittestwhy unit test ?unit test is to test the components of a program automatically. a few good reasons of unit tests:  test driving practice  early sanity checking  for regression test, that the ne">
@@ -371,47 +371,46 @@
 <li>test driving practice </li>
 <li>early sanity checking </li>
 <li>for regression test, that the new changes won’t break early work </li>
-</ul>
-<h3 id="unit-test-or-functional-test"><a href="#unit-test-or-functional-test" class="headerlink" title="unit test or functional test"></a>unit test or functional test</h3><p>unit test is to test the isolated piece of code, usually white box test written by developer; functional test is to test the function requirements, usually black box test written by testers.</p>
-<h3 id="creating-a-unittest"><a href="#creating-a-unittest" class="headerlink" title="creating a unittest"></a>creating a unittest</h3><ul>
-<li>create testcase class by subclassing unittest TestCase </li>
-<li>define test as a method inside the class, name must start with <code>test</code> </li>
-<li>in each test method, must call assert functions </li>
-<li>call unittest.main()</li>
+<li>unit test is to test the isolated piece of code, usually white box test written by developer; functional test is to test the function requirements, usually black box test written by testers.</li>
 </ul>
 <p>the testcase output can be <code>OK</code>, <code>FAIL</code>, <code>ERROR</code>.</p>
 <h3 id="assertion-functions"><a href="#assertion-functions" class="headerlink" title="assertion functions"></a>assertion functions</h3><ul>
 <li><p>basic boolean asserts:</p>
-<p>  assertEqual(arg1, arg2, msg=None)</p>
-<p>  assertIsNot(arg1, arg2, msg=None)<br>  e.t.c.</p>
-</li>
+<pre><code>assertEqual(arg1, arg2, msg=None)
+assertIsNot(arg1, arg2, msg=None)
+</code></pre></li>
 <li><p>comparative asserts:</p>
-<p>  assertAlmostEqual(first, second, places=7, msg=None, delta=None)</p>
-</li>
+<pre><code>assertAlmostEqual(first, second, places=7, msg=None, delta=None)
+</code></pre></li>
 <li><p>asserts for collections:</p>
-<p>  assertListEqual(list1, list2, msg=None)</p>
-<p>  assertTupleEqual(tuple1, tuple2, msg=None)</p>
-<p>  assertSetEqual(set1, set2, msg=None)</p>
-<p>  assertDictEqual(dic1, dic2, msg=None)    </p>
-</li>
-</ul>
-<h3 id="command-line-interface"><a href="#command-line-interface" class="headerlink" title="command line interface"></a>command line interface</h3><ul>
+<pre><code>assertListEqual(list1, list2, msg=None)
+assertTupleEqual(tuple1, tuple2, msg=None)
+assertSetEqual(set1, set2, msg=None)
+assertDictEqual(dic1, dic2, msg=None)    
+</code></pre><h3 id="command-line-interface"><a href="#command-line-interface" class="headerlink" title="command line interface"></a>command line interface</h3></li>
 <li><p>run all unittests</p>
-<p>  python3 -m unittest discover -v -c</p>
-</li>
+<pre><code>python3 -m unittest discover -v -c
+</code></pre></li>
 <li><p>run single test module</p>
-<p>  python3 -m unittest -v -c tests/test_XXXX.py</p>
-</li>
+<pre><code>python3 -m unittest -v -c tests/test_XXXX.py
+</code></pre></li>
 <li><p>run individual test case</p>
-<p>  python3 -m unittest -v tests.test_XXX.TestCaseXXX.test_XXX</p>
-</li>
+<pre><code>python3 -m unittest -v tests.test_XXX.TestCaseXXX.test_XXX
+</code></pre></li>
 </ul>
-<h3 id="mock"><a href="#mock" class="headerlink" title="mock"></a>mock</h3><p><a href="https://docs.python.org/3/library/unittest.mock.html" target="_blank" rel="external">mock module</a> is built in <code>unittest.mock</code> after a later Python version, if not, <code>mock</code> module can be installed by <strong>pip install mock</strong>, then directly <code>import mock</code> in code.</p>
+<h2 id="how-to-write-a-unittest"><a href="#how-to-write-a-unittest" class="headerlink" title="how to write a unittest"></a>how to write a unittest</h2><h3 id="unittest-TestCase"><a href="#unittest-TestCase" class="headerlink" title="unittest.TestCase"></a>unittest.TestCase</h3><p>any user defined test class should first derived from <code>unittest.TestCase</code> </p>
+<h3 id="setUp-amp-tearDown"><a href="#setUp-amp-tearDown" class="headerlink" title="setUp() &amp; tearDown()"></a>setUp() &amp; tearDown()</h3><p>setUp() provides the way to set up things before running any method starting with <code>test_xx()</code>  in user defined test class. tearDown() is where to end the setting ups </p>
+<h3 id="depends-on-other-modules-class"><a href="#depends-on-other-modules-class" class="headerlink" title="depends on other modules/class"></a>depends on other modules/class</h3><p>usually the class/methods we try to test have depends on other modules/class, but as unit test want to isolate these depends, so either mock the other methods or fake data. in general there are three types of depends:</p>
+<h4 id="pure-variable"><a href="#pure-variable" class="headerlink" title="pure variable"></a>pure variable</h4><p>this is the most simple case, then you can directly define the same pure type variable in your <code>test_xx()</code> method </p>
+<h4 id="methods-in-other-modules"><a href="#methods-in-other-modules" class="headerlink" title="methods in other modules"></a>methods in other modules</h4><p>here need to use <code>patch</code>, to mock the method and define its return value is your <code>test_xx()</code> method, then in the class where call the real method will be replace by this mocked one.</p>
+<h4 id="methods-in-other-class"><a href="#methods-in-other-class" class="headerlink" title="methods in other class"></a>methods in other class</h4><p>here need to use <code>mock</code>, either MagicMock or Mock will works.</p>
+<h3 id="mock-amp-patch"><a href="#mock-amp-patch" class="headerlink" title="mock &amp; patch"></a>mock &amp; patch</h3><p><a href="https://docs.python.org/3/library/unittest.mock.html" target="_blank" rel="external">mock module</a> is built in <code>unittest.mock</code> after a later Python version, if not, <code>mock</code> module can be installed by <strong>pip install mock</strong>, then directly <code>import mock</code> in code.</p>
 <p>the philosophy of unit test is to isolate classes test, but in reality most classes have some instances of other classes, so to test the ego class isolated from other classes, that’s where <code>mock</code> helps. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> mock <span class="keyword">import</span> Mock, MagicMock</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestScenario</span><span class="params">(TestCase)</span>:</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_ego</span><span class="params">(self)</span>:</span></div><div class="line">		sim_mock = MagicMock(return_value=<span class="string">"sim"</span>)</div><div class="line">		ego =  prepare_ego(sim_mock)</div><div class="line">		self.assertIsNotNone(ego)</div></pre></td></tr></table></figure>
-<p>in the example above,  the argument of  <code>prepare_ego(simulator)</code> is <code>simulator</code>, which is another class. so during its unit test, using a <code>MagicMock</code> replace of the simulator class.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> mock <span class="keyword">import</span> MagicMock, patch</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestScenario</span><span class="params">(TestCase)</span>:</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_mock</span><span class="params">(self)</span>:</span></div><div class="line">		sim.method = MagicMock(return_value=<span class="string">"xx"</span>)</div><div class="line">		agent = sim.method()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div><div class="line">		</div><div class="line"><span class="meta">	@patch("module/add_agent")</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_patch</span><span class="params">(self, mock_add_agent)</span>:</span></div><div class="line">		mock_add_agent.return_value = <span class="string">"xx"</span></div><div class="line">		agent = module.add_agent()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div></pre></td></tr></table></figure>
+<p><code>Mock</code> helps to mock the method in a class, while <code>patch</code> helps to mock a global method in a module.</p>
 <h3 id="automatical-unittest-generator"><a href="#automatical-unittest-generator" class="headerlink" title="automatical unittest generator"></a>automatical unittest generator</h3><p>there are projects assit to generate unittest code automatically, e.g <a href="">auger</a></p>
-<p>a few common issues e.g. <strong>while True unittest</strong></p>
+<h3 id="test-with-while-Loop"><a href="#test-with-while-Loop" class="headerlink" title="test with while Loop"></a>test with while Loop</h3><p>TODO</p>
+<h3 id="test-with-raise-Error"><a href="#test-with-raise-Error" class="headerlink" title="test with raise Error"></a>test with raise Error</h3><p>TODO</p>
 <h2 id="coverage-py"><a href="#coverage-py" class="headerlink" title="coverage.py"></a>coverage.py</h2><ul>
 <li><p>(one time only) install coverage.py</p>
 <p>  pip3 install –user coverage</p>
@@ -473,6 +472,7 @@
 <p><a href="https://docs.python.org/3/library/unittest.html" target="_blank" rel="external">unittest official</a></p>
 <p><a href="https://github.com/lgsvl/PythonAPI/tree/master/tests" target="_blank" rel="external">unittest in lg-sim project</a></p>
 <p><a href="https://coverage.readthedocs.io/en/stable/" target="_blank" rel="external">coverage.py official</a>  </p>
+<p><a href="https://www.jianshu.com/p/013b9bdecb0d" target="_blank" rel="external">unittest + mock + tox</a></p>
 
       
     </div>
@@ -675,7 +675,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#unittest"><span class="nav-number">1.</span> <span class="nav-text">unittest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#why-unit-test"><span class="nav-number">1.1.</span> <span class="nav-text">why unit test ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unit-test-or-functional-test"><span class="nav-number">1.2.</span> <span class="nav-text">unit test or functional test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#creating-a-unittest"><span class="nav-number">1.3.</span> <span class="nav-text">creating a unittest</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#assertion-functions"><span class="nav-number">1.4.</span> <span class="nav-text">assertion functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#command-line-interface"><span class="nav-number">1.5.</span> <span class="nav-text">command line interface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mock"><span class="nav-number">1.6.</span> <span class="nav-text">mock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#automatical-unittest-generator"><span class="nav-number">1.7.</span> <span class="nav-text">automatical unittest generator</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coverage-py"><span class="nav-number">2.</span> <span class="nav-text">coverage.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logging"><span class="nav-number">3.</span> <span class="nav-text">logging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pygame"><span class="nav-number">4.</span> <span class="nav-text">pygame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">5.</span> <span class="nav-text">refer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#unittest"><span class="nav-number">1.</span> <span class="nav-text">unittest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#why-unit-test"><span class="nav-number">1.1.</span> <span class="nav-text">why unit test ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#assertion-functions"><span class="nav-number">1.2.</span> <span class="nav-text">assertion functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#command-line-interface"><span class="nav-number">1.3.</span> <span class="nav-text">command line interface</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#how-to-write-a-unittest"><span class="nav-number">2.</span> <span class="nav-text">how to write a unittest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unittest-TestCase"><span class="nav-number">2.1.</span> <span class="nav-text">unittest.TestCase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setUp-amp-tearDown"><span class="nav-number">2.2.</span> <span class="nav-text">setUp() & tearDown()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#depends-on-other-modules-class"><span class="nav-number">2.3.</span> <span class="nav-text">depends on other modules/class</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pure-variable"><span class="nav-number">2.3.1.</span> <span class="nav-text">pure variable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#methods-in-other-modules"><span class="nav-number">2.3.2.</span> <span class="nav-text">methods in other modules</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#methods-in-other-class"><span class="nav-number">2.3.3.</span> <span class="nav-text">methods in other class</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mock-amp-patch"><span class="nav-number">2.4.</span> <span class="nav-text">mock & patch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#automatical-unittest-generator"><span class="nav-number">2.5.</span> <span class="nav-text">automatical unittest generator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-with-while-Loop"><span class="nav-number">2.6.</span> <span class="nav-text">test with while Loop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-with-raise-Error"><span class="nav-number">2.7.</span> <span class="nav-text">test with raise Error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coverage-py"><span class="nav-number">3.</span> <span class="nav-text">coverage.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logging"><span class="nav-number">4.</span> <span class="nav-text">logging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pygame"><span class="nav-number">5.</span> <span class="nav-text">pygame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">6.</span> <span class="nav-text">refer</span></a></li></ol></div>
             
 
           </div>
