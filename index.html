@@ -374,21 +374,23 @@
 <ul>
 <li>the environment state <strong>S</strong>(t)</li>
 <li>agent’s action <strong>A</strong>(t)</li>
-<li><p>discouted future reward <strong>R</strong>(t), which satisfy: </p>
-<p>  <img src="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;r_{t&plus;2}&space;&plus;&space;...&space;&plus;&space;\gamma^k&space;r_{t&plus;k&plus;1}" title="R_t = r_{t+1} + \gamma r_{t+2} + ... + \gamma^k r_{t+k+1}"></p>
-<p>  with current state <code>s</code> and taking current action <code>a</code>, the env will give the reward <code>r_{t+1}</code>. <code>\gamma</code> is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent’s value only consider current reward.  check <a href="">discount future reward</a> in following chapter.</p>
-</li>
+<li>discouted future reward <strong>R</strong>(t), which satisfy: </li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;r_{t&plus;2}&space;&plus;&space;...&space;&plus;&space;\gamma^k&space;r_{t&plus;k&plus;1}" title="R_t = r_{t+1} + \gamma r_{t+2} + ... + \gamma^k r_{t+k+1}"></p>
+<pre><code>with current state `s` and taking current action `a`, the env will give the reward `r_{t+1}`. `\gamma` is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent&apos;s value only consider current reward.  check [discount future reward]() in following chapter.
+</code></pre><ul>
 <li><p>agent’s policy <strong>P</strong>(a|s), in current state <code>s</code>, the propability of action <code>a</code></p>
 </li>
 <li><p>agent’s state value <strong>V</strong>(s), in state <code>s</code> and took policy <code>\pi</code>, which usually described as an expectation:</p>
-<p>  <img src="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)" title="V^\pi(s) = E (R_t )"></p>
-</li>
-<li><p>agent’s action value <strong>Q</strong>(s, a), which consider both state <code>s</code> and action <code>a</code> effects on value calculation. </p>
-<p>  <img src="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t&plus;1})&space;=&space;E(r_{t&plus;1}&space;&plus;&space;\gamma&space;V^\pi(s_{t&plus;1}))" title="Q^\pi(s, a) = E_{\pi} ( R_t | s=s_t, a=a_t) = E_{\pi} (R_{t+1}) = E(r_{t+1} + \gamma V^\pi(s_{t+1}))"></p>
 </li>
 </ul>
-<pre><code>&lt;img src=&quot;https://latex.codecogs.com/gif.latex?V^\pi&amp;space;(s)&amp;space;=&amp;space;E&amp;space;(&amp;space;Q^\pi(s,&amp;space;a)|_{a&amp;space;\sim&amp;space;\pi(a|s)}&amp;space;)&quot; title=&quot;V^\pi (s) = E ( Q^\pi(s, a)|_{a \sim \pi(a|s)} )&quot; /&gt;
-</code></pre><p>namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>. </p>
+<p><img src="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)" title="V^\pi(s) = E (R_t )"></p>
+<ul>
+<li>agent’s action value <strong>Q</strong>(s, a), which consider both state <code>s</code> and action <code>a</code> effects on value calculation. </li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t&plus;1})&space;=&space;E(r_{t&plus;1}&space;&plus;&space;\gamma&space;V^\pi(s_{t&plus;1}))" title="Q^\pi(s, a) = E_{\pi} ( R_t | s=s_t, a=a_t) = E_{\pi} (R_{t+1}) = E(r_{t+1} + \gamma V^\pi(s_{t+1}))"></p>
+<p><img src="https://latex.codecogs.com/gif.latex?V^\pi&space;(s)&space;=&space;E&space;(&space;Q^\pi(s,&space;a)|_{a&space;\sim&space;\pi(a|s)}&space;)" title="V^\pi (s) = E ( Q^\pi(s, a)|_{a \sim \pi(a|s)} )"></p>
+<p>namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>. </p>
 <ul>
 <li>state transfer propability <strong>P</strong></li>
 <li>explore rate <code>\eta</code>,  it’s the chance to choose non-max value during iteration, similar as mutation.</li>
@@ -420,10 +422,7 @@ R(t) = r(t) = \gamma R(t+1)
 </ul>
 <p>the ideal result is to find the <code>fixed point</code> in value space, which corresponds to the optimized policy at current state with current policy update strategy.  </p>
 <p>in policy iteration, we only consider policy-value mapping.<br><img src="https://upload-images.jianshu.io/upload_images/17414314-40038359d36b0b92.png" alt="image"></p>
-<ul>
-<li>value iteration</li>
-</ul>
-<p>where policy iteration based valued is implicit, only value iteration explicit by Belman’s equation. this is also a <code>fixed point</code> application, as we can use the explicit mapping (Belman’s equation) in state value space. so there should guarantee existing an optimized policy. </p>
+<h3 id="value-iteration"><a href="#value-iteration" class="headerlink" title="value iteration"></a>value iteration</h3><p>where policy iteration based valued is implicit, only value iteration explicit by Belman’s equation. this is also a <code>fixed point</code> application, as we can use the explicit mapping (Belman’s equation) in state value space. so there should guarantee existing an optimized policy. </p>
 <p><img src="https://upload-images.jianshu.io/upload_images/17414314-6fdea50bdaf6fee7.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
 <h2 id="an-optimization-problem"><a href="#an-optimization-problem" class="headerlink" title="an optimization problem"></a>an optimization problem</h2><p>reiforcement learning solution is to find the optimal value function to achieve the max reward in each timestep, which leads to optimal policy <code>\pi*</code>, or max value func, or max action value func.</p>
 <pre><code>$$ v(s) = max(v_i(s)) foreach i in value funcs $$ 
