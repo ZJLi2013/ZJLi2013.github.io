@@ -93,18 +93,29 @@
 
 
 
-<meta name="description" content="RL model in a few wordsassuming timestep t:  the environment state S(t) agent’s action A(t) reward from environemnt R, which satisfy: (S(t), A(t), t) == R(t+1) agent’s policy P(a|s), which usually des">
+<meta name="description" content="RL conceptsassuming timestep t:  the environment state S(t) agent’s action A(t) discouted future reward R(t), which satisfy:       with current state s and taking current action a, the env will give t">
 <meta name="keywords" content="reinforcement learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="reinforcement learning in nutshell-1">
 <meta property="og:url" content="http://yoursite.com/2019/09/18/reinforcement-learning-in-nutshell-1/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="RL model in a few wordsassuming timestep t:  the environment state S(t) agent’s action A(t) reward from environemnt R, which satisfy: (S(t), A(t), t) == R(t+1) agent’s policy P(a|s), which usually des">
+<meta property="og:description" content="RL conceptsassuming timestep t:  the environment state S(t) agent’s action A(t) discouted future reward R(t), which satisfy:       with current state s and taking current action a, the env will give t">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-18T14:37:06.045Z">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t+1}&space;+&space;\gamma&space;r_{t+2}&space;+&space;...&space;+&space;\gamma^k&space;r_{t+k+1}">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t+1})&space;=&space;E(r_{t+1}&space;+&space;\gamma&space;V^\pi(s_{t+1}))">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17414314-c9a7f64558173b0b.png?imageMogr2/auto-orient/strip|imageView2/2">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?V(S)&space;=&space;E(&space;R_{t+1}&space;+&space;\gamma&space;V(S_{t+1})|S_t&space;=s&space;)">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?Q(s,&space;a)&space;=&space;E(&space;R_{t+1}&space;+&space;\gamma&space;Q(S_{t+1},&space;A_{t+1}&space;)|S_t&space;=s,&space;A_t&space;=a&space;)">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17414314-54bb214db83cc7b2.png?imageMogr2/auto-orient/strip|imageView2/2">
+<meta property="og:image" content="https://latex.codecogs.com/gif.latex?v(s)&space;=&space;E(&space;R_(t+1)&space;+&space;\gamma&space;v(S_(t+1))|S_t&space;=&space;s&space;)">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17414314-40038359d36b0b92.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/17414314-6fdea50bdaf6fee7.png?imageMogr2/auto-orient/strip|imageView2/2">
+<meta property="og:updated_time" content="2019-09-20T14:31:28.599Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="reinforcement learning in nutshell-1">
-<meta name="twitter:description" content="RL model in a few wordsassuming timestep t:  the environment state S(t) agent’s action A(t) reward from environemnt R, which satisfy: (S(t), A(t), t) == R(t+1) agent’s policy P(a|s), which usually des">
+<meta name="twitter:description" content="RL conceptsassuming timestep t:  the environment state S(t) agent’s action A(t) discouted future reward R(t), which satisfy:       with current state s and taking current action a, the env will give t">
+<meta name="twitter:image" content="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t+1}&space;+&space;\gamma&space;r_{t+2}&space;+&space;...&space;+&space;\gamma^k&space;r_{t+k+1}">
 
 
 
@@ -366,73 +377,70 @@
       
 
       
-        <h2 id="RL-model-in-a-few-words"><a href="#RL-model-in-a-few-words" class="headerlink" title="RL model in a few words"></a>RL model in a few words</h2><p>assuming timestep <code>t</code>:</p>
+        <h3 id="RL-concepts"><a href="#RL-concepts" class="headerlink" title="RL concepts"></a>RL concepts</h3><p>assuming timestep <code>t</code>:</p>
 <ul>
 <li>the environment state <strong>S</strong>(t)</li>
 <li>agent’s action <strong>A</strong>(t)</li>
-<li>reward from environemnt <strong>R</strong>, which satisfy: (<strong>S</strong>(t), <strong>A</strong>(t), t) == <strong>R</strong>(t+1)</li>
-<li><p>agent’s policy <strong>P</strong>(a|s), which usually desribed as a propability distribution: with existing env state <code>s</code>, the propability of action <code>a</code></p>
+<li><p>discouted future reward <strong>R</strong>(t), which satisfy: </p>
+<p>  <img src="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;r_{t&plus;2}&space;&plus;&space;...&space;&plus;&space;\gamma^k&space;r_{t&plus;k&plus;1}" title="R_t = r_{t+1} + \gamma r_{t+2} + ... + \gamma^k r_{t+k+1}"></p>
+<p>  with current state <code>s</code> and taking current action <code>a</code>, the env will give the reward <code>r_{t+1}</code>. <code>\gamma</code> is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent’s value only consider current reward.  check <a href="">discount future reward</a> in following chapter.</p>
 </li>
-<li><p>agent’s value <strong>V</strong>(s), in state <code>s</code> and took policy <code>\pi</code>, which usually described as an expectation:</p>
-<pre><code>v(s, \pi) = E(R_(t+1) + \gamma R_(t+2) + \gamma ^2 R_(t+3) ... | S(s) )                (1)
-</code></pre><p>  <code>\gamma</code> is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent’s value only depends on current reward.  check <a href="">discount future reward</a> in following chapter.</p>
+<li><p>agent’s policy <strong>P</strong>(a|s), in current state <code>s</code>, the propability of action <code>a</code></p>
+</li>
+<li><p>agent’s state value <strong>V</strong>(s), in state <code>s</code> and took policy <code>\pi</code>, which usually described as an expectation:</p>
+<p>  <img src="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)" title="V^\pi(s) = E (R_t )"></p>
+</li>
+<li><p>agent’s action value <strong>Q</strong>(s, a), which consider both state <code>s</code> and action <code>a</code> effects on value calculation. </p>
+<p>  <img src="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t&plus;1})&space;=&space;E(r_{t&plus;1}&space;&plus;&space;\gamma&space;V^\pi(s_{t&plus;1}))" title="Q^\pi(s, a) = E_{\pi} ( R_t | s=s_t, a=a_t) = E_{\pi} (R_{t+1}) = E(r_{t+1} + \gamma V^\pi(s_{t+1}))"></p>
 </li>
 </ul>
+<pre><code>&lt;img src=&quot;https://latex.codecogs.com/gif.latex?V^\pi&amp;space;(s)&amp;space;=&amp;space;E&amp;space;(&amp;space;Q^\pi(s,&amp;space;a)|_{a&amp;space;\sim&amp;space;\pi(a|s)}&amp;space;)&quot; title=&quot;V^\pi (s) = E ( Q^\pi(s, a)|_{a \sim \pi(a|s)} )&quot; /&gt;
+</code></pre><p>namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>. </p>
 <ul>
-<li><p>agent’s action value func <strong>q</strong>(s, a), which additionaly consider special <code>action</code> influence. define the propability with status <code>s</code> and taken action <code>a</code> is $p(a|s)$, the relation from  agent’s (state) value func to its action value func satisfy:</p>
-<pre><code>$ v(s) =  \sum p(a|s) q(s,a) $      (2)
-</code></pre><p>  namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>.</p>
-</li>
-</ul>
-<pre><code>assuming the next status from current status subordinate a probability distribution `P`, so action value to value has:
-
-    $ q(s, a) = R_(s,a) + \gamma \sum(P . v(s_(t+1))) $  (3)
-
-namley, agent&apos;s action value is the sum of current reward and the expectation of agent&apos;s value with `P`. **what this really means ?** 
-</code></pre><ul>
 <li>state transfer propability <strong>P</strong></li>
 <li>explore rate <code>\eta</code>,  it’s the chance to choose non-max value during iteration, similar as mutation.</li>
 </ul>
-<p>the pseudo algorithm with a finite <code>state space</code> <strong>S</strong>, and finite <code>action space</code> <strong>A</strong> can be viewed as:</p>
-<p>1)  as time goes, <code>S(t)</code> is known at current timestep</p>
-<p>2) traverse action space. to calculate each action first delay reward, second-delay reward e.t.c, by reward update function</p>
-<p>3) update agent’s value with policy propability. with the knowledge of posterior reward list for each action, namely $ dic\<action, list\<posterior_reward=""> &gt; $, agent’s value at current timestep is also known</action,></p>
-<p>4) choose the max value action with a high chance to update to next state</p>
-<p>there are lots of computing in step 2)</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-c9a7f64558173b0b.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
 <h3 id="Markov-decision-process"><a href="#Markov-decision-process" class="headerlink" title="Markov decision process"></a>Markov decision process</h3><p>assuming <code>state transfer propability</code>, <code>agent&#39;s policy</code>, and <code>agent&#39;s value</code> follow <code>Markov assumption</code>. namely, the current state transfer propability, agent’s policy and value only relates to current state.</p>
-<p>agent’s value function <strong>V</strong>(s) meets Belman’s equation(?):</p>
-<pre><code>$ v(s) = E( R_(t+1) + \gamma v(S_(t+1))|St = s )  $   (4)
-</code></pre><p>and agent’s action value function <strong>q</strong>(s) also has Belman’s equation:</p>
-<pre><code>$ q(s, a) = E( R_(t+1) + \gamma q(S_(t+1), A_(t+1) )|St = s, At = a )  $    (5)
-</code></pre><p>Belman’s equation gives the recurrence relation in two timesteps. the interesting of this equation, is that the current value expection is based on next future env status with given current env status. </p>
-<p>in a simple word, agent in an env, the env has its state <strong>S</strong>, the agent can take an action <strong>A</strong>, which changes the env’s state a little bit and may bring the agent some reward <strong>R</strong>, in this updated env, agent can take another action, and continue.</p>
+<p>agent’s value function <strong>V</strong>(s) meets <a href="">Belman’s equation</a>:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?V(S)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;V(S_{t&plus;1})|S_t&space;=s&space;)" title="V(S) = E( R_{t+1} + \gamma V(S_{t+1})|S_t =s )"></p>
+<p>and agent’s action value function <strong>q</strong>(s) also has Belman’s equation:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;a)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;Q(S_{t&plus;1},&space;A_{t&plus;1}&space;)|S_t&space;=s,&space;A_t&space;=a&space;)" title="Q(s, a) = E( R_{t+1} + \gamma Q(S_{t+1}, A_{t+1} )|S_t =s, A_t =a )"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-54bb214db83cc7b2.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
 <p>in general, env’s state is random; the policy to take action is policy <strong>P(a|s)</strong>. Markov Decision process is: state, action, policy, each <code>[state, action, policy]</code> is an <code>episode</code>, which gives the state-action-reward series:</p>
 <pre><code>s0, a0, r1, s1, a1, r2, ... s(n-1),  a(n-1), rn, sn
 </code></pre><p>Markov assumption is state(n+1) is only depends on state(n).</p>
+<h3 id="Belman’s-equation"><a href="#Belman’s-equation" class="headerlink" title="Belman’s equation"></a>Belman’s equation</h3><p>Belman’s equation gives the recurrence relation in two timesteps. the current state value is calcualted from next future status with given current env status.</p>
+<p><img src="https://latex.codecogs.com/gif.latex?v(s)&space;=&space;E(&space;R_(t&plus;1)&space;&plus;&space;\gamma&space;v(S_(t&plus;1))|S_t&space;=&space;s&space;)" title="v(s) = E( R_(t+1) + \gamma v(S_(t+1))|S_t = s )"></p>
 <h3 id="discounted-future-reward"><a href="#discounted-future-reward" class="headerlink" title="discounted future reward"></a>discounted future reward</h3><p>to achieve better reward in long term, always conside the reward as sum of current and future rewards:</p>
 <pre><code>R(t) = r(t) + r(t+1) + ... r(n)
 </code></pre><p>on the other side, as the env state is random in time, the same action doesn’t give the same reward usually, and as time goes, the difference is even larger. think about the B-tree, as it goes deeper, the number of nodes is larger. so the reward in future doesn’t count the same weight as earlier reward, here define the discount ratio <code>\gamma</code> &lt;- [0, 1]</p>
 <pre><code>R(t) = r(t) + \gamma r(t+1) + ... + \gamma^(n-t) r(n)
 
 R(t) = r(t) = \gamma R(t+1) 
-</code></pre><h2 id="an-optimization-problem"><a href="#an-optimization-problem" class="headerlink" title="an optimization problem"></a>an optimization problem</h2><p>reiforcement learning solution is to find the optimal value function to achieve the max reward in each timestep, which leads to optimal policy <code>\pi*</code>, or max value func, or max action value func.</p>
+</code></pre><h3 id="policy-iteration"><a href="#policy-iteration" class="headerlink" title="policy iteration"></a>policy iteration</h3><p>there are two steps:  </p>
+<ul>
+<li><p>policy evaluation, with current policy <code>\pi</code> to evaluate state’s value <code>V&#39;</code></p>
+</li>
+<li><p>policy improvment, with the state value <code>V&#39;</code>, with a special policy update strategy(e.g. greedy) to update policy.</p>
+</li>
+</ul>
+<p>the ideal result is to find the <code>fixed point</code> in value space, which corresponds to the optimized policy at current state with current policy update strategy.  </p>
+<p>in policy iteration, we only consider policy-value mapping.<br><img src="https://upload-images.jianshu.io/upload_images/17414314-40038359d36b0b92.png" alt="image"></p>
+<ul>
+<li>value iteration</li>
+</ul>
+<p>where policy iteration based valued is implicit, only value iteration explicit by Belman’s equation. this is also a <code>fixed point</code> application, as we can use the explicit mapping (Belman’s equation) in state value space. so there should guarantee existing an optimized policy. </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-6fdea50bdaf6fee7.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
+<h2 id="an-optimization-problem"><a href="#an-optimization-problem" class="headerlink" title="an optimization problem"></a>an optimization problem</h2><p>reiforcement learning solution is to find the optimal value function to achieve the max reward in each timestep, which leads to optimal policy <code>\pi*</code>, or max value func, or max action value func.</p>
 <pre><code>$$ v(s) = max(v_i(s)) foreach i in value funcs $$ 
 
 $$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$ 
 </code></pre><p>mostly the <code>solution space</code> is not known at hand, if else, the optimal solution can get directly. on the other hand, current state, action set tells a little information about the <code>solution space</code>, as they are part of the <code>solution space</code>, so the optimization algorithms used in convex space can be applied here. </p>
-<p>in RL, the process to find out the optimal value based on a policy is called <code>policy evalution</code>; with the optimal policy to update action is called <code>policy iteration</code>.</p>
 <p>a few common optimization algorithms includes: </p>
 <h3 id="dynamic-programming-DP"><a href="#dynamic-programming-DP" class="headerlink" title="dynamic programming(DP)"></a>dynamic programming(DP)</h3><p>DP can used in both <code>policy evaluation</code> and <code>policy iteration</code>, but in each <code>calculation step</code>(not even one physical step, and in one physical step, there can be hundreds or thousands of calculation steps) iteration, DP has to recalculate all state(t=current) value to the very first state(t=0) value, which is disaster for high-dimensional problem, and DP by default is kind of <code>integer programming</code>, not fitted to <code>continuous domain</code> either.</p>
 <h3 id="Monte-Carlo-MC"><a href="#Monte-Carlo-MC" class="headerlink" title="Monte Carlo (MC)"></a>Monte Carlo (MC)</h3><p>MC gets a few sample solutions in the <code>solution space</code>, and use these samples solution to approxiamte the <code>solution space</code>. in a geometry explaination, the base vectors of the solution space is unknown, but MC finds a few points in this space, then approximate the (nearly) base vectors, then any point in this space can be approximated by the linear combination of the nearly base vectors.</p>
 <p>MC has no ideas of the propability of state transfer, MC doesn’t care the inner relations of state variables, or model-free.</p>
-<ul>
-<li><p>policy evaluation</p>
-<p>  in MC for each timestep, take a few policies. for a given policy <code>\pi</code>, there is a whole list of status series: S1, A1, R1, S2, A2, R2 … SF, then the value of each policy can be calculated by summing each reward along the series, the max value gives the optimal policy.</p>
-</li>
-<li><p>policy iteration</p>
-<p>  in each iteration, do policy evalution will give the optimal value, based on a certain algorithm (e.g. greedy) to update optimal policy</p>
-</li>
-</ul>
 <p>MC is robost as it’s model free, on the other hand, if the <code>solution space</code> is high-dimensional, there is a high chance the sampling points are limited in a lower dimension, which weak the presentation of MC approximation; also MC needs to reach the final status, which may be not avaiable in some applications. </p>
 <h3 id="time-serial-Time-Difference-TD"><a href="#time-serial-Time-Difference-TD" class="headerlink" title="time-serial Time Difference(TD)"></a>time-serial Time Difference(TD)</h3><p>MC use the whole list of status for each policy evaluation; in 1st order TD, policy evaluation only use next reward and next state value:</p>
 <pre><code>$ v(s) = R(t+1)  + \gamma S(t+1)|S $
@@ -458,6 +466,10 @@ $$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$
 <p>to make intuitive example, think about an robot walk with 2 choice(e.g. turn left, turn right), and the grid world has 20 box in line, which has 2^20 ~= 10e6 elements in Q(S, A). it can’t scale to any real problem. </p>
 <h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf" target="_blank" rel="external">Sutton &amp; Barto, Reinforcement learning: an introduction</a></p>
 <p><a href="https://www.cnblogs.com/pinard/p/9426283.html" target="_blank" rel="external">Pinard</a></p>
+<p><a href="https://www.jianshu.com/p/b392405115bb" target="_blank" rel="external">fromeast</a></p>
+<p><a href="http://www.w3.org/1998/Math/MathML" target="_blank" rel="external">mathxml editor</a></p>
+<p><a href="https://www.codecogs.com/latex/eqneditor.php" target="_blank" rel="external">equation html editor</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/26365534" target="_blank" rel="external">fixed point mechanism</a></p>
 
       
     </div>
@@ -656,7 +668,7 @@ $$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RL-model-in-a-few-words"><span class="nav-number">1.</span> <span class="nav-text">RL model in a few words</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Markov-decision-process"><span class="nav-number">1.1.</span> <span class="nav-text">Markov decision process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#discounted-future-reward"><span class="nav-number">1.2.</span> <span class="nav-text">discounted future reward</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#an-optimization-problem"><span class="nav-number">2.</span> <span class="nav-text">an optimization problem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamic-programming-DP"><span class="nav-number">2.1.</span> <span class="nav-text">dynamic programming(DP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Monte-Carlo-MC"><span class="nav-number">2.2.</span> <span class="nav-text">Monte Carlo (MC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#time-serial-Time-Difference-TD"><span class="nav-number">2.3.</span> <span class="nav-text">time-serial Time Difference(TD)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SARSA"><span class="nav-number">2.4.</span> <span class="nav-text">SARSA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning"><span class="nav-number">2.5.</span> <span class="nav-text">Q-learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">3.</span> <span class="nav-text">refer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#RL-concepts"><span class="nav-number">1.</span> <span class="nav-text">RL concepts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Markov-decision-process"><span class="nav-number">2.</span> <span class="nav-text">Markov decision process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Belman’s-equation"><span class="nav-number">3.</span> <span class="nav-text">Belman’s equation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#discounted-future-reward"><span class="nav-number">4.</span> <span class="nav-text">discounted future reward</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#policy-iteration"><span class="nav-number">5.</span> <span class="nav-text">policy iteration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#an-optimization-problem"><span class="nav-number"></span> <span class="nav-text">an optimization problem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamic-programming-DP"><span class="nav-number">1.</span> <span class="nav-text">dynamic programming(DP)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Monte-Carlo-MC"><span class="nav-number">2.</span> <span class="nav-text">Monte Carlo (MC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#time-serial-Time-Difference-TD"><span class="nav-number">3.</span> <span class="nav-text">time-serial Time Difference(TD)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SARSA"><span class="nav-number">4.</span> <span class="nav-text">SARSA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning"><span class="nav-number">5.</span> <span class="nav-text">Q-learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number"></span> <span class="nav-text">refer</span></a></div>
             
 
           </div>
