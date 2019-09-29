@@ -291,6 +291,261 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/Carmaker-8-0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/10/Carmaker-8-0/" itemprop="url">Carmaker 8.0</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T10:47:35-04:00">
+                2019-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/10/Carmaker-8-0/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/10/Carmaker-8-0/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this is from IPG open house Shang Hai </p>
+<h2 id="scenario-generation-task"><a href="#scenario-generation-task" class="headerlink" title="scenario generation task"></a>scenario generation task</h2><h3 id="data-record"><a href="#data-record" class="headerlink" title="data record"></a>data record</h3><p>tracking vehicles, roads, tobstacles</p>
+<p>obj:  lane, road, barries, GPS input, vehicle position/orientation, fixed ID, type</p>
+<p>the goal of recoding is for road building, which will be used in replay.</p>
+<h4 id="road-build"><a href="#road-build" class="headerlink" title="road build"></a>road build</h4><p>GPS input + lane mark info +  vehicle location –&gt;  vehicle  trajectory </p>
+<h3 id="replay"><a href="#replay" class="headerlink" title="replay"></a>replay</h3><p>run config, input as tranversal and longitudial position</p>
+<p>traffic vehicle location, speed </p>
+<h3 id="rearrange"><a href="#rearrange" class="headerlink" title="rearrange"></a>rearrange</h3><p>input as :  traffic vehile info + ego info , list of traffic vehicle info</p>
+<p>traffic vehicle manage:</p>
+<pre><code>1) manuevor control:  free move 
+
+2) spawn control:  lati +   longi --&gt;  23 cases 
+
+3) support external plugins +   manuevor trigger
+</code></pre><h2 id="Synthetic-Scenario"><a href="#Synthetic-Scenario" class="headerlink" title="Synthetic Scenario"></a>Synthetic Scenario</h2><p>junction assistant</p>
+<p>road type + traffic rules +  scenario –&gt;</p>
+<p>support road topology modification</p>
+<p>support different envs: day of time,  weather, </p>
+<p>scenario editor to support opendrive import </p>
+<h3 id="standardization"><a href="#standardization" class="headerlink" title="standardization"></a>standardization</h3><p>PEGASUS  +  ASAM simulation standards </p>
+<p>roads, scenarios, simulation interfaces </p>
+<p>Opendrive –&gt;  road topology </p>
+<p>opENScenario –&gt;  maneuver &amp; anction abstract definitions </p>
+<p>Open simulation interface –&gt; interface developed for PEGASUS </p>
+<h3 id="limitations"><a href="#limitations" class="headerlink" title="limitations"></a>limitations</h3><p>pre-define route for vehicle ? </p>
+<p>the ego car has AI maneuvor ? </p>
+<h2 id="Vitual-Prototype"><a href="#Vitual-Prototype" class="headerlink" title="Vitual Prototype"></a>Vitual Prototype</h2><p>including gearbox loss mode, gas mode,  through look-up table </p>
+<p>including hybrid powertrain architectures:  automatic gearbox + parallel hybrid</p>
+<p>including powertrain masses(engine, tank, gearbox, battery, motor) </p>
+<p>including trailer data set generator </p>
+<p>including damping top mount </p>
+<h2 id="Simulation-test"><a href="#Simulation-test" class="headerlink" title="Simulation test"></a>Simulation test</h2><p>support:: ADAS/AD, POWERTRAIN, Vehicle Dynamics </p>
+<h3 id="steering-system-visual-case"><a href="#steering-system-visual-case" class="headerlink" title="steering system visual case"></a>steering system visual case</h3><p>for less steering will overall comfort and vehicle dynamics </p>
+<p>reference measurements(steering-in-loop simulator) -&gt;  model parameter id +  softare + ECU integration –&gt;  parameterization &amp; validation  -&gt; training </p>
+<h4 id="how-the-steering-system-works"><a href="#how-the-steering-system-works" class="headerlink" title="how the steering system works"></a>how the steering system works</h4><p>open loop to get mechanical characteristics(stiffness, friction..)</p>
+<p>system performance with or without EPS </p>
+<p>1) ideal(basis) model vs  physical model</p>
+<p>how to cowok the physical model with autopilot control model ?</p>
+<h3 id="test-bed"><a href="#test-bed" class="headerlink" title="test bed"></a>test bed</h3><p>to support electrification, durability,  balancing,  driveability,  powertain caillbratio,  connected powertrain </p>
+<h3 id="AI-training-with-synthetic-scenario"><a href="#AI-training-with-synthetic-scenario" class="headerlink" title="AI training with synthetic scenario"></a>AI training with synthetic scenario</h3><p>decion making</p>
+<p>trajectory planning </p>
+<p>image perception </p>
+<p>q: how to make sure AI robost ? –&gt; </p>
+<p>what CarMaker can do for AI? </p>
+<p>1) obj annotation (vehicles, pedestrains) –&gt; auto annotation</p>
+<p>2) semantic segmentation </p>
+<p>e.g. IPG Movier for auto semantic segmentation </p>
+<p>Q: what’s the hardware for ? </p>
+<h2 id="Cloud-amp-CPU-GPU-for-Parallelization"><a href="#Cloud-amp-CPU-GPU-for-Parallelization" class="headerlink" title="Cloud &amp; CPU/GPU for Parallelization"></a>Cloud &amp; CPU/GPU for Parallelization</h2><p>q: how to parallel in docker ? </p>
+<p>1)  test case in each CPUs </p>
+<p>2) even for single test run(with multi sensors, multi cars ) </p>
+<pre><code>resources &amp; distribution 
+</code></pre><p>CPU: vehile model,  drivel model, envs, ideal sensors </p>
+<p>GPU; visual, camera RIS, radar ris, lidar rs </p>
+<h3 id="Test-run-in-prallel"><a href="#Test-run-in-prallel" class="headerlink" title="Test run in prallel"></a>Test run in prallel</h3><p>sensor setup(10 ultra,  5 Radar,  1 Lidar, 1 Camera)</p>
+<p>host pc (with test manager)  +  4 virtual machines  </p>
+<p>output:  key figures,  reports,  statistics,  queries </p>
+<p>open archi for scalable processing( on-premise and cloud)</p>
+<p>big data anaysis with DaSense by NorCom </p>
+<ul>
+<li>how it works ?</li>
+<li>external scheduler mananger, PBS</li>
+<li>HPC light to support local PC parallel</li>
+</ul>
+<h2 id="new-features-in-8-0"><a href="#new-features-in-8-0" class="headerlink" title="new features in 8.0"></a>new features in 8.0</h2><p>virtual test driving 8.0 </p>
+<ul>
+<li>simulink lib (through Simscape) </li>
+<li>Scenario Editor:  vege geenration,  animated 3D objs, new models(vehicles, trailers, trucks, bus, buildings, houses, street furniture, pedestrains)</li>
+<li>visulize road surfaces .. </li>
+<li>ipg movie</li>
+<li>fisheye distortion from external file </li>
+<li>new sensor models(Lidar RSI)</li>
+</ul>
+<p>q: what’s the difference of open source tool vs  commericial ?  </p>
+<h3 id="Lidar-RSI"><a href="#Lidar-RSI" class="headerlink" title="Lidar RSI"></a>Lidar RSI</h3><p>Ideal perfect world –&gt; ground truth </p>
+<p>HiFi –&gt;  false positives &amp; negatives </p>
+<p>raw data –&gt;   RSI </p>
+<p>supporting Lidar type: </p>
+<pre><code>moving laser &amp; photot diode
+
+moving mirrors 
+
+solid state 
+
+flash
+</code></pre><p>input features :</p>
+<ul>
+<li><p>Laser beam, including custom beam pattern, Raytracing rays </p>
+</li>
+<li><p>Scene Interaction, including atmoshpere attenuation, color or material or surface or transparent dependency </p>
+</li>
+<li><p>detection, including threashold, multiple echoes per beam, separability</p>
+</li>
+</ul>
+<p>output features:</p>
+<ul>
+<li>sending &amp; receiving direction of every beam </li>
+<li>light intensity of every beam</li>
+<li>time &amp; lenght of light</li>
+<li>pluse width</li>
+<li>number of interactions </li>
+</ul>
+<h2 id="User-Case-Nio-Pilot"><a href="#User-Case-Nio-Pilot" class="headerlink" title="User Case : Nio Pilot"></a>User Case : Nio Pilot</h2><p>by sun peng </p>
+<h3 id="cases"><a href="#cases" class="headerlink" title="cases"></a>cases</h3><p>inter-city,  parking, closed space, crowded space </p>
+<p>sensors:  3 front camera, 4 surround camera, 4 mm RADARS,  12 Ultra, 1 driver monitor camera </p>
+<p>higway pilot in June </p>
+<p>perception:  camera, radar,  ult, hd map, location  </p>
+<p>planning :  path planning,  maneuvor decsion, system control </p>
+<p>cloud &amp; AI </p>
+<h3 id="simulation-usage"><a href="#simulation-usage" class="headerlink" title="simulation usage"></a>simulation usage</h3><ul>
+<li><p>FDS -&gt; cases -&gt; SIL </p>
+</li>
+<li><p>platform –&gt;  cases -&gt;  regression test,  abstraction &amp; instantiation ;  scene reconsturction(in-house) /  close loop SIL ;  traffic model training(to do) </p>
+</li>
+<li><p>integration -&gt;  HIL </p>
+</li>
+</ul>
+<p>what about vd ? –&gt;  co-work with simulation and physical test, the cover percentage of simulation is about 80%, the left is from </p>
+<h3 id="data-platform"><a href="#data-platform" class="headerlink" title="data platform"></a>data platform</h3><p>upload nodes -&gt; cloud </p>
+<p>med usa API server -&gt; fleet mgmt</p>
+<p>log stash –&gt;  elastic search –&gt; Kibana &amp;  Admin (tensn  and spark )</p>
+<p>I think they are collecting data, and this data for scene building and simulation usage in future </p>
+<h3 id="data-visulazation"><a href="#data-visulazation" class="headerlink" title="data visulazation"></a>data visulazation</h3><h2 id="HIL"><a href="#HIL" class="headerlink" title="HIL"></a>HIL</h2><ul>
+<li><p>lane model simualtion on HIL </p>
+</li>
+<li><p>fusion simulation on HIL </p>
+</li>
+</ul>
+<h2 id="automation-test"><a href="#automation-test" class="headerlink" title="automation test"></a>automation test</h2><p>jenkins master –&gt; jenkins slave (agent IPG) –&gt;   cloud </p>
+<h2 id="goal"><a href="#goal" class="headerlink" title="goal"></a>goal</h2><p>simulation server  &lt;—&gt;  data center </p>
+<p>parallel sim core +  simulation monitor (data exchange service)</p>
+<p>data processing + labelling + case management + traffic model training </p>
+<p>(replay,  SIL, REMODEL, Visuliazation )</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/04/PID-control/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1662,158 +1917,6 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/02/partical-filter/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/02/partical-filter/" itemprop="url">partical filter</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-02T10:53:59-04:00">
-                2019-04-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/02/partical-filter/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/04/02/partical-filter/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://medium.com/intro-to-artificial-intelligence/localisation-udacitys-self-driving-car-nanodegree-8440a1f83eab" target="_blank" rel="external">localizing</a> the vehicle involves determing where on the map the vehicle is most likely to be by matching what the vehicles see to the map.</p>
-<p>Markov localization or Bayes Filter for localization is the generalized filter. thinking of the robot location as a probability distribution, each time the robot move, the distribution becomes more diffuse(wide).  by passing control data, map data, observation into the filter will concentrate(narrow) the distribution at each timestep. </p>
-<h2 id="state-space"><a href="#state-space" class="headerlink" title="state space"></a>state space</h2><pre><code>x = f(x, v)            (1)
-
-z = h(x, w)             (2)
-</code></pre><p><code>v</code>, <code>w</code> is the process noise, measurement noise respectfully, and each is in the normal Gaussian distribution.  </p>
-<h2 id="Bayes-filter-derivation"><a href="#Bayes-filter-derivation" class="headerlink" title="Bayes filter derivation"></a>Bayes filter derivation</h2><p><a href="https://www.codecogs.com/eqnedit.php?latex=p(x_k&space;|&space;z_{1:k})&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})}{p(z_k&space;|&space;z_{1:k-1})}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p(x_k&space;|&space;z_{1:k})&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})}{p(z_k&space;|&space;z_{1:k-1})}" title="p(x_k | z_{1:k}) = \frac{p(z_k | x_k) p(x_k | z_{1:k-1})}{p(z_k | z_{1:k-1})}"></a>     (b)</p>
-<p>consider the multiply rule of probability:</p>
-<pre><code>p(a, b) = p(a|b) p(b) 
-</code></pre><p>lhs of equation(b) is:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=p(x_k&space;|&space;z_{1:k})&space;=&space;\frac{p(x_k,&space;z_k,&space;z_{1:k-1})}{p(z_{1:k})}&space;=&space;\frac{p(z_k&space;|&space;x_k,&space;z_{1:k-1})&space;p(x_k,&space;z_{1:k-1})}{p(z_{1:k})}&space;=&space;\frac{p(z_k&space;|&space;x_k&space;)&space;p(x_k,&space;z_{1:k-1})}{p(z_{1:k})}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p(x_k&space;|&space;z_{1:k})&space;=&space;\frac{p(x_k,&space;z_k,&space;z_{1:k-1})}{p(z_{1:k})}&space;=&space;\frac{p(z_k&space;|&space;x_k,&space;z_{1:k-1})&space;p(x_k,&space;z_{1:k-1})}{p(z_{1:k})}&space;=&space;\frac{p(z_k&space;|&space;x_k&space;)&space;p(x_k,&space;z_{1:k-1})}{p(z_{1:k})}" title="p(x_k | z_{1:k}) = \frac{p(x_k, z_k, z_{1:k-1})}{p(z_{1:k})} = \frac{p(z_k | x_k, z_{1:k-1}) p(x_k, z_{1:k-1})}{p(z_{1:k})} = \frac{p(z_k | x_k ) p(x_k, z_{1:k-1})}{p(z_{1:k})}"></a></p>
-<p>given <code>x_k</code>, assuming <code>z_k</code> is <a href="https://stats.stackexchange.com/questions/130944/deriving-the-bayes-filter-correction-equation" target="_blank" rel="external">independent from all previous measurements</a> <code>z_{1:k-1}</code>: </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=p(x_k&space;|&space;z_{1:k})&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})&space;p(z_{1:k-1})}{p(z_k,&space;z_{1:k-1})}&space;\\&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})&space;p(z_{1:k-1})}{p(z_k|z_{1:k-1})p(z_{1:k-1})}&space;\\&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})&space;}{p(z_k|z_{1:k-1})}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p(x_k&space;|&space;z_{1:k})&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})&space;p(z_{1:k-1})}{p(z_k,&space;z_{1:k-1})}&space;\\&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})&space;p(z_{1:k-1})}{p(z_k|z_{1:k-1})p(z_{1:k-1})}&space;\\&space;=&space;\frac{p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;z_{1:k-1})&space;}{p(z_k|z_{1:k-1})}" title="p(x_k | z_{1:k}) = \frac{p(z_k | x_k) p(x_k | z_{1:k-1}) p(z_{1:k-1})}{p(z_k, z_{1:k-1})} \\ = \frac{p(z_k | x_k) p(x_k | z_{1:k-1}) p(z_{1:k-1})}{p(z_k|z_{1:k-1})p(z_{1:k-1})} \\ = \frac{p(z_k | x_k) p(x_k | z_{1:k-1}) }{p(z_k|z_{1:k-1})}"></a></p>
-<h2 id="Markov-Localization"><a href="#Markov-Localization" class="headerlink" title="Markov Localization"></a>Markov Localization</h2><p>in which the true state <code>x</code> is unobserved, and the measurements <code>z</code> is observed.<br>assuming 1st order Markov, the probability of current true state:</p>
-<pre><code>p(x_k | x_{0:k-1}) == p(x_k | x_{k-1}) (3)
-</code></pre><p>similarly, the measurement is only dependent on current state,  which is a <a href="http://robots.stanford.edu/papers/thrun.pf-in-robotics-uai02.pdf" target="_blank" rel="external">stochastic projection</a> of the true state <code>x_t</code>, :</p>
-<pre><code>p(z_k | x_{0:k}) = p(z_k | x_k)     (4)            
-</code></pre><p>(3) is referred to as motion model, and (4) as measurement/observation model. </p>
-<p>the classical problem in partially observable Markov chains is to recover a posterior distribution from all avilable sensor measurements and controls in all timesteps. </p>
-<p>Especially, for the localization problem here is to obtain the system current state posterior <code>p(x_k | z_{1:k})</code> based on the all existing measurements, which can be solved by Bayes Filter.</p>
-<p>ps. the propability distribution of current state is also depend on other known inputs, e.g. map data, control data.</p>
-<h3 id="prediction"><a href="#prediction" class="headerlink" title="prediction"></a>prediction</h3><p>from Bayes filter equation, <code>p(x_k | z_{1:k-1})</code> need get first, which is the prediction step. physically, it used to estimate the system state based on all previous measurements.</p>
-<p>consider <code>x_{k-1}</code> as the random variable, the integration of pdf <code>p(x_k, x_{k-1} | z_{1:k-1})</code>  about <code>x_{k-1}</code> is  <code>p(x_k | z_{1:k-1})</code> </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=p(x_k&space;|&space;z_{1:k-1})&space;=&space;\int&space;p(x_k,&space;x_{k-1}&space;|&space;z_{1:k-1})&space;dx_{k-1}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p(x_k&space;|&space;z_{1:k-1})&space;=&space;\int&space;p(x_k,&space;x_{k-1}&space;|&space;z_{1:k-1})&space;dx_{k-1}" title="p(x_k | z_{1:k-1}) = \int p(x_k, x_{k-1} | z_{1:k-1}) dx_{k-1}"></a></p>
-<p>consider the multiply rule:  </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=p(x_k,&space;x_{k-1})&space;=&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{k-1})&space;\\&space;p(x_k,&space;x_{k-1}&space;|&space;z_{1:k-1})&space;=&space;p(x_k&space;|&space;x_{k-1},&space;z_{1:k-1})&space;p(x_{k-1}&space;|&space;z_{1:k-1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p(x_k,&space;x_{k-1})&space;=&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{k-1})&space;\\&space;p(x_k,&space;x_{k-1}&space;|&space;z_{1:k-1})&space;=&space;p(x_k&space;|&space;x_{k-1},&space;z_{1:k-1})&space;p(x_{k-1}&space;|&space;z_{1:k-1})" title="p(x_k, x_{k-1}) = p(x_k | x_{k-1}) p(x_{k-1}) \\ p(x_k, x_{k-1} | z_{1:k-1}) = p(x_k | x_{k-1}, z_{1:k-1}) p(x_{k-1} | z_{1:k-1})"></a></p>
-<p>by 1st order Markov assuming, the first item in integral can reduced: </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=p(x_k&space;|&space;z_{1:k-1}&space;)&space;=&space;\int&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{k-1}&space;|&space;z_{1:k-1})&space;dx_{k-1}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p(x_k&space;|&space;z_{1:k-1}&space;)&space;=&space;\int&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{k-1}&space;|&space;z_{1:k-1})&space;dx_{k-1}" title="p(x_k | z_{1:k-1} ) = \int p(x_k | x_{k-1}) p(x_{k-1} | z_{1:k-1}) dx_{k-1}"></a></p>
-<p><code>p(x_k | x_{k-1})</code> is determined by the system, which obey the same distribution of process noise.  <code>p(x_{k-1} | z_{1:k-1})</code> is known, as the posterior state at timestep <code>k-1</code>. this is where the recursive process. </p>
-<h3 id="update"><a href="#update" class="headerlink" title="update"></a>update</h3><p>using equation (b) to update the current posterior state. the denominator of (b) is a constant coeffient. <code>p(z_k | x_k)</code> is the likelihood paramter, decided by measurement.  </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1864,7 +1967,7 @@ z = h(x, w)             (2)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-count">112</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
