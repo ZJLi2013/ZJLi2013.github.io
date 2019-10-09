@@ -291,6 +291,176 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/reactjs-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/30/reactjs-introduction/" itemprop="url">reactjs introduction</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T11:07:50-04:00">
+                2019-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/30/reactjs-introduction/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/30/reactjs-introduction/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>React is the front-end framework used in lg-sim WebUI(version 2019.07). as well for Cruise webviz, Uber visualization, Apollo, they all choose a web UI design, there is something great about web framework.</p>
+<h3 id="what-is-React"><a href="#what-is-React" class="headerlink" title="what is React"></a>what is React</h3><p>used to build complex UI from small and isolated pieces of code “components” </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">vehicleManager</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">	render()</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></div><div class="line">	&#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>React will render the html on screen, and any changes in data will update and rerender. <code>render()</code> returns a description(React element) of what you want to see on the screen, React takes the descriptions and displays the result.  </p>
+<h3 id="build-a-react-hello-world-app"><a href="#build-a-react-hello-world-app" class="headerlink" title="build a react hello-world app"></a>build a react hello-world app</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npx create-react-app react-demo</div><div class="line"></div><div class="line">cd react-demo</div><div class="line"></div><div class="line">npm start</div></pre></td></tr></table></figure>
+<h3 id="index-js"><a href="#index-js" class="headerlink" title="index.js"></a>index.js</h3><p><code>index.js</code> is the traditional and actual entry point for all Node apps. in React, it tells what to render and where to render. </p>
+<h3 id="components"><a href="#components" class="headerlink" title="components"></a>components</h3><p>components works as a func, and props is the func’s paramters, the func will return a React element which then rendered in view</p>
+<p>components can be either class, derived from <code>React.Component</code>, which then has <code>this.state</code> and <code>this.setState()</code> ;</p>
+<p>or a function, which need use <code>Hook</code> to keep its state. </p>
+<p>the design advantage of components is obvious: to make components/modules reuseable. usually in <code>route.js</code> will define the logic switch to each component based on the HTTP request. </p>
+<h3 id="setState"><a href="#setState" class="headerlink" title="setState"></a>setState</h3><p>whenever <code>this.setState()</code> takes an object or a function as its parameter, update it, and React rerender this component. when need to change a component state, <code>setState()</code> is the right way, rather than to use <code>this.state = xx</code>, which won’t register in React. </p>
+<h3 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h3><p>example from <a href="https://github.com/xiaohesong/TIL/blob/master/front-end/react/hooks/state-hook.md" target="_blank" rel="external">stateHoook</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> &#123; useState &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Example</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// Declare a new state variable, which we'll call "count"</span></div><div class="line">  <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> (</div><div class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></div><div class="line">      <span class="tag">&lt;<span class="name">p</span>&gt;</span>You clicked &#123;count&#125; times<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> setCount(count + 1)&#125;&gt;</div><div class="line">        Click me</div><div class="line">      <span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Hook is a speicial feature, used to share sth with React function. e.g. <code>useState</code> is a way to keep React state in function, which by default has no <code>this.state</code> </p>
+<p>in Hook way, even afer function() is executed,  the function’s variable is not clear, but keep until next render. so basically Hook give a way to make function stateable. </p>
+<ul>
+<li>intial hook</li>
+</ul>
+<p>the only parameter pass in hook::useState(new Map()) is  the initial state.   useState(initState)</p>
+<ul>
+<li>return from useState</li>
+</ul>
+<p>it returns a pair [currentState, setStatefunc], e.g.  [maps, setMaps],  setStatefunc here is similar as <code>this.setState</code> in class component</p>
+<ul>
+<li>access state</li>
+</ul>
+<p>directly  {currentState}</p>
+<ul>
+<li>update state</li>
+</ul>
+<p>{() =&gt; setStatefunc(currentState)} </p>
+<h3 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h3><p><img src="https://upload-images.jianshu.io/upload_images/1457831-1b8e3c5ce88f7758" alt="image"></p>
+<p>context gives the way to access data, not in the strict hierachy way. the top <app> is the context Provider, and the <child> is the context consumer, there can be multi consumers. </child></app></p>
+<h4 id="createContext"><a href="#createContext" class="headerlink" title="createContext"></a>createContext</h4><p>as in <a href="https://react.docschina.org/docs/context.html#reactcreatecontext" target="_blank" rel="external">react context official doc</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Context = React.createContext(defaultValue);</div></pre></td></tr></table></figure>
+<p>during <code>render</code>, the component which subscribe this context will get the context content from its context provider and put in rendering, only when no avialable provider is found, <code>defaultValue</code> is used.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Context.Provider value=&#123;/xx/&#125; &gt;</div></pre></td></tr></table></figure>
+<p>whenever the value in Provider changes, all consumers will rerender. </p>
+<h3 id="EventSource"><a href="#EventSource" class="headerlink" title="EventSource"></a>EventSource</h3><p>EventSource is HTTP based one-way communication from server to client, which is lighter than Websocket <a href="https://juejin.im/post/5c121c77f265da614a3a5e07" target="_blank" rel="external">eventsource vs websocket</a>, also the message  type is only txt in EventSource, while in Websocekt it can be either txt or binary stream. </p>
+<p>by default, when client received a [“/event”] message, will trigger  <code>onMessage()</code>. but EveentSource allow to define user-speicial event type, e.g. <code>VehicleDownload</code>, so in client need to a new listener: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myEventSource.addEventListener(<span class="string">'VehicleDownload'</span>, (e)=&gt;handleVehicleEvents(e))</div></pre></td></tr></table></figure>
+<h3 id="react-route"><a href="#react-route" class="headerlink" title="react route"></a>react route</h3><h2 id="js-special"><a href="#js-special" class="headerlink" title="js special"></a>js special</h2><h3 id="first-class-object"><a href="#first-class-object" class="headerlink" title="first class object"></a>first class object</h3><ul>
+<li>a function is an instance of the Object type</li>
+<li>a function can have properties and has a link back to its constructor method</li>
+<li>can store a function in a variable</li>
+<li>pass a function as a parameter to another function</li>
+<li>return a function from another function</li>
+</ul>
+<h3 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h3><h3 id="arrow-function"><a href="#arrow-function" class="headerlink" title="arrow function"></a>arrow function</h3>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/nancyfx-study/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1666,155 +1836,6 @@ nslookup  10.20.101.119   #reverse (ip 2 domain)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/15/autosar-sucks/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/15/autosar-sucks/" itemprop="url">autosar sucks</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-15T10:29:53-04:00">
-                2019-07-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/15/autosar-sucks/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/15/autosar-sucks/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="what-is-AUTOSAR"><a href="#what-is-AUTOSAR" class="headerlink" title="what is AUTOSAR"></a>what is AUTOSAR</h2><p>basically it’s an micro-service architecture for vehicle EE system. </p>
-<p>Each micro-service is called software component(<code>swc</code>), and it has uniform interfaces, while of which the implementation is varied. as the goal of AUTOSAR said: share on the standard (interface), compete in the implementation. </p>
-<p>the inter-connect of micro-services is through virtual function bus(<code>vfb</code>),  which works as a gateway, guiding data flow from port A, from micro-serviceA to port B, from micro-serviceB</p>
-<p>the benefits of AUTOSAR is obvious, to design the interface at system level first, if any changed need, it can be updated quickly. after the system architecture is fixed, then go to the implementation details.</p>
-<p><a href="https://automotivetechis.wordpress.com/autosar-concepts/" target="_blank" rel="external">refer</a> </p>
-<h3 id="input-description"><a href="#input-description" class="headerlink" title="input description"></a>input description</h3><ul>
-<li><p>software components(micro-services) description, only define the data flow, interface functions</p>
-</li>
-<li><p>system, system topology(interconnection among ECUs, and available data buses, protocols etc)</p>
-</li>
-<li><p>hardware, the available hardware(processors, sensors, actuators etc) </p>
-</li>
-</ul>
-<h3 id="system-configuration"><a href="#system-configuration" class="headerlink" title="system configuration"></a>system configuration</h3><p>used to distributes the software component descritpions to different ECU</p>
-<h3 id="ECU-configuration"><a href="#ECU-configuration" class="headerlink" title="ECU configuration"></a>ECU configuration</h3><p>the basic software(BST) and run-time environment(<code>rte</code>) of each ECU has been configured, this is based on the dedication of the application software components to each ECU.</p>
-<h3 id="generation-of-executables"><a href="#generation-of-executables" class="headerlink" title="generation of executables"></a>generation of executables</h3><p>in this step to implement the software components, then build.  this can be automated done by tool-chains. </p>
-<p>all steps up to now are supported by defining exchange formats(xml) and work methods.</p>
-<p><img src="https://automotivetechis.files.wordpress.com/2012/05/untitled2.jpg" alt="image"></p>
-<h2 id="basic-software"><a href="#basic-software" class="headerlink" title="basic software"></a>basic software</h2><p>each swc has well-defined ports, either provider port(PPort) or request port(RPort), the swc interface can either be a client-server interface or sender-receiver interface. </p>
-<p>with a PPort, the swc will impelment data generation; with a RPort, the swc will implement data read.</p>
-<p><code>communication manager</code> (ComM), is a resource mananger to encapsulates communication related basic software modules. </p>
-<p>the actual bus states are controlled by the corresponding <code>bus state manager</code>, e.g.  CAN/FlexRay/Lin bus. when ComM request a specific commmunication mode from the state manager, it will map the communication mode to a special bus state.</p>
-<p><code>network management modules</code> (NM) works in bus-sleep mode and only support broadcast communication.</p>
-<p><code>diagnostic communication manager</code>(DCM), a common API for diagnostic services. </p>
-<p><code>CAN driver</code> performs the hardware access and provides a hardware-independent API to upper layers; it can access hardware resources and converts the given information for transmission into a hardware specic format and triggers the transmission.</p>
-<h3 id="runtime-environment-RTE"><a href="#runtime-environment-RTE" class="headerlink" title="runtime environment(RTE)"></a>runtime environment(RTE)</h3><p>between basic software to upper application softwares, I think it’s mostly <code>vfb</code>. </p>
-<h3 id="application-software-components"><a href="#application-software-components" class="headerlink" title="application software components"></a>application software components</h3><p>for now, e.g. ADAS, traditional EE.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1865,7 +1886,7 @@ nslookup  10.20.101.119   #reverse (ip 2 domain)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

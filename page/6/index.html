@@ -291,6 +291,231 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" itemprop="url">paper reading-perception, planning, control and coordination for autonomous vehicles</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T05:41:05-04:00">
+                2019-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Lidar-Perception"><a href="#Lidar-Perception" class="headerlink" title="Lidar Perception"></a>Lidar Perception</h2><ul>
+<li><p>point cloud based approach, directly use the raw sensor data for further processing. usually applied a voxel-based filtering to reduce the number of points </p>
+</li>
+<li><p>feature based approach, extract parametric features out of the point cloud, and represent the environment usign extracted features (out of date)</p>
+</li>
+<li><p>grid based approach</p>
+</li>
+</ul>
+<h3 id="segmentation-algorithms"><a href="#segmentation-algorithms" class="headerlink" title="segmentation algorithms"></a>segmentation algorithms</h3><p>cluster points into multiple homogeneous groups.</p>
+<ul>
+<li>edge based method</li>
+<li>region based method, cluster neighborhood points based on certain criteria</li>
+<li>model-based / parametric method,</li>
+<li>graph based method </li>
+</ul>
+<h3 id="detection-algorithms"><a href="#detection-algorithms" class="headerlink" title="detection algorithms"></a>detection algorithms</h3><p>categorize each cluster into different objects, the information in each cluster is mainly from spatial relationship and Lidar intensity of the points. </p>
+<h2 id="Vision"><a href="#Vision" class="headerlink" title="Vision"></a>Vision</h2><p>usually deal with road detection and on-road object detection. </p>
+<h2 id="Road-Detection"><a href="#Road-Detection" class="headerlink" title="Road Detection"></a>Road Detection</h2><h3 id="lane-mark-detection"><a href="#lane-mark-detection" class="headerlink" title="lane mark detection"></a>lane mark detection</h3><ul>
+<li><p>lane line feature extraction<br>basically identify the pixels that belong to lane line marks. </p>
+</li>
+<li><p>fitting the pixels into different models</p>
+</li>
+</ul>
+<ul>
+<li>estimate the vehicle pose(lateral position and moving orientation) based on the fitted model. </li>
+</ul>
+<h3 id="road-surface-detection"><a href="#road-surface-detection" class="headerlink" title="road surface detection"></a>road surface detection</h3><p>inform the self-driving car on the location of free space where it can drive without collision. usually three ways:</p>
+<ul>
+<li>feature based detection</li>
+</ul>
+<p>first identify the feature points or patches in the original image; based on the identified features, either model fitting or segmentation kind of algorithms will be applied to identify the road surfaces. </p>
+<ul>
+<li>feature based learning<br>first extract a set of features associated to pixels or image patches, then train a classifier based on the features to assign a road or non-road label to the pixels or patches</li>
+</ul>
+<ul>
+<li>deep learning</li>
+</ul>
+<h3 id="on-road-object-detection"><a href="#on-road-object-detection" class="headerlink" title="on-road object detection"></a>on-road object detection</h3><p>mainly concerns vehicle and pedestrain object classes, and mainly with deep learning based approaches, whose pipeline usually like:</p>
+<p>1) the proposal bounding boxes needs to be generated around the input image</p>
+<p>2) each proposal box will be sent through the CNN network to determine a classification and fine tune its bounding box location </p>
+<h2 id="Fusion"><a href="#Fusion" class="headerlink" title="Fusion"></a>Fusion</h2><p>sensor fusion betweeen Lidar and camera is necessary to make the best use of these devices and achive a robust environment perception result. </p>
+<h2 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h2><p>the problem of estimating the ego vehicle’s pose, can divided into 2 sub-problems:  pose fixing problem and dead reckoning problem. </p>
+<ul>
+<li><p>pose fixing problem is to predict a measurement given a pose, e.g. a map. </p>
+</li>
+<li><p>dead reckoning problem, the state is related to the observation by a set of differential equations, and these equations has to be integrated in order to navigate. </p>
+</li>
+</ul>
+<p>map aided localization algorithm use local features to achieve highly precise localization.  e.g. SLAM.</p>
+<p>a key event in smoothing based SLAM is loop closure, basically when features that have not been seen for a while are observed again from the sensor readings. when a loop closure is detected, the error caused by imperfect odometry can then be removed, and a substantial portion of the map can be updated. </p>
+<p>approaches to semantic mapping can be categorized into three ways:  object based, appearance based, and activity based. </p>
+<ul>
+<li><p>appearance based semantic mapping, interpret sensor readings to construct semantic information of the environment</p>
+</li>
+<li><p>object based semantic mapping, use the occurrence of key objects to build a semantic understanding of the environments, where object recognition and classification is important. </p>
+</li>
+<li><p>activity based semantic mapping, relies on information about the activities of the agents around the ego vehicle. </p>
+</li>
+</ul>
+<h2 id="Planning"><a href="#Planning" class="headerlink" title="Planning"></a>Planning</h2><h3 id="mission-planning"><a href="#mission-planning" class="headerlink" title="mission planning"></a>mission planning</h3><p>performed through graph search over a directed graph network, which reflects road/path network connectivity. </p>
+<h3 id="behavioral-planning"><a href="#behavioral-planning" class="headerlink" title="behavioral planning"></a>behavioral planning</h3><p>decision making to ensure the vehicle follows any road rules and interacts with other agents in a conventional, safe manner. </p>
+<h3 id="motion-planning"><a href="#motion-planning" class="headerlink" title="motion planning"></a>motion planning</h3><p>the process of deciding on a sequence of actions to reach a specified goal, typically based on avoiding colisions on a sequence of actions to reach a specified goal. </p>
+<ul>
+<li>combinatorial planning, builds a discrete representation of the real environment, and finds a complete solution. </li>
+</ul>
+<ul>
+<li>sampling-based planning, utilizes a collision checking module to conduct discrete searching over samples drawn from the configuration space, which rely on random sampling of continuous spaces and the generation of  a feasible trajectory graph where feasibility is verified through collision checking of nodes and edges to connect these nodes .</li>
+</ul>
+<h3 id="planning-in-dynamic-environments"><a href="#planning-in-dynamic-environments" class="headerlink" title="planning in dynamic environments"></a>planning in dynamic environments</h3><ul>
+<li><p>decision making structures for obstacle avoidance </p>
+<p>  to monitor regions along the intended path for potential obstacle collisions, where these regions are labeled as “critial zones”, and checking against the trajectories of all nearby vehicles to determine a “time to collision”. </p>
+</li>
+</ul>
+<ul>
+<li>planning in space-time </li>
+</ul>
+<ul>
+<li><p>control space obstacle represnetations </p>
+<p>  rather than checking for collisions directly in robot’s configuration space, directly plan in the control space by prohibiting certain control actions which are predicted to lead to collision.</p>
+</li>
+</ul>
+<h3 id="incremental-planning-and-replanning"><a href="#incremental-planning-and-replanning" class="headerlink" title="incremental planning and replanning"></a>incremental planning and replanning</h3><p>a means of incrementally generating sub-goals, a new plan is generated as often as a new sub-goal is defined. iteratively replanning to generate new solution trajectories presents a potential opportunity to carry over knowledge from previous planning iterations to subsequent planning iterations.</p>
+<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><h3 id="feedback-control"><a href="#feedback-control" class="headerlink" title="feedback control"></a>feedback control</h3><p>e.g. proportional-integral-derivative(PID) controller, the limitation of feedback-only control, is has delayed response to errors.</p>
+<h3 id="model-predictive-control"><a href="#model-predictive-control" class="headerlink" title="model predictive control"></a>model predictive control</h3><h3 id="trajectory-generation"><a href="#trajectory-generation" class="headerlink" title="trajectory generation"></a>trajectory generation</h3><ul>
+<li><p>combined trajectory generation and tracking </p>
+</li>
+<li><p>separate trajectory generation and tracking </p>
+<p>  1) trajectory generation, to find an entire control input, which corresponds to some desired state trajectory. can be dealed as a two point boundary value problem, with a starting state and a final state. </p>
+<p>  1.1) sensor based trajectory generation</p>
+<p>  1.2) dynamic based trajectory generation </p>
+</li>
+</ul>
+<h3 id="trajectory-tracking"><a href="#trajectory-tracking" class="headerlink" title="trajectory tracking"></a>trajectory tracking</h3><ul>
+<li><p>geometric methods</p>
+<p>  pursues a point along the path that is located at a certain lookahead distance away from the vehicle’s current position. the input is waypoints, rather than smooth curves. </p>
+</li>
+<li><p>model based methods </p>
+<p>  kinematic model based controllers performs well at low speed applications, but the error increase as the vehicle speed and curvature rate of path increases.</p>
+<p>  dynamic model based controllers performs well for higher speed driving applications</p>
+</li>
+</ul>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>this is an overview of self-driving car system. From a job-hunting view, the algorithms details are more important and better with some practial experience.</p>
+<p><a href="https://www.mdpi.com/2075-1702/5/1/6/htm" target="_blank" rel="external">paper link</a> </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/book-reading-第一本无人驾驶技术书/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1822,135 +2047,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/where-am-I-in-next-5-years/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/21/where-am-I-in-next-5-years/" itemprop="url">where am I in next 5 years</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-21T15:12:17-05:00">
-                2019-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/21/where-am-I-in-next-5-years/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/21/where-am-I-in-next-5-years/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>I love reading autographies, especially these with life-time stories. it’s a window to explore kinds of life possibilites. and recently I readed &lt;&lt; the only girl &gt;&gt;, Robbin at Rolling Stone magazines in 1970s. </p>
-<p>I remember <a href="https://coolshell.cn/articles/17583.html" target="_blank" rel="external">some toughts</a> about life meanings. there are three kinds:  1) to crazy satisfy yourself, or pursue a free life, live the way you really want. e.g the freelancer;  2) ladder up to the higher social class, which is happening a lot in developing countries, and to be rich and success is the guarantee; 3) enjoy the beauty of nature and civilazation in this short period of life time.</p>
-<p>the last two meanings can not be done immediately, to crazily or desperately satisfy self, is then the easiest way to fight against the fucking environment. like when getting tired of this busy world, I behave more like a hippie, no big deal to anything, and kill time on drama, books, or drugs or sex. </p>
-<p>the hippie lifestyle is momental, it creats a space to seperate from daily troubles; after a few days or nights, I am back to real life, continuing on career stuff.  </p>
-<p>so take it, the reality for me, as born in Asian developing country, with traditional family responsibility, is pursuing career, and of course it helps to take a break, and enjoying hippies, but don’t take it as the life-time way.</p>
-<p>mostly of my inner voices are:  either busy to live or busy to die; problem-solving skills, leadership; to figure out how the economy machine functions in small and big roles; and be the smart guy in market and at office. </p>
-<p>and no need with another degree or matured platform to be problem-solvingable or leadershipable. these skills are in everywhere.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2001,7 +2097,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

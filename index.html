@@ -291,6 +291,177 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/09/Gitlab-integrated-Jenkins/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/09/Gitlab-integrated-Jenkins/" itemprop="url">Gitlab integrated Jenkins</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-09T06:59:28-04:00">
+                2019-10-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/09/Gitlab-integrated-Jenkins/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/09/Gitlab-integrated-Jenkins/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>after built the Gitlab server in LAN for two month, managing about 20 projects in ADS group currently. the needs for CI is coming up. at very beginning, I tried Gitlab CI runner, doesn’t work through. so Jenkins!</p>
+<h2 id="Jenkins-installation"><a href="#Jenkins-installation" class="headerlink" title="Jenkins installation"></a>Jenkins installation</h2><p>there is a great series <a href="https://github.com/maxfields2000/dockerjenkins_tutorial" target="_blank" rel="external">Maxfields jekins-docker tutorial</a>, since originally I had Docker env and which is a prepartion for cloud deployment in future.</p>
+<ul>
+<li><p><a href="https://jenkins.io/doc/book/installing/#debian-ubuntu" target="_blank" rel="external">Jenkins in Docker installation</a>, </p>
+</li>
+<li><p>start Jenkins in Docker</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run --rm -p 8080:8080 -p 50000:50000 -v jenkins-data:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock  jenkinsci/blueocean</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://jenkins.io/doc/book/installing/#setup-wizard" target="_blank" rel="external">setup wizard</a></li>
+</ul>
+<p>also Jenkins installed directly in <a href="https://linuxize.com/post/how-to-install-jenkins-on-ubuntu-18-04/" target="_blank" rel="external">Ubuntu</a></p>
+<h2 id="Jenkins-integrated-with-Gitlab"><a href="#Jenkins-integrated-with-Gitlab" class="headerlink" title="Jenkins integrated with Gitlab"></a>Jenkins integrated with Gitlab</h2><p>Jenkins default has integrated with BitBucket and Github, to integrate with Gitlab:</p>
+<ul>
+<li>set Gitlab token</li>
+</ul>
+<p>in Gitlab Project main page, go to <code>User Profile</code> &gt;&gt; <code>Settings</code> &gt;&gt; <code>Peronsal Access Token</code>, naming the token and click <code>api</code> domain, the token is generated. </p>
+<ul>
+<li>install Gitlab Plugins   </li>
+</ul>
+<p>in Jenkins main page: <code>Manage Jenkins</code> &gt;&gt; <code>Manage Plugins</code> &gt;&gt; Search Available Plugins (gitlab).</p>
+<ul>
+<li>add gitlab key credentials </li>
+</ul>
+<p>in Jenkins main page, go to <code>Credentials</code>, choose the key type to <code>Gitlab API token</code>, then generate the key credential, used to access Gitlab project. </p>
+<ul>
+<li>configure Jenkins with gitlab</li>
+</ul>
+<p>in Jenkins main page, go to <code>Manage Jenkins</code> &gt;&gt; <code>Configure System</code>, at the gitlab section, add the gitlab host url and use the credential created at previous step.</p>
+<p>since the gitlab server is hosted in LAN, even don’t have DNS for the gitlab server, purely raw IP address. so the gitlab host URL is like:</p>
+<pre><code>http://10.20.110.110:80 
+</code></pre><p>rather than the project git url (e.g.  <a href="http://10.20.110.110/your_name/your_project.git" target="_blank" rel="external">http://10.20.110.110/your_name/your_project.git</a>)</p>
+<h2 id="Gitlab-Hook-Plugin"><a href="#Gitlab-Hook-Plugin" class="headerlink" title="Gitlab Hook Plugin"></a>Gitlab Hook Plugin</h2><p>gitlab events will be post to Jenkins through webhook, which is a common way to notify external serivces, e.g. dingding office chat, JIRA e.t.c. To set it up, need to configure <code>Gitlab Hook</code> plugin in Jenkins.</p>
+<p>as mentioned in <a href="https://linuxize.com/post/how-to-install-jenkins-on-ubuntu-18-04/" target="_blank" rel="external">this post</a>, JDK10 or 11 is not supported  for Jenkins, if the current OS system has already JDK11, need addtionally install jdk8, and configure the default jdk=8: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">update-java-alternatives --list </div><div class="line"></div><div class="line">sudo update-alternatives --config java </div><div class="line"></div><div class="line">java -version</div></pre></td></tr></table></figure>
+<h2 id="Jenkins-Project"><a href="#Jenkins-Project" class="headerlink" title="Jenkins Project"></a>Jenkins Project</h2><p>add a new Jenkins Item, select <code>FreeStyle</code>, go to <code>Configure</code>.</p>
+<p>in <code>Source Code Management</code> section, select <code>Git</code>. add Repository URL and set gitlab username and password as Jenkins Credentials. </p>
+<p>in <code>Build Triggers</code> section, select <code>Build when a change is pushed to Gitlab</code>, which display the Gitlab webhook URL: <a href="http://localhost:8080/jenkins/project/demo" target="_blank" rel="external">http://localhost:8080/jenkins/project/demo</a>; go to <code>Adavance</code> section to generate the secret token.</p>
+<p>when getting all these done, back to Gitlab project, as Admin or Maintainer, in Project <code>Settings</code> &gt;&gt; <code>Integrations</code> &gt;&gt; <code>Add Webhooks</code>.URL and Secret Token are from the previous settings.</p>
+<p>there is a common issue: <strong>Url is blocked: Requests to localhost are not allowed</strong>, please refer to <a href="https://docs.gitlab.com/ee/security/webhooks.html" target="_blank" rel="external">allow request to localhost network from system hooks</a></p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://technology.riotgames.com/news/putting-jenkins-docker-container" target="_blank" rel="external">riot games: putting jenkins in docker</a></p>
+<p><a href="https://github.com/jenkinsci/gitlab-plugin#jenkins-to-gitlab-authentication" target="_blank" rel="external">jenkins to gitlab authentication</a></p>
+<p><a href="https://emilwypych.com/emil-wypych/" target="_blank" rel="external">devops expert: Emil</a></p>
+<p><a href="https://www.mindtheproduct.com/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/" target="_blank" rel="external">mind the product: PM’s guide to CD &amp; DevOps</a><br><a href="https://www.oodlestechnologies.com/blogs/Managing-Multiple-version-of-JDK-on-Ubuntu/" target="_blank" rel="external">manage multi version of JDK on Ubuntu</a></p>
+<p><a href="https://www.jianshu.com/p/7dd79e6c0ac5" target="_blank" rel="external">a jianshu refer</a></p>
+<p><a href="https://yq.aliyun.com/articles/659876" target="_blank" rel="external">a aliyun refer</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1465854" target="_blank" rel="external">tencent refer</a></p>
+<p><a href="https://docs.gitlab.com/ee/security/webhooks.html" target="_blank" rel="external">allow request to localhost network from system hooks</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/29/warm-up-Hilber-space/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2013,176 +2184,6 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/reactjs-introduction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/30/reactjs-introduction/" itemprop="url">reactjs introduction</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T11:07:50-04:00">
-                2019-08-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/30/reactjs-introduction/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/30/reactjs-introduction/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>React is the front-end framework used in lg-sim WebUI(version 2019.07). as well for Cruise webviz, Uber visualization, Apollo, they all choose a web UI design, there is something great about web framework.</p>
-<h3 id="what-is-React"><a href="#what-is-React" class="headerlink" title="what is React"></a>what is React</h3><p>used to build complex UI from small and isolated pieces of code “components” </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">vehicleManager</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">	render()</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">html</span>&gt;</span><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span></div><div class="line">	&#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>React will render the html on screen, and any changes in data will update and rerender. <code>render()</code> returns a description(React element) of what you want to see on the screen, React takes the descriptions and displays the result.  </p>
-<h3 id="build-a-react-hello-world-app"><a href="#build-a-react-hello-world-app" class="headerlink" title="build a react hello-world app"></a>build a react hello-world app</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">npx create-react-app react-demo</div><div class="line"></div><div class="line">cd react-demo</div><div class="line"></div><div class="line">npm start</div></pre></td></tr></table></figure>
-<h3 id="index-js"><a href="#index-js" class="headerlink" title="index.js"></a>index.js</h3><p><code>index.js</code> is the traditional and actual entry point for all Node apps. in React, it tells what to render and where to render. </p>
-<h3 id="components"><a href="#components" class="headerlink" title="components"></a>components</h3><p>components works as a func, and props is the func’s paramters, the func will return a React element which then rendered in view</p>
-<p>components can be either class, derived from <code>React.Component</code>, which then has <code>this.state</code> and <code>this.setState()</code> ;</p>
-<p>or a function, which need use <code>Hook</code> to keep its state. </p>
-<p>the design advantage of components is obvious: to make components/modules reuseable. usually in <code>route.js</code> will define the logic switch to each component based on the HTTP request. </p>
-<h3 id="setState"><a href="#setState" class="headerlink" title="setState"></a>setState</h3><p>whenever <code>this.setState()</code> takes an object or a function as its parameter, update it, and React rerender this component. when need to change a component state, <code>setState()</code> is the right way, rather than to use <code>this.state = xx</code>, which won’t register in React. </p>
-<h3 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h3><p>example from <a href="https://github.com/xiaohesong/TIL/blob/master/front-end/react/hooks/state-hook.md" target="_blank" rel="external">stateHoook</a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> &#123; useState &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Example</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// Declare a new state variable, which we'll call "count"</span></div><div class="line">  <span class="keyword">const</span> [count, setCount] = useState(<span class="number">0</span>);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> (</div><div class="line">    <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></div><div class="line">      <span class="tag">&lt;<span class="name">p</span>&gt;</span>You clicked &#123;count&#125; times<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> setCount(count + 1)&#125;&gt;</div><div class="line">        Click me</div><div class="line">      <span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Hook is a speicial feature, used to share sth with React function. e.g. <code>useState</code> is a way to keep React state in function, which by default has no <code>this.state</code> </p>
-<p>in Hook way, even afer function() is executed,  the function’s variable is not clear, but keep until next render. so basically Hook give a way to make function stateable. </p>
-<ul>
-<li>intial hook</li>
-</ul>
-<p>the only parameter pass in hook::useState(new Map()) is  the initial state.   useState(initState)</p>
-<ul>
-<li>return from useState</li>
-</ul>
-<p>it returns a pair [currentState, setStatefunc], e.g.  [maps, setMaps],  setStatefunc here is similar as <code>this.setState</code> in class component</p>
-<ul>
-<li>access state</li>
-</ul>
-<p>directly  {currentState}</p>
-<ul>
-<li>update state</li>
-</ul>
-<p>{() =&gt; setStatefunc(currentState)} </p>
-<h3 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h3><p><img src="https://upload-images.jianshu.io/upload_images/1457831-1b8e3c5ce88f7758" alt="image"></p>
-<p>context gives the way to access data, not in the strict hierachy way. the top <app> is the context Provider, and the <child> is the context consumer, there can be multi consumers. </child></app></p>
-<h4 id="createContext"><a href="#createContext" class="headerlink" title="createContext"></a>createContext</h4><p>as in <a href="https://react.docschina.org/docs/context.html#reactcreatecontext" target="_blank" rel="external">react context official doc</a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Context = React.createContext(defaultValue);</div></pre></td></tr></table></figure>
-<p>during <code>render</code>, the component which subscribe this context will get the context content from its context provider and put in rendering, only when no avialable provider is found, <code>defaultValue</code> is used.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Context.Provider value=&#123;/xx/&#125; &gt;</div></pre></td></tr></table></figure>
-<p>whenever the value in Provider changes, all consumers will rerender. </p>
-<h3 id="EventSource"><a href="#EventSource" class="headerlink" title="EventSource"></a>EventSource</h3><p>EventSource is HTTP based one-way communication from server to client, which is lighter than Websocket <a href="https://juejin.im/post/5c121c77f265da614a3a5e07" target="_blank" rel="external">eventsource vs websocket</a>, also the message  type is only txt in EventSource, while in Websocekt it can be either txt or binary stream. </p>
-<p>by default, when client received a [“/event”] message, will trigger  <code>onMessage()</code>. but EveentSource allow to define user-speicial event type, e.g. <code>VehicleDownload</code>, so in client need to a new listener: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">myEventSource.addEventListener(<span class="string">'VehicleDownload'</span>, (e)=&gt;handleVehicleEvents(e))</div></pre></td></tr></table></figure>
-<h3 id="react-route"><a href="#react-route" class="headerlink" title="react route"></a>react route</h3><h2 id="js-special"><a href="#js-special" class="headerlink" title="js special"></a>js special</h2><h3 id="first-class-object"><a href="#first-class-object" class="headerlink" title="first class object"></a>first class object</h3><ul>
-<li>a function is an instance of the Object type</li>
-<li>a function can have properties and has a link back to its constructor method</li>
-<li>can store a function in a variable</li>
-<li>pass a function as a parameter to another function</li>
-<li>return a function from another function</li>
-</ul>
-<h3 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h3><h3 id="arrow-function"><a href="#arrow-function" class="headerlink" title="arrow function"></a>arrow function</h3>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2233,7 +2234,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

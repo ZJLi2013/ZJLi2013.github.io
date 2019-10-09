@@ -291,6 +291,168 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/03/粒子滤波-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/03/粒子滤波-2/" itemprop="url">particle filter (2)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-03T11:51:48-04:00">
+                2019-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/03/粒子滤波-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/03/粒子滤波-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://zjli2013.github.io/2019/04/02/partical-filter/" target="_blank" rel="external">前一篇</a> 介绍贝叶斯滤波的数学原理和蒙特卡洛定位的算法。本篇将介绍基于序贯重要性采样。粒子滤波的思想就是采用一个加权粒子分布去近似后验概率分布<code>p(x)</code></p>
+<h2 id="蒙特卡洛积分"><a href="#蒙特卡洛积分" class="headerlink" title="蒙特卡洛积分"></a>蒙特卡洛积分</h2><p>定义一连续随机变量X, 其概率密度分布函数为 <code>p(X)</code>; 定义<code>Y=f(X)</code>， 则随机变量Y的数学期望：</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)&space;p(x_i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)&space;p(x_i)" title="E(Y) = \int f(x)p(x) dx \approx \frac{1}{N} \sum_{i=1}^{N} f(x_i) p(x_i)"></a></p>
+<p>实际中，概率密度分布<code>p(X)</code>未知，如何保障所采样的点服从<code>p(X)</code></p>
+<h3 id="直接采样"><a href="#直接采样" class="headerlink" title="直接采样"></a>直接采样</h3><p>通过对均匀分布采样，实现对任意分布的采样。 </p>
+<p>任何未知概率密度分布的累积概率函数cdf都映射在[0-1]区间，通过在[0-1]区间的均匀采样，再函数<code>z = cdf(y)</code>求逆，即是符合真实 <code>y</code>的概率密度分布的采样点。</p>
+<p>但如果cdf()函数未知或无法求逆，直接采样不可行。</p>
+<h3 id="接受-拒绝采样"><a href="#接受-拒绝采样" class="headerlink" title="接受-拒绝采样"></a>接受-拒绝采样</h3><p>用一个已知概率分布函数<code>q(X)</code>去采样，然后按照一定的方法拒绝某些样本，达到近似<code>p(X)</code>分布: </p>
+<pre><code>p(x_i) &lt;= k p(x_i)
+</code></pre><p>该采样的限制是确定参数k。</p>
+<h3 id="重要性采样"><a href="#重要性采样" class="headerlink" title="重要性采样"></a>重要性采样</h3><p>在一定的抽样数量基础上，增加准确度。未知<code>p(x)</code>, 在已知概率密度分布的<code>q(x)</code>上采样{x_1, x_2, … x_n}后估计f的期望：</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(Y)&space;=&space;\int&space;f(x)p(x)&space;dx&space;\approx&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;f(x_i)" title="E(Y) = \int f(x)p(x) dx \approx \frac{1}{N} \sum_{i=1}^{N} f(x_i)"></a></p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=E(Y)&ace;=&space;\int&space;\frac{p(x)}{q(x)}&space;q(x)&space;f(x)&space;dx" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(Y)&space;=&space;\int&space;\frac{p(x)}{q(x)}&space;q(x)&space;f(x)&space;dx" title="E(Y) = \int \frac{p(x)}{q(x)} q(x) f(x) dx"></a></p>
+<p>定义新的随机变量：<br>        <a href="https://www.codecogs.com/eqnedit.php?latex=Z&space;=&space;\frac{p(x)}{q(x)}&space;f(x)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Z&space;=&space;\frac{p(x)}{q(x)}&space;f(x)" title="Z = \frac{p(x)}{q(x)} f(x)"></a></p>
+<p>关于原随机变量<code>Y</code>在未知概率分布<code>p(x)</code>下的期望，转化为新的随机变量<code>Z</code>在已知概率分布<code>q(x)</code>下的期望。已知概率分布，即知道如何采样。这里 <code>p(x)/q(x)</code> 就是权值。</p>
+<p>so the <a href="https://users.aalto.fi/~ssarkka/course_k2012/handout6.pdf" target="_blank" rel="external">posterior expectations</a> can be computed as:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;Z(x^i)&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}&space;f(x^i)&space;\\&space;E[Y]&space;=&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;Z(x^i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;Z(x^i)&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}&space;f(x^i)&space;\\&space;E[Y]&space;=&space;\frac{1}{N}&space;\sum_{i=1}^{N}&space;Z(x^i)" title="Z(x^i) = \frac{p(x^i | z_{1:t})}{q(x^i | z_{1:t})} f(x^i) \\ E[Y] = \frac{1}{N} \sum_{i=1}^{N} Z(x^i)"></a></p>
+<p>as the importance weights can be defined as: </p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w^i&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w^i&space;=&space;\frac{p(x^i&space;|&space;z_{1:t})}{q(x^i&space;|&space;z_{1:t})}" title="w^i = \frac{p(x^i | z_{1:t})}{q(x^i | z_{1:t})}"></a></p>
+<p>the problem is we can’t get <code>p(x|z)</code> ,  but a loosed (unnormalized) importance weights as:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;\tilde{w^i}&space;=&space;\frac{p(x^i)&space;p(z_{1:t}&space;|&space;x^i)}{q(x^i&space;|&space;z_{1:t})}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;\tilde{w^i}&space;=&space;\frac{p(x^i)&space;p(z_{1:t}&space;|&space;x^i)}{q(x^i&space;|&space;z_{1:t})}" title="\tilde{w^i} = \frac{p(x^i) p(z_{1:t} | x^i)}{q(x^i | z_{1:t})}"></a></p>
+<p>then do normalized from it:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w^i&space;=&space;\frac{\tilde{w^i}}{\sum_{j}&space;\tilde{w^j}&space;}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w^i&space;=&space;\frac{\tilde{w^i}}{\sum_{j}&space;\tilde{w^j}&space;}" title="w^i = \frac{\tilde{w^i}}{\sum_{j} \tilde{w^j} }"></a></p>
+<p>so the posterior expectation is approximated as: </p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;E[Y&space;|&space;z_{1:t}]&space;\approx&space;\sum_{i=1}^{N}&space;w^i&space;f(x^i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;E[Y&space;|&space;z_{1:t}]&space;\approx&space;\sum_{i=1}^{N}&space;w^i&space;f(x^i)" title="E[Y | z_{1:t}] \approx \sum_{i=1}^{N} w^i f(x^i)"></a></p>
+<h2 id="sequential-importance-sampling-SIS"><a href="#sequential-importance-sampling-SIS" class="headerlink" title="sequential importance sampling(SIS)"></a>sequential importance sampling(SIS)</h2><p>consider the full posterior distribution of states <code>X_{0:k}</code> given measurements <code>y_{1:k}</code> :</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;p(x_{0:k}&space;|&space;z_{1:k})&space;\approx&space;p(z_k&space;|&space;x_{0:k},&space;z_{1:k-1})&space;p(x_{0:k}&space;|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{0:k-1},&space;z_{1:k-1})&space;p(x_{0:k-1}|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;p(x_{0:k}&space;|&space;z_{1:k})&space;\approx&space;p(z_k&space;|&space;x_{0:k},&space;z_{1:k-1})&space;p(x_{0:k}&space;|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{0:k-1},&space;z_{1:k-1})&space;p(x_{0:k-1}|&space;z_{1:k-1})&space;\\&space;=&space;p(z_k&space;|&space;x_k)&space;p(x_k&space;|&space;x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})" title="p(x_{0:k} | z_{1:k}) \approx p(z_k | x_{0:k}, z_{1:k-1}) p(x_{0:k} | z_{1:k-1}) \\ = p(z_k | x_k) p(x_k | x_{0:k-1}, z_{1:k-1}) p(x_{0:k-1}| z_{1:k-1}) \\ = p(z_k | x_k) p(x_k | x_{k-1}) p(x_{0:k-1} | z_{1:k-1})"></a></p>
+<p>consider the sequential of <code>q(x)</code>:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;q(x_{0:k}|&space;z_{1:k})&space;=&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;q(x_{0:k}|&space;z_{1:k})&space;=&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})" title="q(x_{0:k}| z_{1:k}) = q(x_{0:k-1} | z_{1:k-1}) q(x_k | x_{0:k-1}, z_{1:k})"></a></p>
+<p>then the unnormalized importance weights can be as:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})&space;p(x_{0:k-1}&space;|&space;z_{1:k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;q(x_{0:k-1}&space;|&space;z_{1:k-1})&space;}" title="w^i \approx \frac{p(z_k|x_k)p(x_k|x_{k-1}) p(x_{0:k-1} | z_{1:k-1})}{ q(x_k | x_{0:k-1}, z_{1:k}) q(x_{0:k-1} | z_{1:k-1}) }"></a></p>
+<p>namely:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;w_k^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;}&space;w_{k-1}^i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;w_k^i&space;\approx&space;\frac{p(z_k|x_k)p(x_k|x_{k-1})}{&space;q(x_k&space;|&space;x_{0:k-1},&space;z_{1:k})&space;}&space;w_{k-1}^i" title="w_k^i \approx \frac{p(z_k|x_k)p(x_k|x_{k-1})}{ q(x_k | x_{0:k-1}, z_{1:k}) } w_{k-1}^i"></a></p>
+<p>the problem in SIS is the algorithm is degenerate, that variance of the weights increases at every step, which means the algorithm will converget to single none-zero (w=1) weight and the rest being zero. </p>
+<p>so resampling.</p>
+<h2 id="sequential-importance-resampling-SER"><a href="#sequential-importance-resampling-SER" class="headerlink" title="sequential importance resampling(SER)"></a>sequential importance resampling(SER)</h2><p>resampling process: </p>
+<p>1) interpret each weight as the probability of obtaining the sample index <code>i</code> in the set <code>x^i</code></p>
+<p>2) draw <code>N</code> samples from that discrete distribtuion and replace the old sample set with the new one.</p>
+<p>SER process:</p>
+<p>1) draw point <code>x_i</code> from the     <code>q</code> distribution.<br>2) calculate the weights in iteration SIS and normalized the weights to sum to unity<br>3) if the effective number of particles is too low, go to resampling process</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/02/partical-filter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1635,231 +1797,6 @@ $$  z =  h(x, v)    $$            (2.2)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" itemprop="url">paper reading-perception, planning, control and coordination for autonomous vehicles</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-27T05:41:05-04:00">
-                2019-03-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Lidar-Perception"><a href="#Lidar-Perception" class="headerlink" title="Lidar Perception"></a>Lidar Perception</h2><ul>
-<li><p>point cloud based approach, directly use the raw sensor data for further processing. usually applied a voxel-based filtering to reduce the number of points </p>
-</li>
-<li><p>feature based approach, extract parametric features out of the point cloud, and represent the environment usign extracted features (out of date)</p>
-</li>
-<li><p>grid based approach</p>
-</li>
-</ul>
-<h3 id="segmentation-algorithms"><a href="#segmentation-algorithms" class="headerlink" title="segmentation algorithms"></a>segmentation algorithms</h3><p>cluster points into multiple homogeneous groups.</p>
-<ul>
-<li>edge based method</li>
-<li>region based method, cluster neighborhood points based on certain criteria</li>
-<li>model-based / parametric method,</li>
-<li>graph based method </li>
-</ul>
-<h3 id="detection-algorithms"><a href="#detection-algorithms" class="headerlink" title="detection algorithms"></a>detection algorithms</h3><p>categorize each cluster into different objects, the information in each cluster is mainly from spatial relationship and Lidar intensity of the points. </p>
-<h2 id="Vision"><a href="#Vision" class="headerlink" title="Vision"></a>Vision</h2><p>usually deal with road detection and on-road object detection. </p>
-<h2 id="Road-Detection"><a href="#Road-Detection" class="headerlink" title="Road Detection"></a>Road Detection</h2><h3 id="lane-mark-detection"><a href="#lane-mark-detection" class="headerlink" title="lane mark detection"></a>lane mark detection</h3><ul>
-<li><p>lane line feature extraction<br>basically identify the pixels that belong to lane line marks. </p>
-</li>
-<li><p>fitting the pixels into different models</p>
-</li>
-</ul>
-<ul>
-<li>estimate the vehicle pose(lateral position and moving orientation) based on the fitted model. </li>
-</ul>
-<h3 id="road-surface-detection"><a href="#road-surface-detection" class="headerlink" title="road surface detection"></a>road surface detection</h3><p>inform the self-driving car on the location of free space where it can drive without collision. usually three ways:</p>
-<ul>
-<li>feature based detection</li>
-</ul>
-<p>first identify the feature points or patches in the original image; based on the identified features, either model fitting or segmentation kind of algorithms will be applied to identify the road surfaces. </p>
-<ul>
-<li>feature based learning<br>first extract a set of features associated to pixels or image patches, then train a classifier based on the features to assign a road or non-road label to the pixels or patches</li>
-</ul>
-<ul>
-<li>deep learning</li>
-</ul>
-<h3 id="on-road-object-detection"><a href="#on-road-object-detection" class="headerlink" title="on-road object detection"></a>on-road object detection</h3><p>mainly concerns vehicle and pedestrain object classes, and mainly with deep learning based approaches, whose pipeline usually like:</p>
-<p>1) the proposal bounding boxes needs to be generated around the input image</p>
-<p>2) each proposal box will be sent through the CNN network to determine a classification and fine tune its bounding box location </p>
-<h2 id="Fusion"><a href="#Fusion" class="headerlink" title="Fusion"></a>Fusion</h2><p>sensor fusion betweeen Lidar and camera is necessary to make the best use of these devices and achive a robust environment perception result. </p>
-<h2 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h2><p>the problem of estimating the ego vehicle’s pose, can divided into 2 sub-problems:  pose fixing problem and dead reckoning problem. </p>
-<ul>
-<li><p>pose fixing problem is to predict a measurement given a pose, e.g. a map. </p>
-</li>
-<li><p>dead reckoning problem, the state is related to the observation by a set of differential equations, and these equations has to be integrated in order to navigate. </p>
-</li>
-</ul>
-<p>map aided localization algorithm use local features to achieve highly precise localization.  e.g. SLAM.</p>
-<p>a key event in smoothing based SLAM is loop closure, basically when features that have not been seen for a while are observed again from the sensor readings. when a loop closure is detected, the error caused by imperfect odometry can then be removed, and a substantial portion of the map can be updated. </p>
-<p>approaches to semantic mapping can be categorized into three ways:  object based, appearance based, and activity based. </p>
-<ul>
-<li><p>appearance based semantic mapping, interpret sensor readings to construct semantic information of the environment</p>
-</li>
-<li><p>object based semantic mapping, use the occurrence of key objects to build a semantic understanding of the environments, where object recognition and classification is important. </p>
-</li>
-<li><p>activity based semantic mapping, relies on information about the activities of the agents around the ego vehicle. </p>
-</li>
-</ul>
-<h2 id="Planning"><a href="#Planning" class="headerlink" title="Planning"></a>Planning</h2><h3 id="mission-planning"><a href="#mission-planning" class="headerlink" title="mission planning"></a>mission planning</h3><p>performed through graph search over a directed graph network, which reflects road/path network connectivity. </p>
-<h3 id="behavioral-planning"><a href="#behavioral-planning" class="headerlink" title="behavioral planning"></a>behavioral planning</h3><p>decision making to ensure the vehicle follows any road rules and interacts with other agents in a conventional, safe manner. </p>
-<h3 id="motion-planning"><a href="#motion-planning" class="headerlink" title="motion planning"></a>motion planning</h3><p>the process of deciding on a sequence of actions to reach a specified goal, typically based on avoiding colisions on a sequence of actions to reach a specified goal. </p>
-<ul>
-<li>combinatorial planning, builds a discrete representation of the real environment, and finds a complete solution. </li>
-</ul>
-<ul>
-<li>sampling-based planning, utilizes a collision checking module to conduct discrete searching over samples drawn from the configuration space, which rely on random sampling of continuous spaces and the generation of  a feasible trajectory graph where feasibility is verified through collision checking of nodes and edges to connect these nodes .</li>
-</ul>
-<h3 id="planning-in-dynamic-environments"><a href="#planning-in-dynamic-environments" class="headerlink" title="planning in dynamic environments"></a>planning in dynamic environments</h3><ul>
-<li><p>decision making structures for obstacle avoidance </p>
-<p>  to monitor regions along the intended path for potential obstacle collisions, where these regions are labeled as “critial zones”, and checking against the trajectories of all nearby vehicles to determine a “time to collision”. </p>
-</li>
-</ul>
-<ul>
-<li>planning in space-time </li>
-</ul>
-<ul>
-<li><p>control space obstacle represnetations </p>
-<p>  rather than checking for collisions directly in robot’s configuration space, directly plan in the control space by prohibiting certain control actions which are predicted to lead to collision.</p>
-</li>
-</ul>
-<h3 id="incremental-planning-and-replanning"><a href="#incremental-planning-and-replanning" class="headerlink" title="incremental planning and replanning"></a>incremental planning and replanning</h3><p>a means of incrementally generating sub-goals, a new plan is generated as often as a new sub-goal is defined. iteratively replanning to generate new solution trajectories presents a potential opportunity to carry over knowledge from previous planning iterations to subsequent planning iterations.</p>
-<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><h3 id="feedback-control"><a href="#feedback-control" class="headerlink" title="feedback control"></a>feedback control</h3><p>e.g. proportional-integral-derivative(PID) controller, the limitation of feedback-only control, is has delayed response to errors.</p>
-<h3 id="model-predictive-control"><a href="#model-predictive-control" class="headerlink" title="model predictive control"></a>model predictive control</h3><h3 id="trajectory-generation"><a href="#trajectory-generation" class="headerlink" title="trajectory generation"></a>trajectory generation</h3><ul>
-<li><p>combined trajectory generation and tracking </p>
-</li>
-<li><p>separate trajectory generation and tracking </p>
-<p>  1) trajectory generation, to find an entire control input, which corresponds to some desired state trajectory. can be dealed as a two point boundary value problem, with a starting state and a final state. </p>
-<p>  1.1) sensor based trajectory generation</p>
-<p>  1.2) dynamic based trajectory generation </p>
-</li>
-</ul>
-<h3 id="trajectory-tracking"><a href="#trajectory-tracking" class="headerlink" title="trajectory tracking"></a>trajectory tracking</h3><ul>
-<li><p>geometric methods</p>
-<p>  pursues a point along the path that is located at a certain lookahead distance away from the vehicle’s current position. the input is waypoints, rather than smooth curves. </p>
-</li>
-<li><p>model based methods </p>
-<p>  kinematic model based controllers performs well at low speed applications, but the error increase as the vehicle speed and curvature rate of path increases.</p>
-<p>  dynamic model based controllers performs well for higher speed driving applications</p>
-</li>
-</ul>
-<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>this is an overview of self-driving car system. From a job-hunting view, the algorithms details are more important and better with some practial experience.</p>
-<p><a href="https://www.mdpi.com/2075-1702/5/1/6/htm" target="_blank" rel="external">paper link</a> </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1910,7 +1847,7 @@ $$  z =  h(x, v)    $$            (2.2)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
