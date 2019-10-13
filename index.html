@@ -291,6 +291,155 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/reinforcement-learning-in-nutshell-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/13/reinforcement-learning-in-nutshell-2/" itemprop="url">reinforcement learning in nutshell-2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-13T10:30:40-04:00">
+                2019-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/13/reinforcement-learning-in-nutshell-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/13/reinforcement-learning-in-nutshell-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="function-approximation"><a href="#function-approximation" class="headerlink" title="function approximation"></a>function approximation</h2><p>write the mapping from \<state action=""> pair to value as $ <strong>S</strong> X <strong>A</strong> -&gt; <strong>Q</strong> $.</state></p>
+<p>usually <strong>S</strong>, <strong>Q</strong> can be continuous high-dimensional space, and even in discrete state problem. e.g. in GO game, the state space is about 10^170, to store each \<state action=""> pair in a table is almost impossible. a good and approximated way is using a hash map, where input a state, and through this hash map to get its value, which is one step, rather than many steps even with a tree strucutre of the whole state-action/value space.</state></p>
+<p>in math, this is called <code>function approximation</code>, it’s very intuitive idea, to fit a function from the sample points; then any point in the space, it can be represented by the function’s paramters, rather than search in all  the sample points, which may be huge; and further as only the function’s parameters is required to store, rather than the whole sample points information, which is really a pleasure.</p>
+<h2 id="Deep-Q-Learning"><a href="#Deep-Q-Learning" class="headerlink" title="Deep Q-Learning"></a>Deep Q-Learning</h2><p><a href="https://zjli2013.github.io/2019/09/18/reinforcement-learning-in-nutshell-1/" target="_blank" rel="external">previously in Q-Learning</a>, to update Q(S,A):</p>
+<pre><code>$ Q(S,A) &lt;- \delta ( Q(S, A) + R + \gamma ( Q(S&apos;, A&apos;) - Q(S, A))
+</code></pre><p>to approximate <code>q(s,a)</code> can use a neural network(NN), the benefit of NN is  to approximate any function to any precise, similar to any <a href="https://zjli2013.github.io/2019/09/29/warm-up-Hilber-space/" target="_blank" rel="external">complete orthonormal sequence</a>, e.g. Fourier Series.</p>
+<h3 id="CNN-approximator"><a href="#CNN-approximator" class="headerlink" title="CNN approximator"></a>CNN approximator</h3><p>the input to Q neural network is the eigenvector of state <strong>S</strong>, assuming the action set is finite. the output is action value in <code>state-action-hyperparameter</code>: q(s, a, \theta), </p>
+<pre><code>Q(S, A, \theta) ~= Q(S, A)
+</code></pre><p><img src="https://img2018.cnblogs.com/blog/1042406/201809/1042406-20180928142605652-445522913.jpg" alt="image"></p>
+<p>as the right most section, here assuming the action set is finite, so for each action, there is an output.</p>
+<h3 id="experience-replay"><a href="#experience-replay" class="headerlink" title="experience replay"></a>experience replay</h3><p>instead of discarding experiences after one stochastic gradient descent, the agent remembers past expereicnes and learns from them repeatdely, as if the experience has happened again. this allows for greater data efficiency. another reason, as DNN is easily overfitting current episodes, once DNN is overfitted, it’s difficult to produce various experinces. so exprience replay can store experiences including state transitions, rewards, and actions, which are necessary to perform Q learning. </p>
+<p>at time <code>t</code>, the agent’s experience <code>e_t</code> is defined as:</p>
+<p><a href="https://www.codecogs.com/eqnedit.php?latex=e_t&space;=&space;(s_t,&space;a_t,&space;r_{t&plus;1},&space;s_{t&plus;1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?e_t&space;=&space;(s_t,&space;a_t,&space;r_{t&plus;1},&space;s_{t&plus;1})" title="e_t = (s_t, a_t, r_{t+1}, s_{t+1})"></a></p>
+<p>all of agent’s experiences at each time step over all episodes played by the agent are stored in the <code>replay memory</code>. actually, usually the replay memory/buffer set to some finite size limit, namely only store the recent N experiences. and then choose random samples from the replay buffer to train the network.</p>
+<p>the key reason here is to break the correction between consecutive samples. if the CNN learned from consecutive samples of experience as they occurred sequentially in the environment, the samples are highly correlated, taking random samples from replay buffer.</p>
+<h3 id="target-network"><a href="#target-network" class="headerlink" title="target network"></a>target network</h3><p>use a separate network to estimate the target, this target network has the same architecture as the CNN approximator but with frozen parameters. every T steps(a hyperparameter) the parameters from the Q network are copied to this target network, which leads to more stable training because it keeps the target function fixed(for a while)</p>
+<h2 id="go-futher-in-DQN"><a href="#go-futher-in-DQN" class="headerlink" title="go futher in DQN"></a>go futher in DQN</h2><h3 id="Double-DQN"><a href="#Double-DQN" class="headerlink" title="Double DQN"></a>Double DQN</h3><p>here use two networks, the DQN network is for action selection and the target network is for target Q value generation. </p>
+<p>the problem comes: how to be sure the best action for the next state is the action with the highest Q-value ? </p>
+<h3 id="Prioritized-Replay-DQN"><a href="#Prioritized-Replay-DQN" class="headerlink" title="Prioritized Replay DQN"></a>Prioritized Replay DQN</h3><h3 id="Dueling-DQN"><a href="#Dueling-DQN" class="headerlink" title="Dueling DQN"></a>Dueling DQN</h3><h2 id="yet-a-summary"><a href="#yet-a-summary" class="headerlink" title="yet a summary"></a>yet a summary</h2><p>at the begining of this series, I was thinking to make a simple summary about DQN, which looks promising in self-driving. After almost one month, there are more and more topics and great blogs jumping out, the simple idea to make a summary is not easy any more. I will stop here, and once back.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://www.hostmath.com" target="_blank" rel="external">math equation editor</a></p>
+<p><a href="https://www.mcs.anl.gov/petsc/" target="_blank" rel="external">Petsc Krylov</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/28223841" target="_blank" rel="external">zhihu: function approximate</a></p>
+<p><a href="https://www.dqnbook.com/2/experience-replay" target="_blank" rel="external">dqnbook: experience replay</a></p>
+<p><a href="https://towardsdatascience.com/welcome-to-deep-reinforcement-learning-part-1-dqn-c3cab4d41b6b" target="_blank" rel="external">Toward Data Science</a></p>
+<p><a href="https://deeplizard.com/learn/video/Bcuj2fTH4_4" target="_blank" rel="external">explained replay memory</a></p>
+<p><a href="https://danieltakeshi.github.io/2016/12/01/going-deeper-into-reinforcement-learning-understanding-dqn/" target="_blank" rel="external">going deeper into RL: understanding DQN</a></p>
+<p><a href="https://www.freecodecamp.org/news/improvements-in-deep-q-learning-dueling-double-dqn-prioritized-experience-replay-and-fixed-58b130cc5682/" target="_blank" rel="external">improvements in DQN</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/configure-pgAdmin4-in-server-mode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2080,144 +2229,6 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/06/a-nested-conditonal-variable-model-in-python/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/06/a-nested-conditonal-variable-model-in-python/" itemprop="url">a nested conditonal variable model in python</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-06T08:06:08-04:00">
-                2019-09-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/06/a-nested-conditonal-variable-model-in-python/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/06/a-nested-conditonal-variable-model-in-python/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p> the work is derived from <a href="https://github.com/lgsvl/simulator/blob/master-obsolete/Api/lgsvl/remote.py" target="_blank" rel="external">lg-sim/lgsvl/remote</a>, the original <code>remote</code> function is listen message return from server on each <code>command</code> request, basically a async request-receive model.</p>
-<p> additionaly, we want lg-sim server to send every episode state info to client too, luckily, the server - client communicate is based on <code>Websocket</code>，which support server actively pushing message. so simple add a <code>episode state</code> info in server side and send it through websocket at every frame works.</p>
-<p> in <code>conditional variable</code> design,  <code>notify()</code> won’t be hanged-up, while <code>wait_for()</code> can be hanged-up if no other thread call <code>notify()</code> at first.  </p>
-<p> in Python class, to keep object status, it’s better to use <code>class member variable</code>, rather than <code>object member variable</code>, which can’t track its status when the object reset. (/)</p>
-<h2 id="try-finally"><a href="#try-finally" class="headerlink" title="try finally"></a>try finally</h2><p> the status update in <code>try()</code> package won’t be the final status .</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"> <span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(type)</span>:</span> </div><div class="line">	status = <span class="keyword">False</span> </div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">if</span>(type==<span class="string">"a"</span>):</div><div class="line">			status = <span class="keyword">True</span> </div><div class="line">	<span class="keyword">finally</span>:</div><div class="line">		<span class="keyword">if</span>(type == <span class="string">"b"</span>):</div><div class="line">			status = <span class="keyword">False</span> </div><div class="line">	print(<span class="string">"cv.status ....\t"</span>, status)</div><div class="line">	<span class="keyword">return</span> status</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">	type_list = [<span class="string">"a"</span>, <span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"b"</span>, <span class="string">"a"</span>, <span class="string">"a"</span>, <span class="string">"a"</span>];</div><div class="line">	<span class="keyword">for</span> _ <span class="keyword">in</span> range(len(type_list)):</div><div class="line">		print(process(type_list[_]))</div></pre></td></tr></table></figure>
-<h2 id="the-client-design"><a href="#the-client-design" class="headerlink" title="the client design"></a>the client design</h2><p>in client, the message received is handeled in <code>process()</code>. by default, there is only one type of message, namely the <code>event message</code>, so only one <code>conditional variable(CV)</code> is needed to send <code>notification</code> to <code>command()</code> to actually deal with the recieved message. </p>
-<p>first we defined the new message type(<code>episode message</code>), as well as a new real-handel fun <code>episode_tick()</code>. then modifying <code>remote::process()</code> as:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">	self.event_cv.acquire()    </div><div class="line">	self.data = json.loads(data)</div><div class="line">	<span class="keyword">if</span> check_message(self.data) == <span class="string">"episode_message"</span> ：</div><div class="line">		self.event_cv.release()</div><div class="line">		self.event_cv_released_already = <span class="keyword">True</span> </div><div class="line">		<span class="keyword">with</span> self.episode_cv:</div><div class="line">			self.episode_cv.notify()</div><div class="line">	<span class="keyword">else</span> :</div><div class="line">		self.event_cv.notify()</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">	<span class="keyword">if</span> self.event_cv_released_already:</div><div class="line">		self.cv_released_already = <span class="keyword">False</span> </div><div class="line">	<span class="keyword">else</span>:</div><div class="line">		self.cv.release()</div></pre></td></tr></table></figure>
-<h2 id="will-it-dead-locked"><a href="#will-it-dead-locked" class="headerlink" title="will it dead-locked ?"></a>will it dead-locked ?</h2><p>as both <code>command()</code> and <code>episode_tick()</code> have conditional variable <code>wait_for()</code> :</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public command():</div><div class="line">	<span class="keyword">with</span> self.event_cv :</div><div class="line">		self.event_cv.wait_for(<span class="keyword">lambda</span>: self.data <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>)</div><div class="line"></div><div class="line">public episode_tick():</div><div class="line">	<span class="keyword">with</span> self.episode_cv.wait_for(<span class="keyword">lambda</span>: self.data <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>)</div></pre></td></tr></table></figure>
-<p>so if <code>notify()</code> is not called in any situation, <code>dead-locked</code> happens, meaning the <code>wait_for()</code> will never return but suspended.</p>
-<p><code>remote.process()</code> is running in another thread, rather than hte main sim thread, where run <code>sim.process()</code>.  <code>remote.process()</code> used to accept the message, and <code>sim.process()</code> is the actual place to handle these received messages. the two threads run simutaneously.</p>
-<p>for any message received, if its type is <code>event_message</code>, then it triggers <code>event_cv.notify()</code>, so <code>command()</code> in <code>sim::process()</code> won’t dead block;</p>
-<p>to avoid <code>episode_message</code> dead locked, in <code>sim::process()</code> need to call <code>episode_tick()</code> only when the message type is <code>episode_message</code>, which can be checked by <code>remote.event_cv_released_already == True</code>, </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sim</span>:</span>:process(events):</div><div class="line">	j = self.remote.command(events)</div><div class="line">	<span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">		<span class="keyword">if</span> self.remote.event_cv_released_already :</div><div class="line">			self.remote.episode_tick()</div><div class="line">		<span class="keyword">if</span> j <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">			<span class="keyword">return</span> </div><div class="line">		<span class="keyword">if</span> <span class="string">"events"</span> <span class="keyword">in</span> j:</div><div class="line">			self._process_events(j)</div><div class="line">		</div><div class="line">		j = self.remote.command（“<span class="keyword">continue</span><span class="string">")</span></div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2268,7 +2279,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
