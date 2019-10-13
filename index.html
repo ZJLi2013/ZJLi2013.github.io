@@ -291,6 +291,362 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/configure-pgAdmin4-in-server-mode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/13/configure-pgAdmin4-in-server-mode/" itemprop="url">configure pgAdmin4 in server mode</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-13T06:35:25-04:00">
+                2019-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/13/configure-pgAdmin4-in-server-mode/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/13/configure-pgAdmin4-in-server-mode/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="pgSQLServer"><a href="#pgSQLServer" class="headerlink" title="pgSQLServer"></a>pgSQLServer</h2><ul>
+<li><p><a href="https://www.postgresql.org/download/linux/ubuntu/" target="_blank" rel="external">official install postgresql</a></p>
+</li>
+<li><p><a href="https://www.postgresql.org/docs/current/server-start.html" target="_blank" rel="external">start pgSQLserver</a></p>
+</li>
+<li><p>jump into pgSQL server:</p>
+<p>  /etc/init.d/postgresql start </p>
+<p>  sudo su - postgres </p>
+</li>
+</ul>
+<h2 id="pgAdmin4"><a href="#pgAdmin4" class="headerlink" title="pgAdmin4"></a>pgAdmin4</h2><p>installed by <code>apt-get install pgadmin4</code>, will put pgAdmin4 under local user or root permission, which will be rejected if accessed by remote clients. </p>
+<p>so it’s better to install from src and in a different Python virtual env.</p>
+<ul>
+<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-programming-environment-on-an-ubuntu-18-04-server" target="_blank" rel="external">setup Python virtual Env</a></p>
+</li>
+<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">install pgAdmin4 from src</a></p>
+</li>
+</ul>
+<p>there maybe a few errors as following:</p>
+<pre><code>*  No package &apos;libffi&apos; found  
+
+*  error: invalid command &apos;bdist_wheel&apos; [sol](https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci)
+
+* error: command &apos;x86_64-linux-gnu-gcc&apos; failed with exit status 1, [sol](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
+</code></pre><h2 id="configure-pgAdmin4"><a href="#configure-pgAdmin4" class="headerlink" title="configure pgAdmin4"></a>configure pgAdmin4</h2><p>follow <a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">this configure pgadmin4 in Server mode</a></p>
+<h2 id="configure-Apache2"><a href="#configure-Apache2" class="headerlink" title="configure Apache2"></a>configure Apache2</h2><p>follow previous blog to set Apache2 for pgadmin4:</p>
+<pre><code class="script">&lt;VirtualHost *:8084&gt;
+    ServerName 10.20.181.119:8084
+    ErrorLog  &quot;/var/www/pgadmin4/logs/error.log&quot;
+    WSGIDaemonProcess pgadmin  python-home=/home/david/py_venv/pgenv
+    WSGIScriptAlias /pgadmin4 /home/david/py_venv/pgenv/lib/python3.5/site-packages/pgadmin4/pgAdmin4.wsgi
+
+    &lt;Directory &quot;/home/david/py_venv/pgenv/lib/python3.5/site-packages/pgadmin4/&quot;&gt;
+        WSGIProcessGroup pgadmin
+        WSGIApplicationGroup %{GLOBAL}
+        Require all granted
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>restart Apache2 server will make this works.</p>
+<p>in summary: so far we can host pgAdmin4 in Apache web server, which is a good support for team work in same LAN. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://serverfault.com/questions/601140/whats-the-difference-between-sudo-su-postgres-and-sudo-u-postgres" target="_blank" rel="external">why sudo - su</a></p>
+<p><a href="https://www.godaddy.com/garage/how-to-install-postgresql-on-ubuntu-14-04/" target="_blank" rel="external">godaddy about sudo - su</a></p>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">configure pgadmin4 in Server mode</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/host-mod-wsgi-in-Apache2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/13/host-mod-wsgi-in-Apache2/" itemprop="url">host mod_wsgi in Apache2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-13T06:33:40-04:00">
+                2019-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/13/host-mod-wsgi-in-Apache2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/13/host-mod-wsgi-in-Apache2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Apache2-Background"><a href="#Apache2-Background" class="headerlink" title="Apache2 Background"></a>Apache2 Background</h2><h3 id="Apache2-virutal-host"><a href="#Apache2-virutal-host" class="headerlink" title="Apache2 virutal host"></a>Apache2 virutal host</h3><ul>
+<li>site-available </li>
+</ul>
+<p>all virtual hosts are configured in individual files with <code>/etc/apache2/sites-available</code> </p>
+<ul>
+<li>site-enabled </li>
+</ul>
+<p>until the *.config in site-available are enabled, Apache2 won’t know know.</p>
+<pre><code>sudo sevice apache2 reload 
+</code></pre><ul>
+<li>IP based virtual host </li>
+</ul>
+<p>use IP address of the connection to determine the correct virtual host to serve, so each host needs a separate IP</p>
+<p>we had name-based vhost in LAN, a few web servers sharing the same IP in the same physical machine, but with different Ports, and even we don’t use DNS server to tell the domains. </p>
+<h3 id="apache-mode-cores"><a href="#apache-mode-cores" class="headerlink" title="apache mode cores"></a>apache mode cores</h3><p><a href="https://httpd.apache.org/docs/2.4/mod/core.html#servername" target="_blank" rel="external">refer</a></p>
+<ul>
+<li>VirtualHost </li>
+</ul>
+<p>the title to define this virutal host, and tell which port to listen. by default is port80</p>
+<ul>
+<li>ServerName</li>
+</ul>
+<p>sets the request scheme, hostname, and port that the server uses to identify itself</p>
+<ul>
+<li>ServerAlias</li>
+</ul>
+<p>sets the alternate name for a host </p>
+<ul>
+<li>WSGIDaemonProcess</li>
+</ul>
+<p>for wsgi app, which usually define in a seperate Python virtual environment, rather than the default localhost user or root. so <code>WSGIDaemonProcess</code> point to the python virtual env. </p>
+<ul>
+<li>WSGIScriptAlias</li>
+</ul>
+<p>point to the wsgi_app.wsgi </p>
+<ul>
+<li>DocumentRoot </li>
+</ul>
+<p>set the directory from which httpd/apache2 will serve files <code>/var/www/html</code></p>
+<h2 id="mod-wsgi"><a href="#mod-wsgi" class="headerlink" title="mod_wsgi"></a>mod_wsgi</h2><ul>
+<li>install <code>apt-get install apache2  libapache2-mode-wsgi-py3</code></li>
+</ul>
+<h3 id="config-in-Apache2"><a href="#config-in-Apache2" class="headerlink" title="config in Apache2"></a>config in Apache2</h3><h4 id="config-with-configure-file"><a href="#config-with-configure-file" class="headerlink" title="config with configure file"></a>config with configure file</h4><ul>
+<li>create  <code>example.conf</code> under  <code>/etc/apache2/conf-available/</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:8084&gt;</div><div class="line">        ServerName  10.20.181.119:8084</div><div class="line">        ServerAlias example.com</div><div class="line">        DocumentRoot &quot;/var/www/html&quot;</div><div class="line">        ErrorLog &quot;/var/www/example/logs/error.log&quot;</div><div class="line"> </div><div class="line">&lt;/VirtualHost&gt;</div><div class="line">``` </div><div class="line">the served web content is stored at `/var/www/html`, which can simple include a index.html or a few js.</div><div class="line"></div><div class="line">* enable configure, which will create corresponding conf under `conf-enable` folder</div><div class="line"></div><div class="line">        sudo a2enconf example </div><div class="line"></div><div class="line">* check configure</div><div class="line"></div><div class="line">        sudo apachectl -S </div><div class="line">        sudo apachectl configtest </div><div class="line"></div><div class="line"></div><div class="line">#### config with virtual host </div><div class="line"></div><div class="line">* create `example.conf` under  `/etc/apache2/site-available/`</div><div class="line">```script </div><div class="line">&lt;VirtualHost *:8085&gt;</div><div class="line">        ServerName  10.20.181.119:8085</div><div class="line">        ServerAlias application.com</div><div class="line">        DocumentRoot &quot;/var/www/wsgy_example&quot;</div><div class="line">        ErrorLog &quot;/var/www/wsgy_example/logs/error.log&quot;</div><div class="line">        WSGIScriptAlias /application /var/www/wsgy_app/application.wsgi</div><div class="line"></div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
+<p>here used the additional <code>WSGI script</code>, <a href="https://www.linode.com/docs/web-servers/apache/apache-and-modwsgi-on-ubuntu-14-04-precise-pangolin/" target="_blank" rel="external">link</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import os</div><div class="line">import sys</div><div class="line"></div><div class="line">sys.path.append(&apos;/var/www/wsgy_app/&apos;)</div><div class="line"></div><div class="line">os.environ[&apos;PYTHON_EGG_CACHE&apos;] = &apos;/var/www/wsgy_app/.python-egg&apos;</div><div class="line"></div><div class="line">def application(environ, start_response):</div><div class="line">        status = &apos;200 OK&apos;</div><div class="line">        output = b&apos;Helo World&apos;</div><div class="line"></div><div class="line">        response_headers = [(&apos;Content-type&apos;, &apos;text/plain&apos;),</div><div class="line">                            (&apos;Content-length&apos;, str(len(output)))]</div><div class="line"></div><div class="line">        start_response(status, response_headers)</div><div class="line"></div><div class="line">        return [output]</div></pre></td></tr></table></figure>
+<ul>
+<li><p>enable configure, which will create corresponding conf under <code>site-enable</code> folder</p>
+<pre><code>sudo a2ensite wsgy_example 
+</code></pre></li>
+<li><p>check configure</p>
+<pre><code>sudo apachectl -S 
+sudo apachectl configtest 
+</code></pre></li>
+</ul>
+<h3 id="add-multi-ports"><a href="#add-multi-ports" class="headerlink" title="add multi ports:"></a>add multi ports:</h3><p>in /etc/apache2/ports.conf:</p>
+<pre><code>Listen 8083
+Listen 8084
+</code></pre><p>since this Apache server host system_engineering web and pgadmin4 web, and share the same IP.</p>
+<h3 id="restart-apache"><a href="#restart-apache" class="headerlink" title="restart apache"></a>restart apache</h3><pre><code>sudo systemctl restart apache2 
+</code></pre><h3 id="test-apache"><a href="#test-apache" class="headerlink" title="test apache"></a>test apache</h3><p>in browser:</p>
+<pre><code>10.20.181.119:8085/application
+</code></pre><p>should view “hello world”</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://httpd.apache.org/docs/2.4/vhosts/name-based.html" target="_blank" rel="external">name based virtual host</a></p>
+<p><a href="https://httpd.apache.org/docs/2.4/vhosts/" target="_blank" rel="external">Apache2 virutal host</a></p>
+<p><a href="https://serverfault.com/questions/246445/how-do-i-create-virtual-hosts-for-different-ports-on-apache" target="_blank" rel="external">vhost with different ports</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/09/Gitlab-integrated-Jenkins/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1848,342 +2204,6 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="url">vehicle dynamics model in ADS simulation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-03T09:08:09-04:00">
-                2019-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-<h2 id="VD-background"><a href="#VD-background" class="headerlink" title="VD background"></a>VD background</h2><p>usually to simualate vehicle dynamic(VD) system, either by physical model, e.g. pysical models of engine, gearbox, powertrain; or parameter model, which doesn’t take into the physical process of the dynamic system, but tracking the system’s input, output and fit their relationship with polynomail equation or functions with multi-pieces. </p>
-<p><code>traction force</code> is derived from engine torque, which goes to gearbox(powertrain system) and then divided by radius of wheels, then distribute to wheels. </p>
-<h3 id="traction-torque"><a href="#traction-torque" class="headerlink" title="traction torque"></a>traction torque</h3><ul>
-<li><p>air drag </p>
-</li>
-<li><p>air lift force </p>
-</li>
-<li><p>traction force </p>
-<p>  $$ F(traction) = F(air drag) + F(air lift force) + F(tire drag) + acc * mass $$</p>
-</li>
-</ul>
-<p>in a detail way, the equation above should split into lateral state equation and longitudional state equation, if consider driver control module, which will give <code>laterl control equation</code> and <code>longitudional control equation</code>. </p>
-<h3 id="brake-torque-and-ABS-system"><a href="#brake-torque-and-ABS-system" class="headerlink" title="brake torque and ABS system"></a>brake torque and ABS system</h3><p>ABS(anti-block system) works in the situation, when driver input <code>brake torque</code> is larger than the max <code>ground-tire torque</code> can attached between tire and ground. </p>
-<p>once max <code>ground-tire torque</code> is achieved, namely the max fore-aft force <code>T</code> is achived, the traction direction <code>traction slip angular</code> decceleration will leap, this is the dead-blocking situation, and when it happens, the driver input <code>brake torque</code> is saturated.  </p>
-<p>to avoid block situation happens, usually track decelleration of <code>traction slip angular</code> during <code>brake torque</code> increase, if the value of <code>decelleration of slip traction angular</code> is beyond a threshold value, ABS controller will trigger to decease <code>brake torque</code>.</p>
-<h3 id="drive-stability"><a href="#drive-stability" class="headerlink" title="drive stability"></a>drive stability</h3><p>the driving stability is mainly due to forces on tires, sepcially the lateral angular velocity derived from <code>Lateral Force</code></p>
-<p><img src="https://upload.wikimedia.org/wikipedia/en/6/65/Tire_Force_Variation1.jpg" alt="image"></p>
-<h3 id="lateral-control"><a href="#lateral-control" class="headerlink" title="lateral control"></a>lateral control</h3><p>taking driver as one element, the driveing system is a close-loop control system. the system works on a road situation:</p>
-<ul>
-<li>the driver pre-expect a driving path(predefined path) and operate the steering wheel to some certain angular </li>
-<li>the vehicle take a move with a real driving path(real path)</li>
-<li>the real path is not exactly fitted to the predefined path, leading the driver take an additional conpensation control</li>
-</ul>
-<h3 id="longitudinal-control"><a href="#longitudinal-control" class="headerlink" title="longitudinal control"></a>longitudinal control</h3><p>similar as lateral control</p>
-<h2 id="VD-in-Unity"><a href="#VD-in-Unity" class="headerlink" title="VD in Unity"></a>VD in Unity</h2><p>any vehicle in Unity is a combination of:  4 wheels colliders and 1 car collider.</p>
-<p><img src="http://www.theappguruz.com/app/uploads/2018/06/car-as-per-unity.png" alt="image"></p>
-<h3 id="WheelConllider"><a href="#WheelConllider" class="headerlink" title="WheelConllider"></a>WheelConllider</h3><p>1) AxleInfo</p>
-<p><code>AxleInfo</code> represents the pair of wheels, so for 4-wheel vehicle, there are two AxleInfo objects. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AxleInfo</span> </span></div><div class="line">&#123;</div><div class="line">  WheelCollider  left ;</div><div class="line">  WheelCollider right; </div><div class="line">  GameObject leftVisual ;</div><div class="line">  GameObject  rightVisual ;</div><div class="line">  <span class="keyword">bool</span> motor ;    <span class="meta">#enable movement of this wheel pair</span></div><div class="line">  <span class="keyword">bool</span> steering ; <span class="meta"># enable rotation of this wheel pair </span></div><div class="line">  <span class="keyword">float</span> brakeBias = <span class="number">0.5f</span>; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>2) core parameters </p>
-<ul>
-<li><p>wheel damping rate </p>
-</li>
-<li><p>suspension distance </p>
-</li>
-<li><p>Force apply point distance (where ground force act on wheel) </p>
-</li>
-<li><p>suspension spring </p>
-</li>
-<li><p>forwardSlip(slip angle),   tire slip in the rolling(tractional) direction, which is used in calculating torque</p>
-</li>
-<li><p>sidewaySlip, the lateral direction slip, which leads to stability issue.</p>
-</li>
-</ul>
-<p><img src="http://www.theappguruz.com/app/uploads/2018/06/physics-of-wheel-collider.png" alt="physical of wheel"></p>
-<p>3) visualization</p>
-<p>the <code>WheelCollider</code> GameObject is always fixed relative to the vehicle body, usually need to setup another visual GameObject to represent turn and roll.</p>
-<p><a href="https://github.com/lgsvl/simulator/blob/master/Assets/Scripts/Controllers/VehicleController.cs" target="_blank" rel="external">implementation from lg-sim</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">void ApplyLocalPositionToVisuals(WheelCollider collider, GameObject visual)</div><div class="line">    &#123;</div><div class="line">        Transform visualWheel = visual.transform;</div><div class="line"></div><div class="line">        Vector3 position;</div><div class="line">        Quaternion rotation;</div><div class="line">        collider.GetWorldPose(out position, out rotation);</div><div class="line"></div><div class="line">        visualWheel.transform.position = position;</div><div class="line">        visualWheel.transform.rotation = rotation;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>4) WheelCollider.ConfigureVehicleSubsteps</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void ConfigureVehicleSubsteps(float speedThreshold, int stepsBelowThreshold, int stepsAboveThreshold);</div></pre></td></tr></table></figure>
-<p>Every time a fixed update happens, the vehicle simulation splits this fixed delta time into smaller sub-steps and calculates suspension and tire forces per each smaller delta. Then, it would sum up all resulting forces and torques, integrate them, and apply to the vehicle’s body.</p>
-<p>5) WheelCollider.GetGroundHit<br>return the ground collision data for the wheel, namely <a href="https://docs.unity3d.com/ScriptReference/WheelHit.html" target="_blank" rel="external"><code>WheelHit</code></a></p>
-<h3 id="wheel-friction-curve"><a href="#wheel-friction-curve" class="headerlink" title="wheel friction curve"></a>wheel friction curve</h3><p>for wheels’ forward(rolling) direction and sideways direction, first need to determine how much the tire is slipping, which is based on speed difference between the tire’s rubber and the road,<br>then this slip is used to find out the tire force exerted on the contact point </p>
-<p>the wheel friction curve taks a measure of tire slip as an Input and give a force as output.  </p>
-<p>The property of real tires is that for low slip they can exert high forces, since the rubber compensates for the slip by stretching. Later when the slip gets really high, the forces are reduced as the tire starts to slide or spin</p>
-<p>1) AnimationCurve<br><a href="https://docs.unity3d.com/ScriptReference/AnimationCurve.html" target="_blank" rel="external">unity official</a></p>
-<p>store a collection of Keyframes that can be evaluated over time  </p>
-<h3 id="vehicleController-in-lg-sim"><a href="#vehicleController-in-lg-sim" class="headerlink" title="vehicleController() in lg-sim"></a>vehicleController() in lg-sim</h3><p>1) the controllable parameters:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">currentGear </div><div class="line">currentRPM</div><div class="line">currentSpeed </div><div class="line">currentTorque</div><div class="line">currentInput </div><div class="line">steerInput</div></pre></td></tr></table></figure>
-<p>2)  math interpolate function used</p>
-<pre><code>Mathf.Lerp(a, b, t)
-</code></pre><p>a -&gt; the start value </p>
-<p>b -&gt; the end value</p>
-<p>t -&gt; the interpolation value between start and end </p>
-<p>3) fixedUpdate()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// cal trace force by rigidbody</div><div class="line">rigidbody.AddForce(air_drag)</div><div class="line">rigidbody.AddForce(air_lift)</div><div class="line">rigidbody.AddForceAtPosition(tire_drag, act_position)</div><div class="line">// update current driving torque</div><div class="line">currentTorque = rpmCurve.Evalue(currentRPM / maxRPM) * gearRaion * AdjustedMaxTorque </div><div class="line">// apply torque </div><div class="line">// apply traction control</div><div class="line">// update speed</div><div class="line">currentSpeed = rigidbody.velocity.magnitude</div><div class="line">// update fuel info</div><div class="line">fuelLevel -= deltaConsumption</div><div class="line">// update engine temp</div><div class="line">// update turn signal light</div></pre></td></tr></table></figure>
-<p>4) ApplyTorque()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">float torquePerWheel = accelInput * (currentTorque / numberofWheels) </div><div class="line">foreach(axle in axles):</div><div class="line">	if(axle.left.motor):</div><div class="line">		axle.left.motorTorque = torquePerWheel</div><div class="line">	if(axle.right.motor):</div><div class="line">		axle.right.motorTorque = torquePerWheel</div></pre></td></tr></table></figure>
-<p>5) TractionControl()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">TractionControl()</div><div class="line">&#123;</div><div class="line">	AdjustTractionControlTorque(axle.hitLeft.forwardSlip)</div><div class="line">&#125;</div><div class="line">			</div><div class="line">AdjustTractionControlTorque(forwardSlip)</div><div class="line">&#123;</div><div class="line">   if(forwardSlip &gt; SlipLimit)</div><div class="line">	tractionMaxTorque -= 10 </div><div class="line">   else </div><div class="line">        tractionMaxTorque += 10 </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>in lg-sim, the VD model is still simple, as there is only traction/logitudional control. </p>
-<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html" target="_blank" rel="external">add equation in markdown</a></p>
-<p><a href="https://docs.unity3d.com/Manual/class-WheelCollider.html" target="_blank" rel="external">wheelcollider doc</a></p>
-<p><a href="https://docs.unity3d.com/ScriptReference/WheelCollider.html" target="_blank" rel="external">whell collider official</a></p>
-<p><a href="https://docs.unity3d.com/Manual/WheelColliderTutorial.html" target="_blank" rel="external">whellcollider tutorial</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/31/未来5年在哪里-9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/31/未来5年在哪里-9/" itemprop="url">未来5年在哪里-9</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-31T23:37:54-04:00">
-                2019-08-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/31/未来5年在哪里-9/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/31/未来5年在哪里-9/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="低速发展和高附加值"><a href="#低速发展和高附加值" class="headerlink" title="低速发展和高附加值"></a>低速发展和高附加值</h2><p>昨天看到一篇比较中欧(美)国家差异的帖子：<a href="https://www.zhihu.com/question/58173613/answer/676810895" target="_blank" rel="external">北欧国家是如何保持高福利的</a>。非常有意思的一个概念：高附加值，低发展速度的行业。</p>
-<p>这些国家有一些传统强势行业。很有意思的是，印象中的传统行业，比如农业、畜牧业、纺织、手工业等等，跟高科技、现代化很远，似乎是非洲国家的土著人干的活儿。相比，在国内，互联网、技术创业、地产、金融、mba营销、国际贸易等才是时尚。</p>
-<p>早年在农业大学，对以色列强大的现代农业是有所耳闻的。只是没有这种洞察力，现代化的传统行业与国民福利之间还有这样的隐形关系。</p>
-<p>相比，美国的农业、畜牧业等传统行业很不错；美国也引领科技、金融这些时尚的行业。在美国生活的人民确是有了进退的余地。向左，可以退居大农村；向右，可以进军纽约、硅谷当金融、科技新贵。</p>
-<p>国家的选择看似主动，也是现实的驱动。国家可以集中发力在互联网、金融、创业等方面做的很有声有色，但与此同时，传统的制造业，典型低发展速度，需要长期积累，国家发力也解不了。比如，汽车发动机、精密仪器、芯片制造等。</p>
-<p>制造业在国内的标签是<code>低附加值</code>，资本不愿意进入，国家队发力也没气色。然而经过了这些长期积累的国家，比如欧洲小国瑞士、德国，制造业出口完全是高端制造的典范。而且马太效应显著，让这些欧洲国家不需要社会剧烈的经济变动，不需要老百姓担心行业变动、反倒一年还有20天带薪假。政府和人民都其乐融融，有时候看北欧人的生活，建筑、厨房、国家公园、办公环境、甚至监狱，简直像在童话里；报道一个小小的新闻，似乎都要惊动整个镇子上的人一样，这里简直就生活在像伊甸园。</p>
-<p>而中国总是一片火热的场景，5年大力发展基建、5年大力吹捧全国创业、又5年搞工业互联网。国家没有消停，老百姓有人欢喜有人愁。</p>
-<p>中国没有先发优势，在这些传统行业缺少长期积淀，强行进入既不不讨资本喜欢，也不讨人喜欢。比如报道，西安火箭研究员工资20万；大国重器的老焊工，无数荣誉奖章，一个月才一万多，在北京买不起房；国家队出动安利中小企业贷款，但银行就是宁愿带给亏损的国企，也不给需要钱的中小企业。</p>
-<p>对于这些需要长期资本补血，短期回报低，才能形成壁垒的传统行业。在这个资本、市场竞争相对成熟的年代，确实比100年前，搞种植、搞养殖，或西门子、博世等制造业刚出道积累行业(非金钱资本)“资本”要困难的多。似乎印证了上周接触深圳汽车电子行业的感触，一个词：活着。根本谈不上行业积累。</p>
-<p>可以说，北欧国家以及北美国家，因为上几代人的积累，给他们留下的行业遗产、社会制度遗产，才允许他们活的这么滋润。相比，中国没有上几代人的遗产，又进入了成熟资本市场的21世纪，所以，是压力也是机遇。去发掘新世纪的矿吧。</p>
-<p>对这个大环境的从业者而言，选择农业、传统制造业，也确实不聪明。干着比人累的活儿，挣得比人少，社会还不待见。年轻人选择行业要识大局。相比，这个时代热的东西，确实该多关注。存在即合理。</p>
-<h2 id="工程师的心态"><a href="#工程师的心态" class="headerlink" title="工程师的心态"></a>工程师的心态</h2><p>国内有些企业家喜欢讲情怀，吹“工匠精神”, 结果把自己作死了。而华为这样的企业，可以拿高薪，也是加班拿命换的。能够心安理得的当一名工程师，不需要为生计、价值实现、社会待见操心的，只会在这些“低速、高附加值”的欧美公司。一个国家的企业能进化到这种形态，基本是社会稳定，企业稳定，developed，达到了一个最佳平衡点，再投资也不会增加收益，每个岗位都相对稳定，组织内部管理效能达到最优，系统的规范化远超过个人能力，所以每个员工心安理得，做好自己份内的事就好。剩下的时间，享受生活，或者出于兴趣爱好，搞点车库创业都不在话下。</p>
-<p>相比，国内的市场还在巨变当中，没有一家企业已经进化到developed，企业组织系统还不成熟，个人能力还能发挥显著价值，那老老实实当工程师的，在还在发生资源重组系统里，就会被挤到最底层。所以，不要怪国内的年轻人心态不正。因为这个时代，传统技工不会长在国内，国内应该培养属于这个时代的阶层和行业。想跟欧美，比工匠精神，确实是拿短处跟人家的长处比。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2234,7 +2254,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-count">115</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2247,7 +2267,7 @@ A2.x + B2.y + C2.z + P2 = 0
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

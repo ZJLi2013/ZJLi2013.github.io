@@ -291,6 +291,284 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/22/W3C-automotive-open-web-platform/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/22/W3C-automotive-open-web-platform/" itemprop="url">W3C automotive open web platform</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-22T21:16:59-04:00">
+                2018-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/22/W3C-automotive-open-web-platform/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/22/W3C-automotive-open-web-platform/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="W3C-automotive-open-web-platform"><a href="#W3C-automotive-open-web-platform" class="headerlink" title="W3C automotive open web platform"></a>W3C automotive open web platform</h1><p>Main page: <a href="https://www.w3.org/auto/wg/" target="_blank" rel="external">Link</a></p>
+<p>A clear web framework: 1) define the network communication APIs(based WebSocket protocol); 2) standarlize vehicle data; 3) define APIs to access vehicle data. </p>
+<h2 id="Vehicle-Information-Service-Specification-VISS"><a href="#Vehicle-Information-Service-Specification-VISS" class="headerlink" title="Vehicle Information Service Specification(VISS)"></a>Vehicle Information Service Specification(VISS)</h2><p>Object: to define WebSocket based APIs for a vehicle information service to enable client apps to get, set, subscribe, unsubscribe to vehicle signals, data attributes<br><a href="https://w3c.github.io/automotive/vehicle_data/vehicle_information_service.html" target="_blank" rel="external">Link</a></p>
+<p><img src="VISS.png" alt="VISS architecture"> </p>
+<h2 id="Vehicle-Data"><a href="#Vehicle-Data" class="headerlink" title="Vehicle Data"></a>Vehicle Data</h2><p>doc <a href="https://rawgit.com/w3c/automotive/master/vehicle_data/data_spec.html" target="_blank" rel="external">Link</a></p>
+<p>Object: to define a standard Vehicle Data with might be available in a vehicle </p>
+<p>1)    VehicleInterface<br>2)    VehicleCommonDataType<br>3)    VehicleConfigurationInterface (identification, sizeConfiguration, fuelConfiguration, transmissionConfiguration, wheelConfiguration, steeringWheelConfiguration)<br>4)    Running Status Interface(vehicleSpeed, wheelSpeed, engineSpeed, vehiclePowerMode, powertrain, acceleratorPedalPosition, throttlePosition, tripMeters, transmission, cruiseControlStatus, lightStatus, interiorLightStatus, horn, chime, fuel, engineOil, acceleration, engineeCoolant, steeringWheel, wheelTick, ignitionTime, gyro, brakeOperation, buttonEvent, drivingStatus, nightMode, startStopMode)<br>5)    Maintenance Interfaces(odometer, transmissionOil, transmissionClutch, brakeMaintenance, washerFluid, malfuncitonIndicator, battery Status, Tire, trouble Code, diagnostic)<br>6)    Personalization Interfaces ( languageConfiguration, unitsOfMeasures, mirror, driveMode, seatAdjustment, dashboardIllumination, vehicleSound )<br>7)    DrivingSafety Interfaces ( antilockBrakingSystem, tractionControlSystem, electroniceStabilitySystem, topSpeedLimit, airbagStatus, door, childSafetyLock, seat)<br>8)    Climate Interfaces (temperature, rainSensor, wiperStatus, defrost, sunroof, convertibleRoof, sideWindow, climateControl, atmosphericPressure)<br>9)    Vision &amp; Parking Interfaces( laneDepartureDetection, alarm, parkingBrake, parkingSensors) </p>
+<h2 id="Vehicle-Information-API-Specification"><a href="#Vehicle-Information-API-Specification" class="headerlink" title="Vehicle Information API Specification"></a>Vehicle Information API Specification</h2><p>Object: define a high level API for accessing vehicle signals, data attributes and communicate with in-vehicle data servers </p>
+<p>doc <a href="https://www.w3.org/TR/vehicle-information-api/#vehicleinterface-interface" target="_blank" rel="external">Link</a></p>
+<ul>
+<li>VISClient Interface<br>  used to define any on-board, off-board clients</li>
+<li>VISClientOptions Interface<br>  used to define a connection to a vehicle signal     server(speicifiable by protocal, host, port) </li>
+<li>VISSubscription Interface<br>  used as return value from subscribed() methods  </li>
+<li>VSS Interface<br>  used as return value from getVSS(), which should be sufficent to fully traverse the VSS tree </li>
+</ul>
+<h2 id="Vehicle-Information-Access-API"><a href="#Vehicle-Information-Access-API" class="headerlink" title="Vehicle Information Access API"></a>Vehicle Information Access API</h2><p>doc <a href="https://rawgit.com/w3c/automotive/master/vehicle_data/vehicle_spec.html" target="_blank" rel="external">Link</a></p>
+<p>Object: enable connectivity through in-vehicle infotainment systems and vehicle data access protocols </p>
+<p>1)    Navigator Interface: exposes the interface to vehicle information services<br>2)    Vehicle Interface:  the initial entry point to get access to the vehicle information<br>3)    Zone interface: physical and logical zones<br>4)    VehicleIneterfaceCallback<br>5)    AvailableCallback<br>6)    VehicleInterfaceError  (permission denied, invalid operation, timeout, invalid zone, unknown, error, message)<br>7)    VehicleInterface : the base interface to get all vehicle properties<br>8)    VehicleCOnfigurationInterface :  access to static vehicle information<br>9)    VehicleSignalInterface:  access to variables vehicle info<br>10)    Data Availability :  available,  not supported, not supported security policy, supported …</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/18/where-are-you-in-next-5-years-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/18/where-are-you-in-next-5-years-2/" itemprop="url">where are you in next 5 years(2)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-18T16:32:42-04:00">
+                2018-05-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/05/18/where-are-you-in-next-5-years-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/05/18/where-are-you-in-next-5-years-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="the-billions-level-product"><a href="#the-billions-level-product" class="headerlink" title="the billions level product"></a>the billions level product</h2><p>Think about these guys in the world, who defined products/services used by billions people, they are more than model innovation, but really make a diffrence in most people’s life. </p>
+<p>e.g. iPhone, facebook, Google, they are not created from nowhere, but went through product iterations by iterations, and they only imerge when the tech, the market, the time all are in perfect. </p>
+<p>How many people in history achieved here? in any sense, it’s the history choose that person, not that person made history. so take it easy even you are not the 0.01%.</p>
+<h2 id="in-the-promising-market"><a href="#in-the-promising-market" class="headerlink" title="in the promising market"></a>in the promising market</h2><p>most people in their life time neither can be the next Jobs, nor Bill Gates. that’s the reality, no sad but clean expectation in the end before really in the last day of life. </p>
+<p>the second goal is easier, find a promising market and lead a small product, maybe lucky invovled in a domain market finally. You are not significant, but one of other 5000 competitors. Even this career path, however, you can’t expect the normal lifestyle: start at 25 and retire at 55 with enough 401K to death. If so, mostly you will be fired out someday in 30s or 40s. Chinese say, “if you dont plan far, you will be in trouble soon”</p>
+<p>so what may be the promising market subset in automotive software in next 5 years? generally say: 1) service, consulting; 2) self-business; 3)tech expert. in specificly saying: 1) electricity, energy infrastructure;  2) connected, cloud infrastructure; 3) autonomous vehicle.4) mobile apps, which is the carrier for the first 3.  </p>
+<p>I mean the trend is so clear these days. No one can say he dont’ know where should stand in future. but where are you now? I like the model Elon Musk mentioned when do future plan: what’s your reality, what’s your goal, how to meet the gap, than focus on acting.</p>
+<h2 id="will-automotive-software-like-mobile-smartphones"><a href="#will-automotive-software-like-mobile-smartphones" class="headerlink" title="will automotive software like mobile smartphones ?"></a>will automotive software like mobile smartphones ?</h2><p>It’s interesting even now there are few third-party or independent “automotive software” companines, on opposite, in mobile market, there are lots of small or big third-party developing companines around Andriod, iOS, the mobile ecosystem is plenty and diversity. the reality in automotive field is lack of abstraction and separation between bottom hardware and top applications.</p>
+<p>in a mature mobile ecosystem, developer -&gt; end-users<br>in automotive software ecosystem, devleoper –&gt; OEM –&gt; end-users</p>
+<p>some auto allience is working on(AutoSAR). as developers, either gain some knowledge in hardware/control to solve the gap, or waiting for the day. </p>
+<p>what I expect on the way, may be like mobile time:<br>1) automotive OS platform<br>2) vehicle apps<br>3) infrastures extending</p>
+<p>once the platform is unified, suppose many new auto branchs will emergy. like HTC, Xiaomi, Vivo, Huawei, Lenvo branches after Andriod OS. then new market stratgey is highly required, also traditional OEMs will be heavily impacted. </p>
+<h2 id="OEM-don’t-like-mobile-ecosystem"><a href="#OEM-don’t-like-mobile-ecosystem" class="headerlink" title="OEM don’t like mobile ecosystem"></a>OEM don’t like mobile ecosystem</h2><p>this may happen soon or never, since OEM don’t like this trend. most possiblely, automotive software developers will highly rely on OEMs. so where will I stand in next 5-years ?</p>
+<p>OEM is good at strategy study and product integration. at a tech supplier, the benefit is more product driven experience. </p>
+<p>OEM suppose to have the advantage at automotive platform built-up, but reality is big Internet/software companies with product-level solutions, and OEM doesn’t. </p>
+<p>it is clear for me in next 5-years to jump into electric, connected, autonomous related industries, either at OEM level or supplier level. Also it is the time to do some study at automotive platform vendors.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/07/what-happens-in-automotive-softwares/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -749,7 +1027,7 @@ ResNet
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-count">115</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -762,7 +1040,7 @@ ResNet
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

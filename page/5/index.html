@@ -291,6 +291,375 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/28/apollo-planning-源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/28/apollo-planning-源码/" itemprop="url">Apollo 2.0  Planning 源码(1)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-28T11:30:06-04:00">
+                2019-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/28/apollo-planning-源码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/28/apollo-planning-源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line">APOLLO_MAIN(apollo::planning::Planning)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">	google::InitGoogleLogging(argv[<span class="number">0</span>]);</div><div class="line">	google::ParseCommandLineFlags(&amp;argc, &amp;argv, <span class="literal">true</span>); </div><div class="line">	signal(SIGINT, apollo::common::apollo_app_sigint_handler);</div><div class="line">	apollo::planning::Planning apollo_app_ ;</div><div class="line">	ros::init(argc, argv, apollo_app_.Name());</div><div class="line">	apollo_app_.Spin();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> ApolloApp::Spin()</div><div class="line">&#123;</div><div class="line">	ros::<span class="function">AsyncSpinner <span class="title">spinner</span><span class="params">(callback_thread_num_)</span></span>;</div><div class="line">	<span class="keyword">auto</span> status = Init();</div><div class="line">	status = Start(); </div><div class="line">	</div><div class="line">	spinner.start();</div><div class="line">	ros::waitForShutdown();</div><div class="line">	Stop();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"></div><div class="line">Status Planning::Init()</div><div class="line">&#123;</div><div class="line">	hdmap_ = apollo::hdmap::HDMapUtil::BaseMapPtr();</div><div class="line">	</div><div class="line">apollo::common::util::GetProtoFromFile(FLAGS_planning_config_file, &amp;config);</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(!AdapterManager::Initialized())&#123;</div><div class="line">		AdaapterManager::Init(FLAGS_planning_adapter_config_filename);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	AdapterManager::GetLocalization();</div><div class="line">	AdapterManager::GetChassis();</div><div class="line">	AdapterManager::GetRoutingResponse();</div><div class="line">	AdapterManager::GetRoutingRequest();</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_prediction)</div><div class="line">		AdapterManager::GetPrediction();</div><div class="line">		</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_traffic_light)</div><div class="line">		AdapterManager::GetTrafficLightDetection();</div><div class="line">		</div><div class="line">	ReferenceLineProvider::instance()-&gt;Init(hdmap_, config_.qp_spline_reference_line_smoother_config()); </div><div class="line">	</div><div class="line">	RegisterPlanners();</div><div class="line">	</div><div class="line">	planner_ = planner_factory_.CreateObject(config_.planner_type());</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> planner_-&gt;Init(config_);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* DEFINE_string(planning_adapter_config_filename,</span></div><div class="line">	"modules/planning/conf/adapter.conf",</div><div class="line">	"The adapter configuration file")</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;adapter_config_filename)</div><div class="line">&#123;</div><div class="line">	AdapterManagerConfig configs;</div><div class="line">	util::GetProtoFromFile(adapter_config_filename, &amp;configs);</div><div class="line">	Init(configs);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> AdapterManagerConfig&amp; configs)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(Initialized())	<span class="keyword">return</span>;</div><div class="line">	instance()-&gt;initialized_ = <span class="literal">true</span>; </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(configs.is_ros())&#123;</div><div class="line">		instance()-&gt;node_handle_.reset(<span class="keyword">new</span> ros::NodeHandle());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;config : configs.config())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::CHASSIS:</div><div class="line">			EnableChassis(FLAGS_chassis_topic, config);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::LOCALIZATION:</div><div class="line">			EnableLocalization(FLAGS_localization_topic, config);</div><div class="line">			<span class="keyword">break</span>;	</div><div class="line">			<span class="comment">// ...</span></div><div class="line">	&#125;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"><span class="comment">/* DEFINE_string 宏</span></div><div class="line">	FLAGS_chassis_topic -&gt;  /apollo/canbus/chassis</div><div class="line">	FLAGS_localization_topic -&gt; /apollo/localization/pose</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>where is <code>EnableChassis</code> ? </p>
+<p>in /apollo/modules/common/adapters/message_adapters.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> ChassisAdapter=Adapter&lt;::apollo::canbus::Chassis&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> GpsAdapter = Adapter&lt;apollo::localization::Gps&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> PlanningAdapter = Adapter&lt;planning::ADCTrajectory&gt;;</div></pre></td></tr></table></figure>
+<p>in /apollo/modules/common/adapters/adapter_manager.h</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> REGISTER_ADAPTER(name)</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> Enable#<span class="meta">#name(const std::string &amp;topic_name, const AdapterConfig&amp; config)</span></div><div class="line">	&#123;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h5 id="continue-tomorrow"><a href="#continue-tomorrow" class="headerlink" title="continue tomorrow"></a>continue tomorrow</h5>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/08/自动驾驶职位介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/08/自动驾驶职位介绍/" itemprop="url">自动驾驶职位介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-08T09:07:04-04:00">
+                2019-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/04/08/自动驾驶职位介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/04/08/自动驾驶职位介绍/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="光庭科技（武汉）"><a href="#光庭科技（武汉）" class="headerlink" title="光庭科技（武汉）"></a>光庭科技（武汉）</h2><p>智能网联汽车车载终端产品，汽车IT公司，自主研发、产品设计、制造和销售。e.g. 自动驾驶控制器，远程无线通信终端，立体相机、地图传感器、”光谷梦4.0”自动驾驶系统</p>
+<p>职位：感知算法工程师</p>
+<p>要求：图像/点云目标检测、跟踪；slam算法；Camera/Lidar/Radar传感器融合算法；系统集成和调试</p>
+<p>加分项：ROS开发经验，视觉SLAM算法，深度学习算法</p>
+<p>职位：控制算法工程师</p>
+<p>要求：控制系统设计、信号处理、动态系统建模； 时域/频域控制器设计和稳定性分析；汽车速度和方向控制</p>
+<p>职位：测试主管</p>
+<p>要求： 产品测试方案、管理。软件测试及自动化测试工具</p>
+<h2 id="华砺智行（武汉）"><a href="#华砺智行（武汉）" class="headerlink" title="华砺智行（武汉）"></a>华砺智行（武汉）</h2><p>智能基础设施平台，为智能驾驶、智慧城市提供软硬件解决方案。产品：智能网联汽车终端、交通行业、无线通信、云平台、交通应用等</p>
+<h2 id="天迈科技（郑州）"><a href="#天迈科技（郑州）" class="headerlink" title="天迈科技（郑州）"></a>天迈科技（郑州）</h2><p>城市公交运营、管理及服务提供综合解决方案。车联网产品：智能公交调度系统、远程监控系统、智能公交收银系统、充电运营管理。</p>
+<p>职位：视频算法工程师</p>
+<p>要求： 驾驶员行为状态检测算法，机器学习检测效果</p>
+<h2 id="赢彻科技"><a href="#赢彻科技" class="headerlink" title="赢彻科技"></a>赢彻科技</h2><p>物流</p>
+<h2 id="纵目科技"><a href="#纵目科技" class="headerlink" title="纵目科技"></a>纵目科技</h2><p>环视ADAS解决方案</p>
+<p>职位：  车身控制算法工程师</p>
+<p>要求： 车身横向、侧向控制算法设计、仿真、测试。自动控制理论，车辆底盘控制，车身动力学，Carsim, Simulink</p>
+<h2 id="西井科技（上海）"><a href="#西井科技（上海）" class="headerlink" title="西井科技（上海）"></a>西井科技（上海）</h2><p>职位： 仿真平台开发工程师</p>
+<p>要求： 设计仿真平台架构，传感器仿真模型，3D物理引擎(unreal, unity)，熟悉开源仿真平台(carla, airsim)，构建场景环境</p>
+<h2 id="小鹏汽车（广州）"><a href="#小鹏汽车（广州）" class="headerlink" title="小鹏汽车（广州）"></a>小鹏汽车（广州）</h2><p>职位： SLAM专家</p>
+<p>要求： 视觉定位算法；与感知、地图模块结合做3d视觉系统；</p>
+<p>职位：HD Map工程师</p>
+<p>要求： 大规模多层高精地图框架，地图API, 地图数据质量评估，地图数据格式</p>
+<p>职位：运动控制算法专家</p>
+<p>要求：转向、制动、动力系统的主动控制，对底盘、执行器的控制需求；车道保持、自适应巡航、自动变道等功能运动控制，现场调试</p>
+<p>职位：规划与控制专家</p>
+<p>要求：算法开发、测试，提出硬件设计和集成要求</p>
+<p>职位： 雷达算法工程师</p>
+<p>要求： 算法仿真验证、数据分析、算法嵌入式平台实现、维护</p>
+<p>职位：计算机视觉</p>
+<p>要求：场景元素识别；道路、停车场环境寓意分割；算法验证</p>
+<p>职位：传感器融合</p>
+<p>要求： 毫米波、超声波、摄像头、激光雷达测试开发； 感知数据处理、实时地图构建及应用；目标实时跟踪与预测</p>
+<p>职位：项目经理</p>
+<p>要求： l2-l4产品解决方案项目管理</p>
+<h2 id="宇通汽车（深圳）"><a href="#宇通汽车（深圳）" class="headerlink" title="宇通汽车（深圳）"></a>宇通汽车（深圳）</h2><p>职位： 控制工程师</p>
+<p>要求： 轨迹跟踪、车辆控制、 仿真优化</p>
+<p>职位：行为决策工程师</p>
+<p>要求：行为决策算法开发，碰撞预测、行为预测、驾驶经验库、交通安全规则库等，基于强化学习的跟踪(?)</p>
+<p>职位：首席工程师</p>
+<p>要求：自驾客车架构规划、设计；核心算法开发和测试；自动驾驶技术跟踪。熟悉人工智能、机器视觉、深度学习、高精地图、定位等， 熟悉滤波算法、轨迹规划</p>
+<h2 id="纽励科技"><a href="#纽励科技" class="headerlink" title="纽励科技"></a>纽励科技</h2><p>职位：ADAS产品经理</p>
+<p>要求：产品客户需求调研、项目收集整理， 与主机厂沟通技术方案，产品改进。熟悉AEB, ACC, LKA, FCW, 自动泊车，熟悉汽车电子软硬件设计、嵌入式开发标准，熟悉传感器</p>
+<h2 id="光束汽车"><a href="#光束汽车" class="headerlink" title="光束汽车"></a>光束汽车</h2><p>职位： 控制算法</p>
+<h2 id="华人运通"><a href="#华人运通" class="headerlink" title="华人运通"></a>华人运通</h2><p>职位： 控制工程师</p>
+<p>要求： 运动控制算法的设计开发、仿真、优化，测试； 基于驾驶员操作数据的车辆运动控制算法</p>
+<h2 id="恒大汽车"><a href="#恒大汽车" class="headerlink" title="恒大汽车"></a>恒大汽车</h2><p>自行开发，现有汽车平台及产品 </p>
+<p>职位： 仿真验证经理</p>
+<p>要求：汽车电子网络、诊断开发测试、</p>
+<p>研发中心结构： 造型中心，动力总成中心， 车联网中心，整车工程中心，自动驾驶中心</p>
+<h2 id="上海电气"><a href="#上海电气" class="headerlink" title="上海电气"></a>上海电气</h2><p>轨道公交智能系统</p>
+<p>职位： 控制算法工程师</p>
+<p>要求：车辆控制实时数据采集、理论模型、系统仿真和实测验证算法</p>
+<h2 id="Magna-Steyr-麦格纳斯太尔汽车技术"><a href="#Magna-Steyr-麦格纳斯太尔汽车技术" class="headerlink" title="Magna Steyr 麦格纳斯太尔汽车技术"></a>Magna Steyr 麦格纳斯太尔汽车技术</h2><p>职位： L4 ADAS电子专家</p>
+<p>要求： ADAS SE团队</p>
+<p>职位： GNSS测试验证首席工程师</p>
+<h2 id="牧月科技"><a href="#牧月科技" class="headerlink" title="牧月科技"></a>牧月科技</h2><p>职位：仿真系统工程师</p>
+<p>要求： 负责仿真系统开发、测试，及各种传感器的仿真软件库，利用已有数据构建仿真场景；开发自动化仿真分析平台</p>
+<h2 id="景驰科技（文远知行）"><a href="#景驰科技（文远知行）" class="headerlink" title="景驰科技（文远知行）"></a>景驰科技（文远知行）</h2><p>职位： 仿真算法工程师</p>
+<p>要求： 开发场景自动化生成算法、人机交互仿真软件工具集、可扩展计算框架</p>
+<h2 id="腾讯CSIG事业部"><a href="#腾讯CSIG事业部" class="headerlink" title="腾讯CSIG事业部"></a>腾讯CSIG事业部</h2><h2 id="伟世通"><a href="#伟世通" class="headerlink" title="伟世通"></a>伟世通</h2><p>职位： 软件测试</p>
+<p>要求： ADAS软件测试、竞品分析</p>
+<h2 id="博世（苏州）"><a href="#博世（苏州）" class="headerlink" title="博世（苏州）"></a>博世（苏州）</h2><p>职位： 控制算法工程师</p>
+<p>要求： ADAS自动泊车系统</p>
+<h2 id="亿伽通（吉利系）"><a href="#亿伽通（吉利系）" class="headerlink" title="亿伽通（吉利系）"></a>亿伽通（吉利系）</h2><p>职位：算法工程师<br>要求：定位产品场景、需求分析； 参与搭建自动驾驶数据智能服务平台；熟悉基于视觉的slam方案</p>
+<h2 id="奥迪中国（北京）"><a href="#奥迪中国（北京）" class="headerlink" title="奥迪中国（北京）"></a>奥迪中国（北京）</h2><p>车联网团队</p>
+<p>职位： 测试工程师</p>
+<p>要求： ADAS/HAD功能测试</p>
+<p>职位：仿真工程师</p>
+<p>要求： SiL环境搭建，adas功能仿真测试</p>
+<h2 id="斑马智行（阿里、上汽）"><a href="#斑马智行（阿里、上汽）" class="headerlink" title="斑马智行（阿里、上汽）"></a>斑马智行（阿里、上汽）</h2><h2 id="智加科技（苏州）"><a href="#智加科技（苏州）" class="headerlink" title="智加科技（苏州）"></a>智加科技（苏州）</h2><p>职位： 传感器标定工程师</p>
+<p>要求： 传感器选型、数据读取、内外参标定、在线检测</p>
+<p>职位：感知算法工程师</p>
+<p>要求： 对图像、点云等的静态场景要素检测和追踪；融合传感器数据后的目标检测和跟踪；服务地图自建、预测规划决策系统</p>
+<p>职位： 地图定位工程师</p>
+<p>要求： 开发多传感器融合算法以提高地图精度，自动化地图的大规模采集、生成、标注、校政。</p>
+<p>职位： 决策规划工程师 </p>
+<p>要求： 预测、决策、规划等系统</p>
+<p>职位： 仿真工程师</p>
+<p>要求： 利用真实数据或合成数据搭建动态环境的仿真框架；设计场景，为感知、规划、预测等模块开发仿真测试接口；开发基于仿真测试的自动化分析平台；构建可扩展的仿真框架</p>
+<h2 id="魔视智能（上海）"><a href="#魔视智能（上海）" class="headerlink" title="魔视智能（上海）"></a>魔视智能（上海）</h2><h2 id="极目智能"><a href="#极目智能" class="headerlink" title="极目智能"></a>极目智能</h2><p>职位： 车辆决策算法工程师 </p>
+<h2 id="零跑科技"><a href="#零跑科技" class="headerlink" title="零跑科技"></a>零跑科技</h2><p>职位： 算法工程师</p>
+<p>要求： 定位算法模块，基于GPS/IMU的航伟推算算法，视觉定位算法</p>
+<h2 id="阿里巴巴（人工智能实验室）"><a href="#阿里巴巴（人工智能实验室）" class="headerlink" title="阿里巴巴（人工智能实验室）"></a>阿里巴巴（人工智能实验室）</h2><p>职位： 仿真算法工程师 </p>
+<h2 id="吉利"><a href="#吉利" class="headerlink" title="吉利"></a>吉利</h2><h2 id="Volvo上海研发中心"><a href="#Volvo上海研发中心" class="headerlink" title="Volvo上海研发中心"></a>Volvo上海研发中心</h2><h2 id="中智行（南京）"><a href="#中智行（南京）" class="headerlink" title="中智行（南京）"></a>中智行（南京）</h2><p>l4 解决方案</p>
+<h2 id="同元软控（苏州）"><a href="#同元软控（苏州）" class="headerlink" title="同元软控（苏州）"></a>同元软控（苏州）</h2><p>国产CAD/CAE产品供应商</p>
+<h2 id="华为2012"><a href="#华为2012" class="headerlink" title="华为2012"></a>华为2012</h2><h2 id="华为海思（上海）"><a href="#华为海思（上海）" class="headerlink" title="华为海思（上海）"></a>华为海思（上海）</h2><p>职位： 软件测试 </p>
+<h2 id="一汽红旗"><a href="#一汽红旗" class="headerlink" title="一汽红旗"></a>一汽红旗</h2><p>职位： 车联网构架设计师</p>
+<p>要求： T-box端-云构架，v2x</p>
+<p>潜在人选：</p>
+<ul>
+<li>车联网企业： 斑马、亿伽通、博泰、百度车联网团队、飞驰镁物、哈曼、四维图新、梧桐车联</li>
+<li>新势力： 蔚来、小鹏、威马</li>
+</ul>
+<p>职位：软件算法、系统工程师</p>
+<p>潜在人选：</p>
+<ul>
+<li>上汽人工智能实验室</li>
+<li>英伟达</li>
+<li>福特-argo ai </li>
+<li>momenta, plusai</li>
+</ul>
+<p>职位： 数据挖掘工程师</p>
+<p>要求： 大数据建模分析，用户数据、车辆数据、驾驶员数据等</p>
+<p>潜在人选：</p>
+<ul>
+<li>浪潮</li>
+<li>曙光</li>
+<li>华为云</li>
+<li>阿里云</li>
+<li>百度</li>
+</ul>
+<h2 id="华域汽车"><a href="#华域汽车" class="headerlink" title="华域汽车"></a>华域汽车</h2><h2 id="滴滴无人车"><a href="#滴滴无人车" class="headerlink" title="滴滴无人车"></a>滴滴无人车</h2><h2 id="美团无人车"><a href="#美团无人车" class="headerlink" title="美团无人车"></a>美团无人车</h2><p>职位： 仿真工程师</p>
+<h2 id="一汽大众"><a href="#一汽大众" class="headerlink" title="一汽大众"></a>一汽大众</h2><p>职位：决策算法工程师</p>
+<h2 id="veoneer"><a href="#veoneer" class="headerlink" title="veoneer"></a>veoneer</h2><p>职位：adas软件开发工程师 </p>
+<h2 id="易航智能"><a href="#易航智能" class="headerlink" title="易航智能"></a>易航智能</h2><p>职位： 控制算法工程师</p>
+<h2 id="三一无人驾驶"><a href="#三一无人驾驶" class="headerlink" title="三一无人驾驶"></a>三一无人驾驶</h2><p>无人码头</p>
+<p>职位： 算法工程师</p>
+<h2 id="易高美"><a href="#易高美" class="headerlink" title="易高美"></a>易高美</h2><p>职位： hpmap仿真工程师</p>
+<p>要求： 大批量仿真数据自动化生成；设计分布式仿真系统底层架构，3D引擎编辑器工具链开发；实现仿真系统场景渲染；对大批量及各种随机虚拟数据自动化脚本工具开发。OpenGL/Direct3D图形接口; unreal, unity引擎</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/03/粒子滤波-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1478,325 +1847,6 @@ $$  z =  h(x, v)    $$            (2.2)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" itemprop="url">paper reading- autono Vi-Sim simualtion platform</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-28T05:36:00-04:00">
-                2019-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="introduction-of-Vi-Sim"><a href="#introduction-of-Vi-Sim" class="headerlink" title="introduction of Vi-Sim"></a>introduction of Vi-Sim</h2><ul>
-<li><p>data generation, allowing exports of traffic data and virtual sensor data on the vehicle, which can be used in training DL by generating automatically labelled classification and control data</p>
-</li>
-<li><p>dynamic traffic conditions, with varying vehicles, pedestrians, lighting, weather </p>
-</li>
-<li><p>rapid scenario construction</p>
-</li>
-</ul>
-<h2 id="simulation-modules"><a href="#simulation-modules" class="headerlink" title="simulation modules"></a>simulation modules</h2><p> Vi-Sim is divided into 8 extensible modules. </p>
-<h3 id="roads"><a href="#roads" class="headerlink" title="roads"></a>roads</h3><p> represented by center line, #lanes, directions, surface friction. the roads can quick constructed by drawing splines on the landscape</p>
-<h3 id="road-network"><a href="#road-network" class="headerlink" title="road network"></a>road network</h3><p> provides connectivity information of road and traffic infrastructure. the road network provides routing and localization purpose.</p>
-<h3 id="infrastructure"><a href="#infrastructure" class="headerlink" title="infrastructure"></a>infrastructure</h3><p> represents traffic lights, signage, and any entities that will modify the behavior of vehicles on the road. </p>
-<h3 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h3><p> represents the time of the day, weather, rain conditions, road friction etc. </p>
-<h3 id="non-vehicle-traffic"><a href="#non-vehicle-traffic" class="headerlink" title="non-vehicle traffic"></a>non-vehicle traffic</h3><p> basically pedestrains and cyclists in the map. both are following safe traffic rules.</p>
-<h3 id="data-capture"><a href="#data-capture" class="headerlink" title="data capture"></a>data capture</h3><p> this module used for logging data of the environment as well as sensor data from ego vehicle</p>
-<h2 id="driving-modules"><a href="#driving-modules" class="headerlink" title="driving modules"></a>driving modules</h2><h3 id="vehicle"><a href="#vehicle" class="headerlink" title="vehicle"></a>vehicle</h3><p>  represented as a physical-driven entity with specific tire, steering, sensor parameters. </p>
-<p>  the vehicle has 3 components: </p>
-<pre><code>* control is provided with steering, throttle, brake inputs;  
-
-
-* dynamics is implemented in Nvidia physX engine; 
-
-
-* perception component is a ray-cast with configurable uncertainty, detection time, classification error rate, and sensor angle/range. 
-</code></pre><p>   a vehicle can equip multiple sensors. the perception component provides interface to a generic camera interface and Monte Carlo scanning ray-casts, which can be extended to Lidar/camera based NN claassifiers. </p>
-<h3 id="driver"><a href="#driver" class="headerlink" title="driver"></a>driver</h3><p>   driving decision module, who fuses information from road network and vehicle’s sensor to make decisions. currently there are 3 driver models</p>
-<pre><code>   * lane-following driver, which employs control command like lane-keeping ADAS
-
-   * manual driver, allows a human drive the vehicle
-
-* autonoVi driver, use optimization-based maneuvering with traffic constraints to generate advanced behaviors 
-</code></pre><h2 id="limitations"><a href="#limitations" class="headerlink" title="limitations"></a>limitations</h2><ul>
-<li><p>lack of calibaration configuration to replicate specific sensors</p>
-</li>
-<li><p>driver modules are limited to hierarchical, rule-based approaches</p>
-</li>
-<li><p>real traffic conditions </p>
-</li>
-</ul>
-<h2 id="thoughts"><a href="#thoughts" class="headerlink" title="thoughts"></a>thoughts</h2><pre><code>1) sensor components in simulation, e.g.  Lidar, camera, Radar
-
-2) sensor calibration in simulation, Apollo and Carla may has some good suggestions 
-
-3) multi-agents environment
-
-4) distributed framework to ensure real time multi-agents simualtion 
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/" itemprop="url">paper reading-distributed simulation platform for autonomous driving</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-28T01:21:13-04:00">
-                2019-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>to test newly developed algorithms, due to the massive amount of simulation data, need a distributed simulation platform based on Spark distributed framework.</p>
-<ul>
-<li><p>simulation based on synthetic data, used in control and planning </p>
-</li>
-<li><p>simulation based on real data playback, used to test function and performance of different components</p>
-</li>
-</ul>
-<p>in autonomous driving system, each functional module in ROS is deployed as a node, the communication between nodes rely on the messages with well-defined formats. so the test of each module is independent, we can develop simulation module for each functional module. </p>
-<h2 id="anatomy-of-simulator"><a href="#anatomy-of-simulator" class="headerlink" title="anatomy of simulator"></a>anatomy of simulator</h2><p>there should be a dynamic model of the car, a vehicle dynamic model;  then the external environment is needed, which includes static and dynamic scenes.</p>
-<p>the simulator can decompose external environment into basic elements, and rearranges the combination to generate a variety of test cases, each simulating a specific scenario. </p>
-<p>e.g. the position, speed, next step command of the barrier vehicle can give different basic elements. </p>
-<h2 id="ROS-based-simulator"><a href="#ROS-based-simulator" class="headerlink" title="ROS based simulator"></a>ROS based simulator</h2><p>to use the real traffic data to reproduce the real scene requires a distributed simulation platform. </p>
-<ul>
-<li><p>ROSBAG, record from Topic and replay message to Topic. </p>
-<p>  the Record function is to create a recording node in ROS, and call the subscribe method to receive ROS message to all Topics, and then write the message to Bag file. </p>
-<p>  the Play function is to establish a play node, and call the advertise method to send message in bag to specified Topic. </p>
-</li>
-</ul>
-<h2 id="Spark-distributed-platform"><a href="#Spark-distributed-platform" class="headerlink" title="Spark distributed platform"></a>Spark distributed platform</h2><p>the Spark driver launch different simulation applications, e.g. localization algorithms, object recoginization algorithms, vehicle decision-making and control algorithms etc, then allocate resources to each Spark worker, who first reads the RosBag data into memory and launches a ROS node to process the incoming data. </p>
-<p>the interface between Spark and ROS is through Linux pipe, basically data written to the write end of the pipe is buffered by the kernel until it is read from the read end of the pipe.</p>
-<p>two problems: 1) Spark only support text-based data consuming; 2) Spark memeory to ROBag </p>
-<h3 id="Binary-data-streaming"><a href="#Binary-data-streaming" class="headerlink" title="Binary data streaming"></a>Binary data streaming</h3><p>the core Spark data structure is resilient distributed dataset (RDD). to process and transform binary data into a user-defined format and transform the output of Spark computation into a byte stream, even further to a generic binary file(HDFs)</p>
-<pre><code>1) encode and serialize the binary files(image, lidar input data) to form a binary byte stream 
-
-2) de-serialize and decode the binary stream, according to interpret byte stream into an understandable format and perform target computation
-
-3) the output then be encoded and serialized before passed in RDD partitions(e.g. HDFs), and returned to Spark driver 
-</code></pre><h3 id="data-retrieval-through-ROSbag-cache"><a href="#data-retrieval-through-ROSbag-cache" class="headerlink" title="data retrieval through ROSbag cache"></a>data retrieval through ROSbag cache</h3><p>two things: reading from memory through ROSbag play, and writing to memory through ROSbag record. </p>
-<p>solution: design a memoryChunkedFile class, derived from ChuckedFile class, to read/write memory rather than files.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1847,7 +1897,7 @@ $$  z =  h(x, v)    $$            (2.2)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-count">115</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1860,7 +1910,7 @@ $$  z =  h(x, v)    $$            (2.2)
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
