@@ -291,6 +291,242 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/math-in-ADS-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/14/math-in-ADS-system/" itemprop="url">math in ADS system</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-14T06:43:04-04:00">
+                2019-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/14/math-in-ADS-system/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/14/math-in-ADS-system/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>when dealing with plan and control models in ADS system, there are plenty of basic math, and the understanding of these math are definitely helpful to build a better and stronger algorithm.</p>
+<p>to design a ADS software system, there are two parts, the engineering background and software development. enginneering side is the core logic, while software is about how to organize the software and present, especially with new ideas, e.g. cloud based architecture, web user interface.</p>
+<h2 id="vector-analysis"><a href="#vector-analysis" class="headerlink" title="vector analysis"></a>vector analysis</h2><h3 id="coordinate-system"><a href="#coordinate-system" class="headerlink" title="coordinate system"></a>coordinate system</h3><p>asssumed a Cartesian system [O: e1, e2, e3], a vector <strong>r</strong> can be represented as (x, y, z).</p>
+<h3 id="vector-operator"><a href="#vector-operator" class="headerlink" title="vector operator"></a>vector operator</h3><ul>
+<li><p>vector add </p>
+<p>  <strong>a</strong> + <strong>b</strong> = (a_x + b_x) <strong>i</strong> + (a_y + b_y) <strong>j</strong> + (a_z + b_z) <strong>k</strong></p>
+</li>
+</ul>
+<p>the triangle inequality is:</p>
+<p>|<strong>a</strong> + <strong>b</strong>| &lt;= |<strong>a</strong>| + |<strong>b</strong>|</p>
+<ul>
+<li><p>multiply scalar </p>
+<p><strong>a</strong> . <strong>b</strong> =  a . b_x <strong>i</strong> + a . b_y <strong>j</strong> + a . b_z <strong>k</strong>  </p>
+</li>
+</ul>
+<p>namely, by multiplying each direction component of the vector by <code>a</code>.</p>
+<ul>
+<li><p>dot product </p>
+<p><strong>a</strong> . <strong>b</strong> = |a|.|b|. \cos<a,b> = a_x . b_x +  a_y . b_y +  a_z . b_z </a,b></p>
+</li>
+</ul>
+<p>a simple physical explaination: assume <code>a</code> is displacement, <code>b</code> is force, then the power of force in the displacement is by <code>dot product</code>.</p>
+<p>the geometric meaning of <code>dot product</code> is projection. namely, |a|cos<a,b> means project of vector <code>a</code> on vector <code>b</code>, which also gives the decomposion of <code>a</code>, which has a unique <code>projection component vector</code> and <code>vertical component vector</code>.</a,b></p>
+<p><strong>a</strong> =  <strong>a_p</strong> + <strong>a_v</strong></p>
+<p><strong>a_p</strong> = ( <strong>a</strong> . <strong>e_p</strong> ) . <strong>e_p</strong></p>
+<ul>
+<li>cross product </li>
+</ul>
+<p>assume three vectors non-co-plane, (a, b, c), rotating start from a to b, the thumb point to c, which is a right-hand-coordinate system. </p>
+<p>a simple physical meaning: assume <code>a</code> is the force, <code>b</code> is the force arm, then <code>a x b</code> gives the torque, which perpendicular to <a, b=""> plane. </a,></p>
+<p> <strong>a</strong> x <strong>b</strong> = |a||b| \sin<a, b=""> </a,></p>
+<p>the geometric meaning of <code>cross product</code> is the area of parallelogram by <a, b="">. </a,></p>
+<p>base vectors in right-hand Cartesian coordiante system satisfy:</p>
+<pre><code>ei x ej = ek (i != j)
+</code></pre><ul>
+<li><p>mixed product </p>
+<pre><code>$$ a x b \cdot c  $$
+</code></pre></li>
+</ul>
+<p>which gives the volume of parallel hexagonal propped by <a, b,="" c=""></a,></p>
+<h3 id="curve-volume-integration"><a href="#curve-volume-integration" class="headerlink" title="curve(volume) integration"></a>curve(volume) integration</h3><ul>
+<li><p>Gauss integration </p>
+</li>
+<li><p>Stokes integration </p>
+</li>
+</ul>
+<h3 id="scalar-field"><a href="#scalar-field" class="headerlink" title="scalar field"></a>scalar field</h3><ul>
+<li>directional derivative </li>
+</ul>
+<p>assuming vector <code>l</code> in space, its unitfied vector can be present as directional cosine [cos\alpha, cos\beta, cos\gamma]^T. for any function <code>u=u(x, y, z)</code>, who is derivable at <code>M0(x0, y0, z0)</code>, then:</p>
+<pre><code>\frac{\partial u}{\partial l} = dot_product(\Delta u, &lt;\cos \alpha, \cos \beta, \cos \gamme&gt; )
+</code></pre><ul>
+<li><p>gradient </p>
+<pre><code>\Delta u =  \frac{\partial u}{\parial x} \b{i} + \frac{\partial u}{\parial y} \b{j} +  \frac{\partial u}{\parial z} \b{k}
+</code></pre></li>
+</ul>
+<p>the directional derivative which gives the maximum of <code>\Delta u</code> at a point, it’s the gradient direction. the gradient direction in space, stands for the direction from lowest co-value layer to highest co-value layer, which in physical, means the most high rate of change in general. </p>
+<ul>
+<li><p>Halmilton operator </p>
+<pre><code>\Delta  =  \frac{\partial}{\parial x} \b{i} + \frac{\partial}{\parial y} \b{j} +  \frac{\partial}{\parial z} \b{k}
+</code></pre></li>
+</ul>
+<h3 id="vector-field"><a href="#vector-field" class="headerlink" title="vector field"></a>vector field</h3><ul>
+<li>directional derivative</li>
+</ul>
+<p>the gradient field of a vector field gives a tensor field, which raise the dimension one more. the dot product(inner product) of a vector field, decrease to scalar field, the cross product of a vector field keeps a vector field. for a vector field, usually talk about its flux and divergence.</p>
+<h2 id="analytical-geometry"><a href="#analytical-geometry" class="headerlink" title="analytical geometry"></a>analytical geometry</h2><h3 id="plane-equation"><a href="#plane-equation" class="headerlink" title="plane equation"></a>plane equation</h3><p>assume plane <code>\pi</code> in Cartesian coordinate system [O: X, Y, Z], <code>O</code>‘s projection in plane is <code>N</code>,  the directional cosine of <code>ON</code> is <code>(l, m, n)</code>, </p>
+<p>for any point <code>P</code> in plane, <code>NP</code> is always perpendicular to the directional cosine, namely:</p>
+<p>dot_product( <strong>NP</strong>, <strong>(l, m, n)</strong> ) = 0 </p>
+<p>as <code>l**2 + m**2 + n**2 == 1</code>, which gives:</p>
+<pre><code>lx + my + nz - p = 0            (1)
+</code></pre><p>equation 1) is the normalized plane equation. and <code>(l, m, n)</code> is the normal vector of lane <code>\pi</code>, and <code>p</code> should be no lesss than 0.</p>
+<h3 id="linear-equation"><a href="#linear-equation" class="headerlink" title="linear equation"></a>linear equation</h3><p>assumed a line  go across point <code>P_0</code> $(x_0, y_0, z_0)$ and in direction <code>\lamba</code>, then any point <code>P</code> $(x,y,z)$ on this line, satisfy:</p>
+<pre><code>x - x_0 = |PP_0| . l 
+y - y_0 = |PP_0| . m 
+z - z_0 = |PP_0| . n 
+</code></pre><p>taking |PP_0| as <code>t</code>, the equation above is the parmeterized line equation, namely:</p>
+<pre><code>\frac{x-x0}{l} =  \frac{y-y0}{m} =  \frac{z-z0}{n} 
+</code></pre><p>in general, a linear is the cross interface of two linear plane, so its genearl equation is to satisfy both plane equation:</p>
+<pre><code>A1.x + B1.y + C1.z + P1 = 0
+A2.x + B2.y + C2.z + P2 = 0
+</code></pre><h3 id="coordiante-transfer"><a href="#coordiante-transfer" class="headerlink" title="coordiante transfer"></a>coordiante transfer</h3><p>in general, coordiante transfer means <code>base vector</code> linear transfer. assuming original coordinate system [O: e1, e2, e3], and new coordinate system [O’, e1’, e2’, e3’]</p>
+<p>both the original base vector <e1, e2,="" e3=""> and new base vector &lt;e1’, e2’, e3’&gt; prop up the same 3D linear space. </e1,></p>
+<p>and there should be transfer matrix between them:</p>
+<p><strong>e</strong> = matrix[3x3] \cdot <strong>e’</strong></p>
+<p>for any point <code>P</code> transfer from original to new coordinate system, </p>
+<p>{<strong>x</strong>} = {<strong>a</strong>} + {<strong>x’</strong>} . matrix[3x3]</p>
+<p>matrix[3x3] is:</p>
+<table>
+<thead>
+<tr>
+<th>a11</th>
+<th>a21</th>
+<th>a31</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a12</td>
+<td>a22</td>
+<td>a32</td>
+</tr>
+<tr>
+<td>a13</td>
+<td>a23</td>
+<td>a33</td>
+</tr>
+</tbody>
+</table>
+<p>each raw in the matix above, stands for a <code>base vector</code> tranfer from original one to the new one, namely:</p>
+<pre><code>$$ e1&apos; = a11.e1 + a21.e2 + a31.e3 $$ 
+</code></pre><p>the component value of each coordinate, can be simply by:</p>
+<p>x1’ =  <strong>e1’</strong> . <strong>OP’</strong></p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="http://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/" target="_blank" rel="external">write mathematic fomulars in Markdown</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/未来5年在哪里-10/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1741,164 +1977,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/threading-and-websockets/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/16/threading-and-websockets/" itemprop="url">threading and websockets</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T09:30:00-04:00">
-                2019-08-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/16/threading-and-websockets/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/16/threading-and-websockets/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="threading-Thread"><a href="#threading-Thread" class="headerlink" title="threading.Thread"></a>threading.Thread</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">run()</div><div class="line"></div><div class="line">start()</div><div class="line"></div><div class="line">join([time])</div><div class="line"></div><div class="line">isAlive()</div><div class="line"></div><div class="line">getName()</div><div class="line"></div><div class="line">setName()</div></pre></td></tr></table></figure>
-<p>to initialize a thread with:  threadID, name, counter</p>
-<h3 id="start-and-run"><a href="#start-and-run" class="headerlink" title="start() and run()"></a>start() and run()</h3><p>start() once for each thread, run() will not spawn a separate thread, but run in current thread </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">myThread</span><span class="params">(threading.Thread)</span>:</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></div><div class="line">		super(myThread, self).__init__(*args, **kwargs)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></div><div class="line">		print(<span class="string">"run ... from start()"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">	demo = myThread()</div><div class="line">	demo.start()</div><div class="line">	demo.join()</div></pre></td></tr></table></figure>
-<h3 id="lock-objects"><a href="#lock-objects" class="headerlink" title="lock objects"></a>lock objects</h3><p>a primitive lock does not belongto a certain thread when locked. by default, when constructed, the lock is in <code>unlocked</code> state.</p>
-<ul>
-<li><code>acquire()</code>, will set the lock to <code>locked</code> and return the lock immediately(atom operator); if current lock is <code>locked</code>, then <code>acquire()</code> blocks (the thread) untill the occuping-lock thread calls release().</li>
-</ul>
-<p>if multi-thread blocked by <code>acquire()</code>, only one thread will get the lock when release() is called, but can’t sure which one from the suspended threads</p>
-<h3 id="condition-objects"><a href="#condition-objects" class="headerlink" title="condition objects"></a>condition objects</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">threading.Condition(lock=None)</div><div class="line"></div><div class="line">acquire()</div><div class="line"></div><div class="line">wait()</div><div class="line"></div><div class="line">notify()</div><div class="line"></div><div class="line">release()</div></pre></td></tr></table></figure>
-<p>thread A aquire() the condition variable, to check if condition satification, if not, thread A wait; if satisfied, update the condition variable status and notify all other threads in waiting.</p>
-<h2 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h2><h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p>webocket is better than http when the server need actively push message to client, rather than waiting client request first.</p>
-<p><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html" target="_blank" rel="external"></a></p>
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><p>usually webSocket client has two methods:  <code>send()</code> to send data to server; <code>close()</code> to close websocket connection, as well a few event callbacks:</p>
-<ul>
-<li>onopen(): triggered when websocket instance get connected</li>
-<li>onerror(),</li>
-<li>onclose(), </li>
-<li>onmessage(), which triggered when received data from server.</li>
-</ul>
-<p>when constructing a webSocket instance, a connection is built between server and client. </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// client connect to server </span></div><div class="line"><span class="keyword">var</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8181'</span>);</div><div class="line">ws.onopen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   ws.send(<span class="string">"hello server"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">// if need run multi callback</span></div><div class="line">ws.addEventListener(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">	ws.send(<span class="string">'hello server'</span>);</div><div class="line">	&#125;); </div><div class="line">ws.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> data = event.data ;</div><div class="line">&#125;;</div><div class="line">ws.addEventListener(<span class="string">"message"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> data = event.data ;</div><div class="line">&#125;); </div><div class="line">ws.send(<span class="string">'client message'</span>);</div></pre></td></tr></table></figure>
-<h4 id="onmessage"><a href="#onmessage" class="headerlink" title="onmessage()"></a>onmessage()</h4><p>whenever the server send data, onmessage() events get fired.</p>
-<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><ul>
-<li>onOpen(), triggered when a new client-server connection setup</li>
-<li>onMessage(), triggered when message received </li>
-<li>onClose(), </li>
-<li>onError(), </li>
-</ul>
-<h3 id="implementation"><a href="#implementation" class="headerlink" title="implementation"></a>implementation</h3><p>in c#, there is websocket-sharp, in python is python-websockets, in js is nodejs-websocket. as well as websocket protocol is satisified, server can write using websocket-sharp, and client in python-websockets. an example is in lg-simulator.</p>
-<p>the message type in websocket can be json or binary, so there should be json parse in c#(SimpleJSON), python(json module) and js (JSON).</p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://stackoverflow.com/questions/16280747/sending-message-to-a-specific-connected-users-using-websocket" target="_blank" rel="external">sending message to a client</a></p>
-<p><a href="https://stackoverflow.com/questions/50618425/websockets-get-message-from-a-websocket-server-and-send-it-to-client" target="_blank" rel="external">sent message from server to client</a></p>
-<p><a href="https://websockets.readthedocs.io/en/stable/" target="_blank" rel="external">python websockets</a></p>
-<p><a href="https://github.com/websockets/ws#server-broadcast" target="_blank" rel="external">nodjs websocket</a></p>
-<p><a href="https://www.vcblog.top/article/494/" target="_blank" rel="external">c# websocket</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1949,7 +2027,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">118</span>
+                <span class="site-state-item-count">119</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="lg-sim,vehicle dynamics," />
+  <meta name="keywords" content="ros," />
 
 
 
@@ -93,22 +93,21 @@
 
 
 
-<meta name="description" content="VD backgroundusually to simualate vehicle dynamic(VD) system, either by physical model, e.g. pysical models of engine, gearbox, powertrain; or parameter model, which doesn’t take into the physical">
-<meta name="keywords" content="lg-sim,vehicle dynamics">
+<meta name="description" content="backgroundin ADS,  data fusion, sensor performance, L3+ perception, localization algorithms development relys a lot on physicall data collection, commonly in rosbag format with information/data about">
+<meta name="keywords" content="ros">
 <meta property="og:type" content="article">
-<meta property="og:title" content="vehicle dynamics model in ADS simulation">
-<meta property="og:url" content="http://yoursite.com/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/index.html">
+<meta property="og:title" content="rosbag tools in ADS">
+<meta property="og:url" content="http://yoursite.com/2019/10/21/rosbag-tools-in-ADS/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="VD backgroundusually to simualate vehicle dynamic(VD) system, either by physical model, e.g. pysical models of engine, gearbox, powertrain; or parameter model, which doesn’t take into the physical">
+<meta property="og:description" content="backgroundin ADS,  data fusion, sensor performance, L3+ perception, localization algorithms development relys a lot on physicall data collection, commonly in rosbag format with information/data about">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/6/65/Tire_Force_Variation1.jpg">
-<meta property="og:image" content="http://www.theappguruz.com/app/uploads/2018/06/car-as-per-unity.png">
-<meta property="og:image" content="http://www.theappguruz.com/app/uploads/2018/06/physics-of-wheel-collider.png">
-<meta property="og:updated_time" content="2019-09-03T13:09:02.820Z">
+<meta property="og:image" content="https://github.com/valtech/ros_hadoop/blob/master/doc/images/concept.png">
+<meta property="og:image" content="https://github.com/valtech/ros_hadoop/blob/master/doc/images/rosbag-analytics.png">
+<meta property="og:updated_time" content="2019-10-21T10:21:29.983Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="vehicle dynamics model in ADS simulation">
-<meta name="twitter:description" content="VD backgroundusually to simualate vehicle dynamic(VD) system, either by physical model, e.g. pysical models of engine, gearbox, powertrain; or parameter model, which doesn’t take into the physical">
-<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/en/6/65/Tire_Force_Variation1.jpg">
+<meta name="twitter:title" content="rosbag tools in ADS">
+<meta name="twitter:description" content="backgroundin ADS,  data fusion, sensor performance, L3+ perception, localization algorithms development relys a lot on physicall data collection, commonly in rosbag format with information/data about">
+<meta name="twitter:image" content="https://github.com/valtech/ros_hadoop/blob/master/doc/images/concept.png">
 
 
 
@@ -136,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/10/21/rosbag-tools-in-ADS/"/>
 
 
 
 
 
-  <title>vehicle dynamics model in ADS simulation | Serious Autonomous Vehicles</title>
+  <title>rosbag tools in ADS | Serious Autonomous Vehicles</title>
   
 
 
@@ -295,7 +294,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/rosbag-tools-in-ADS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -312,7 +311,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">vehicle dynamics model in ADS simulation</h1>
+          <h1 class="post-title" itemprop="name headline">rosbag tools in ADS</h1>
         
 
         <div class="post-meta">
@@ -324,8 +323,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-03T09:08:09-04:00">
-                2019-09-03
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-21T06:18:47-04:00">
+                2019-10-21
               </time>
             
 
@@ -343,9 +342,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/#comments" itemprop="discussionUrl">
+                <a href="/2019/10/21/rosbag-tools-in-ADS/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/10/21/rosbag-tools-in-ADS/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -370,85 +369,80 @@
       
 
       
-        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>in ADS,  data fusion, sensor performance, L3+ perception, localization algorithms development relys a lot on physicall data collection, commonly in rosbag format with information/data about gps, rtk, camera, Lidar, radar e.t.c.</p>
+<p>to build up the development process systemly is a critial thing, but also ignored by most ADS teams. for large OEMs, each section may have their own test vehicles, e.g. data fusion team,  sensor team e.t.c, but few of them take care data systematically, or build a solution to manage data. one reason is the engineers are lack of ability to give software tool feedbacks/requirements, so they still stay and survive with folders or Excel management, which is definitely not acceptable and scalable for massive product team. </p>
+<p>thanks for ROS open source community conributing a great rosbag database manage tool: <a href="http://wiki.ros.org/TheBagDatabase" target="_blank" rel="external">bag_database</a>. with docker installation, this tool is really easy to configure. a few tips:</p>
+<ul>
+<li>web server IP port in Docker can be accessed from LAN by parameter <code>-p</code> during docker run.</li>
+</ul>
+<h2 id="mount-sbm-drive"><a href="#mount-sbm-drive" class="headerlink" title="mount sbm drive"></a>mount sbm drive</h2><p>as mentioned, most already collected rosbag is stored in a share drive, one way is to mount these data.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo mount -t cifs //share_ip_address/ROS_data /home/david/repo/rosbag_manager/data  -o uid=david -o gid=david -o credentials=/home/david/repo/rosbag_manager/data/.pwd </div><div class="line"></div><div class="line"></div><div class="line">sudo umount -t cifs /home/david/repo/rosbag_manager/data</div></pre></td></tr></table></figure>
+<h2 id="Tomcat-server-configure"><a href="#Tomcat-server-configure" class="headerlink" title="Tomcat server configure"></a>Tomcat server configure</h2><p>bag_database is hosted by Tomcat, the default port is 8080. For our services, which already host pgAdmin4 for map group; gitlab for team work; xml server for system engineering; for webviz. check the port is occupied or not:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -an | grep 8088</div></pre></td></tr></table></figure>
+<p>so configure <code>/usr/loca/tomcat/conf/server.xml</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">&lt;Service name="Catalina"&gt;</div><div class="line">   &lt;Connector port="your_special_port"</div><div class="line">   ...</div><div class="line">&lt;/Service&gt;</div></pre></td></tr></table></figure>
+<h2 id="a-few-other-tools"><a href="#a-few-other-tools" class="headerlink" title="a few other tools"></a>a few other tools</h2><h3 id="ros-hadoop"><a href="#ros-hadoop" class="headerlink" title="ros_hadoop"></a>ros_hadoop</h3><p><a href="https://github.com/valtech/ros_hadoop" target="_blank" rel="external">ros_hadoop</a> is a rosbag analysis tool based on hdfs data management. which is a more scalable platform for massive ADS data requirements. if there is massive ros bag process in need, ros_hadoop should be a great tool. there is a discussion in <a href="https://discourse.ros.org/t/working-with-large-ros-bag-files-on-hadoop-and-spark/2314" target="_blank" rel="external">ros wiki</a></p>
+<p><img src="https://github.com/valtech/ros_hadoop/blob/master/doc/images/concept.png" alt="image"></p>
+<p><img src="https://github.com/valtech/ros_hadoop/blob/master/doc/images/rosbag-analytics.png" alt="image"></p>
+<h4 id="install-hadoop"><a href="#install-hadoop" class="headerlink" title="install hadoop"></a>install hadoop</h4><p><a href="https://hadoop.apache.org/releases.html" target="_blank" rel="external">apache hadoop download</a></p>
+<p><a href="https://poweruphosting.com/blog/install-hadoop-ubuntu/" target="_blank" rel="external">single alone install</a></p>
+<h4 id="concept-in-hdfs"><a href="#concept-in-hdfs" class="headerlink" title="concept in hdfs"></a>concept in hdfs</h4><ul>
+<li>namenode </li>
+</ul>
+<p>daemon process, used to manage file system</p>
+<ul>
+<li>datanode </li>
+</ul>
+<p>used to data block store and query</p>
+<ul>
+<li>secondary namenode</li>
+</ul>
+<p>used to backup</p>
+<ul>
+<li><p><a href="https://cloud.tencent.com/developer/article/1456436" target="_blank" rel="external">hdfs shell command</a></p>
+</li>
+<li><p><a href="https://www.thomashenson.com/find-hdfs-path-url/" target="_blank" rel="external">hdfs path URL</a></p>
+</li>
+</ul>
+<h4 id="hdfs-site-xml"><a href="#hdfs-site-xml" class="headerlink" title="hdfs-site.xml"></a>hdfs-site.xml</h4><pre><code>/usr/local/hadoop/etc/hadoop/hdfs-site.xml
+</code></pre><p><a href="https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="external">configure file</a></p>
+<ul>
+<li>dfs.datanode.data.dir -&gt;  local file system where to store data blocks on DataNodes </li>
+<li>dfs.replicaiton -&gt;  num of replicated datablocks for protecting data </li>
+<li>dfs.namenode.https-address -&gt;  location for NameNode URL </li>
+<li>dfs.https.port -&gt; </li>
+</ul>
+<h4 id="copy-local-data-into-hdfs"><a href="#copy-local-data-into-hdfs" class="headerlink" title="copy local data into hdfs"></a>copy local data into hdfs</h4><pre><code class="script">
+hdfs dfs -put /your/local/file/or/folder   [hdfs default data dir]
 
-<h2 id="VD-background"><a href="#VD-background" class="headerlink" title="VD background"></a>VD background</h2><p>usually to simualate vehicle dynamic(VD) system, either by physical model, e.g. pysical models of engine, gearbox, powertrain; or parameter model, which doesn’t take into the physical process of the dynamic system, but tracking the system’s input, output and fit their relationship with polynomail equation or functions with multi-pieces. </p>
-<p><code>traction force</code> is derived from engine torque, which goes to gearbox(powertrain system) and then divided by radius of wheels, then distribute to wheels. </p>
-<h3 id="traction-torque"><a href="#traction-torque" class="headerlink" title="traction torque"></a>traction torque</h3><ul>
-<li><p>air drag </p>
-</li>
-<li><p>air lift force </p>
-</li>
-<li><p>traction force </p>
-<p>  $$ F(traction) = F(air drag) + F(air lift force) + F(tire drag) + acc * mass $$</p>
-</li>
-</ul>
-<p>in a detail way, the equation above should split into lateral state equation and longitudional state equation, if consider driver control module, which will give <code>laterl control equation</code> and <code>longitudional control equation</code>. </p>
-<h3 id="brake-torque-and-ABS-system"><a href="#brake-torque-and-ABS-system" class="headerlink" title="brake torque and ABS system"></a>brake torque and ABS system</h3><p>ABS(anti-block system) works in the situation, when driver input <code>brake torque</code> is larger than the max <code>ground-tire torque</code> can attached between tire and ground. </p>
-<p>once max <code>ground-tire torque</code> is achieved, namely the max fore-aft force <code>T</code> is achived, the traction direction <code>traction slip angular</code> decceleration will leap, this is the dead-blocking situation, and when it happens, the driver input <code>brake torque</code> is saturated.  </p>
-<p>to avoid block situation happens, usually track decelleration of <code>traction slip angular</code> during <code>brake torque</code> increase, if the value of <code>decelleration of slip traction angular</code> is beyond a threshold value, ABS controller will trigger to decease <code>brake torque</code>.</p>
-<h3 id="drive-stability"><a href="#drive-stability" class="headerlink" title="drive stability"></a>drive stability</h3><p>the driving stability is mainly due to forces on tires, sepcially the lateral angular velocity derived from <code>Lateral Force</code></p>
-<p><img src="https://upload.wikimedia.org/wikipedia/en/6/65/Tire_Force_Variation1.jpg" alt="image"></p>
-<h3 id="lateral-control"><a href="#lateral-control" class="headerlink" title="lateral control"></a>lateral control</h3><p>taking driver as one element, the driveing system is a close-loop control system. the system works on a road situation:</p>
+hdfs dfs -ls
+</code></pre>
+<h3 id="mongodb-store"><a href="#mongodb-store" class="headerlink" title="mongodb_store"></a>mongodb_store</h3><p><a href="https://github.com/strands-project/mongodb_store" target="_blank" rel="external">mongodb_store</a> is a tool to store and analysis ROS systems. also in <a href="https://answers.ros.org/question/240699/ros_databases/" target="_blank" rel="external">ros wiki</a></p>
+<h3 id="mongo-ros"><a href="#mongo-ros" class="headerlink" title="mongo_ros"></a>mongo_ros</h3><p><a href="https://wiki.ros.org/mongo_ros" target="_blank" rel="external">mongo_ros</a> used to store ROS message n MongoDB, with C++ and Python clients.</p>
+<h3 id="mongo-hadoop"><a href="#mongo-hadoop" class="headerlink" title="mongo-hadoop"></a>mongo-hadoop</h3><p><a href="https://github.com/mongodb/mongo-hadoop/" target="_blank" rel="external">mongo-hadoop</a> allows MongoDB to be used as an input source or output destination for Hadoop taskes. </p>
+<h3 id="ros-pandas"><a href="#ros-pandas" class="headerlink" title="ros_pandas"></a>ros_pandas</h3><p><a href="https://nimbus.unl.edu/2014/11/using-rosbag_pandas-to-analyze-rosbag-files/" target="_blank" rel="external">rosbag_pandas</a></p>
+<h3 id="tabbles"><a href="#tabbles" class="headerlink" title="tabbles"></a>tabbles</h3><p><a href="https://tabbles.net/" target="_blank" rel="external">tabbles</a> used to tag any rosbags or folders.</p>
+<h3 id="hdfs-fdw"><a href="#hdfs-fdw" class="headerlink" title="hdfs_fdw"></a>hdfs_fdw</h3><p><a href="https://github.com/EnterpriseDB/hdfs_fdw" target="_blank" rel="external">hdfs for postSQL</a> </p>
+<h2 id="at-the-end"><a href="#at-the-end" class="headerlink" title="at the end"></a>at the end</h2><p>talked with a friend from DiDi software team, most big Internet companies have their own software tool teams in house, which as I know so far, doesn’t exist in any traditional OEMs. is there a need for tool team in OEMs? the common sense is at the early stage, there is no need to develop and maintain in-house tools, the commericial ones should be more efficient; as the department grows bigger and requires more user special development and commericial tools doesn’t meet the needs any more, tool teams may come out. still most decided by the industry culture, OEM’s needs is often pre-defined by big suppliers, so before OEMs are clear their software tool requirements/need, the suppliers already have the solutions there – this situation is epecially true for Chinese OEMs, as their steps is behind Europen suppliers maybe 50 years.\</p>
+<p>I am interested at the bussiness model of <a href="https://autovia.ai/" target="_blank" rel="external">autovia.ai</a>, which focus on <code>distributed machine learning</code> and <code>sensor data analytics</code> in cloud with <code>petabyte of data</code>, with the following skills: </p>
 <ul>
-<li>the driver pre-expect a driving path(predefined path) and operate the steering wheel to some certain angular </li>
-<li>the vehicle take a move with a real driving path(real path)</li>
-<li>the real path is not exactly fitted to the predefined path, leading the driver take an additional conpensation control</li>
-</ul>
-<h3 id="longitudinal-control"><a href="#longitudinal-control" class="headerlink" title="longitudinal control"></a>longitudinal control</h3><p>similar as lateral control</p>
-<h2 id="VD-in-Unity"><a href="#VD-in-Unity" class="headerlink" title="VD in Unity"></a>VD in Unity</h2><p>any vehicle in Unity is a combination of:  4 wheels colliders and 1 car collider.</p>
-<p><img src="http://www.theappguruz.com/app/uploads/2018/06/car-as-per-unity.png" alt="image"></p>
-<h3 id="WheelConllider"><a href="#WheelConllider" class="headerlink" title="WheelConllider"></a>WheelConllider</h3><p>1) AxleInfo</p>
-<p><code>AxleInfo</code> represents the pair of wheels, so for 4-wheel vehicle, there are two AxleInfo objects. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AxleInfo</span> </span></div><div class="line">&#123;</div><div class="line">  WheelCollider  left ;</div><div class="line">  WheelCollider right; </div><div class="line">  GameObject leftVisual ;</div><div class="line">  GameObject  rightVisual ;</div><div class="line">  <span class="keyword">bool</span> motor ;    <span class="meta">#enable movement of this wheel pair</span></div><div class="line">  <span class="keyword">bool</span> steering ; <span class="meta"># enable rotation of this wheel pair </span></div><div class="line">  <span class="keyword">float</span> brakeBias = <span class="number">0.5f</span>; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>2) core parameters </p>
-<ul>
-<li><p>wheel damping rate </p>
+<li><p>large scale sensor data(rosbag) processing with Apache Spark</p>
 </li>
-<li><p>suspension distance </p>
+<li><p>large scale sensro data(rosbag) training with TensorFlow</p>
 </li>
-<li><p>Force apply point distance (where ground force act on wheel) </p>
+<li><p>parallel processing with fast serialization between nodes and clusters </p>
 </li>
-<li><p>suspension spring </p>
+<li><p>hdmap generation tool in cloud </p>
 </li>
-<li><p>forwardSlip(slip angle),   tire slip in the rolling(tractional) direction, which is used in calculating torque</p>
+<li><p>metrics and visulization in web</p>
 </li>
-<li><p>sidewaySlip, the lateral direction slip, which leads to stability issue.</p>
+<li><p>loading data directly from hdfs, Amazon S3</p>
 </li>
 </ul>
-<p><img src="http://www.theappguruz.com/app/uploads/2018/06/physics-of-wheel-collider.png" alt="physical of wheel"></p>
-<p>3) visualization</p>
-<p>the <code>WheelCollider</code> GameObject is always fixed relative to the vehicle body, usually need to setup another visual GameObject to represent turn and roll.</p>
-<p><a href="https://github.com/lgsvl/simulator/blob/master/Assets/Scripts/Controllers/VehicleController.cs" target="_blank" rel="external">implementation from lg-sim</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">void ApplyLocalPositionToVisuals(WheelCollider collider, GameObject visual)</div><div class="line">    &#123;</div><div class="line">        Transform visualWheel = visual.transform;</div><div class="line"></div><div class="line">        Vector3 position;</div><div class="line">        Quaternion rotation;</div><div class="line">        collider.GetWorldPose(out position, out rotation);</div><div class="line"></div><div class="line">        visualWheel.transform.position = position;</div><div class="line">        visualWheel.transform.rotation = rotation;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>4) WheelCollider.ConfigureVehicleSubsteps</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void ConfigureVehicleSubsteps(float speedThreshold, int stepsBelowThreshold, int stepsAboveThreshold);</div></pre></td></tr></table></figure>
-<p>Every time a fixed update happens, the vehicle simulation splits this fixed delta time into smaller sub-steps and calculates suspension and tire forces per each smaller delta. Then, it would sum up all resulting forces and torques, integrate them, and apply to the vehicle’s body.</p>
-<p>5) WheelCollider.GetGroundHit<br>return the ground collision data for the wheel, namely <a href="https://docs.unity3d.com/ScriptReference/WheelHit.html" target="_blank" rel="external"><code>WheelHit</code></a></p>
-<h3 id="wheel-friction-curve"><a href="#wheel-friction-curve" class="headerlink" title="wheel friction curve"></a>wheel friction curve</h3><p>for wheels’ forward(rolling) direction and sideways direction, first need to determine how much the tire is slipping, which is based on speed difference between the tire’s rubber and the road,<br>then this slip is used to find out the tire force exerted on the contact point </p>
-<p>the wheel friction curve taks a measure of tire slip as an Input and give a force as output.  </p>
-<p>The property of real tires is that for low slip they can exert high forces, since the rubber compensates for the slip by stretching. Later when the slip gets really high, the forces are reduced as the tire starts to slide or spin</p>
-<p>1) AnimationCurve<br><a href="https://docs.unity3d.com/ScriptReference/AnimationCurve.html" target="_blank" rel="external">unity official</a></p>
-<p>store a collection of Keyframes that can be evaluated over time  </p>
-<h3 id="vehicleController-in-lg-sim"><a href="#vehicleController-in-lg-sim" class="headerlink" title="vehicleController() in lg-sim"></a>vehicleController() in lg-sim</h3><p>1) the controllable parameters:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">currentGear </div><div class="line">currentRPM</div><div class="line">currentSpeed </div><div class="line">currentTorque</div><div class="line">currentInput </div><div class="line">steerInput</div></pre></td></tr></table></figure>
-<p>2)  math interpolate function used</p>
-<pre><code>Mathf.Lerp(a, b, t)
-</code></pre><p>a -&gt; the start value </p>
-<p>b -&gt; the end value</p>
-<p>t -&gt; the interpolation value between start and end </p>
-<p>3) fixedUpdate()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// cal trace force by rigidbody</div><div class="line">rigidbody.AddForce(air_drag)</div><div class="line">rigidbody.AddForce(air_lift)</div><div class="line">rigidbody.AddForceAtPosition(tire_drag, act_position)</div><div class="line">// update current driving torque</div><div class="line">currentTorque = rpmCurve.Evalue(currentRPM / maxRPM) * gearRaion * AdjustedMaxTorque </div><div class="line">// apply torque </div><div class="line">// apply traction control</div><div class="line">// update speed</div><div class="line">currentSpeed = rigidbody.velocity.magnitude</div><div class="line">// update fuel info</div><div class="line">fuelLevel -= deltaConsumption</div><div class="line">// update engine temp</div><div class="line">// update turn signal light</div></pre></td></tr></table></figure>
-<p>4) ApplyTorque()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">float torquePerWheel = accelInput * (currentTorque / numberofWheels) </div><div class="line">foreach(axle in axles):</div><div class="line">	if(axle.left.motor):</div><div class="line">		axle.left.motorTorque = torquePerWheel</div><div class="line">	if(axle.right.motor):</div><div class="line">		axle.right.motorTorque = torquePerWheel</div></pre></td></tr></table></figure>
-<p>5) TractionControl()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">TractionControl()</div><div class="line">&#123;</div><div class="line">	AdjustTractionControlTorque(axle.hitLeft.forwardSlip)</div><div class="line">&#125;</div><div class="line">			</div><div class="line">AdjustTractionControlTorque(forwardSlip)</div><div class="line">&#123;</div><div class="line">   if(forwardSlip &gt; SlipLimit)</div><div class="line">	tractionMaxTorque -= 10 </div><div class="line">   else </div><div class="line">        tractionMaxTorque += 10 </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>in lg-sim, the VD model is still simple, as there is only traction/logitudional control. </p>
-<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html" target="_blank" rel="external">add equation in markdown</a></p>
-<p><a href="https://docs.unity3d.com/Manual/class-WheelCollider.html" target="_blank" rel="external">wheelcollider doc</a></p>
-<p><a href="https://docs.unity3d.com/ScriptReference/WheelCollider.html" target="_blank" rel="external">whell collider official</a></p>
-<p><a href="https://docs.unity3d.com/Manual/WheelColliderTutorial.html" target="_blank" rel="external">whellcollider tutorial</a></p>
+<p>all these functions will be a neccessary for a full-stack ADS team in future to development safety products, which I called “ data infrastructure for ADS”.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://moore-mike.com/ros-analysis-part-2.html" target="_blank" rel="external">MooreMike: ros analysis in Jupter</a></p>
+<p><a href="https://askubuntu.com/questions/29535/how-do-i-access-a-mounted-windows-share-from-the-command-line" target="_blank" rel="external">mount smb share drive to ubuntu</a></p>
+<p><a href="https://autovia.ai/" target="_blank" rel="external">autovia.ai</a></p>
 
       
     </div>
@@ -478,9 +472,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/lg-sim/" rel="tag"># lg-sim</a>
-          
-            <a href="/tags/vehicle-dynamics/" rel="tag"># vehicle dynamics</a>
+            <a href="/tags/ros/" rel="tag"># ros</a>
           
         </div>
       
@@ -493,8 +485,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/31/未来5年在哪里-9/" rel="next" title="未来5年在哪里-9">
-                <i class="fa fa-chevron-left"></i> 未来5年在哪里-9
+              <a href="/2019/10/16/safety-guy-in-AV/" rel="next" title="safety guy in AV">
+                <i class="fa fa-chevron-left"></i> safety guy in AV
               </a>
             
           </div>
@@ -502,10 +494,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/09/06/a-nested-conditonal-variable-model-in-python/" rel="prev" title="a nested conditonal variable model in python">
-                a nested conditonal variable model in python <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -653,7 +641,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#VD-background"><span class="nav-number">1.</span> <span class="nav-text">VD background</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#traction-torque"><span class="nav-number">1.1.</span> <span class="nav-text">traction torque</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#brake-torque-and-ABS-system"><span class="nav-number">1.2.</span> <span class="nav-text">brake torque and ABS system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#drive-stability"><span class="nav-number">1.3.</span> <span class="nav-text">drive stability</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lateral-control"><span class="nav-number">1.4.</span> <span class="nav-text">lateral control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#longitudinal-control"><span class="nav-number">1.5.</span> <span class="nav-text">longitudinal control</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VD-in-Unity"><span class="nav-number">2.</span> <span class="nav-text">VD in Unity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WheelConllider"><span class="nav-number">2.1.</span> <span class="nav-text">WheelConllider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wheel-friction-curve"><span class="nav-number">2.2.</span> <span class="nav-text">wheel friction curve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vehicleController-in-lg-sim"><span class="nav-number">2.3.</span> <span class="nav-text">vehicleController() in lg-sim</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#refer"><span class="nav-number">2.3.1.</span> <span class="nav-text">refer</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mount-sbm-drive"><span class="nav-number">2.</span> <span class="nav-text">mount sbm drive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tomcat-server-configure"><span class="nav-number">3.</span> <span class="nav-text">Tomcat server configure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-few-other-tools"><span class="nav-number">4.</span> <span class="nav-text">a few other tools</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ros-hadoop"><span class="nav-number">4.1.</span> <span class="nav-text">ros_hadoop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#install-hadoop"><span class="nav-number">4.1.1.</span> <span class="nav-text">install hadoop</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#concept-in-hdfs"><span class="nav-number">4.1.2.</span> <span class="nav-text">concept in hdfs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hdfs-site-xml"><span class="nav-number">4.1.3.</span> <span class="nav-text">hdfs-site.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#copy-local-data-into-hdfs"><span class="nav-number">4.1.4.</span> <span class="nav-text">copy local data into hdfs</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mongodb-store"><span class="nav-number">4.2.</span> <span class="nav-text">mongodb_store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mongo-ros"><span class="nav-number">4.3.</span> <span class="nav-text">mongo_ros</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mongo-hadoop"><span class="nav-number">4.4.</span> <span class="nav-text">mongo-hadoop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ros-pandas"><span class="nav-number">4.5.</span> <span class="nav-text">ros_pandas</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tabbles"><span class="nav-number">4.6.</span> <span class="nav-text">tabbles</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hdfs-fdw"><span class="nav-number">4.7.</span> <span class="nav-text">hdfs_fdw</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#at-the-end"><span class="nav-number">5.</span> <span class="nav-text">at the end</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">6.</span> <span class="nav-text">refer</span></a></li></ol></div>
             
 
           </div>
@@ -796,9 +784,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/';
-          this.page.identifier = '2019/09/03/vehicle-dynamics-model-in-ADS-simulation/';
-          this.page.title = 'vehicle dynamics model in ADS simulation';
+          this.page.url = 'http://yoursite.com/2019/10/21/rosbag-tools-in-ADS/';
+          this.page.identifier = '2019/10/21/rosbag-tools-in-ADS/';
+          this.page.title = 'rosbag tools in ADS';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
