@@ -291,6 +291,155 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/15/autosar-sucks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/15/autosar-sucks/" itemprop="url">autosar sucks</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-15T10:29:53-04:00">
+                2019-07-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/15/autosar-sucks/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/15/autosar-sucks/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="what-is-AUTOSAR"><a href="#what-is-AUTOSAR" class="headerlink" title="what is AUTOSAR"></a>what is AUTOSAR</h2><p>basically it’s an micro-service architecture for vehicle EE system. </p>
+<p>Each micro-service is called software component(<code>swc</code>), and it has uniform interfaces, while of which the implementation is varied. as the goal of AUTOSAR said: share on the standard (interface), compete in the implementation. </p>
+<p>the inter-connect of micro-services is through virtual function bus(<code>vfb</code>),  which works as a gateway, guiding data flow from port A, from micro-serviceA to port B, from micro-serviceB</p>
+<p>the benefits of AUTOSAR is obvious, to design the interface at system level first, if any changed need, it can be updated quickly. after the system architecture is fixed, then go to the implementation details.</p>
+<p><a href="https://automotivetechis.wordpress.com/autosar-concepts/" target="_blank" rel="external">refer</a> </p>
+<h3 id="input-description"><a href="#input-description" class="headerlink" title="input description"></a>input description</h3><ul>
+<li><p>software components(micro-services) description, only define the data flow, interface functions</p>
+</li>
+<li><p>system, system topology(interconnection among ECUs, and available data buses, protocols etc)</p>
+</li>
+<li><p>hardware, the available hardware(processors, sensors, actuators etc) </p>
+</li>
+</ul>
+<h3 id="system-configuration"><a href="#system-configuration" class="headerlink" title="system configuration"></a>system configuration</h3><p>used to distributes the software component descritpions to different ECU</p>
+<h3 id="ECU-configuration"><a href="#ECU-configuration" class="headerlink" title="ECU configuration"></a>ECU configuration</h3><p>the basic software(BST) and run-time environment(<code>rte</code>) of each ECU has been configured, this is based on the dedication of the application software components to each ECU.</p>
+<h3 id="generation-of-executables"><a href="#generation-of-executables" class="headerlink" title="generation of executables"></a>generation of executables</h3><p>in this step to implement the software components, then build.  this can be automated done by tool-chains. </p>
+<p>all steps up to now are supported by defining exchange formats(xml) and work methods.</p>
+<p><img src="https://automotivetechis.files.wordpress.com/2012/05/untitled2.jpg" alt="image"></p>
+<h2 id="basic-software"><a href="#basic-software" class="headerlink" title="basic software"></a>basic software</h2><p>each swc has well-defined ports, either provider port(PPort) or request port(RPort), the swc interface can either be a client-server interface or sender-receiver interface. </p>
+<p>with a PPort, the swc will impelment data generation; with a RPort, the swc will implement data read.</p>
+<p><code>communication manager</code> (ComM), is a resource mananger to encapsulates communication related basic software modules. </p>
+<p>the actual bus states are controlled by the corresponding <code>bus state manager</code>, e.g.  CAN/FlexRay/Lin bus. when ComM request a specific commmunication mode from the state manager, it will map the communication mode to a special bus state.</p>
+<p><code>network management modules</code> (NM) works in bus-sleep mode and only support broadcast communication.</p>
+<p><code>diagnostic communication manager</code>(DCM), a common API for diagnostic services. </p>
+<p><code>CAN driver</code> performs the hardware access and provides a hardware-independent API to upper layers; it can access hardware resources and converts the given information for transmission into a hardware specic format and triggers the transmission.</p>
+<h3 id="runtime-environment-RTE"><a href="#runtime-environment-RTE" class="headerlink" title="runtime environment(RTE)"></a>runtime environment(RTE)</h3><p>between basic software to upper application softwares, I think it’s mostly <code>vfb</code>. </p>
+<h3 id="application-software-components"><a href="#application-software-components" class="headerlink" title="application software components"></a>application software components</h3><p>for now, e.g. ADAS, traditional EE.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/13/play-with-ros/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2014,142 +2163,6 @@ multi path                     +-1m
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/robust-control-theory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/10/robust-control-theory/" itemprop="url">robust control theory</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T10:54:01-04:00">
-                2019-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/10/robust-control-theory/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/10/robust-control-theory/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>this is a review from <a href="https://users.ece.cmu.edu/~koopman/des_s99/control_theory/" target="_blank" rel="external">cmu refer</a></p>
-<h2 id="state-variable-method"><a href="#state-variable-method" class="headerlink" title="state variable method"></a>state variable method</h2><p>any Nth order differential equation describing a control system could be reduced to N 1st order equations, these equations could be arranged in the form of matrix equations. </p>
-<p>define <code>x</code> as system state,  <code>y</code> as output, <code>u</code> as input: </p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{X}&space;=&space;AX&space;&plus;&space;Bu&space;\\&space;Y&space;=&space;CX&space;&plus;&space;Du" title="\dot{X} = AX + Bu \\ Y = CX + Du"></a></p>
-<p>modern control methods(ODEs) can handle multiple-input-multiple-outputs, and they can be optimized, and they allow to design performance and cost model. </p>
-<h2 id="effects-of-uncertainty"><a href="#effects-of-uncertainty" class="headerlink" title="effects of uncertainty"></a>effects of uncertainty</h2><h4 id="observability"><a href="#observability" class="headerlink" title="observability"></a>observability</h4><p>the ability to observe all of the parameters or state variables in the system</p>
-<h4 id="controllability"><a href="#controllability" class="headerlink" title="controllability"></a>controllability</h4><p>the ability to move a system from any given state to any desired state </p>
-<h4 id="stability"><a href="#stability" class="headerlink" title="stability"></a>stability</h4><p>the bounded response to any bounded input </p>
-<p>robust control theory might be stated as a worst-case analysis, to bound the uncertantiy.</p>
-<h2 id="metircs"><a href="#metircs" class="headerlink" title="metircs"></a>metircs</h2><p>how to model the behavior of the test system is one most difficult challenge in design a good control system.</p>
-<h4 id="adaptive-control"><a href="#adaptive-control" class="headerlink" title="adaptive control"></a>adaptive control</h4><p>set up observers for each significant state variable. at each iteration loop, the system learns about the changes in the system parameters, and getting closer to the desired. while the method may suffer from convergence issues</p>
-<h4 id="H2-or-H-infinity"><a href="#H2-or-H-infinity" class="headerlink" title="H2 or H-infinity"></a>H2 or H-infinity</h4><p>H2 control seeks to bound the power gain of the system, H-infinity seeks to bound the energy gain of the system. gains in power or energy indicate operation of the system near a pole in the transfer function.</p>
-<h4 id="parameter-estimation"><a href="#parameter-estimation" class="headerlink" title="parameter estimation"></a>parameter estimation</h4><p>by establishing boundaries in the frequency domain that cannot be crossed to maintain stability. </p>
-<h4 id="Lyapanov"><a href="#Lyapanov" class="headerlink" title="Lyapanov"></a>Lyapanov</h4><p>the only universal tech for assessing non-linear systems, the method focus on stability. Lyapanov functions are constructed, which are described as energy-like functions, to model the behavior of real system. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2200,7 +2213,7 @@ multi path                     +-1m
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">122</span>
+                <span class="site-state-item-count">123</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -291,6 +291,139 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/12/vehicle-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/12/vehicle-network/" itemprop="url">vehicle network</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-12T17:55:12-04:00">
+                2018-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/12/vehicle-network/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/12/vehicle-network/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>vehicle networ is what connects the different parts together as a vehile. </p>
+<h2 id="the-lower-level-basic"><a href="#the-lower-level-basic" class="headerlink" title="the lower-level basic"></a>the lower-level basic</h2><p>A few basic concepts:  TCP/UDP socket, CAN Bus, Ethernet, MCU register, Ip address, MAC address, Ethernet driver, network configure, how to code a ECU/MCU etc. </p>
+<p>there are EE students working on this close to physical level implementation, on how to talk with register, MCU pins and controls, and some implementing the data traffic protocol in network. While both are isolated from top applications, since no matter where the data come from, either AV application or connected vehicle or media data, doesn’t make a difference.  </p>
+<h2 id="architecture"><a href="#architecture" class="headerlink" title="architecture"></a>architecture</h2><p> <a href="https://autoelectricalsystems.wordpress.com/2015/11/07/typical-vehicle-network-architecture/" target="_blank" rel="external">typical vehicle network architecture</a></p>
+<p>beyond the basic, network architecture brings a good vision to understand what makes a vehicle electronicly as a whole. and which is serving all apps with v2x, in-vehicle entertainment, AV.</p>
+<p>I was thought ECU handling events the same as web server. while they are very different. each ECU is doing only one special task. e.g. ABS ECU only dealing with ABS events, there are no many ABS events happening simultaneously to seize the ECU computing resource; however, a web server have to deal with multiplex request simultaneously, either using thread pool or asynchronous event callbacks. </p>
+<p>each ECU actually has an easy life, but the bus seems easily choked since around 100+ ECU nodes in the vehicle network. however again, typical vehicle network architecture is very matured products, without data-heavy applications arising, current CAN bus is great.</p>
+<h2 id="smart-phone-in-wheels"><a href="#smart-phone-in-wheels" class="headerlink" title="smart phone in wheels?"></a>smart phone in wheels?</h2><p>one day in future, every vehicle running on road is requesting some data from cloud seamlessly, the scenario is like billions of browsers send requests to Google server seamlessly, then the cloud may face same issues in today’s web server. </p>
+<p>Service oriented architecture(SOA) is also rising in vehicle network architeture design, but what kind of services is better locally in vehicle, and which services in cloud ? as hardwares evolution, even the computing-heavy tasks, e.g. vision based detection, path planning in AV, suppose not be a burden for local ECUs. so these services make sense locally served.  </p>
+<p>except that, I only image future vehicle as a smart phone on wheels. so remote cloud server do connect to, e.g. talk to another vehicle, play online game during driving, check weather, find out a parking lot, resturant or similar, or the car company want to steal user data privately? </p>
+<p>SOA is a good move to decouple ECU modules and make the network bus light, and it’s fun to try some vehicle network architecture open project or play with ROS simulator if hardware required. but in a business view, I don’t know a good story to attract investors, namely vehicle network sounds not that blinking amazing.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/29/gnu-make/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1581,143 +1714,6 @@ threadA.do();
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/07/what-happens-in-automotive-softwares/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/07/what-happens-in-automotive-softwares/" itemprop="url">what happens in automotive softwares</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-07T20:40:43-04:00">
-                2018-05-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/05/07/what-happens-in-automotive-softwares/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/05/07/what-happens-in-automotive-softwares/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Backgroud"><a href="#Backgroud" class="headerlink" title="Backgroud:"></a>Backgroud:</h2><p>Due to 6-year school experince in mechanics, I was native to jump into CAE position. But I have few willing with CAD, which is very fundemental to be a qualified Product-Design side engineer. so I am not. </p>
-<p>So I am in a CAE tools support team, where I don’t directly design, mainly in enhancement, deployment etc, where understandthe old code, and write new function code, track bugs, system configure is enough. </p>
-<p>even in the big CAE vendors companies(Altair, Dassult System), the new methodlogy invest is very possibly less than product integration and customer consultings. </p>
-<h2 id="what’s-changing"><a href="#what’s-changing" class="headerlink" title="what’s changing:"></a>what’s changing:</h2><p>the trend of CAE tools in OEMs demenstrates less investment, not because CAE tools are less used, but the CAE methodlodgy/process is really mature; new trends are arising, e.g. connected vehicles(CV), smart city, autonomous vehicles(AV), all of which require different knowledge and mindset(from mechanical to EE/CS). </p>
-<p>In 2017 Sep, I enrolled Udacity self-driving car, which gave some knowledge(openCV, deep learning, data fusion, object detect, plan algorithm), and the problems in AV. This field is so hot that openings around everywhere, basically California companies are high-demand, looking for a strong guy, AI expert, or senior automotive<br>engineer; while Michigan companies are old fasion, more on system integration level, and the required skills are random. </p>
-<h2 id="if-it’s-a-turning-point"><a href="#if-it’s-a-turning-point" class="headerlink" title="if it’s a turning point"></a>if it’s a turning point</h2><p>while Udacity didn’t work for me and AV is too young to all-in invest.For a while I am actually back to CAE, tried to enjoy it. But bad news keep coming, less projects funded, and frustrated office environment, so I move on. </p>
-<p>this time, IoT(connected vehicles) come to mind. it is really an old topic, since 2008 at college, IBM throw the big vision: smart earth to connect everything. Decades passed, finally the infrastructure, the application levels(transport, home, offices) are prepared-well. </p>
-<p>Good for me, I track AGL, GENIVI open source projects for around a year already and had 8-months experience in mobile developement(RESTful, server-client model), all bring me some fresh idea in connected vehicles.  </p>
-<p>To study the automotive embedded software system, I tracked freeRTOS first, cause it’s easy  since knowldege in Linux; about applications based on RTOS, however, I have no idea, e.g. vehicle dynamics, body/engine/<br>powertrain control components, sensors, algorithms. While they are new but not difficult, hopefully can be familar in short period.  </p>
-<h2 id="softwares-in-connected-vehicles"><a href="#softwares-in-connected-vehicles" class="headerlink" title="softwares in connected vehicles"></a>softwares in connected vehicles</h2><p>There are two sections: the vehicle development, including traditional control components, which requires professional knowledge in vehicle dynamics, ECU; Vehicle Infotainment(IVI)components, which is like mobile developement. this section already has standard architecture, e.g. AutoSar</p>
-<p>secondly the vehicle to surroundings, either cloud device, peronsal mobile devices, or other vehicles. which requires: cloud infrastructures, communication protocol, security vendors, Android/IOS mobile apps, and IoT hardware vendors. </p>
-<p>it’s a clear big market, also it presents more valuable to do business than to be an engineer in each small field. the reasons come to mind, 1)architecture is done, no big mind/theory updated ; 2) so all should be about products, the integration components to market products is virtual.</p>
-<h2 id="on-going"><a href="#on-going" class="headerlink" title="on-going"></a>on-going</h2><p>CAE softwares is heavy-math/numerical algorithms demanding; on the other side, embedded softwares is like enterprise Java, more on logic flow. As the population of mobile frameworks, and standarlization in automotive embedded system, the threshold suppose become lower. On the other hand, the dependence on suppliers’ libs and the test/release on hardwares may draw the life cycle of embedded software development longer.</p>
-<p>To explore embedded softwares may not the right career path, but no doubt it’s good to know what’s happening there.</p>
-<p>Finally, Either embrace the changing or wait it come to you, I mean, both are good stragies, maybe!</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1768,7 +1764,7 @@ threadA.do();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">122</span>
+                <span class="site-state-item-count">123</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
