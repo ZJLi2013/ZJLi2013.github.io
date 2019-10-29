@@ -291,6 +291,234 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/29/warm-up-Hilber-space/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/29/warm-up-Hilber-space/" itemprop="url">warm up Hilber space</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-29T10:39:22-04:00">
+                2019-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/29/warm-up-Hilber-space/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/29/warm-up-Hilber-space/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="abstract-space"><a href="#abstract-space" class="headerlink" title="abstract space"></a>abstract space</h2><ul>
+<li>Cauchy Series</li>
+</ul>
+<p>in metric space, existing an any positive and small \etta, exist a natural number <code>N</code>, $m, n &gt; N$, which satisfies:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?|x_m&space;-&space;x_n|&space;<&space;\varepsilon" title="|x_m - x_n| < \varepsilon"></p>
+<p>it’s called a Cauchy Series. intuitively, as the numbers goes above, the elements get closer. </p>
+<ul>
+<li>Complete Space </li>
+</ul>
+<p>any Caunchy Series in these abstract space, its convergence is still in the original space. </p>
+<p>e.g. rational number space is not complete space, as <img src="https://latex.codecogs.com/gif.latex?\sqrt{2}" title="\sqrt{2}"> is not in rational number space anymore. </p>
+<p>intuitively, a complete space is like a shell without any holes on its surface. </p>
+<ul>
+<li>Linear Space </li>
+</ul>
+<p>with linear structural set, which can be described by <code>base vector</code>, so any hyper-point in a linear space can be represented by the linear combination of its <code>base</code>, so also called as <code>vector space</code>. in another way, linear space has only <code>add</code> and <code>scalar multi</code> operator.</p>
+<ul>
+<li>Metric Space </li>
+</ul>
+<p>to describe length or distance in linear space, adding  <code>normal</code> in the linear space, gives <code>normed linear space</code> or <code>metric space</code>.</p>
+<ul>
+<li>Banach Space</li>
+</ul>
+<p>a complete metric space</p>
+<ul>
+<li>Inner Product Space </li>
+</ul>
+<p>with <code>inner product</code> feature in metric space. for the infinite space, there are two different sub space, either the inner product of the series converged or not. </p>
+<p>the convergence sub space is a completed space. </p>
+<ul>
+<li>Hilbert Space</li>
+</ul>
+<p>a completed inner product space</p>
+<ul>
+<li>Eurepean Space</li>
+</ul>
+<p>a finite  Hilbert Space. </p>
+<h2 id="functional-analysis"><a href="#functional-analysis" class="headerlink" title="functional analysis"></a>functional analysis</h2><p>the optimzed control theory problem, is to find the functional, under system dynamic constraints, which gives the extremum point(function) in the infinite normed linear space; in general.</p>
+<p>in general, the functional is depends on the system dynamic path, which gives some famuous theorem: Banach fixed point. </p>
+<p>PDE theory, partial geometry, optimized control theory are all part of functional analysis. from computational mechanics field, there is a chance go to PDE theory; from modern control field, there is a chance go to optimized control theory; from modern physics field, the students may also get familiar with partial geometry. the beauty of math is show up, all these big concepts finally arrive to one source:  functional analysis. </p>
+<p>to transfer all these big things into numerial world, which gives CAE solver, DQN solvers e.t.c.</p>
+<h3 id="the-closest-point-property-of-Hilbert-Space"><a href="#the-closest-point-property-of-Hilbert-Space" class="headerlink" title="the closest point property of Hilbert Space"></a>the closest point property of Hilbert Space</h3><p>A subset of <code>A</code> of a vector space is <strong>convex</strong>: if for all a, b belongs to <code>A</code>, all \lamba such that <code>0 &lt; \lamba &lt; 1</code>, the point <img src="https://latex.codecogs.com/gif.latex?\lambda&space;a&space;&plus;&space;(1-\lambda)&space;b" title="\lambda a + (1-\lambda) b"> belongs to <code>A</code></p>
+<p>assuming <code>A</code> is non-empty closed convex set in Hilbert Space <code>H</code>, for any x belongs to <code>H</code>, there is a unique point <code>y</code> of <code>A</code> which is closer to x than any ohter point of <code>A</code>:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?||&space;x&space;-&space;y&space;||&space;=&space;{R}_{a&space;\sphericalangle&space;R}&space;||&space;x&space;-&space;a||" title="|| x - y || = {R}_{a \sphericalangle R} || x - a||"></p>
+<h3 id="orthogonal-expansions"><a href="#orthogonal-expansions" class="headerlink" title="orthogonal expansions"></a>orthogonal expansions</h3><p>if (e_n) is an orthonormal sequence in a Hilbert space <code>H</code>, for any x belongs to <code>H</code>, (x, e_n) is the nth Fourier coefficient of x with respect to (e_n), the Fourier series of x with respect to the sequence (e_n) is the series: </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\sum_i(x,&space;e_i)e_i" title="\sum_i(x, e_i)e_i"></p>
+<ul>
+<li>pointwise converges</li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?\sum_{n=1}^{\infty&space;}&space;f_n(t)&space;=&space;f(t)" title="\sum_{n=1}^{\infty } f_n(t) = f(t)"></p>
+<p>where <code>f_n</code>is a sequence of functions in <img src="https://latex.codecogs.com/gif.latex?L^2(0,1)" title="L^2(0,1)"></p>
+<ul>
+<li>complete orthonormal sequence </li>
+</ul>
+<p>given an orthonormal sequence of (e_n) and a vector <code>x</code> belongs to <code>H</code> then:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?x&space;=&space;\sum_{n=1}^{\infty&space;}&space;(x,&space;e_n)&space;e_n" title="x = \sum_{n=1}^{\infty } (x, e_n) e_n"></p>
+<p>but only when this sequence is complete, the right-hand side converge to  left-hand side workks.</p>
+<p>an orthonormal sequence (e_n) in Hilbert Space <code>H</code> is complete if the only member of <code>H</code> which is orthogonal to every e_n is the zero vector.</p>
+<p>a complete orthonal sequence in <code>H</code> is also called an <code>orthonormal basis</code> of <code>H</code>.</p>
+<p><code>H</code> is separable if it contains a complete orthonormal sequence, </p>
+<p>the orthogonal complement (which named as E^T) of a subset <code>E</code> of <code>H</code> is the set:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?{&space;x&space;\in&space;H:&space;(x,&space;y)&space;=&space;0&space;for&space;all&space;y&space;\in&space;E}" title="{ x \in H: (x, y) = 0 for all y \in E}"></p>
+<p>for any set <code>E</code> in <code>H</code>, <code>E^T</code> is a closed linear subspace of <code>H</code>.</p>
+<p>the knowledge above gives the convergence in Hilbert Space, application like FEA, once created the orthonormal basis of solution space, the solution function represented by the linear combination of these basis is guranted to convergence. </p>
+<h3 id="Fourier-series"><a href="#Fourier-series" class="headerlink" title="Fourier series"></a>Fourier series</h3><p>it is a complete orthonormal sequence in <code>L^2(-\pi, \pi)</code>, and any function represented by a linear combination of Fourier basis is converged. </p>
+<p>but here Fourier basis is the arithmetic means of the nth partial sum of the Fourier series of f, not the direct basis itself. </p>
+<h3 id="Dual-space"><a href="#Dual-space" class="headerlink" title="Dual space"></a>Dual space</h3><h3 id="FEA-solutions-for-PDE"><a href="#FEA-solutions-for-PDE" class="headerlink" title="FEA solutions for PDE"></a>FEA solutions for PDE</h3><p>PDE can be represented in a differential representation:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?\bigtriangledown&space;\cdot&space;(-k&space;\bigtriangledown&space;T)&space;=&space;g(T,&space;x)&space;,&space;in&space;\Omega" title="\bigtriangledown \cdot (-k \bigtriangledown T) = g(T, x) , in \Omega"></p>
+<p>or an integral representation: </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\int_{\Omega}{&space;\bigtriangledown&space;\cdot&space;(-k&space;\bigtriangledown&space;T)}&space;=\int_{\Omega}&space;g(T,&space;x)&space;,&space;in&space;\Omega" title="\int_{\Omega}{ \bigtriangledown \cdot (-k \bigtriangledown T)} =\int_{\Omega} g(T, x) , in \Omega"></p>
+<p>integral formulation has included existing boundary conditions. by multiplying test function <code>\phi</code> on both side of integral representation, and using Green’s first identity will give the weak formulation(variational formulation) of this PDE.</p>
+<p><img src="https://latex.codecogs.com/gif.latex?\int_{\Omega}&space;\bigtriangledown&space;T&space;\cdot&space;\bigtriangledown&space;\varphi&space;dV&space;&plus;&space;\int_{S}&space;(-k&space;\bigtriangledown&space;T)&space;\cdot&space;\mathbf{n}&space;\varphi&space;dS&space;=&space;\int_{\Omega}&space;g&space;\varphi&space;dV" title="\int_{\Omega} \bigtriangledown T \cdot \bigtriangledown \varphi dV + \int_{S} (-k \bigtriangledown T) \cdot \mathbf{n} \varphi dS = \int_{\Omega} g \varphi dV"></p>
+<p>in FEA, assuming the test function <code>\phi</code> and solution <code>T</code> belong to same Hilbert space, the advantage of Hilbert space, is functions inside can do linear combination, like vectors in a vector space. FEA also provides the error estimates, or bounds for the error. </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\phi&space;\in&space;H&space;;&space;T&space;\in&space;H" title="\phi \in H ; T \in H"></p>
+<p>the weak formulation should be obtained by all test functions in Hilbert space. this is <code>weak formulation</code> due to now it doesn’t exactly requries all points in the domain need meet the differential representation of the PDE, but in a integral sense. so even a discontinuity of first derivative of solution <code>T</code> still works by weak formulation. </p>
+<h3 id="Hilbert-space-and-weak-convergence"><a href="#Hilbert-space-and-weak-convergence" class="headerlink" title="Hilbert space and weak convergence"></a>Hilbert space and weak convergence</h3><p>convergence in another words means, the existence of solution. for CAE, DQN algorithms, the solution space is in Hilbert space. </p>
+<h3 id="Lagrange-and-its-duality"><a href="#Lagrange-and-its-duality" class="headerlink" title="Lagrange and its duality"></a>Lagrange and its duality</h3><p>to transfer a general convex optimization problem with lagrange mulitplier:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?min&space;f(x)&space;\\&space;s.t.&space;c_i(x)&space;<=&space;0&space;\\&space;h_j(x)&space;=&space;0" title="min f(x) \\ s.t. c_i(x) <= 0 \\ h_j(x) = 0"></p>
+<p>=&gt;</p>
+<p><img src="https://latex.codecogs.com/gif.latex?L(x,&space;\alpha,&space;\beta)&space;=&space;f(x)&space;&plus;&space;\sum&space;\alpha_i&space;c_i(x)&space;\sum&space;\beta_j&space;h_j(x)" title="L(x, \alpha, \beta) = f(x) + \sum \alpha_i c_i(x) \sum \beta_j h_j(x)"></p>
+<p>we always looks for meaning solution, so <code>L</code> should exist maximum extremum. if not, as <code>x</code> grow, the system goes divergence, no meaningful solution. define:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?\theta_P(x)&space;=&space;max_{\alpha,&space;\beta&space;\geq&space;0}&space;L(x,&space;\alpha,&space;\beta)" title="\theta_P(x) = max_{\alpha, \beta \geq 0} L(x, \alpha, \beta)"></p>
+<p>so the constrainted system equation equals to :</p>
+<p><img src="https://latex.codecogs.com/gif.latex?min_x&space;\theta_P(x)&space;=&space;min_x&space;max_{\alpha,&space;\beta&space;\geq&space;0}&space;L(x,&space;\alpha,&space;\beta)" title="min_x \theta_P(x) = min_x max_{\alpha, \beta \geq 0} L(x, \alpha, \beta)"></p>
+<p>to rewrite the original equation as: </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\theta_D(\alpha,&space;\beta)=&space;min_x&space;L(x,&space;\alpha,&space;\beta)" title="\theta_D(\alpha, \beta)= min_x L(x, \alpha, \beta)"></p>
+<p>then the system’s duality is defined as :</p>
+<p><img src="https://latex.codecogs.com/gif.latex?max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;\theta_D(\alpha,&space;\beta)=&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;min_x&space;L(x,&space;\alpha,&space;\beta)" title="max_{\alpha, \beta \geqslant 0} \theta_D(\alpha, \beta)= max_{\alpha, \beta \geqslant 0} min_x L(x, \alpha, \beta)"></p>
+<p>for a system, if the original state equation and its duality equation both exist extremum solution, then :</p>
+<p><img src="https://latex.codecogs.com/gif.latex?d^*&space;=&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;min_x&space;L(x,&space;\alpha,&space;\beta)&space;\leqslant&space;min_x&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;L(x,&space;\alpha,&space;\beta)&space;=&space;p^*" title="d^* = max_{\alpha, \beta \geqslant 0} min_x L(x, \alpha, \beta) \leqslant min_x max_{\alpha, \beta \geqslant 0} L(x, \alpha, \beta) = p^*"></p>
+<p>the benefits of duality problems is </p>
+<ul>
+<li><p>the duality problem is always convex,  even when the original problem is non-convex </p>
+</li>
+<li><p>the duality solution give an lower boundary for the original solution</p>
+</li>
+<li><p>when strong duality satisfy, the duality solution is the original solution</p>
+</li>
+</ul>
+<h3 id="Krylov-Space"><a href="#Krylov-Space" class="headerlink" title="Krylov Space"></a>Krylov Space</h3><h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://zhuanlan.zhihu.com/p/37108430" target="_blank" rel="external">convex func</a></p>
+<p><a href="https://www.comsol.com/multiphysics/finite-element-method" target="_blank" rel="external">finite element method</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/38182879" target="_blank" rel="external">Lagranget duality</a></p>
+<p><a href="https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf" target="_blank" rel="external">standford convex optimization</a></p>
+<p><a href="https://danieltakeshi.github.io/2016/10/31/going-deeper-into-reinforcement-learning-understanding-q-learning-and-linear-function-approximation/" target="_blank" rel="external">Going deeper into RF: understaing Q-learning and linear function approximation</a></p>
+<p><a href="">Nicholas Young, an introduction to Hilbert Space</a></p>
+<p><a href="https://www.quora.com/Why-are-Hilbert-spaces-important-for-finite-element-analysis" target="_blank" rel="external">why are Hilbert Space important to finite element analysis</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/reinforcement-learning-in-nutshell-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1955,194 +2183,6 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/nancyfx-study/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/30/nancyfx-study/" itemprop="url">nancyfx study</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T09:11:39-04:00">
-                2019-08-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/30/nancyfx-study/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/30/nancyfx-study/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://github.com/NancyFx/Nancy/wiki/Documentation" target="_blank" rel="external">document</a>, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me.</p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Nancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is designed to handle <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and     <code>PATCH</code> request and provides  a simple, elegant Domain Specific Language(DSL) for returning a response. </p>
-<h3 id="build-to-run-anywhere"><a href="#build-to-run-anywhere" class="headerlink" title="build to run anywhere"></a>build to run anywhere</h3><p>Nancy was designed to not have any dependenceis on existing frameworks, it’s used pretty much wherever you want to. <code>host</code> in Nancy acts as an <code>adaptor</code> for a hosting environment, thus enabling Nancy to run on existing techs, such as ASP.NET, WCF.</p>
-<p>the bare minimum requires to build a Nancy service are the core framework and a host. </p>
-<h3 id="helloworld-service"><a href="#helloworld-service" class="headerlink" title="helloworld service"></a>helloworld service</h3><p>all module should be derived from <code>NancyModule</code>, and define a route handler.  tips: always make the module <code>public</code>, so NancyFx can discover it. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class HelloWorld : NancyModule </div><div class="line">&#123;</div><div class="line">	public HelloModule()</div><div class="line">	&#123;</div><div class="line">		Get[&quot;/&quot;] = parameters =&gt; &quot;Hello World&quot; ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="exploring-modules"><a href="#exploring-modules" class="headerlink" title="exploring modules"></a>exploring modules</h2><p>module is where you define the logic, is the minimum requirement for any Nancy app. module should inherit from <code>NancyModule</code>, then define the behaviors, with <code>routes</code> and <code>actions</code>.</p>
-<h3 id="modules-are-globally-discovered"><a href="#modules-are-globally-discovered" class="headerlink" title="modules are globally discovered"></a>modules are globally discovered</h3><p>the global discovery of modules will perform once and the information is then cached, so not expensive.</p>
-<h2 id="Define-routes"><a href="#Define-routes" class="headerlink" title="Define routes"></a>Define routes</h2><p>to define a <code>Route</code> need to specify a     <code>Method</code> + <code>Pattern</code> + <code>Action</code> + (optional) <code>Condition</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;] = _ =&gt; &#123;</div><div class="line">     	// do sth</div><div class="line">     &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>or async run:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;, runAsnyc: true ] = async(_, token) =&gt; 	  &#123;</div><div class="line">     	// do sth long and tedious</div><div class="line">      &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h3 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h3><p>method is the <code>HTTP method</code> used to access the resource, Nancy support:  <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code>.</p>
-<h3 id="secret-for-selecting-the-right-route-to-invoke"><a href="#secret-for-selecting-the-right-route-to-invoke" class="headerlink" title="secret for selecting the right route to invoke"></a>secret for selecting the right route to invoke</h3><p>in case when two routes capture the same request, remember :</p>
-<ul>
-<li><p>the order in which modules are loaded are non-deterministic </p>
-</li>
-<li><p>routes in a given module are discovered in the order in which they are defined </p>
-</li>
-<li><p>if several possible matches found, the most specific match.</p>
-</li>
-</ul>
-<h3 id="root-path"><a href="#root-path" class="headerlink" title="root path"></a>root path</h3><p>all pathes used in Nancy are relative to <code>root path</code>, which tell Nancy where its resources are stored on the file system, which is defined in <code>IRootPathProvider</code></p>
-<h3 id="static-content"><a href="#static-content" class="headerlink" title="static content"></a>static content</h3><p><code>static content</code> is things e.g. javascript files, css, images etc. Nancy uses a convention based approach to figure out what static content it is able to serve at runtime.</p>
-<p>Nancy supports the notion of having multiple conventions for static content and each convention is represented by a <code>delegate</code> with the signature <code>Func&lt;NancyContext, string, Response&gt;</code> </p>
-<p>the delegate accepts two parameters: the context of the current request and the application root path, the output of the delegate is a standard Nancy <code>Response</code> object or <code>null</code>, which means the convention has no static content.</p>
-<h4 id="define-your-own-conventions-usign-the-bootstrapper"><a href="#define-your-own-conventions-usign-the-bootstrapper" class="headerlink" title="define your own conventions usign the bootstrapper"></a>define your own conventions usign the bootstrapper</h4><p><a href="https://github.com/NancyFx/Nancy/wiki/Managing-static-content" target="_blank" rel="external">link</a></p>
-<h2 id="View-engines"><a href="#View-engines" class="headerlink" title="View engines"></a>View engines</h2><p>view engine, takes a <code>template</code>  and an optional <code>model</code>(the data) and outputs(usually) <code>HTML</code> to be rendered into the browser. in lg-sim, the <code>view</code> is rendered in nodejs. </p>
-<h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p><a href="https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/overview/understanding-models-views-and-controllers-cs" target="_blank" rel="external">model view controller</a></p>
-<ul>
-<li>understand controller </li>
-</ul>
-<p>a controller is reponsible for controlling the flow logic in the app. e.g. what reponse to send back to a user when a user makes a browser request.</p>
-<p>any public method in a controller is exposed as a controller action. </p>
-<ul>
-<li>understand view</li>
-</ul>
-<p>a view contains the HTML markup and content that is send to the browser. in general to return a view for a controller action, need to create a subfolder in the <code>Views</code> folder with the same name as the controller.</p>
-<ul>
-<li>understand model</li>
-</ul>
-<p>the model is anything not inside a controller or a view. e.g. validation logic, database access. the view should only contain logic related to generating the user interface. the controller should only contain the bare minimum of logic required to return the right view. </p>
-<h2 id="C-anonymous"><a href="#C-anonymous" class="headerlink" title="C# anonymous"></a>C# anonymous</h2><p><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/statements-expressions-operators/anonymous-functions" target="_blank" rel="external">c# programming guide</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(input-parameters) =&gt; expression </div><div class="line">(input-parameters) =&gt; &#123;&lt;sequence-of-statements&gt;&#125;</div><div class="line"></div><div class="line">TestDelegate testD = (x) =&gt; &#123;(Console.WriteLine(x);&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li><code>=&gt;</code> is the <code>Lambda</code> operator, on its left is input paramters(if exist). Lambda expression/sequence is equal to a delegate class.</li>
-</ul>
-<ul>
-<li><code>delegate</code> is a refer type, used to pass one function as paramter to another function. e.g. in event handle. </li>
-</ul>
-<h2 id="Nancy-in-lg-sim-WebUI"><a href="#Nancy-in-lg-sim-WebUI" class="headerlink" title="Nancy in lg-sim WebUI"></a>Nancy in lg-sim WebUI</h2><p><a href="https://github.com/lgsvl/simulator/tree/master/Assets/Scripts/Web" target="_blank" rel="external">/Assets/Scripts/Web</a></p>
-<p>a few steps to build  Nancy server: </p>
-<ul>
-<li>Nancyhost.start() </li>
-<li>add NancyModule instance(where define route logic)  </li>
-</ul>
-<p>a few other libs used :</p>
-<ul>
-<li><p>PetaPoco, a light-weight ORM(object relational mapper) framework in C#</p>
-</li>
-<li><p>SQLite</p>
-</li>
-</ul>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://auth0.com/blog/meet-nancy-a-lightweight-web-framework-for-dot-net/" target="_blank" rel="external">meet nancy</a></p>
-<p><a href="http://liulixiang1988.github.io/nancy-webkuang-jia.html#_1" target="_blank" rel="external">nancy doc in chinese</a></p>
-<p>`</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2193,7 +2233,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">121</span>
+                <span class="site-state-item-count">122</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
