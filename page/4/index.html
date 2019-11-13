@@ -291,6 +291,146 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/dns-server-in-lan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/10/dns-server-in-lan/" itemprop="url">dns server in lan</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-10T10:08:04-04:00">
+                2019-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/10/dns-server-in-lan/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/10/dns-server-in-lan/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="DNS-server-in-LAN"><a href="#DNS-server-in-LAN" class="headerlink" title="DNS server in LAN"></a>DNS server in LAN</h2><p>to use domain name(e.g. gitlab.com) in LAN rather than IP, it needs every local host machine to store all key-values:: host-IP. if the LAN has many host machines, it will be difficult to maintain. Setting up DNS server will help to automatically map the ip to domain or reverse in the LAN.</p>
+<h3 id="bind9"><a href="#bind9" class="headerlink" title="bind9"></a>bind9</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">apt-get install bind9 </div><div class="line">``` </div><div class="line"><span class="meta">#</span>## /etc/bind/named.conf.local</div><div class="line"></div><div class="line">```shell</div><div class="line"></div><div class="line">zone "gitlab.com" &#123;</div><div class="line">	type: master;</div><div class="line">	file "/etc/bind/db.ip2gitlab.com" ;</div><div class="line">&#125;;	</div><div class="line"></div><div class="line">zone "101.20.10.in-addr.arpa" &#123;</div><div class="line">	type: master;</div><div class="line">	file "/etc/bind/db.gitlab2ip.com" ;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">``` </div><div class="line"><span class="meta">#</span>## /etc/bind/db.gitlab2ip.com </div><div class="line"></div><div class="line">[dns zone file format](https://help.dyn.com/how-to-format-a-zone-file/)</div><div class="line"></div><div class="line">gitlab2ip zone file is mapping from domain to ip, as following sample, it works like:</div><div class="line"></div><div class="line">	www.$ORIGIN  --&gt;  10.20.101.119 </div><div class="line"></div><div class="line">```shell</div><div class="line">; command</div><div class="line"><span class="meta">$</span>TTL  6000</div><div class="line">;@ refer to current zone file</div><div class="line">;			 DNS-server-FDNQ notification-email</div><div class="line"><span class="meta">$</span>ORIGIN  gitlab.com</div><div class="line">@ 	IN 	SOA	 	server 	email (</div><div class="line">			 		2	 ;</div><div class="line">			 		1d ;</div><div class="line">			 		1h ;</div><div class="line">			 		5min ;</div><div class="line">			 	)</div><div class="line">@		IN		NS  	server</div><div class="line">www		IN		A		10.20.101.119</div><div class="line">server	IN		A		10.20.101.119</div></pre></td></tr></table></figure>
+<h3 id="etc-bind-db-ip2gitlab-com"><a href="#etc-bind-db-ip2gitlab-com" class="headerlink" title="/etc/bind/db.ip2gitlab.com"></a>/etc/bind/db.ip2gitlab.com</h3><p>ip2gitlab zone file is from ip to domain mapping, </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span>TTL  6000</div><div class="line"><span class="meta">$</span>ORIGIN 101.20.10.in-addr.arpa</div><div class="line">@ 	IN 	SOA	 	server. 	email. (</div><div class="line">			 		2	 ;</div><div class="line">			 		1d ;</div><div class="line">			 		1h ;</div><div class="line">			 		5min ;</div><div class="line">			 	)</div><div class="line">@		IN		NS  	server</div><div class="line">119		IN		A		www.gitlab.com</div><div class="line">119		IN		A		server.gitlab.com</div></pre></td></tr></table></figure>
+<h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><pre><code class="shell">nslookup www.gitlab.com   #dns forward (domain 2 ip)
+
+nslookup  10.20.101.119   #reverse (ip 2 domain)
+</code></pre>
+<h2 id="settings"><a href="#settings" class="headerlink" title="settings"></a>settings</h2><p>if the DNS setted above(DNS-git) is the only DNS server in the LAN, then this DNS works like a gateway, to communicate by domain name, every local host talk to it first, to understand the domain name.</p>
+<p>but in a large size company LAN newtwork, there may already has a DNS server hosted at IT department (DNS-IT), with a fixed IP e.g. <code>10.10.101.101</code>, and all localhost machines actually set DNS-IT as the default DNS. DNS-git will work as a sub-DNS server. </p>
+<p>Inside the small team, either every localhost change default DNS to DNS-git, then DNS-git become the sub-network server.</p>
+<p>if every localhost still keep DNS-IT, there is no way(?) to use DNS-git service in LAN, and even make conflicts, as the DNS-git localhost machine will listen on all TCP/IP ports, every new gitlab.com access request (input as IP address) will get an output as domain name, but the others can’t understand this domain-name…</p>
+<p>what happened with two DNS server in LAN ? </p>
+<h2 id="how-email-works"><a href="#how-email-works" class="headerlink" title="how email works"></a>how email works</h2><p>Mail User Agent(MUA), e.g. Outlook, Foxmail, used to receive and send emails.</p>
+<p>MUA is not directly sent emails to end users, but through  Mail Transfer Agent(MTA), e.g. SendMail, Postfix.</p>
+<p>an email sent out from MUA will go through one or more MTA, finally reach to Mail Delivery Agent(MDA), the email then store in some database, e.g. mailbox</p>
+<p>the receiver then use MUA to review the email in the mailbox</p>
+<p>ps, one day work as a IT admin …. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2024,166 +2164,6 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/17/principles-of-GNSS-positioning/" itemprop="url">principles of GNSS positioning</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-17T10:35:26-04:00">
-                2019-06-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/17/principles-of-GNSS-positioning/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/17/principles-of-GNSS-positioning/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://www.novatel.com/an-introduction-to-gnss/chapter-1-gnss-overview/" target="_blank" rel="external">novatel introduction</a></p>
-<h3 id="GNSS-architecture"><a href="#GNSS-architecture" class="headerlink" title="GNSS architecture"></a>GNSS architecture</h3><p>a) space segment</p>
-<p>the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status.</p>
-<p>b) control segment </p>
-<p>a ground-based network of master control stations, data uploading stations adn monitor stations. in case of GPS, 2 master control stations(one primary and one backup),  4 data uploading stations, and 16 monitor stations</p>
-<p>c) user segment </p>
-<p>the user equipment that process the received signals. </p>
-<h3 id="GNSS-propagation"><a href="#GNSS-propagation" class="headerlink" title="GNSS propagation"></a>GNSS propagation</h3><p>the layer of atmoshpere that most influcences the transmission of GPS signals is the ionosphere(电离层), ionoshperic delays are frequency dependent; and the other layer is troposphere(平流层), whose delay is a function of local temperature, pressure and relative humidity. </p>
-<p>some singal energy is reflected on the way to the receiver, called “multipath propagation”. </p>
-<h3 id="Antenna"><a href="#Antenna" class="headerlink" title="Antenna"></a>Antenna</h3><p>each GNSS constellation has its own signal frequencies and bandwidths, an antenan must cover the signal frequencies and bandwidth.</p>
-<p>antenna gain is defined as the relative measure of an antenna’s ability to direct or concentrate radio frequency energy in a particular direction or pattern. A minimum gain is required to achieve a minimum carrier : power-noise-ratio to track GNSS satellites.</p>
-<h3 id="GNSS-error-sources"><a href="#GNSS-error-sources" class="headerlink" title="GNSS error sources"></a>GNSS error sources</h3><pre><code>contributing sources         error range
-
-satellite clocks             +- 2m
-
-orbit errors                       +-2.5m
-
-inospheric delays            +-5m
-
-tropospheric delays            +-0.5m
-
-receiver noies                +-0.3m
-
-multi path                     +-1m
-</code></pre><h3 id="Resolving-errors"><a href="#Resolving-errors" class="headerlink" title="Resolving errors"></a>Resolving errors</h3><h4 id="multi-constellation-amp-multi-frequency"><a href="#multi-constellation-amp-multi-frequency" class="headerlink" title="multi-constellation &amp; multi-frequency"></a>multi-constellation &amp; multi-frequency</h4><p>multi-frequency is the most effective way to remove ionospheric error,  by comparing the delays of two GNSS signals, L1 &amp; L2, the receiver can correct for the impact of ionospheric errors.</p>
-<p>multi-constellation has benefits:  reduce signal acquisition time,  improve position and time accuracy.</p>
-<h4 id="D-GNSS"><a href="#D-GNSS" class="headerlink" title="D-GNSS"></a>D-GNSS</h4><p>in differential GNSS(D-GNSS), the position of a fixed GNSS receiver, refered as a base station, which sends the atmospheric delay related errors to receivers, which incorporate the corrections into their positoin calculations.</p>
-<p>differential positiong requires a data link betwen the base station and rovers, if corrections need to be applied in real-time. and D-GNSS works very well with base station-to-rover separations of up to 10km.</p>
-<h4 id="Real-time-kinematic-RTK"><a href="#Real-time-kinematic-RTK" class="headerlink" title="Real time kinematic(RTK)"></a>Real time kinematic(RTK)</h4><p>it uses measurements of the phase of the signal’s carrier wave, in addition to the information content of the signal and relies on a single fixed reference station to provide real-time corrections, up to centimetre-level accuracy. </p>
-<p>the range to a satellite is calculated by multiplying the carrier wavelength times the number of whole cycles between the satellite and the rover and adding the phase difference. the results in an error equal to the error in the estimated number of cycles times the wavelength, so-called integer ambiguity search, which is 19cm for L1 signal. </p>
-<h4 id="Precise-Point-Positioning-PPP"><a href="#Precise-Point-Positioning-PPP" class="headerlink" title="Precise Point Positioning(PPP)"></a>Precise Point Positioning(PPP)</h4><p>PPP solution depends on GNSS satellite clock and orbit corrections, generated from a network of global reference stations. </p>
-<h3 id="GNSS-IMU"><a href="#GNSS-IMU" class="headerlink" title="GNSS + IMU"></a>GNSS + IMU</h3><p>the external reference can quite effectively be provided by GNSS, and GNSS provides an absolute set of coordinates that can be used as the initial start point, as well, GNSS provides continuous positions adn velocities thereafter which are used to update the IMU/INS filter estimates.</p>
-<p>for additional combined sensors, such as odometers, cameras vision.</p>
-<h3 id="challenges-of-GNSS-in-AV"><a href="#challenges-of-GNSS-in-AV" class="headerlink" title="challenges of GNSS in AV"></a>challenges of GNSS in AV</h3><p>talk from iMorpheus.ai </p>
-<p>1)  antenna</p>
-<p>2)  multipath mitigation</p>
-<p>3)  multi-band, multi-constellation signals</p>
-<p>4)  integrated navigation (camera )</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2234,7 +2214,7 @@ multi path                     +-1m
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">125</span>
+                <span class="site-state-item-count">126</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
