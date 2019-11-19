@@ -373,99 +373,72 @@
             <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>previously, <a href="https://zjli2013.github.io/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/" target="_blank" rel="external">vulkan in docker</a> gives the way to run vulkan based apps in Docker; this post is about how to deploy a GPU-based app in docker swarm. Docker swarm has the ability to deploy apps(service) in scalability.</p>
 <h2 id="Docker-registry"><a href="#Docker-registry" class="headerlink" title="Docker registry"></a>Docker registry</h2><p>Docker Registry is acted as a local Docker Hub, so the nodes in the LAN can share images.</p>
 <h3 id="update-docker-daemon-with-insecure-registries"><a href="#update-docker-daemon-with-insecure-registries" class="headerlink" title="update docker daemon with insecure-registries"></a>update docker daemon with insecure-registries</h3><ul>
-<li>modify <code>/etc/docker/daemon.json</code> in worker node: </li>
-</ul>
-<p>adding <code>&quot;insecure-registries&quot;: [&quot;192.168.0.10:5000&quot;]</code></p>
-<ul>
+<li><p>modify <code>/etc/docker/daemon.json</code> in worker node: </p>
+<pre><code>&quot;insecure-registries&quot;: [&quot;192.168.0.10:5000&quot;] 
+</code></pre></li>
 <li><p>systemctl restart docker </p>
 </li>
 <li><p>start registry service in manager node </p>
+<p>  docker service create –name registry –publish published=5000,target=5000 registry:2</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ docker service create --name registry --publish published=5000,target=5000 registry:2</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">access docker registry on both manager node and worker node :</div></pre></td></tr></table></figure>
-<p>$ curl <a href="http://192.168.0.10:5000/v2/" target="_blank" rel="external">http://192.168.0.10:5000/v2/</a>   #on manager node<br>$ curl <a href="http://192.168.0.10:5000/v2/" target="_blank" rel="external">http://192.168.0.10:5000/v2/</a>   #on worker node<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">`insecure registry` is only for test; for product, it has to with secure connection, check the official doc about [deploy a registry server](https://docs.docker.com/registry/deploying/)</div><div class="line"></div><div class="line"></div><div class="line">### upload images to this local registry hub</div></pre></td></tr></table></figure></p>
-<p>docker tag  stackdemo  192.168.0.10:5000/stackdemo<br>docker push  192.168.0.10:5000/stackdemo:latest<br>curl  <a href="http://192.168.0.10:5000/v2/_catalog" target="_blank" rel="external">http://192.168.0.10:5000/v2/_catalog</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* on worker run:</div></pre></td></tr></table></figure>
-<p>docker pull 192.168.0.10:5000/stackdemo<br>docker run -p 8000:8000  192.168.0.10:5000/stackdemo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">the purpose of `local registry` is to build a local docker image file server, to share in the cluster server. </div><div class="line"></div><div class="line"></div><div class="line">## Deploy compose</div><div class="line"></div><div class="line"></div><div class="line">### docker-compose build </div><div class="line"></div><div class="line">`docker-compose build` is used to build the images. `docker-compose up` will run the image, if not exiting, will build the image first. for lgsvl app, the running has a few parameters, so directly run `docker-compose up` will report `no protocol` error.</div><div class="line"></div><div class="line">### run vkcube in docker-compose</div><div class="line"></div><div class="line">docker-compose v2 does support `runtime=nvidia`, by appending the following to `/etc/docker/daemon.json`:</div></pre></td></tr></table></figure></p>
-<p>   “runtimes”: {<br>        “nvidia”: {<br>            “path”: “nvidia-container-runtime”,<br>            “runtimeArgs”: []<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">to run vkcube in compose by:</div></pre></td></tr></table></figure></p>
-<p>xhost +si:localuser:root<br>docker-compose up<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">the docker-compose.yml is :</div></pre></td></tr></table></figure></p>
-<p>version: ‘2.3’</p>
-<p>services:<br> vkcube-test:<br>  runtime: nvidia<br>  volumes:</p>
-<pre><code>- /tmp/.X11-unix:/tmp/.X11-unix 
-</code></pre><p>  environment:</p>
-<ul>
-<li>NVIDIA_VISIBLE_DEVICES=0 </li>
-<li>DISPLAY<h1 id="image-nvidia-cuda-9-0-base"><a href="#image-nvidia-cuda-9-0-base" class="headerlink" title="image: nvidia/cuda:9.0-base"></a>image: nvidia/cuda:9.0-base</h1>image: vkcube<h1 id="build"><a href="#build" class="headerlink" title="build: ."></a>build: .</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">however, currently [composev3 doesn&apos;t support NVIDIA runtime](https://github.com/docker/compose/issues?utf8=%E2%9C%93&amp;q=nvidia), who is required to run stack deploy. </div><div class="line"></div><div class="line"></div><div class="line">### support v3 compose with nvidia runtime </div><div class="line"></div><div class="line">as discussed at [#issue: support for NVIDIA GPUs under docker compose](https://github.com/docker/compose/issues/6691):</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>services:<br>  my_app:<br>    deploy:<br>      resources:<br>        reservations:<br>          generic_resources:</p>
-<pre><code>- discrete_resource_spec:
-    kind: &apos;gpu&apos;
-    value: 2
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">update [daemon.json](https://www.ipyker.com/2018/03/22/docker-daemon) with `node-generic-resources`, an official sample of [compose resource](https://github.com/docker/cli/blob/9a39a1/cli/compose/loader/full-example.yml#L71-L74) can be reviewed. but so far, it only reports error:</div></pre></td></tr></table></figure>
-<p>ERROR: The Compose file ‘./docker-compose.yml’ is invalid because:<br>services.nvidia-smi-test.deploy.resources.reservations value Additional properties are not allowed (‘generic_resources’ was unexpected<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### deploy compose\_V3 to swarm</div><div class="line"></div><div class="line">[docker compose v3](https://docs.docker.com/compose/compose-file/) has two run options, if triggered by `docker-compose up`, it is in standalone mode, will all services in the stack is host in current node; if triggered through `docker stack deploy` and current node is the manager of the swarm cluster, the services will be hosted in the swarm. btw, `docker compose v2` only support standalone mode.</div><div class="line"></div><div class="line"></div><div class="line">take an example from the official doc: [deploy a stack to swarm](https://docs.docker.com/engine/swarm/stack-deploy/):</div></pre></td></tr></table></figure></p>
-<p>docker service create –name registry –publish published=5000,target=5000 registry:2<br>docker-compose up -d<br>docker-compose ps<br>docker-compose down –volumes<br>docker-compose push #push to local registry<br>docker stack deploy<br>docker stack services stackdemo<br>docker stack rm stackdemo<br>docker service rm registry<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">after deploy `stackdemo` in swarm, check on both manager node and worker node:</div></pre></td></tr></table></figure></p>
-<p>curl <a href="http://192.168.0.13:8000" target="_blank" rel="external">http://192.168.0.13:8000</a><br>curl <a href="http://192.168.0.10:8000" target="_blank" rel="external">http://192.168.0.10:8000</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### docker service runtime </div><div class="line"></div><div class="line">`docker run` can support runtime env through `-e` in CLI or `env-file`, but actually `docker service` doesn&apos;t have runtime env support. `docker compose v3` give the possiblity to configure the runtime env and deploy the service to clusters, but so far v3 compose doesn&apos;t support `runtime=nvidia`, so not helpful.</div><div class="line"></div><div class="line">I tried to run vkcube, lgsvl with docker service:</div></pre></td></tr></table></figure></p>
-<p>docker service create –name vkcc –env NVIDIA_VISIBLE_DEVICES=0 –env DISPLAY=unix:$DISPLAY –mount src=”/.X11-unix”,dst=”/tmp/.X11-unix”  vkcube<br>docker service create –name lgsvl  -p 8080:8080 –env NVIDIA_VISIBLE_DEVICES=0 –env DISPLAY=unix$DISPLAY –mount src=”X11-unix”,dst=”/tmp/.X11-unix”  lgsvl</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">for `vkcube`, the service converged, but no GUI display; for `lgsvl`, the service failed.</div><div class="line"></div><div class="line">## Docker deploy</div><div class="line"></div><div class="line">[docker deploy](https://docs.docker.com/v17.12/edge/engine/reference/commandline/deploy/) is used to deploy a complete application stack to the swarm, which accepts the stack application in [compose file](https://docs.docker.com/compose/compose-file/), docker depoy is in experimental, which can be trigger in `/etc/docker/daemon.json`, [check to enable experimental features](https://docs.docker.com/v17.12/engine/reference/commandline/dockerd/#daemon-configuration-file)</div><div class="line"></div><div class="line">[a sample from jianshu](https://www.jianshu.com/p/1db6f0150fdb) `docker-compose.yml`:</div></pre></td></tr></table></figure>
-<p>version: “3”</p>
-<p>services:<br>  nginx:<br>    image: nginx:alpine<br>    ports:</p>
-<pre><code>  - 80:80
-deploy:
-  mode: replicated
-  replicas: 4
-</code></pre><p>  visualizer:<br>    image: dockersamples/visualizer<br>    ports:</p>
-<pre><code>  - &quot;9001:8080&quot;
-volumes:
-  - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;
-deploy:
-  replicas: 1
-  placement:
-    constraints: [node.role == manager]
-</code></pre><p>  portainer:<br>    image: portainer/portainer<br>    ports:</p>
-<pre><code>  - &quot;9000:9000&quot;
-volumes:
-  - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;
-deploy:
-  replicas: 1
-  placement:
-    constraints: [node.role == manager]
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">a few commands to look into swarm services:</div></pre></td></tr></table></figure>
-<p>docker stack deploy -c docker-compose.yml   stack-demo<br>docker stack services  stack-demo<br>docker service inspect –pretty stack-demo   # inspect service in the swarm<br>docker service ps <service-id>  # check which nodes are running the service<br>docker ps #on the special node where the task is running, to see details about the container</service-id></p>
-<p>```</p>
+<p>access docker registry on both manager node and worker node :</p>
+<pre><code>$ curl http://192.168.0.10:5000/v2/   #on manager node 
+$ curl http://192.168.0.10:5000/v2/   #on worker node 
+</code></pre><p>insecure registry is only for test; for product, it has to with secure connection, check the official doc about <a href="https://docs.docker.com/registry/deploying/" target="_blank" rel="external">deploy a registry server</a></p>
+<h3 id="upload-images-to-this-local-registry-hub"><a href="#upload-images-to-this-local-registry-hub" class="headerlink" title="upload images to this local registry hub"></a>upload images to this local registry hub</h3><pre><code>docker tag  stackdemo  192.168.0.10:5000/stackdemo
+docker push  192.168.0.10:5000/stackdemo:latest
+curl  http://192.168.0.10:5000/v2/_catalog
+</code></pre><p>on worker run: </p>
+<pre><code>docker pull 192.168.0.10:5000/stackdemo 
+docker run -p 8000:8000  192.168.0.10:5000/stackdemo  
+</code></pre><p>the purpose of <code>local registry</code> is to build a local docker image file server, to share in the cluster server. </p>
+<h2 id="Deploy-compose"><a href="#Deploy-compose" class="headerlink" title="Deploy compose"></a>Deploy compose</h2><h3 id="docker-compose-build"><a href="#docker-compose-build" class="headerlink" title="docker-compose build"></a>docker-compose build</h3><p><code>docker-compose build</code> is used to build the images. <code>docker-compose up</code> will run the image, if not exiting, will build the image first. for lgsvl app, the running has a few parameters, so directly run <code>docker-compose up</code> will report <code>no protocol</code> error.</p>
+<h3 id="run-vkcube-in-docker-compose"><a href="#run-vkcube-in-docker-compose" class="headerlink" title="run vkcube in docker-compose"></a>run vkcube in docker-compose</h3><p>docker-compose v2 does support <code>runtime=nvidia</code>, by appending the following to <code>/etc/docker/daemon.json</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"runtimes": &#123;</div><div class="line">     "nvidia": &#123;</div><div class="line">         "path": "nvidia-container-runtime",</div><div class="line">         "runtimeArgs": []</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>to run vkcube in compose by:</p>
+<pre><code>xhost +si:localuser:root
+docker-compose up
+</code></pre><p>the docker-compose.yml is :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">version: '2.3'</div><div class="line"></div><div class="line">services:</div><div class="line"> vkcube-test:</div><div class="line">  runtime: nvidia</div><div class="line">  volumes:</div><div class="line">      - /tmp/.X11-unix:/tmp/.X11-unix </div><div class="line">  environment:</div><div class="line">  - NVIDIA_VISIBLE_DEVICES=0 </div><div class="line">  - DISPLAY</div><div class="line">#  image: nvidia/cuda:9.0-base</div><div class="line">  image: vkcube</div><div class="line">#  build: .</div></pre></td></tr></table></figure>
+<p>however, currently <a href="https://github.com/docker/compose/issues?utf8=%E2%9C%93&amp;q=nvidia" target="_blank" rel="external">composev3 doesn’t support NVIDIA runtime</a>, who is required to run stack deploy. </p>
+<h3 id="support-v3-compose-with-nvidia-runtime"><a href="#support-v3-compose-with-nvidia-runtime" class="headerlink" title="support v3 compose with nvidia runtime"></a>support v3 compose with nvidia runtime</h3><p>as discussed at <a href="https://github.com/docker/compose/issues/6691" target="_blank" rel="external">#issue: support for NVIDIA GPUs under docker compose</a>:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">services:</div><div class="line">  my_app:</div><div class="line">    deploy:</div><div class="line">      resources:</div><div class="line">        reservations:</div><div class="line">          generic_resources:</div><div class="line">            - discrete_resource_spec:</div><div class="line">                kind: 'gpu'</div><div class="line">                value: 2</div></pre></td></tr></table></figure>
+<p>update <a href="https://www.ipyker.com/2018/03/22/docker-daemon" target="_blank" rel="external">daemon.json</a> with <code>node-generic-resources</code>, an official sample of <a href="https://github.com/docker/cli/blob/9a39a1/cli/compose/loader/full-example.yml#L71-L74" target="_blank" rel="external">compose resource</a> can be reviewed. but so far, it only reports error:</p>
+<pre><code>ERROR: The Compose file &apos;./docker-compose.yml&apos; is invalid because:
+services.nvidia-smi-test.deploy.resources.reservations value Additional properties are not allowed (&apos;generic_resources&apos; was unexpected`
+</code></pre><h3 id="deploy-compose-V3-to-swarm"><a href="#deploy-compose-V3-to-swarm" class="headerlink" title="deploy compose_V3 to swarm"></a>deploy compose_V3 to swarm</h3><p><a href="https://docs.docker.com/compose/compose-file/" target="_blank" rel="external">docker compose v3</a> has two run options, if triggered by <code>docker-compose up</code>, it is in standalone mode, will all services in the stack is host in current node; if triggered through <code>docker stack deploy</code> and current node is the manager of the swarm cluster, the services will be hosted in the swarm. btw, <code>docker compose v2</code> only support standalone mode.</p>
+<p>take an example from the official doc: <a href="https://docs.docker.com/engine/swarm/stack-deploy/" target="_blank" rel="external">deploy a stack to swarm</a>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">docker service create --name registry --publish published=5000,target=5000 registry:2</div><div class="line">docker-compose up -d</div><div class="line">docker-compose ps</div><div class="line">docker-compose down --volumes</div><div class="line">docker-compose push #push to local registry</div><div class="line">docker stack deploy</div><div class="line">docker stack services stackdemo</div><div class="line">docker stack rm stackdemo</div><div class="line">docker service rm registry</div></pre></td></tr></table></figure>
+<p>after deploy <code>stackdemo</code> in swarm, check on both manager node and worker node:</p>
+<pre><code>curl http://192.168.0.13:8000
+curl http://192.168.0.10:8000
+</code></pre><h3 id="docker-service-runtime"><a href="#docker-service-runtime" class="headerlink" title="docker service runtime"></a>docker service runtime</h3><p><code>docker run</code> can support runtime env through <code>-e</code> in CLI or <code>env-file</code>, but actually <code>docker service</code> doesn’t have runtime env support. <code>docker compose v3</code> give the possiblity to configure the runtime env and deploy the service to clusters, but so far v3 compose doesn’t support <code>runtime=nvidia</code>, so not helpful.</p>
+<p>I tried to run vkcube, lgsvl with docker service:</p>
+<pre><code>docker service create --name vkcc --env NVIDIA_VISIBLE_DEVICES=0 --env DISPLAY=unix:$DISPLAY --mount src=&quot;/.X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot;  vkcube
+docker service create --name lgsvl  -p 8080:8080 --env NVIDIA_VISIBLE_DEVICES=0 --env DISPLAY=unix$DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot;  lgsvl
+</code></pre><p>for <code>vkcube</code>, the service converged, but no GUI display; for <code>lgsvl</code>, the service failed.</p>
+<h2 id="Docker-deploy"><a href="#Docker-deploy" class="headerlink" title="Docker deploy"></a>Docker deploy</h2><p><a href="https://docs.docker.com/v17.12/edge/engine/reference/commandline/deploy/" target="_blank" rel="external">docker deploy</a> is used to deploy a complete application stack to the swarm, which accepts the stack application in <a href="https://docs.docker.com/compose/compose-file/" target="_blank" rel="external">compose file</a>, docker depoy is in experimental, which can be trigger in <code>/etc/docker/daemon.json</code>, <a href="https://docs.docker.com/v17.12/engine/reference/commandline/dockerd/#daemon-configuration-file" target="_blank" rel="external">check to enable experimental features</a></p>
+<p><a href="https://www.jianshu.com/p/1db6f0150fdb" target="_blank" rel="external">a sample from jianshu</a> <code>docker-compose.yml</code>:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">version: "3"</div><div class="line"></div><div class="line">services:</div><div class="line">  nginx:</div><div class="line">    image: nginx:alpine</div><div class="line">    ports:</div><div class="line">      - 80:80</div><div class="line">    deploy:</div><div class="line">      mode: replicated</div><div class="line">      replicas: 4</div><div class="line"></div><div class="line">  visualizer:</div><div class="line">    image: dockersamples/visualizer</div><div class="line">    ports:</div><div class="line">      - "9001:8080"</div><div class="line">    volumes:</div><div class="line">      - "/var/run/docker.sock:/var/run/docker.sock"</div><div class="line">    deploy:</div><div class="line">      replicas: 1</div><div class="line">      placement:</div><div class="line">        constraints: [node.role == manager]</div><div class="line"></div><div class="line">  portainer:</div><div class="line">    image: portainer/portainer</div><div class="line">    ports:</div><div class="line">      - "9000:9000"</div><div class="line">    volumes:</div><div class="line">      - "/var/run/docker.sock:/var/run/docker.sock"</div><div class="line">    deploy:</div><div class="line">      replicas: 1</div><div class="line">      placement:</div><div class="line">        constraints: [node.role == manager]</div></pre></td></tr></table></figure>
+<p>a few commands to look into swarm services: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker stack deploy -c docker-compose.yml   stack-demo </div><div class="line">docker stack services  stack-demo </div><div class="line">docker service inspect --pretty stack-demo   # inspect service in the swarm</div><div class="line">docker service ps &lt;service-id&gt;  # check which nodes are running the service</div><div class="line">docker ps #on the special node where the task is running, to see details about the container</div></pre></td></tr></table></figure>
 <h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>at this moment, it’s not possible to use v3 compose.yml to support <code>runtime=nvidia</code>, so using v3 compose.yml to depoly a gpu-based service in swarm is blocked. the nature swarm way maybe the right solution. </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><ul>
-<li><p><a href="https://github.com/docker/docker.github.io/blob/master/registry/insecure.md" target="_blank" rel="external">run as an insecure registry</a></p>
-</li>
-<li><p><a href="https://www.cnblogs.com/sparkdev/p/6890995.html" target="_blank" rel="external">https configure for docker registry in LAN</a></p>
-</li>
-<li><p><a href="https://asperti.com/en/docker-proxy-for-lan" target="_blank" rel="external">a docker proxy for your LAN</a></p>
-</li>
-<li><p><a href="https://github.com/alexei-led/swarm-mac/blob/master/init_swarm.sh" target="_blank" rel="external">alex: deploy compose(v3) to swarm</a></p>
-</li>
-<li><p><a href="https://sysdig.com/blog/monitor-docker-swarm/" target="_blank" rel="external">monitor docker swarm</a></p>
-</li>
-<li><p><a href="https://github.com/dockersamples/docker-swarm-visualizer" target="_blank" rel="external">docker swarm visulizer</a></p>
-</li>
-<li><p><a href="https://proxy.dockerflow.com/swarm-mode-auto/" target="_blank" rel="external">swarm mode with docker service</a></p>
-</li>
-<li><p><a href="https://docs.docker.com/v17.09/engine/swarm/swarm-tutorial/inspect-service/" target="_blank" rel="external">inspect a service on the swarm</a></p>
-</li>
-<li><p><a href="https://github.com/dockersamples/example-voting-app#linux-containers" target="_blank" rel="external">voting example</a></p>
-</li>
-<li><p><a href="https://yudanta.github.io/posts/nvidia-docker-and-docker-compose-enabled/" target="_blank" rel="external">enable compose for nvidia-docker</a></p>
-</li>
-<li><p><a href="https://libraries.io/pypi/nvidia-docker-compose" target="_blank" rel="external">nvidia-docker-compose</a></p>
-</li>
-<li><p><a href="https://github.com/docker/compose/issues/6691" target="_blank" rel="external">compose issue: to support nvidia under Docker compose</a></p>
-</li>
-<li><p><a href="https://github.com/docker/app/issues/241" target="_blank" rel="external">potential solution for composev3 with runtime</a></p>
-</li>
-<li><p><a href="https://github.com/docker/swarmkit/blob/master/design/generic_resources.md" target="_blank" rel="external">swarmkit: generic_resources</a></p>
-</li>
-<li><p><a href="https://vsupalov.com/docker-arg-env-variable-guide/" target="_blank" rel="external">Docker ARG, ENV, .env – a complete guide</a></p>
-</li>
-</ul>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p> <a href="https://github.com/docker/docker.github.io/blob/master/registry/insecure.md" target="_blank" rel="external">run as an insecure registry</a></p>
+<p> <a href="https://www.cnblogs.com/sparkdev/p/6890995.html" target="_blank" rel="external">https configure for docker registry in LAN</a></p>
+<p> <a href="https://asperti.com/en/docker-proxy-for-lan" target="_blank" rel="external">a docker proxy for your LAN</a></p>
+<p> <a href="https://github.com/alexei-led/swarm-mac/blob/master/init_swarm.sh" target="_blank" rel="external">alex: deploy compose(v3) to swarm</a></p>
+<p> <a href="https://sysdig.com/blog/monitor-docker-swarm/" target="_blank" rel="external">monitor docker swarm</a></p>
+<p> <a href="https://github.com/dockersamples/docker-swarm-visualizer" target="_blank" rel="external">docker swarm visulizer</a></p>
+<p> <a href="https://proxy.dockerflow.com/swarm-mode-auto/" target="_blank" rel="external">swarm mode with docker service</a></p>
+<p> <a href="https://docs.docker.com/v17.09/engine/swarm/swarm-tutorial/inspect-service/" target="_blank" rel="external">inspect a service on the swarm</a></p>
+<p> <a href="https://github.com/dockersamples/example-voting-app#linux-containers" target="_blank" rel="external">voting example</a></p>
+<p> <a href="https://yudanta.github.io/posts/nvidia-docker-and-docker-compose-enabled/" target="_blank" rel="external">enable compose for nvidia-docker</a></p>
+<p> <a href="https://libraries.io/pypi/nvidia-docker-compose" target="_blank" rel="external">nvidia-docker-compose</a></p>
+<p> <a href="https://github.com/docker/compose/issues/6691" target="_blank" rel="external">compose issue: to support nvidia under Docker compose</a></p>
+<p> <a href="https://github.com/docker/app/issues/241" target="_blank" rel="external">potential solution for composev3 with runtime</a></p>
+<p> <a href="https://github.com/docker/swarmkit/blob/master/design/generic_resources.md" target="_blank" rel="external">swarmkit: generic_resources</a></p>
+<p> <a href="https://vsupalov.com/docker-arg-env-variable-guide/" target="_blank" rel="external">Docker ARG, ENV, .env – a complete guide</a></p>
 
           
         
