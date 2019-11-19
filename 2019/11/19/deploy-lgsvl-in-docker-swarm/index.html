@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Docker,lg-sim," />
 
 
 
@@ -93,17 +93,18 @@
 
 
 
-<meta name="description" content="what happend in high dimensional space?Pixel-based distance on high-dimensional data can be very unintuitive. Linear Classification1) define a score function from image pixels to class scores. benefit">
+<meta name="description" content="Backgroundpreviously, vulkan in docker gives the way to run vulkan based apps in Docker; this post is about how to deploy a GPU-based app in docker swarm. Docker swarm has the ability to deploy apps(s">
+<meta name="keywords" content="Docker,lg-sim">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cs231 -- CNN in computer vision">
-<meta property="og:url" content="http://yoursite.com/2017/07/24/CNN-demo/index.html">
+<meta property="og:title" content="deploy lgsvl in docker swarm">
+<meta property="og:url" content="http://yoursite.com/2019/11/19/deploy-lgsvl-in-docker-swarm/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what happend in high dimensional space?Pixel-based distance on high-dimensional data can be very unintuitive. Linear Classification1) define a score function from image pixels to class scores. benefit">
+<meta property="og:description" content="Backgroundpreviously, vulkan in docker gives the way to run vulkan based apps in Docker; this post is about how to deploy a GPU-based app in docker swarm. Docker swarm has the ability to deploy apps(s">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-08-10T20:45:36.000Z">
+<meta property="og:updated_time" content="2019-11-19T13:35:22.370Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cs231 -- CNN in computer vision">
-<meta name="twitter:description" content="what happend in high dimensional space?Pixel-based distance on high-dimensional data can be very unintuitive. Linear Classification1) define a score function from image pixels to class scores. benefit">
+<meta name="twitter:title" content="deploy lgsvl in docker swarm">
+<meta name="twitter:description" content="Backgroundpreviously, vulkan in docker gives the way to run vulkan based apps in Docker; this post is about how to deploy a GPU-based app in docker swarm. Docker swarm has the ability to deploy apps(s">
 
 
 
@@ -131,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/24/CNN-demo/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/11/19/deploy-lgsvl-in-docker-swarm/"/>
 
 
 
 
 
-  <title>cs231 -- CNN in computer vision | Serious Autonomous Vehicles</title>
+  <title>deploy lgsvl in docker swarm | Serious Autonomous Vehicles</title>
   
 
 
@@ -290,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/24/CNN-demo/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/deploy-lgsvl-in-docker-swarm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -307,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">cs231 -- CNN in computer vision</h1>
+          <h1 class="post-title" itemprop="name headline">deploy lgsvl in docker swarm</h1>
         
 
         <div class="post-meta">
@@ -319,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-24T16:57:46-04:00">
-                2017-07-24
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-19T08:16:59-05:00">
+                2019-11-19
               </time>
             
 
@@ -338,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/07/24/CNN-demo/#comments" itemprop="discussionUrl">
+                <a href="/2019/11/19/deploy-lgsvl-in-docker-swarm/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/07/24/CNN-demo/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/11/19/deploy-lgsvl-in-docker-swarm/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -365,38 +366,103 @@
       
 
       
-        <h2 id="what-happend-in-high-dimensional-space"><a href="#what-happend-in-high-dimensional-space" class="headerlink" title="what happend in high dimensional space?"></a>what happend in high dimensional space?</h2><p>Pixel-based distance on high-dimensional data can be very unintuitive.</p>
-<h2 id="Linear-Classification"><a href="#Linear-Classification" class="headerlink" title="Linear Classification"></a>Linear Classification</h2><p>1) define a score function from image pixels to class scores. benefits, no need to store all data</p>
-<p>2) SVM and Softmax </p>
-<p>3) a loss function, measure the quality of a paricular set of parameters based on how well the induced scores agreed with the ground truth labels</p>
-<h2 id="optimization-SGD"><a href="#optimization-SGD" class="headerlink" title="optimization (SGD)"></a>optimization (SGD)</h2><p>the loss function as a hihg-dimeonsional optimization landscape, in which trying to reach the bottom</p>
-<h2 id="BP"><a href="#BP" class="headerlink" title="BP"></a>BP</h2><h2 id="Rectified-linear-unit-ReLU"><a href="#Rectified-linear-unit-ReLU" class="headerlink" title="Rectified linear unit (ReLU)"></a>Rectified linear unit (ReLU)</h2><h2 id="Neural-Networks"><a href="#Neural-Networks" class="headerlink" title="Neural Networks"></a>Neural Networks</h2><p>train a small network, the final loss are relatively few local minima, and easy to converge, but they are high loss; if train large network, there may many different solutions, but the variance in final loss is much smaller. –&gt; all solutions are equally as good, rely less on the random initialization </p>
-<p>in practice, use regularization tech to control overfit on large train network</p>
-<h2 id="Data-Preprocessing"><a href="#Data-Preprocessing" class="headerlink" title="Data Preprocessing"></a>Data Preprocessing</h2><p>1) mean subtraction</p>
-<p>2) normalization</p>
-<p>3) PCA &amp; whitening</p>
-<p>4) weight initialization</p>
-<p>5) regularization</p>
-<pre><code>5.1) L-norm regularization
+        <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>previously, <a href="https://zjli2013.github.io/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/" target="_blank" rel="external">vulkan in docker</a> gives the way to run vulkan based apps in Docker; this post is about how to deploy a GPU-based app in docker swarm. Docker swarm has the ability to deploy apps(service) in scalability.</p>
+<h2 id="Docker-registry"><a href="#Docker-registry" class="headerlink" title="Docker registry"></a>Docker registry</h2><p>Docker Registry is acted as a local Docker Hub, so the nodes in the LAN can share images.</p>
+<h3 id="update-docker-daemon-with-insecure-registries"><a href="#update-docker-daemon-with-insecure-registries" class="headerlink" title="update docker daemon with insecure-registries"></a>update docker daemon with insecure-registries</h3><ul>
+<li>modify <code>/etc/docker/daemon.json</code> in worker node: </li>
+</ul>
+<p>adding <code>&quot;insecure-registries&quot;: [&quot;192.168.0.10:5000&quot;]</code></p>
+<ul>
+<li><p>systemctl restart docker </p>
+</li>
+<li><p>start registry service in manager node </p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ docker service create --name registry --publish published=5000,target=5000 registry:2</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">access docker registry on both manager node and worker node :</div></pre></td></tr></table></figure>
+<p>$ curl <a href="http://192.168.0.10:5000/v2/" target="_blank" rel="external">http://192.168.0.10:5000/v2/</a>   #on manager node<br>$ curl <a href="http://192.168.0.10:5000/v2/" target="_blank" rel="external">http://192.168.0.10:5000/v2/</a>   #on worker node<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">`insecure registry` is only for test; for product, it has to with secure connection, check the official doc about [deploy a registry server](https://docs.docker.com/registry/deploying/)</div><div class="line"></div><div class="line"></div><div class="line">### upload images to this local registry hub</div></pre></td></tr></table></figure></p>
+<p>docker tag  stackdemo  192.168.0.10:5000/stackdemo<br>docker push  192.168.0.10:5000/stackdemo:latest<br>curl  <a href="http://192.168.0.10:5000/v2/_catalog" target="_blank" rel="external">http://192.168.0.10:5000/v2/_catalog</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* on worker run:</div></pre></td></tr></table></figure>
+<p>docker pull 192.168.0.10:5000/stackdemo<br>docker run -p 8000:8000  192.168.0.10:5000/stackdemo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">the purpose of `local registry` is to build a local docker image file server, to share in the cluster server. </div><div class="line"></div><div class="line"></div><div class="line">## Deploy compose</div><div class="line"></div><div class="line"></div><div class="line">### docker-compose build </div><div class="line"></div><div class="line">`docker-compose build` is used to build the images. `docker-compose up` will run the image, if not exiting, will build the image first. for lgsvl app, the running has a few parameters, so directly run `docker-compose up` will report `no protocol` error.</div><div class="line"></div><div class="line">### run vkcube in docker-compose</div><div class="line"></div><div class="line">docker-compose v2 does support `runtime=nvidia`, by appending the following to `/etc/docker/daemon.json`:</div></pre></td></tr></table></figure></p>
+<p>   “runtimes”: {<br>        “nvidia”: {<br>            “path”: “nvidia-container-runtime”,<br>            “runtimeArgs”: []<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">to run vkcube in compose by:</div></pre></td></tr></table></figure></p>
+<p>xhost +si:localuser:root<br>docker-compose up<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">the docker-compose.yml is :</div></pre></td></tr></table></figure></p>
+<p>version: ‘2.3’</p>
+<p>services:<br> vkcube-test:<br>  runtime: nvidia<br>  volumes:</p>
+<pre><code>- /tmp/.X11-unix:/tmp/.X11-unix 
+</code></pre><p>  environment:</p>
+<ul>
+<li>NVIDIA_VISIBLE_DEVICES=0 </li>
+<li>DISPLAY<h1 id="image-nvidia-cuda-9-0-base"><a href="#image-nvidia-cuda-9-0-base" class="headerlink" title="image: nvidia/cuda:9.0-base"></a>image: nvidia/cuda:9.0-base</h1>image: vkcube<h1 id="build"><a href="#build" class="headerlink" title="build: ."></a>build: .</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">however, currently [composev3 doesn&apos;t support NVIDIA runtime](https://github.com/docker/compose/issues?utf8=%E2%9C%93&amp;q=nvidia), who is required to run stack deploy. </div><div class="line"></div><div class="line"></div><div class="line">### support v3 compose with nvidia runtime </div><div class="line"></div><div class="line">as discussed at [#issue: support for NVIDIA GPUs under docker compose](https://github.com/docker/compose/issues/6691):</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>services:<br>  my_app:<br>    deploy:<br>      resources:<br>        reservations:<br>          generic_resources:</p>
+<pre><code>- discrete_resource_spec:
+    kind: &apos;gpu&apos;
+    value: 2
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">update [daemon.json](https://www.ipyker.com/2018/03/22/docker-daemon) with `node-generic-resources`, an official sample of [compose resource](https://github.com/docker/cli/blob/9a39a1/cli/compose/loader/full-example.yml#L71-L74) can be reviewed. but so far, it only reports error:</div></pre></td></tr></table></figure>
+<p>ERROR: The Compose file ‘./docker-compose.yml’ is invalid because:<br>services.nvidia-smi-test.deploy.resources.reservations value Additional properties are not allowed (‘generic_resources’ was unexpected<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### deploy compose\_V3 to swarm</div><div class="line"></div><div class="line">[docker compose v3](https://docs.docker.com/compose/compose-file/) has two run options, if triggered by `docker-compose up`, it is in standalone mode, will all services in the stack is host in current node; if triggered through `docker stack deploy` and current node is the manager of the swarm cluster, the services will be hosted in the swarm. btw, `docker compose v2` only support standalone mode.</div><div class="line"></div><div class="line"></div><div class="line">take an example from the official doc: [deploy a stack to swarm](https://docs.docker.com/engine/swarm/stack-deploy/):</div></pre></td></tr></table></figure></p>
+<p>docker service create –name registry –publish published=5000,target=5000 registry:2<br>docker-compose up -d<br>docker-compose ps<br>docker-compose down –volumes<br>docker-compose push #push to local registry<br>docker stack deploy<br>docker stack services stackdemo<br>docker stack rm stackdemo<br>docker service rm registry<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">after deploy `stackdemo` in swarm, check on both manager node and worker node:</div></pre></td></tr></table></figure></p>
+<p>curl <a href="http://192.168.0.13:8000" target="_blank" rel="external">http://192.168.0.13:8000</a><br>curl <a href="http://192.168.0.10:8000" target="_blank" rel="external">http://192.168.0.10:8000</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### docker service runtime </div><div class="line"></div><div class="line">`docker run` can support runtime env through `-e` in CLI or `env-file`, but actually `docker service` doesn&apos;t have runtime env support. `docker compose v3` give the possiblity to configure the runtime env and deploy the service to clusters, but so far v3 compose doesn&apos;t support `runtime=nvidia`, so not helpful.</div><div class="line"></div><div class="line">I tried to run vkcube, lgsvl with docker service:</div></pre></td></tr></table></figure></p>
+<p>docker service create –name vkcc –env NVIDIA_VISIBLE_DEVICES=0 –env DISPLAY=unix:$DISPLAY –mount src=”/.X11-unix”,dst=”/tmp/.X11-unix”  vkcube<br>docker service create –name lgsvl  -p 8080:8080 –env NVIDIA_VISIBLE_DEVICES=0 –env DISPLAY=unix$DISPLAY –mount src=”X11-unix”,dst=”/tmp/.X11-unix”  lgsvl</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">for `vkcube`, the service converged, but no GUI display; for `lgsvl`, the service failed.</div><div class="line"></div><div class="line">## Docker deploy</div><div class="line"></div><div class="line">[docker deploy](https://docs.docker.com/v17.12/edge/engine/reference/commandline/deploy/) is used to deploy a complete application stack to the swarm, which accepts the stack application in [compose file](https://docs.docker.com/compose/compose-file/), docker depoy is in experimental, which can be trigger in `/etc/docker/daemon.json`, [check to enable experimental features](https://docs.docker.com/v17.12/engine/reference/commandline/dockerd/#daemon-configuration-file)</div><div class="line"></div><div class="line">[a sample from jianshu](https://www.jianshu.com/p/1db6f0150fdb) `docker-compose.yml`:</div></pre></td></tr></table></figure>
+<p>version: “3”</p>
+<p>services:<br>  nginx:<br>    image: nginx:alpine<br>    ports:</p>
+<pre><code>  - 80:80
+deploy:
+  mode: replicated
+  replicas: 4
+</code></pre><p>  visualizer:<br>    image: dockersamples/visualizer<br>    ports:</p>
+<pre><code>  - &quot;9001:8080&quot;
+volumes:
+  - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;
+deploy:
+  replicas: 1
+  placement:
+    constraints: [node.role == manager]
+</code></pre><p>  portainer:<br>    image: portainer/portainer<br>    ports:</p>
+<pre><code>  - &quot;9000:9000&quot;
+volumes:
+  - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;
+deploy:
+  replicas: 1
+  placement:
+    constraints: [node.role == manager]
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">a few commands to look into swarm services:</div></pre></td></tr></table></figure>
+<p>docker stack deploy -c docker-compose.yml   stack-demo<br>docker stack services  stack-demo<br>docker service inspect –pretty stack-demo   # inspect service in the swarm<br>docker service ps <service-id>  # check which nodes are running the service<br>docker ps #on the special node where the task is running, to see details about the container</service-id></p>
+<p>```</p>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>at this moment, it’s not possible to use v3 compose.yml to support <code>runtime=nvidia</code>, so using v3 compose.yml to depoly a gpu-based service in swarm is blocked. the nature swarm way maybe the right solution. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><ul>
+<li><p><a href="https://github.com/docker/docker.github.io/blob/master/registry/insecure.md" target="_blank" rel="external">run as an insecure registry</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/sparkdev/p/6890995.html" target="_blank" rel="external">https configure for docker registry in LAN</a></p>
+</li>
+<li><p><a href="https://asperti.com/en/docker-proxy-for-lan" target="_blank" rel="external">a docker proxy for your LAN</a></p>
+</li>
+<li><p><a href="https://github.com/alexei-led/swarm-mac/blob/master/init_swarm.sh" target="_blank" rel="external">alex: deploy compose(v3) to swarm</a></p>
+</li>
+<li><p><a href="https://sysdig.com/blog/monitor-docker-swarm/" target="_blank" rel="external">monitor docker swarm</a></p>
+</li>
+<li><p><a href="https://github.com/dockersamples/docker-swarm-visualizer" target="_blank" rel="external">docker swarm visulizer</a></p>
+</li>
+<li><p><a href="https://proxy.dockerflow.com/swarm-mode-auto/" target="_blank" rel="external">swarm mode with docker service</a></p>
+</li>
+<li><p><a href="https://docs.docker.com/v17.09/engine/swarm/swarm-tutorial/inspect-service/" target="_blank" rel="external">inspect a service on the swarm</a></p>
+</li>
+<li><p><a href="https://github.com/dockersamples/example-voting-app#linux-containers" target="_blank" rel="external">voting example</a></p>
+</li>
+<li><p><a href="https://yudanta.github.io/posts/nvidia-docker-and-docker-compose-enabled/" target="_blank" rel="external">enable compose for nvidia-docker</a></p>
+</li>
+<li><p><a href="https://libraries.io/pypi/nvidia-docker-compose" target="_blank" rel="external">nvidia-docker-compose</a></p>
+</li>
+<li><p><a href="https://github.com/docker/compose/issues/6691" target="_blank" rel="external">compose issue: to support nvidia under Docker compose</a></p>
+</li>
+<li><p><a href="https://github.com/docker/app/issues/241" target="_blank" rel="external">potential solution for composev3 with runtime</a></p>
+</li>
+<li><p><a href="https://github.com/docker/swarmkit/blob/master/design/generic_resources.md" target="_blank" rel="external">swarmkit: generic_resources</a></p>
+</li>
+<li><p><a href="https://vsupalov.com/docker-arg-env-variable-guide/" target="_blank" rel="external">Docker ARG, ENV, .env – a complete guide</a></p>
+</li>
+</ul>
 
-5.2) Dropout
-</code></pre><h2 id="Hyperparamter-optimization"><a href="#Hyperparamter-optimization" class="headerlink" title="Hyperparamter optimization"></a>Hyperparamter optimization</h2><p>1) initial learning rate</p>
-<p>2) learning rate decay schedule </p>
-<p>3) regularization strength (L2 penalty)</p>
-<p>tips:  decay learning rate over the period of training; search for good hyperparameters with random search</p>
-<h2 id="CNN"><a href="#CNN" class="headerlink" title="CNN"></a>CNN</h2><p>layers used to build ConvNet architectures:</p>
-<p>1)    Convolutional layer</p>
-<p>2)  ReLU layer</p>
-<p>3)  Pooling layer</p>
-<p>4)    Fully-connected layer</p>
-<p>case study:</p>
-<pre><code>LeNet    
-AlexNet
-ZF Net
-GoogleNet
-VGGNet
-ResNet
-</code></pre><h2 id="Visulization-CNN"><a href="#Visulization-CNN" class="headerlink" title="Visulization CNN"></a>Visulization CNN</h2><h2 id="Transfer-learning"><a href="#Transfer-learning" class="headerlink" title="Transfer learning"></a>Transfer learning</h2>
       
     </div>
 
@@ -423,6 +489,14 @@ ResNet
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+            <a href="/tags/lg-sim/" rel="tag"># lg-sim</a>
+          
+        </div>
+      
 
       
       
@@ -432,15 +506,15 @@ ResNet
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/" rel="next" title="vulkan in docker to support new lgsvl">
+                <i class="fa fa-chevron-left"></i> vulkan in docker to support new lgsvl
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/05/open-source-car-control/" rel="prev" title="open source car control">
-                open source car control <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -588,7 +662,7 @@ ResNet
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-happend-in-high-dimensional-space"><span class="nav-number">1.</span> <span class="nav-text">what happend in high dimensional space?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linear-Classification"><span class="nav-number">2.</span> <span class="nav-text">Linear Classification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#optimization-SGD"><span class="nav-number">3.</span> <span class="nav-text">optimization (SGD)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BP"><span class="nav-number">4.</span> <span class="nav-text">BP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rectified-linear-unit-ReLU"><span class="nav-number">5.</span> <span class="nav-text">Rectified linear unit (ReLU)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Neural-Networks"><span class="nav-number">6.</span> <span class="nav-text">Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Preprocessing"><span class="nav-number">7.</span> <span class="nav-text">Data Preprocessing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hyperparamter-optimization"><span class="nav-number">8.</span> <span class="nav-text">Hyperparamter optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CNN"><span class="nav-number">9.</span> <span class="nav-text">CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Visulization-CNN"><span class="nav-number">10.</span> <span class="nav-text">Visulization CNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transfer-learning"><span class="nav-number">11.</span> <span class="nav-text">Transfer learning</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Background"><span class="nav-number">1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker-registry"><span class="nav-number">2.</span> <span class="nav-text">Docker registry</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#update-docker-daemon-with-insecure-registries"><span class="nav-number">2.1.</span> <span class="nav-text">update docker daemon with insecure-registries</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#image-nvidia-cuda-9-0-base"><span class="nav-number"></span> <span class="nav-text">image: nvidia/cuda:9.0-base</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#build"><span class="nav-number"></span> <span class="nav-text">build: .</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-number">1.</span> <span class="nav-text">summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">2.</span> <span class="nav-text">refer</span></a></li></ol></div>
             
 
           </div>
@@ -731,9 +805,9 @@ ResNet
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/07/24/CNN-demo/';
-          this.page.identifier = '2017/07/24/CNN-demo/';
-          this.page.title = 'cs231 -- CNN in computer vision';
+          this.page.url = 'http://yoursite.com/2019/11/19/deploy-lgsvl-in-docker-swarm/';
+          this.page.identifier = '2019/11/19/deploy-lgsvl-in-docker-swarm/';
+          this.page.title = 'deploy lgsvl in docker swarm';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';

@@ -291,6 +291,224 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/deploy-lgsvl-in-docker-swarm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/deploy-lgsvl-in-docker-swarm/" itemprop="url">deploy lgsvl in docker swarm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-19T08:16:59-05:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/19/deploy-lgsvl-in-docker-swarm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/19/deploy-lgsvl-in-docker-swarm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>previously, <a href="https://zjli2013.github.io/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/" target="_blank" rel="external">vulkan in docker</a> gives the way to run vulkan based apps in Docker; this post is about how to deploy a GPU-based app in docker swarm. Docker swarm has the ability to deploy apps(service) in scalability.</p>
+<h2 id="Docker-registry"><a href="#Docker-registry" class="headerlink" title="Docker registry"></a>Docker registry</h2><p>Docker Registry is acted as a local Docker Hub, so the nodes in the LAN can share images.</p>
+<h3 id="update-docker-daemon-with-insecure-registries"><a href="#update-docker-daemon-with-insecure-registries" class="headerlink" title="update docker daemon with insecure-registries"></a>update docker daemon with insecure-registries</h3><ul>
+<li>modify <code>/etc/docker/daemon.json</code> in worker node: </li>
+</ul>
+<p>adding <code>&quot;insecure-registries&quot;: [&quot;192.168.0.10:5000&quot;]</code></p>
+<ul>
+<li><p>systemctl restart docker </p>
+</li>
+<li><p>start registry service in manager node </p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ docker service create --name registry --publish published=5000,target=5000 registry:2</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">access docker registry on both manager node and worker node :</div></pre></td></tr></table></figure>
+<p>$ curl <a href="http://192.168.0.10:5000/v2/" target="_blank" rel="external">http://192.168.0.10:5000/v2/</a>   #on manager node<br>$ curl <a href="http://192.168.0.10:5000/v2/" target="_blank" rel="external">http://192.168.0.10:5000/v2/</a>   #on worker node<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">`insecure registry` is only for test; for product, it has to with secure connection, check the official doc about [deploy a registry server](https://docs.docker.com/registry/deploying/)</div><div class="line"></div><div class="line"></div><div class="line">### upload images to this local registry hub</div></pre></td></tr></table></figure></p>
+<p>docker tag  stackdemo  192.168.0.10:5000/stackdemo<br>docker push  192.168.0.10:5000/stackdemo:latest<br>curl  <a href="http://192.168.0.10:5000/v2/_catalog" target="_blank" rel="external">http://192.168.0.10:5000/v2/_catalog</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* on worker run:</div></pre></td></tr></table></figure>
+<p>docker pull 192.168.0.10:5000/stackdemo<br>docker run -p 8000:8000  192.168.0.10:5000/stackdemo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">the purpose of `local registry` is to build a local docker image file server, to share in the cluster server. </div><div class="line"></div><div class="line"></div><div class="line">## Deploy compose</div><div class="line"></div><div class="line"></div><div class="line">### docker-compose build </div><div class="line"></div><div class="line">`docker-compose build` is used to build the images. `docker-compose up` will run the image, if not exiting, will build the image first. for lgsvl app, the running has a few parameters, so directly run `docker-compose up` will report `no protocol` error.</div><div class="line"></div><div class="line">### run vkcube in docker-compose</div><div class="line"></div><div class="line">docker-compose v2 does support `runtime=nvidia`, by appending the following to `/etc/docker/daemon.json`:</div></pre></td></tr></table></figure></p>
+<p>   “runtimes”: {<br>        “nvidia”: {<br>            “path”: “nvidia-container-runtime”,<br>            “runtimeArgs”: []<br>        }<br>    }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">to run vkcube in compose by:</div></pre></td></tr></table></figure></p>
+<p>xhost +si:localuser:root<br>docker-compose up<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">the docker-compose.yml is :</div></pre></td></tr></table></figure></p>
+<p>version: ‘2.3’</p>
+<p>services:<br> vkcube-test:<br>  runtime: nvidia<br>  volumes:</p>
+<pre><code>- /tmp/.X11-unix:/tmp/.X11-unix 
+</code></pre><p>  environment:</p>
+<ul>
+<li>NVIDIA_VISIBLE_DEVICES=0 </li>
+<li>DISPLAY<h1 id="image-nvidia-cuda-9-0-base"><a href="#image-nvidia-cuda-9-0-base" class="headerlink" title="image: nvidia/cuda:9.0-base"></a>image: nvidia/cuda:9.0-base</h1>image: vkcube<h1 id="build"><a href="#build" class="headerlink" title="build: ."></a>build: .</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">however, currently [composev3 doesn&apos;t support NVIDIA runtime](https://github.com/docker/compose/issues?utf8=%E2%9C%93&amp;q=nvidia), who is required to run stack deploy. </div><div class="line"></div><div class="line"></div><div class="line">### support v3 compose with nvidia runtime </div><div class="line"></div><div class="line">as discussed at [#issue: support for NVIDIA GPUs under docker compose](https://github.com/docker/compose/issues/6691):</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>services:<br>  my_app:<br>    deploy:<br>      resources:<br>        reservations:<br>          generic_resources:</p>
+<pre><code>- discrete_resource_spec:
+    kind: &apos;gpu&apos;
+    value: 2
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">update [daemon.json](https://www.ipyker.com/2018/03/22/docker-daemon) with `node-generic-resources`, an official sample of [compose resource](https://github.com/docker/cli/blob/9a39a1/cli/compose/loader/full-example.yml#L71-L74) can be reviewed. but so far, it only reports error:</div></pre></td></tr></table></figure>
+<p>ERROR: The Compose file ‘./docker-compose.yml’ is invalid because:<br>services.nvidia-smi-test.deploy.resources.reservations value Additional properties are not allowed (‘generic_resources’ was unexpected<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### deploy compose\_V3 to swarm</div><div class="line"></div><div class="line">[docker compose v3](https://docs.docker.com/compose/compose-file/) has two run options, if triggered by `docker-compose up`, it is in standalone mode, will all services in the stack is host in current node; if triggered through `docker stack deploy` and current node is the manager of the swarm cluster, the services will be hosted in the swarm. btw, `docker compose v2` only support standalone mode.</div><div class="line"></div><div class="line"></div><div class="line">take an example from the official doc: [deploy a stack to swarm](https://docs.docker.com/engine/swarm/stack-deploy/):</div></pre></td></tr></table></figure></p>
+<p>docker service create –name registry –publish published=5000,target=5000 registry:2<br>docker-compose up -d<br>docker-compose ps<br>docker-compose down –volumes<br>docker-compose push #push to local registry<br>docker stack deploy<br>docker stack services stackdemo<br>docker stack rm stackdemo<br>docker service rm registry<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">after deploy `stackdemo` in swarm, check on both manager node and worker node:</div></pre></td></tr></table></figure></p>
+<p>curl <a href="http://192.168.0.13:8000" target="_blank" rel="external">http://192.168.0.13:8000</a><br>curl <a href="http://192.168.0.10:8000" target="_blank" rel="external">http://192.168.0.10:8000</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">### docker service runtime </div><div class="line"></div><div class="line">`docker run` can support runtime env through `-e` in CLI or `env-file`, but actually `docker service` doesn&apos;t have runtime env support. `docker compose v3` give the possiblity to configure the runtime env and deploy the service to clusters, but so far v3 compose doesn&apos;t support `runtime=nvidia`, so not helpful.</div><div class="line"></div><div class="line">I tried to run vkcube, lgsvl with docker service:</div></pre></td></tr></table></figure></p>
+<p>docker service create –name vkcc –env NVIDIA_VISIBLE_DEVICES=0 –env DISPLAY=unix:$DISPLAY –mount src=”/.X11-unix”,dst=”/tmp/.X11-unix”  vkcube<br>docker service create –name lgsvl  -p 8080:8080 –env NVIDIA_VISIBLE_DEVICES=0 –env DISPLAY=unix$DISPLAY –mount src=”X11-unix”,dst=”/tmp/.X11-unix”  lgsvl</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">for `vkcube`, the service converged, but no GUI display; for `lgsvl`, the service failed.</div><div class="line"></div><div class="line">## Docker deploy</div><div class="line"></div><div class="line">[docker deploy](https://docs.docker.com/v17.12/edge/engine/reference/commandline/deploy/) is used to deploy a complete application stack to the swarm, which accepts the stack application in [compose file](https://docs.docker.com/compose/compose-file/), docker depoy is in experimental, which can be trigger in `/etc/docker/daemon.json`, [check to enable experimental features](https://docs.docker.com/v17.12/engine/reference/commandline/dockerd/#daemon-configuration-file)</div><div class="line"></div><div class="line">[a sample from jianshu](https://www.jianshu.com/p/1db6f0150fdb) `docker-compose.yml`:</div></pre></td></tr></table></figure>
+<p>version: “3”</p>
+<p>services:<br>  nginx:<br>    image: nginx:alpine<br>    ports:</p>
+<pre><code>  - 80:80
+deploy:
+  mode: replicated
+  replicas: 4
+</code></pre><p>  visualizer:<br>    image: dockersamples/visualizer<br>    ports:</p>
+<pre><code>  - &quot;9001:8080&quot;
+volumes:
+  - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;
+deploy:
+  replicas: 1
+  placement:
+    constraints: [node.role == manager]
+</code></pre><p>  portainer:<br>    image: portainer/portainer<br>    ports:</p>
+<pre><code>  - &quot;9000:9000&quot;
+volumes:
+  - &quot;/var/run/docker.sock:/var/run/docker.sock&quot;
+deploy:
+  replicas: 1
+  placement:
+    constraints: [node.role == manager]
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">a few commands to look into swarm services:</div></pre></td></tr></table></figure>
+<p>docker stack deploy -c docker-compose.yml   stack-demo<br>docker stack services  stack-demo<br>docker service inspect –pretty stack-demo   # inspect service in the swarm<br>docker service ps <service-id>  # check which nodes are running the service<br>docker ps #on the special node where the task is running, to see details about the container</service-id></p>
+<p>```</p>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>at this moment, it’s not possible to use v3 compose.yml to support <code>runtime=nvidia</code>, so using v3 compose.yml to depoly a gpu-based service in swarm is blocked. the nature swarm way maybe the right solution. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><ul>
+<li><p><a href="https://github.com/docker/docker.github.io/blob/master/registry/insecure.md" target="_blank" rel="external">run as an insecure registry</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/sparkdev/p/6890995.html" target="_blank" rel="external">https configure for docker registry in LAN</a></p>
+</li>
+<li><p><a href="https://asperti.com/en/docker-proxy-for-lan" target="_blank" rel="external">a docker proxy for your LAN</a></p>
+</li>
+<li><p><a href="https://github.com/alexei-led/swarm-mac/blob/master/init_swarm.sh" target="_blank" rel="external">alex: deploy compose(v3) to swarm</a></p>
+</li>
+<li><p><a href="https://sysdig.com/blog/monitor-docker-swarm/" target="_blank" rel="external">monitor docker swarm</a></p>
+</li>
+<li><p><a href="https://github.com/dockersamples/docker-swarm-visualizer" target="_blank" rel="external">docker swarm visulizer</a></p>
+</li>
+<li><p><a href="https://proxy.dockerflow.com/swarm-mode-auto/" target="_blank" rel="external">swarm mode with docker service</a></p>
+</li>
+<li><p><a href="https://docs.docker.com/v17.09/engine/swarm/swarm-tutorial/inspect-service/" target="_blank" rel="external">inspect a service on the swarm</a></p>
+</li>
+<li><p><a href="https://github.com/dockersamples/example-voting-app#linux-containers" target="_blank" rel="external">voting example</a></p>
+</li>
+<li><p><a href="https://yudanta.github.io/posts/nvidia-docker-and-docker-compose-enabled/" target="_blank" rel="external">enable compose for nvidia-docker</a></p>
+</li>
+<li><p><a href="https://libraries.io/pypi/nvidia-docker-compose" target="_blank" rel="external">nvidia-docker-compose</a></p>
+</li>
+<li><p><a href="https://github.com/docker/compose/issues/6691" target="_blank" rel="external">compose issue: to support nvidia under Docker compose</a></p>
+</li>
+<li><p><a href="https://github.com/docker/app/issues/241" target="_blank" rel="external">potential solution for composev3 with runtime</a></p>
+</li>
+<li><p><a href="https://github.com/docker/swarmkit/blob/master/design/generic_resources.md" target="_blank" rel="external">swarmkit: generic_resources</a></p>
+</li>
+<li><p><a href="https://vsupalov.com/docker-arg-env-variable-guide/" target="_blank" rel="external">Docker ARG, ENV, .env – a complete guide</a></p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1790,192 +2008,6 @@ SOTIF Analysis
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/cruise-webriz-configure/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/16/cruise-webriz-configure/" itemprop="url">cruise webriz configure</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-16T07:09:19-04:00">
-                2019-10-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/16/cruise-webriz-configure/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/10/16/cruise-webriz-configure/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>during ADS development, ros bag is used a lot to record the sensor, CAN and scenario info, which helps in vehicle test, data fusion, perception.<br><a href="https://github.com/cruise-automation/webviz" target="_blank" rel="external">cruise webviz</a> is an open source tool to visualize rosbag and allow user defined layout in web environment, without the pain to run <code>roscore</code> and other ros nodes.</p>
-<p>while js is not a common tool in my visibility, the way how an js project is organized is really confused at the first time. there are a punch of new things:</p>
-<ul>
-<li><a href="https://create-react-app.dev/" target="_blank" rel="external">react</a></li>
-<li>[regl]<a href="https://www.giacomodebidda.com/how-to-get-started-with-regl-and-webpack/" target="_blank" rel="external">https://www.giacomodebidda.com/how-to-get-started-with-regl-and-webpack/</a>)</li>
-</ul>
-<p>and <code>js</code> functions/modules are really patches, they can be pached anywhere in the project, so usually it requires a patch manager(e.g. lerna) to deal with versions, dependencies etc; and bigger there are packages, which is independent function component.</p>
-<p>webviz has a few packages, e.g. regl-worldview, webviz-core, which has more than 40 patches(modules) used.</p>
-<ul>
-<li><p><a href="https://webviz.io/worldview/#/docs/tutorial/introduction" target="_blank" rel="external">cruise:worldview</a></p>
-</li>
-<li><p><a href="">cruise:webviz core</a></p>
-</li>
-<li><p><a href="https://github.com/cruise-automation/rosbag.js" target="_blank" rel="external">rosbag.js</a></p>
-</li>
-</ul>
-<h2 id="lerna"><a href="#lerna" class="headerlink" title="lerna"></a>lerna</h2><p><a href="https://github.com/lerna/lerna" target="_blank" rel="external">lerna</a> is an open source tool to manage js project with multi packages.</p>
-<ul>
-<li><p><code>lerna init</code> will generate <code>lerna.json</code>, which defines the required modules</p>
-</li>
-<li><p><code>package.json</code> defines useful infomation about the module depencies,  CLI(which give a detail about how things work behind) and project description</p>
-</li>
-<li><p><code>lerna bootstrap --hoist react</code> will install all required modules in the root folder <code>/node_modules</code>, if doesn’t work well, leading to <code>Can&#39;t Resovle module errors</code>,  may need manually install some.</p>
-</li>
-</ul>
-<h2 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h2><p><a href="https://webpack.js.org/guides/getting-started/" target="_blank" rel="external">webpack</a> is an open source tool for js module bundler. </p>
-<p><code>webpack.config.js</code>, defines <code>entry</code>, where the compiler start; <code>output</code> , where the compiler end; <code>module</code>, how to deal with each module; <code>plugin</code>, additionaly content post compiliation; <code>resovle.alias</code> define alias for modules.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var path=require(<span class="string">"path"</span>)</div><div class="line"></div><div class="line">module.exports =&#123;</div><div class="line">	entry: &#123; app:[<span class="string">"./app/main.js"</span>] &#125;</div><div class="line">     	output: &#123;path: path.resolve(__dirname, <span class="string">"build"</span>)&#125; </div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">npm install webpack-dev-server</div><div class="line"></div><div class="line">npm list | head -n <span class="number">1</span> </div><div class="line"></div><div class="line">webpack-dev-server --inline --hot</div></pre></td></tr></table></figure>
-<p>the JS bundle could be loaded from a static HTML page, served with any simple web server. That’s exactly what this /packages/webviz-core/public/index.html file is, which is used for <a href="https://webviz.io/try" target="_blank" rel="external">https://webviz.io/try</a>. The webpack dev server is configured to serve it at /webpack.config.js</p>
-<h2 id="npm-commands"><a href="#npm-commands" class="headerlink" title="npm commands"></a>npm commands</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm config list </div><div class="line">npm install packages@version.minor [-g] [--save]</div><div class="line">npm uninstall packages </div><div class="line">npm search packages</div><div class="line">npm cache clean --force</div></pre></td></tr></table></figure>
-<h2 id="webpack-server"><a href="#webpack-server" class="headerlink" title="webpack-server"></a>webpack-server</h2><p><a href="https://github.com/webpack/docs/wiki/webpack-dev-server" target="_blank" rel="external">webpack-server</a> is a little nodejs Express server. to install it as a CLI tool first, then run it under the webviz project root folder, with optional parameters, e.g.  –host, –port e.t.c</p>
-<h2 id="webviz-configure"><a href="#webviz-configure" class="headerlink" title="webviz configure"></a>webviz configure</h2><ul>
-<li>npm config set registry <a href="https://r.npm.taobao.org" target="_blank" rel="external">https://r.npm.taobao.org</a></li>
-<li>npm install puppeteer –unsafe-perm=true</li>
-<li>npm run bootstrap</li>
-</ul>
-<p>if failed: </p>
-<ul>
-<li>sudo npm cache  clean –force </li>
-<li>npm install -g lerna </li>
-<li>npm run bootstrap     </li>
-<li>sudo npm install/rebuild node-sass </li>
-<li>npm run build</li>
-</ul>
-<p>if failed, manually installed unresovled modules</p>
-<ul>
-<li>npm test   </li>
-</ul>
-<p>if failed based on a few test modules, install then</p>
-<ul>
-<li>npm install  webpack-dev-server –save </li>
-</ul>
-<p>webpack-dev-server.js –host IP –port 8085  #under project root</p>
-<p>a little hack, by default <code>npm install inter-ui</code> <a href="https://github.com/philipbelesky/inter-ui/tree/master/Inter%20(web" target="_blank" rel="external">phli’s inter-ui</a>), where inside<br><code>webviz/packages/webvix-core/src/styles/fonts.module.scess</code>, it uses: <code>url(&quot;~inter-ui/Inter UI (web)/Inter-UI.var.woff2&quot;) format(&quot;woff2-variations&quot;)</code>, modified this line to: <code>url(&quot;~inter-ui/Inter (web)/Inter.var.woff2&quot;) format(&quot;woff2-variations&quot;)</code></p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://tabbles.net/" target="_blank" rel="external">tabbles</a></p>
-<p><a href="https://discourse.ros.org/t/webviz-ros-data-visualization-in-the-browser/9783" target="_blank" rel="external">webviz in ros community</a></p>
-<p><a href="https://stackoverflow.com/questions/33272967/how-to-make-the-webpack-dev-server-run-on-port-80-and-on-0-0-0-0-to-make-it-publ" target="_blank" rel="external">access web-server in LAN</a></p>
-<p><a href="https://github.com/cruise-automation/webviz/issues/161" target="_blank" rel="external">issue: how to run cruise webviz</a></p>
-<p><a href="https://ternaris.com/marv-robotics/" target="_blank" rel="external">Ternaris Marv</a></p>
-<p><a href="https://min.io/" target="_blank" rel="external">minio: high performance object storage for AI</a></p>
-<p><a href="https://github.com/cruise-automation/webviz/issues/247" target="_blank" rel="external">webviz on remote bag</a></p>
-<p><a href="https://github.com/cruise-automation/webviz/issues/118" target="_blank" rel="external">visuaize data from a live server</a></p>
-<p><a href="https://stackoverflow.com/questions/22764407/npm-install-goes-to-dead-in-china" target="_blank" rel="external">npm package install in China</a></p>
-<p><a href="https://npm.taobao.org/package/cnpm" target="_blank" rel="external">taobao.npm</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2026,7 +2058,7 @@ SOTIF Analysis
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">126</span>
+                <span class="site-state-item-count">127</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
