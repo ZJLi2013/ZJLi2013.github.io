@@ -422,8 +422,8 @@ docker service create --name vkcc --generic-resource &quot;gpu=0&quot; --env DIS
 <p>and run: </p>
 <pre><code>docker service create --name vkcc --generic-resource &quot;gpu=1&quot; --env DISPLAY --constraint &apos;node.role==manager&apos; nvidia/cudagl:9.0-base-ubuntu16.04
 </code></pre><p>it works  with output <code>verify: Service converged</code>. However, when test image with <code>vucube</code> or <code>lgsvl</code> it has errors:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">error msg=&quot;pulling image failed&quot; error=&quot;pull access denied for vkcube, repository does not exist or may require &apos;docker login&apos;&quot;</div><div class="line"></div><div class="line">Nov 21 19:33:20 ubuntu dockerd[52334]: time=&quot;2019-11-21T19:33:20.467968047+08:00&quot; level=error msg=&quot;fatal task error&quot; error=&quot;task: non-zero exit (1)&quot; module=node/agent/taskmanager node.id=emzw1f9293rwdk97ki7gfqq1q service.id=spahe4h24fecq11ja3sp8t2cn task.id=uo7nk4a3ud201bo9ymmlpxzr3</div></pre></td></tr></table></figure>
-<p>the regsitry error can be fixed, by push the image to local registry. and to debug the <code>non-zero exit (1)</code> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Nov 21 19:33:20 ubuntu dockerd[52334]: time=&quot;2019-11-21T19:33:20.467968047+08:00&quot; level=error msg=&quot;fatal task error&quot; error=&quot;task: non-zero exit (1)&quot; module=node/agent/taskmanager node.id=emzw1f9293rwdk97ki7gfqq1q service.id=spahe4h24fecq11ja3sp8t2cn task.id=uo7nk4a3ud201bo9ymmlpxzr3</div></pre></td></tr></table></figure>
+<p>to debug the <code>non-zero exit (1)</code> :</p>
 <pre><code>docker service  ls    #get the dead service-ID
 
 docker [service] inspect  r14a68p6v1gu  # check 
@@ -432,8 +432,17 @@ docker ps -a  # find the dead container-ID
 
 docker logs  ff9a1b5ca0de   # check the log of the failure container
 </code></pre><p>it gives: <code>Cannot find a compatible Vulkan installable client driver (ICD)</code> </p>
-<p>I had an issue at <a href="https://gitlab.com/nvidia/container-images/vulkan/issues/2" target="_blank" rel="external">gitlab/nvidia-images</a></p>
-<p>in summary, this is so far I get, but looks close. if not work, maybe need to check <code>swarmkit</code>, or to <code>ssh</code> at last.</p>
+<p>check the issue at <a href="https://gitlab.com/nvidia/container-images/vulkan/issues/2" target="_blank" rel="external">gitlab/nvidia-images</a></p>
+<h4 id="forth-try"><a href="#forth-try" class="headerlink" title="forth try"></a>forth try</h4><pre><code>docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears 
+</code></pre><p>BINGO !!!!! it does serve  <code>openGL/glxgears</code> in service mode. However, there are a few issues:</p>
+<ul>
+<li><p>constraint to manager node</p>
+</li>
+<li><p>require host network </p>
+</li>
+</ul>
+<p>the <code>X11-unix</code> and <code>Xauthority</code> are from <a href="https://www.csdn.net/article/2015-07-30/2825340" target="_blank" rel="external">X11 configuration</a>, which need more study. also  <code>network</code> parameter need to expand to ingress overlay</p>
+<p>mostly, vulkan image still can’t run, with the same error: <code>Cannot find a compatible Vulkan installable client driver (ICD)</code></p>
 <h4 id="generic-resource-support-discussion"><a href="#generic-resource-support-discussion" class="headerlink" title="generic-resource support discussion"></a>generic-resource support discussion</h4><p><a href="https://github.com/moby/moby/issues/33439" target="_blank" rel="external">moby issue 33439: add support for swarmkit generic resources</a></p>
 <ul>
 <li>how to advertise Generic Resources(republish generic resources)</li>
