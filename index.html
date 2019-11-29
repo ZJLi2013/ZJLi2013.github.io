@@ -291,6 +291,372 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/recent-thoughts-in-ADS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/29/recent-thoughts-in-ADS/" itemprop="url">recent thoughts in ADS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-29T08:56:20-05:00">
+                2019-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/29/recent-thoughts-in-ADS/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/29/recent-thoughts-in-ADS/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>the following are some pieces of ideas during  discussion and online resources.</p>
+<h2 id="system-engineering-in-practical"><a href="#system-engineering-in-practical" class="headerlink" title="system engineering in practical"></a>system engineering in practical</h2><p>the following idea is coming from the expert of system engineering. </p>
+<p>originally, system engineering or model based design sounds come from aerospace, defense department. the feature of these products: </p>
+<p>1) they are the most complex system</p>
+<p>2) they are sponsored by the goverment</p>
+<p>3) they are unique and no competitors</p>
+<p>which means they don’t need worry about money and time, so to gurantee the product finally works, they can design from top to down in a long time. </p>
+<p>the degrade order of requirements level comes as:</p>
+<p>areospace, defense product &gt;&gt;  vehicle level product &gt;&gt;  industry level product &gt;&gt; customer level product</p>
+<p>usually the techs used in the top level is gradually degrading into the next lower level in years. e.g. GPS, Internet, autonomous e.t.c. at the same time, the metholodies from top level go to lower level as well. </p>
+<p>I suppose that’s why system engineeering design comes to vehicle industry. however, does it really work in this competitional industry?  I got the first experince when running scenaio testes in simulation SIL. as the system engineering team define the test cases/scenarios, e.g. 400 test scenarios; on the other hand, the vehicle test team does the road test a few times every week.the result is, most time the 400 test scenarios never catch a system failure; but most road test failure scenario does can be repeated in the simulation env.</p>
+<p>system engineering based design doesn’t fit well. there are a lot reasons. at first, traditionally the design lifetime of a new vehicle model is about 3~5 years, and startup EV companies recently has even shorter design life cycle, about 1~2 years. so a top-down design at the early time, to cover every aspect of a new model, does almost not make sense. in the V development model, most fresh engineers thought the top-down design is done once for all, the reality is most early stage system engineering desgin need be reconstructured. </p>
+<p>secondly, system engineering design usually is abstract and high beyond and except engineering considerations, as the system engineers mostly doesn’t have engineering experience in most sections of the sysetem. which results in the system engineering based requirements are not testable, can’t measure during section implementation.</p>
+<p>there are a few suggestions to set a workable system engineering process: </p>
+<p>the system engineering team should sit by the develop teams and test teams, they should have a lot of communication, and balance the high-level requirements and also testable, measurable, implementable requirements. basically, system engineering design should have product/component developers as input.</p>
+<p>both the system engineers and developers should understand the whole V model, including system requirements, component requirements are iteratable.</p>
+<p>focus on the special requirement, and not always start from the top, each special requirement is like a point, and all these existing points(already finished requirements) will merged to the whole picture finally.</p>
+<p>take an example, during the road test, there will come a new requirement to have a HMI visulization,  then focus on this HMI requirement, cause this requirements may not exist in the top down design. but it is the actual need.</p>
+<h2 id="system-test-and-verification-CI-CD"><a href="#system-test-and-verification-CI-CD" class="headerlink" title="system test and verification CI/CD"></a>system test and verification CI/CD</h2><p>as most OEMs have said they will massive product L3 ADS around 2022, it is the time to jump into the ADS system test and verification. just knew that Nvidia has the full-stack hardware lines: the AI chips in car(e.g. Xavier), the AI training workstation(e.g. DGX), and the ADS system verifcation platform(e.g. Constallation box).</p>
+<h4 id="data-needs"><a href="#data-needs" class="headerlink" title="data needs"></a>data needs</h4><p>the ADS development depends a lot on data infrastructure:</p>
+<pre><code>data collect --&gt; data storage --&gt; data analysis
+</code></pre><p>there are many small pieces as well, e.g. data cleaning, labeling, training, mining, visulization e.t.c</p>
+<p>from different dev stage or teams, there are different focus. </p>
+<ul>
+<li><p>road test/sensor team, they need a lot of online vehicle status/sensor data check, data logging, visulization(dev HMI), as well as offline data analysis and storage </p>
+</li>
+<li><p>perception team, need a lot of raw image/radar data, used to train, mine, as well as to query and store.</p>
+</li>
+<li><p>planning/control team, need high quality data to test algorithms as well as a good structured in-car computer.</p>
+</li>
+<li><p>HMI team, are focusing on friendly data display </p>
+</li>
+<li><p>fleet operation team, need think about how to transfer data in cloud, vehicle, OEM data centers e.t.c.</p>
+</li>
+</ul>
+<p>sooner or later, data pipepline built up is a have to choice.</p>
+<h4 id="data-collection-vendors"><a href="#data-collection-vendors" class="headerlink" title="data collection vendors"></a>data collection vendors</h4><p>road test data collection equipment used in ADS development, is actually not a very big market, compared to in-var computers. but still there are a few vendors already. </p>
+<ul>
+<li>the top chip OEMs, e.g.  Nvidia, Intel has these products.</li>
+<li>chip poxy, e.g.  Inspire </li>
+<li>traditional vehicle test vendors, e.g. Dspace, Vector, Prescan</li>
+<li>startups, e.g. horizon </li>
+</ul>
+<h4 id="Nvidia-constellation"><a href="#Nvidia-constellation" class="headerlink" title="Nvidia constellation"></a>Nvidia constellation</h4><p>ADS system test usually includes simulation test and road test. and the road test is also called vehicle-in-loop, which is highly expensive and not easy to repeat; then is hardware-in-loop(HIL) test, basically including only the domain controller/ECU in test loop; finally is the  is software-in-loop(SIL) test, which is most controllable but also not that reliable.</p>
+<p>in practical, it’s not easy to build up a closed-loop verification(CI/CD) process from SIL to HIL to road test. and once CI/CD is setted up, the whole team can be turned into data/simulation/test driven.  </p>
+<p>the difficult and hidden part is the supporting toolchain development. Most vehicle test vendors have their special full-stack solution toolchains, but most of them are too eco-customized, it’s really difficult for ADS team, specially OEMs, to follow a speical vendor solution.</p>
+<p>another reason, test vehicles include components from different vendors, e.g. camera from sony, radar from bosch, Lidar from a Chinese startup, logging equipment from dSpace, and ECUs from Conti. which makes it difficult to fit this mixed system into a Vector verification platform. </p>
+<p>Nvidia Constallation is trying to meet the gap from SIL, HIL to road test. as it can suppport most customized ECUs.</p>
+<ul>
+<li><p>from road test to HIL, it use the exactly same chip. </p>
+</li>
+<li><p>for road test resimulation,  Nvidia offer a sim env, and the road test log can feed in directly</p>
+</li>
+</ul>
+<p>the ability to do resimulation of road test is a big step, the input is directly scanned images/cloud points, even lgsvl, Carla has no such direct support. but resimulation is really useful for CI/CD. Nvidia constallation as said, is the solution from captured data to KPIs.</p>
+<p>another big thing is about their high-level scenario description language(HLSDL), which I think is more abstract than OpenScenario. the HLSDL engine use hyper-parameters, SOTIF embedded scenario idea, and optimized scenario generator, which should be massive, random as well as KPI significantly, it should be a good scenario engine if it has these features. </p>
+<h2 id="Bosch-VMS"><a href="#Bosch-VMS" class="headerlink" title="Bosch VMS"></a>Bosch VMS</h2><p>vehicle management system(VMS) is cloud nature framework from Bosch, which is used to meet the similar requirements as Nvidia’s solution, to bring the closed-loop(CI/CD) from road test data collection, data anlaysis to fleet management. they have a few applications based on VMS:</p>
+<ul>
+<li>fleet batteries management(FBM)</li>
+</ul>
+<p>for single vehicle’s diaglostic, prediction; and for the EV market, FBM can be used as certification for second-hand EV dealers</p>
+<ul>
+<li>road coefficient system(RCS)</li>
+</ul>
+<p>Bosch has both in-vehicle data collection box and cloud server, RCS will be taken as additional sensor for ADS in prodcut</p>
+<ul>
+<li>VMS in itself</li>
+</ul>
+<p>Bosch would like to think VMS as the PLM for ADS, from design, test, to deployment. and it shoul be easy to integrate many dev tools, e.g. labeling, simulation e.t.c</p>
+<h2 id="what-about-safety"><a href="#what-about-safety" class="headerlink" title="what about safety"></a>what about safety</h2><p>as mentioned previously, 80% of Tesla FSD is to handle AI computing, Nvidia Xavier has about 50% GPU; Mobileye has very limited support for AI. all right, Tesla is most AI aggressive, then Nvidia, then Mobileye is most conserved. which make OEMs take Mobileye solution as more safety, but AI does better performance in perception, so how to balance these two ways? </p>
+<p>I realized the greats of Mobileye’s new concept: <code>responsibility sensitive safety</code>(RSS), RSS can be used as the ADS safety boundary, but inside either AI or CV make the house power. a lot of AI research on mixed traditional algorithms with AI algorithms, RSS sounds the good solution. would be nice to build a general <code>RSS Mixing AI</code>(RMA) framework.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/X11-GUI-in-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/29/X11-GUI-in-docker/" itemprop="url">X11 GUI in docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-29T08:43:13-05:00">
+                2019-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/29/X11-GUI-in-docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/29/X11-GUI-in-docker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Xorg"><a href="#Xorg" class="headerlink" title="Xorg"></a>Xorg</h2><p>Xorg is client-server architecture, including Xprotocol, Xclient, Xserver. Linux itself has no graphics interface, all GUI apps in Linux is based on X protcol.</p>
+<p>Xserver used to manage the Display device, e.g. monitor, Xserver is responsible for displaying, and send the device input(e.g. keyboard click) to Xclient.</p>
+<p>Xclient, or X app, which includes grahics libs, e.g. OpenGL, Vulkan e.t.c</p>
+<h4 id="xauthority"><a href="#xauthority" class="headerlink" title="xauthority"></a>xauthority</h4><p>Xauthority file can be found in each user home directory and is used to store credentials in cookies used by xauth for authentication of X sessions. Once an X session is started, the cookie is used to authenticate connections to that specific display. You can find more info on X authentication and X authority in the xauth man pages (type man xauth in a terminal). if you are not the owner of this file you can’t login since you can’t store your credentials there.</p>
+<p>when <code>Xorg</code> starts, <code>.Xauthority</code> file is send to Xorg, review this file by <code>xauth -f ~/.Xauthority</code> </p>
+<p>ubuntu@ubuntu:~$ xauth -f ~/.Xauthority<br>Using authority file /home/wubantu/.Xauthority<br>xauth&gt; list<br>ubuntu/unix:1  MIT-MAGIC-COOKIE-1  ee227cb9465ac073a072b9d263b4954e<br>ubuntu/unix:0  MIT-MAGIC-COOKIE-1  71cdd2303de2ef9cf7abc91714bbb417<br>ubuntu/unix:10  MIT-MAGIC-COOKIE-1  7541848bd4e0ce920277cb0bb2842828</p>
+<p><code>Xserver</code> is the host who will used to display/render graphics, and the other host is <code>Xclient</code>. if Xclient is from remote host, then need configure $DISPLAY in <code>Xserver</code>. To display X11 on remote Xserver,  need to copy the .Xauthority from Xserver to Xclient machine, and export $DISPLAY and $XAUTHORITY</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=&#123;Display number stored in the Xauthority file&#125;</div><div class="line">export XAUTHORITY=&#123;the file path of .Xauthority&#125;</div></pre></td></tr></table></figure>
+<h4 id="xhost"><a href="#xhost" class="headerlink" title="xhost"></a>xhost</h4><p><a href="https://www.linuxidc.com/Linux/2012-11/74874.htm" target="_blank" rel="external">Xhost</a> is used to grant access to Xserver (on your local host), by default, the local client can access the local Xserer, but any remote client need get granted first through Xhost. taking an example, when ssh from hostA to hostB, and run <code>glxgears</code> in this ssh shel. for grahics/GPU resources,  hostA is used to display, so hostA is the Xserver.</p>
+<h4 id="x11-forwarding"><a href="#x11-forwarding" class="headerlink" title="x11 forwarding"></a>x11 forwarding</h4><p>when Xserver and Xclient are in the same host machine, nothing big deal. but Xserver, Xclient can totally be on different machines, as well as Xprotocol communication between them. this is how SSH -X helps to run the app in Xclient, and display in Xserver, which needs <code>X11 Forwarding</code>.</p>
+<p><img src="http://www.ipaomi.com/wp-content/uploads/2017/11/x_server_client_remote.gif" alt="image"></p>
+<h4 id="test-benchmark"><a href="#test-benchmark" class="headerlink" title="test benchmark"></a>test benchmark</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh 192.16.0.13</div><div class="line">xeyes</div></pre></td></tr></table></figure>
+<h4 id="tmp-X11-unix"><a href="#tmp-X11-unix" class="headerlink" title="/tmp/.X11-unix"></a>/tmp/.X11-unix</h4><p>the X11(xorg) server communicates with client via some kind of reliable stream of bytes. </p>
+<p>A Unix-domain socket is like the more familiar TCP ones, except that instead of connecting to an address and port, you connect to a path. You use an actual file (a socket file) to connect.</p>
+<pre><code>srwxrwxrwx 1 root root 0 Nov 26 08:49 X0
+</code></pre><p>the <code>s</code> in front of the permissions, which means its a socket. If you have multiple X servers running, you’ll have more than one file there.</p>
+<p>is where X server put listening AF_DOMAIN sockets. </p>
+<h4 id="DISPLAY-device"><a href="#DISPLAY-device" class="headerlink" title="DISPLAY device"></a>DISPLAY device</h4><p>DISPLAY format: <strong>hostname: displaynumber.screennumber</strong></p>
+<p>hostname is the hostname or hostname IP of Xserver</p>
+<p>displaynumber starting from 0<br>screennumber starting from 0</p>
+<p>when using TCP(x11-unix protocol only works when Xclient and Xserver are in the same machine), displaynumber is the connection port number minus 6000; so if displaynumber is 0, namely the port is 6000. <code>DISPLAY</code> refers to a display device, and all graphics will be displayed on this device.<br>by deafult,  Xserver localhost doesn’t listen on TCP port. run: <code>sudo netstat -lnp | grep &quot;6010&quot;</code>, no return. <a href="https://askubuntu.com/questions/1143831/xserver-listen-on-tcp-ubuntu-19-04" target="_blank" rel="external">how to configure Xserver listen on TCP</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Add DisallowTCP=false under directive [security] in /etc/gdm3/custom.conf file. Now open file /etc/X11/xinit/xserverrc and change exec /usr/bin/X -nolisten tcp to exec /usr/bin/X11/X -listen tcp. Then restart GDM with command sudo systemctl restart gdm3. To verify the status of listen at port 6000, issue command ss -ta | grep -F 6000. Assume that $DISPLAY value is :0.</div></pre></td></tr></table></figure>
+<h4 id="virtual-DISPLAY-device"><a href="#virtual-DISPLAY-device" class="headerlink" title="virtual DISPLAY device"></a>virtual DISPLAY device</h4><p><a href="https://bbs.archlinux.org/viewtopic.php?id=180904" target="_blank" rel="external">creating a virtual display/monitor</a><br><a href="https://bbs.archlinux.org/viewtopic.php?id=180904" target="_blank" rel="external">add fake display when no Monitor is plugged in</a></p>
+<h2 id="Xserver-broadcast"><a href="#Xserver-broadcast" class="headerlink" title="Xserver broadcast"></a>Xserver broadcast</h2><p>the idea behind is to stand in one manager(Xserver) machine, and send command to a bunch of worker(Xclient) machines. the default way is all Xclient will talk to Xserver, which eat too much GPU and network bandwith resources on manager node. so it’s better that each worker node will do the display on its own. and if there is no monitor on these worker nodes, they can survive with virtual display.</p>
+<h4 id="xvfb"><a href="#xvfb" class="headerlink" title="xvfb"></a>xvfb</h4><p><a href="http://manpages.ubuntu.com/manpages/xenial/man1/xvfb-run.1.html" target="_blank" rel="external">xvfb</a> is the virtual Xserver solution, but doesn’t run well(need check more)</p>
+<h4 id="nvidia-xconfig"><a href="#nvidia-xconfig" class="headerlink" title="nvidia-xconfig"></a>nvidia-xconfig</h4><p><a href="https://devtalk.nvidia.com/default/topic/585014/how-to-configure-x-server-to-work-headless-as-well-with-any-monitor-connected-/" target="_blank" rel="external">configure X server to work headless as well with any monitor connected</a></p>
+<h4 id="unity-headless"><a href="#unity-headless" class="headerlink" title="unity headless"></a>unity headless</h4><h2 id="env-setup"><a href="#env-setup" class="headerlink" title="env setup"></a>env setup</h2><p>to test with docker, vulkan, ssh, usually need the following packages: </p>
+<h4 id="vulkan-dev-env"><a href="#vulkan-dev-env" class="headerlink" title="vulkan dev env"></a>vulkan dev env</h4><pre><code>sudo add-apt-repository ppa:graphics-drivers/ppa
+sudo apt upgrade
+apt-get install libvulkan1 vulkan vulkan-utils 
+sudo apt install vulkan-sdk 
+</code></pre><h4 id="nvidia-env"><a href="#nvidia-env" class="headerlink" title="nvidia env"></a>nvidia env</h4><pre><code>install nvidia-driver, nvidia-container-runtime
+install mesa-utils  #glxgears
+</code></pre><h4 id="docker-env"><a href="#docker-env" class="headerlink" title="docker env"></a>docker env</h4><pre><code>install docker 
+</code></pre><h2 id="run-glxgear-vkcube-lgsvl-in-docker-through-ssh-tunnel"><a href="#run-glxgear-vkcube-lgsvl-in-docker-through-ssh-tunnel" class="headerlink" title="run glxgear/vkcube/lgsvl in docker through ssh tunnel"></a>run glxgear/vkcube/lgsvl in docker through ssh tunnel</h2><p>there is a very nice blog: <a href="https://dzone.com/articles/docker-x11-client-via-ssh" target="_blank" rel="external">Docker x11 client via SSH</a>, disccussed the arguments passing to the following samples</p>
+<h4 id="run-glxgear"><a href="#run-glxgear" class="headerlink" title="run glxgear"></a>run glxgear</h4><p>glxgear is OpenGL benchmark test. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh -X -v abc@192.168.0.13</div><div class="line">sudo docker run --runtime=nvidia -ti --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v &quot;$HOME/.Xauthority:/root/.Xauthority&quot; --net=host 192.168.0.10:5000/glxgears</div></pre></td></tr></table></figure>
+<p>if seting $DISPLAY=localhost:10.0 , then the gears will display at master node(ubuntu)</p>
+<p>if setting $DISPLAY=:0,  then the gears will display at worker node(worker)</p>
+<p>and w/o <code>/tmp/.X11-unix</code> it works as well. </p>
+<h4 id="run-vkcube"><a href="#run-vkcube" class="headerlink" title="run vkcube"></a>run vkcube</h4><p>vkcube is Vulkan benchmark test.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh -X -v abc@192.168.0.13</div><div class="line">export DISPLAY=:0</div><div class="line">sudo docker run --runtime=nvidia -ti --rm -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v &quot;$HOME/.Xauthority:/root/.Xauthority&quot; --net=host  192.168.0.10:5000/vkcube</div></pre></td></tr></table></figure>
+<p>in this way, vkcube is displayed in worker node(namely, using worker GPU resource), manager node has no burden at all. </p>
+<p>if <code>$DISPLAY=localhost:10.0</code>, to run vkcube, give errors:</p>
+<pre><code>No protocol specified
+Cannot find a compatible Vulkan installable client driver (ICD).
+Exiting ...
+</code></pre><p>looks vulkan has limitation.</p>
+<h4 id="run-lgsvl"><a href="#run-lgsvl" class="headerlink" title="run lgsvl"></a>run lgsvl</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0</div><div class="line">sudo docker run --runtime=nvidia -ti --rm -p 8080:8080 -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v &quot;$HOME/.Xauthority:/root/.Xauthority&quot; --net=host  192.168.0.10:5000/lgsvl  /bin/bash </div><div class="line">./simulator</div></pre></td></tr></table></figure>
+<p>works well! the good news as if take the manager node as the end user monitor, and all worker nodes in cloud, without display, then this parameters will be used in <code>docker service create</code> to host in the swarm. so the next step is to vitual display for each worker node.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.x.org/wiki/XServer/" target="_blank" rel="external">wiki: Xorg/Xserver</a><br><a href="https://www.ibm.com/developerworks/cn/linux/l-cn-xwin/index.html" target="_blank" rel="external">IBM study: Xwindows</a><br><a href="https://www.cnblogs.com/ipaomi/p/7830778.html" target="_blank" rel="external">cnblogs: run GUI in remote server</a><br><a href="https://wiki.ubuntu.com/X/Config" target="_blank" rel="external">xorg.conf in ubuntu</a><br><a href="https://docs.citrix.com/en-us/linux-virtual-delivery-agent/current-release/configuration/configure-xauthority.html" target="_blank" rel="external">configure Xauthority</a><br><a href="https://stackoverflow.com/questions/44429394/x11-forwarding-of-a-gui-app-running-in-docker" target="_blank" rel="external">X11 forwarding of a GUI app running in docker</a><br><a href="https://www.cnblogs.com/kevin-boy/p/3223404.html" target="_blank" rel="external">cnblogs: Linux DISPLAY skills</a><br><a href="https://github.com/NVIDIA/nvidia-docker/issues/631" target="_blank" rel="external">nvidia-runtime-container feature: Vulkan support</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/what-about-Tesla/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1786,342 +2152,11 @@ cp rsa_pub.key authorized_key
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/lg-sim-source-code-review-2019-09/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/22/lg-sim-source-code-review-2019-09/" itemprop="url">lg-sim source code review (2019.09)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T09:02:53-04:00">
-                2019-10-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/22/lg-sim-source-code-review-2019-09/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/10/22/lg-sim-source-code-review-2019-09/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>the recent version of lg-sim <a href="https://github.com/lgsvl/simulator" target="_blank" rel="external">2019.09</a> has additionally support for webUI, cloud, which is a big enhencement. the following code review is focusing on new components to support WebUI, cluster management.</p>
-<h2 id="database"><a href="#database" class="headerlink" title="database"></a>database</h2><p>database used <code>sqlite</code> project, which is an embedded in-memory db; the ORM used <code>PetaPoco</code> project; there are a few db related serices, e.g.  vehicleService, simulationService, which will be used in RESTful web request.</p>
-<ul>
-<li><code>DatabaseManager</code>:</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">static IDatabaseBuildConfiguration  DbConfig ;</div><div class="line"></div><div class="line">Init()&#123;</div><div class="line"></div><div class="line">	DbConfig = GetConfig(connectionString)</div><div class="line">	using  db =  new SqliteConnection(connectionString)&#123;</div><div class="line">		db.Open()</div><div class="line">&#125;</div><div class="line"></div><div class="line">CreateDefaultDbAssets()&#123;</div><div class="line"></div><div class="line">	using db = Open() </div><div class="line">	if (info.DownloadEnvs != null)&#123;</div><div class="line">		map =  new MapModel()&#123;url = url  LocalPath=localPath;&#125;</div><div class="line">		id =  db.Insert(map)</div><div class="line">	&#125;</div><div class="line">		</div><div class="line">	if (info.DownloadVehicles != null)&#123;&#125;</div><div class="line"></div><div class="line">	if(defaultMap.HasValue)</div><div class="line">	&#123;</div><div class="line">		sim1 = new SimulationModel()&#123; Cluster=0,  Map=defaultMap.Value,   ApiOnly=false&#125;;</div><div class="line">		AddSimulation(db, sim1, noBridgeVehicle);</div><div class="line">		AddSimulation(db, sim, apolloVehicle);</div><div class="line">		db.Insert(simx)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">AddSimulation(IDatabase db, sim,vehicle)&#123;</div><div class="line">	conn = new ConnectionModel()&#123;</div><div class="line">		simulation = id,</div><div class="line">		vehicle = vehicle.Value,</div><div class="line">	&#125;</div><div class="line">	db.Insert(conn)</div><div class="line">&#125;</div><div class="line"></div><div class="line">AddVehicle(db, sim,vehicle)&#123;</div><div class="line">	conn = new VehicleModel()&#123;</div><div class="line">		Url = url ,</div><div class="line">	&#125;</div><div class="line">	db.Insert(vehicle)</div><div class="line">	</div><div class="line">	return vehicle.Id;</div><div class="line">&#125;</div><div class="line"></div><div class="line">PendingVehicleDownloads()&#123;</div><div class="line">	using db=Open()&#123;</div><div class="line">		var sql =  Sql.Builder.From(&quot;vehicles&quot;).Where(&quot;status=00&quot;, &quot;Downloading&quot;);</div><div class="line">		return db.Query&lt;VehicleModel&gt;(sql);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="database-ORMs"><a href="#database-ORMs" class="headerlink" title="database ORMs"></a>database ORMs</h3><p>using <code>PetaPoco</code> to define <code>ORM</code> models, such as<br><code>users</code>, <code>sessions</code>, <code>maps</code>, <code>vehicles</code>, <code>clusters</code>, <code>simulations</code> </p>
-<h4 id="PetaPoco"><a href="#PetaPoco" class="headerlink" title="PetaPoco"></a>PetaPoco</h4><p>a few operators in PetaPoco, such as <code>Page</code>, used to query a page; <code>Single</code>, used to query a single item; <code>Insert</code>; <code>Delete</code>; <code>Update</code></p>
-<h3 id="database-provider"><a href="#database-provider" class="headerlink" title="database provider"></a>database provider</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">SQLiteDatabaseProvider =&gt; </div><div class="line">GetFactory(&quot;Mono.Data.Sqlite.SqliteFactory, Mono.Data.Sqlit&quot;)</div></pre></td></tr></table></figure>
-<p>called inside <code>DatabaseManager::Init()</code>.</p>
-<h3 id="database-services"><a href="#database-services" class="headerlink" title="database services"></a>database services</h3><ul>
-<li><p>VehicleService : IVehicleService </p>
-</li>
-<li><p>MapService </p>
-</li>
-<li><p>NotificationService =&gt;  NotificationManager.SendNotification()</p>
-</li>
-<li><p>DownloadService =&gt;  DownloadManager.AddDownloadToQueue()</p>
-</li>
-<li><p>ClusterService </p>
-</li>
-<li><p>SessionService </p>
-</li>
-<li><p>SimulationService</p>
-</li>
-</ul>
-<h2 id="Web-model"><a href="#Web-model" class="headerlink" title="Web model"></a>Web model</h2><p>web model is where WebUI server located, which is served by <code>Nancy</code> project, in which a new design metholody is applied: Inversin of Control Contaner(IoC), namely <code>控制反转</code> in chinese. IoC is used to inject implementation of class, and manage lifecycle,  dependencies.    </p>
-<p>web model is the server where talk to webUI through routes, which is defined in the React project.</p>
-<h3 id="Nancy"><a href="#Nancy" class="headerlink" title="Nancy"></a>Nancy</h3><p>used to build HTTP based web service,</p>
-<ul>
-<li>FileStream</li>
-<li>StreamResponse  </li>
-<li><a href="https://github.com/grumpydev/TinyIoC" target="_blank" rel="external">TinyIoC</a>   </li>
-<li>UnityBootstrapper : <a href="https://github.com/NancyFx/Nancy/wiki/Bootstrapper" target="_blank" rel="external">DefaultNancyBootstrapper</a>, used to automatic discovery of modules, custm model binders, dependencies.</li>
-</ul>
-<ul>
-<li>/Assets/Scripts/Web/Nancy/NancyUnityUtils</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">ConfigureApplicatinContainer(TinyIoCContainer container)</div><div class="line">&#123;</div><div class="line">  container.Register&lt;UserMapper&gt;();</div><div class="line">  container.Register&lt;IMapService&gt;(); </div><div class="line">  container.Register&lt;IClusterService&gt;();</div><div class="line">  container.Register&lt;IVehicleService&gt;();</div><div class="line">  container.Register&lt;ISimulationService&gt;();</div><div class="line">&#125; </div><div class="line">``` </div><div class="line"></div><div class="line">### route modules </div><div class="line"></div><div class="line">```c#</div><div class="line"></div><div class="line">SimulationModule : NancyModule()</div><div class="line">&#123;</div><div class="line">  class SimulationRequest&#123;&#125;</div><div class="line">  class SimulationResponse&#123;&#125;</div><div class="line">  </div><div class="line">  Get(&quot;/&quot;,  x=&#123;&#125;)</div><div class="line">  Post(&quot;/&quot;,  x=&#123;&#125;)</div><div class="line">  Put(&quot;/&#123;id:long&#125;&quot;, x=&#123;&#125;)</div><div class="line">  Post(&quot;/&#123;id:long&#125;/start&quot;, x=&#123;&#125;)</div><div class="line">  Post(&quot;/&#123;id:long&#125;/stop&quot;, x=&#123;&#125;)  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>inside some of the route modules will do query or update the sqlite database for special objects. till here is the complete web back-end server, with a http server and an in-memory database.</p>
-<p>the webUI frontend is based on React, about React check <a href="https://zjli2013.github.io/2019/08/30/reactjs-introduction/" target="_blank" rel="external">a previous blog</a>. in the React WebUI project will have http requests corresponding to each of routes defined here. </p>
-<p>React front end is very independent framework, which should be handled by an independent team in standard pipeline.</p>
-<h3 id="Config-amp-Loader"><a href="#Config-amp-Loader" class="headerlink" title="Config &amp; Loader"></a>Config &amp; Loader</h3><ul>
-<li>/Assets/Scripts/Web/Config.cs: </li>
-</ul>
-<p>used to define <code>WebHost</code>,  <code>WebPort</code>, <code>ApiHost</code>, <code>ClourUrl</code>, <code>Headless</code>, <code>Sensors</code>, <code>Bridges</code> e.t.c   </p>
-<ul>
-<li>Loader.cs :</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Loader Instance ;    //Loader object is never destroyed, even between scene reloads</div><div class="line"></div><div class="line">Loader.Start()&#123;</div><div class="line"></div><div class="line">	DatabaseManager.Init();</div><div class="line">	var config = new HostConfguration&#123;&#125; ;   // ?</div><div class="line">	Server = new NancyHost(Config.WebHost);</div><div class="line">	Server.Start();</div><div class="line">	DownloadManager.Init();</div><div class="line">&#125;</div><div class="line"></div><div class="line">Loader.StartAsync(simulation)&#123;</div><div class="line"></div><div class="line">	Instance.Actions.Enqueue() =&gt;</div><div class="line">	var db = DatabaseManager.Open()</div><div class="line">	AssetBundle mapBundle = null; </div><div class="line">		</div><div class="line">	simulation.Status &quot;Starting&quot; </div><div class="line">	NotificationManager.SendNotification();</div><div class="line">	Instance.LoaderUI.SetLoaderUIState();</div><div class="line"></div><div class="line">	Instance.SimConfig = new SimlationConfig()&#123;</div><div class="line">		Clusters, ApiOnly, Headless, Interative, TimeOfDay, UseTraffic...</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Loader.SetupScene(simulation)&#123;</div><div class="line"></div><div class="line">	var db = DatabaseManager.Open()</div><div class="line">	foreach var agentConfig in Instance.SimConfig.Agents:</div><div class="line">		var bundlePath = agentConfig.AssetBundle </div><div class="line">		var vehicleBundle = AssetBundle.LoadfromFile(bundlePath)</div><div class="line">		var vehicleAssets = vehicleBundle.GetAllAssetNames();</div><div class="line">		agentConfig.Prefab = vehicleBundle.LoadAsset&lt;GO&gt;(vehicleAssets[0])</div><div class="line">		</div><div class="line">	var sim = CreateSimulationManager();	</div><div class="line">	Instance.CurrentSimulation = simulation </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>DownloadManager</li>
-</ul>
-<pre><code class="c#">
-class Download();
-Init(){ client = new WebClient();  ManageDownloads(); }
-</code></pre>
-<h2 id="network-module"><a href="#network-module" class="headerlink" title="network module"></a>network module</h2><p><code>network module</code> is used for communication among master and clients(workers) in the cluster network for cloud support. the P2P network is built on <code>LiteNetLib</code> which is a reliable UDP lib. </p>
-<h3 id="LiteNetLib"><a href="#LiteNetLib" class="headerlink" title="LiteNetLib"></a>LiteNetLib</h3><p><a href="https://github.com/RevenantX/LiteNetLib" target="_blank" rel="external">LiteNetLib</a>is Udp package, used to P2P communication among master node and slave nodes here, where are defined as <code>MasterManager</code>, <code>ClientManager</code>.</p>
-<p>usage of LiteNetLib can be found in the <a href="https://github.com/RevenantX/LiteNetLib/wiki/NetPacketProcessor-(NetSerializer" target="_blank" rel="external">wiki</a>-usage)</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/IoC-in-C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/22/IoC-in-C/" itemprop="url">IoC in C#</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T08:58:37-04:00">
-                2019-10-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/22/IoC-in-C/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/10/22/IoC-in-C/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Inversion of Control(IoC) is a design mechanism to decouple components dependencies, a light-weight implementation is: <a href="https://github.com/grumpydev/TinyIoC" target="_blank" rel="external">TinyIoC</a>, which is also part of <a href="http://nancyfx.org" target="_blank" rel="external">Nancy</a>.  </p>
-<p>IoC idea uses commonly in webUI(and backend server) apps,  which is an user friendly solution to cloud deployment management as well as apps in mobile, which should be the right direction in future ADS software tool development.</p>
-<p>the idea of IoC can be explained by the following example from <a href="https://www.tutorialsteacher.com/ioc/register-and-resolve-in-unity-container" target="_blank" rel="external">register and resolve in unity container</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public interface ICar</div><div class="line">&#123;</div><div class="line">    int Run();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class BMW : ICar</div><div class="line">&#123;</div><div class="line">    private int _miles = 0;</div><div class="line"></div><div class="line">    public int Run()</div><div class="line">    &#123;</div><div class="line">        return ++_miles;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Ford : ICar</div><div class="line">&#123;</div><div class="line">    private int _miles = 0;</div><div class="line"></div><div class="line">    public int Run()</div><div class="line">    &#123;</div><div class="line">        return ++_miles;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Driver</div><div class="line">&#123;</div><div class="line">    private ICar _car = null;</div><div class="line"></div><div class="line">    public Driver(ICar car)</div><div class="line">    &#123;</div><div class="line">        _car = car;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void RunCar()</div><div class="line">    &#123;</div><div class="line">        Console.WriteLine(&quot;Running &#123;0&#125; - &#123;1&#125; mile &quot;, _car.GetType().Name, _car.Run());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>the <code>Driver</code> class depends on <code>ICar</code> interface. so when instantiate the <code>Driver</code> class object, need to pass an instance of <code>ICar</code>, e.g.  BMW, Ford as following:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Driver driver = new Driver(new Ford());</div><div class="line">driver.RunCar()</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">**to use IoC**, taking UnityContainer framework as example, a few other choices: TinyIoC e.t.c.</div><div class="line"></div><div class="line">```c#</div><div class="line"></div><div class="line"> var container = new UnityContainer();</div></pre></td></tr></table></figure>
-<ul>
-<li>Register </li>
-</ul>
-<p>create an object of the <code>BMW</code> class and inject it through a constructor whenever you need to inject an ojbect of <code>ICar</code>.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">container.Register&lt;ICar, BMW&gt;();</div></pre></td></tr></table></figure>
-<ul>
-<li>Resolve</li>
-</ul>
-<p><code>Resolve</code> will create an object of the <code>Driver</code> class by automatically creating and njecting a <code>BMW</code> object in it, since previously register <code>BMW</code> type with <code>ICar</code>.</p>
-<pre><code class="c#">
-Driver  drv =  container.Resolve&lt;Driver&gt;();
-drv.RunCar()
-</code></pre>
-<h3 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h3><p>there are two obvious advantages with IoC. </p>
-<ul>
-<li><p>the instantiate of dependent class can be done in run time, rather during compile. e.g.  <code>ICar</code> class doesn’t instantiate in <code>Driver</code> definition</p>
-</li>
-<li><p>automatic <code>new class</code> management in back. </p>
-</li>
-</ul>
-<p>the power of IoC will be scaled, once the main app is depends on many little services.    </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2167,7 +2202,7 @@ drv.RunCar()
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">129</span>
+                <span class="site-state-item-count">131</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2180,7 +2215,7 @@ drv.RunCar()
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

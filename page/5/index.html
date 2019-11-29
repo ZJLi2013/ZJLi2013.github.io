@@ -291,6 +291,353 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker-swarm-compose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/12/play-with-Docker-swarm-compose/" itemprop="url">play with Docker swarm/compose</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-12T11:18:26-04:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/12/play-with-Docker-swarm-compose/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/12/play-with-Docker-swarm-compose/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Docker-swarm"><a href="#Docker-swarm" class="headerlink" title="Docker swarm"></a>Docker swarm</h2><p>docker swarm is Docker nature cluster manager, with built-in DNS service found mechanism, and load-balancing mechanism. compare to k8s, is a light-weight and easy goers.</p>
+<h3 id="create-a-swarm-cluster"><a href="#create-a-swarm-cluster" class="headerlink" title="create a swarm cluster"></a>create a swarm cluster</h3><figure class="highlight bat"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">export MASTER_IP=<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span></div><div class="line"></div><div class="line">docker swarm init --advertise-addr $&#123;MASTER_IP&#125; --name master</div><div class="line"></div><div class="line">docker swarm join --token tokens $&#123;MASTER_IP&#125;  --name  worker1 </div><div class="line"></div><div class="line">docker node ls </div><div class="line"></div><div class="line"># demote/ promote nodeID as manager</div><div class="line">docker node demote/promote nodeID</div><div class="line"></div><div class="line"># rm node </div><div class="line">docker node rm worker1</div><div class="line"># stop swarm <span class="built_in">mode</span> </div><div class="line">docker swarm leave</div></pre></td></tr></table></figure>
+<h3 id="create-service"><a href="#create-service" class="headerlink" title="create service"></a>create service</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker service create  service-name</div><div class="line"><span class="meta"></span></div><div class="line"> # scale service</div><div class="line">docker service scael SERVICE=replicas </div><div class="line"></div><div class="line">docker service rm </div><div class="line"></div><div class="line">docker service inspect</div></pre></td></tr></table></figure>
+<h3 id="create-overlay-network"><a href="#create-overlay-network" class="headerlink" title="create overlay network"></a>create overlay network</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker network create --subnet=192.168.0.0/24  -d overlay ppss-net</div><div class="line"></div><div class="line">docker network rm</div><div class="line"></div><div class="line">docker network connect network-name  docker-node</div></pre></td></tr></table></figure>
+<p>in swarm mode, there are three network created by default:</p>
+<ul>
+<li>bridge0, the default network</li>
+<li>docker_gwbridge,  local bridge used to connect containers hosted in the same host</li>
+<li>ingress,  is a overlay network used in the swarm cluster</li>
+</ul>
+<p>however, in swarm mode, the default network for service is <code>bridge</code>, to across physical host, services need go through <code>overlay</code> network. </p>
+<h3 id="load-balancing"><a href="#load-balancing" class="headerlink" title="load balancing"></a>load balancing</h3><h4 id="Ingress-load-balancing"><a href="#Ingress-load-balancing" class="headerlink" title="Ingress load balancing"></a>Ingress load balancing</h4><p>expose Docker service to external network env</p>
+<h4 id="Internal-load-balancing"><a href="#Internal-load-balancing" class="headerlink" title="Internal load balancing"></a>Internal load balancing</h4><p>swarm mode has build-in DNS</p>
+<h2 id="Docker-compose"><a href="#Docker-compose" class="headerlink" title="Docker compose"></a>Docker compose</h2><p>docker compose is a manage/build tool to create application, which combine a bunch of micro-services, each of which can be ran as a Docker container.</p>
+<p>the <code>docker-compose.yml</code> configure file has to include  each micro-service Dockerfile, and the application running scripts.</p>
+<h3 id="service-startup-order"><a href="#service-startup-order" class="headerlink" title="service startup order"></a>service startup order</h3><p>the services defined in <code>docker-compose.yml</code> is not necessary depended to each other, so each serice can <code>up</code> individually, but of course they can has based on each other. </p>
+<h3 id="docker-compose-yml"><a href="#docker-compose-yml" class="headerlink" title="docker-compose.yml"></a>docker-compose.yml</h3><p><a href="https://yeasy.gitbooks.io/docker_practice/compose/compose_file.html#volumes" target="_blank" rel="external">best practice</a></p>
+<ul>
+<li><p>build</p>
+<p>path to Dockerfile, can be absolute path or relative (to .yml) path. Compose will buid the image based on </p>
+</li>
+<li><p>context<br>sub-choice under build, point to the Dockerfile</p>
+</li>
+<li><p>image </p>
+<p>the image will be used, if not locally, will pull from hub (vs Dockerfile) </p>
+</li>
+<li><p>containe_name</p>
+</li>
+<li><p>volumes<br>  path to attached volumes, in the format <code>HOST:CONTAINER[:access mode]</code></p>
+</li>
+<li>network_mode</li>
+</ul>
+<p>same as  <code>docker run --network</code></p>
+<ul>
+<li><p>init</p>
+</li>
+<li><p>privileged</p>
+</li>
+</ul>
+<ul>
+<li>command</li>
+</ul>
+<p>override launch command when service contianer start</p>
+<ul>
+<li>environment</li>
+</ul>
+<p>set env variables, in the format <code>ENV:value</code><br>if only <code>ENV</code>, the value will be derived from host machine</p>
+<ul>
+<li>runtime:  nvidia </li>
+</ul>
+<p>to suuport <code>nvidia-docker</code> </p>
+<p>e.g.  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">nvsmi:</div><div class="line">	image: ubuntu:16.04</div><div class="line">	runtime: nvidia</div><div class="line">	environment:</div><div class="line">	     - NVIDIA VISIBLE DEVICES=all</div><div class="line">	command:  nvidia-smi</div></pre></td></tr></table></figure>
+<ul>
+<li>stdin_open</li>
+</ul>
+<p>std io aviable</p>
+<ul>
+<li>tty </li>
+</ul>
+<p>virtual terminal </p>
+<h4 id="sample-yml-from-project"><a href="#sample-yml-from-project" class="headerlink" title="sample yml from project"></a>sample yml from project</h4><p>a sample yml for web app:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">services:</div><div class="line"></div><div class="line">	web:</div><div class="line">	   build: . </div><div class="line">	   links: </div><div class="line">	   		- "db: database"</div><div class="line">   db:</div><div class="line">       image: postgres</div></pre></td></tr></table></figure>
+<p>a sample yml for general <a href="https://github.com/lgsvl/second-ros/blob/master/docker-compose.yml" target="_blank" rel="external">app CI</a>:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">services:</div><div class="line"></div><div class="line">	build:</div><div class="line">	</div><div class="line">		build: </div><div class="line">			context: ./Dockerfile</div><div class="line">	    image:  docker-image</div><div class="line">	    container_name: build_app</div><div class="line">	    volumes:</div><div class="line">	    	- ./build_scripts: /root/build</div><div class="line">	    commands:  /root/build/build.sh</div><div class="line">	   </div><div class="line">	    run:</div><div class="line">	    	context:	./Dockerfile</div><div class="line">	    	image:   docker-iamge</div><div class="line">	    	container_name: run_app</div><div class="line">	    	volumes:</div><div class="line">	    	   - ./run_scripts:/root/run</div><div class="line">	    	environments:</div><div class="line">	    	   -DISPLAY</div><div class="line">	    	   -ROS_MASTER</div><div class="line">	    	network_mode: host</div><div class="line">	    	runtime: nvidia</div><div class="line">	    	command: /root/run/run.sh </div><div class="line">	    </div><div class="line">	    test:</div><div class="line">	       #TODO</div></pre></td></tr></table></figure>
+<h2 id="docker-machine"><a href="#docker-machine" class="headerlink" title="docker-machine"></a>docker-machine</h2><p>docker-machine is a tool to build virtial host when hosted in one physical host or among multi-physical hosts. </p>
+<h2 id="ros-docker"><a href="#ros-docker" class="headerlink" title="ros-docker"></a>ros-docker</h2><p>in self-driving software stack, ros is often used. and there is a need to deploy ros in docker. next time.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/12/play-with-Docker/" itemprop="url">play with Docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-12T11:17:46-04:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/12/play-with-Docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/12/play-with-Docker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Docker-networking"><a href="#Docker-networking" class="headerlink" title="Docker networking"></a>Docker networking</h2><ul>
+<li><p>bridge: the default network driver, only in standalone containers; best when have multiple containers to communicate on the same host machine.</p>
+</li>
+<li><p>host: for standalone containers, the Docker host use the host machine’s networking directly; best when need no isolated from the host machine.</p>
+</li>
+<li><p>overlay: connect multi Docker containers, enable swarm services to communicate with each other, no OS-level routing; best when need containers running on different host machines to communicate.</p>
+</li>
+<li><p>none: disable all networking</p>
+</li>
+</ul>
+<p>the network base is open source project <a href="https://github.com/docker/libnetwork" target="_blank" rel="external">libnetwork</a></p>
+<p>containers can communicate through hostname, or through DNS(the now Docker engine has default built-in DNS server), but in early days, can use external dns, e.g. <a href="http://docs.blowb.org/index.html" target="_blank" rel="external">Blowb</a></p>
+<p>to host docker images, either pull to Docker Hub, or to create a private cloud by <a href="https://doc.owncloud.org/server/10.2/" target="_blank" rel="external">ownCloud</a>, or <code>docker save/export</code>  tools:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker save -o /path/to/save/file  image | gzip</div><div class="line">scp *.tar.gz  remote_user@remote_hostname</div><div class="line">docker load *.tar.gz</div></pre></td></tr></table></figure>
+<h2 id="running-GUI-apps-in-Docker"><a href="#running-GUI-apps-in-Docker" class="headerlink" title="running GUI apps in Docker"></a>running GUI apps in Docker</h2><p>there is a benchmark GUI/openGL test in Linux <code>glxgears</code>. to test the host machine support ssh or container based apps, we can first do the following test: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install mesa-utils</div><div class="line">glxinfo </div><div class="line">glxgears</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">Docker by default is bash/text based, but `nvidia-docker` is a gui-supported Docker engine, which requires Nvidia OpenGL drivers and Nvidia Gpus of course. since the gpu hardware version and the docker engine version, please check the compatability at first. </div><div class="line"><span class="meta"></span></div><div class="line"></div><div class="line">## remote hosted apps</div><div class="line">	</div><div class="line">* configure master and worker nodes communication by setting IP address in the same domain, and setting the master node IP address as the gateway IP address for all worker nodes, basically the master node will work as the swticher.</div><div class="line"></div><div class="line">* install xserver-common,  xserver-utils, as Ubuntu by deafult doesn't have X-server. </div><div class="line"></div><div class="line">```shell</div><div class="line"></div><div class="line">master:~/    ssh -X user@worker</div><div class="line">worker:~/    DISPLAY=:0</div><div class="line">worker:~/	   ./gui_app</div></pre></td></tr></table></figure>
+<ul>
+<li>for docker containers, there is also <code>authority</code> property need take care. </li>
+</ul>
+<h2 id="Dockfile"><a href="#Dockfile" class="headerlink" title="Dockfile"></a>Dockfile</h2><p>when the Docker container starts, usually we want to auto start a shell process, so by <code>CMD</code> or <code>ENTRYPOINT</code> defined in the Dockfile. </p>
+<p>for the base images, e.g.  Ubuntu, busybox, are used as the base for upper applications, usually will use <code>CMD</code> at the end of Dockerfile; but if the Docker container is specially for a certain application, it’s usually using <code>ENTRYPOINT</code>.</p>
+<p>the last line of Ubuntu 16.04 Dockerfile:</p>
+<pre><code>CMD &apos;/bin/bash&apos;
+</code></pre><p>usually in one Dockerfile, there is only one <code>CMD</code> or <code>ENTRYPOINT</code>, and it’s better written in exec format:</p>
+<pre><code>CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
+
+ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
+</code></pre><p>since in shell format: </p>
+<pre><code>CMD exectuable, param1, param2 
+</code></pre><p>Docker will trigger <code>/bin/sh</code> first by default, if not define a shell. and this shell is always the first process in this Docker container, which sometimes is not what we expected.</p>
+<p>when using both <code>CMD</code> and <code>ENTRYPOINT</code> in one Dockfile, the output will looks like append/pipe <code>CMD</code> command after <code>ENTRYPOINT</code> command.  </p>
+<p>a sample of Dockerfile: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">FROM &lt;image&gt;:[&lt;tag&gt;] [AS &lt;name&gt;]</div><div class="line">ADD [--chown=&lt;user&gt;:&lt;group&gt;] &lt;src&gt; ... &lt;dest&gt;</div><div class="line">ADD [" ", ... " "]</div><div class="line">COPY &lt;src&gt; ... &lt;dest&gt;</div><div class="line">RUN &lt;command&gt;</div><div class="line">VOLUME /mount/name</div><div class="line">CMD ["executable", "param1", "param2"]</div><div class="line">CMD command par1 par2</div></pre></td></tr></table></figure>
+<h3 id="from-docker-image-to-dockerfile"><a href="#from-docker-image-to-dockerfile" class="headerlink" title="from docker image to dockerfile"></a>from docker image to dockerfile</h3><p>we can easily <code>pull</code> images from hub, but when we try to build some images directly, there is also way to get Dockfile from existing docker image: <a href="https://stackoverflow.com/questions/19104847/how-to-generate-a-dockerfile-from-an-image" target="_blank" rel="external">dfimage</a> </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo docker pull chenzj/dfimage</div></pre></td></tr></table></figure>
+<h3 id="mount-host-volume-to-container"><a href="#mount-host-volume-to-container" class="headerlink" title="mount host volume to container"></a>mount host volume to container</h3><p>either we can define in Dockerfile by <code>VOLUME</code>, which is create a volume name in the base image, or during runtime, <code>docker run -v /host/volume/path:/container/volume/path</code>, to bind a host volume to current container.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/09/where-are-you-in-next-5-years-8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1891,318 +2238,11 @@ flash
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/04/PID-control/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/04/PID-control/" itemprop="url">PID control</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-04T04:27:21-04:00">
-                2019-05-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/04/PID-control/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/04/PID-control/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="closed-loop-system"><a href="#closed-loop-system" class="headerlink" title="closed loop system"></a>closed loop system</h2><p><code>set point</code> is the desired or command value for the process variable. at any given moment, the difference between the process variable and the set point is used by the control system algorithm to determine the desired actuator output to drive the system.</p>
-<p><code>closed loop system</code>, the process of reading sensors to provide constant feedback and calculating the desired actuator output is repeated continuously and at a fixed loop rate.</p>
-<p><code>control system performance</code> is measured by applying a step fuction as the set point command variable, and then measuring the response of the process variable.</p>
-<p><code>rise time</code> is the amount of time that the system takes to go from 10% to 90% of the steady-state/final.</p>
-<p><code>percent overshoot</code> is the amout that the process variable overshoots the final value, expressed as a percentage of the final value.</p>
-<p><code>settling time</code> is the time required for the process variable to settle to within a certain percentage(5%) of the finla value</p>
-<p><code>steady state error</code> is the final difference between the process variable and set point</p>
-<p><code>disturbance rejection</code> is the measure of how well the control system is able to overcome the effects of disturbances. often there is a disturbance in the system that affects the process variables or the measurements of these variables, it’s important to design a control system that performs satisfactorily during the worst case conditions.</p>
-<p><code>nonlinear system</code> , in which the control parameters that produe a desired response at one operating point might not produce a satisfactory response at another operating point.</p>
-<p><code>deadtime</code> is the delay between when a process variable changes, and when that change can be observed.</p>
-<p><code>loop cycle</code> the interval of time between calls to a control system, system that change quickly or have complex behavior requires faster control loop rates.</p>
-<h2 id="PID-theory"><a href="#PID-theory" class="headerlink" title="PID theory"></a>PID theory</h2><h3 id="proportional-response"><a href="#proportional-response" class="headerlink" title="proportional response"></a>proportional response</h3><p><code>error</code> the difference between the set point and the process variable. the proportional gain(K_g) determins the ratio of the output response to the error signal.</p>
-<p>e.g. the error term has a magnitude of 10, and the K_g is 5, then the proportional response is 50.</p>
-<p>increasing K_g will increase the speed of the control system response, but if K_g is too large, the process variable will oscillate(why?)</p>
-<h3 id="integral-response"><a href="#integral-response" class="headerlink" title="integral response"></a>integral response</h3><p>the integral component sums the error term over time. the result is that even a small error term will cause the integral component to increase slowly. the integral response will continually increase unless the error is zero, so the effect is to driven the steady-state-zero to zero.</p>
-<p><code>integral windup</code> when integral action saturates, still without the controller driving the error signal toward zero</p>
-<h3 id="derivative-response"><a href="#derivative-response" class="headerlink" title="derivative response"></a>derivative response</h3><p>the response is portortional to the rate of change of the process variable. increasing the <code>derivative time</code> will cause the control sytem to react more strongly to changes in the error, and react more quickly.</p>
-<p>in practice, most control system use very small derivative time, since the derivative response is highly sensitive to noise. </p>
-<h2 id="turning"><a href="#turning" class="headerlink" title="turning"></a>turning</h2><p>which is the process of setting the optimal gains of P, I, D to get an ideal response. </p>
-<h3 id="trial-and-error"><a href="#trial-and-error" class="headerlink" title="trial and error"></a>trial and error</h3><p>set I, D as zero, and increas P gain.  Once P has been set to obtain a desired fast response, I starts to increase to stop the oscillatins to achieve a minimal steady state error. once P and I have been set, the D is increased untill the loop is acceptably quick to its set point.</p>
-<h3 id="filtering"><a href="#filtering" class="headerlink" title="filtering"></a>filtering</h3><p>assume a sinusoidla noise with frequency w, the direvative is:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;y(t)&space;=&space;f(t)&space;&plus;&space;a&space;sin(wt)&space;\\&space;dy/dt&space;=&space;df/dt&space;&plus;&space;aw&space;cos(wt)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;y(t)&space;=&space;f(t)&space;&plus;&space;a&space;sin(wt)&space;\\&space;dy/dt&space;=&space;df/dt&space;&plus;&space;aw&space;cos(wt)" title="y(t) = f(t) + a sin(wt) \\ dy/dt = df/dt + aw cos(wt)"></a></p>
-<p>so in practice it’s necessary to limit the high frequency gain of the derivative term, either by adding a low pass filtering of the control signal, or implement the derivative term in a cut-off way.</p>
-<h2 id="Udacity-Self-driving-Car-project-9"><a href="#Udacity-Self-driving-Car-project-9" class="headerlink" title="Udacity Self driving Car project 9"></a>Udacity Self driving Car project 9</h2><pre><code class="c">
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
-</span>{
-    uWS::Hub h ;
-    PID pid ; 
-    pid.Init(pinit, iinit, dinit);
-    h.onMessage(    <span class="comment">// cte, the error </span>
-    {
-        <span class="keyword">double</span> diff = <span class="built_in">fabs</span>(pid.p_error - cte) ; 
-        <span class="keyword">if</span>( diff &gt; <span class="number">0.1</span> &amp;&amp; diff &lt; <span class="number">0.2</span>)
-            thr = <span class="number">0.0</span>; 
-        <span class="keyword">else</span> <span class="keyword">if</span>( diff &gt; <span class="number">0.2</span> &amp;&amp; speed &gt; <span class="number">30</span>)
-            thr = <span class="number">-0.2</span>;
-
-        pid.UpdateError(cte, dt);
-        steer_value = -pid.TotalError(speed);
-    }
-}
-
-<span class="keyword">void</span> PID::UpdateError(<span class="keyword">double</span> cte, <span class="keyword">double</span> dt)
-{
-    d_error = (cte - p_error) /dt ;
-    p_error = cte ;
-    i_error = integral(cte * dt);
-}
-
-<span class="keyword">double</span> PID::TotalError(<span class="keyword">double</span> speed)
-{
-    <span class="keyword">return</span> (Kp - <span class="number">0.0032</span> * speed) * p_error + Ki * i_error + (Kd + <span class="number">0.002</span> * speed) * d_error ;
-}
-</code></pre>
-<p>in real self driving control system, usually divide as latitual and longitual control. and in different scenarios, there are plenty of PID controls. in the future will expose: highway autopilot, auto parking, urban L4 </p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="http://www.ni.com/en-us/innovations/white-papers/06/pid-theory-explained.html" target="_blank" rel="external">PID theory explained</a></p>
-<p><a href="https://www.cds.caltech.edu/~murray/courses/cds101/fa02/caltech/astrom-ch6.pdf" target="_blank" rel="external">PID control from Caltech</a></p>
-<p><a href="https://github.com/NikolasEnt/PID-controller/blob/master/src/PID.cpp" target="_blank" rel="external">udacity pid control</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/03/Apollo-2-0-Localization-源码/" itemprop="url">Apollo 2.0 Localization 源码</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-03T02:36:43-04:00">
-                2019-05-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/03/Apollo-2-0-Localization-源码/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/03/Apollo-2-0-Localization-源码/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>there are two localization methods: RTK and multi-sensor fusion(MSF).  RTK using GPS and IMU inputs, MSF using GPS, IMU and Lidar sensor and HD map as inputs. the output is the localization estimated object instance.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Status Localization::Start()</div><div class="line">&#123;</div><div class="line">	localization_ = localization_factory_.CreateObject(cofig_.type());</div><div class="line">	localization_-&gt;Start();</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status RTKLocalization::Start()&#123;</div><div class="line">	AdapterManager::Init(FLAGS_rtk_adapter_config_file);</div><div class="line">	timer_ = AdapterManager::CreateTimer(ros::Duration(duration), &amp;RTKLocalization::OnTimer, <span class="keyword">this</span>); </div><div class="line">	AdapterManager::GetGps();</div><div class="line">	AdapterManager::GetImu();	</div><div class="line">	tf2_broadcaster_ = <span class="keyword">new</span> tf2_ros::TransformBroadcaster() ;</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::OnTimer(<span class="keyword">const</span> ros::TimerEvent &amp;event)</div><div class="line">&#123;</div><div class="line">	AdapterManager::Observe();</div><div class="line">	PublishLocalization(); </div><div class="line">	RunWatchDog();	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PublishLocalization()&#123;</div><div class="line">	LocalizationEstimate localization ;</div><div class="line">	PrepareLocalizationMsg(&amp;localization);</div><div class="line">	AdapterManager::PublishLocalization(localization);</div><div class="line">	PublishPoseBroadcastTF(localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PrepareLocalizationMsg(LocalizationEstimate *localization)&#123;</div><div class="line">	<span class="keyword">const</span> <span class="keyword">auto</span> &amp;gps_msg = AdapterManager::GetGps()-&gt;GetLatestObserved();</div><div class="line">	Imu imu_msg = AdapterManager::GetImu()-&gt;GetLatestObserved();</div><div class="line">	ComposeLocalizationMsg(gps_msg, imu_msg, localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::ComposeLocalizationMsg(<span class="keyword">const</span> localization::Gps&amp; gps_msg, <span class="keyword">const</span> localization::Imu &amp;img_msg, LocalizationEstimate* localization)</div><div class="line">&#123;</div><div class="line">	<span class="comment">// add header </span></div><div class="line">	<span class="comment">// set measurement time </span></div><div class="line">	<span class="comment">// combine gps and imu </span></div><div class="line">	</div><div class="line">	<span class="keyword">auto</span> mutable_pose = localization-&gt;mutable_pose(); </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(gps_msg.has_localization())&#123;</div><div class="line">		<span class="keyword">const</span> <span class="keyword">auto</span> &amp;pose = gps_msg.localization();</div><div class="line">		<span class="keyword">if</span>(pose.has_position())&#123; <span class="comment">// update mutable_pose &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_orientation()) &#123; <span class="comment">//update mutable orientation &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_linear_velocity())&#123;&#125;;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(imu.has_linear_acceleration())&#123;	<span class="comment">//update mutable_pose acc &#125;;</span></div><div class="line">	<span class="keyword">if</span>(imu.has_angular_velocity())&#123;&#125;;</div><div class="line">	<span class="keyword">if</span>(imu.has_euler_angles())&#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h2><p><a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf" target="_blank" rel="external">vehicle localization based on multi-sensor fusion</a></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MSFLocalization</span> &#123;</span>	</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">InitParams</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnPointCloud</span><span class="params">(<span class="keyword">const</span> sensor_msgs::PointCloud2 &amp;message)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnRawImu</span><span class="params">(<span class="keyword">const</span> drivers::gnss::Imu &amp;imu_msg)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnGnssRtkObs</span><span class="params">(<span class="keyword">const</span> EpochObservation &amp;raw_obs_msg)</span></span>;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">PublishPoseBroadcastTF</span><span class="params">(<span class="keyword">const</span> LocalizationEstimate&amp; localization)</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status MSFLocalization::Start()</div><div class="line">&#123;</div><div class="line">	AdapterManager::Init(FLAGS_msf_adapter_config_file);</div><div class="line">	Status &amp;&amp;status = Init();</div><div class="line">	</div><div class="line">	AdapterManager::GetRawImu();</div><div class="line">	AdapterManager::ADDRawImuCallback(&amp;MSFLocalization::OnRawImu, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	AdapterManager::GetPointCloud();</div><div class="line">	AdapterManager::AddPointCloudCallback(&amp;MSFLocalization::OnPointCloud, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>there is addtional <a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf/local_map" target="_blank" rel="external"><code>local_map</code></a> module, which will be review later.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2248,7 +2288,7 @@ flash
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">129</span>
+                <span class="site-state-item-count">131</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2261,7 +2301,7 @@ flash
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
