@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="simulation,lg-sim," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -93,18 +93,17 @@
 
 
 
-<meta name="description" content="to design scenarios in self-driving test, one reference is: a framework for automated driving system testable cases and sceanrios, most other scenario classifications have almost the same elements: OD">
-<meta name="keywords" content="simulation,lg-sim">
+<meta name="description" content="install xserver-xorg-video-dummyapt-cache search xserver-xorg-video-dummy  apt-get update  sudo apt-get install xserver-xorg-video-dummy which depends on xorg-video-abi-20 and xserver-xorg-core, so ne">
 <meta property="og:type" content="article">
-<meta property="og:title" content="design scenarios in ADS simulation">
-<meta property="og:url" content="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/index.html">
+<meta property="og:title" content="running Vulkan in virtual display">
+<meta property="og:url" content="http://yoursite.com/2019/12/04/running-Vulkan-in-virtual-display/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="to design scenarios in self-driving test, one reference is: a framework for automated driving system testable cases and sceanrios, most other scenario classifications have almost the same elements: OD">
+<meta property="og:description" content="install xserver-xorg-video-dummyapt-cache search xserver-xorg-video-dummy  apt-get update  sudo apt-get install xserver-xorg-video-dummy which depends on xorg-video-abi-20 and xserver-xorg-core, so ne">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-18T14:44:23.239Z">
+<meta property="og:updated_time" content="2019-12-04T14:40:49.435Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="design scenarios in ADS simulation">
-<meta name="twitter:description" content="to design scenarios in self-driving test, one reference is: a framework for automated driving system testable cases and sceanrios, most other scenario classifications have almost the same elements: OD">
+<meta name="twitter:title" content="running Vulkan in virtual display">
+<meta name="twitter:description" content="install xserver-xorg-video-dummyapt-cache search xserver-xorg-video-dummy  apt-get update  sudo apt-get install xserver-xorg-video-dummy which depends on xorg-video-abi-20 and xserver-xorg-core, so ne">
 
 
 
@@ -132,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/12/04/running-Vulkan-in-virtual-display/"/>
 
 
 
 
 
-  <title>design scenarios in ADS simulation | Serious Autonomous Vehicles</title>
+  <title>running Vulkan in virtual display | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +290,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/running-Vulkan-in-virtual-display/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +307,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">design scenarios in ADS simulation</h1>
+          <h1 class="post-title" itemprop="name headline">running Vulkan in virtual display</h1>
         
 
         <div class="post-meta">
@@ -320,8 +319,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-25T10:15:24-04:00">
-                2019-07-25
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-04T09:40:22-05:00">
+                2019-12-04
               </time>
             
 
@@ -339,9 +338,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/07/25/design-scenarios-in-ADS-simulation/#comments" itemprop="discussionUrl">
+                <a href="/2019/12/04/running-Vulkan-in-virtual-display/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2019/12/04/running-Vulkan-in-virtual-display/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,56 +365,118 @@
       
 
       
-        <p>to design scenarios in self-driving test, one reference is: <a href="https://www.nhtsa.gov/document/framework-automated-driving-system-testable-cases-and-scenarios" target="_blank" rel="external">a framework for automated driving system testable cases and sceanrios</a>, most other scenario classifications have almost the same elements: ODD, e.g. road types, road surfaces; OEDR, namely object and event detection and response, e.g. static obstacles, other road actors, traffic signature, environment conditions, special zones; and failure mode behaviors.</p>
-<p>in general, test cases can be grouped as black box test, in which the scenario parterners’ behavior is not pre-defined or unpredictable, e.g. random traffic flow(npcs) scenario, or white box test, where the npcs behavior is pre-defined, e.g. following user-define routings. white box testing is helpful to support performance metrics; while black-box testing is helpful to verify the system completeness and robust.</p>
-<p>as for ADS test, there are a few chanllenges coming from:</p>
+        <h2 id="install-xserver-xorg-video-dummy"><a href="#install-xserver-xorg-video-dummy" class="headerlink" title="install xserver-xorg-video-dummy"></a>install xserver-xorg-video-dummy</h2><pre><code>apt-cache search xserver-xorg-video-dummy 
+apt-get update 
+sudo apt-get install xserver-xorg-video-dummy
+</code></pre><p>which depends on <code>xorg-video-abi-20</code> and <code>xserver-xorg-core</code>, so need to install <code>xserver-xorg-core</code> first. after update xorg.conf as <a href="https://techoverflow.net/2019/02/23/how-to-run-x-server-using-xserver-xorg-video-dummy-driver-on-ubuntu/" target="_blank" rel="external">run Xserver using xserver-xorg-video-dummy driver</a>, and reboot the machine, which leads both keyboard and mouse doesn’t reponse any more. </p>
+<h3 id="understand-xorg-conf"><a href="#understand-xorg-conf" class="headerlink" title="understand xorg.conf"></a>understand xorg.conf</h3><p>usually, <code>xorg.conf</code> is not in system any more, so most common use, the xorg will configure the system device by default. if additional device need to configure, can run in root <code>X -configure</code>, which will generate <code>xorg.conf.new</code> file at <code>/root</code>.</p>
+<p>there are two <code>xorg.conf</code>, one generated by running <code>X -configure</code>, which located at <code>/root/xorg.conf.new</code> ;  the other is generated by <code>nvidia-xconfigure</code>,  which can be found at <code>/etc/X11/xorg.conf</code>.</p>
+<p>the following list is from <a href="https://www.x.org/releases/X11R7.7/doc/man/man5/xorg.conf.5.xhtml" target="_blank" rel="external">xorg.conf doc</a></p>
 <ul>
-<li><p>heuristics decision-making algorithms, deep-learning algorithms, which is not mathematically completed</p>
+<li>ServerLayout section</li>
+</ul>
+<p>it is at the highest level, they bind together the input and output devices that will be used in a session.</p>
+<p>input devices are described in <code>InputDevice</code> sections, output devices usualy consist of multiple independent components(GPU, monitor), which are defined in <code>Screen</code> section.  each <code>Screen</code> section binds togethere a graphics board(GPU) and a monitor. </p>
+<p>the GPU are described in <code>Device</code> sections and monitors are described in <code>Monitor</code> sections</p>
+<ul>
+<li>FILES section</li>
+</ul>
+<p>used to specify some path names required by the server.</p>
+<p>e.g. ModulePath, FontPath ..</p>
+<ul>
+<li>SERVERFLAGS section</li>
+</ul>
+<p>used to specify global Xorg server options.  all should be <code>Options</code></p>
+<p><code>&quot;AutoAddDevices&quot;</code>,  enabled by default.</p>
+<ul>
+<li>MODULE section</li>
+</ul>
+<p>used to specify which Xorg server (extension) modules shoul be loaded.</p>
+<ul>
+<li>INPUTDEVICE section </li>
+</ul>
+<p>Recent X servers employ HAL or udev backends for input device enumeration and input hotplugging. It is usually not necessary to provide InputDevice sections in the xorg.conf if hotplugging is in use (i.e. AutoAddDevices is enabled). If hotplugging is enabled, InputDevice sections using the mouse, kbd and vmmouse driver will be ignored.</p>
+<p><code>Identifier</code> and <code>Driver</code> are required in all <code>InputDevice</code> sections.  <code>Identifier</code> used to specify the unique name for this input device;  <code>Driver</code> used to specify the name of the driver.</p>
+<p>An InputDevice section is considered active if it is referenced by an active ServerLayout section, if it is referenced by the −keyboard or −pointer command line options, or if it is selected implicitly as the core pointer or keyboard device in the absence of such explicit references. The most commonly used input drivers are evdev(4) on Linux systems, and kbd(4) and mousedrv(4) on other platforms.</p>
+<p>a few driver-independent <code>Options</code> in <code>InputDevice</code>:</p>
+<p><code>CorePointer</code> and <code>CoreKeyboard</code> are the inverse of option <code>Floating</code>, which, when enabled, the input device does not report evens through any master device or control a cursor. the device is only available to clients using X input Extension API.  </p>
+<ul>
+<li>Device section</li>
+</ul>
+<p>there must be at least one, for the video card(GPU) being used. <code>Identifier</code> and <code>Driver</code> are required in all <code>Device</code> sections.</p>
+<ul>
+<li>Monitor Section<br>there must be at least one, for the monitor being used. the default configuration will be created when one isn’t specified.  <code>Identifier</code> is the only mandatory.</li>
+</ul>
+<ul>
+<li>Screen Section<br>There must be at least one, for the “screen” being used, represents the binding of a graphics device (Device section) and a monitor (Monitor section). A Screen section is considered “active” if it is referenced by an active ServerLayout section or by the −screen command line option. The <code>Identifier</code> and <code>Device</code> entries are mandatory. </li>
+</ul>
+<h3 id="debug-keyboard-mouse-not-response-after-X-upgrade"><a href="#debug-keyboard-mouse-not-response-after-X-upgrade" class="headerlink" title="debug keyboard/mouse not response after X upgrade"></a>debug keyboard/mouse not response after X upgrade</h3><ul>
+<li><p>login to Ubuntu safe mode, by <code>F12</code> –&gt;  <code>Esc</code> (to display GRUB2 menu), then <code>enable network</code> –&gt;  <code>root shell</code></p>
 </li>
-<li><p>the test case completeness, as the number of tests required to achieve statistically significant to claim safe would be staggering</p>
-</li>
-<li><p>undefined conditions or assumptions</p>
+<li><p>run <code>X -configure</code></p>
 </li>
 </ul>
-<p>a sample test scenario set maybe looks like: </p>
-<table>
-<thead>
-<tr>
-<th>ODD</th>
-<th>OEDR-obj</th>
-<th>OEDR-loc</th>
-<th>maneuver</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>in rump</td>
-<td>static obstacles</td>
-<td>in front of current lane</td>
-<td></td>
-</tr>
-<tr>
-<td>in rump</td>
-<td>static obstacles</td>
-<td>in front of targe lane</td>
-<td></td>
-</tr>
-<tr>
-<td>in rump</td>
-<td>dynamic obstacles</td>
-<td>in front of current lane</td>
-</tr>
-</tbody>
-</table>
-<h3 id="scenarios-runner"><a href="#scenarios-runner" class="headerlink" title="scenarios_runner"></a>scenarios_runner</h3><p><a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external">carla</a> has offered an scenario engine, which is helpful to define scenarios by test_criteria and behaviors, of course the timeout as well.</p>
-<p><code>test_criteria</code>, is like an underline boundary for the scenario to keep, if not, the scenario failed. e.g. max_speed_limitation, collision e.t.c. these are test criterias, no matter simualtion test or physical test, that have to follow the same criterias; in old ways, we always try to find a way to evaluate the simulation result, and thought this may be very complex, but as no clue to go complex further, simple criterias actually is good. even for reinforcement learning, the simple criterias is good enough for the agent to learn the drive policy. </p>
-<p>of course, I can expect there are some expert system about test criterias.  </p>
-<p>For simulation itself, there has another metric to descibe how close the simulation itself to physical world, namley to performance how well the simulator is, which is beyond here.</p>
-<p><code>behaivor</code> is a good way to describe the dynamic processing in the scenario. e.g. npc follow lane to next intersection, and stop in right lane, ego follow npc till the stop area.</p>
-<p>OpenScenario has similar ideas to descibe the dynamic. to support <code>behaivor</code>, the simulator should have the features to control ego and npc with the atomic behaviors, e.g. lane-follow, lane-change, stop at intersection e.t.c. </p>
-<p>in lg simulator, npc has simple AI routing and lane-following API, basically is limited to follow pre-defined behaviors; ego has only cruise-control, but external planner is avialable through ROS.</p>
-<p>for both <code>test_criteria</code> and <code>behavior</code>, carla has a few existing atomic elements, which is a good idea to build up complex scenarios. </p>
-<h3 id="OpenScenario"><a href="#OpenScenario" class="headerlink" title="OpenScenario"></a>OpenScenario</h3><p>not sure if this is a project still on-going, carla has interface and a few other open source parsers there, but as it is a standard in popular projects, e.g. PEGUS, should be worthy to take further study.  </p>
+<p>one line say:</p>
+<pre><code>List of video drivers:  dummy, nvidia,  modesetting. 
+</code></pre><h4 id="uninstall-xserver-xorg-video-dummy"><a href="#uninstall-xserver-xorg-video-dummy" class="headerlink" title="uninstall xserver-xorg-video-dummy"></a>uninstall xserver-xorg-video-dummy</h4><p>I thought the dummy video driver is the key reason, so uninstall it, then rerun the lines above, check <code>/var/log/Xorg.0.log</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[   386.768] List of video drivers:</div><div class="line">[   386.768] 	nvidia</div><div class="line">[   386.768] 	modesetting</div><div class="line">[   386.860] (++) Using config file: &quot;/root/xorg.conf.new&quot;</div><div class="line">[   386.860] (==) Using system config directory &quot;/usr/share/X11/xorg.conf.d&quot;</div><div class="line">[   386.860] (==) ServerLayout &quot;X.org Configured&quot;</div><div class="line">[   386.860] (**) |--&gt;Screen &quot;Screen0&quot; (0)</div><div class="line">[   386.860] (**) |   |--&gt;Monitor &quot;Monitor0&quot;</div><div class="line">[   386.861] (**) |   |--&gt;Device &quot;Card0&quot;</div><div class="line">[   386.861] (**) |   |--&gt;GPUDevice &quot;Card0&quot;</div><div class="line">[   386.861] (**) |--&gt;Input Device &quot;Mouse0&quot;</div><div class="line">[   386.861] (**) |--&gt;Input Device &quot;Keyboard0&quot;</div><div class="line">[   386.861] (==) Automatically adding devices</div><div class="line">[   386.861] (==) Automatically enabling devices</div><div class="line">[   386.861] (==) Automatically adding GPU devices</div><div class="line">[   386.861] (**) ModulePath set to &quot;/usr/lib/xorg/modules&quot;</div><div class="line">[   386.861] (WW) Hotplugging is on, devices using drivers &apos;kbd&apos;, &apos;mouse&apos; or &apos;vmmouse&apos; will be disabled.</div><div class="line">[   386.861] (WW) Disabling Mouse0</div><div class="line">[   386.861] (WW) Disabling Keyboard0</div><div class="line">Xorg detected  mouyourse at device /dev/input/mice.</div><div class="line">Please check your config if the mouse is still not</div><div class="line">operational, as by default Xorg tries to autodetect</div><div class="line">the protocol.</div></pre></td></tr></table></figure>
+<p>there is a warning: <code>(WW) Hotplugging is on, devices using drivers &#39;kbd&#39;, &#39;mouse&#39; or &#39;vmmouse&#39; will be disabled</code></p>
+<h4 id="disable-Hotplugging"><a href="#disable-Hotplugging" class="headerlink" title="disable Hotplugging"></a>disable Hotplugging</h4><p>first generate by <code>X -configure</code> at <code>/root/xorg.conf.new</code>, and copy it to <code>/etc/X11/xorg.conf</code>. then add the additional section in /etc/X11/xorg.conf, , which will disable Hotplugging: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Section &quot;ServerFlags&quot;</div><div class="line">Option &quot;AllowEmptyInput&quot; &quot;True&quot;</div><div class="line">Option &quot;AutoAddDevices&quot; &quot;False&quot;</div><div class="line">EndSection</div></pre></td></tr></table></figure>
+<p>however, it reports: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(EE) Failed to load module &quot;evdev&quot; (module does not exist, 0)</div><div class="line">(EE) NVIDIA(0): Failed to initialize the GLX module; please check in your X</div><div class="line">(EE) NVIDIA(0):     log file that the GLX module has been loaded in your X</div><div class="line">(EE) NVIDIA(0):     server, and that the module is the NVIDIA GLX module.  If</div><div class="line">(EE) NVIDIA(0):     you continue to encounter problems, Please try</div><div class="line">(EE) NVIDIA(0):     reinstalling the NVIDIA driver.</div><div class="line">(EE) Failed to load module &quot;mouse&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `mouse&apos;</div></pre></td></tr></table></figure>
+<h4 id="switch-to-nvidia-xorg-conf"><a href="#switch-to-nvidia-xorg-conf" class="headerlink" title="switch to nvidia xorg.conf"></a>switch to nvidia xorg.conf</h4><p>which reports:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(EE) Failed to load module &quot;mouse&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `mouse&apos;</div><div class="line">(EE) Failed to load module &quot;evdev&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `evdev&apos;</div></pre></td></tr></table></figure>
+<p>it fix the Nvidia issue, but still can’t fix the input device and driver issue.</p>
+<h4 id="switch-to-evdev-driver"><a href="#switch-to-evdev-driver" class="headerlink" title="switch to evdev driver"></a>switch to evdev driver</h4><p>as mentioned previously, <code>evdev</code> driver is the default driver for Linux, and will be loaded by Xserver by default. so try to both Keyboard and Mouse driver to <code>evdev</code>,</p>
+<p>which reports:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(EE) No input driver matching `kbd&apos;</div><div class="line">(EE) Failed to load module &quot;kbd&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `mouse&apos;</div><div class="line">(EE) Failed to load module &quot;mouse&quot; (module does not exist, 0)</div></pre></td></tr></table></figure>
+<p>looks it’s the problem of driver, even the default driver is missed. I try to copy master node’s <a href="https://forums.gentoo.org/viewtopic-p-4771817.html" target="_blank" rel="external">/usr/lib/xorg/modules/input/</a> to worker node, then it reports :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(EE) module ABI major version (24) doesn&apos;t match the server&apos;s version (22)</div><div class="line">(EE) Failed to load module &quot;evdev&quot; (module requirement mismatch, 0)</div></pre></td></tr></table></figure>
+<p>which can be fixed by adding <code>Option IgnoreABI</code> .</p>
+<h4 id="delete-customized-keyboard-and-mouse"><a href="#delete-customized-keyboard-and-mouse" class="headerlink" title="delete customized keyboard and mouse"></a>delete customized keyboard and mouse</h4><p>if enable Hotplugging, the X will auto detect the device, I’d try: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">Section &quot;ServerLayout&quot;</div><div class="line">    Identifier     &quot;Layout0&quot;</div><div class="line">    Screen      0  &quot;Screen0&quot; 0 0 </div><div class="line">EndSection</div><div class="line"></div><div class="line"></div><div class="line">Section &quot;Monitor&quot;</div><div class="line">    Identifier     &quot;Monitor0&quot;</div><div class="line">    VendorName     &quot;Unknown&quot;</div><div class="line">    ModelName      &quot;Unknown&quot;</div><div class="line">    HorizSync       28.0 - 33.0</div><div class="line">    VertRefresh     43.0 - 72.0</div><div class="line">    Option         &quot;DPMS&quot;</div><div class="line">EndSection</div><div class="line"></div><div class="line">Section &quot;Device&quot;</div><div class="line">    Identifier     &quot;Device0&quot;</div><div class="line">    Driver         &quot;nvidia&quot;</div><div class="line">    VendorName     &quot;NVIDIA Corporation&quot;</div><div class="line">EndSection</div><div class="line"></div><div class="line">Section &quot;Screen&quot;</div><div class="line">    Identifier     &quot;Screen0&quot;</div><div class="line">    Device         &quot;Device0&quot;</div><div class="line">    Monitor        &quot;Monitor0&quot;</div><div class="line">    DefaultDepth    24</div><div class="line">    SubSection     &quot;Display&quot;</div><div class="line">        Depth       24</div><div class="line">    EndSubSection</div><div class="line">EndSection</div><div class="line"></div><div class="line">Section &quot;ServerFlags&quot;</div><div class="line">  Option &quot;AllowEmptyInput&quot; &quot;True&quot;</div><div class="line">  Option &quot;IgnoreABI&quot; &quot;True&quot;</div><div class="line">EndSection</div></pre></td></tr></table></figure>
+<p>which reports:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(II) No input driver specified, ignoring this device.</div><div class="line">(II) This device may have been added with another device file.</div><div class="line">(II) config/udev: Adding input device Lenovo Precision USB Mouse (/dev/input/mouse0</div></pre></td></tr></table></figure>
+<p>there is no ERROR any more, but looks the default Input driver (evdev?) can’t be found out …</p>
+<h4 id="reinstall-xorg"><a href="#reinstall-xorg" class="headerlink" title="reinstall xorg"></a>reinstall xorg</h4><p>Mouse and keyboard can be driven by evdev or mouse/keyboard driver respectively. Xorg will load only <code>endev</code> automatically, To use mouse and/or keyboard driver instead of evdev they must be loaded in xorg.conf. There is no need to generate xorg.conf unless you want to fine tune your setup or need to customize keyboard layout or mouse/touchpad functionality.</p>
+<ul>
+<li>firstly configure new network interface for worker node:</li>
+</ul>
+<p><a href="https://unix.stackexchange.com/questions/303536/configuring-automatic-dhcp-network-connection-via-command-line-on-ubuntu-14-04" target="_blank" rel="external">configure DHCP network connection</a></p>
+<p>setting at <code>/etc/network/interface</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">auto enp0s25 </div><div class="line">iface enp0s25 inet dhcp</div></pre></td></tr></table></figure>
+<p>ifconfig enp0s25 down<br>ifconfig enp0s25 up</p>
+<ul>
+<li>then reinstall xorg: </li>
+</ul>
+<pre><code>sudo apt-get update 
+sudo apt-get upgrade
+sudo apt-get install xserver-xorg-core  xserver-xorg  xorg
+</code></pre><p>which install these libs, <code>xserver-xorg-input-all</code>, <code>xserver-xorg-input-evdev</code>,  <code>xserver-xorg-inut-wacom</code>, <code>xserver-xorg-input-vmouse</code>,  <code>xserver-xorg-input-synaptics</code>, these are the exact missing parts(input device and drivers).  it looks when uninstall <code>video-dummy</code>, these modules are deleted by accident.</p>
+<ul>
+<li><p>reboot, both keyboard and mouse work !</p>
+</li>
+<li><p>“sudo startx” through ssh</p>
+</li>
+</ul>
+<p>now the user password doesn’t work in normal login, but when ssh login from another machine, the password verify well. which can be fixed by ssh login from remote host first, then run <code>sudo startx</code>, which will bring the user-password verification back</p>
+<h2 id="virtual-display"><a href="#virtual-display" class="headerlink" title="virtual display"></a>virtual display</h2><p><a href="https://xpra.org/trac/wiki/Xdummy" target="_blank" rel="external">xdummy</a></p>
+<p><a href="http://xpra.org/xorg.conf" target="_blank" rel="external">xdummy: xorg.conf</a></p>
+<p>run: <code>Xorg -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./10.log -config ./xorg.conf :10</code> </p>
+<ul>
+<li>test with glxgears/OpengGL works</li>
+</ul>
+<p>1) DISPLAY=localhost:10.0  works</p>
+<p>2) DISPLAY=:0  works, but you can’t see it, cause the worker host is in virtual display</p>
+<ul>
+<li>test with vkcube/Vulkan failed</li>
+</ul>
+<p>in summary, the vitual display can support OpenGL running, but doesn’t support Vulkan yet. <a href="https://unity.com/simulation" target="_blank" rel="external">unity simulation cloud SDK</a> is the vendor’s solution, but licensed.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://xpra.org/xorg.conf" target="_blank" rel="external">sample xorg.conf for dummy device</a></p>
+<p><a href="https://askubuntu.com/questions/940476/keyboard-and-mouse-not-responding-at-reboot-after-xorg-conf-update" target="_blank" rel="external">Keyboard and mouse not responding at reboot after xorg.conf update</a></p>
+<p><a href="https://askubuntu.com/questions/4662/where-is-the-x-org-config-file-how-do-i-configure-x-there" target="_blank" rel="external">how to Xconfigure</a></p>
+<p><a href="https://www.linuxquestions.org/questions/linux-software-2/no-input-drivers-loading-in-x-4175577628/" target="_blank" rel="external">no input drivers loading in X</a></p>
 
       
     </div>
@@ -443,14 +504,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/simulation/" rel="tag"># simulation</a>
-          
-            <a href="/tags/lg-sim/" rel="tag"># lg-sim</a>
-          
-        </div>
-      
 
       
       
@@ -460,8 +513,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/18/model-based-design-sucks/" rel="next" title="model based design sucks">
-                <i class="fa fa-chevron-left"></i> model based design sucks
+              <a href="/2019/11/29/recent-thoughts-in-ADS/" rel="next" title="recent thoughts in ADS">
+                <i class="fa fa-chevron-left"></i> recent thoughts in ADS
               </a>
             
           </div>
@@ -470,8 +523,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/10/dns-server-in-lan/" rel="prev" title="dns server in lan">
-                dns server in lan <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/04/where-are-you-in-next-4-years-1/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -620,7 +673,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#scenarios-runner"><span class="nav-number">1.</span> <span class="nav-text">scenarios_runner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OpenScenario"><span class="nav-number">2.</span> <span class="nav-text">OpenScenario</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#install-xserver-xorg-video-dummy"><span class="nav-number">1.</span> <span class="nav-text">install xserver-xorg-video-dummy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#understand-xorg-conf"><span class="nav-number">1.1.</span> <span class="nav-text">understand xorg.conf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#debug-keyboard-mouse-not-response-after-X-upgrade"><span class="nav-number">1.2.</span> <span class="nav-text">debug keyboard/mouse not response after X upgrade</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#uninstall-xserver-xorg-video-dummy"><span class="nav-number">1.2.1.</span> <span class="nav-text">uninstall xserver-xorg-video-dummy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#disable-Hotplugging"><span class="nav-number">1.2.2.</span> <span class="nav-text">disable Hotplugging</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#switch-to-nvidia-xorg-conf"><span class="nav-number">1.2.3.</span> <span class="nav-text">switch to nvidia xorg.conf</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#switch-to-evdev-driver"><span class="nav-number">1.2.4.</span> <span class="nav-text">switch to evdev driver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delete-customized-keyboard-and-mouse"><span class="nav-number">1.2.5.</span> <span class="nav-text">delete customized keyboard and mouse</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reinstall-xorg"><span class="nav-number">1.2.6.</span> <span class="nav-text">reinstall xorg</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#virtual-display"><span class="nav-number">2.</span> <span class="nav-text">virtual display</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">3.</span> <span class="nav-text">refer</span></a></li></ol></div>
             
 
           </div>
@@ -763,9 +816,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/';
-          this.page.identifier = '2019/07/25/design-scenarios-in-ADS-simulation/';
-          this.page.title = 'design scenarios in ADS simulation';
+          this.page.url = 'http://yoursite.com/2019/12/04/running-Vulkan-in-virtual-display/';
+          this.page.identifier = '2019/12/04/running-Vulkan-in-virtual-display/';
+          this.page.title = 'running Vulkan in virtual display';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
