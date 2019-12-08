@@ -291,6 +291,146 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/18/model-based-design-sucks/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/18/model-based-design-sucks/" itemprop="url">model based design sucks</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-18T11:06:00-04:00">
+                2019-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/18/model-based-design-sucks/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/18/model-based-design-sucks/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>AV development includes <code>perception</code>, <code>sensor fusion</code>, <code>location &amp; mapping</code>, <code>decision-making &amp; control</code> (or motion planning),  <code>embedded</code>, <code>simulation</code> and maybe many system-glue software tools.</p>
+<p>L3 <code>planning &amp; control</code> is now expert-based decision system, which basically defines rules to make decision, where model based design(mbd) is a helper.</p>
+<p>Waymo mentioned their hybrid decision-making solution, basically Machine Learning(ML) will take a big part of the situations, but still space to allow rule-based solution to take priority. </p>
+<p>when consider to <a href="https://36kr.com/p/5063036" target="_blank" rel="external">ML decision making</a>, mdb will become less useful.  </p>
+<h3 id="why-model-based"><a href="#why-model-based" class="headerlink" title="why model-based"></a>why model-based</h3><p>Traditional OEMs follow vehicle-level safety requirements(ASIL-D) to develop vehicle products and  components, usually can be represented as the <code>V</code> style development, from user requirs, system design,  implmenent to test verification. </p>
+<p>to go through the whole <code>V</code> process take a rather long time, e.g. for a new vehicle model, it means 2~5 years. Commercial hardware and software(mobile apps) products which has lower level safety requirements, however, can iterate in a quicker frequency. </p>
+<p>the safety requirements drive the product development in a very different way, compared to common Internet products, which include more straight-forward programming skills and software architecture mindset. but to satisfy the additional, or should say the priority safety requirements, how to organize the code is less important than how to verify the functions is to satisfy the safety.</p>
+<p>so there comes the model-based design, the most-highly feature of which is to support system test and verify at pre-product period.</p>
+<p>of course, model-based design should be easily to build up prototype and visualize the system, which is the second feature of mbd, working similar like a microsoft vision e.t.c</p>
+<p>thirdly, from design to product, is auto code generation. which means once the design is verified, you don’t need to go back to write code again, but directly generate code from the design graph. </p>
+<p>model-based design toolchain is already a whole eco-system, e.g. system design, auto code generator, test tools. and all these tools should be first verified by ASIL-D standard. </p>
+<p>Internet AI companies once thought it would be easy to take over this traditional development by Internet agile development, while the reality is they still depends on model-based design at first to verify the system, then back to implement code again, which should be more optimized than auto-generated ones, which is one drawbacks of mbd, as mbd is tool-depended, e.g. Matlab, if Matlab doesn’t support some most updated libs, then they are not in the auto-code, and most time Matlab is far behind the stable version of libs outside. </p>
+<h3 id="what-mbd-can’t-do"><a href="#what-mbd-can’t-do" class="headerlink" title="what mbd can’t do"></a>what mbd can’t do</h3><p>mbd is born to satisfy safety requirments in product development. so any non safety required product won’t use mbd.</p>
+<p>and by nature, mbd is good at turning mathematical expressions to system languages, and logical relations to state flows, so any non-articulatable system is difficult to represent in mdb languages.  </p>
+<p>in vehicle product development, engine, powertrain, ECU, brake system, ADAS, L3 motion planning, e.t.c have depends heavily on mbd.</p>
+<p>but also we can predict, L3+ applications arise, with image, cloud point based object detection, data fusion, SLAM, AI-driven planning, IVI, V2X, will hybrid mbd with many Internet code style.</p>
+<h3 id="industry-experience-a-metaphysics"><a href="#industry-experience-a-metaphysics" class="headerlink" title="industry experience: a metaphysics"></a>industry experience: a metaphysics</h3><p>some friends say mass-product-experience makes him more value than new birds. since industry experience is not transparent, as there is a no clear bar to test the ability/value of the enginer, unlike developers, who can valued by their product, or skills, also the same reason make these guys who stay long in the industry sounds more valued, and they have more likey went through one or many mass product experience. </p>
+<p>but at most, industry product depends e.g. vehicle, on teamwork, even the team lead can’t make it by himself, unlike developer, a top developer can make a huge difference, much valued than a team of ordinary ones.  </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/15/autosar-sucks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2027,142 +2167,6 @@ multi path                     +-1m
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/how-simulation-helps-for-autonomous-vehicle/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/06/how-simulation-helps-for-autonomous-vehicle/" itemprop="url">how simulation helps for autonomous vehicle</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-06T05:50:37-04:00">
-                2019-06-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/06/how-simulation-helps-for-autonomous-vehicle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/06/how-simulation-helps-for-autonomous-vehicle/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="prefare"><a href="#prefare" class="headerlink" title="prefare"></a>prefare</h2><p>recently joined another Chinese auto OEM, still work in simulation platform for autonomous vehicle. this experience is a different pratice from GM or Ford. </p>
-<p>at first, it’s the mindset update, once for a long time, or even take for granted that I was looking for to be treated greatly, like in NA companies, what the company can offer me. it’s about freedom and responsibility. To have the freedom/right to make a difference in project direction, contents, and methods to achieve sth, first prove that I can take it, which is responsibility.</p>
-<p>“ you can you up” that kind of phylosphy is very common and actually I’d love it in some point.</p>
-<h2 id="beta-version"><a href="#beta-version" class="headerlink" title="beta version"></a>beta version</h2><p>there are ways to make a virtual simulator. traditional tool vendors include Matlab/Simulink, Prescan, VTD, ANSYS e.t.c. and as the beta version of simulator tool-chain, they are common in most OEMs in China. while have to say, in China, cause most software tools, from engineering tools to modern HR managment tools to product managment tools are kind of in practice process in Chinese companies as I can see, rather than as a matured segment pluged-in the company’s DNA. e.g.  the product development tools are pretty in trial and error, occasionaly some PLM vendors come to introduce their products. and actually except the CAD/CAE tools, which were introduced in China since 80’s, and which sounds matured right now, the simulation tools for autonomous vehicle is pretty new-things, from map, sensor to all kinds of internal algorithms.</p>
-<p>the beta version of simulation tools has its DNAs as well. first they are charged by license fee, which is a pretty old way like IBM days. not many modern Internet mobility companies live in this way anymore.  </p>
-<p>secondly, they can’t update frequently, once or twice a year with a new version of the product is common, which maybe OK in CAD/CAE tools, since the engineering analysis process are pretty matured and few exceptional requirements jump out in daily work, and there update is sometime by the vendor itself, which is not a required update, maybe optimized the algorithms, maybe added a third-party function, and sometime is from the users conference, usually the tool vendor will organize this kind of user conference to group users together, one way to get some connections, as well as to get some end-user requirements to fix the next version product, which is also a drawback compared to open source tool community, in where the user is more active.</p>
-<p>thirdly, the beta version tools are excluding the users someway, who can’t actually manage the tool as part of its whole functions. assuming simulation will be the key to make a difference in future auto product, then this excluding is unacceptable. on the other side, if autonomous simulation tool are at most aided to develop new product, then it becomes a piece of chicken neck either to take or to throw. <strong>from a product view, what is the role of simulation tool or as  a product itself, where it is blooming point</strong></p>
-<h2 id="alpha-version"><a href="#alpha-version" class="headerlink" title="alpha version"></a>alpha version</h2><p>why simulation tool become a role in autonomous, except the traditional vendors, mostly coming from Internet companies, e.g. Google, Uber, Baidu, Tecent etc. they are pretty strong to make a software product, including the simulation software in auto industry.  <strong>interesting, these Internet companines never go to make a CAD/CAE software, but they actually prefer to support the cloud/HPC infrastructures for CAD/CAE simulation.</strong></p>
-<p>these big mobility companines make their simulation tools now and well cowork with their existing IT development methodlogy, software product ideas as well as all ICT infrastures, which make these tools sounds huge great, and which also make themselves as the core role, rather than the OEMs, few are free or not yet open-sourced.  </p>
-<p>and there are a few popular open source simulation tools, e.g. Carla, Airsim, LG simulator e.t.c. I actually get a chance with Carla at GM research team, which even now still great, but does’t study deeper, and for me it is a great tool for AI training, which should be the key role of simulation tool in future, since L3 or below, really cares little environment info, and its rule-based decision has no need for a large chunk of virtual test. that’s also <strong>a difference between Chinese and NA team</strong>,  NA teams have the trend to invest in new tech even without immeditaly money back, but Chinese companies would prefer in immediate invest. </p>
-<h3 id="lg-simulator"><a href="#lg-simulator" class="headerlink" title="lg simulator"></a>lg simulator</h3><p>Unreal never tried, but Unity looks pretty easy to use, while still need sometime to get familiar with the editor and play with scenes. lg simulator has give a great reference to build the virtual city and make autonomous vehicles running. the real problem actually for most team is how to make this tool useful in product development. </p>
-<p>we can think about the tool strucutre itself, like cloud running features, implement measure/verified methods, and build scenes database as we can think about or from the sort of system engineering port. </p>
-<p>as for a L3 or below usage, the whole meaning of simualtion is not driven, but at most additional support of product development, as I can see. so what simulation for ?  L4+, which leads to AI, or data driven product development!</p>
-<p>from this point, the simlation itself is not the core, but the AI, so think about that in career development. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2213,7 +2217,7 @@ multi path                     +-1m
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">133</span>
+                <span class="site-state-item-count">134</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

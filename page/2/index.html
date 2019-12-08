@@ -291,6 +291,170 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/05/Linux-network-tool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/05/Linux-network-tool/" itemprop="url">Linux network tool</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-05T08:11:11-05:00">
+                2019-11-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/05/Linux-network-tool/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/05/Linux-network-tool/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Linux-network-commands"><a href="#Linux-network-commands" class="headerlink" title="Linux network commands"></a>Linux network commands</h2><h3 id="ip"><a href="#ip" class="headerlink" title="ip"></a>ip</h3><p><a href="https://www.computerhope.com/unix/ip.htm" target="_blank" rel="external">ip</a> command is used to edit and display the configuration of network interfaces, routing, and tunnels. On many Linux systems, it replaces the deprecated ifconfig command.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ip link  del docker0   # delete a virtual network interface </div><div class="line">ip addr add 192.168.0.1  dev eth1  #assign IP to a specific interface(eht1)</div><div class="line">ip addr show #check network interface </div><div class="line">ip addr del 192.168.0.1 dev eth1 </div><div class="line">ip link set eth1 up/down</div><div class="line">ip route [show] </div><div class="line">ip route add 192.168.0.1 via 10.10.20.0 dev eth0  #add static route 192.168.0.1</div><div class="line">ip route del 192.168.0.1  #remove static route</div><div class="line">ip route add default via 192.168.0.1 # add default gw</div></pre></td></tr></table></figure>
+<h3 id="netstate"><a href="#netstate" class="headerlink" title="netstate"></a>netstate</h3><p><a href="https://www.ibm.com/support/knowledgecenter/en/ssw_aix_72/n_commands/netstat.html" target="_blank" rel="external">netstate</a> used to display active sockets/ports for each protocol (tcp/ip)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">netstat -lat </div><div class="line">netstat -us</div></pre></td></tr></table></figure>
+<h3 id="nmcli"><a href="#nmcli" class="headerlink" title="nmcli"></a>nmcli</h3><p><a href="https://developer.gnome.org/NetworkManager/stable/nmcli.html" target="_blank" rel="external">nmcli</a> is a Gnome command tool to control NetworkManager and report network status: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">nmcli  device status </div><div class="line">nmcli connection show =</div></pre></td></tr></table></figure>
+<h3 id="route"><a href="#route" class="headerlink" title="route"></a>route</h3><p><a href="http://www.softpanorama.org/Net/Netutils/route_in_linux.shtml" target="_blank" rel="external">route</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">route  ==&gt;  ip route (modern version) ##print router </div><div class="line">route add -net sample-net gw 192.168.0.1 </div><div class="line">route del -net link-local netmask  255.255.0.0  #delete a virtual network interface </div><div class="line">ip route flush  # flashing routing table</div></pre></td></tr></table></figure>
+<h3 id="tracepath"><a href="#tracepath" class="headerlink" title="tracepath"></a>tracepath</h3><p><a href="https://www.linux.org/docs/man8/tracepath.html" target="_blank" rel="external">tracepath</a> is used to traces path to a network host discovering MTU along this path. a modern version is <code>traceroute</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tracepath 192.168.0.1 </div><div class="line">``` </div><div class="line"></div><div class="line">### networking service</div></pre></td></tr></table></figure>
+<p>systemctl restart networking<br>/etc/init.d/networking restart </p>
+<h1 id="or"><a href="#or" class="headerlink" title="or"></a>or</h1><p>service NetworkManager stop<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">## network interface </div><div class="line"></div><div class="line">location at `/etc/network/interfaces` </div><div class="line"></div><div class="line">`eno1` is onboard Ethernet(wired) adapter. if machines has already `eth1` in its config file, for the second adapter, it will use `eno1` rather than using `eth2`.</div><div class="line"></div><div class="line">[ifconfig](https://www.ibm.com/support/knowledgecenter/ssw_aix_71/i_commands/ifconfig.html) is used to set up network interfaces such as Loopback, Ethernet network interface: a software interface to networking hardware, e.g.  physical or virtual. physical interface, such as `eth0`, namely Ethernet network card. virtual interface such as `Loopback`, `bridges`, `VLANs` e.t.c.</div></pre></td></tr></table></figure></p>
+<p>ifconfig -a<br>ifconfig eth0  #check specific network interface<br>ifconfig eth0 192.168.0.1 #assign static IP address to network interface<br>ifconfig eth0 netmask 255.255.0.0 #assign netmask </p>
+<p>ifconfig docker0 down/up </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">replaced by `ip` command later.</div><div class="line"></div><div class="line"></div><div class="line">### why enp4s0f2 instead of eth0</div><div class="line"></div><div class="line">[change back to eth0](https://www.itzgeek.com/how-tos/mini-howtos/change-default-network-name-ens33-to-old-eth0-on-ubuntu-16-04.html)</div><div class="line"></div><div class="line">```shell</div><div class="line"></div><div class="line">lspci | grep -i &quot;net&quot;</div><div class="line"></div><div class="line">dmesg | grep -i eth0</div><div class="line"></div><div class="line">ip a </div><div class="line"></div><div class="line">sudo vi /etc/default/grub</div><div class="line">	GRUB_CMDLINELINUX=&quot;net.ifnames=0 biosdevname=0&quot;</div><div class="line">update-grub</div><div class="line"></div><div class="line"># update  /etc/network/interfaces </div><div class="line"></div><div class="line">auto eth0</div><div class="line">iface eth0  inet static </div><div class="line"></div><div class="line">sudo reboot</div></pre></td></tr></table></figure>
+<h3 id="Unknown-interface-enp4s0f2"><a href="#Unknown-interface-enp4s0f2" class="headerlink" title="Unknown interface enp4s0f2"></a>Unknown interface enp4s0f2</h3><p>due TO <code>/etc/network/interfaces</code> has <code>auto enp4s0f2</code> line, which always create this network interface , when restart the networking service.</p>
+<h3 id="ping-hostname-with-docker0"><a href="#ping-hostname-with-docker0" class="headerlink" title="ping hostname with docker0"></a>ping hostname with docker0</h3><p>usually there may be have multi network interfaces(eth0, docker0, bridge..) on a remote host, when ping this remote host with exisiting docker network (<code>docker0</code>), by default will talk to the docker0, which may not the desired one.</p>
+<h2 id="build-LAN-cluster-with-office-PCs"><a href="#build-LAN-cluster-with-office-PCs" class="headerlink" title="build LAN cluster with office PCs"></a>build LAN cluster with office PCs</h2><ul>
+<li>setup PC IPs</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">master node: </div><div class="line">IP Address:  192.168.0.1 </div><div class="line">netmask: 24</div><div class="line">Gateway: null</div><div class="line">DNS serer:  10.3.101.101 </div><div class="line"></div><div class="line"></div><div class="line">worker node:</div><div class="line"></div><div class="line">IP address:  192.168.0.12</div><div class="line">netmask: 24</div><div class="line">Gateway: 192.168.0.1</div><div class="line">DNS: 10.255.18.3</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">* `ufw disable` </div><div class="line"></div><div class="line">*  update `/etc/hosts` file:</div></pre></td></tr></table></figure>
+<pre><code>192.168.0.1 master
+192.168.0.12 worker 
+</code></pre><pre><code>if need to update the default hostname to `worker`, can modify `/etc/hostname` file, and reboot.
+
+* ping test :
+
+```script 
+
+ping -c 3 master 
+ping -c 3 worker
+</code></pre><ul>
+<li>set ssh access(optionally)</li>
+</ul>
+<pre><code class="script">
+sudo apt-get install openssh-server 
+ssh-keygen -t rsa 
+# use custmized key
+cp rsa_pub.key authorized_key
+</code></pre>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.cyberciti.biz/faq/ubuntu-linux-add-static-routing/" target="_blank" rel="external">Ubuntu add static route</a></p>
+<p><a href="https://www.tecmint.com/ip-command-examples/" target="_blank" rel="external">10 useful IP commands</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/29/未来5年在哪里11/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1821,210 +1985,6 @@ SOTIF Analysis
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/host-mod-wsgi-in-Apache2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/13/host-mod-wsgi-in-Apache2/" itemprop="url">host mod_wsgi in Apache2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-13T06:33:40-04:00">
-                2019-10-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/13/host-mod-wsgi-in-Apache2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/10/13/host-mod-wsgi-in-Apache2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Apache2-Background"><a href="#Apache2-Background" class="headerlink" title="Apache2 Background"></a>Apache2 Background</h2><h3 id="Apache2-virutal-host"><a href="#Apache2-virutal-host" class="headerlink" title="Apache2 virutal host"></a>Apache2 virutal host</h3><ul>
-<li>site-available </li>
-</ul>
-<p>all virtual hosts are configured in individual files with <code>/etc/apache2/sites-available</code> </p>
-<ul>
-<li>site-enabled </li>
-</ul>
-<p>until the *.config in site-available are enabled, Apache2 won’t know know.</p>
-<pre><code>sudo sevice apache2 reload 
-</code></pre><ul>
-<li>IP based virtual host </li>
-</ul>
-<p>use IP address of the connection to determine the correct virtual host to serve, so each host needs a separate IP</p>
-<p>we had name-based vhost in LAN, a few web servers sharing the same IP in the same physical machine, but with different Ports, and even we don’t use DNS server to tell the domains. </p>
-<h3 id="apache-mode-cores"><a href="#apache-mode-cores" class="headerlink" title="apache mode cores"></a>apache mode cores</h3><p><a href="https://httpd.apache.org/docs/2.4/mod/core.html#servername" target="_blank" rel="external">refer</a></p>
-<ul>
-<li>VirtualHost </li>
-</ul>
-<p>the title to define this virutal host, and tell which port to listen. by default is port80</p>
-<ul>
-<li>ServerName</li>
-</ul>
-<p>sets the request scheme, hostname, and port that the server uses to identify itself</p>
-<ul>
-<li>ServerAlias</li>
-</ul>
-<p>sets the alternate name for a host </p>
-<ul>
-<li>WSGIDaemonProcess</li>
-</ul>
-<p>for wsgi app, which usually define in a seperate Python virtual environment, rather than the default localhost user or root. so <code>WSGIDaemonProcess</code> point to the python virtual env. </p>
-<ul>
-<li>WSGIScriptAlias</li>
-</ul>
-<p>point to the wsgi_app.wsgi </p>
-<ul>
-<li>DocumentRoot </li>
-</ul>
-<p>set the directory from which httpd/apache2 will serve files <code>/var/www/html</code></p>
-<h2 id="mod-wsgi"><a href="#mod-wsgi" class="headerlink" title="mod_wsgi"></a>mod_wsgi</h2><ul>
-<li>install <code>apt-get install apache2  libapache2-mode-wsgi-py3</code></li>
-</ul>
-<h3 id="config-in-Apache2"><a href="#config-in-Apache2" class="headerlink" title="config in Apache2"></a>config in Apache2</h3><h4 id="config-with-configure-file"><a href="#config-with-configure-file" class="headerlink" title="config with configure file"></a>config with configure file</h4><ul>
-<li>create  example.conf under  /etc/apache2/conf-available/</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;VirtualHost *:8084&gt;</div><div class="line">        ServerName  10.20.181.119:8084</div><div class="line">        ServerAlias example.com</div><div class="line">        DocumentRoot &quot;/var/www/html&quot;</div><div class="line">        ErrorLog &quot;/var/www/example/logs/error.log&quot;</div><div class="line"> </div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
-<p>the served web content is stored at <code>/var/www/html</code>, which can simple include a index.html or a few js.</p>
-<ul>
-<li><p>enable configure, which will create corresponding conf under <code>conf-enable</code> folder</p>
-<pre><code>sudo a2enconf example 
-</code></pre></li>
-<li><p>check configure</p>
-<pre><code>sudo apachectl -S 
-sudo apachectl configtest 
-</code></pre></li>
-</ul>
-<h4 id="config-with-virtual-host"><a href="#config-with-virtual-host" class="headerlink" title="config with virtual host"></a>config with virtual host</h4><ul>
-<li>create <code>example.conf</code> under  <code>/etc/apache2/site-available/</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:8085&gt;</div><div class="line">        ServerName  10.20.181.119:8085</div><div class="line">        ServerAlias application.com</div><div class="line">        DocumentRoot &quot;/var/www/wsgy_example&quot;</div><div class="line">        ErrorLog &quot;/var/www/wsgy_example/logs/error.log&quot;</div><div class="line">        WSGIScriptAlias /application /var/www/wsgy_app/application.wsgi</div><div class="line"></div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>here used the additional <code>WSGI script</code>, <a href="https://www.linode.com/docs/web-servers/apache/apache-and-modwsgi-on-ubuntu-14-04-precise-pangolin/" target="_blank" rel="external">link</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import os</div><div class="line">import sys</div><div class="line"></div><div class="line">sys.path.append(&apos;/var/www/wsgy_app/&apos;)</div><div class="line"></div><div class="line">os.environ[&apos;PYTHON_EGG_CACHE&apos;] = &apos;/var/www/wsgy_app/.python-egg&apos;</div><div class="line"></div><div class="line">def application(environ, start_response):</div><div class="line">        status = &apos;200 OK&apos;</div><div class="line">        output = b&apos;Helo World&apos;</div><div class="line"></div><div class="line">        response_headers = [(&apos;Content-type&apos;, &apos;text/plain&apos;),</div><div class="line">                            (&apos;Content-length&apos;, str(len(output)))]</div><div class="line"></div><div class="line">        start_response(status, response_headers)</div><div class="line"></div><div class="line">        return [output]</div></pre></td></tr></table></figure>
-<ul>
-<li><p>enable configure, which will create corresponding conf under <code>site-enable</code> folder</p>
-<pre><code>sudo a2ensite wsgy_example 
-</code></pre></li>
-<li><p>check configure</p>
-<pre><code>sudo apachectl -S 
-sudo apachectl configtest 
-</code></pre></li>
-</ul>
-<h3 id="add-multi-ports"><a href="#add-multi-ports" class="headerlink" title="add multi ports:"></a>add multi ports:</h3><p>in /etc/apache2/ports.conf:</p>
-<pre><code>Listen 8083
-Listen 8084
-</code></pre><p>since this Apache server host system_engineering web and pgadmin4 web, and share the same IP.</p>
-<h3 id="restart-apache"><a href="#restart-apache" class="headerlink" title="restart apache"></a>restart apache</h3><pre><code>sudo systemctl restart apache2 
-</code></pre><h3 id="test-apache"><a href="#test-apache" class="headerlink" title="test apache"></a>test apache</h3><p>in browser:</p>
-<pre><code>10.20.181.119:8085/application
-</code></pre><p>should view “hello world”</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://httpd.apache.org/docs/2.4/vhosts/name-based.html" target="_blank" rel="external">name based virtual host</a></p>
-<p><a href="https://httpd.apache.org/docs/2.4/vhosts/" target="_blank" rel="external">Apache2 virutal host</a></p>
-<p><a href="https://serverfault.com/questions/246445/how-do-i-create-virtual-hosts-for-different-ports-on-apache" target="_blank" rel="external">vhost with different ports</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2075,7 +2035,7 @@ Listen 8084
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">133</span>
+                <span class="site-state-item-count">134</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
