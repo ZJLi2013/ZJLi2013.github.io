@@ -291,6 +291,318 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/dns-server-in-lan/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/10/dns-server-in-lan/" itemprop="url">dns server in lan</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-10T10:08:04-04:00">
+                2019-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/10/dns-server-in-lan/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/10/dns-server-in-lan/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="DNS-server-in-LAN"><a href="#DNS-server-in-LAN" class="headerlink" title="DNS server in LAN"></a>DNS server in LAN</h2><p>to use domain name(e.g. gitlab.com) in LAN rather than IP, it needs every local host machine to store all key-values:: host-IP. if the LAN has many host machines, it will be difficult to maintain. Setting up DNS server will help to automatically map the ip to domain or reverse in the LAN.</p>
+<h3 id="bind9"><a href="#bind9" class="headerlink" title="bind9"></a>bind9</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">apt-get install bind9 </div><div class="line">``` </div><div class="line"><span class="meta">#</span>## /etc/bind/named.conf.local</div><div class="line"></div><div class="line">```shell</div><div class="line"></div><div class="line">zone "gitlab.com" &#123;</div><div class="line">	type: master;</div><div class="line">	file "/etc/bind/db.ip2gitlab.com" ;</div><div class="line">&#125;;	</div><div class="line"></div><div class="line">zone "101.20.10.in-addr.arpa" &#123;</div><div class="line">	type: master;</div><div class="line">	file "/etc/bind/db.gitlab2ip.com" ;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">``` </div><div class="line"><span class="meta">#</span>## /etc/bind/db.gitlab2ip.com </div><div class="line"></div><div class="line">[dns zone file format](https://help.dyn.com/how-to-format-a-zone-file/)</div><div class="line"></div><div class="line">gitlab2ip zone file is mapping from domain to ip, as following sample, it works like:</div><div class="line"></div><div class="line">	www.$ORIGIN  --&gt;  10.20.101.119 </div><div class="line"></div><div class="line">```shell</div><div class="line">; command</div><div class="line"><span class="meta">$</span>TTL  6000</div><div class="line">;@ refer to current zone file</div><div class="line">;			 DNS-server-FDNQ notification-email</div><div class="line"><span class="meta">$</span>ORIGIN  gitlab.com</div><div class="line">@ 	IN 	SOA	 	server 	email (</div><div class="line">			 		2	 ;</div><div class="line">			 		1d ;</div><div class="line">			 		1h ;</div><div class="line">			 		5min ;</div><div class="line">			 	)</div><div class="line">@		IN		NS  	server</div><div class="line">www		IN		A		10.20.101.119</div><div class="line">server	IN		A		10.20.101.119</div></pre></td></tr></table></figure>
+<h3 id="etc-bind-db-ip2gitlab-com"><a href="#etc-bind-db-ip2gitlab-com" class="headerlink" title="/etc/bind/db.ip2gitlab.com"></a>/etc/bind/db.ip2gitlab.com</h3><p>ip2gitlab zone file is from ip to domain mapping, </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span>TTL  6000</div><div class="line"><span class="meta">$</span>ORIGIN 101.20.10.in-addr.arpa</div><div class="line">@ 	IN 	SOA	 	server. 	email. (</div><div class="line">			 		2	 ;</div><div class="line">			 		1d ;</div><div class="line">			 		1h ;</div><div class="line">			 		5min ;</div><div class="line">			 	)</div><div class="line">@		IN		NS  	server</div><div class="line">119		IN		A		www.gitlab.com</div><div class="line">119		IN		A		server.gitlab.com</div></pre></td></tr></table></figure>
+<h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><pre><code class="shell">nslookup www.gitlab.com   #dns forward (domain 2 ip)
+
+nslookup  10.20.101.119   #reverse (ip 2 domain)
+</code></pre>
+<h2 id="settings"><a href="#settings" class="headerlink" title="settings"></a>settings</h2><p>if the DNS setted above(DNS-git) is the only DNS server in the LAN, then this DNS works like a gateway, to communicate by domain name, every local host talk to it first, to understand the domain name.</p>
+<p>but in a large size company LAN newtwork, there may already has a DNS server hosted at IT department (DNS-IT), with a fixed IP e.g. <code>10.10.101.101</code>, and all localhost machines actually set DNS-IT as the default DNS. DNS-git will work as a sub-DNS server. </p>
+<p>Inside the small team, either every localhost change default DNS to DNS-git, then DNS-git become the sub-network server.</p>
+<p>if every localhost still keep DNS-IT, there is no way(?) to use DNS-git service in LAN, and even make conflicts, as the DNS-git localhost machine will listen on all TCP/IP ports, every new gitlab.com access request (input as IP address) will get an output as domain name, but the others can’t understand this domain-name…</p>
+<p>what happened with two DNS server in LAN ? </p>
+<h2 id="how-email-works"><a href="#how-email-works" class="headerlink" title="how email works"></a>how email works</h2><p>Mail User Agent(MUA), e.g. Outlook, Foxmail, used to receive and send emails.</p>
+<p>MUA is not directly sent emails to end users, but through  Mail Transfer Agent(MTA), e.g. SendMail, Postfix.</p>
+<p>an email sent out from MUA will go through one or more MTA, finally reach to Mail Delivery Agent(MDA), the email then store in some database, e.g. mailbox</p>
+<p>the receiver then use MUA to review the email in the mailbox</p>
+<p>ps, one day work as a IT admin …. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="url">design scenarios in ADS simulation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-25T10:15:24-04:00">
+                2019-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/25/design-scenarios-in-ADS-simulation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>to design scenarios in self-driving test, one reference is: <a href="https://www.nhtsa.gov/document/framework-automated-driving-system-testable-cases-and-scenarios" target="_blank" rel="external">a framework for automated driving system testable cases and sceanrios</a>, most other scenario classifications have almost the same elements: ODD, e.g. road types, road surfaces; OEDR, namely object and event detection and response, e.g. static obstacles, other road actors, traffic signature, environment conditions, special zones; and failure mode behaviors.</p>
+<p>in general, test cases can be grouped as black box test, in which the scenario parterners’ behavior is not pre-defined or unpredictable, e.g. random traffic flow(npcs) scenario, or white box test, where the npcs behavior is pre-defined, e.g. following user-define routings. white box testing is helpful to support performance metrics; while black-box testing is helpful to verify the system completeness and robust.</p>
+<p>as for ADS test, there are a few chanllenges coming from:</p>
+<ul>
+<li><p>heuristics decision-making algorithms, deep-learning algorithms, which is not mathematically completed</p>
+</li>
+<li><p>the test case completeness, as the number of tests required to achieve statistically significant to claim safe would be staggering</p>
+</li>
+<li><p>undefined conditions or assumptions</p>
+</li>
+</ul>
+<p>a sample test scenario set maybe looks like: </p>
+<table>
+<thead>
+<tr>
+<th>ODD</th>
+<th>OEDR-obj</th>
+<th>OEDR-loc</th>
+<th>maneuver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>in rump</td>
+<td>static obstacles</td>
+<td>in front of current lane</td>
+<td></td>
+</tr>
+<tr>
+<td>in rump</td>
+<td>static obstacles</td>
+<td>in front of targe lane</td>
+<td></td>
+</tr>
+<tr>
+<td>in rump</td>
+<td>dynamic obstacles</td>
+<td>in front of current lane</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scenarios-runner"><a href="#scenarios-runner" class="headerlink" title="scenarios_runner"></a>scenarios_runner</h3><p><a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external">carla</a> has offered an scenario engine, which is helpful to define scenarios by test_criteria and behaviors, of course the timeout as well.</p>
+<p><code>test_criteria</code>, is like an underline boundary for the scenario to keep, if not, the scenario failed. e.g. max_speed_limitation, collision e.t.c. these are test criterias, no matter simualtion test or physical test, that have to follow the same criterias; in old ways, we always try to find a way to evaluate the simulation result, and thought this may be very complex, but as no clue to go complex further, simple criterias actually is good. even for reinforcement learning, the simple criterias is good enough for the agent to learn the drive policy. </p>
+<p>of course, I can expect there are some expert system about test criterias.  </p>
+<p>For simulation itself, there has another metric to descibe how close the simulation itself to physical world, namley to performance how well the simulator is, which is beyond here.</p>
+<p><code>behaivor</code> is a good way to describe the dynamic processing in the scenario. e.g. npc follow lane to next intersection, and stop in right lane, ego follow npc till the stop area.</p>
+<p>OpenScenario has similar ideas to descibe the dynamic. to support <code>behaivor</code>, the simulator should have the features to control ego and npc with the atomic behaviors, e.g. lane-follow, lane-change, stop at intersection e.t.c. </p>
+<p>in lg simulator, npc has simple AI routing and lane-following API, basically is limited to follow pre-defined behaviors; ego has only cruise-control, but external planner is avialable through ROS.</p>
+<p>for both <code>test_criteria</code> and <code>behavior</code>, carla has a few existing atomic elements, which is a good idea to build up complex scenarios. </p>
+<h3 id="OpenScenario"><a href="#OpenScenario" class="headerlink" title="OpenScenario"></a>OpenScenario</h3><p>not sure if this is a project still on-going, carla has interface and a few other open source parsers there, but as it is a standard in popular projects, e.g. PEGUS, should be worthy to take further study.  </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/18/model-based-design-sucks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1852,321 +2164,6 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/17/principles-of-GNSS-positioning/" itemprop="url">principles of GNSS positioning</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-17T10:35:26-04:00">
-                2019-06-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/17/principles-of-GNSS-positioning/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/17/principles-of-GNSS-positioning/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://www.novatel.com/an-introduction-to-gnss/chapter-1-gnss-overview/" target="_blank" rel="external">novatel introduction</a></p>
-<h3 id="GNSS-architecture"><a href="#GNSS-architecture" class="headerlink" title="GNSS architecture"></a>GNSS architecture</h3><p>a) space segment</p>
-<p>the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status.</p>
-<p>b) control segment </p>
-<p>a ground-based network of master control stations, data uploading stations adn monitor stations. in case of GPS, 2 master control stations(one primary and one backup),  4 data uploading stations, and 16 monitor stations</p>
-<p>c) user segment </p>
-<p>the user equipment that process the received signals. </p>
-<h3 id="GNSS-propagation"><a href="#GNSS-propagation" class="headerlink" title="GNSS propagation"></a>GNSS propagation</h3><p>the layer of atmoshpere that most influcences the transmission of GPS signals is the ionosphere(电离层), ionoshperic delays are frequency dependent; and the other layer is troposphere(平流层), whose delay is a function of local temperature, pressure and relative humidity. </p>
-<p>some singal energy is reflected on the way to the receiver, called “multipath propagation”. </p>
-<h3 id="Antenna"><a href="#Antenna" class="headerlink" title="Antenna"></a>Antenna</h3><p>each GNSS constellation has its own signal frequencies and bandwidths, an antenan must cover the signal frequencies and bandwidth.</p>
-<p>antenna gain is defined as the relative measure of an antenna’s ability to direct or concentrate radio frequency energy in a particular direction or pattern. A minimum gain is required to achieve a minimum carrier : power-noise-ratio to track GNSS satellites.</p>
-<h3 id="GNSS-error-sources"><a href="#GNSS-error-sources" class="headerlink" title="GNSS error sources"></a>GNSS error sources</h3><pre><code>contributing sources         error range
-
-satellite clocks             +- 2m
-
-orbit errors                       +-2.5m
-
-inospheric delays            +-5m
-
-tropospheric delays            +-0.5m
-
-receiver noies                +-0.3m
-
-multi path                     +-1m
-</code></pre><h3 id="Resolving-errors"><a href="#Resolving-errors" class="headerlink" title="Resolving errors"></a>Resolving errors</h3><h4 id="multi-constellation-amp-multi-frequency"><a href="#multi-constellation-amp-multi-frequency" class="headerlink" title="multi-constellation &amp; multi-frequency"></a>multi-constellation &amp; multi-frequency</h4><p>multi-frequency is the most effective way to remove ionospheric error,  by comparing the delays of two GNSS signals, L1 &amp; L2, the receiver can correct for the impact of ionospheric errors.</p>
-<p>multi-constellation has benefits:  reduce signal acquisition time,  improve position and time accuracy.</p>
-<h4 id="D-GNSS"><a href="#D-GNSS" class="headerlink" title="D-GNSS"></a>D-GNSS</h4><p>in differential GNSS(D-GNSS), the position of a fixed GNSS receiver, refered as a base station, which sends the atmospheric delay related errors to receivers, which incorporate the corrections into their positoin calculations.</p>
-<p>differential positiong requires a data link betwen the base station and rovers, if corrections need to be applied in real-time. and D-GNSS works very well with base station-to-rover separations of up to 10km.</p>
-<h4 id="Real-time-kinematic-RTK"><a href="#Real-time-kinematic-RTK" class="headerlink" title="Real time kinematic(RTK)"></a>Real time kinematic(RTK)</h4><p>it uses measurements of the phase of the signal’s carrier wave, in addition to the information content of the signal and relies on a single fixed reference station to provide real-time corrections, up to centimetre-level accuracy. </p>
-<p>the range to a satellite is calculated by multiplying the carrier wavelength times the number of whole cycles between the satellite and the rover and adding the phase difference. the results in an error equal to the error in the estimated number of cycles times the wavelength, so-called integer ambiguity search, which is 19cm for L1 signal. </p>
-<h4 id="Precise-Point-Positioning-PPP"><a href="#Precise-Point-Positioning-PPP" class="headerlink" title="Precise Point Positioning(PPP)"></a>Precise Point Positioning(PPP)</h4><p>PPP solution depends on GNSS satellite clock and orbit corrections, generated from a network of global reference stations. </p>
-<h3 id="GNSS-IMU"><a href="#GNSS-IMU" class="headerlink" title="GNSS + IMU"></a>GNSS + IMU</h3><p>the external reference can quite effectively be provided by GNSS, and GNSS provides an absolute set of coordinates that can be used as the initial start point, as well, GNSS provides continuous positions adn velocities thereafter which are used to update the IMU/INS filter estimates.</p>
-<p>for additional combined sensors, such as odometers, cameras vision.</p>
-<h3 id="challenges-of-GNSS-in-AV"><a href="#challenges-of-GNSS-in-AV" class="headerlink" title="challenges of GNSS in AV"></a>challenges of GNSS in AV</h3><p>talk from iMorpheus.ai </p>
-<p>1)  antenna</p>
-<p>2)  multipath mitigation</p>
-<p>3)  multi-band, multi-constellation signals</p>
-<p>4)  integrated navigation (camera )</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/Manhanton-SC-review/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/12/Manhanton-SC-review/" itemprop="url">Manhanton SC review</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-12T10:37:16-04:00">
-                2019-06-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/12/Manhanton-SC-review/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/12/Manhanton-SC-review/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="conjunctions"><a href="#conjunctions" class="headerlink" title="conjunctions"></a>conjunctions</h3><p>the seven conjunctions can used to connect two independent clauses:</p>
-<pre><code>For,   And, Nor,  But, Or,  Yet, So
-</code></pre><p>comma only cant connect two sentences;  but can connect two independent clauses using a semicolon(;)</p>
-<p>semicolon is often followed by a transition expression, (however, therefore, in addition), but these expression are not conjunctions, so must use semicolons, not commas to join.</p>
-<h3 id="noun-modifiers"><a href="#noun-modifiers" class="headerlink" title="noun modifiers"></a>noun modifiers</h3><p>in the format:  prepositon,  part participle, presetn participle without commas. put the noun and its modifier as close together as possible </p>
-<p>“ comma which” is a nonessential modifier</p>
-<h3 id="relative-pronouns"><a href="#relative-pronouns" class="headerlink" title="relative pronouns"></a>relative pronouns</h3><p>which,  cant modify people, </p>
-<p>who/ whom, must modify people </p>
-<p>whose,  can modify either people or things</p>
-<p>where, can modify a noun place,  can’t modify a metaphorical place, such as situation, case …</p>
-<p>when,  can modify a noun event or time </p>
-<h3 id="Noun-Modifier-markers"><a href="#Noun-Modifier-markers" class="headerlink" title="Noun Modifier markers"></a>Noun Modifier markers</h3><p>any -ing that are not verbs and not separated from the rest of the sentence by comma will either be a noun, or a modifier of another noun.</p>
-<p>any “comma -ing” is adverbial modifiers </p>
-<h3 id="adverbial-modifier"><a href="#adverbial-modifier" class="headerlink" title="adverbial modifier"></a>adverbial modifier</h3><p>in the format of:  prepositional phrase,  present participle with commas , past participle with commas </p>
-<p>the adverbial modifier must modify a certain verb or clause at a right position, not structurally closer to another verb or clause </p>
-<h3 id="participle-modifiers"><a href="#participle-modifiers" class="headerlink" title="participle modifiers"></a>participle modifiers</h3><p>when using particples, the information present earlier in the sentence leads to or results in the information presented later in the sentence .</p>
-<h3 id="subordinators"><a href="#subordinators" class="headerlink" title="subordinators"></a>subordinators</h3><p>subordernate clause provides additional info about the main clause.  common subordinatetor markers:</p>
-<pre><code>although,  before,  unless, because,  that, so that, 
- if, yet, after, while, since, when. 
-</code></pre><p>and using only one connected word per “connection” . .   </p>
-<h3 id="which-vs-ing"><a href="#which-vs-ing" class="headerlink" title="which vs  -ing"></a>which vs  -ing</h3><p>whenever using <code>which</code>, must refer to a noun,  can’t modify a whole clause. </p>
-<p>so if need to modify the whole clause, use  an  adverbial modifier(either -ing, or past) </p>
-<h2 id="quantity"><a href="#quantity" class="headerlink" title="quantity"></a>quantity</h2><p>countable modifiers:   </p>
-<pre><code>many,  few, fewer,  fewest,  number of ,  numerous 
-</code></pre><p>uncountable modifiers:  </p>
-<pre><code>much, little, less, least, amount of , great 
-</code></pre><p>more, enough,  all works with both countable and uncountable. </p>
-<h2 id="parallelism"><a href="#parallelism" class="headerlink" title="parallelism"></a>parallelism</h2><p>comparable sentence parts must be structurally and logically similar </p>
-<h2 id="comparison"><a href="#comparison" class="headerlink" title="comparison"></a>comparison</h2><p>comparison are a subset of parallelism, which requires parallelism between two elements, but also require the two compared items are fundamentally the same type of thing </p>
-<pre><code>like,  unlike,  as, than,  as adj as, 
- different from,  in contrast to/with 
-</code></pre><h3 id="like-vs-as"><a href="#like-vs-as" class="headerlink" title="like vs  as"></a>like vs  as</h3><p><code>like</code> is used to compare nouns, pronouns or noun phrase, never put a clause or prepositional phrase after like.</p>
-<p><code>as</code> can used to compare two clauses.  </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2217,7 +2214,7 @@ multi path                     +-1m
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-count">136</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -291,6 +291,321 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/principles-of-GNSS-positioning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/17/principles-of-GNSS-positioning/" itemprop="url">principles of GNSS positioning</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-17T10:35:26-04:00">
+                2019-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/17/principles-of-GNSS-positioning/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/06/17/principles-of-GNSS-positioning/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://www.novatel.com/an-introduction-to-gnss/chapter-1-gnss-overview/" target="_blank" rel="external">novatel introduction</a></p>
+<h3 id="GNSS-architecture"><a href="#GNSS-architecture" class="headerlink" title="GNSS architecture"></a>GNSS architecture</h3><p>a) space segment</p>
+<p>the GNSS satellites, each of which broadcasts a signal that identifies ti and provides its time, orbit and status.</p>
+<p>b) control segment </p>
+<p>a ground-based network of master control stations, data uploading stations adn monitor stations. in case of GPS, 2 master control stations(one primary and one backup),  4 data uploading stations, and 16 monitor stations</p>
+<p>c) user segment </p>
+<p>the user equipment that process the received signals. </p>
+<h3 id="GNSS-propagation"><a href="#GNSS-propagation" class="headerlink" title="GNSS propagation"></a>GNSS propagation</h3><p>the layer of atmoshpere that most influcences the transmission of GPS signals is the ionosphere(电离层), ionoshperic delays are frequency dependent; and the other layer is troposphere(平流层), whose delay is a function of local temperature, pressure and relative humidity. </p>
+<p>some singal energy is reflected on the way to the receiver, called “multipath propagation”. </p>
+<h3 id="Antenna"><a href="#Antenna" class="headerlink" title="Antenna"></a>Antenna</h3><p>each GNSS constellation has its own signal frequencies and bandwidths, an antenan must cover the signal frequencies and bandwidth.</p>
+<p>antenna gain is defined as the relative measure of an antenna’s ability to direct or concentrate radio frequency energy in a particular direction or pattern. A minimum gain is required to achieve a minimum carrier : power-noise-ratio to track GNSS satellites.</p>
+<h3 id="GNSS-error-sources"><a href="#GNSS-error-sources" class="headerlink" title="GNSS error sources"></a>GNSS error sources</h3><pre><code>contributing sources         error range
+
+satellite clocks             +- 2m
+
+orbit errors                       +-2.5m
+
+inospheric delays            +-5m
+
+tropospheric delays            +-0.5m
+
+receiver noies                +-0.3m
+
+multi path                     +-1m
+</code></pre><h3 id="Resolving-errors"><a href="#Resolving-errors" class="headerlink" title="Resolving errors"></a>Resolving errors</h3><h4 id="multi-constellation-amp-multi-frequency"><a href="#multi-constellation-amp-multi-frequency" class="headerlink" title="multi-constellation &amp; multi-frequency"></a>multi-constellation &amp; multi-frequency</h4><p>multi-frequency is the most effective way to remove ionospheric error,  by comparing the delays of two GNSS signals, L1 &amp; L2, the receiver can correct for the impact of ionospheric errors.</p>
+<p>multi-constellation has benefits:  reduce signal acquisition time,  improve position and time accuracy.</p>
+<h4 id="D-GNSS"><a href="#D-GNSS" class="headerlink" title="D-GNSS"></a>D-GNSS</h4><p>in differential GNSS(D-GNSS), the position of a fixed GNSS receiver, refered as a base station, which sends the atmospheric delay related errors to receivers, which incorporate the corrections into their positoin calculations.</p>
+<p>differential positiong requires a data link betwen the base station and rovers, if corrections need to be applied in real-time. and D-GNSS works very well with base station-to-rover separations of up to 10km.</p>
+<h4 id="Real-time-kinematic-RTK"><a href="#Real-time-kinematic-RTK" class="headerlink" title="Real time kinematic(RTK)"></a>Real time kinematic(RTK)</h4><p>it uses measurements of the phase of the signal’s carrier wave, in addition to the information content of the signal and relies on a single fixed reference station to provide real-time corrections, up to centimetre-level accuracy. </p>
+<p>the range to a satellite is calculated by multiplying the carrier wavelength times the number of whole cycles between the satellite and the rover and adding the phase difference. the results in an error equal to the error in the estimated number of cycles times the wavelength, so-called integer ambiguity search, which is 19cm for L1 signal. </p>
+<h4 id="Precise-Point-Positioning-PPP"><a href="#Precise-Point-Positioning-PPP" class="headerlink" title="Precise Point Positioning(PPP)"></a>Precise Point Positioning(PPP)</h4><p>PPP solution depends on GNSS satellite clock and orbit corrections, generated from a network of global reference stations. </p>
+<h3 id="GNSS-IMU"><a href="#GNSS-IMU" class="headerlink" title="GNSS + IMU"></a>GNSS + IMU</h3><p>the external reference can quite effectively be provided by GNSS, and GNSS provides an absolute set of coordinates that can be used as the initial start point, as well, GNSS provides continuous positions adn velocities thereafter which are used to update the IMU/INS filter estimates.</p>
+<p>for additional combined sensors, such as odometers, cameras vision.</p>
+<h3 id="challenges-of-GNSS-in-AV"><a href="#challenges-of-GNSS-in-AV" class="headerlink" title="challenges of GNSS in AV"></a>challenges of GNSS in AV</h3><p>talk from iMorpheus.ai </p>
+<p>1)  antenna</p>
+<p>2)  multipath mitigation</p>
+<p>3)  multi-band, multi-constellation signals</p>
+<p>4)  integrated navigation (camera )</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/Manhanton-SC-review/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/12/Manhanton-SC-review/" itemprop="url">Manhanton SC review</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-12T10:37:16-04:00">
+                2019-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/12/Manhanton-SC-review/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/06/12/Manhanton-SC-review/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="conjunctions"><a href="#conjunctions" class="headerlink" title="conjunctions"></a>conjunctions</h3><p>the seven conjunctions can used to connect two independent clauses:</p>
+<pre><code>For,   And, Nor,  But, Or,  Yet, So
+</code></pre><p>comma only cant connect two sentences;  but can connect two independent clauses using a semicolon(;)</p>
+<p>semicolon is often followed by a transition expression, (however, therefore, in addition), but these expression are not conjunctions, so must use semicolons, not commas to join.</p>
+<h3 id="noun-modifiers"><a href="#noun-modifiers" class="headerlink" title="noun modifiers"></a>noun modifiers</h3><p>in the format:  prepositon,  part participle, presetn participle without commas. put the noun and its modifier as close together as possible </p>
+<p>“ comma which” is a nonessential modifier</p>
+<h3 id="relative-pronouns"><a href="#relative-pronouns" class="headerlink" title="relative pronouns"></a>relative pronouns</h3><p>which,  cant modify people, </p>
+<p>who/ whom, must modify people </p>
+<p>whose,  can modify either people or things</p>
+<p>where, can modify a noun place,  can’t modify a metaphorical place, such as situation, case …</p>
+<p>when,  can modify a noun event or time </p>
+<h3 id="Noun-Modifier-markers"><a href="#Noun-Modifier-markers" class="headerlink" title="Noun Modifier markers"></a>Noun Modifier markers</h3><p>any -ing that are not verbs and not separated from the rest of the sentence by comma will either be a noun, or a modifier of another noun.</p>
+<p>any “comma -ing” is adverbial modifiers </p>
+<h3 id="adverbial-modifier"><a href="#adverbial-modifier" class="headerlink" title="adverbial modifier"></a>adverbial modifier</h3><p>in the format of:  prepositional phrase,  present participle with commas , past participle with commas </p>
+<p>the adverbial modifier must modify a certain verb or clause at a right position, not structurally closer to another verb or clause </p>
+<h3 id="participle-modifiers"><a href="#participle-modifiers" class="headerlink" title="participle modifiers"></a>participle modifiers</h3><p>when using particples, the information present earlier in the sentence leads to or results in the information presented later in the sentence .</p>
+<h3 id="subordinators"><a href="#subordinators" class="headerlink" title="subordinators"></a>subordinators</h3><p>subordernate clause provides additional info about the main clause.  common subordinatetor markers:</p>
+<pre><code>although,  before,  unless, because,  that, so that, 
+ if, yet, after, while, since, when. 
+</code></pre><p>and using only one connected word per “connection” . .   </p>
+<h3 id="which-vs-ing"><a href="#which-vs-ing" class="headerlink" title="which vs  -ing"></a>which vs  -ing</h3><p>whenever using <code>which</code>, must refer to a noun,  can’t modify a whole clause. </p>
+<p>so if need to modify the whole clause, use  an  adverbial modifier(either -ing, or past) </p>
+<h2 id="quantity"><a href="#quantity" class="headerlink" title="quantity"></a>quantity</h2><p>countable modifiers:   </p>
+<pre><code>many,  few, fewer,  fewest,  number of ,  numerous 
+</code></pre><p>uncountable modifiers:  </p>
+<pre><code>much, little, less, least, amount of , great 
+</code></pre><p>more, enough,  all works with both countable and uncountable. </p>
+<h2 id="parallelism"><a href="#parallelism" class="headerlink" title="parallelism"></a>parallelism</h2><p>comparable sentence parts must be structurally and logically similar </p>
+<h2 id="comparison"><a href="#comparison" class="headerlink" title="comparison"></a>comparison</h2><p>comparison are a subset of parallelism, which requires parallelism between two elements, but also require the two compared items are fundamentally the same type of thing </p>
+<pre><code>like,  unlike,  as, than,  as adj as, 
+ different from,  in contrast to/with 
+</code></pre><h3 id="like-vs-as"><a href="#like-vs-as" class="headerlink" title="like vs  as"></a>like vs  as</h3><p><code>like</code> is used to compare nouns, pronouns or noun phrase, never put a clause or prepositional phrase after like.</p>
+<p><code>as</code> can used to compare two clauses.  </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/how-simulation-helps-for-autonomous-vehicle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1516,276 +1831,6 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/30/未来5年在哪里-7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/30/未来5年在哪里-7/" itemprop="url">未来5年在哪里(7)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-30T11:06:14-04:00">
-                2019-04-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/30/未来5年在哪里-7/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/04/30/未来5年在哪里-7/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="噱头团队"><a href="#噱头团队" class="headerlink" title="噱头团队"></a>噱头团队</h2><p>必须在有危机意识的企业中成长。靠投资活的团队，往往只展现其繁荣的一面，对内对外；而实际公司的产品、市场定位，甚至内部员工都不知情。对员工缺乏诚实，对市场客户也不会诚实。</p>
-<h2 id="民企文化"><a href="#民企文化" class="headerlink" title="民企文化"></a>民企文化</h2><p>近距离观察了一家民企（长城汽车），意识到民企都不容易迈过国际化的坎儿。为什么需要国际化？因为资本市场是赢者通吃。行业内国际企业进入，本土行业要想生存，必须主动走出去。</p>
-<p>民企的老总个人印记太深。集权的管理问题，符合中国文化传统，但与现代管理理念相差甚远。强调军事化管理的集体制，是无法调动个人主观积极性的，对于底层车间工人可能有效，但如此又会造成企业管理上的双轨制，产生内部紧张。另外，集体制会助长一些骄横的个人气息，狭隘自大，而不利于个人内在品质的培养。一个代表先进生产关系和生产力的团队，是不会容忍形式主义的。</p>
-<p>国内不错的企业要么狼性，要么艰苦奋斗。其实鼓励创业氛围没有问题，但是文化上很容易“右倾”，把规则理解的太死。</p>
-<p>另外强调艰苦奋斗又不集权的华为，给员工持股，也许才是现代优秀企业该有的特征。把员工当作“合伙人“，自然调动了员工的积极性，而不是为某个老板打工。 </p>
-<p>回国前的想法是参与一个团队的成长，而不是在一家公司打工。所以除了物质利益，现在人更渴求在工作中的身份认同：”合伙人“。</p>
-<h1 id="套路"><a href="#套路" class="headerlink" title="套路"></a>套路</h1><p>国内的套路：先放话。</p>
-<p>改革开放前，国家层面严禁私有制，结果江浙的小农户搞了“分田到户”私有承包，后来却全国推广了。面对新情况，国家领导也在摸索，但又要给广大普通人一致的声音。所以先放话。在日后的实践中，慢慢修正，甚至会产生与放话的内容完全相反的实践。至于普通人，如果把放话的内容听的太真，跟领导较劲儿，就是不懂套路。</p>
-<p>有些企业做了匪夷所思的规定，还名正言顺地称为“企业文化”，对于明显不符合人情逻辑的条例，也就是这类“放话”，企业领导并不知道怎么管理，员工明白就好，该怎么来还是怎么来；但如果因此想挑战企业领导的规定，就是不懂套路。</p>
-<h2 id="提拔-or-压制"><a href="#提拔-or-压制" class="headerlink" title="提拔 or 压制"></a>提拔 or 压制</h2><p>国内有个说法叫”站错队“：不怨能力，是没跟对人。在美国职场，管理层都至少表现比较”亲民“，另外工薪层也基本生活无忧，所以两者相安，比较容易相信对方；相对，国内的职场还没有成熟的系统，就会有”站错队“的风险。另外大家都有生活压力，难免成了隐性竞争对手，互不信任，所以国内的职场被压制可能多过受提拔。这当然是陋习。</p>
-<p>偶然看了密西根的地图，一股亲切感就涌上来。在美国的大环境会把善意当作默认的配置，工作生活上有意无意都会受到他人的帮助或有意无意地帮助别人。善意比较容易表达出来；相比，国内的环境，职场上、生活上，都有一些压制感。</p>
-<p>比如生活上的压抑感。在北美的同学都嘴上说，回国好啊，吃的多么多么好。实际上，外面的东西都不敢吃，忌讳比如肉干净吗、油干净吗、放了不该放的调料吗。办点事，老是担心哪里被骗了都不知道。社会系统不成熟，就会有这样的隐形成本。</p>
-<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>写完上面的内容4天后，才有机会再次打开。工作到没时间读书是对人最大的消耗。希望自己尽快适应国内工作生活节奏，而又不受制于这样的工作生活状态。</p>
-<p><a href="https://www.sohu.com/a/128114001_473283" target="_blank" rel="external">某个人的回忆</a></p>
-<p>ps 军训的时候，每天跑8km，站军姿一个半小时，在这样的环境下反而更激发我去思考，如何把高标准习成标配。</p>
-<h2 id="管理之路"><a href="#管理之路" class="headerlink" title="管理之路"></a>管理之路</h2><p>我以为自己是细节导向的，国内这个工作环境会占据太多个人时间，叫人没时间思考大方向的问题。高标准成为标配吧。</p>
-<p>越来越看到技术是平的，相比，工作流程，系统建设才是企业愿意花钱的地方。写程序、推公式、做运营、甚至做基础研究，到一定阶段都是极易取代的。“单腿走路”是high risk的。相比，任何一个领域的产品人，至少有一条粗腿，同时还有很多不错的小腿。把各个环节、各个岗位有机组合起来的，就是管理。而在工作中需要有意培养系统（管理）意识。</p>
-<p>现在的民企，管理水平还是很差的。文化层面上，虽然在推一些流程，但是也有一些制度性的限制。一方面，一边高举打破旧思维搞创新，一边又做很多行为细节上的约束，在员工心理建立墙。工作流程的建立，不是做几次讲座、参加几个培训，领导提倡几次，不是喊出来的，而是像培养一个工作习惯。需要反复练习，慢慢融入到企业文化，变成员工自然而然的行为。</p>
-<p>日常层面上，任务管理、时间管理都比较缺乏。老板会希望员工加班，但并没有定义很好的工作内容，即缺乏任务管理，缺乏日常的考核机制。然后责任不明晰，缺乏有效的工作模式，比如出现一个问题，一伙儿人都围上来了。或者一个会议讨论停不下来。当然，大的层面还是工作的流程没有建立好。</p>
-<p>今后的工作，要经常跳出来思考系统建设，而不要跟年轻人拼体力上。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/28/apollo-planning-源码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/28/apollo-planning-源码/" itemprop="url">Apollo 2.0  Planning 源码(1)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-28T11:30:06-04:00">
-                2019-04-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/04/28/apollo-planning-源码/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/04/28/apollo-planning-源码/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line">APOLLO_MAIN(apollo::planning::Planning)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">	google::InitGoogleLogging(argv[<span class="number">0</span>]);</div><div class="line">	google::ParseCommandLineFlags(&amp;argc, &amp;argv, <span class="literal">true</span>); </div><div class="line">	signal(SIGINT, apollo::common::apollo_app_sigint_handler);</div><div class="line">	apollo::planning::Planning apollo_app_ ;</div><div class="line">	ros::init(argc, argv, apollo_app_.Name());</div><div class="line">	apollo_app_.Spin();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> ApolloApp::Spin()</div><div class="line">&#123;</div><div class="line">	ros::<span class="function">AsyncSpinner <span class="title">spinner</span><span class="params">(callback_thread_num_)</span></span>;</div><div class="line">	<span class="keyword">auto</span> status = Init();</div><div class="line">	status = Start(); </div><div class="line">	</div><div class="line">	spinner.start();</div><div class="line">	ros::waitForShutdown();</div><div class="line">	Stop();</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"></div><div class="line">Status Planning::Init()</div><div class="line">&#123;</div><div class="line">	hdmap_ = apollo::hdmap::HDMapUtil::BaseMapPtr();</div><div class="line">	</div><div class="line">apollo::common::util::GetProtoFromFile(FLAGS_planning_config_file, &amp;config);</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(!AdapterManager::Initialized())&#123;</div><div class="line">		AdaapterManager::Init(FLAGS_planning_adapter_config_filename);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	AdapterManager::GetLocalization();</div><div class="line">	AdapterManager::GetChassis();</div><div class="line">	AdapterManager::GetRoutingResponse();</div><div class="line">	AdapterManager::GetRoutingRequest();</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_prediction)</div><div class="line">		AdapterManager::GetPrediction();</div><div class="line">		</div><div class="line">	<span class="keyword">if</span>(FLAGS_enable_traffic_light)</div><div class="line">		AdapterManager::GetTrafficLightDetection();</div><div class="line">		</div><div class="line">	ReferenceLineProvider::instance()-&gt;Init(hdmap_, config_.qp_spline_reference_line_smoother_config()); </div><div class="line">	</div><div class="line">	RegisterPlanners();</div><div class="line">	</div><div class="line">	planner_ = planner_factory_.CreateObject(config_.planner_type());</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> planner_-&gt;Init(config_);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/* DEFINE_string(planning_adapter_config_filename,</span></div><div class="line">	"modules/planning/conf/adapter.conf",</div><div class="line">	"The adapter configuration file")</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">///////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;adapter_config_filename)</div><div class="line">&#123;</div><div class="line">	AdapterManagerConfig configs;</div><div class="line">	util::GetProtoFromFile(adapter_config_filename, &amp;configs);</div><div class="line">	Init(configs);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//////////////////////////////////////////////////////////////</span></div><div class="line"></div><div class="line"><span class="keyword">void</span> AdapterManager::Init(<span class="keyword">const</span> AdapterManagerConfig&amp; configs)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(Initialized())	<span class="keyword">return</span>;</div><div class="line">	instance()-&gt;initialized_ = <span class="literal">true</span>; </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(configs.is_ros())&#123;</div><div class="line">		instance()-&gt;node_handle_.reset(<span class="keyword">new</span> ros::NodeHandle());</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> &amp;config : configs.config())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::CHASSIS:</div><div class="line">			EnableChassis(FLAGS_chassis_topic, config);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		<span class="keyword">case</span> AdapterConfig::LOCALIZATION:</div><div class="line">			EnableLocalization(FLAGS_localization_topic, config);</div><div class="line">			<span class="keyword">break</span>;	</div><div class="line">			<span class="comment">// ...</span></div><div class="line">	&#125;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"><span class="comment">/* DEFINE_string 宏</span></div><div class="line">	FLAGS_chassis_topic -&gt;  /apollo/canbus/chassis</div><div class="line">	FLAGS_localization_topic -&gt; /apollo/localization/pose</div><div class="line">*/</div></pre></td></tr></table></figure>
-<p>where is <code>EnableChassis</code> ? </p>
-<p>in /apollo/modules/common/adapters/message_adapters.h</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> ChassisAdapter=Adapter&lt;::apollo::canbus::Chassis&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> GpsAdapter = Adapter&lt;apollo::localization::Gps&gt;;</div><div class="line"></div><div class="line"><span class="keyword">using</span> PlanningAdapter = Adapter&lt;planning::ADCTrajectory&gt;;</div></pre></td></tr></table></figure>
-<p>in /apollo/modules/common/adapters/adapter_manager.h</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> REGISTER_ADAPTER(name)</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> Enable#<span class="meta">#name(const std::string &amp;topic_name, const AdapterConfig&amp; config)</span></div><div class="line">	&#123;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<h5 id="continue-tomorrow"><a href="#continue-tomorrow" class="headerlink" title="continue tomorrow"></a>continue tomorrow</h5>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1836,7 +1881,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-count">136</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

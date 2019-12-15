@@ -291,6 +291,312 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/" itemprop="url">vulkan in docker to support new lgsvl</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-13T08:06:45-05:00">
+                2019-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/13/vulkan-in-docker-to-support-new-lgsvl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/13/vulkan-in-docker-to-support-new-lgsvl/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p>Docker is a great idea to package apps, the first time to try <a href="https://zjli2013.github.io/2019/07/12/play-with-Docker-swarm-compose/" target="_blank" rel="external">play with docker swarm</a>. <a href="https://github.com/lgsvl/simulator" target="_blank" rel="external">lg-sim</a> has updated to HDRP rendering, which has a higher quality, as well requires more GPU features, <code>Vulkan</code>. currently <code>Vulkan</code> is not supported by standard <code>docker</code> neither <code>nvidia-dcker</code>, which is deprecated after <code>docker enginer &gt; 19.03</code>. </p>
+<p>there is <a href="https://gitlab.com/nvidia/container-images" target="_blank" rel="external">nvidia images</a>,  the special one we are interesed is <a href="https://gitlab.com/nvidia/container-images/vulkan" target="_blank" rel="external">vulkan docker</a>, and there is an related <a href="https://github.com/edowson/docker-nvidia-vulkan" target="_blank" rel="external">personal project</a>, which is based on the <code>cudagl=10.1</code>, which is not supported by non-Tesla GPU. so for our platform, which has only <a href="https://developer.nvidia.com/cuda-gpus" target="_blank" rel="external">Quadra P2000 GPUs</a>, the supported CUDA is 9.0, so we need to rebuild the vulkan docker based on <code>CUDA9.0</code>. check the <a href="https://gitlab.com/nvidia/container-images/vulkan/blob/master/Dockerfile" target="_blank" rel="external">vulkan dockerfile</a>, instead of using <code>cudagl:9.0</code>, change to: <code>FROM nvidia/cudagl:9.0-base-ubuntu16.04</code></p>
+<p>after build the image, we can build the <a href="https://gitlab.com/nvidia/container-images/samples/tree/master/vulkan/ubuntu16.04" target="_blank" rel="external">vulkan test samples</a>. if no issue, load lg-sim into this vulkan-docker.</p>
+<p>a few lines may help:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">/usr/lib/nvidia-384/libGLX_nvidia.s.0 </div><div class="line"></div><div class="line">/usr/share/vulkan/icd.d</div><div class="line"></div><div class="line">/proc/driver/nvidia/version</div></pre></td></tr></table></figure>
+<h3 id="new-lgsvl-in-docker"><a href="#new-lgsvl-in-docker" class="headerlink" title="new lgsvl in docker"></a>new lgsvl in docker</h3><p>the previous lg-sim(2019.04) can be easily run in docker, as mentioned <a href="https://github.com/lgsvl/simulator/issues/222" target="_blank" rel="external">here</a>.</p>
+<p>the above vulkan-docker image is the base to host lgsvl (2019.09). additionaly, adding <code>vulkan_pso_cache.bin</code> to the docker. the benefit of host lgsvl server in docker, is to access the webUI from host or remote. so the network should be configured to run as <code>--net=host</code>. if configure as a swarm overlay network, it should support swarm cluster.</p>
+<p>a few related issue can be checked at <a href="https://github.com/lgsvl/simulator/issues/488" target="_blank" rel="external">lgsvl issues hub</a>.</p>
+<h3 id="VOLUME-in-dockerfile"><a href="#VOLUME-in-dockerfile" class="headerlink" title="VOLUME in dockerfile"></a>VOLUME in dockerfile</h3><p>the following sample is from <a href="https://stackoverflow.com/questions/41935435/understanding-volume-instruction-in-dockerfile" target="_blank" rel="external">understand VOLUME instruction in Dockerfile</a></p>
+<p>create a Dockerfile as: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">FROM openjdk</div><div class="line">VOLUME vol1 /vol2</div><div class="line">CMD [&quot;/bin/bash&quot;]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker build -t vol_test . </div><div class="line">docker run --rm -it vol_test</div></pre></td></tr></table></figure>
+<p>check in the container, <code>vol1</code>, <code>vol2</code> does both exist in the running container.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">bash-4.2# ls </div><div class="line">	bin   dev  home  lib64	mnt  proc  run	 srv  tmp  var	 vol2</div><div class="line">	boot  etc  lib	 media	opt  root  sbin  sys  usr  vol1</div></pre></td></tr></table></figure>
+<p>also check in host terminal:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@ubuntu:~# docker volume ls </div><div class="line">DRIVER              VOLUME NAME</div><div class="line">local               0ffca0474fe0d2bf8911fba9cd6b5875e51abe172f6a4b3eb5fd8b784e59ee76</div><div class="line">local               7c03d43aaa018a8fb031ef8ed809d30f025478ef6a64aa87b87b224b83901445</div></pre></td></tr></table></figure>
+<p>and check further: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@ubuntu:/var/lib/docker/volumes# ls </div><div class="line">0ffca0474fe0d2bf8911fba9cd6b5875e51abe172f6a4b3eb5fd8b784e59ee76  metadata.db</div><div class="line">7c03d43aaa018a8fb031ef8ed809d30f025478ef6a64aa87b87b224b83901445</div></pre></td></tr></table></figure>
+<p>once <code>touch ass_file</code> under container <code>/vol1</code>, we can find immediately in host machine at <code>/var/lib/docker/volumes</code> :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@ubuntu:/var/lib/docker/volumes/0ffca0474fe0d2bf8911fba9cd6b5875e51abe172f6a4b3eb5fd8b784e59ee76/_data# ls -lt </div><div class="line">total 0</div><div class="line">-rw-r--r-- 1 root root 0 Nov  7 11:40 css_file</div><div class="line">-rw-r--r-- 1 root root 0 Nov  7 11:40 ass_file</div></pre></td></tr></table></figure>
+<p>also if deleted file from host machine, it equally delete from the runnning container. The <code>_data</code> folder is also referred to as a <code>mount point</code>.  Exit out from the container and list the volumes on the host. They are gone. We used the –rm flag when running the container and this option effectively wipes out not just the container on exit, but also the volumes.</p>
+<h3 id="sync-localhost-folder-to-container"><a href="#sync-localhost-folder-to-container" class="headerlink" title="sync localhost folder to container"></a>sync localhost folder to container</h3><p>by default, Dockerfile can not map to a host path, when trying to bring files in from the host to the container during runtime. namely, The Dockerfile can only specify the destination of the volume.  for example, we expect to sync a localshost folder e.g. <code>attach_me</code> to container, by <code>cd /path/to/dockfile &amp;&amp; docker run -v /attache_me -it vol_test</code>. a new data volume named <code>attach_me</code> is, just like the other <code>/vol1</code>, <code>/vol2</code> located in the container, but this one is totally nothing to do with the localhost folder. </p>
+<p>while a trick can do the sync:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -v $(pwd)/attach_me:/attach_me vol_test</div></pre></td></tr></table></figure>
+<p>Both sides of the <code>:</code> character expects an absolute path. Left side being an absolute path on the host machine, right side being an absolute path inside the container.</p>
+<h3 id="volumes-in-compose"><a href="#volumes-in-compose" class="headerlink" title="volumes in compose"></a>volumes in compose</h3><p>which is only works during compose build, and has nothing to do with docker container.</p>
+<h3 id="copy-folder-from-host-to-container"><a href="#copy-folder-from-host-to-container" class="headerlink" title="copy folder from host to container"></a>copy folder from host to container</h3><ul>
+<li>COPY in dockerfile</li>
+</ul>
+<p>ERROR: Service ‘lg-run’ failed to build: COPY failed: stat /var/lib/docker/tmp/docker-builder322528355/home/wubantu/zj/simulator201909/build: no such file or directory</p>
+<p>the solution is to keep the folder in Dockerfile’s current pwd; if else, Docker engine will look from <code>/var/lib/docker/tmp</code>.</p>
+<h3 id="VOLUME-summary"><a href="#VOLUME-summary" class="headerlink" title="VOLUME summary"></a>VOLUME summary</h3><p>If you do not provide a volume in your run command, or compose file, the only option for docker is to create an anonymous volume. This is a local named <code>volume with a long unique id</code> for the name and no other indication for why it was created or what data it contains. If you override the volume, pointing to a named or host volume, your data will go there instead.</p>
+<p>when <code>VOLUME</code> in DOCKERFILE, it actually has nothing to do with current host path, it actually generate something in host machine, located at <code>/var/lib/docker/volumes/</code>, which is nonreadable and managed by Docker Engine. also don’t forget to use <code>--rm</code>, which will delete the attached volumes in host when the container exit.</p>
+<p><a href="https://stackoverflow.com/questions/41935435/understanding-volume-instruction-in-dockerfile" target="_blank" rel="external">warning: VOLUME breaks things</a></p>
+<h3 id="understand-docker-compose-yml"><a href="#understand-docker-compose-yml" class="headerlink" title="understand docker-compose.yml"></a>understand docker-compose.yml</h3><p><a href="https://www.ionos.com/community/server-cloud-infrastructure/docker/understanding-and-managing-docker-container-volumes/" target="_blank" rel="external">Understand and manage Docker container volumes</a></p>
+<p><a href="https://www.lunarg.com/vulkan-sdk/" target="_blank" rel="external">what is vulkan SDK</a></p>
+<p><a href="https://www.wihlidal.com/blog/graphics/2019-05-28-vk-rust-ray-tracing-hlsl/" target="_blank" rel="external">Graham blog</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/build-cluster-on-Docker-swarm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/06/build-cluster-on-Docker-swarm/" itemprop="url">build cluster on Docker swarm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-06T07:10:03-05:00">
+                2019-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/06/build-cluster-on-Docker-swarm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/06/build-cluster-on-Docker-swarm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Docker-micro-services"><a href="#Docker-micro-services" class="headerlink" title="Docker micro services"></a>Docker micro services</h3><p><a href="https://docs.docker.com/v17.09/engine/swarm/key-concepts/#services-and-tasks" target="_blank" rel="external">key concepts in Docker</a></p>
+<p>when deploy an application(lg-sim) to swarm cluster as a service, which is defined in a/the manager node, the manager node will dispatch units of work as taskes to worker nodes.</p>
+<p>when create a service, you specify which container image to use and which commands to execute inside runing containers. In the <code>replicated services</code>, the swarm manager distributes a specific number of replica tasks among the nodes based upon the scale you set in the desired state. For <code>global services</code>, the swarm runs one task for the service on every available node in the cluster.</p>
+<p><img src="https://docs.docker.com/v17.09/engine/swarm/images/swarm-diagram.png" alt="docker node"></p>
+<h4 id="Docker-swarm-CLI-commands"><a href="#Docker-swarm-CLI-commands" class="headerlink" title="Docker swarm CLI commands"></a>Docker swarm CLI commands</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">docker swarm init </div><div class="line">docker swarm join</div><div class="line">docker service create  --name  --env --workdir --user</div><div class="line">docker service inspect </div><div class="line">docker service ls </div><div class="line">docker service rm</div><div class="line">docker service scale </div><div class="line">docker service ps</div><div class="line">docker service update  --args</div><div class="line">docker node inspect </div><div class="line">docker node update --label-add </div><div class="line">docker node promote/demote </div><div class="line"># run in worker</div><div class="line">docker swarm leave</div><div class="line"># run in manager</div><div class="line">docker node rm worker-node</div><div class="line">docker ps  #get running container ID</div><div class="line">docker exec -it containerID /bin/bash</div><div class="line">docker run -it</div><div class="line">docker-compose up build/run</div></pre></td></tr></table></figure>
+<h4 id="delete-unused-Docker-network"><a href="#delete-unused-Docker-network" class="headerlink" title="delete unused Docker network"></a>delete unused Docker network</h4><p>as Docker network may confuse external when access to the local network interfaces, sometimes need to remove the docker networks.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">docker network ls</div><div class="line">docker network disconnect -f  &#123;network&#125; &#123;endpoint-name&#125;</div><div class="line">docker network rm </div><div class="line">docker stop $(docker ps -a -q)</div><div class="line">docker rm $(docker ps -a -q)</div><div class="line">docker volume prune </div><div class="line">docker network prune</div></pre></td></tr></table></figure>
+<p>the above scripts will delete the unused(non-active) docker network, then may still active docker related networks, which can be deleted through:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">sudo ip link del docker0</div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">### access Docker service </div><div class="line"></div><div class="line">Docker container has its own virutal IP(172.17.0.1) and port(2347), which allowed to access in the host machine; for externaly access, need to map the hostmachine IP to docker container, by `--publish-add`. the internal communication among docker nodes are configured by `advertise_addr` and `listen-addr`.</div><div class="line"></div><div class="line"></div><div class="line">#### through IP externaly</div><div class="line">To publish a service’s ports externally, use the --publish &lt;PUBLISHED-PORT&gt;:&lt;SERVICE-PORT&gt; flag. When a user or process connects to a service, any worker node running a service task may respond.</div><div class="line"></div><div class="line">taking example from [5mins series](https://www.cnblogs.com/CloudMan6/tag/Swarm/)</div></pre></td></tr></table></figure>
+<p>docker service create –name web_server –replicas=2 httpd<br>docker service ps web_server </p>
+<h1 id="access-service-only-on-host-machine-through-the-Docker-IP"><a href="#access-service-only-on-host-machine-through-the-Docker-IP" class="headerlink" title="access service only on host machine through the Docker IP"></a>access service only on host machine through the Docker IP</h1><p>curl 172.17.0.1<br>docker service update –publish-add 8080:80 web_server</p>
+<h1 id="access-service-externally"><a href="#access-service-externally" class="headerlink" title="access service externally"></a>access service externally</h1><p>curl <a href="http://hostmachineIP:8080" target="_blank" rel="external">http://hostmachineIP:8080</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#### configure websocket protocol</div><div class="line"></div><div class="line">for lg-sim server to pythonAPI client, which is communicated through `websocket`, it&apos;s better if the service can be configured to publish through websocket.</div><div class="line"></div><div class="line"></div><div class="line">#### publish httpd server to swarm service</div></pre></td></tr></table></figure></p>
+<p>docker service create –name web_server –publish 880:80 –replicas=2  httpd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">the container IP is IP in network interface `docker0`(e.g. 172.17.0.1), which can be checked through `ifconfig`.  `80` is the default port used by httpd, which is mapped to the host machine `880` port. so any of the following will check correctly:</div></pre></td></tr></table></figure></p>
+<p>curl 172.17.0.1:880<br>curl localhost:880<br>curl 192.168.0.1:880<br>curl 192.168.0.13:880 #the other docker node<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> </div><div class="line">#### publish lg-sim into swarm service </div><div class="line"></div><div class="line">the previous version(2019.04) of lg-sim doesn&apos;t have a http server built-in, since 2019.7, they have `Nancy http server`, which is a great step toward dockerlize the lg-sim server.</div><div class="line"></div><div class="line"></div><div class="line">### manage data in Docker </div><div class="line"></div><div class="line">`Volumes` are stored in a part of the host filesystem, which is located `/var/lib/docker/volumes`, which is actually managed by Docker, rather than by host machine.</div><div class="line">Volumes are the preferred way to [persist data in Docker](https://docs.docker.com/v17.09/engine/admin/volumes/#more-details-about-mount-types) containers and services. some use cases of volume:</div><div class="line"></div><div class="line">* once created, even the container stops or removed, the volume still exist.</div><div class="line">* multiple containes can mount the same voume simultaneously; </div><div class="line">* when need to store data on a remote host </div><div class="line">* when need to backup, restore, or migrate data from one Dockr to another</div><div class="line"></div><div class="line">#### RexRay</div><div class="line"></div><div class="line">an even high-robost way is to separate volume manager and storge provider manager. [Rex-Ray](https://rexray.readthedocs.io/en/v0.3.3/)</div></pre></td></tr></table></figure></p>
+<p>docker service create –name web_s \<br>    –publish 8080:80 \<br>    –mount “type=volume, volume-driver=rexray, source=web_data, target=/usr/local/apache2/htdocs” \<br>    httpd</p>
+<p>docker exec -it containerID<br>ls -ld /usr/local/apahce2/htdocs<br>chown www-data:www-data </p>
+<h2 id="test-visit"><a href="#test-visit" class="headerlink" title="test visit"></a>test visit</h2><p>curl <a href="http://192.168.0.1:8080" target="_blank" rel="external">http://192.168.0.1:8080</a><br>docker inspect containerID </p>
+<p>```</p>
+<p><code>source</code> reprensents the name of data volume, if null, will create new<br><code>target</code> reprensents data volume will be mounted to <code>/usr/local/apache2/htdocs</code> in each container</p>
+<p>in RexRay, data volume update, scale, failover(when any node crashed, the data volume won’t lose) also be taken care.</p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.cnblogs.com/CloudMan6/tag/Swarm/" target="_blank" rel="external">5mins in Docker</a></p>
+<p><a href="https://www.bookstack.cn/read/docker-swarm-guides/kai-shi-shi-yong-swarm-swarmmo-shi-duan-kou-lu-you.md" target="_blank" rel="external">Docker swarm in and out</a></p>
+<p><a href="https://boxboat.com/2016/08/17/whats-docker-swarm-advertise-addr/" target="_blank" rel="external">what is swarm advertise-addr</a></p>
+<p><a href="https://www.reddit.com/r/docker/comments/a5kbte/run_docker_exec_over_a_docker_swarm/" target="_blank" rel="external">can ran exec in swarm</a></p>
+<p><a href="https://stackoverflow.com/questions/39362363/execute-a-command-within-docker-swarm-service" target="_blank" rel="external">execute a command within docker swarm service</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/05/Linux-network-tool/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1670,321 +1976,6 @@ SOTIF Analysis
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/reinforcement-learning-in-nutshell-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/13/reinforcement-learning-in-nutshell-2/" itemprop="url">reinforcement learning in nutshell-2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-13T10:30:40-04:00">
-                2019-10-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/13/reinforcement-learning-in-nutshell-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/10/13/reinforcement-learning-in-nutshell-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="function-approximation"><a href="#function-approximation" class="headerlink" title="function approximation"></a>function approximation</h2><p>write the mapping from \<state action=""> pair to value as $ <strong>S</strong> X <strong>A</strong> -&gt; <strong>Q</strong> $.</state></p>
-<p>usually <strong>S</strong>, <strong>Q</strong> can be continuous high-dimensional space, and even in discrete state problem. e.g. in GO game, the state space is about 10^170, to store each \<state action=""> pair in a table is almost impossible. a good and approximated way is using a hash map, where input a state, and through this hash map to get its value, which is one step, rather than many steps even with a tree strucutre of the whole state-action/value space.</state></p>
-<p>in math, this is called <code>function approximation</code>, it’s very intuitive idea, to fit a function from the sample points; then any point in the space, it can be represented by the function’s paramters, rather than search in all  the sample points, which may be huge; and further as only the function’s parameters is required to store, rather than the whole sample points information, which is really a pleasure.</p>
-<h2 id="Deep-Q-Learning"><a href="#Deep-Q-Learning" class="headerlink" title="Deep Q-Learning"></a>Deep Q-Learning</h2><p><a href="https://zjli2013.github.io/2019/09/18/reinforcement-learning-in-nutshell-1/" target="_blank" rel="external">previously in Q-Learning</a>, to update Q(S,A):</p>
-<pre><code>$ Q(S,A) &lt;- \delta ( Q(S, A) + R + \gamma ( Q(S&apos;, A&apos;) - Q(S, A))
-</code></pre><p>to approximate <code>q(s,a)</code> can use a neural network(NN), the benefit of NN is  to approximate any function to any precise, similar to any <a href="https://zjli2013.github.io/2019/09/29/warm-up-Hilber-space/" target="_blank" rel="external">complete orthonormal sequence</a>, e.g. Fourier Series.</p>
-<h3 id="CNN-approximator"><a href="#CNN-approximator" class="headerlink" title="CNN approximator"></a>CNN approximator</h3><p>the input to Q neural network is the eigenvector of state <strong>S</strong>, assuming the action set is finite. the output is action value in <code>state-action-hyperparameter</code>: q(s, a, \theta), </p>
-<pre><code>Q(S, A, \theta) ~= Q(S, A)
-</code></pre><p><img src="https://img2018.cnblogs.com/blog/1042406/201809/1042406-20180928142605652-445522913.jpg" alt="image"></p>
-<p>as the right most section, here assuming the action set is finite, so for each action, there is an output.</p>
-<h3 id="experience-replay"><a href="#experience-replay" class="headerlink" title="experience replay"></a>experience replay</h3><p>instead of discarding experiences after one stochastic gradient descent, the agent remembers past expereicnes and learns from them repeatdely, as if the experience has happened again. this allows for greater data efficiency. another reason, as DNN is easily overfitting current episodes, once DNN is overfitted, it’s difficult to produce various experinces. so exprience replay can store experiences including state transitions, rewards, and actions, which are necessary to perform Q learning. </p>
-<p>at time <code>t</code>, the agent’s experience <code>e_t</code> is defined as:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=e_t&space;=&space;(s_t,&space;a_t,&space;r_{t&plus;1},&space;s_{t&plus;1})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?e_t&space;=&space;(s_t,&space;a_t,&space;r_{t&plus;1},&space;s_{t&plus;1})" title="e_t = (s_t, a_t, r_{t+1}, s_{t+1})"></a></p>
-<p>all of agent’s experiences at each time step over all episodes played by the agent are stored in the <code>replay memory</code>. actually, usually the replay memory/buffer set to some finite size limit, namely only store the recent N experiences. and then choose random samples from the replay buffer to train the network.</p>
-<p>the key reason here is to break the correction between consecutive samples. if the CNN learned from consecutive samples of experience as they occurred sequentially in the environment, the samples are highly correlated, taking random samples from replay buffer.</p>
-<h3 id="target-network"><a href="#target-network" class="headerlink" title="target network"></a>target network</h3><p>use a separate network to estimate the target, this target network has the same architecture as the CNN approximator but with frozen parameters. every T steps(a hyperparameter) the parameters from the Q network are copied to this target network, which leads to more stable training because it keeps the target function fixed(for a while)</p>
-<h2 id="go-futher-in-DQN"><a href="#go-futher-in-DQN" class="headerlink" title="go futher in DQN"></a>go futher in DQN</h2><h3 id="Double-DQN"><a href="#Double-DQN" class="headerlink" title="Double DQN"></a>Double DQN</h3><p>here use two networks, the DQN network is for action selection and the target network is for target Q value generation. </p>
-<p>the problem comes: how to be sure the best action for the next state is the action with the highest Q-value ? </p>
-<h3 id="Prioritized-Replay-DQN"><a href="#Prioritized-Replay-DQN" class="headerlink" title="Prioritized Replay DQN"></a>Prioritized Replay DQN</h3><h3 id="Dueling-DQN"><a href="#Dueling-DQN" class="headerlink" title="Dueling DQN"></a>Dueling DQN</h3><h2 id="yet-a-summary"><a href="#yet-a-summary" class="headerlink" title="yet a summary"></a>yet a summary</h2><p>at the begining of this series, I was thinking to make a simple summary about DQN, which looks promising in self-driving. After almost one month, there are more and more topics and great blogs jumping out, the simple idea to make a summary is not easy any more. I will stop here, and once back.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://www.hostmath.com" target="_blank" rel="external">math equation editor</a></p>
-<p><a href="https://www.mcs.anl.gov/petsc/" target="_blank" rel="external">Petsc Krylov</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/28223841" target="_blank" rel="external">zhihu: function approximate</a></p>
-<p><a href="https://www.dqnbook.com/2/experience-replay" target="_blank" rel="external">dqnbook: experience replay</a></p>
-<p><a href="https://towardsdatascience.com/welcome-to-deep-reinforcement-learning-part-1-dqn-c3cab4d41b6b" target="_blank" rel="external">Toward Data Science</a></p>
-<p><a href="https://deeplizard.com/learn/video/Bcuj2fTH4_4" target="_blank" rel="external">explained replay memory</a></p>
-<p><a href="https://danieltakeshi.github.io/2016/12/01/going-deeper-into-reinforcement-learning-understanding-dqn/" target="_blank" rel="external">going deeper into RL: understanding DQN</a></p>
-<p><a href="https://www.freecodecamp.org/news/improvements-in-deep-q-learning-dueling-double-dqn-prioritized-experience-replay-and-fixed-58b130cc5682/" target="_blank" rel="external">improvements in DQN</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/configure-pgAdmin4-in-server-mode/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/13/configure-pgAdmin4-in-server-mode/" itemprop="url">configure pgAdmin4 in server mode</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-13T06:35:25-04:00">
-                2019-10-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/13/configure-pgAdmin4-in-server-mode/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/10/13/configure-pgAdmin4-in-server-mode/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>pgSQL is common used to store hd map in ADS stack, and the client is usually pgAdmin4. in big tech companies, e.g. Tencent, Alibaba, Uber e.t.c, their <code>data infrastructure</code> for ADS stack development is usually based on pgSQL. for our team work, we also store most map info in pgSQL, and for better development toolchain, there is a need to configure the client pgAdmin4 as a web server, rather than request every developer to install a copy of pgAdmin4 at their local side.</p>
-<p>in LAN web server, apache2 is used to serve a few services, so there is a need to configure multi virutal host in Aapche2, with differnt port and same IP.</p>
-<h2 id="pgSQLServer"><a href="#pgSQLServer" class="headerlink" title="pgSQLServer"></a>pgSQLServer</h2><ul>
-<li><p><a href="https://www.postgresql.org/download/linux/ubuntu/" target="_blank" rel="external">official install postgresql</a></p>
-</li>
-<li><p><a href="https://www.postgresql.org/docs/current/server-start.html" target="_blank" rel="external">start pgSQLserver</a></p>
-</li>
-<li><p>jump into pgSQL server:</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">/etc/init.d/postgresql start </div><div class="line"></div><div class="line">sudo su - postgres</div></pre></td></tr></table></figure>
-<h2 id="pgAdmin4"><a href="#pgAdmin4" class="headerlink" title="pgAdmin4"></a>pgAdmin4</h2><p>installed by <code>apt-get install pgadmin4</code>, will put pgAdmin4 under local user or root permission, which will be rejected if accessed by remote clients, whose permission is <code>www-data</code></p>
-<p>so it’s better to install from src and in a different Python virtual env.</p>
-<ul>
-<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-programming-environment-on-an-ubuntu-18-04-server" target="_blank" rel="external">setup Python virtual Env</a></p>
-</li>
-<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">install pgAdmin4 from src</a></p>
-</li>
-</ul>
-<p>there maybe a few errors as following:</p>
-<pre><code>*  No package &apos;libffi&apos; found  
-
-*  error: invalid command &apos;bdist_wheel&apos; [sol](https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci)
-
-* error: command &apos;x86_64-linux-gnu-gcc&apos; failed with exit status 1, [sol](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
-</code></pre><h2 id="configure-pgAdmin4"><a href="#configure-pgAdmin4" class="headerlink" title="configure pgAdmin4"></a>configure pgAdmin4</h2><p>follow <a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">this configure pgadmin4 in Server mode</a></p>
-<h2 id="configure-Apache2"><a href="#configure-Apache2" class="headerlink" title="configure Apache2"></a>configure Apache2</h2><p>follow previous blog to set Apache2 for pgadmin4:</p>
-<pre><code class="script">&lt;VirtualHost *:8084&gt;
-    ServerName 10.20.181.119:8084
-    ErrorLog  &quot;/var/www/pgadmin4/logs/error.log&quot;
-    WSGIDaemonProcess pgadmin  python-home=/home/david/py_venv/pgenv
-    WSGIScriptAlias /pgadmin4 /home/david/py_venv/pgenv/lib/python3.5/site-packages/pgadmin4/pgAdmin4.wsgi
-
-    &lt;Directory &quot;/home/david/py_venv/pgenv/lib/python3.5/site-packages/pgadmin4/&quot;&gt;
-        WSGIProcessGroup pgadmin
-        WSGIApplicationGroup %{GLOBAL}
-        Require all granted
-    &lt;/Directory&gt;
-&lt;/VirtualHost&gt;
-</code></pre>
-<p>restart Apache2 server will make this works.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://serverfault.com/questions/601140/whats-the-difference-between-sudo-su-postgres-and-sudo-u-postgres" target="_blank" rel="external">why sudo - su</a></p>
-<p><a href="https://www.godaddy.com/garage/how-to-install-postgresql-on-ubuntu-14-04/" target="_blank" rel="external">godaddy about sudo - su</a></p>
-<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">configure pgadmin4 in Server mode</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2035,7 +2026,7 @@ SOTIF Analysis
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-count">136</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

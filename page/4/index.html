@@ -291,6 +291,345 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/06/a-nested-conditonal-variable-model-in-python/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/06/a-nested-conditonal-variable-model-in-python/" itemprop="url">a nested conditonal variable model in python</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-06T08:06:08-04:00">
+                2019-09-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/06/a-nested-conditonal-variable-model-in-python/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/06/a-nested-conditonal-variable-model-in-python/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p> the work is derived from <a href="https://github.com/lgsvl/simulator/blob/master-obsolete/Api/lgsvl/remote.py" target="_blank" rel="external">lg-sim/lgsvl/remote</a>, the original <code>remote</code> function is listen message return from server on each <code>command</code> request, basically a async request-receive model.</p>
+<p> additionaly, we want lg-sim server to send every episode state info to client too, luckily, the server - client communicate is based on <code>Websocket</code>，which support server actively pushing message. so simple add a <code>episode state</code> info in server side and send it through websocket at every frame works.</p>
+<p> in <code>conditional variable</code> design,  <code>notify()</code> won’t be hanged-up, while <code>wait_for()</code> can be hanged-up if no other thread call <code>notify()</code> at first.  </p>
+<p> in Python class, to keep object status, it’s better to use <code>class member variable</code>, rather than <code>object member variable</code>, which can’t track its status when the object reset. (/)</p>
+<h2 id="try-finally"><a href="#try-finally" class="headerlink" title="try finally"></a>try finally</h2><p> the status update in <code>try()</code> package won’t be the final status .</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"> <span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(type)</span>:</span> </div><div class="line">	status = <span class="keyword">False</span> </div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">if</span>(type==<span class="string">"a"</span>):</div><div class="line">			status = <span class="keyword">True</span> </div><div class="line">	<span class="keyword">finally</span>:</div><div class="line">		<span class="keyword">if</span>(type == <span class="string">"b"</span>):</div><div class="line">			status = <span class="keyword">False</span> </div><div class="line">	print(<span class="string">"cv.status ....\t"</span>, status)</div><div class="line">	<span class="keyword">return</span> status</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">	type_list = [<span class="string">"a"</span>, <span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"b"</span>, <span class="string">"a"</span>, <span class="string">"a"</span>, <span class="string">"a"</span>];</div><div class="line">	<span class="keyword">for</span> _ <span class="keyword">in</span> range(len(type_list)):</div><div class="line">		print(process(type_list[_]))</div></pre></td></tr></table></figure>
+<h2 id="the-client-design"><a href="#the-client-design" class="headerlink" title="the client design"></a>the client design</h2><p>in client, the message received is handeled in <code>process()</code>. by default, there is only one type of message, namely the <code>event message</code>, so only one <code>conditional variable(CV)</code> is needed to send <code>notification</code> to <code>command()</code> to actually deal with the recieved message. </p>
+<p>first we defined the new message type(<code>episode message</code>), as well as a new real-handel fun <code>episode_tick()</code>. then modifying <code>remote::process()</code> as:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span>:</div><div class="line">	self.event_cv.acquire()    </div><div class="line">	self.data = json.loads(data)</div><div class="line">	<span class="keyword">if</span> check_message(self.data) == <span class="string">"episode_message"</span> ：</div><div class="line">		self.event_cv.release()</div><div class="line">		self.event_cv_released_already = <span class="keyword">True</span> </div><div class="line">		<span class="keyword">with</span> self.episode_cv:</div><div class="line">			self.episode_cv.notify()</div><div class="line">	<span class="keyword">else</span> :</div><div class="line">		self.event_cv.notify()</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">	<span class="keyword">if</span> self.event_cv_released_already:</div><div class="line">		self.cv_released_already = <span class="keyword">False</span> </div><div class="line">	<span class="keyword">else</span>:</div><div class="line">		self.cv.release()</div></pre></td></tr></table></figure>
+<h2 id="will-it-dead-locked"><a href="#will-it-dead-locked" class="headerlink" title="will it dead-locked ?"></a>will it dead-locked ?</h2><p>as both <code>command()</code> and <code>episode_tick()</code> have conditional variable <code>wait_for()</code> :</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public command():</div><div class="line">	<span class="keyword">with</span> self.event_cv :</div><div class="line">		self.event_cv.wait_for(<span class="keyword">lambda</span>: self.data <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>)</div><div class="line"></div><div class="line">public episode_tick():</div><div class="line">	<span class="keyword">with</span> self.episode_cv.wait_for(<span class="keyword">lambda</span>: self.data <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>)</div></pre></td></tr></table></figure>
+<p>so if <code>notify()</code> is not called in any situation, <code>dead-locked</code> happens, meaning the <code>wait_for()</code> will never return but suspended.</p>
+<p><code>remote.process()</code> is running in another thread, rather than hte main sim thread, where run <code>sim.process()</code>.  <code>remote.process()</code> used to accept the message, and <code>sim.process()</code> is the actual place to handle these received messages. the two threads run simutaneously.</p>
+<p>for any message received, if its type is <code>event_message</code>, then it triggers <code>event_cv.notify()</code>, so <code>command()</code> in <code>sim::process()</code> won’t dead block;</p>
+<p>to avoid <code>episode_message</code> dead locked, in <code>sim::process()</code> need to call <code>episode_tick()</code> only when the message type is <code>episode_message</code>, which can be checked by <code>remote.event_cv_released_already == True</code>, </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sim</span>:</span>:process(events):</div><div class="line">	j = self.remote.command(events)</div><div class="line">	<span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">		<span class="keyword">if</span> self.remote.event_cv_released_already :</div><div class="line">			self.remote.episode_tick()</div><div class="line">		<span class="keyword">if</span> j <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">			<span class="keyword">return</span> </div><div class="line">		<span class="keyword">if</span> <span class="string">"events"</span> <span class="keyword">in</span> j:</div><div class="line">			self._process_events(j)</div><div class="line">		</div><div class="line">		j = self.remote.command（“<span class="keyword">continue</span><span class="string">")</span></div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="url">vehicle dynamics model in ADS simulation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-03T09:08:09-04:00">
+                2019-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<h2 id="VD-background"><a href="#VD-background" class="headerlink" title="VD background"></a>VD background</h2><p>usually to simualate vehicle dynamic(VD) system, either by physical model, e.g. pysical models of engine, gearbox, powertrain; or parameter model, which doesn’t take into the physical process of the dynamic system, but tracking the system’s input, output and fit their relationship with polynomail equation or functions with multi-pieces. </p>
+<p><code>traction force</code> is derived from engine torque, which goes to gearbox(powertrain system) and then divided by radius of wheels, then distribute to wheels. </p>
+<h3 id="traction-torque"><a href="#traction-torque" class="headerlink" title="traction torque"></a>traction torque</h3><ul>
+<li><p>air drag </p>
+</li>
+<li><p>air lift force </p>
+</li>
+<li><p>traction force </p>
+<p>  $$ F(traction) = F(air drag) + F(air lift force) + F(tire drag) + acc * mass $$</p>
+</li>
+</ul>
+<p>in a detail way, the equation above should split into lateral state equation and longitudional state equation, if consider driver control module, which will give <code>laterl control equation</code> and <code>longitudional control equation</code>. </p>
+<h3 id="brake-torque-and-ABS-system"><a href="#brake-torque-and-ABS-system" class="headerlink" title="brake torque and ABS system"></a>brake torque and ABS system</h3><p>ABS(anti-block system) works in the situation, when driver input <code>brake torque</code> is larger than the max <code>ground-tire torque</code> can attached between tire and ground. </p>
+<p>once max <code>ground-tire torque</code> is achieved, namely the max fore-aft force <code>T</code> is achived, the traction direction <code>traction slip angular</code> decceleration will leap, this is the dead-blocking situation, and when it happens, the driver input <code>brake torque</code> is saturated.  </p>
+<p>to avoid block situation happens, usually track decelleration of <code>traction slip angular</code> during <code>brake torque</code> increase, if the value of <code>decelleration of slip traction angular</code> is beyond a threshold value, ABS controller will trigger to decease <code>brake torque</code>.</p>
+<h3 id="drive-stability"><a href="#drive-stability" class="headerlink" title="drive stability"></a>drive stability</h3><p>the driving stability is mainly due to forces on tires, sepcially the lateral angular velocity derived from <code>Lateral Force</code></p>
+<p><img src="https://upload.wikimedia.org/wikipedia/en/6/65/Tire_Force_Variation1.jpg" alt="image"></p>
+<h3 id="lateral-control"><a href="#lateral-control" class="headerlink" title="lateral control"></a>lateral control</h3><p>taking driver as one element, the driveing system is a close-loop control system. the system works on a road situation:</p>
+<ul>
+<li>the driver pre-expect a driving path(predefined path) and operate the steering wheel to some certain angular </li>
+<li>the vehicle take a move with a real driving path(real path)</li>
+<li>the real path is not exactly fitted to the predefined path, leading the driver take an additional conpensation control</li>
+</ul>
+<h3 id="longitudinal-control"><a href="#longitudinal-control" class="headerlink" title="longitudinal control"></a>longitudinal control</h3><p>similar as lateral control</p>
+<h2 id="VD-in-Unity"><a href="#VD-in-Unity" class="headerlink" title="VD in Unity"></a>VD in Unity</h2><p>any vehicle in Unity is a combination of:  4 wheels colliders and 1 car collider.</p>
+<p><img src="http://www.theappguruz.com/app/uploads/2018/06/car-as-per-unity.png" alt="image"></p>
+<h3 id="WheelConllider"><a href="#WheelConllider" class="headerlink" title="WheelConllider"></a>WheelConllider</h3><p>1) AxleInfo</p>
+<p><code>AxleInfo</code> represents the pair of wheels, so for 4-wheel vehicle, there are two AxleInfo objects. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AxleInfo</span> </span></div><div class="line">&#123;</div><div class="line">  WheelCollider  left ;</div><div class="line">  WheelCollider right; </div><div class="line">  GameObject leftVisual ;</div><div class="line">  GameObject  rightVisual ;</div><div class="line">  <span class="keyword">bool</span> motor ;    <span class="meta">#enable movement of this wheel pair</span></div><div class="line">  <span class="keyword">bool</span> steering ; <span class="meta"># enable rotation of this wheel pair </span></div><div class="line">  <span class="keyword">float</span> brakeBias = <span class="number">0.5f</span>; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2) core parameters </p>
+<ul>
+<li><p>wheel damping rate </p>
+</li>
+<li><p>suspension distance </p>
+</li>
+<li><p>Force apply point distance (where ground force act on wheel) </p>
+</li>
+<li><p>suspension spring </p>
+</li>
+<li><p>forwardSlip(slip angle),   tire slip in the rolling(tractional) direction, which is used in calculating torque</p>
+</li>
+<li><p>sidewaySlip, the lateral direction slip, which leads to stability issue.</p>
+</li>
+</ul>
+<p><img src="http://www.theappguruz.com/app/uploads/2018/06/physics-of-wheel-collider.png" alt="physical of wheel"></p>
+<p>3) visualization</p>
+<p>the <code>WheelCollider</code> GameObject is always fixed relative to the vehicle body, usually need to setup another visual GameObject to represent turn and roll.</p>
+<p><a href="https://github.com/lgsvl/simulator/blob/master/Assets/Scripts/Controllers/VehicleController.cs" target="_blank" rel="external">implementation from lg-sim</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">void ApplyLocalPositionToVisuals(WheelCollider collider, GameObject visual)</div><div class="line">    &#123;</div><div class="line">        Transform visualWheel = visual.transform;</div><div class="line"></div><div class="line">        Vector3 position;</div><div class="line">        Quaternion rotation;</div><div class="line">        collider.GetWorldPose(out position, out rotation);</div><div class="line"></div><div class="line">        visualWheel.transform.position = position;</div><div class="line">        visualWheel.transform.rotation = rotation;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>4) WheelCollider.ConfigureVehicleSubsteps</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void ConfigureVehicleSubsteps(float speedThreshold, int stepsBelowThreshold, int stepsAboveThreshold);</div></pre></td></tr></table></figure>
+<p>Every time a fixed update happens, the vehicle simulation splits this fixed delta time into smaller sub-steps and calculates suspension and tire forces per each smaller delta. Then, it would sum up all resulting forces and torques, integrate them, and apply to the vehicle’s body.</p>
+<p>5) WheelCollider.GetGroundHit<br>return the ground collision data for the wheel, namely <a href="https://docs.unity3d.com/ScriptReference/WheelHit.html" target="_blank" rel="external"><code>WheelHit</code></a></p>
+<h3 id="wheel-friction-curve"><a href="#wheel-friction-curve" class="headerlink" title="wheel friction curve"></a>wheel friction curve</h3><p>for wheels’ forward(rolling) direction and sideways direction, first need to determine how much the tire is slipping, which is based on speed difference between the tire’s rubber and the road,<br>then this slip is used to find out the tire force exerted on the contact point </p>
+<p>the wheel friction curve taks a measure of tire slip as an Input and give a force as output.  </p>
+<p>The property of real tires is that for low slip they can exert high forces, since the rubber compensates for the slip by stretching. Later when the slip gets really high, the forces are reduced as the tire starts to slide or spin</p>
+<p>1) AnimationCurve<br><a href="https://docs.unity3d.com/ScriptReference/AnimationCurve.html" target="_blank" rel="external">unity official</a></p>
+<p>store a collection of Keyframes that can be evaluated over time  </p>
+<h3 id="vehicleController-in-lg-sim"><a href="#vehicleController-in-lg-sim" class="headerlink" title="vehicleController() in lg-sim"></a>vehicleController() in lg-sim</h3><p>1) the controllable parameters:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">currentGear </div><div class="line">currentRPM</div><div class="line">currentSpeed </div><div class="line">currentTorque</div><div class="line">currentInput </div><div class="line">steerInput</div></pre></td></tr></table></figure>
+<p>2)  math interpolate function used</p>
+<pre><code>Mathf.Lerp(a, b, t)
+</code></pre><p>a -&gt; the start value </p>
+<p>b -&gt; the end value</p>
+<p>t -&gt; the interpolation value between start and end </p>
+<p>3) fixedUpdate()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// cal trace force by rigidbody</div><div class="line">rigidbody.AddForce(air_drag)</div><div class="line">rigidbody.AddForce(air_lift)</div><div class="line">rigidbody.AddForceAtPosition(tire_drag, act_position)</div><div class="line">// update current driving torque</div><div class="line">currentTorque = rpmCurve.Evalue(currentRPM / maxRPM) * gearRaion * AdjustedMaxTorque </div><div class="line">// apply torque </div><div class="line">// apply traction control</div><div class="line">// update speed</div><div class="line">currentSpeed = rigidbody.velocity.magnitude</div><div class="line">// update fuel info</div><div class="line">fuelLevel -= deltaConsumption</div><div class="line">// update engine temp</div><div class="line">// update turn signal light</div></pre></td></tr></table></figure>
+<p>4) ApplyTorque()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">float torquePerWheel = accelInput * (currentTorque / numberofWheels) </div><div class="line">foreach(axle in axles):</div><div class="line">	if(axle.left.motor):</div><div class="line">		axle.left.motorTorque = torquePerWheel</div><div class="line">	if(axle.right.motor):</div><div class="line">		axle.right.motorTorque = torquePerWheel</div></pre></td></tr></table></figure>
+<p>5) TractionControl()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">TractionControl()</div><div class="line">&#123;</div><div class="line">	AdjustTractionControlTorque(axle.hitLeft.forwardSlip)</div><div class="line">&#125;</div><div class="line">			</div><div class="line">AdjustTractionControlTorque(forwardSlip)</div><div class="line">&#123;</div><div class="line">   if(forwardSlip &gt; SlipLimit)</div><div class="line">	tractionMaxTorque -= 10 </div><div class="line">   else </div><div class="line">        tractionMaxTorque += 10 </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>in lg-sim, the VD model is still simple, as there is only traction/logitudional control. </p>
+<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html" target="_blank" rel="external">add equation in markdown</a></p>
+<p><a href="https://docs.unity3d.com/Manual/class-WheelCollider.html" target="_blank" rel="external">wheelcollider doc</a></p>
+<p><a href="https://docs.unity3d.com/ScriptReference/WheelCollider.html" target="_blank" rel="external">whell collider official</a></p>
+<p><a href="https://docs.unity3d.com/Manual/WheelColliderTutorial.html" target="_blank" rel="external">whellcollider tutorial</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/31/未来5年在哪里-9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1519,318 +1858,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/dns-server-in-lan/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/10/dns-server-in-lan/" itemprop="url">dns server in lan</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-10T10:08:04-04:00">
-                2019-08-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/10/dns-server-in-lan/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/10/dns-server-in-lan/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="DNS-server-in-LAN"><a href="#DNS-server-in-LAN" class="headerlink" title="DNS server in LAN"></a>DNS server in LAN</h2><p>to use domain name(e.g. gitlab.com) in LAN rather than IP, it needs every local host machine to store all key-values:: host-IP. if the LAN has many host machines, it will be difficult to maintain. Setting up DNS server will help to automatically map the ip to domain or reverse in the LAN.</p>
-<h3 id="bind9"><a href="#bind9" class="headerlink" title="bind9"></a>bind9</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">apt-get install bind9 </div><div class="line">``` </div><div class="line"><span class="meta">#</span>## /etc/bind/named.conf.local</div><div class="line"></div><div class="line">```shell</div><div class="line"></div><div class="line">zone "gitlab.com" &#123;</div><div class="line">	type: master;</div><div class="line">	file "/etc/bind/db.ip2gitlab.com" ;</div><div class="line">&#125;;	</div><div class="line"></div><div class="line">zone "101.20.10.in-addr.arpa" &#123;</div><div class="line">	type: master;</div><div class="line">	file "/etc/bind/db.gitlab2ip.com" ;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">``` </div><div class="line"><span class="meta">#</span>## /etc/bind/db.gitlab2ip.com </div><div class="line"></div><div class="line">[dns zone file format](https://help.dyn.com/how-to-format-a-zone-file/)</div><div class="line"></div><div class="line">gitlab2ip zone file is mapping from domain to ip, as following sample, it works like:</div><div class="line"></div><div class="line">	www.$ORIGIN  --&gt;  10.20.101.119 </div><div class="line"></div><div class="line">```shell</div><div class="line">; command</div><div class="line"><span class="meta">$</span>TTL  6000</div><div class="line">;@ refer to current zone file</div><div class="line">;			 DNS-server-FDNQ notification-email</div><div class="line"><span class="meta">$</span>ORIGIN  gitlab.com</div><div class="line">@ 	IN 	SOA	 	server 	email (</div><div class="line">			 		2	 ;</div><div class="line">			 		1d ;</div><div class="line">			 		1h ;</div><div class="line">			 		5min ;</div><div class="line">			 	)</div><div class="line">@		IN		NS  	server</div><div class="line">www		IN		A		10.20.101.119</div><div class="line">server	IN		A		10.20.101.119</div></pre></td></tr></table></figure>
-<h3 id="etc-bind-db-ip2gitlab-com"><a href="#etc-bind-db-ip2gitlab-com" class="headerlink" title="/etc/bind/db.ip2gitlab.com"></a>/etc/bind/db.ip2gitlab.com</h3><p>ip2gitlab zone file is from ip to domain mapping, </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span>TTL  6000</div><div class="line"><span class="meta">$</span>ORIGIN 101.20.10.in-addr.arpa</div><div class="line">@ 	IN 	SOA	 	server. 	email. (</div><div class="line">			 		2	 ;</div><div class="line">			 		1d ;</div><div class="line">			 		1h ;</div><div class="line">			 		5min ;</div><div class="line">			 	)</div><div class="line">@		IN		NS  	server</div><div class="line">119		IN		A		www.gitlab.com</div><div class="line">119		IN		A		server.gitlab.com</div></pre></td></tr></table></figure>
-<h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><pre><code class="shell">nslookup www.gitlab.com   #dns forward (domain 2 ip)
-
-nslookup  10.20.101.119   #reverse (ip 2 domain)
-</code></pre>
-<h2 id="settings"><a href="#settings" class="headerlink" title="settings"></a>settings</h2><p>if the DNS setted above(DNS-git) is the only DNS server in the LAN, then this DNS works like a gateway, to communicate by domain name, every local host talk to it first, to understand the domain name.</p>
-<p>but in a large size company LAN newtwork, there may already has a DNS server hosted at IT department (DNS-IT), with a fixed IP e.g. <code>10.10.101.101</code>, and all localhost machines actually set DNS-IT as the default DNS. DNS-git will work as a sub-DNS server. </p>
-<p>Inside the small team, either every localhost change default DNS to DNS-git, then DNS-git become the sub-network server.</p>
-<p>if every localhost still keep DNS-IT, there is no way(?) to use DNS-git service in LAN, and even make conflicts, as the DNS-git localhost machine will listen on all TCP/IP ports, every new gitlab.com access request (input as IP address) will get an output as domain name, but the others can’t understand this domain-name…</p>
-<p>what happened with two DNS server in LAN ? </p>
-<h2 id="how-email-works"><a href="#how-email-works" class="headerlink" title="how email works"></a>how email works</h2><p>Mail User Agent(MUA), e.g. Outlook, Foxmail, used to receive and send emails.</p>
-<p>MUA is not directly sent emails to end users, but through  Mail Transfer Agent(MTA), e.g. SendMail, Postfix.</p>
-<p>an email sent out from MUA will go through one or more MTA, finally reach to Mail Delivery Agent(MDA), the email then store in some database, e.g. mailbox</p>
-<p>the receiver then use MUA to review the email in the mailbox</p>
-<p>ps, one day work as a IT admin …. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="url">design scenarios in ADS simulation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-25T10:15:24-04:00">
-                2019-07-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/25/design-scenarios-in-ADS-simulation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>to design scenarios in self-driving test, one reference is: <a href="https://www.nhtsa.gov/document/framework-automated-driving-system-testable-cases-and-scenarios" target="_blank" rel="external">a framework for automated driving system testable cases and sceanrios</a>, most other scenario classifications have almost the same elements: ODD, e.g. road types, road surfaces; OEDR, namely object and event detection and response, e.g. static obstacles, other road actors, traffic signature, environment conditions, special zones; and failure mode behaviors.</p>
-<p>in general, test cases can be grouped as black box test, in which the scenario parterners’ behavior is not pre-defined or unpredictable, e.g. random traffic flow(npcs) scenario, or white box test, where the npcs behavior is pre-defined, e.g. following user-define routings. white box testing is helpful to support performance metrics; while black-box testing is helpful to verify the system completeness and robust.</p>
-<p>as for ADS test, there are a few chanllenges coming from:</p>
-<ul>
-<li><p>heuristics decision-making algorithms, deep-learning algorithms, which is not mathematically completed</p>
-</li>
-<li><p>the test case completeness, as the number of tests required to achieve statistically significant to claim safe would be staggering</p>
-</li>
-<li><p>undefined conditions or assumptions</p>
-</li>
-</ul>
-<p>a sample test scenario set maybe looks like: </p>
-<table>
-<thead>
-<tr>
-<th>ODD</th>
-<th>OEDR-obj</th>
-<th>OEDR-loc</th>
-<th>maneuver</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>in rump</td>
-<td>static obstacles</td>
-<td>in front of current lane</td>
-<td></td>
-</tr>
-<tr>
-<td>in rump</td>
-<td>static obstacles</td>
-<td>in front of targe lane</td>
-<td></td>
-</tr>
-<tr>
-<td>in rump</td>
-<td>dynamic obstacles</td>
-<td>in front of current lane</td>
-</tr>
-</tbody>
-</table>
-<h3 id="scenarios-runner"><a href="#scenarios-runner" class="headerlink" title="scenarios_runner"></a>scenarios_runner</h3><p><a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external">carla</a> has offered an scenario engine, which is helpful to define scenarios by test_criteria and behaviors, of course the timeout as well.</p>
-<p><code>test_criteria</code>, is like an underline boundary for the scenario to keep, if not, the scenario failed. e.g. max_speed_limitation, collision e.t.c. these are test criterias, no matter simualtion test or physical test, that have to follow the same criterias; in old ways, we always try to find a way to evaluate the simulation result, and thought this may be very complex, but as no clue to go complex further, simple criterias actually is good. even for reinforcement learning, the simple criterias is good enough for the agent to learn the drive policy. </p>
-<p>of course, I can expect there are some expert system about test criterias.  </p>
-<p>For simulation itself, there has another metric to descibe how close the simulation itself to physical world, namley to performance how well the simulator is, which is beyond here.</p>
-<p><code>behaivor</code> is a good way to describe the dynamic processing in the scenario. e.g. npc follow lane to next intersection, and stop in right lane, ego follow npc till the stop area.</p>
-<p>OpenScenario has similar ideas to descibe the dynamic. to support <code>behaivor</code>, the simulator should have the features to control ego and npc with the atomic behaviors, e.g. lane-follow, lane-change, stop at intersection e.t.c. </p>
-<p>in lg simulator, npc has simple AI routing and lane-following API, basically is limited to follow pre-defined behaviors; ego has only cruise-control, but external planner is avialable through ROS.</p>
-<p>for both <code>test_criteria</code> and <code>behavior</code>, carla has a few existing atomic elements, which is a good idea to build up complex scenarios. </p>
-<h3 id="OpenScenario"><a href="#OpenScenario" class="headerlink" title="OpenScenario"></a>OpenScenario</h3><p>not sure if this is a project still on-going, carla has interface and a few other open source parsers there, but as it is a standard in popular projects, e.g. PEGUS, should be worthy to take further study.  </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1881,7 +1908,7 @@ nslookup  10.20.101.119   #reverse (ip 2 domain)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-count">136</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
