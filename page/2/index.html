@@ -291,6 +291,230 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/deploy-lgsvl-in-docker-swarm-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/21/deploy-lgsvl-in-docker-swarm-2/" itemprop="url">deploy lgsvl in docker swarm-2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-21T08:31:30-05:00">
+                2019-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/21/deploy-lgsvl-in-docker-swarm-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/11/21/deploy-lgsvl-in-docker-swarm-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>previously tried to <a href="https://zjli2013.github.io/2019/11/19/deploy-lgsvl-in-docker-swarm/" target="_blank" rel="external">deploy lgsvl by docker compose v3</a>, which at first sounds promising, but due to lack of runtime support, which doesn’t work any way.  <code>docker service create --generic-resource</code> is another choice.</p>
+<h2 id="docker-service-options"><a href="#docker-service-options" class="headerlink" title="docker service options"></a>docker service options</h2><p><a href="https://docs.docker.com/engine/swarm/services/" target="_blank" rel="external">docker service</a> support a few common <a href="https://docs.docker.com/engine/reference/commandline/service_create/" target="_blank" rel="external">options</a></p>
+<pre><code>--workdir is the working directory inside the container 
+
+--args is used to update the command the service runs 
+
+--publish &lt;Published-Port&gt;:&lt;Service-Port&gt;
+
+--network
+
+--mount 
+
+--mode 
+
+--env 
+</code></pre><p> <a href="https://docs.docker.com/engine/swarm/configs/" target="_blank" rel="external">–config</a></p>
+<h2 id="docker-service-create-with-generic-resource"><a href="#docker-service-create-with-generic-resource" class="headerlink" title="docker service create with generic-resource"></a>docker service create with generic-resource</h2><h4 id="generic-resource"><a href="#generic-resource" class="headerlink" title="generic-resource"></a>generic-resource</h4><p>create services requesting <a href="https://docs.docker.com/v17.12/edge/engine/reference/commandline/service_create/#specify-isolation-mode-windows" target="_blank" rel="external">generic resources</a> is supported well:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker service create --name cuda \</div><div class="line">                        --generic-resource &quot;NVIDIA-GPU=2&quot; \</div><div class="line">                        --generic-resource &quot;SSD=1&quot; \</div><div class="line">                        nvidia/cuda</div></pre></td></tr></table></figure>
+<p>tips: acutally the keyword <code>NVIDIA-GPU</code> is not the real tags. <code>generic_resource</code> is also supported in <a href="https://stackoverflow.com/questions/49141284/docker-swarm-generic-device-resource-connection" target="_blank" rel="external">docker compose v3.5</a>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">generic_resources:</div><div class="line">    - discrete_resource_spec:</div><div class="line">       kind: &apos;gpu&apos;</div><div class="line">       value: 2</div></pre></td></tr></table></figure>
+<p><code>--generic-resource</code> has the ability to access GPU in service, a few blog topics:</p>
+<ul>
+<li><p><a href="https://codingsans.com/blog/gpu-orchestration-using-docker" target="_blank" rel="external">GPU Orchestration Using Docker</a></p>
+</li>
+<li><p><a href="http://cowlet.org/2018/05/21/accessing-gpus-from-a-docker-swarm-service.html" target="_blank" rel="external">access gpus from swarm service</a></p>
+</li>
+</ul>
+<h4 id="first-try"><a href="#first-try" class="headerlink" title="first try"></a>first try</h4><p>follow <a href="http://cowlet.org/2018/05/21/accessing-gpus-from-a-docker-swarm-service.html" target="_blank" rel="external">accessing GPUs from swarm service</a>. install <a href="https://github.com/NVIDIA/nvidia-container-runtime" target="_blank" rel="external">nvidia-container-runtime</a> and install <code>docker-compose</code>, and run the following script:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">export GPU_ID=`nvidia-smi -a | grep UUID | awk &apos;&#123;print substr($4,0,12)&#125;&apos;`</div><div class="line">sudo mkdir -p /etc/systemd/system/docker.service.d</div><div class="line">cat EOF | sudo tee --append /etc/systemd/system/docker.service.d/override.conf</div><div class="line">[Service]</div><div class="line">ExecStart=</div><div class="line">ExecStart=/usr/bin/dockerd -H fdd:// --default-runtime=nvidia --node-generic-resource gpu=$&#123;GPU_ID&#125;</div><div class="line">EOF</div><div class="line">sudo sed -i &apos;swarm-resource = &quot;DOCKER_RESOURCE_GPU&quot;&apos; /etc/nvidia-container-runtime/config.toml</div><div class="line">sudo systemctl daemon-reload</div><div class="line">sudo systemctl start docker</div></pre></td></tr></table></figure>
+<p>to understand supported dockerd options, can check <a href="https://github.com/docker/cli/blob/master/docs/reference/commandline/dockerd.md" target="_blank" rel="external">here</a>, then run the test as: </p>
+<pre><code>docker service create --name vkcc --generic-resource &quot;gpu=0&quot; --constraint &apos;node.role==manager&apos; nvidia/cudagl:9.0-base-ubuntu16.04
+
+docker service create --name vkcc --generic-resource &quot;gpu=0&quot; --env DISPLAY=unix:$DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --constraint &apos;node.role==manager&apos; vkcube 
+</code></pre><p>which gives the errors:</p>
+<pre><code>1/1: no suitable node (1 node not available for new tasks; insufficient resourc… 
+1/1: no suitable node (insufficient resources on 2 nodes) 
+</code></pre><p>if run as, where <code>GPU-9b5113ed</code> is the physical GPU ID in node:</p>
+<pre><code>docker service create --name vkcc --generic-resource &quot;gpu=GPU-9b5113ed&quot; nvidia/cudagl:9.0-base-ubuntu16.04
+</code></pre><p>which gives the error: </p>
+<pre><code>invalid generic-resource request `gpu=GPU-9b5113ed`, Named Generic Resources is not supported for service create or update
+</code></pre><p>these errors are due to swarm cluster can’t recognized this GPU resource, which is configured in <code>/etc/nvidia-container-runtime/config.toml</code></p>
+<h4 id="second-try"><a href="#second-try" class="headerlink" title="second try"></a>second try</h4><p>as mentioined in <a href="https://codingsans.com/blog/gpu-orchestration-using-docker" target="_blank" rel="external">GPU orchestration using Docker</a>, another change can be done:</p>
+<pre><code>ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock --default-runtime=nvidia --node-generic-resource gpu=${GPU_ID}
+</code></pre><p>which fixes the <code>no suitable node</code> issue, but start container failed: OCI..</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@ubuntu:~# docker service ps vkcc  </div><div class="line">ID                  NAME                IMAGE                                NODE                DESIRED STATE       CURRENT STATE           ERROR                              PORTS</div><div class="line">orhcaxyujece        vkcc.1              nvidia/cudagl:9.0-base-ubuntu16.04   ubuntu              Ready               Ready 3 seconds ago                                        </div><div class="line">e001nd557ka6         \_ vkcc.1          nvidia/cudagl:9.0-base-ubuntu16.04   ubuntu              Shutdown            Failed 3 seconds ago    &quot;starting container failed: OC…&quot;</div></pre></td></tr></table></figure>
+<p>check daemon log with <code>sudo journalctl -fu docker.service</code>, which gives:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Nov 21 13:07:12 ubuntu dockerd[1372]: time=&quot;2019-11-21T13:07:12.089005034+08:00&quot; level=error msg=&quot;fatal task error&quot; error=&quot;starting container failed: OCI runtime create failed: unable to retrieve OCI runtime error (open /run/containerd/io.containerd.runtime.v1.linux/moby/9eee7ac30a376ee8f59704f7687455bfb163e5ea3dd6d09d24fbd69ca2dfaa4e/log.json: no such file or directory): nvidia-container-runtime did not terminate sucessfully: unknown&quot; module=node/agent/taskmanager node.id=emzw1f9293rwdk97ki7gfqq1q service.id=qdma7vr1g519lz9hx2y1fen9o task.id=ex1l4wy61kvughns5uzo6qgxy</div></pre></td></tr></table></figure>
+<h4 id="third-try"><a href="#third-try" class="headerlink" title="third try"></a>third try</h4><p>following <a href="https://github.com/NVIDIA/nvidia-docker/issues/141#issuecomment-356458450" target="_blank" rel="external">issue #141</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">nvidia-smi -a | grep UUID | awk &apos;&#123;print &quot;--node-generic-resource gpu=&quot;substr($4,0,12)&#125;&apos; | paste -d&apos; &apos; -s</div><div class="line">sudo systemctl edit docker</div><div class="line"></div><div class="line">[Service]</div><div class="line">ExecStart=</div><div class="line">ExecStart=/usr/bin/dockerd -H fd:// --default-runtime=nvidia &lt;resource output from the above&gt;</div></pre></td></tr></table></figure>
+<p>and run: </p>
+<pre><code>docker service create --name vkcc --generic-resource &quot;gpu=1&quot; --env DISPLAY --constraint &apos;node.role==manager&apos; nvidia/cudagl:9.0-base-ubuntu16.04
+</code></pre><p>it works  with output <code>verify: Service converged</code>. However, when test image with <code>vucube</code> or <code>lgsvl</code> it has errors:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Nov 21 19:33:20 ubuntu dockerd[52334]: time=&quot;2019-11-21T19:33:20.467968047+08:00&quot; level=error msg=&quot;fatal task error&quot; error=&quot;task: non-zero exit (1)&quot; module=node/agent/taskmanager node.id=emzw1f9293rwdk97ki7gfqq1q service.id=spahe4h24fecq11ja3sp8t2cn task.id=uo7nk4a3ud201bo9ymmlpxzr3</div></pre></td></tr></table></figure>
+<p>to debug the <code>non-zero exit (1)</code> :</p>
+<pre><code>docker service  ls    #get the dead service-ID
+
+docker [service] inspect  r14a68p6v1gu  # check 
+
+docker ps -a  # find the dead container-ID 
+
+docker logs  ff9a1b5ca0de   # check the log of the failure container
+</code></pre><p>it gives: <code>Cannot find a compatible Vulkan installable client driver (ICD)</code> </p>
+<p>check the issue at <a href="https://gitlab.com/nvidia/container-images/vulkan/issues/2" target="_blank" rel="external">gitlab/nvidia-images</a></p>
+<h4 id="forth-try"><a href="#forth-try" class="headerlink" title="forth try"></a>forth try</h4><pre><code>docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears 
+</code></pre><p>BINGO !!!!! it does serve  <code>openGL/glxgears</code> in service mode. However, there are a few issues:</p>
+<ul>
+<li><p>constraint to manager node</p>
+</li>
+<li><p>require host network </p>
+</li>
+</ul>
+<p>the <code>X11-unix</code> and <code>Xauthority</code> are from <a href="https://www.csdn.net/article/2015-07-30/2825340" target="_blank" rel="external">X11 configuration</a>, which need more study. also  <code>network</code> parameter need to expand to ingress overlay</p>
+<p>mostly, vulkan image still can’t run, with the same error: <code>Cannot find a compatible Vulkan installable client driver (ICD)</code></p>
+<h4 id="generic-resource-support-discussion"><a href="#generic-resource-support-discussion" class="headerlink" title="generic-resource support discussion"></a>generic-resource support discussion</h4><p><a href="https://github.com/moby/moby/issues/33439" target="_blank" rel="external">moby issue 33439: add support for swarmkit generic resources</a></p>
+<ul>
+<li>how to advertise Generic Resources(republish generic resources)</li>
+<li>how to request Generic Resources </li>
+</ul>
+<p><a href="https://github.com/NVIDIA/nvidia-docker/issues/141" target="_blank" rel="external">nvidia-docker issue 141: support for swarm mode in Docker 1.12</a></p>
+<p><a href="https://github.com/docker/docker.github.io/pull/5416" target="_blank" rel="external">docker issue 5416: Add Generic Resources</a></p>
+<p><strong>Generic resources</strong></p>
+<p><a href="https://github.com/RenaudWasTaken/docker.github.io/blob/master/compose/compose-file/index.md" target="_blank" rel="external">Generic resources</a> are a way to select the kind of nodes your task can land on.</p>
+<p>In a swarm cluster, nodes can advertise Generic resources as discrete values or as named values such as SSD=3 or GPU=UID1, GPU=UID2.</p>
+<p>The Generic resources on a service allows you to request for a number of these Generic resources advertised by swarm nodes and have your tasks land on nodes with enough available resources to statisfy your request.</p>
+<p>If you request Named Generic resource(s), the resources selected are exposed in your container through the use of environment variables. E.g: DOCKER_RESOURCE_GPU=UID1,UID2</p>
+<p>You can only set the generic_resources resources’ reservations field.</p>
+<p><a href="https://stackoverflow.com/questions/40172594/schedule-a-container-with-docker-swarm-using-gpu-memory-as-a-constraint" target="_blank" rel="external">overstack: schedule a container with swarm using GPU memory as a constraint</a></p>
+<p><a href="https://docs.docker.com/v17.12/datacenter/ucp/2.2/guides/admin/configure/add-labels-to-cluster-nodes/" target="_blank" rel="external">label swarm nodes</a></p>
+<pre><code>$ docker node update --label-add &lt;key&gt;=&lt;value&gt; &lt;node-id&gt;
+</code></pre><p><a href="https://github.com/docker/compose/issues/6691" target="_blank" rel="external">compose issue #6691</a></p>
+<p><a href="https://github.com/NVIDIA/nvidia-docker/issues/141" target="_blank" rel="external">docker-nvidia issue #141</a></p>
+<h4 id="SwarmKit"><a href="#SwarmKit" class="headerlink" title="SwarmKit"></a>SwarmKit</h4><p><a href="https://github.com/docker/swarmkit" target="_blank" rel="external">swarmkit</a> also support <a href="https://github.com/docker/swarmkit/blob/master/design/generic_resources.md" target="_blank" rel="external">GenericResource</a>, please check <a href="https://github.com/docker/swarmkit/blob/master/design/generic_resources.md#use-cases" target="_blank" rel="external">design doc</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ # Single resource</div><div class="line">$ swarmctl service create --name nginx --image nginx:latest --generic-resources &quot;banana=2&quot;</div><div class="line">$ # Multiple resources</div><div class="line">$ swarmctl service create --name nginx --image nginx:latest --generic-resources &quot;banana=2,apple=3&quot;</div></pre></td></tr></table></figure>
+<pre><code>./bin/swarmctl service create --device /dev/nvidia-uvm --device /dev/nvidiactl --device /dev/nvidia0 --bind /var/lib/nvidia-docker/volumes/nvidia_driver/367.35:/usr/local/nvidia --image nvidia/digits:4.0 --name digits
+</code></pre><p>swarmkit add support <a href="https://github.com/docker/swarmkit/issues/1244" target="_blank" rel="external">devices option</a></p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://stackoverflow.com/questions/51398808/how-to-manage-docker-swarm-service-configuration" target="_blank" rel="external">manage swarm service with config</a></p>
+<p><a href="https://upcloud.com/community/tutorials/how-to-configure-docker-swarm/" target="_blank" rel="external">UpCloud: how to configure Docker swarm</a></p>
+<p><a href="https://codefresh.io/docker-tutorial/deploy-docker-compose-v3-swarm-mode-cluster/" target="_blank" rel="external">Docker compose v3 to swarm cluster</a></p>
+<p><a href="https://blog.couchbase.com/deploy-docker-compose-services-swarm/" target="_blank" rel="external">deploy docker compose services to swarm</a></p>
+<p><a href="https://docs.docker.com/v17.12/edge/engine/reference/commandline/deploy/" target="_blank" rel="external">docker deploy doc</a></p>
+<p><a href="https://github.com/alexei-led/swarm-mac/blob/master/init_swarm.sh" target="_blank" rel="external">alexei-led github</a></p>
+<p><a href="https://vsupalov.com/docker-arg-env-variable-guide/" target="_blank" rel="external">Docker ARG, ENV, .env – a complete guide</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/deploy-lgsvl-in-docker-swarm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1785,202 +2009,6 @@ hdfs dfs -ls
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/safety-guy-in-AV/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/16/safety-guy-in-AV/" itemprop="url">safety guy in AV</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-16T07:10:58-04:00">
-                2019-10-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/10/16/safety-guy-in-AV/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/10/16/safety-guy-in-AV/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>why Waymo still can’t release fully driveless cars on road; why vehicle startups, NIO is going to brankruptcy? one of the hidden reasons vehicle as a consumer product can’t go to fast iteration as social media, mobility apps in Internet companies, is safety. </p>
-<p>vehicle development(VD) needs to satisfy safety requiements at first priority. so in VD,  the cutting edge tech/ new solutions usually doesn’t make a difference, but the processes, how to handle safety requirements, system requirements, e.t.c are really the first thing in vehicle engineers’ mind.</p>
-<p>so now, deep learning AI in object detection is fairly matured, but it’s not used common in vehicle camera products. and for these start ups, who say themselves as tech-driven doesn’t survive well, because VD should be process driven. </p>
-<p> the best managment/survive way for original equipment manufacture(OEM) companies is build up their process system. e.g. GM managemnet is about process, and Toyota agile management is about a more flexible process, too. no OEMs said their team is tech-driven. </p>
-<h3 id="what-is-SOTIF"><a href="#what-is-SOTIF" class="headerlink" title="what is SOTIF ?"></a>what is SOTIF ?</h3><p>safety of the intended functionality(SOTIF): the absence of unreasonable risk due to hazards resulting from functional insufficiencies of the intended functionaliyt or by reasonably foreseeable misuse by persons.</p>
-<p>SOTIF is a way to define <code>safey by design</code>, while still there are <code>unsafe post design</code>, which is beyond the standards can handle. </p>
-<h3 id="safety-chanllenges-in-ADS"><a href="#safety-chanllenges-in-ADS" class="headerlink" title="safety chanllenges in ADS"></a>safety chanllenges in ADS</h3><p>is conserative behaivor of AI unsafe ? YES. as Waymo cars driving in San Fransisco, it’s more conservative than human drivers, which makes itself unsafe and surrounding vehicles unsafe. and the definiation of conservative or aggressive of driving behavior is further area depends, e.g. how human drivers drive in San Fransisco is different than drivers from Michigan, how AI handle this? </p>
-<p>how does AI satisfy VD requirements, and how to verify the AI really satisfy? there is no standard solution yet. since AI is black box, it may satisfy VD requirements in 99.9% situations, but failed in 0.1% case. </p>
-<p>an ADS solution works well in 99% scenarios is not an acceptable solution at all, which is really big chanllenge for most self driving full-stack solution start-ups. so Waymo and a few giants are working on test driven verification, which requires build up a very strong simulation team to power up safety test by simulation, which’s even chanllenging for most traditional OEMs.</p>
-<p>and definitely, there is no way to handle unstructured stochastic traffic environments,  </p>
-<h2 id="classification-of-safety-hazards"><a href="#classification-of-safety-hazards" class="headerlink" title="classification of safety hazards"></a>classification of safety hazards</h2><ul>
-<li><p>IS26262</p>
-</li>
-<li><p>internal cyber security (ISO21434)</p>
-</li>
-<li><p>functional insufficient &amp; human misuse (IS02148)</p>
-</li>
-<li><p>external infrastructura cyber security (traffic light system, jamming sensors signals)</p>
-</li>
-</ul>
-<h2 id="malfunction-behaviors-of-EE"><a href="#malfunction-behaviors-of-EE" class="headerlink" title="malfunction behaviors of EE"></a>malfunction behaviors of EE</h2><p>Harzard Analysis &amp; Risk Assignment </p>
-<pre><code>    |
-    |
-    V
-
-ASIL B/C/D         &lt;--   sys requires 
-
-* func redundency 
-
-* system safety mechanism 
-
-* predictive safety mechanism 
-</code></pre><p>this is a close-loop analysis, to satisfy <code>sys requirement</code> will get new situations, which lead to new system requirements </p>
-<pre><code>system requirements 
-
-  ^ 
-  |
-  |
-  V
-
-SOTIF Analysis 
-</code></pre><p>this is a double direction design, with any new requiremenst, there is a need to do SOTIF analysis, which may find out some potential bugs/problems in the design, then back to new system requirements.</p>
-<p>in summary, the input to SOTIF analysis is system requirements, and output is new system requirements.</p>
-<h2 id="functional-insufficients"><a href="#functional-insufficients" class="headerlink" title="functional insufficients"></a>functional insufficients</h2><ul>
-<li>unsafe by design </li>
-</ul>
-<p>e.g. full pressure brake design, is not sufficient in scenarios, when there is rear following vehicle in full speed</p>
-<h2 id="Tech-limitations"><a href="#Tech-limitations" class="headerlink" title="Tech limitations"></a>Tech limitations</h2><ul>
-<li><p>safe known </p>
-</li>
-<li><p>unsafe known </p>
-</li>
-<li><p>safe unknown</p>
-</li>
-<li><p>unsafe unknown </p>
-</li>
-</ul>
-<p>SOTIF is to identify all unsafe cases and requies to make them safe, but not know how, but SOTIF can’t predict unknown. </p>
-<p>back to why Waymo doesn’t release their driveless vehicle yet, cause they don’t have a way to prove their ADS system has zero unsafe unknown situations, and most possiblely the current ADS solution may be reached 80% functions of the final completed fully ADS solution, but that’s even not the turning point for ADS system. </p>
-<h2 id="where-to-go"><a href="#where-to-go" class="headerlink" title="where to go?"></a>where to go?</h2><ul>
-<li>rule based vs AI based </li>
-</ul>
-<p>as neither purely rule based nor purely AI based can achieve safety goals, so there are combined ways, but then there need a manager module to decide which should be weighted more in a special situation.</p>
-<ul>
-<li>a new undeterministic/unpredicted system explaination</li>
-</ul>
-<p>reinforcement learning is actually a good way to train agents in unpredicted simulation environemnt, but even in simulation, it can’t travel every case in the state space; then to use R.L to train vehicles in real traffic environment with random pedestrains, npcs, situations, which’s impossible so far. </p>
-<ul>
-<li>a new AI system </li>
-</ul>
-<p>current AI is still correlation analysis, while human does causal reasoning. </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="">safety first for automated driving handover to PR</a></p>
-<p><a href="https://www.iso.org/standard/70939.html" target="_blank" rel="external">ISO 26262 standard</a></p>
-<p><a href="https://hal.archives-ouvertes.fr/hal-01190734/document" target="_blank" rel="external">how to reach complete safety requirement refinement for autonomous vehicle</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2031,7 +2059,7 @@ SOTIF Analysis
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">137</span>
+                <span class="site-state-item-count">138</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2044,7 +2072,7 @@ SOTIF Analysis
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
