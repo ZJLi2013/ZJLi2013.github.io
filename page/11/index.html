@@ -291,6 +291,283 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/01/reinforce-learning-in-simulator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/01/reinforce-learning-in-simulator/" itemprop="url">reinforcement learning in simulator</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-01T10:14:26-05:00">
+                2018-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/01/reinforce-learning-in-simulator/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/12/01/reinforce-learning-in-simulator/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> <a href="http://www0.cs.ucl.ac.uk/staff/d.silver/web/Teaching.html" target="_blank" rel="external">reinforcement learning</a> from David Silver. In autonomous vehicle training, more and more practices dependent on simulator training e.g. <a href="https://github.com/carla-simulator/reinforcement-learning" target="_blank" rel="external">carla RF</a><br>  an open source architecture used often is <a href="https://gym.openai.com/" target="_blank" rel="external">OpenAI GYM</a></p>
+<p>each agent has state, observation, action, which can be defined in  state_space, observation_space, action_space. </p>
+<h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>  1) infinite or finite : </p>
+<p> in real case, state, observation space are easily to be infinite, e.g. in every frame, the agent has a different environment,<br>  which means a different state. the elements in action_space may be limited, e.g. turn left, turn right, accelerate, brake. etc.</p>
+<p>  2) continuous or discrete : </p>
+<p>  when driving a car, the control is continuous, namely, a continuous function a time <code>t</code>. on the other hand, like play GO game,<br>  the action is not time related, each action is discrete to another. </p>
+<p>  3) locally or globally perception</p>
+<p>  for a grid world game, the agent knows the whole world; but when a car running in a city, it can only percept the environment locally.<br>  this has a big difference when make decision </p>
+<p>  the following talks about on-line policy RL, which means the agent will follow some policy(high-level). e.g the velocity limit, no collision with another car etc to training agent know how to drive, often need define environment reward, used to update the policy(detail-level), e.g. when the agent in <code>stateA</code>,  <code>policyI</code> will be used. but keep in mind, neither the human nor the agent know exactly at first, which is the best(detail-level) value for the chosen policy, and the input <code>(state, policy/action)</code>  is not even accurate so the learning process is actually to iterate in each episode to update the table <code>(state, action)</code>, in which the policy is updated hidden, and which is usually called Q-value. after training, the <code>(state, action)</code> is better to handle the simulation environement.    </p>
+<p>  so the high-level computing flow:</p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"> s0 = env.step(agent)</div><div class="line"> a0 = agent.follow_policy(s0)</div><div class="line"> <span class="keyword">while</span> <span class="keyword">not</span> is_done: </div><div class="line">s1, r1, is_done, info = agent.act(a0) </div><div class="line">old_q_value = env.get_Q(s0, a0)</div><div class="line">cur_q_value = env.get_Q(s1, a1) </div><div class="line">measure = r1 + gamma * cur_q_value </div><div class="line">new_q_value = old_q_value + alpha * (measure - old_q_value) </div><div class="line">env.set_Q(s0, a0, new_q_value) </div><div class="line"></div><div class="line">s0, a0 = s1, a1</div></pre></td></tr></table></figure>
+<h2 id="real-case"><a href="#real-case" class="headerlink" title="real case"></a>real case</h2><p>  <code>while loop</code> is basically update policy, so next time in a certain state, the agent will performance better. but there is a problem, most real problem don’t have a Q-table, since the state space is infinite. </p>
+<p>   1) linear space approximator </p>
+<p>the real state space is high-dimension even infinite-dimension, mathmatically it’s OK to use a linear space to be as close as possible to the real space (Hilbert space). e.g. in elastic mechanics, the finite element space can approximate any accuracy to the continuous elastic space. </p>
+<p>so the idea is to construct the linear space <code>base vector</code> based on existing sample state, then all state can be descriped as a linear combination of the base vector. </p>
+<p>  2） neuro-network aproximator </p>
+<p>for nonlinear fitted application, to construct a neuro-network to describe the state space. how to train the network and how to make sure it is robost and convergence is another topic</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/27/pYTHON-again/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/27/pYTHON-again/" itemprop="url">pYTHON again</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-27T00:05:45-04:00">
+                2018-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/27/pYTHON-again/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/27/pYTHON-again/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Pick python up from a <a href="https://www.liaoxuefeng.com/" target="_blank" rel="external">link</a> for new position: </p>
+<h2 id="type"><a href="#type" class="headerlink" title="type"></a>type</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">type(<span class="number">123</span>)</div><div class="line">isinstance(instance_name, class_name)</div></pre></td></tr></table></figure>
+<h2 id="property"><a href="#property" class="headerlink" title="@property"></a>@property</h2><p>transfer <code>get()</code>method in a class to a decorator</p>
+<h2 id="define-function"><a href="#define-function" class="headerlink" title="define function"></a>define function</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_abs</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(x, (int, float)):</div><div class="line">        <span class="keyword">raise</span> TypeError(<span class="string">'bad operand type'</span>)</div></pre></td></tr></table></figure>
+<h2 id="fun-decorator"><a href="#fun-decorator" class="headerlink" title="fun decorator"></a>fun decorator</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@decorator</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span><span class="params">()</span></span></div></pre></td></tr></table></figure>
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">is_odd</span><span class="params">(n)</span>:</span></div><div class="line">	<span class="keyword">return</span> n%<span class="number">2</span> == <span class="number">1</span> </div><div class="line">	</div><div class="line">list(filter(is_odd, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</div></pre></td></tr></table></figure>
+<h2 id="lambda"><a href="#lambda" class="headerlink" title="lambda"></a>lambda</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">list(map(<span class="keyword">lambda</span> x: x*<span class="number">2</span>, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]))</div></pre></td></tr></table></figure>
+<h2 id="slice"><a href="#slice" class="headerlink" title="slice"></a>slice</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">L = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</div><div class="line">L[<span class="number">-2</span>:]  <span class="comment">#[4, 5]</span></div></pre></td></tr></table></figure>
+<h2 id="list-generation"><a href="#list-generation" class="headerlink" title="list generation"></a>list generation</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[x*<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">5</span>)]</div></pre></td></tr></table></figure>
+<h2 id="class-amp-instance"><a href="#class-amp-instance" class="headerlink" title="class &amp; instance"></a>class &amp; instance</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">s</span><span class="params">(object)</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__init__</span><span class="params">(self, name)</span>:</span></div><div class="line">		self.name = name</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">print_s</span><span class="params">(self)</span>:</span></div><div class="line">		print(<span class="string">'%s:'</span> %(self.name))</div><div class="line">		</div><div class="line">s1 = s(<span class="string">"john"</span>)</div><div class="line">s1.print_s()</div></pre></td></tr></table></figure>
+<h2 id="customized-class"><a href="#customized-class" class="headerlink" title="customized class"></a>customized class</h2><p>dynamic language, so the instance of any class can be added any other attributes. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">s</span><span class="params">(object)</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__init__</span><span class="params">(self, name)</span>:</span></div><div class="line">			self._name = name</div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__str__</span><span class="params">(self)</span>:</span></div><div class="line">		<span class="keyword">return</span> <span class="string">'s object(name: %s)'</span> % self._name</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> \<span class="title">__getattr__</span><span class="params">(self, attr)</span>:</span></div><div class="line">		<span class="keyword">if</span> attr == <span class="string">'attr1'</span>:</div><div class="line">			<span class="keyword">return</span> <span class="keyword">lambda</span>: attr1.value</div></pre></td></tr></table></figure>
+<h2 id="raise-amp-except"><a href="#raise-amp-except" class="headerlink" title="raise &amp; except"></a>raise &amp; except</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">	print(<span class="string">'try...'</span>)</div><div class="line">	r = <span class="number">10</span>/<span class="number">0</span> </div><div class="line">	print(<span class="string">'result: '</span>, r)</div><div class="line"><span class="keyword">except</span> ZeroDiisionError <span class="keyword">as</span> e:</div><div class="line">	print(<span class="string">'except'</span>, e)</div><div class="line">	logging.exception(e)</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">	print(<span class="string">'finally..'</span>)</div></pre></td></tr></table></figure>
+<h2 id="IO-stream"><a href="#IO-stream" class="headerlink" title="IO stream"></a>IO stream</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">f = open(<span class="string">'test.log'</span>, <span class="string">'r'</span>)</div><div class="line">print(f.read(size))</div><div class="line">f.close() </div><div class="line"></div><div class="line"><span class="comment">#or </span></div><div class="line"></div><div class="line"><span class="keyword">with</span> open(<span class="string">'test.log'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</div><div class="line">	printf(f.read(size)) </div><div class="line"></div><div class="line">	<span class="keyword">for</span> line <span class="keyword">in</span> f.readlines():</div><div class="line">		print(line.strip())</div></pre></td></tr></table></figure>
+<h2 id="pickling"><a href="#pickling" class="headerlink" title="pickling"></a>pickling</h2><p>serializaion/marshalling/flattening and reverse</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pickle</div><div class="line"><span class="keyword">import</span> json</div><div class="line"></div><div class="line">d = dic(name=<span class="string">'zj'</span>, age=<span class="string">'18'</span>)</div><div class="line">pickle.dumps(d)</div><div class="line">json.dumps(d)</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/11/the-OK-and-not-OK-in-my-life/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1334,274 +1611,6 @@ root-&gt;right = insert(root-&gt;right, key);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/object-creating-in-C-C/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/11/object-creating-in-C-C/" itemprop="url">object creating in C/C++</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T21:09:08-04:00">
-                2018-09-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/11/object-creating-in-C-C/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/11/object-creating-in-C-C/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="construct-an-object"><a href="#construct-an-object" class="headerlink" title="construct an object"></a>construct an object</h2><p>the compiler will define a default constructor with no parameters, if there is no user defined default constructors. usually the parameters for user defined(UD) default constructors should have default values. </p>
-<p>directly call the UD constructor will create an object; call the UD through new keyword will create an object pointer.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span>&#123;</span></div><div class="line">	<span class="keyword">int</span> val; </div><div class="line">	TreeNode *right ;</div><div class="line">	TreeNode *left;</div><div class="line">	TreeNode(<span class="keyword">int</span> x=<span class="number">0</span>): val(x), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>)&#123;&#125;; <span class="comment">//user defined constructor </span></div><div class="line">	TreeNode(<span class="keyword">const</span> TreeNode *cp) <span class="comment">//copy constructor </span></div><div class="line">	&#123;</div><div class="line">		val = cp-&gt;val;</div><div class="line">		right = cp-&gt;right;</div><div class="line">		left = cp-&gt;left;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">TreeNode node1; </div><div class="line"><span class="function">TreeNode <span class="title">node2</span><span class="params">(<span class="number">100</span>)</span></span>;</div><div class="line">TreeNode *node_p = <span class="keyword">new</span> TreeNode(<span class="number">10</span>);</div></pre></td></tr></table></figure>
-<h2 id="create-an-object-in-pure-C"><a href="#create-an-object-in-pure-C" class="headerlink" title="create an object in pure C"></a>create an object in pure C</h2><p><code>new</code> operator do two things: allocate memory for a C++ class object, then call the object’s constructor to initialize this object. basically, <code>new</code> packages memory management of objects and objects initialization.</p>
-<p>while in pure C,  since there is no object constructor, after <code>malloc</code>  memory for the structure, either call an initial function or manually initialize this structure member variables.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">TreeNode </div><div class="line">&#123;</div><div class="line">	int val; </div><div class="line">	TreeNode *right ;</div><div class="line">	TreeNode *left;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   TreeNode *p =  (TreeNode*) malloc( sizeof(struct TreeNode)); </div><div class="line">   p-&gt;val = 0;</div><div class="line">   p-&gt;right = NULL; </div><div class="line">   p-&gt;left = NULL ; </div><div class="line">&#125;</div><div class="line">``` </div><div class="line">  </div><div class="line">## construct an object array </div><div class="line"></div><div class="line">beyond creating one object (pointer), how to create object array.  </div><div class="line"></div><div class="line">```c </div><div class="line">int nums = 5;</div><div class="line">TreeNode tree_array[nums];</div><div class="line">TreeNode *tree_p = (TreeNode*) new TreeNode[nums];</div></pre></td></tr></table></figure>
-<p>be aware, each element in tree_array has the whole memory of TreeNode structure; and tree_p++ will go to next TreeNode structure, tree_p[i] is also a whole memory of TreeNode structure. </p>
-<h2 id="create-an-object-array-in-pure-C"><a href="#create-an-object-array-in-pure-C" class="headerlink" title="create an object array in pure C"></a>create an object array in pure C</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> nums = <span class="number">5</span>;</div><div class="line">TreeNode *tree_p = (TreeNode*) <span class="built_in">malloc</span>(nums * <span class="keyword">sizeof</span>(TreeNode));</div></pre></td></tr></table></figure>
-<p>basically <code>malloc</code> will return a pointer to a block of memory, but it’s not responsible to initialize this block of memory. </p>
-<h2 id="the-rule-of-five"><a href="#the-rule-of-five" class="headerlink" title="the rule of five"></a>the rule of five</h2><p><a href="https://cpppatterns.com/patterns/rule-of-five.html" target="_blank" rel="external">rule of three</a> is about how to manage dynamically allocated resources in C++.</p>
-<p>why it is necessary? </p>
-<p>1) when parameter B is copying by value from A, if no user defined copy constructor, the compiler will do a shallow copy from A to B by default, in which  a new pointer point to the same content address. at the end of function call, the parameter B is out of scope, so destructor is called, and A is still there. but at the end of the main function, A is out of scope, need deallocating, then error is B already deallocate the content of A. </p>
-<p>with a user defined copy constructor, B will get a deep copy of A, so no sharing content, no problems when deallocating either B or A.</p>
-<p>2) if no user specified assignment constructor, a shallow copy happens, then error-potential. and assignment constructor (operator=) can be implemented with copy constructor. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	TreeNode node1;</div><div class="line">	TreeNode node2 = node1; <span class="comment">//actually a copy-construct, same as node2(node1)</span></div><div class="line">	TreeNode node3 ;</div><div class="line">	node3 = node1 ; <span class="comment">//a compiler assignment-construct by default(shallow copy)</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/scrabmle-string/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/11/scrabmle-string/" itemprop="url">scrabmle string</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T21:07:03-04:00">
-                2018-09-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/09/11/scrabmle-string/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/09/11/scrabmle-string/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://leetcode.com/problems/scramble-string/description/" target="_blank" rel="external">scramble string</a> at leetCode 87. sol: get all possible scrambled strings of s1, then compare if s2 is in it.</p>
-<pre><code>for 1-char:   scramble(&quot;a&quot;) --&gt; &quot;a&quot; 
-    for 2-chars :  scramble(&quot;ab&quot;) --&gt; &quot;ba&quot;  
-for 3-chars:  scramble(&quot;abc&quot;) --&gt; &quot;bac&quot;, &quot;cba&quot;,  &quot;acb&quot;, &quot;cba&quot;      for 4-chars:   scramble(&quot;abcd&quot;) --&gt;  (a | bcd) + (ab | cd) +  (abc | d) 
-for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (abc |  de) + (abcd | e) 
-</code></pre><p>from the enumaration, there is always a left-substring and a right-substring, and recursive in each substring. consider the push_back order, there are two:  left-&gt;\right and right-&gt;\left at each two slibings.</p>
-<p>additional routines: how to do substring join and how to delete duplicate string from string-vector.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="function"><span class="built_in">string</span> <span class="title">join</span><span class="params">(<span class="built_in">string</span>&amp; sub1, <span class="built_in">string</span>&amp; sub2)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">string</span> res; </div><div class="line">	 res.reserve(sub1.size() + sub2.size());</div><div class="line">	 </div><div class="line">	 <span class="built_in">string</span>::iterator it;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(it = sub1.begin(); it != sub1.end(); it++)</div><div class="line">		 res.push_back(*it);</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(it = sub2.begin(); it != sub2.end(); it++)</div><div class="line">		 res.push_back(*it);</div><div class="line">	 </div><div class="line">	 <span class="keyword">return</span> res;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> <span class="comment">//<span class="doctag">TODO:</span>  keep in mind the transfer function, and how to design it  </span></div><div class="line"> <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;  scramble(<span class="built_in">string</span>&amp; s)</div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">string</span>  ls, rs; </div><div class="line">	 <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; vls, vrs, vcurs; </div><div class="line">	 </div><div class="line">	 <span class="keyword">if</span>(s.size() == <span class="number">1</span>)</div><div class="line">	 &#123;</div><div class="line">		 vcurs.push_back(s); </div><div class="line">		 <span class="keyword">return</span> vcurs; </div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;s.size(); i++)</div><div class="line">	 &#123;</div><div class="line">		 ls = s.substr(<span class="number">0</span>, i);</div><div class="line">		 rs = s.substr(i, s.size()); </div><div class="line">		 vls = scramble(ls);</div><div class="line">		 vrs = scramble(rs); 		 </div><div class="line">		 </div><div class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> m=<span class="number">0</span>; m&lt; vls.size(); m++)</div><div class="line">			 <span class="keyword">for</span>(<span class="keyword">int</span> n=<span class="number">0</span>; n &lt; vrs.size(); n++)</div><div class="line">			 &#123;				 </div><div class="line">				 vcurs.push_back(join(vls[m], vrs[n])); </div><div class="line">				 vcurs.push_back(join(vrs[n], vls[m])); 			 </div><div class="line">			 &#125;</div><div class="line">	 &#125;</div><div class="line"></div><div class="line"><span class="comment">/*how to delete duplicated string from vector&lt;string&gt; */</span> 	 </div><div class="line">	 <span class="built_in">std</span>::sort(vcurs.begin(), vcurs.end()); </div><div class="line">	 vcurs.erase( <span class="built_in">std</span>::unique(vcurs.begin(), vcurs.end()), vcurs.end()); </div><div class="line">	 <span class="keyword">return</span> vcurs; </div><div class="line"> &#125; </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">string</span> s1 = <span class="string">"abcd"</span> ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; outs = scramble(s1); </div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;outs.size(); i++)</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; outs[i] &lt;&lt; <span class="built_in">endl</span>; </div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>How to write a completed code, meaning, always take care the boundaries correctly, no missing situations. It’s easy to start from scratch and achieve somewhere, but hard to be completed.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1652,7 +1661,7 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">138</span>
+                <span class="site-state-item-count">140</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
