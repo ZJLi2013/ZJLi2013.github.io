@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="learning is about repeat 100 times !this maybe the third time to go through ROS, which still looks fresh, but does give a whole picture about how ROS works in ADS dev.   what is ros topic and message">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-05T04:04:45.781Z">
+<meta property="og:updated_time" content="2020-01-05T04:09:50.913Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ADS stack in ros talk to lgsvl">
 <meta name="twitter:description" content="learning is about repeat 100 times !this maybe the third time to go through ROS, which still looks fresh, but does give a whole picture about how ROS works in ADS dev.   what is ros topic and message">
@@ -414,14 +414,63 @@ TwistStamped,
 
 Apollo.control_command 
 </code></pre><p>which is the list of ros messages that lgsvl can parsing.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">if(!Readers.ContainsKey(topic))</div><div class="line">&#123;</div><div class="line">   Readers.Add(topic, Tuple.Create&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;(msg=&gt;converter(msg),  new List&lt;Action&lt;object&gt;&gt;()) ) ;</div><div class="line"></div><div class="line">&#125;  </div><div class="line"></div><div class="line">Readers[topic].Item2.Add(msg=&gt;callback(T)msg)); </div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">`AddReader` is the subscriber nodes in lgsvl. in `Sensor` group, there are three sensors do `AddReader`: </div><div class="line"></div><div class="line">         GroundTruth3DVisualizer </div><div class="line">  </div><div class="line">         VehicleControlSensor </div><div class="line"></div><div class="line">         GroudTruth2DVisualizer</div><div class="line"></div><div class="line"></div><div class="line">which means, lgsvl server can read these three typies of messsages. </div><div class="line"></div><div class="line">if there is no rendering/visual needs, only vehicle conroller (acc, brake) message is required for lgsvl. </div><div class="line"></div><div class="line"></div><div class="line">* AddWriter(topic)</div><div class="line"></div><div class="line">the types/topic supported are: </div><div class="line"></div><div class="line">	 ImageData, </div><div class="line">	 PointCloudData, </div><div class="line">	 Detected3DObjectData, </div><div class="line">	 Detected2DObjectData, </div><div class="line">	 SignalDataArray, </div><div class="line">	 DetectedRadarObjectData, </div><div class="line">	 CanBusData, </div><div class="line">	 GpsData, </div><div class="line">	 ImuData, </div><div class="line">	 CorrectedImuData, </div><div class="line">	 GpsOdometryData, </div><div class="line">	 ClockData</div><div class="line"></div><div class="line"></div><div class="line">`AddWriter()` is a writer adapter, which returns a special type/topic writer/publisher. `AddWriter` is the publisher nodes in lgsvl, in `Sensor` group, the following sensors can publish message out:</div><div class="line"></div><div class="line">		LidarSensor </div><div class="line">		SignalSensor</div><div class="line"> 		GpsInsSensor</div><div class="line">		GpsOdometrySensor</div><div class="line">		DepthCameraSensor</div><div class="line">		ImuSensor</div><div class="line">		SemanticCameraSensor</div><div class="line">		GroudTruth2DSensor</div><div class="line">		CanBusSensor</div><div class="line">		RadarSensor</div><div class="line">		GroudTruth3DSensor</div><div class="line">		ClockSensor</div><div class="line">		GpsSensor</div><div class="line">		ColorCameraSensor</div><div class="line"></div><div class="line"></div><div class="line">* AddService(topic, callback)</div><div class="line"></div><div class="line"></div><div class="line">* OnMessage(sender, args)</div></pre></td></tr></table></figure>
-<p>if (args.op==”publish”)<br>{<br>   topic = json[“topic”]<br>   Readers.TryGetValue(topic, out readerPair)<br>   var parse = readerPair.Item1 ;<br>   var readers = readerPair.Item2;<br>   var msg = parse(json[“msg”]);<br>   foreach (var reader in readers)<br>   {<br>     QueuedActions.Enqueue(()=&gt;reader(msg));   //<br>   }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">ros subscriber uses a callback mechanism, when the message is coming, all readers who subscribe this topic will read in this message. </div><div class="line"></div><div class="line"></div><div class="line">#### RosWriter.cs </div><div class="line"></div><div class="line">the message output is in the format as:</div></pre></td></tr></table></figure></p>
-<p> {<br>   “op” :  “publish” ,<br>   “topic” :  Topic,<br>   “msg”:  message<br> } </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line">#### websocket in ros bridge </div><div class="line"></div><div class="line">the implementation of ros bridge in lgsvl is by `WebSocket`, which maintained a continously communication pipeline, for external ros nodes publishers.</div><div class="line"></div><div class="line"></div><div class="line">## ros ads talk to lgsvl rosbridge </div><div class="line"></div><div class="line">from the previous section, lgsvl talk to external ros nodes (which is the ADS stack) through rosbridge, and which needs external inputs, e.g. vehicle control command, 2d/3d ground truth visualizer. and the ADS stack ros nodes can subscribes Gps, canbus, Lidar, Radar, GroudTruth, SemanticCamera, DeepCamera topics through lgsvl rosbrige.</div><div class="line"></div><div class="line">so the pipeline are simple as following:</div></pre></td></tr></table></figure>
-<p>lgsvl rosbridge  –&gt;  {gps, radar, camera, lidar, groudTruth message} –&gt;  ADS stack nodes </p>
-<p>ADS stack nodes –&gt;  {vehicle control command message} –&gt; lgsvl rosbridge </p>
-<p>```</p>
-<p>usually, the ADS stack nodes are a few related ros nodes, including RTK/GPS sensor, Lidar/Camera/Radar sensors, hdmap node, data fusion node e.t.c.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(!Readers.ContainsKey(topic))</div><div class="line">&#123;</div><div class="line">   Readers.Add(topic, Tuple.Create&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;(msg=&gt;converter(msg),  new List&lt;Action&lt;object&gt;&gt;()) ) ;</div><div class="line"></div><div class="line">&#125;  </div><div class="line"></div><div class="line">Readers[topic].Item2.Add(msg=&gt;callback(T)msg));</div></pre></td></tr></table></figure>
+<p><code>AddReader</code> is the subscriber nodes in lgsvl. in <code>Sensor</code> group, there are three sensors do <code>AddReader</code>: </p>
+<pre><code>GroundTruth3DVisualizer 
+
+VehicleControlSensor 
+
+GroudTruth2DVisualizer
+</code></pre><p>which means, lgsvl server can read these three typies of messsages. </p>
+<p>if there is no rendering/visual needs, only vehicle conroller (acc, brake) message is required for lgsvl. </p>
+<ul>
+<li>AddWriter(topic)</li>
+</ul>
+<p>the types/topic supported are: </p>
+<pre><code>ImageData, 
+PointCloudData, 
+Detected3DObjectData, 
+Detected2DObjectData, 
+SignalDataArray, 
+DetectedRadarObjectData, 
+CanBusData, 
+GpsData, 
+ImuData, 
+CorrectedImuData, 
+GpsOdometryData, 
+ClockData
+</code></pre><p><code>AddWriter()</code> is a writer adapter, which returns a special type/topic writer/publisher. <code>AddWriter</code> is the publisher nodes in lgsvl, in <code>Sensor</code> group, the following sensors can publish message out:</p>
+<pre><code>LidarSensor 
+SignalSensor
+ GpsInsSensor
+GpsOdometrySensor
+DepthCameraSensor
+ImuSensor
+SemanticCameraSensor
+GroudTruth2DSensor
+CanBusSensor
+RadarSensor
+GroudTruth3DSensor
+ClockSensor
+GpsSensor
+ColorCameraSensor
+</code></pre><ul>
+<li>AddService(topic, callback)</li>
+</ul>
+<ul>
+<li>OnMessage(sender, args)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">if (args.op==&quot;publish&quot;)</div><div class="line">&#123;</div><div class="line">   topic = json[&quot;topic&quot;]</div><div class="line">   Readers.TryGetValue(topic, out readerPair)</div><div class="line">   var parse = readerPair.Item1 ; </div><div class="line">   var readers = readerPair.Item2; </div><div class="line">   var msg = parse(json[&quot;msg&quot;]);</div><div class="line">   foreach (var reader in readers)</div><div class="line">   &#123;</div><div class="line">     QueuedActions.Enqueue(()=&gt;reader(msg));   //</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>ros subscriber uses a callback mechanism, when the message is coming, all readers who subscribe this topic will read in this message. </p>
+<h4 id="RosWriter-cs"><a href="#RosWriter-cs" class="headerlink" title="RosWriter.cs"></a>RosWriter.cs</h4><p>the message output is in the format as:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">  &quot;op&quot; :  &quot;publish&quot; ,</div><div class="line">  &quot;topic&quot; :  Topic, </div><div class="line">  &quot;msg&quot;:  message </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="websocket-in-ros-bridge"><a href="#websocket-in-ros-bridge" class="headerlink" title="websocket in ros bridge"></a>websocket in ros bridge</h4><p>the implementation of ros bridge in lgsvl is by <code>WebSocket</code>, which maintained a continously communication pipeline, for external ros nodes publishers.</p>
+<h2 id="ros-ads-talk-to-lgsvl-rosbridge"><a href="#ros-ads-talk-to-lgsvl-rosbridge" class="headerlink" title="ros ads talk to lgsvl rosbridge"></a>ros ads talk to lgsvl rosbridge</h2><p>from the previous section, lgsvl talk to external ros nodes (which is the ADS stack) through rosbridge, and which needs external inputs, e.g. vehicle control command, 2d/3d ground truth visualizer. and the ADS stack ros nodes can subscribes Gps, canbus, Lidar, Radar, GroudTruth, SemanticCamera, DeepCamera topics through lgsvl rosbrige.</p>
+<p>so the pipeline are simple as following:</p>
+<pre><code>lgsvl rosbridge  --&gt;  {gps, radar, camera, lidar, groudTruth message} --&gt;  ADS stack nodes 
+
+ADS stack nodes --&gt;  {vehicle control command message} --&gt; lgsvl rosbridge 
+</code></pre><p>usually, the ADS stack nodes are a few related ros nodes, including RTK/GPS sensor, Lidar/Camera/Radar sensors, hdmap node, data fusion node e.t.c.</p>
 <h4 id="run-ROS-ADS-stack"><a href="#run-ROS-ADS-stack" class="headerlink" title="run ROS ADS stack"></a>run ROS ADS stack</h4><p>the following nodes are used commonly in ADS dev:</p>
 <ul>
 <li><p>gps_node</p>
@@ -665,7 +714,7 @@ publish topics: /vehicle/cmd_ctl
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#learning-is-about-repeat-100-times"><span class="nav-number">1.</span> <span class="nav-text">learning is about repeat 100 times !</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rosBridge-in-lgsvl"><span class="nav-number">2.</span> <span class="nav-text">rosBridge in lgsvl</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RosBridge-cs"><span class="nav-number">2.0.1.</span> <span class="nav-text">RosBridge.cs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#run-ROS-ADS-stack"><span class="nav-number">2.0.2.</span> <span class="nav-text">run ROS ADS stack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ADS-ros-launch"><span class="nav-number">2.0.3.</span> <span class="nav-text">ADS ros launch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#system-verification"><span class="nav-number">2.0.4.</span> <span class="nav-text">system verification</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">3.</span> <span class="nav-text">refer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#learning-is-about-repeat-100-times"><span class="nav-number">1.</span> <span class="nav-text">learning is about repeat 100 times !</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rosBridge-in-lgsvl"><span class="nav-number">2.</span> <span class="nav-text">rosBridge in lgsvl</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RosBridge-cs"><span class="nav-number">2.0.1.</span> <span class="nav-text">RosBridge.cs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RosWriter-cs"><span class="nav-number">2.0.2.</span> <span class="nav-text">RosWriter.cs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#websocket-in-ros-bridge"><span class="nav-number">2.0.3.</span> <span class="nav-text">websocket in ros bridge</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ros-ads-talk-to-lgsvl-rosbridge"><span class="nav-number">3.</span> <span class="nav-text">ros ads talk to lgsvl rosbridge</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#run-ROS-ADS-stack"><span class="nav-number">3.0.1.</span> <span class="nav-text">run ROS ADS stack</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ADS-ros-launch"><span class="nav-number">3.0.2.</span> <span class="nav-text">ADS ros launch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#system-verification"><span class="nav-number">3.0.3.</span> <span class="nav-text">system verification</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">4.</span> <span class="nav-text">refer</span></a></li></ol></div>
             
 
           </div>
