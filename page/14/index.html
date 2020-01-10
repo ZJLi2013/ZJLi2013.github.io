@@ -291,6 +291,160 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/29/gnu-make/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/29/gnu-make/" itemprop="url">gnu-make</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-29T17:45:40-04:00">
+                2018-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/29/gnu-make/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/29/gnu-make/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> websocket projects recently reviewed: <a href="https://github.com/uNetworking/uWebSockets" target="_blank" rel="external">uWebSocket</a>, which is used in Udacity self-driving car term2 projects. the other is <a href="https://github.com/warmcat/libwebsockets" target="_blank" rel="external">libwebsocket</a>, which is used in <a href="https://github.com/otcshare/automotive-message-broker/tree/master/ambd" target="_blank" rel="external">automotive message broker</a>(amb). </p>
+<h2 id="gcc-compiler-options"><a href="#gcc-compiler-options" class="headerlink" title="gcc compiler options"></a>gcc compiler options</h2><p><a href="https://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html" target="_blank" rel="external">gcc and make:  a tutorial on how to compile, link and build c/c++ projects</a></p>
+<pre><code>-wall : print all warning messages 
+-c : compile into object, by default the object has same name as the source file
+-o : specify the output executable filename
+</code></pre><h2 id="headers-h-static-libs-lib-a-amp-shared-libs-dll-so"><a href="#headers-h-static-libs-lib-a-amp-shared-libs-dll-so" class="headerlink" title="headers(.h), static libs(.lib, .a) &amp; shared libs(.dll, .so)"></a>headers(.h), static libs(.lib, .a) &amp; shared libs(.dll, .so)</h2><p>gcc by default, links to the shared libraries if available.</p>
+<p>the compiler search “include-paths” for headers, which is specified via -L\<dir\> option or CPATH; </dir\></p>
+<p>the linker search “library-paths” to link the program into an executable object, which is specified via -L\<dir\> or LIBRARY_PATH, in addition, need to specify the library name via -l<name></name></dir\></p>
+<p>the system default “include-paths” can be found by “cpp -v”</p>
+<h2 id="gcc-environment-variables"><a href="#gcc-environment-variables" class="headerlink" title="gcc environment variables"></a>gcc environment variables</h2><p>PATH is used to search executable and run-time shared libs. (woo, this suppose to replace LD-LIBRARY-PATH)<br>CPATH is used to search “include-paths”, it’s searched after paths specified in -I&lt;dir> options. C_INCLUDE_PATH &amp; CPLUS_INCLUDE_PATH can be used to specify C &amp; C++ headers<br>LIBRARY_PATH is used to search linking-time “library-paths”, it’s searched after paths specified in -L\<dir\> options. the standard directories is  /usr/lib </dir\></p>
+<h2 id="Linux-utils"><a href="#Linux-utils" class="headerlink" title="Linux utils"></a>Linux utils</h2><p>1) readelf: read <a href="https://amir.rachum.com/blog/2016/09/17/shared-libraries/" target="_blank" rel="external">ELF</a> </p>
+<p>2) ldconfig : by default, read /etc/ls.so.conf, sets up the appropirate symbolic links in the dynamic link dir, and then write a cache to /etc/ld.so.cache, which then is used by other programs</p>
+<p>3) ldd: to see recursive shared library dependencies</p>
+<p>4) file: determine file type </p>
+<p>5) nm: list symbol table of an object file, commonly-used to check if a particular func or variable is defined in an object file. “T” indicates   it is defined; “U” means undefined, which should be resolved by the linker.</p>
+<h2 id="make-amp-cmake"><a href="#make-amp-cmake" class="headerlink" title="make &amp; cmake"></a>make &amp; cmake</h2><p>[gnu make] (<a href="https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents" target="_blank" rel="external">https://www.gnu.org/software/make/manual/html_node/index.html#SEC_Contents</a>) </p>
+<p>there are many best practical, e.g. <a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1" target="_blank" rel="external">effective cmake</a></p>
+<h2 id="build-libuv"><a href="#build-libuv" class="headerlink" title="build libuv"></a>build libuv</h2><p>it’s built based on GNU autotools</p>
+<pre><code>sh autogen.sh  
+&quot;libtoolize: AC_CONFIG_MACRO_DIR([m4]) conflicts with ACLOCAL_AMFLAGS=-I m4&quot;
+</code></pre><p><a href="https://pete.akeo.ie/2010/12/that-darn-libtoolize-acconfigmacrodirm4.html" target="_blank" rel="external">fixing-solution</a>, then make all &amp; make install, so here is libuv.so, add the directory to \$LIBRARY_PATH in ~/.bashrc </p>
+<h2 id="build-uWebSockets"><a href="#build-uWebSockets" class="headerlink" title="build uWebSockets"></a>build uWebSockets</h2><p>it’s built based on gnu make. the tests command has dependents on libuv. since already added libuv directory to \$LIBRARY_PATH, run through. if else, errors output:</p>
+<pre><code>cannot find -luv
+collect2: error: ld returned 1 exit status
+Makefile:xx recipe for targe &apos;tests&apos; failed    
+make: *** [tests] Error 1 
+</code></pre><p>try to run ./testsBin, get another error:</p>
+<pre><code>error while loading shared libraries: libuWS.so: cannot open shared object file: No such file or directory 
+</code></pre><p>that’s run-time error, since libuWS.so is not included in \$PATH or speically for building/testing purpose, define $LD_LIBRARY_PATH. </p>
+<h2 id="build-libwebsockets"><a href="#build-libwebsockets" class="headerlink" title="build libwebsockets"></a>build libwebsockets</h2><p>it’s built based on cmake. there is some dependent, but should go through well.</p>
+<h2 id="beyond-the-note"><a href="#beyond-the-note" class="headerlink" title="beyond the note"></a>beyond the note</h2><p>when 2-months ago, looking at amb project, which has websocket plugin module, then find uWebSocket lib, during reading this tiny lib, where libuv APIs are highly-used, and soon found out libuv is actually the event-loop in nodejs. Woo, somehow they are related.</p>
+<p>build tools are highly used in each project, but prior experience is more done by luck.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/25/career-thoughts/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1564,133 +1718,6 @@ threadA.do();
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/05/open-source-car-control/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/05/open-source-car-control/" itemprop="url">open source car control</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-05T22:35:56-04:00">
-                2017-09-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/09/05/open-source-car-control/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/09/05/open-source-car-control/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="OSCC-Intro"><a href="#OSCC-Intro" class="headerlink" title="OSCC Intro"></a>OSCC Intro</h2><p><a href="https://github.com/PolySync/oscc" target="_blank" rel="external">github</a></p>
-<p>it’s a modular using software to interface with a vehicle’s communication network and control systems.</p>
-<p>functions:  to send control commands to the vehicle, read control messages from the vehicle’s OBD-II CAN network,f and forward reports for current vehicle control state (e.g.  steering angle,  wheel speed)</p>
-<p>sensors:  steerng wheel torque sensor, throttle position sensor, brake position sensor</p>
-<p>issues: not safe for spoofing CAN message, or hacking</p>
-<h2 id="firmware-amp-hardware"><a href="#firmware-amp-hardware" class="headerlink" title="firmware &amp; hardware"></a>firmware &amp; hardware</h2><h2 id="application-layer-API"><a href="#application-layer-API" class="headerlink" title="application layer (API)"></a>application layer (API)</h2>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1741,7 +1768,7 @@ threadA.do();
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">141</span>
+                <span class="site-state-item-count">142</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

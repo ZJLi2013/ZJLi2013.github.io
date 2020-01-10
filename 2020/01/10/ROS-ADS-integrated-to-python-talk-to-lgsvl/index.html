@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="lg-sim,Docker," />
+  <meta name="keywords" content="ros,lg-sim,python," />
 
 
 
@@ -93,20 +93,18 @@
 
 
 
-<meta name="description" content="backgroundpreviously tried to run Vulkan in virtual display, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node h">
-<meta name="keywords" content="lg-sim,Docker">
+<meta name="description" content="backgroundpreviously, we had done ADS ros package directly talk with lgsvl. the step further is to trigger ADS ros nodes from scenario python script a few requirements:  for ADS ros should be integrat">
+<meta name="keywords" content="ros,lg-sim,python">
 <meta property="og:type" content="article">
-<meta property="og:title" content=" deploy lgsvl in docker swarm 3">
-<meta property="og:url" content="http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/index.html">
+<meta property="og:title" content="ROS ADS integrated to python talk to lgsvl">
+<meta property="og:url" content="http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="backgroundpreviously tried to run Vulkan in virtual display, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node h">
+<meta property="og:description" content="backgroundpreviously, we had done ADS ros package directly talk with lgsvl. the step further is to trigger ADS ros nodes from scenario python script a few requirements:  for ADS ros should be integrat">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://docs.docker.com/engine/swarm/images/ingress-lb.png">
-<meta property="og:updated_time" content="2019-12-15T13:10:14.316Z">
+<meta property="og:updated_time" content="2020-01-10T13:36:31.047Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" deploy lgsvl in docker swarm 3">
-<meta name="twitter:description" content="backgroundpreviously tried to run Vulkan in virtual display, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node h">
-<meta name="twitter:image" content="https://docs.docker.com/engine/swarm/images/ingress-lb.png">
+<meta name="twitter:title" content="ROS ADS integrated to python talk to lgsvl">
+<meta name="twitter:description" content="backgroundpreviously, we had done ADS ros package directly talk with lgsvl. the step further is to trigger ADS ros nodes from scenario python script a few requirements:  for ADS ros should be integrat">
 
 
 
@@ -134,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/"/>
 
 
 
 
 
-  <title> deploy lgsvl in docker swarm 3 | Serious Autonomous Vehicles</title>
+  <title>ROS ADS integrated to python talk to lgsvl | Serious Autonomous Vehicles</title>
   
 
 
@@ -293,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -310,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"> deploy lgsvl in docker swarm 3</h1>
+          <h1 class="post-title" itemprop="name headline">ROS ADS integrated to python talk to lgsvl</h1>
         
 
         <div class="post-meta">
@@ -322,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-15T08:04:41-05:00">
-                2019-12-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-10T08:35:12-05:00">
+                2020-01-10
               </time>
             
 
@@ -341,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/12/15/deploy-lgsvl-in-docker-swarm-3/#comments" itemprop="discussionUrl">
+                <a href="/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/15/deploy-lgsvl-in-docker-swarm-3/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -368,39 +366,82 @@
       
 
       
-        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>previously tried to <a href="https://zjli2013.github.io/2019/12/04/running-Vulkan-in-virtual-display/" target="_blank" rel="external">run Vulkan in virtual display</a>, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node has plugged monitor(which is called <strong>PC cluster</strong>). for future in cloud support, current solution won’t work. and earlier, also tried to <a href="https://zjli2013.github.io/2019/11/21/deploy-lgsvl-in-docker-swarm-2/" target="_blank" rel="external">deploy lgsvl in docker  swarm</a>, which so far can work with Vulkan as well, after a little bit <a href="https://zjli2013.github.io/2019/11/29/X11-GUI-in-docker/" target="_blank" rel="external">understand X11</a></p>
-<p>a few demo test can run as followning:</p>
-<h4 id="deploy-glxgears-OpenGL-in-PC-cluster"><a href="#deploy-glxgears-OpenGL-in-PC-cluster" class="headerlink" title="deploy glxgears/OpenGL in PC cluster"></a>deploy glxgears/OpenGL in PC cluster</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0 </div><div class="line">xhost + </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears</div></pre></td></tr></table></figure>
-<h4 id="deploy-vkcube-Vulkan-in-PC-cluster"><a href="#deploy-vkcube-Vulkan-in-PC-cluster" class="headerlink" title="deploy vkcube/Vulkan in PC cluster"></a>deploy vkcube/Vulkan in PC cluster</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0 </div><div class="line">xhost +  </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/vkcube</div></pre></td></tr></table></figure>
-<h4 id="deploy-service-with-“node-role-worker”"><a href="#deploy-service-with-“node-role-worker”" class="headerlink" title="deploy service with “node.role==worker”"></a>deploy service with “node.role==worker”</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0</div><div class="line">xhost + </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==worker&apos;  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears</div></pre></td></tr></table></figure>
-<h4 id="deploy-service-in-whole-swarm"><a href="#deploy-service-in-whole-swarm" class="headerlink" title="deploy service in whole swarm"></a>deploy service in whole swarm</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xhost + </div><div class="line">export DISPLAY=:0 </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --replicas 2  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/vkcube</div></pre></td></tr></table></figure>
-<p>which deploy vkcube service in both manager and worker node:</p>
-<pre><code>overall progress: 2 out of 2 tasks 
-1/2: running   [==================================================&gt;]     
-2/2: running   [==================================================&gt;] 
-verify: Service converged 
-</code></pre><h4 id="understand-Xauthority"><a href="#understand-Xauthority" class="headerlink" title="understand .Xauthority"></a>understand .Xauthority</h4><p>as docker service can run with <code>--mount</code> arguments, which give the first try to copy <code>.Xauthority</code> to manager node, but <code>.X11-unix</code> is not copyable, which is not a normal file, but a socket.</p>
-<p>in <code>docker service create</code>, when create a OpenGL/vulkan service in one remote worker node, and using <code>$DISPLAY=:0</code>, which means the display happens at the remote worker node. so in this way, the remote worker node is played the <code>Xserver</code> role; and since the vulkan service is actually run in the remote worker node, so the remote worker node is <code>Xclient</code> ? </p>
-<p>assuming the lower implement of <code>docker swarm service</code>is based on <code>ssh</code>, then when the manager node start the service, it will build the ssh tunnel to the remote worker node, and with the $DISPLAY variable as null; even if the docker swarm can start the ssh tunnel with <code>-X</code>, which by default, will use the manager node’s <code>$DISPLAY=localhost:10.0</code></p>
-<p><code>Xauthority cookie</code> is used to grant access to Xserver, so first make sure which machine is the Xserver, then the Xauthority should be included in that Xserer host machine. a few testes: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ssh in worker: echo $DISPLAY --&gt;  localhost:10.0</div><div class="line"></div><div class="line">xeyes --&gt; display in master monitor </div><div class="line"></div><div class="line">ssh in worker: xauth list --&gt; &#123;worker/unix:0  MIT-MAGIC-COOKIE-1  19282b0a651789ed27950801ef6f1441; worker/unix:10  MIT-MAGIC-COOKIE-1  a6cbe81637207bf0c168b3ad20a9267a &#125;</div><div class="line"></div><div class="line">in master: xauth list --&gt; &#123; ubuntu/unix:1  MIT-MAGIC-COOKIE-1  ee227cb9465ac073a072b9d263b4954e; ubuntu/unix:0  MIT-MAGIC-COOKIE-1  75893fb66941792235adba22362c4a6f; ubuntu/unix:10  MIT-MAGIC-COOKIE-1  785f20eb0ade772ceffb24eadeede645 &#125;</div></pre></td></tr></table></figure>
-<p>so which cookie is is for this $DISPLAY ? it shouldb be the one on <code>ubuntu/unix:10</code>;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh in worker:  export DISPLAY=:0</div><div class="line">xeyes  --&gt; display in worker monitor</div></pre></td></tr></table></figure>
-<p>then it use the cookie:  <code>worker/unix:0</code>.</p>
-<h4 id="deploy-lgsvl-service-in-swarm"><a href="#deploy-lgsvl-service-in-swarm" class="headerlink" title="deploy lgsvl service in swarm"></a>deploy lgsvl service in swarm</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xhost + </div><div class="line">export DISPLAY=:0</div><div class="line">sudo docker service create --name lgsvl --generic-resource &quot;gpu=1&quot; --replicas 2  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host --publish published=8080,target=8080  192.168.0.10:5000/lgsvl</div></pre></td></tr></table></figure>
-<p>which gives:</p>
-<pre><code>overall progress: 0 out of 2 tasks 
-1/2: container cannot be disconnected from host network or connected to host network
-2/2: container cannot be disconnected from host network or connected to host network
-</code></pre><p>basically, the service is deployed in <code>ingress network</code> by default, but as well, the service is configured with <code>host network</code>. so it conflict.</p>
-<h2 id="swarm-network"><a href="#swarm-network" class="headerlink" title="swarm network"></a>swarm network</h2><p><img src="https://docs.docker.com/engine/swarm/images/ingress-lb.png" alt="image"></p>
-<p>the <a href="https://docs.docker.com/engine/swarm/services/#publish-a%20services-ports-using-the-routing-mesh" target="_blank" rel="external">routing mesh</a> is the default internal balancer in swarm network; the other choice is to <a href="https://docs.docker.com/engine/swarm/services/#publish-a-services-ports-directly-on-the-swarm-node" target="_blank" rel="external">deploy serivce directly on the node</a>, namely <code>bypassing routing mesh</code>, which ask the service run in <code>global mode</code> and with pubished port setting as <code>mode=host</code>, which should be the same as <code>--network host</code> in <code>replicas mode</code>. </p>
-<p>the limitation of bypassing routing mesh, is only one task on one node, and access the published port can only require the service from this special node, which doesn’ make sense in cloud env.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">docker service create \</div><div class="line">     --mode global \</div><div class="line">     --publish mode=host,target=80,published=8080 \</div><div class="line">     --generic-resource &quot;gpu=1&quot;  \</div><div class="line">     --env DISPLAY  \</div><div class="line">     --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  \</div><div class="line">     --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot;  \</div><div class="line">     --network host  \</div><div class="line">     --name lgsvl \</div><div class="line">     lgsvl:latest</div></pre></td></tr></table></figure>
-<p>tips: –mount src=”X11-unix”,dst=”/tmp/.X11-unix” is kind of cached. so once docker image has ran in worker node, then it doesn’t need to pass this parameter again, but once worker node restart, it need this parameter again</p>
-<p>in summary about swarm netowrk, the routing mesh should be the right solution for cloud deployment. so how to bypass <code>--network host</code> ? </p>
-<p>the reason of <code>host network</code> is the lgsvl server and webUI can works in same host; if not, there is kind of cross-domain security failures, which actually is another topic, namely, how to host lgsvl and webUI/React in different hosts.</p>
-<p>need some study of webUI in next post.</p>
+        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p><a href="https://zjli2013.github.io/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" target="_blank" rel="external">previously</a>, we had done ADS ros package directly talk with lgsvl. the step further is to trigger ADS ros nodes from scenario python script</p>
+<p>a few requirements:</p>
+<ul>
+<li><p>for ADS ros should be integrated with each scenario python script, which means, when the python script finished, the ADS ros should exit</p>
+</li>
+<li><p>the ads ros package shell script is independ of python script </p>
+</li>
+</ul>
+<h4 id="execute-shell-in-Python"><a href="#execute-shell-in-Python" class="headerlink" title="execute shell in Python"></a>execute shell in Python</h4><ul>
+<li>to <a href="http://dreamsyssoft.com/python-scripting-tutorial/shell-tutorial.php" target="_blank" rel="external">call a shell command</a> directly with <code>os.system(cmd)</code> or </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">subprocess.call(&quot;ls -lt&quot;, shell=True)</div></pre></td></tr></table></figure>
+<ul>
+<li>to run shell script with a python subprocess </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proc=subprocess.Popen([&quot;&quot;], stdout=subprocess.PIPE)</div></pre></td></tr></table></figure>
+<p><code>subprocess.Popen()</code> return the process object</p>
+<p>a few helpful commands to debug rosrun:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ps -aux | grep &quot;roscore&quot;  </div><div class="line"></div><div class="line">ps -aux | grep &quot;rosmaster&quot;</div><div class="line"></div><div class="line">killall -9 roscore </div><div class="line"></div><div class="line">killall -9 rosmaster</div></pre></td></tr></table></figure>
+<h2 id="ros1-to-python3"><a href="#ros1-to-python3" class="headerlink" title="ros1 to python3"></a>ros1 to python3</h2><p>there is an real issue, due to the ADS ros package is mostly implemented by ROS1, maintained by the algorithm team. but lgsvl scenario is running with python3. <a href="http://design.ros2.org/articles/changes.html" target="_blank" rel="external">ROS1 matches Python2</a>. so there comes the solution, either to upgrade the ADS ros pakcage to ROS2, or find a way to run ROS1 in python3 env.</p>
+<h4 id="conda-base-env"><a href="#conda-base-env" class="headerlink" title="conda base env"></a>conda base env</h4><p>we had decided to adapt ROS1 in python3 env. as the host machine has conda env, first need to <a href="https://stackoverflow.com/questions/54429210/how-do-i-prevent-conda-from-activating-the-base-environment-by-default" target="_blank" rel="external">disable conda base</a>. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda config --set auto_activate_base false</div></pre></td></tr></table></figure>
+<p>as lgsvl scenario is runned with conda python3 env, inside which used <code>subprocess</code> to run ADS ros shell, in which creates a few new <code>gnome-terminal</code>s, which are non log-in terminal, and the trick things here: even though disabled auto activate base, and the terminal has no header <code>(base)</code>, but when check the python path, it still points to the <code>conda/bin/python</code>, which will fail <code>rosbridge_launch.server</code>, which is a pure ros1 and python2 module.</p>
+<p>so need check if <code>conda --version</code> in the ads ros shell script is  in current terminal, if does, run <code>conda deactivate</code>, which gives error:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CommandNotFoundError: Your shell has not been properly configured to use &apos;conda deactivate&apos;.</div></pre></td></tr></table></figure>
+<p>it looks there is some mess up, with init <code>conda.sh</code> is in <code>~/.bashrc</code>, but during the new terminal ceated, it doens’t confgiure all right. which can be fixed :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">conda --version </div><div class="line">if [ $? == 0 ]</div><div class="line">then </div><div class="line">    source ~/anaconda3/etc/profile.d/conda.sh</div><div class="line">    conda deactivate</div><div class="line">fi</div></pre></td></tr></table></figure>
+<p>in this way, we run lgsvl scenario in python3, as well as can new with python2 terminals to run ads ros nodes from this python3 terminal</p>
+<h4 id="ros-scripts-path-is-not-python-path"><a href="#ros-scripts-path-is-not-python-path" class="headerlink" title="ros scripts path is not python path"></a>ros scripts path is not python path</h4><p>as we try to separate python scripts from ads ros nodes, so need some global env variable for the ros scripts path. </p>
+<h2 id="kill-all-ros-nodes-gracefully"><a href="#kill-all-ros-nodes-gracefully" class="headerlink" title="kill all ros nodes gracefully"></a>kill all ros nodes gracefully</h2><p>we need restart/shutdown the ads ros nodes package at each time when python scenario script start/stop, which has two steps:</p>
+<ul>
+<li><p>to shutdown ros nodes, e.g.  <a href="https://answers.ros.org/question/237862/rosnode-kill/" target="_blank" rel="external">rosnode kill</a></p>
+</li>
+<li><p>to close all the gnome-terminals to run the ros nodes</p>
+</li>
+</ul>
+<p>the second step is very tricky, need some understand. A terminal is a file. Like /dev/tty. Files do not have a process id. The process that “owns” the terminal is usually called the controlling process, or more correctly, the process group leader. <code>gnome-terminal</code> <a href="https://askubuntu.com/questions/775025/how-to-detect-the-number-of-opened-terminals-by-the-user" target="_blank" rel="external">runs a single pid</a>, it creates a child process for each and every window and/or tab. and can retrieve these child processes by the command:</p>
+<pre><code>$ pgrep -P &lt;pid_of_gnome-terminal&gt;
+</code></pre><p>Many terminals seem to <a href="https://askubuntu.com/questions/640096/how-do-i-check-which-terminal-i-am-using" target="_blank" rel="external">mask themselves as xterm-compatible</a>, which is reported by echo $TERM or echo $COLORTERM. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$! is the PID of the last backgrounded process.</div><div class="line">kill -0 $PID checks whether it&apos;s still running.</div><div class="line">$$ is the PID of the current shell.</div></pre></td></tr></table></figure>
+<pre><code>#! /bin/bash
+
+gnome_pid=`pgrep gnome-terminal`
+subpids=`pgrep -P ${gnome_pid}`
+
+if [ ! $1 ]; then
+   echo &quot;missing the gnome-terminal pid, exit&quot;
+   exit -1
+fi
+
+#shutdown the ros nodes 
+rosnode kill -a  &gt; /dev/null  2&gt;&amp;1
+killall -9 rosmaster &gt; /dev/null  2&gt;&amp;1
+
+#shutdown the terminals where ros nodes hosted
+for pid in $subpids
+do
+        if [[ $pid != $1 ]] ; then
+                echo $pid
+                kill $pid
+        fi
+done
+</code></pre><p>tips: the implement has a litle problem when integrate with lgsvl when the simulation time is short, e.g. 1sec, then <code>ros_clear.sh</code> can’t catch the opened gnome-terminals from <code>ros_start.sh</code>. </p>
+<h4 id="find-the-process-name-using-PID"><a href="#find-the-process-name-using-PID" class="headerlink" title="find the process name using PID"></a><a href="https://www.tecmint.com/find-process-name-pid-number-linux/" target="_blank" rel="external">find the process name using PID</a></h4><pre><code>$ ps aux | grep PID
+$ ps -p PID -o format         
+$ curpid=`ps -p $$ -o ppid=`
+</code></pre><h4 id="the-output-of-ps-aux"><a href="#the-output-of-ps-aux" class="headerlink" title="the output of ps aux"></a><a href="https://www.computernetworkingnotes.com/linux-tutorials/ps-aux-command-and-ps-command-explained.html" target="_blank" rel="external">the output of ps aux</a></h4><ul>
+<li>–&gt;  in the foreground process group<br>s –&gt;  is a session leader </li>
+</ul>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>so far, we integrated ads ros packages into python, which then talk to lgsvl. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.jianshu.com/p/2eb33b491024" target="_blank" rel="external">pythn subprocess from Jianshu</a></p>
+<p><a href="https://www.cnblogs.com/vamei/archive/2012/10/07/2713023.html" target="_blank" rel="external">understand linux process group</a></p>
+<p><a href="https://www.cyberciti.biz/faq/linux-pidof-command-examples-find-pid-of-program/" target="_blank" rel="external">pidof command</a></p>
+<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line/476663#476663" target="_blank" rel="external">which_term</a></p>
+<p><a href="https://stackoverflow.com/questions/9378021/how-to-get-process-details-from-its-pid" target="_blank" rel="external">get the info of a PID</a></p>
+<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line" target="_blank" rel="external">get the pid of running terminal</a></p>
 
       
     </div>
@@ -430,9 +471,11 @@ verify: Service converged
       
         <div class="post-tags">
           
+            <a href="/tags/ros/" rel="tag"># ros</a>
+          
             <a href="/tags/lg-sim/" rel="tag"># lg-sim</a>
           
-            <a href="/tags/Docker/" rel="tag"># Docker</a>
+            <a href="/tags/python/" rel="tag"># python</a>
           
         </div>
       
@@ -445,8 +488,8 @@ verify: Service converged
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/08/where-are-you-in-next-4-years-1/" rel="next" title="where are you in next 4 years (1)">
-                <i class="fa fa-chevron-left"></i> where are you in next 4 years (1)
+              <a href="/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" rel="next" title="ADS stack in ros talk to lgsvl">
+                <i class="fa fa-chevron-left"></i> ADS stack in ros talk to lgsvl
               </a>
             
           </div>
@@ -454,10 +497,6 @@ verify: Service converged
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/15/web-service-bypass-in-lgsvl/" rel="prev" title="web service bypass in lgsvl">
-                web service bypass in lgsvl <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -605,7 +644,7 @@ verify: Service converged
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-glxgears-OpenGL-in-PC-cluster"><span class="nav-number">1.0.1.</span> <span class="nav-text">deploy glxgears/OpenGL in PC cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-vkcube-Vulkan-in-PC-cluster"><span class="nav-number">1.0.2.</span> <span class="nav-text">deploy vkcube/Vulkan in PC cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-service-with-“node-role-worker”"><span class="nav-number">1.0.3.</span> <span class="nav-text">deploy service with “node.role==worker”</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-service-in-whole-swarm"><span class="nav-number">1.0.4.</span> <span class="nav-text">deploy service in whole swarm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#understand-Xauthority"><span class="nav-number">1.0.5.</span> <span class="nav-text">understand .Xauthority</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-lgsvl-service-in-swarm"><span class="nav-number">1.0.6.</span> <span class="nav-text">deploy lgsvl service in swarm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#swarm-network"><span class="nav-number">2.</span> <span class="nav-text">swarm network</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#execute-shell-in-Python"><span class="nav-number">1.0.1.</span> <span class="nav-text">execute shell in Python</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ros1-to-python3"><span class="nav-number">2.</span> <span class="nav-text">ros1 to python3</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#conda-base-env"><span class="nav-number">2.0.1.</span> <span class="nav-text">conda base env</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ros-scripts-path-is-not-python-path"><span class="nav-number">2.0.2.</span> <span class="nav-text">ros scripts path is not python path</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kill-all-ros-nodes-gracefully"><span class="nav-number">3.</span> <span class="nav-text">kill all ros nodes gracefully</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#find-the-process-name-using-PID"><span class="nav-number">3.0.1.</span> <span class="nav-text">find the process name using PID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#the-output-of-ps-aux"><span class="nav-number">3.0.2.</span> <span class="nav-text">the output of ps aux</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-number">4.</span> <span class="nav-text">summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">5.</span> <span class="nav-text">refer</span></a></li></ol></div>
             
 
           </div>
@@ -748,9 +787,9 @@ verify: Service converged
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/';
-          this.page.identifier = '2019/12/15/deploy-lgsvl-in-docker-swarm-3/';
-          this.page.title = ' deploy lgsvl in docker swarm 3';
+          this.page.url = 'http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/';
+          this.page.identifier = '2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/';
+          this.page.title = 'ROS ADS integrated to python talk to lgsvl';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
