@@ -291,6 +291,174 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/15/ads-ros-and-simulator-in-one-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/15/ads-ros-and-simulator-in-one-docker/" itemprop="url">ads ros and simulator in one docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-15T06:16:36-05:00">
+                2020-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/15/ads-ros-and-simulator-in-one-docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/01/15/ads-ros-and-simulator-in-one-docker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="backround"><a href="#backround" class="headerlink" title="backround"></a>backround</h2><p><a href="https://zjli2013.github.io/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/" target="_blank" rel="external">previously</a>, we had test to run ads ros in one docker container, and lgsvl simulator in another docker container. once they are hosted in the same host machine, the ADS ros nodes and lgsvl can communicate well. based on this work, now it’s the time to integrate ADS ros nodes into the lgsvl docker.</p>
+<p>the basic idea of how to combine multi docker images into one, is <a href="https://docs.docker.com/develop/develop-images/multistage-build/" target="_blank" rel="external">use multistage-build</a>, which I call “image level integration”.</p>
+<h4 id="image-level-integration"><a href="#image-level-integration" class="headerlink" title="image level integration"></a>image level integration</h4><p>basically we have both <code>ads_ros</code> image and <code>lgsvlsimulator</code> image already, and there are a few components from <code>ads_ros</code> can be imported to <code>lgsvlsimulator</code> container: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">FROM ads_ros:latest  AS ADS</div><div class="line">FROM lgsvlsimulator:latest</div><div class="line">RUN mkdir /catkin_ws</div><div class="line">COPY --from=ADS /root/catkin_ws  /catkin_ws</div><div class="line">COPY --from=ADS /opt/ros /opt/ros </div><div class="line">CMD [&quot;/bin/bash&quot;]</div></pre></td></tr></table></figure>
+<p>the problem of <code>image level integration</code>, it actually miss some system level components: <code>/etc/apt/sources.list.d/ros-latest.list</code>, which then can’t update ros modules; other components, e.g. which are installed during building <code>ads_ros</code> image by <code>apt-get install</code>, which are go the system lib path, which of course can distinct out, and copy to <code>lgsvlsimulator</code>, but which is no doubt tedious and easy to miss some components.</p>
+<h4 id="component-level-integration"><a href="#component-level-integration" class="headerlink" title="component level integration"></a>component level integration</h4><p>as <code>ads_ros</code> is really indepent to <code>lgsvlsimulator</code>, so another way is use <code>lgsvlsimulator</code> as base image, then add/build <code>ros</code> component and <code>ads_ros</code> compnents inside.</p>
+<pre><code>FROM ros:kinetic  AS ROS
+# http://wiki.ros.org/kinetic/Installation/Ubuntu
+
+FROM lgsvlsimulator:latest
+RUN mkdir -p /catkin_ws/src
+COPY --from=ROS /opt/ros /opt/ros 
+COPY --from=ROS /etc/apt/sources.list.d/ros1-latest.list /etc/apt/sources.list.d/ros1-latest.list
+# ADD ros key
+RUN apt-key adv --keyserver &apos;hkp://keyserver.ubuntu.com:80&apos; --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+## -------- install ads ros packages in lgsvlsimulator container ------------ ##
+ENV CATKIN_WS=/catkin_ws
+ENV ROS_DISTRO=kinetic
+## https://docs.ros.org/api/catkin/html/user_guide/installation.html
+RUN APT_INSTALL=&quot;apt-get install -y --no-install-recommends&quot; &amp;&amp; \
+    apt-get update &amp;&amp; \
+    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
+        build-essential \
+        apt-utils \
+        ca-certificates \ 
+        psmisc \
+        cmake \
+        python-catkin-pkg \ 
+        ros-${ROS_DISTRO}-catkin  \ 
+        ros-${ROS_DISTRO}-tf  \
+        ros-${ROS_DISTRO}-turtlesim \
+        ros-${ROS_DISTRO}-rosbridge-suite \
+        iputils-ping \   
+        net-tools 
+# RUN source ~/.bashrc 
+# copy ads ros into ws
+COPY /ads_ros/src $CATKIN_WS/src
+### build msgs 
+RUN /bin/bash -c &apos;. /opt/ros/${ROS_DISTRO}/setup.bash; cd ${CATKIN_WS}; catkin_make --pkg pcl_msgs autoware_msgs nmea_msgs &apos;                   
+### build ros nodes 
+RUN /bin/bash -c &apos;. /opt/ros/${ROS_DISTRO}/setup.bash; cd ${CATKIN_WS}; catkin_make &apos;
+# copy ros scripts
+COPY /ads_ros/script_docker $CATKIN_WS/script
+###--------finished ads ros package -------------- ### 
+CMD [&quot;/bin/bash&quot;]
+</code></pre><h2 id="runtime-issue"><a href="#runtime-issue" class="headerlink" title="runtime issue"></a>runtime issue</h2><p>with the dockerfile above, we can build the docker image which include both lgsvl and ads ros. one runtime issue is due to lgsvl scenario is run with <code>python3</code>, while our ads ros, especially <code>ros_bridge_launch</code> is based on <code>python2</code>. so need some trick to add <code>python2</code> at <code>$PATH</code> before <code>python3</code> when launch <code>ros_bridge</code>, then exchange back.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -372,7 +540,7 @@
           
             <h3 id="backgound"><a href="#backgound" class="headerlink" title="backgound"></a>backgound</h3><p>previously, we had integrated ads ros nodes into one launch file. now we try to put ads nodes into docker, and talk to lgsvl simulator in another docker. </p>
 <h4 id="run-dockerimage"><a href="#run-dockerimage" class="headerlink" title="run dockerimage"></a>run dockerimage</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker build -t ads_ros . </div><div class="line">docker run -it ads_ros  /bin/bash</div></pre></td></tr></table></figure>
-<h4 id="unable-to-run-cakin-make-in-dockerfile"><a href="#unable-to-run-cakin-make-in-dockerfile" class="headerlink" title="unable to run cakin_make in dockerfile"></a>unable to run <code>cakin_make</code> in dockerfile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">RUN /bin/bash -c &apos;. /opt/ros/kinetic/setup.bash; cd &lt;into the desired folder e.g. ~/catkin_ws/src&gt;; catkin_make&apos;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">#### dockerfile for ads ros</div><div class="line"></div><div class="line">``` </div><div class="line">FROM ros:kinetic </div><div class="line"></div><div class="line"># create local catkin workspace </div><div class="line">ENV CATKIN_WS=/root/catkin_ws</div><div class="line">ENV ROS_DISTRO=kinetic</div><div class="line">RUN mkdir -p $CATKIN_WS/src</div><div class="line"></div><div class="line">## install catkin_make </div><div class="line">## https://docs.ros.org/api/catkin/html/user_guide/installation.html</div><div class="line">RUN APT_INSTALL=&quot;apt-get install -y --no-install-recommends&quot; &amp;&amp; \</div><div class="line">    apt-get update &amp;&amp; \</div><div class="line">    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \</div><div class="line">        build-essential \</div><div class="line">        apt-utils \</div><div class="line">        ca-certificates \ </div><div class="line">        psmisc \</div><div class="line">        cmake \</div><div class="line">        vim \ </div><div class="line">        python-catkin-pkg \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-catkin  \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-tf  \</div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-turtlesim \</div><div class="line">        ros-$&#123;CATKIN_WS&#125;-rosbridge-suite </div><div class="line">        iputils-ping \   </div><div class="line">        net-tools </div><div class="line">### add third-party headers</div><div class="line"></div><div class="line"># RUN source ~/.bashrc </div><div class="line"># copy ads ros into ws</div><div class="line">COPY /src $CATKIN_WS/src</div><div class="line"></div><div class="line">### build msgs </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make --pkg pcl_msgs pb_msgs autoware_msgs mobileye_msgs ibeo_msgs nmea_msgs &apos;                   </div><div class="line">### build ros nodes </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make &apos;</div><div class="line"></div><div class="line"># copy ros scripts</div><div class="line">COPY /script $CATKIN_WS/scripts </div><div class="line"></div><div class="line"># run ros shell</div><div class="line">WORKDIR $&#123;CATKIN_WS&#125;/scripts</div></pre></td></tr></table></figure>
+<h4 id="unable-to-run-cakin-make-in-dockerfile"><a href="#unable-to-run-cakin-make-in-dockerfile" class="headerlink" title="unable to run cakin_make in dockerfile"></a>unable to run cakin_make in dockerfile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">RUN /bin/bash -c &apos;. /opt/ros/kinetic/setup.bash; cd &lt;into the desired folder e.g. ~/catkin_ws/src&gt;; catkin_make&apos;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">#### dockerfile for ads ros</div><div class="line"></div><div class="line">``` </div><div class="line">FROM ros:kinetic </div><div class="line"></div><div class="line"># create local catkin workspace </div><div class="line">ENV CATKIN_WS=/root/catkin_ws</div><div class="line">ENV ROS_DISTRO=kinetic</div><div class="line">RUN mkdir -p $CATKIN_WS/src</div><div class="line"></div><div class="line">## install catkin_make </div><div class="line">## https://docs.ros.org/api/catkin/html/user_guide/installation.html</div><div class="line">RUN APT_INSTALL=&quot;apt-get install -y --no-install-recommends&quot; &amp;&amp; \</div><div class="line">    apt-get update &amp;&amp; \</div><div class="line">    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \</div><div class="line">        build-essential \</div><div class="line">        apt-utils \</div><div class="line">        ca-certificates \ </div><div class="line">        psmisc \</div><div class="line">        cmake \</div><div class="line">        vim \ </div><div class="line">        python-catkin-pkg \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-catkin  \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-tf  \</div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-turtlesim \</div><div class="line">        ros-$&#123;CATKIN_WS&#125;-rosbridge-suite </div><div class="line">        iputils-ping \   </div><div class="line">        net-tools </div><div class="line">### add third-party headers</div><div class="line"># RUN source ~/.bashrc </div><div class="line"># copy ads ros into ws</div><div class="line">COPY /src $CATKIN_WS/src</div><div class="line">### build msgs </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make --pkg pcl_msgs pb_msgs autoware_msgs mobileye_msgs ibeo_msgs nmea_msgs &apos;                   </div><div class="line">### build ros nodes </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make &apos;</div><div class="line"># copy ros scripts</div><div class="line">COPY /script $CATKIN_WS/scripts </div><div class="line"># run ros shell</div><div class="line">WORKDIR $&#123;CATKIN_WS&#125;/scripts</div></pre></td></tr></table></figure>
 <h4 id="ros-envs"><a href="#ros-envs" class="headerlink" title="ros envs"></a>ros envs</h4><p>set <code>ROS_IP</code> on all involved containers to their IP, and set <code>ROS_MASTER_URI</code> to the IP of the roscore container. That would avoid the DNS problem. understand <a href="http://wiki.ros.org/ROS/EnvironmentVariables" target="_blank" rel="external">ros environment variables</a></p>
 <ul>
 <li><p>$ROS_ROOT :   set the location whre the ROS core packages are installed </p>
@@ -382,29 +550,29 @@
 <li><p>$ROS_IP or $ROS_HOSTNAME : sets the declared network address of a ROS node</p>
 </li>
 </ul>
-<h4 id="get-docker-container’s-IP"><a href="#get-docker-container’s-IP" class="headerlink" title="get docker container’s IP"></a>get docker container’s IP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">docker inspect -f &quot;&#123;&#123; .NetworkSettings.Networks.&lt;network_name&gt;.IPAddress &#125;&#125;&quot; &lt;container_name||container_id&gt; </div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">tips, network_name: e.g. host, bridge, ingress e.t.c.</div><div class="line"></div><div class="line">with [docker host net](https://docs.docker.com/network/host/), then the container doesn&apos;t have its own IP address allocated, but the application is available on the host&apos;s IP address with customized port.</div><div class="line"></div><div class="line"> </div><div class="line">#### run roscore in docker and talk to rosnodes at host </div><div class="line"></div><div class="line">* start roscore from docker container as following :</div></pre></td></tr></table></figure>
-<p>sudo docker run -it –net host ads_ros /bin/bash<br>roscore<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* start other ros nodes at host</div></pre></td></tr></table></figure></p>
-<p>rosnode list  ## &gt;&gt;&gt;  /rosout<br>source $ROS_PACKAGE/setup.sh<br>rosrun rtk_sensor rtk_sensor   ### run successfully<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">how to understand ?  once the docker container start with `host network`, the `roscore` run inside docker, is same as run in the host machine !! </div><div class="line"></div><div class="line"></div><div class="line">#### ads ros in docker talk to lgsvl in another docker with HOST network </div><div class="line"></div><div class="line">* once we start ads ros docker as following:</div></pre></td></tr></table></figure></p>
-<p>sudo docker run -it –net host ads_ros /bin/bash<br>roscore<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* start lgsvl in docker:</div></pre></td></tr></table></figure></p>
-<p>#! /usr/bin/env bash</p>
-<p>xhost + </p>
-<p>sudo nvidia-docker run -it  -p 8080:8080  -e DISPLAY=unix$DISPLAY –net host -v /tmp/.X11-unix:/tmp/.X11-unix lgsvlsimulator /bin/bash</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">then access webUI in host machine, and add `host: 10.20.181.132` in `Clusters` page, and  add `10.20.181.132:9090` for Selected Vehicles. as lgsvl is also in `host network`. so these two docker can communicate through ros well !! </div><div class="line"></div><div class="line"></div><div class="line">#### ads ros container talk to lgsvl container with ROS_IP</div><div class="line"></div><div class="line"></div><div class="line">since lgsvl will run in docker swarm env, we can&apos;t depend on `host network`, which requires ROS_IP env. the following test is in one host machine. </div><div class="line"></div><div class="line">* in host terminal</div></pre></td></tr></table></figure>
-<p>export ROS_MASTER_URI=<a href="http://192.168.0.10:11311" target="_blank" rel="external">http://192.168.0.10:11311</a><br>export ROS_HOSTNAME=192.168.0.10<br>export ROS_IP=192.168.0.10   </p>
-<p>roscore </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* in ads ros docker</div></pre></td></tr></table></figure>
-<p>sudo docker run -it \<br>     –env ROS_MASTER_URI=<a href="http://10.20.181.132:11311" target="_blank" rel="external">http://10.20.181.132:11311</a> \<br>     –env ROS_IP=10.20.181.132 \<br>     ads_ros /bin/bash</p>
-<p>rosnod list </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">however, when start `roscore` in docker, it reports:</div></pre></td></tr></table></figure>
-<p>Unable to contact my own server at [<a href="http://10.20.181.132:33818/" target="_blank" rel="external">http://10.20.181.132:33818/</a>].<br>This usually means that the network is not configured properly.</p>
-<p>A common cause is that the machine cannot ping itself.  Please check<br>for errors by running:</p>
-<pre><code>ping 10.20.181.132
-</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">if checking the IP address inside the docker container by `ifconfig`, which reports `172.17.0.3`, which then make sense that the container can&apos;t talk to `10.20.181.132`, which means we can&apos;t assign a special IP address for a docker container. so reset in the docker container as:</div></pre></td></tr></table></figure>
-<p>export ROS_MASTER_URI=<a href="http://172.17.0.3:11311" target="_blank" rel="external">http://172.17.0.3:11311</a><br>export ROS_HOSTNAME=172.17.0.3<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">actually, the host terminal can talk to the ads ros container directly, with no need to set `$ROS_HOSTNAME` &amp; `$ROS_MASTER_URI` specially; as well as another docker container in this host machine, e.g. lgsvl. </div><div class="line"></div><div class="line"></div><div class="line">a little bit knowledge about docker network. so each docker container does have an virtual IP, e.g. 172.17.0.1. while if run the docker image with `host network`, there is no special container IP, but the container directly share the IP of the host machine. as multi docker containers run in the same host machine, even without `host network`, they are in the same network range, so they can communicate to each other. additionaly for `ros_master`, which may requires to add `$ROS_HOSTNAME` &amp; `$ROS_MASTER_URI`.</div><div class="line"></div><div class="line"></div><div class="line">* start lgsvl in another docker</div></pre></td></tr></table></figure></p>
-<p>#! /usr/bin/env bash</p>
-<p>xhost + </p>
-<p>sudo nvidia-docker run -it \<br>     -p 8080:8080 \<br>     -e DISPLAY=unix$DISPLAY \<br>     -v /tmp/.X11-unix:/tmp/.X11-unix \<br>     –env ROS_MASTER_URI=<a href="http://172.17.0.3:11311" target="_blank" rel="external">http://172.17.0.3:11311</a>  \<br>     –env ROS_HOSTNAME=172.17.0.3<br>     lgsvlsimulator /bin/bash</p>
-<p>```</p>
+<h4 id="get-docker-container’s-IP"><a href="#get-docker-container’s-IP" class="headerlink" title="get docker container’s IP"></a>get docker container’s IP</h4><pre><code>docker inspect -f &quot;{{ .NetworkSettings.Networks.<network_name>.IPAddress }}&quot; &lt;container_name||container_id&gt; 
+</network_name></code></pre><p>tips, network_name: e.g. host, bridge, ingress e.t.c.</p>
+<p>with <a href="https://docs.docker.com/network/host/" target="_blank" rel="external">docker host net</a>, then the container doesn’t have its own IP address allocated, but the application is available on the host’s IP address with customized port.</p>
+<h4 id="run-roscore-in-docker-and-talk-to-rosnodes-at-host"><a href="#run-roscore-in-docker-and-talk-to-rosnodes-at-host" class="headerlink" title="run roscore in docker and talk to rosnodes at host"></a>run roscore in docker and talk to rosnodes at host</h4><ul>
+<li><p>start roscore from docker container as following :</p>
+<p>  sudo docker run -it –net host ads_ros /bin/bash<br>  roscore </p>
+</li>
+<li><p>start other ros nodes at host </p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">rosnode list  ## &gt;&gt;&gt;  /rosout </div><div class="line">source $ROS_PACKAGE/setup.sh</div><div class="line">rosrun rtk_sensor rtk_sensor   ### run successfully </div><div class="line">``` </div><div class="line"></div><div class="line">how to understand ?  once the docker container start with `host network`, the `roscore` run inside docker, is same as run in the host machine !! </div><div class="line"><span class="meta"></span></div><div class="line"></div><div class="line">#### ads ros in docker talk to lgsvl in another docker with HOST network </div><div class="line"></div><div class="line">* once we start ads ros docker as following: </div><div class="line"></div><div class="line">```shell</div><div class="line">sudo docker run -it --net host ads_ros /bin/bash</div><div class="line">roscore </div><div class="line">``` </div><div class="line"></div><div class="line">* start lgsvl in docker: </div><div class="line"></div><div class="line">```shell</div><div class="line"><span class="meta">#</span>! /usr/bin/env bash</div><div class="line">xhost + </div><div class="line">sudo nvidia-docker run -it  -p 8080:8080  -e DISPLAY=unix$DISPLAY --net host -v /tmp/.X11-unix:/tmp/.X11-unix lgsvlsimulator /bin/bash</div></pre></td></tr></table></figure>
+<p>then access webUI in host machine, and add <code>host: 10.20.181.132</code> in <code>Clusters</code> page, and  add <code>10.20.181.132:9090</code> for Selected Vehicles. as lgsvl is also in <code>host network</code>. so these two docker can communicate through ros well !! </p>
+<h4 id="ads-ros-container-talk-to-lgsvl-container-with-ROS-IP"><a href="#ads-ros-container-talk-to-lgsvl-container-with-ROS-IP" class="headerlink" title="ads ros container talk to lgsvl container with ROS_IP"></a>ads ros container talk to lgsvl container with ROS_IP</h4><p>since lgsvl will run in docker swarm env, we can’t depend on <code>host network</code>, which requires ROS_IP env. the following test is in one host machine. </p>
+<ul>
+<li>in host terminal </li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">export ROS_MASTER_URI=http://192.168.0.10:11311</div><div class="line">export ROS_HOSTNAME=192.168.0.10</div><div class="line">export ROS_IP=192.168.0.10   </div><div class="line"></div><div class="line">roscore </div><div class="line">``` </div><div class="line"></div><div class="line">* in ads ros docker </div><div class="line"></div><div class="line">```shell</div><div class="line">sudo docker run -it \ </div><div class="line">     --env ROS_MASTER_URI=http://10.20.181.132:11311 \ </div><div class="line">     --env ROS_IP=10.20.181.132 \ </div><div class="line">     ads_ros /bin/bash</div><div class="line"></div><div class="line">rosnod list </div><div class="line">``` </div><div class="line"></div><div class="line">however, when start `roscore` in docker, it reports:</div><div class="line"></div><div class="line">```shell</div><div class="line">Unable to contact my own server at [http://10.20.181.132:33818/].</div><div class="line">This usually means that the network is not configured properly.</div><div class="line"></div><div class="line">A common cause is that the machine cannot ping itself.  Please check</div><div class="line">for errors by running:</div><div class="line"></div><div class="line">	ping 10.20.181.132</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">if checking the IP address inside the docker container by `ifconfig`, which reports `172.17.0.3`, which then make sense that the container can't talk to `10.20.181.132`, which means we can't assign a special IP address for a docker container. so reset in the docker container as:</div><div class="line"></div><div class="line">```shell</div><div class="line">export ROS_MASTER_URI=http://172.17.0.3:11311</div><div class="line">export ROS_HOSTNAME=172.17.0.3</div></pre></td></tr></table></figure>
+<p>actually, the host terminal can talk to the ads ros container directly, with no need to set <code>$ROS_HOSTNAME</code> &amp; <code>$ROS_MASTER_URI</code> specially; as well as another docker container in this host machine, e.g. lgsvl. </p>
+<p>a little bit knowledge about docker network. so each docker container does have an virtual IP, e.g. 172.17.0.1. while if run the docker image with <code>host network</code>, there is no special container IP, but the container directly share the IP of the host machine. as multi docker containers run in the same host machine, even without <code>host network</code>, they are in the same network range, so they can communicate to each other. additionaly for <code>ros_master</code>, which may requires to add <code>$ROS_HOSTNAME</code> &amp; <code>$ROS_MASTER_URI</code>.</p>
+<ul>
+<li>start lgsvl in another docker </li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>! /usr/bin/env bash</div><div class="line">xhost + </div><div class="line">sudo nvidia-docker run -it \ </div><div class="line">     -p 8080:8080 \  </div><div class="line">     -e DISPLAY=unix$DISPLAY \ </div><div class="line">     -v /tmp/.X11-unix:/tmp/.X11-unix \ </div><div class="line">     --env ROS_MASTER_URI=http://172.17.0.3:11311  \ </div><div class="line">     --env ROS_HOSTNAME=172.17.0.3   </div><div class="line">     lgsvlsimulator /bin/bash</div></pre></td></tr></table></figure>
 <h4 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h4><p>so far, we have host ads ros in one docker, and lgsvl in another docker, and they are in the same machine, and they can talk to each other. the next thing is to put ads ros and lgsvl in one image.</p>
 <h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://wiki.ros.org/rosdep" target="_blank" rel="external">rosdep</a></p>
 <p><a href="https://stackoverflow.com/questions/35742807/docker-1-10-containers-ip-in-lan/39285950#39285950" target="_blank" rel="external">docker 1.10 container’s IP in LAN</a></p>
@@ -1819,154 +1987,6 @@ verify: Service converged
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/where-are-you-in-next-4-years-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/08/where-are-you-in-next-4-years-1/" itemprop="url">where are you in next 4 years (1)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-08T03:25:48-05:00">
-                2019-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/08/where-are-you-in-next-4-years-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/08/where-are-you-in-next-4-years-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>it’s more than one year since I started this series “where are you in the next 5 years”, I wound love to transfer to “the next 4 years”, and thanks for the opportunity to get back in China, so there is a high chance to involve in the market heavily in a short time. </p>
-<p>at the begining of the year, travelled around the whole nation, stay in Shanghai, Beijing, Shenzhen, Guangzhong. and that was a great chance to get familiar with the startups in autonomus vehicle, as this trip really gave me some input, and till now I had another half year in one of the top OEMs in China. combined with this two sources, which gave me the kind of the whole picture of ADS market happening in China. I would love to write this blog more in bussiness thought, rather than engineering way.  </p>
-<h2 id="L4-startups"><a href="#L4-startups" class="headerlink" title="L4 startups"></a>L4 startups</h2><p>ADS leap time is about 2016 to the first half year of 2018. there are a bunch of startups and also most OEMs have build their ADS teams.</p>
-<p>the startups, e.g. Pony.ai, WeRide, AutoX, roadstar(the new split), ToSimple, Momenta. which are still very active recently. </p>
-<p>Today I have taken PlusAI’s tech open day, I have to say, most of these startups have very similar tech roadmap. I personally, think that’s a really sad thing. </p>
-<p>a few teches they all have: </p>
-<ul>
-<li><p>simulation pipeline </p>
-</li>
-<li><p>data pipeline(collect, label, training)  </p>
-</li>
-<li><p>AI based perception, motion planning</p>
-</li>
-<li><p>friendly HMI </p>
-</li>
-</ul>
-<p>WeRide and Pony.ai are in <code>Robtaxi service</code>;  ToSimple and PlusAI are in <code>highway logistics</code>;  Momenta is in <code>harbor transformation</code>.</p>
-<p>Alibaba, jingdong, Meituan e.t.c are in small personal package delivery shuttles, similar as Nuro.</p>
-<p>OEMs focus in the passenger vehicles.</p>
-<p>DiDi focus in taxi services as well, similar as Uber, Waymo.</p>
-<p>all of them can be called as ADS service suppliers. however, most of them use the exactly same sensor packages, including Lidar, Camera, Radar, GPS e.t.c. the software stacks during prodcut dev as mentioned above are mostly similar; there maybe a few special features during the services in deployment, e.g. Robtaxi may have a Uber-like call-taxi app e.t.c, Rather than that, nothing really is amazing about ADS itself.</p>
-<p>and mostly this is not a tech problem, it’s must be defined or find out by the social guys, who are from the real needs. </p>
-<p>in the engineering work environment, it’s easily to misunderstand the role of engineering. engineering is the bumper, only when the house need fixed, there is a need for bumper. However, in an engineering-centered env, it’s so easy to tell no difference between I have the bumper and I have the needs. My experieince till now, I am learning how to use the bumper well, but few thinks why need to learn to use the bumper.</p>
-<p>on the other hand, what kind of tech is really helpful or profitable? </p>
-<p>by chance, to talk with Unity China team, who are enhancing Unity3D engine with cloud support, <a href="https://unity.com/simulation" target="_blank" rel="external">unity simualtion</a>, which is the feature I am looking for a while. if the tech pipeline is the waterflow, the Unity team is the one standing at the upper flow, who can implement new features in engine. </p>
-<p>just like Nvidia, Google e.t.c, these are the guys who really make a difference with their tech. and it’s profitable of course.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2017,7 +2037,7 @@ verify: Service converged
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">143</span>
+                <span class="site-state-item-count">144</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2030,7 +2050,7 @@ verify: Service converged
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
