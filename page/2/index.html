@@ -291,6 +291,161 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/15/deploy-lgsvl-in-docker-swarm-3/" itemprop="url"> deploy lgsvl in docker swarm 3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-15T08:04:41-05:00">
+                2019-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/15/deploy-lgsvl-in-docker-swarm-3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/12/15/deploy-lgsvl-in-docker-swarm-3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>previously tried to <a href="https://zjli2013.github.io/2019/12/04/running-Vulkan-in-virtual-display/" target="_blank" rel="external">run Vulkan in virtual display</a>, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node has plugged monitor(which is called <strong>PC cluster</strong>). for future in cloud support, current solution won’t work. and earlier, also tried to <a href="https://zjli2013.github.io/2019/11/21/deploy-lgsvl-in-docker-swarm-2/" target="_blank" rel="external">deploy lgsvl in docker  swarm</a>, which so far can work with Vulkan as well, after a little bit <a href="https://zjli2013.github.io/2019/11/29/X11-GUI-in-docker/" target="_blank" rel="external">understand X11</a></p>
+<p>a few demo test can run as followning:</p>
+<h4 id="deploy-glxgears-OpenGL-in-PC-cluster"><a href="#deploy-glxgears-OpenGL-in-PC-cluster" class="headerlink" title="deploy glxgears/OpenGL in PC cluster"></a>deploy glxgears/OpenGL in PC cluster</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0 </div><div class="line">xhost + </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears</div></pre></td></tr></table></figure>
+<h4 id="deploy-vkcube-Vulkan-in-PC-cluster"><a href="#deploy-vkcube-Vulkan-in-PC-cluster" class="headerlink" title="deploy vkcube/Vulkan in PC cluster"></a>deploy vkcube/Vulkan in PC cluster</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0 </div><div class="line">xhost +  </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/vkcube</div></pre></td></tr></table></figure>
+<h4 id="deploy-service-with-“node-role-worker”"><a href="#deploy-service-with-“node-role-worker”" class="headerlink" title="deploy service with “node.role==worker”"></a>deploy service with “node.role==worker”</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0</div><div class="line">xhost + </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==worker&apos;  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears</div></pre></td></tr></table></figure>
+<h4 id="deploy-service-in-whole-swarm"><a href="#deploy-service-in-whole-swarm" class="headerlink" title="deploy service in whole swarm"></a>deploy service in whole swarm</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xhost + </div><div class="line">export DISPLAY=:0 </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --replicas 2  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/vkcube</div></pre></td></tr></table></figure>
+<p>which deploy vkcube service in both manager and worker node:</p>
+<pre><code>overall progress: 2 out of 2 tasks 
+1/2: running   [==================================================&gt;]     
+2/2: running   [==================================================&gt;] 
+verify: Service converged 
+</code></pre><h4 id="understand-Xauthority"><a href="#understand-Xauthority" class="headerlink" title="understand .Xauthority"></a>understand .Xauthority</h4><p>as docker service can run with <code>--mount</code> arguments, which give the first try to copy <code>.Xauthority</code> to manager node, but <code>.X11-unix</code> is not copyable, which is not a normal file, but a socket.</p>
+<p>in <code>docker service create</code>, when create a OpenGL/vulkan service in one remote worker node, and using <code>$DISPLAY=:0</code>, which means the display happens at the remote worker node. so in this way, the remote worker node is played the <code>Xserver</code> role; and since the vulkan service is actually run in the remote worker node, so the remote worker node is <code>Xclient</code> ? </p>
+<p>assuming the lower implement of <code>docker swarm service</code>is based on <code>ssh</code>, then when the manager node start the service, it will build the ssh tunnel to the remote worker node, and with the $DISPLAY variable as null; even if the docker swarm can start the ssh tunnel with <code>-X</code>, which by default, will use the manager node’s <code>$DISPLAY=localhost:10.0</code></p>
+<p><code>Xauthority cookie</code> is used to grant access to Xserver, so first make sure which machine is the Xserver, then the Xauthority should be included in that Xserer host machine. a few testes: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ssh in worker: echo $DISPLAY --&gt;  localhost:10.0</div><div class="line"></div><div class="line">xeyes --&gt; display in master monitor </div><div class="line"></div><div class="line">ssh in worker: xauth list --&gt; &#123;worker/unix:0  MIT-MAGIC-COOKIE-1  19282b0a651789ed27950801ef6f1441; worker/unix:10  MIT-MAGIC-COOKIE-1  a6cbe81637207bf0c168b3ad20a9267a &#125;</div><div class="line"></div><div class="line">in master: xauth list --&gt; &#123; ubuntu/unix:1  MIT-MAGIC-COOKIE-1  ee227cb9465ac073a072b9d263b4954e; ubuntu/unix:0  MIT-MAGIC-COOKIE-1  75893fb66941792235adba22362c4a6f; ubuntu/unix:10  MIT-MAGIC-COOKIE-1  785f20eb0ade772ceffb24eadeede645 &#125;</div></pre></td></tr></table></figure>
+<p>so which cookie is is for this $DISPLAY ? it shouldb be the one on <code>ubuntu/unix:10</code>;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh in worker:  export DISPLAY=:0</div><div class="line">xeyes  --&gt; display in worker monitor</div></pre></td></tr></table></figure>
+<p>then it use the cookie:  <code>worker/unix:0</code>.</p>
+<h4 id="deploy-lgsvl-service-in-swarm"><a href="#deploy-lgsvl-service-in-swarm" class="headerlink" title="deploy lgsvl service in swarm"></a>deploy lgsvl service in swarm</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xhost + </div><div class="line">export DISPLAY=:0</div><div class="line">sudo docker service create --name lgsvl --generic-resource &quot;gpu=1&quot; --replicas 2  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host --publish published=8080,target=8080  192.168.0.10:5000/lgsvl</div></pre></td></tr></table></figure>
+<p>which gives:</p>
+<pre><code>overall progress: 0 out of 2 tasks 
+1/2: container cannot be disconnected from host network or connected to host network
+2/2: container cannot be disconnected from host network or connected to host network
+</code></pre><p>basically, the service is deployed in <code>ingress network</code> by default, but as well, the service is configured with <code>host network</code>. so it conflict.</p>
+<h2 id="swarm-network"><a href="#swarm-network" class="headerlink" title="swarm network"></a>swarm network</h2><p><img src="https://docs.docker.com/engine/swarm/images/ingress-lb.png" alt="image"></p>
+<p>the <a href="https://docs.docker.com/engine/swarm/services/#publish-a%20services-ports-using-the-routing-mesh" target="_blank" rel="external">routing mesh</a> is the default internal balancer in swarm network; the other choice is to <a href="https://docs.docker.com/engine/swarm/services/#publish-a-services-ports-directly-on-the-swarm-node" target="_blank" rel="external">deploy serivce directly on the node</a>, namely <code>bypassing routing mesh</code>, which ask the service run in <code>global mode</code> and with pubished port setting as <code>mode=host</code>, which should be the same as <code>--network host</code> in <code>replicas mode</code>. </p>
+<p>the limitation of bypassing routing mesh, is only one task on one node, and access the published port can only require the service from this special node, which doesn’ make sense in cloud env.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">docker service create \</div><div class="line">     --mode global \</div><div class="line">     --publish mode=host,target=80,published=8080 \</div><div class="line">     --generic-resource &quot;gpu=1&quot;  \</div><div class="line">     --env DISPLAY  \</div><div class="line">     --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  \</div><div class="line">     --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot;  \</div><div class="line">     --network host  \</div><div class="line">     --name lgsvl \</div><div class="line">     lgsvl:latest</div></pre></td></tr></table></figure>
+<p>tips: –mount src=”X11-unix”,dst=”/tmp/.X11-unix” is kind of cached. so once docker image has ran in worker node, then it doesn’t need to pass this parameter again, but once worker node restart, it need this parameter again</p>
+<p>in summary about swarm netowrk, the routing mesh should be the right solution for cloud deployment. so how to bypass <code>--network host</code> ? </p>
+<p>the reason of <code>host network</code> is the lgsvl server and webUI can works in same host; if not, there is kind of cross-domain security failures, which actually is another topic, namely, how to host lgsvl and webUI/React in different hosts.</p>
+<p>need some study of webUI in next post.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/where-are-you-in-next-4-years-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2068,153 +2223,6 @@ docker service create --name lgsvl  -p 8080:8080 --env NVIDIA_VISIBLE_DEVICES=0 
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/build-cluster-on-Docker-swarm/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/06/build-cluster-on-Docker-swarm/" itemprop="url">build cluster on Docker swarm</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-06T07:10:03-05:00">
-                2019-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/11/06/build-cluster-on-Docker-swarm/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/11/06/build-cluster-on-Docker-swarm/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Docker-micro-services"><a href="#Docker-micro-services" class="headerlink" title="Docker micro services"></a>Docker micro services</h3><p><a href="https://docs.docker.com/v17.09/engine/swarm/key-concepts/#services-and-tasks" target="_blank" rel="external">key concepts in Docker</a></p>
-<p>when deploy an application(lg-sim) to swarm cluster as a service, which is defined in a/the manager node, the manager node will dispatch units of work as taskes to worker nodes.</p>
-<p>when create a service, you specify which container image to use and which commands to execute inside runing containers. In the <code>replicated services</code>, the swarm manager distributes a specific number of replica tasks among the nodes based upon the scale you set in the desired state. For <code>global services</code>, the swarm runs one task for the service on every available node in the cluster.</p>
-<p><img src="https://docs.docker.com/v17.09/engine/swarm/images/swarm-diagram.png" alt="docker node"></p>
-<h4 id="Docker-swarm-CLI-commands"><a href="#Docker-swarm-CLI-commands" class="headerlink" title="Docker swarm CLI commands"></a>Docker swarm CLI commands</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">docker swarm init </div><div class="line">docker swarm join</div><div class="line">docker service create  --name  --env --workdir --user</div><div class="line">docker service inspect </div><div class="line">docker service ls </div><div class="line">docker service rm</div><div class="line">docker service scale </div><div class="line">docker service ps</div><div class="line">docker service update  --args</div><div class="line">docker node inspect </div><div class="line">docker node update --label-add </div><div class="line">docker node promote/demote </div><div class="line"># run in worker</div><div class="line">docker swarm leave</div><div class="line"># run in manager</div><div class="line">docker node rm worker-node</div><div class="line">docker ps  #get running container ID</div><div class="line">docker exec -it containerID /bin/bash</div><div class="line">docker run -it</div><div class="line">docker-compose up build/run</div></pre></td></tr></table></figure>
-<h4 id="delete-unused-Docker-network"><a href="#delete-unused-Docker-network" class="headerlink" title="delete unused Docker network"></a>delete unused Docker network</h4><p>as Docker network may confuse external when access to the local network interfaces, sometimes need to remove the docker networks.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">docker network ls</div><div class="line">docker network disconnect -f  &#123;network&#125; &#123;endpoint-name&#125;</div><div class="line">docker network rm </div><div class="line">docker stop $(docker ps -a -q)</div><div class="line">docker rm $(docker ps -a -q)</div><div class="line">docker volume prune </div><div class="line">docker network prune</div></pre></td></tr></table></figure>
-<p>the above scripts will delete the unused(non-active) docker network, then may still active docker related networks, which can be deleted through:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">sudo ip link del docker0</div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">### access Docker service </div><div class="line"></div><div class="line">Docker container has its own virutal IP(172.17.0.1) and port(2347), which allowed to access in the host machine; for externaly access, need to map the hostmachine IP to docker container, by `--publish-add`. the internal communication among docker nodes are configured by `advertise_addr` and `listen-addr`.</div><div class="line"></div><div class="line"></div><div class="line">#### through IP externaly</div><div class="line">To publish a service’s ports externally, use the --publish &lt;PUBLISHED-PORT&gt;:&lt;SERVICE-PORT&gt; flag. When a user or process connects to a service, any worker node running a service task may respond.</div><div class="line"></div><div class="line">taking example from [5mins series](https://www.cnblogs.com/CloudMan6/tag/Swarm/)</div></pre></td></tr></table></figure>
-<p>docker service create –name web_server –replicas=2 httpd<br>docker service ps web_server </p>
-<h1 id="access-service-only-on-host-machine-through-the-Docker-IP"><a href="#access-service-only-on-host-machine-through-the-Docker-IP" class="headerlink" title="access service only on host machine through the Docker IP"></a>access service only on host machine through the Docker IP</h1><p>curl 172.17.0.1<br>docker service update –publish-add 8080:80 web_server</p>
-<h1 id="access-service-externally"><a href="#access-service-externally" class="headerlink" title="access service externally"></a>access service externally</h1><p>curl <a href="http://hostmachineIP:8080" target="_blank" rel="external">http://hostmachineIP:8080</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">#### configure websocket protocol</div><div class="line"></div><div class="line">for lg-sim server to pythonAPI client, which is communicated through `websocket`, it&apos;s better if the service can be configured to publish through websocket.</div><div class="line"></div><div class="line"></div><div class="line">#### publish httpd server to swarm service</div></pre></td></tr></table></figure></p>
-<p>docker service create –name web_server –publish 880:80 –replicas=2  httpd<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">the container IP is IP in network interface `docker0`(e.g. 172.17.0.1), which can be checked through `ifconfig`.  `80` is the default port used by httpd, which is mapped to the host machine `880` port. so any of the following will check correctly:</div></pre></td></tr></table></figure></p>
-<p>curl 172.17.0.1:880<br>curl localhost:880<br>curl 192.168.0.1:880<br>curl 192.168.0.13:880 #the other docker node<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> </div><div class="line">#### publish lg-sim into swarm service </div><div class="line"></div><div class="line">the previous version(2019.04) of lg-sim doesn&apos;t have a http server built-in, since 2019.7, they have `Nancy http server`, which is a great step toward dockerlize the lg-sim server.</div><div class="line"></div><div class="line"></div><div class="line">### manage data in Docker </div><div class="line"></div><div class="line">`Volumes` are stored in a part of the host filesystem, which is located `/var/lib/docker/volumes`, which is actually managed by Docker, rather than by host machine.</div><div class="line">Volumes are the preferred way to [persist data in Docker](https://docs.docker.com/v17.09/engine/admin/volumes/#more-details-about-mount-types) containers and services. some use cases of volume:</div><div class="line"></div><div class="line">* once created, even the container stops or removed, the volume still exist.</div><div class="line">* multiple containes can mount the same voume simultaneously; </div><div class="line">* when need to store data on a remote host </div><div class="line">* when need to backup, restore, or migrate data from one Dockr to another</div><div class="line"></div><div class="line">#### RexRay</div><div class="line"></div><div class="line">an even high-robost way is to separate volume manager and storge provider manager. [Rex-Ray](https://rexray.readthedocs.io/en/v0.3.3/)</div></pre></td></tr></table></figure></p>
-<p>docker service create –name web_s \<br>    –publish 8080:80 \<br>    –mount “type=volume, volume-driver=rexray, source=web_data, target=/usr/local/apache2/htdocs” \<br>    httpd</p>
-<p>docker exec -it containerID<br>ls -ld /usr/local/apahce2/htdocs<br>chown www-data:www-data </p>
-<h2 id="test-visit"><a href="#test-visit" class="headerlink" title="test visit"></a>test visit</h2><p>curl <a href="http://192.168.0.1:8080" target="_blank" rel="external">http://192.168.0.1:8080</a><br>docker inspect containerID </p>
-<p>```</p>
-<p><code>source</code> reprensents the name of data volume, if null, will create new<br><code>target</code> reprensents data volume will be mounted to <code>/usr/local/apache2/htdocs</code> in each container</p>
-<p>in RexRay, data volume update, scale, failover(when any node crashed, the data volume won’t lose) also be taken care.</p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.cnblogs.com/CloudMan6/tag/Swarm/" target="_blank" rel="external">5mins in Docker</a></p>
-<p><a href="https://www.bookstack.cn/read/docker-swarm-guides/kai-shi-shi-yong-swarm-swarmmo-shi-duan-kou-lu-you.md" target="_blank" rel="external">Docker swarm in and out</a></p>
-<p><a href="https://boxboat.com/2016/08/17/whats-docker-swarm-advertise-addr/" target="_blank" rel="external">what is swarm advertise-addr</a></p>
-<p><a href="https://www.reddit.com/r/docker/comments/a5kbte/run_docker_exec_over_a_docker_swarm/" target="_blank" rel="external">can ran exec in swarm</a></p>
-<p><a href="https://stackoverflow.com/questions/39362363/execute-a-command-within-docker-swarm-service" target="_blank" rel="external">execute a command within docker swarm service</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2265,7 +2273,7 @@ docker service create --name lgsvl  -p 8080:8080 --env NVIDIA_VISIBLE_DEVICES=0 
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">144</span>
+                <span class="site-state-item-count">145</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
