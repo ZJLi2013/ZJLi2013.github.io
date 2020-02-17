@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="apollo," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="review apollo (2)EMPlannerin review apollo(1), we had went through perception, prediction and part of planning module. the ADS planning problem can be summaried with a few input conditions, we can get">
+<meta name="keywords" content="apollo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="review-apollo (2).md">
+<meta property="og:url" content="http://yoursite.com/2020/02/17/review-apollo-2/index.html">
+<meta property="og:site_name" content="Serious Autonomous Vehicles">
+<meta property="og:description" content="review apollo (2)EMPlannerin review apollo(1), we had went through perception, prediction and part of planning module. the ADS planning problem can be summaried with a few input conditions, we can get">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-17T13:58:00.061Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="review-apollo (2).md">
+<meta name="twitter:description" content="review apollo (2)EMPlannerin review apollo(1), we had went through perception, prediction and part of planning module. the ADS planning problem can be summaried with a few input conditions, we can get">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/17/review-apollo-2/"/>
+
+
+
+
+
+  <title>review-apollo (2).md | Serious Autonomous Vehicles</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Serious Autonomous Vehicles</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/review-apollo-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">review-apollo (2).md</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-17T08:56:30-05:00">
+                2020-02-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/17/review-apollo-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/17/review-apollo-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="review-apollo-2"><a href="#review-apollo-2" class="headerlink" title="review apollo (2)"></a>review apollo (2)</h1><h2 id="EMPlanner"><a href="#EMPlanner" class="headerlink" title="EMPlanner"></a>EMPlanner</h2><p><a href="">in review apollo(1)</a>, we had went through perception, prediction and part of planning module. the ADS planning problem can be summaried with a few input conditions, we can get a few drivable driving path, now <a href="https://github.com/YannZyl/Apollo-Note/blob/master/docs/planning/em_planner.md" target="_blank" rel="external">EMPlanner, here</a> need to find out the best one.</p>
+<p>input conditions:</p>
+<ul>
+<li><p>perception and prediction obstacles and its future(in 5s) trajectory</p>
+</li>
+<li><p>current road status, e.g. special area, pedestrain cross e.t.c.</p>
+</li>
+</ul>
+<p>both <code>path</code> and <code>speed</code> need to be planned or optimized. the core of EMPlanner is <a href="">Dynamic programming(DP)</a>, which is an classic algorithm to search the global optimized solution. the DP garantee each sub-group best solution accumulated to the final global best solution.</p>
+<h3 id="PathOptimizer"><a href="#PathOptimizer" class="headerlink" title="PathOptimizer"></a>PathOptimizer</h3><p>the DP used in path optimizer basic processes:</p>
+<p>starting from current location, in every time, move in x-direction about next n meters(to next location), and sample in y-direction at the next location, calcuate the cost from current location to each of the sampling point at the next location, and save cost value for each path for this sub path segment. (<strong>this is the different from DP to greedy algorithm</strong>), finally we retrieve all the cost values tables for each sub-path, and get the final best solution for the whole path. </p>
+<p>a few question about DP here:</p>
+<ul>
+<li><p>how long in x-direction need to plan ?</p>
+<pre><code>KMinSampleDistance = 40.0
+</code></pre></li>
+<li><p>what size of the interval in x-direction is good ?</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">step_length = math::Clamp(init_point.v() * SamplePointLookForwardTime, config_.step_length_min(), config_.step_length_max());</div></pre></td></tr></table></figure>
+<ul>
+<li>how many sample points in y-direction is needed ? </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">num_sample_per_level = config_.sample_points_num_each_level();</div></pre></td></tr></table></figure>
+<ul>
+<li>how to sample in y-direction and x-direction ?</li>
+</ul>
+<p>which is case by case, depends on the ego’s maneuver as well as the lanes info.</p>
+<p>basically, we had <code>RouteSegments</code>/<code>ReferenceLine</code> set, which includes the filtered referencelines for ego vehicle. for each referenceLine, we can calcuate the cost, then figure out the min cost referenceline as planning module’s output.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">EMPlanner::Plan(&amp;start_point, *frame)</div><div class="line">&#123;</div><div class="line">	foreach reference_line_info in frame-&gt;reference_line_info():</div><div class="line">		PlanOnReferenceLine();</div><div class="line">&#125;</div><div class="line"></div><div class="line">EMPlanner::PlanOnReferenceLine(start_point, frame, reference_line_info)&#123;</div><div class="line">	foreach optmizer in tasks_ :</div><div class="line">		ret = optmizer-&gt;Execute(frame, reference_line_info);</div><div class="line">&#125;</div><div class="line"></div><div class="line">PathOptimizer::Execute(*frame, *reference_line_info)&#123;</div><div class="line">	ret = Process(speedData, reference_line, start_point, path_data);</div><div class="line">&#125;</div><div class="line"></div><div class="line">DpPolyPathOptimizer::Process(SpeedData, ReferenceLine, init_point, path_data)&#123;</div><div class="line">	dp_road_graph.FindPathTunnel();</div><div class="line">&#125;</div><div class="line"></div><div class="line">DPRoadGraph::FindPathTunnel(init_point, &amp;obstacles, *path_data)&#123;</div><div class="line">	CalculateFrenetPoint(init_point, &amp;init_frenet_frame_point_);</div><div class="line">	GenerateMinCostPath(obstacles, &amp;min_cost_path);</div><div class="line">	foreach point in min_cost_path:</div><div class="line">		frenet_path.append(transfer(point));</div><div class="line">	path_data-&gt;SetFrenetPath(frenet_path);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="point2point-cost-calcualation"><a href="#point2point-cost-calcualation" class="headerlink" title="point2point cost calcualation"></a>point2point cost calcualation</h4><p>e.g. from the left interval sample points(in y-direction) to current interval sample points(in y-direction).</p>
+<p>during this cost calcuation, consider pathCost, staticObstacleCost and DynamicObstacleCost. </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">TrajectoryCost::Calculate()&#123;</div><div class="line">	total_cost += CalculatePathCost();</div><div class="line">	total_cost += CalculateStaticObstacleCost();</div><div class="line">	total_cost += CalculateDynamicObstacleCost();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>UpdateNode() </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">DPRoadGraph::GenerateMinCostPath()&#123;</div><div class="line">	<span class="keyword">for</span>(level=<span class="number">1</span>; level &lt; path_waypoints.size(); ++level)&#123;</div><div class="line">		level_points = path_waypoints[level]; <span class="comment">//all sample points in y-direction at current level </span></div><div class="line">		<span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;level_points.size(); ++i)&#123;</div><div class="line">			cur_point = level_points[i];</div><div class="line">			UpdateNode(prev_dp_points, level, &amp;trajectory_cost, &amp;cur_point);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>PathCost</li>
+</ul>
+<p>from each point at prevous level to current point at current level, consider the length, 1st order(speed), 2sec order(acc) should be smooth, can give a 5th-order polyfit, same as what’d done in referenceLine smoother. for each interval/curve polyfit(by <strong>curve.Evaluate()</strong>), we can re-sampling it more density, so at each new sampling point, calculate its (position, speed, acc)<code>l, dl, ddl</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">TrajectoryCost::CalculatePathCost(curve, start_s, end_s, curr_level)&#123;</div><div class="line">	foreach sampling_point in (end_s - start_s):</div><div class="line">		l = curve.Evalaute(0, sampling_point)</div><div class="line">		// cost from l </div><div class="line">		path_cost +=  l * l * config_.path_l_cost()</div><div class="line">		// cost from dl </div><div class="line">		dl = curve.Evaluate(1, sampling_point)</div><div class="line">		path_cost +=  dl * dl * config_.path_dl_cost()</div><div class="line">		// cost from ddl </div><div class="line">		ddl = curve.Evaluate(2, sampling_point)</div><div class="line">		path_cost +=  ddl * ddl * config_.path_ddl_cost()		</div><div class="line">&#125;</div><div class="line"></div><div class="line">```	</div><div class="line">		</div><div class="line">* StaticObstacleCost</div><div class="line"></div><div class="line">StaticObstacleCost() used the same idea from PathCost, basically, to resampling the interval, and calculate a cost on each of the sampling point. </div><div class="line"></div><div class="line">```c++</div><div class="line">TrajectoryCost::CalculateStaticObstalceCost(curve, start_s, end_s)&#123;</div><div class="line">	foreach curr_s in (end_s - start_s):</div><div class="line">		curr_l = curve.Evaluate(0, curr_s, start_s);</div><div class="line">		foreach obs_boundary :: static_obstacle_boundaries:</div><div class="line">			obstacle_cost += GetCostFromObs(curr_s, curr_l, obs_boundary);</div><div class="line">&#125;</div><div class="line"></div><div class="line">TrajectoryCost::GetCostFrmObs()&#123;</div><div class="line">	delta_l = fabs(adc_l - obs_center); </div><div class="line">	obstacle_cost.safety_cost += config_.obstacle_collision_cost() * Sigmoid(config_.obstacle_collision_distance() - delta_l) ;</div></pre></td></tr></table></figure>
+<ul>
+<li>DynamicObstacleCost </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">TrajectoryCost::CalculateDynamicObstacleCost(curve, start_s, end_s)&#123;</div><div class="line">	foreach timestamp:</div><div class="line">		foreach obstacle_trajectory in dynamic_obstacle_boxes_:</div><div class="line">			obstacle_cost += GetCostBetweenObsBoxes(ego_box, obstacle_trajectory.at(timestamp));</div><div class="line">&#125;</div><div class="line"></div><div class="line">TrajectoryCost::GetCostBetweenObsBoxes(ego_box, &amp;obs_box)&#123;</div><div class="line">	distance = obstacle_box.DistanceTo(ego_box);</div><div class="line">	if(distance &gt; config_.obstacle_ignore_distance())</div><div class="line">		return obstacle_cost ;</div><div class="line">	obstacle_cost.safety_cost += ( config_.obstacle_collision_cost() + 20) * Sigmoid(config_.obstacle_collision_distance() - distance);</div></pre></td></tr></table></figure>
+<p>static obstacles cost calculating is like one space-dimension, only consider cost from the fixed/static obstacle to the fixed sampling points. for dynamic obstacles case, as the obstacle is moving, so we need a time-dimension, to calculate the cost at each time interval, from the current obstacle location to the fixed sampling points.</p>
+<p>for dynamic obstacle cost, there is a risk cost (20), which need to take care.</p>
+<h4 id="min-cost-path"><a href="#min-cost-path" class="headerlink" title="min cost path"></a>min cost path</h4><p>we got the cost matrix from the start_s level to the target_s/final level. but the final level in y-direction has 7 sampling points, all of which are drivable. so backward propagation, to get the best path (or a NODE in DAG)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">DPRoadGraph::GenerateMinCostPath()&#123;</div><div class="line">	<span class="keyword">for</span>(cur_dp_node : graph_nodes.back())&#123;</div><div class="line">		fake_head.UpdateCost()</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h3 id="SpeedOptimizer"><a href="#SpeedOptimizer" class="headerlink" title="SpeedOptimizer"></a>SpeedOptimizer</h3><p>the previous PathOptimier give the best (s, l) location of ego should arrived at each interval section along the referenceline. so what’s the best speed to reach these interval section ?</p>
+<p>to do speed optimzier, two parts:</p>
+<ul>
+<li><p>constraint speed conditions, e.g. speed limit,  upper/lower boundary of drivable area along the refereneline due to obstacle trajectory</p>
+</li>
+<li><p>speed planning </p>
+</li>
+</ul>
+<h4 id="BoundaryMapper"><a href="#BoundaryMapper" class="headerlink" title="BoundaryMapper()"></a>BoundaryMapper()</h4><p>for each obstalce’s trajectory, sampling in time-dimension, if its trajectory has overlapped with ego’s trajectory, mark the boundary box.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">StBoundaryMapper::CreateStBoundary()&#123;</div><div class="line">	foreach trajectory_point in trajectory:</div><div class="line">		obs_box = obstacle.GetBoundingBox(trajectory_point);</div><div class="line">		<span class="keyword">for</span>(path_s=<span class="number">0.0</span>, path&lt;s &lt; discretized_path.Length(); path_s += step_length)&#123;</div><div class="line">			curr_adc_path_point = discretized_path.EvaluateUsingLinearApproximation();</div><div class="line">			<span class="keyword">if</span>( CheckOverlap(curr_adc_path_point, obs_box, st_boundary_config_.boundary_buffer()) )</div><div class="line">			&#123;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// only when obs trajectory overlapped with ego's trajectory</span></div><div class="line">StBoundaryMapper::MapWithDecision(path_obstacle, decision)&#123;</div><div class="line">	boundary = StBoundary::GenerateStBoundary(lower_points, upper_points);</div><div class="line">	path_obstacle-&gt;SetStBoundary(boundary);</div><div class="line">	<span class="comment">// assign different boundary type </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="SpeedLimitDecider"><a href="#SpeedLimitDecider" class="headerlink" title="SpeedLimitDecider"></a>SpeedLimitDecider</h4><ul>
+<li><p>speed limit</p>
+</li>
+<li><p>centripetal acc limit</p>
+</li>
+<li><p>centripetal force limit </p>
+</li>
+</ul>
+<h4 id="DpStGraph-Search"><a href="#DpStGraph-Search" class="headerlink" title="DpStGraph::Search"></a>DpStGraph::Search</h4><p>so far we have info from <code>boundaryMapper</code>, which tells lower_s and upper_s of safe driving area along reference line, excluding the overlaping area of obstacle’s trajectories; as well as speed limit. so now in the driving safe area, which speed ego should take at each point is also done by <code>DP</code>, speed can be represent in time-space two dimension, in a <code>T-S</code> table. </p>
+<p>so speed DP can transfer to find the min cost [T,S] althrough the whole planning drive path. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">DpStGraph::Search(speed_data)&#123;</div><div class="line">	InitCostTable().ok();</div><div class="line">	CalculateTotalCost().ok();</div><div class="line">	RetriveSpeedProfile(speed_data).ok();</div><div class="line">&#125;</div><div class="line"></div><div class="line">```	</div><div class="line"></div><div class="line"></div><div class="line">### QpSplineSpeedOptimizer </div><div class="line"></div><div class="line">DPSpeedOptimizer output the value pair of (time, location)(t, s) at each interval, then can get the velocity, acc, angular velocity by differencial among the neighbor intervals. QPSpline is a better way to get a polyfit 2nd-order smoothed speed profile along the referenceLine, which is higher-precision than DP.</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">### SpeedOptimizer and PathOptimizer fusion</div><div class="line"></div><div class="line">PathOptimizer outputs driving path in (accumulated_distance, section_direction distance)(s, l), SpeedOptimizer outputs driving path in (time, accumulated_distance)(t, s). now to get the best/optmized path along the referenceLine, need combine these two outputs.</div><div class="line"></div><div class="line">```c++</div><div class="line">for(cur_rel_time=0.0; cur_rel_time &lt; speed_data_.TotalTime(); cur_rel_time += TimeSec)&#123;</div><div class="line">	speed_data_.EvaluateByTime(cur_rel_time, &amp;speed_point);</div><div class="line">	if(speed_point.s() &gt; path_data_.discretized_path().Length()) break; </div><div class="line">	path_data.GetPathPointWithPathS(speed_point.s(), &amp;path_point);</div><div class="line">	path_point.set_s(path_point.s() + start_s);</div><div class="line">	</div><div class="line">	trajectory_point.mutable_path_point()-&gt;CopyFrom(path_point);</div><div class="line">	 trajectory_point.set_v(speed_point.v());</div><div class="line">    trajectory_point.set_a(speed_point.a());</div><div class="line">    trajectory_point.set_relative_time(speed_point.t() + relative_time);</div><div class="line">    ptr_discretized_trajectory-&gt;AppendTrajectoryPoint(trajectory_point);</div><div class="line">   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>the above fusion is on one ReferenceLine, for all referenceLine, we can reach out the min cost referenceline as following:</p>
+<pre><code class="c++">Frame::FindDriveReferenceLineInfo(){
+    foreach reference_line_info in reference_line_info_ :
+        <span class="keyword">if</span>(reference_line_info.IsDrivable() &amp;&amp; reference_lien_info.Cost &lt; min_cost){
+            drive_reference_line_info_ = &amp;reference_line_info;
+            min_cost = reference_line_info.Cost();
+    }
+
+    <span class="keyword">return</span> drive_reference_line_info_ ;
+}
+</code></pre>
+<h3 id="Planning-in-summary"><a href="#Planning-in-summary" class="headerlink" title="Planning in summary"></a>Planning in summary</h3><p>Planning module has three components, ReferenceLineProvider, Frame and EMPlanner. Frame has <code>ReferencelineInfo</code>, which has everything about once-time planning, including the min-cost ReferenceLineInfo from EMPlanner. EMPlanner do DP and QP for PathPlan and SpeedPlan, seperately, which give a best driving path for each RefereneLine. in the whole, we can reach out the global best(min-cost) referenceLine from EMPlanner, and store back in Frame.</p>
+<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><p>Control module readin the planning ReferenceLine (Trajectory, VehicleStatus) and Localization, output control command.</p>
+<pre><code class="c++">ControlComponent::Proc(){
+    chassis_msg = chassis_reader_-&gt;GetLatestObserved();
+    OnChassis(chassis_msg);
+    trajectory_msg = trajectory_reader_-&gt; GetLatestObserved();
+    localization_msg = localization_reader_-&gt; GetLatestObserved();
+
+    status = ProduceControlCommand(&amp;control_command);
+    control_cmd_writter_-&gt;Write();
+}
+</code></pre>
+<h2 id="simulation"><a href="#simulation" class="headerlink" title="simulation"></a>simulation</h2><p>simulation is a system level verification/test tool, there are a few topics: </p>
+<h4 id="simulate-the-world"><a href="#simulate-the-world" class="headerlink" title="simulate the world"></a>simulate the world</h4><p>how to make a virtual world in simulation, quickly, easily, close to real and massively deploy-friendly. </p>
+<p>currently most commericial tools, e.g. PreScan, CarMaker, are supporting well real map(.osm), and on-line/distributed/cloud service, which is good way.</p>
+<p>a few pioneers are trying to make the virtual world by 3D build through image/point cloud scanning. which is maybe the closest way to the physical world, but need large computing resource. </p>
+<h4 id="integrate-ADS-system"><a href="#integrate-ADS-system" class="headerlink" title="integrate ADS system"></a>integrate ADS system</h4><p>how to integrate ADS system to simulation, easily.</p>
+<p>most simulation software/platform is independent from ADS core. </p>
+<p>for in-house prototype team, they both develop ADS and simulate in Matlab. which is pretty common in most OEM teams.</p>
+<p>in product phase, it’s common to package ADS core as ros node, and talk to the simulation software by ROS.</p>
+<h4 id="friendly-API"><a href="#friendly-API" class="headerlink" title="friendly API"></a>friendly API</h4><p>system level simulation has plenty of scenarios, requiring the simulation platform has friendly way to produce massively scenarios. including env, ego/npc behaviors, special cases e.t.c </p>
+<p>most common APIs are Python and Matlab.</p>
+<h4 id="massively-deployment"><a href="#massively-deployment" class="headerlink" title="massively deployment"></a>massively deployment</h4><p>it’s back to the test purpose, simulation needs to cover as much as possible scenarios, which requires IT infrastructure to support massively deployment. e.g. cloud deployment</p>
+<p>`</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/apollo/" rel="tag"># apollo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/15/review-apollo-1/" rel="next" title="review apollo (1)">
+                <i class="fa fa-chevron-left"></i> review apollo (1)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="David Z.J. Lee" />
+          <p class="site-author-name" itemprop="name">David Z.J. Lee</p>
+           
+              <p class="site-description motion-element" itemprop="description">what I don't know</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ZJLi2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/zhengjia13/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#review-apollo-2"><span class="nav-number">1.</span> <span class="nav-text">review apollo (2)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EMPlanner"><span class="nav-number">1.1.</span> <span class="nav-text">EMPlanner</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PathOptimizer"><span class="nav-number">1.1.1.</span> <span class="nav-text">PathOptimizer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#point2point-cost-calcualation"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">point2point cost calcualation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#min-cost-path"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">min cost path</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpeedOptimizer"><span class="nav-number">1.1.2.</span> <span class="nav-text">SpeedOptimizer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#BoundaryMapper"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">BoundaryMapper()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SpeedLimitDecider"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">SpeedLimitDecider</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DpStGraph-Search"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">DpStGraph::Search</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Planning-in-summary"><span class="nav-number">1.1.3.</span> <span class="nav-text">Planning in summary</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Control"><span class="nav-number">1.2.</span> <span class="nav-text">Control</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#simulation"><span class="nav-number">1.3.</span> <span class="nav-text">simulation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#simulate-the-world"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">simulate the world</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#integrate-ADS-system"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">integrate ADS system</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#friendly-API"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">friendly API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#massively-deployment"><span class="nav-number">1.3.0.4.</span> <span class="nav-text">massively deployment</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Z.J. Lee</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/02/17/review-apollo-2/';
+          this.page.identifier = '2020/02/17/review-apollo-2/';
+          this.page.title = 'review-apollo (2).md';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
