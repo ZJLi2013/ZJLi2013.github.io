@@ -93,16 +93,19 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/archives/2019/page/4/index.html">
+<meta name="description" content="backgroundto deploy simulation in docker swarm, there is a hurting that GPU rendering in docker requires a physical monitor(as $DISPLAY env variable). which is due to GeForece(Quadro 2000) GPUs, for T">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gpu rendering in k8s cloud">
+<meta property="og:url" content="http://yoursite.com/2020/02/21/gpu-rendering-in-k8s-cloud/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="backgroundto deploy simulation in docker swarm, there is a hurting that GPU rendering in docker requires a physical monitor(as $DISPLAY env variable). which is due to GeForece(Quadro 2000) GPUs, for T">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://static001.infoq.cn/resource/image/25/66/2597b690685978c9a780aa93d6c7c266.png">
+<meta property="og:updated_time" content="2020-02-21T06:52:01.618Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="gpu rendering in k8s cloud">
+<meta name="twitter:description" content="backgroundto deploy simulation in docker swarm, there is a hurting that GPU rendering in docker requires a physical monitor(as $DISPLAY env variable). which is due to GeForece(Quadro 2000) GPUs, for T">
+<meta name="twitter:image" content="https://static001.infoq.cn/resource/image/25/66/2597b690685978c9a780aa93d6c7c266.png">
 
 
 
@@ -130,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2019/page/4/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/21/gpu-rendering-in-k8s-cloud/"/>
 
 
 
 
 
-  <title>Archive | Serious Autonomous Vehicles</title>
+  <title>gpu rendering in k8s cloud | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +164,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,402 +282,206 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-    <span class="archive-page-counter">
-      
-      
-       
-        
-      Great! 147 posts in total. Keep on posting.
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/21/gpu-rendering-in-k8s-cloud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
     </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">gpu rendering in k8s cloud</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-21T01:48:05-05:00">
+                2020-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/21/gpu-rendering-in-k8s-cloud/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/21/gpu-rendering-in-k8s-cloud/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
 
       
       
-      
 
+      
+        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>to deploy simulation in docker swarm, there is a hurting that GPU rendering in docker requires a physical monitor(as $DISPLAY env variable). which is due to GeForece(Quadro 2000) GPUs, for Tesla GPUs there is no depends on monitor. really intertesting to know.</p>
+<p>there were two thoughts how to deploy simulation rendering in cloud, either a gpu rendering cluster, or a headless mode in container cluster.</p>
+<h2 id="unity-rendering"><a href="#unity-rendering" class="headerlink" title="unity rendering"></a>unity rendering</h2><p><a href="https://www.cnblogs.com/alan777/p/6204759.html" target="_blank" rel="external">unity rendering pipeline</a> is as following ：</p>
+<ul>
+<li><p>CPU calculate what need to draw and how to draw</p>
+</li>
+<li><p>CPU send commands to GPU</p>
+</li>
+<li><p>GPU plot </p>
+</li>
+</ul>
+<h4 id="direct-rendering"><a href="#direct-rendering" class="headerlink" title="direct rendering"></a>direct rendering</h4><p><a href="https://unix.stackexchange.com/questions/319052/remote-direct-rendering-for-glx-opengl" target="_blank" rel="external">for remote direct rendering for GLX/openGL</a>, Direct rendering will be done on the X client (the remote machine), then rendering results will be transferred to X server for display. Indirect rendering will transmit GL commands to the X server, where those commands will be rendered using server’s hardware. </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">direct rendering: Yes</div><div class="line">OpenGL vendor string: NVIDIA</div></pre></td></tr></table></figure>
+<p>Direct Rendering Infrasturcture(DRI) means the 3D graphics operations are hardware acclerated, Indirect rendering is used to sya the graphics operations are all done in software.</p>
+<p>DRI enable to communicate directly with gpus, instead of sending graphics data through X server, resulting in 10x faster than going through X server </p>
+<p>for performance, mostly the games/video use direct rendering. </p>
+<h4 id="headless-mode"><a href="#headless-mode" class="headerlink" title="headless mode"></a>headless mode</h4><p>to disable rendering, either with dummy display. there is a blog how to <a href="https://towardsdatascience.com/how-to-run-unity-on-amazon-cloud-or-without-monitor-3c10ce022639" target="_blank" rel="external">run opengl in xdummy in AWS cloud</a>; eitherwith <a href="https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Using-Docker.md" target="_blank" rel="external">Unity headless mode</a>, When running in batch mode, <a href="https://answers.unity.com/questions/159079/batchmode-and-nographics.html" target="_blank" rel="external">do not initialize graphics device at all</a>. This makes it possible to run your automated workflows on machines that don’t even have a GPU. to make a game server running on linux, and use the argument “-batchmode” to make it run in headless mode. <a href="https://forum.unity.com/threads/linux-nographics-support.152916/" target="_blank" rel="external">Linux -nographics support</a> <code>-batchmode</code> is normally the headless flag that works without gpu and audio hw acceleration</p>
+<h2 id="GPU-container"><a href="#GPU-container" class="headerlink" title="GPU container"></a>GPU container</h2><p>a gpu containeris needs to map NVIDIA driver from host to the container, which is now done by <code>nvidia-docker</code>; the other issue is gpu-based app usually has its own (runtime) libs, which needs to install in the containers. e.g. CUDA, deep learning libs, OpengGL/vulkan libs. </p>
+<p><img src="https://static001.infoq.cn/resource/image/25/66/2597b690685978c9a780aa93d6c7c266.png" alt="image"></p>
+<h4 id="k8s-device-plugin"><a href="#k8s-device-plugin" class="headerlink" title="k8s device plugin"></a>k8s device plugin</h4><p>k8s has default <code>device plugin</code> model to support gpu, fpga e.t.c devices, but it’s in progress, nvidia has <a href="https://github.com/NVIDIA/k8s-device-plugin" target="_blank" rel="external">a branch</a> to support gpu as device plugin in k8s. </p>
+<h4 id="nvidia-docker-mechanism"><a href="#nvidia-docker-mechanism" class="headerlink" title="nvidia docker mechanism"></a>nvidia docker mechanism</h4><p>when application call cuda/vulkan API/libs, it further goes to cuda/vulkan runtime, which further ask operations on GPU devices.</p>
+<h2 id="cloud-DevOps"><a href="#cloud-DevOps" class="headerlink" title="cloud DevOps"></a>cloud DevOps</h2><h4 id="simulation-in-cloud"><a href="#simulation-in-cloud" class="headerlink" title="simulation in cloud"></a>simulation in cloud</h4><p>so far, there are plenty of cloud simulation online, e.g. ali, tencent, huawei/octopus, Cognata. so how these products work? all of them has containerized. as our test said, only Tesla GPU is a good one for containers, especially for rendering needs; GeForce GPU requires <code>DISPLAY</code> or physical monitor to be used for rendering. </p>
+<h4 id="cloud-vendors-for-carmakers"><a href="#cloud-vendors-for-carmakers" class="headerlink" title="cloud vendors for carmakers"></a>cloud vendors for carmakers</h4><p>as cloud simulation is heavily infrastructure based, OEMs and cloud suppliers are coming together:</p>
+<ul>
+<li>FAW -&gt; Ali cloud</li>
+<li>GAC -&gt; Tencent Cloud</li>
+<li>SAC -&gt; Ali cloud / fin-shine </li>
+<li>Geely -&gt; Ali cloud </li>
+<li>Changan -&gt; Ali cloud </li>
+<li>GWM -&gt; Ali cloud </li>
+<li>Xpeng, Nio (?)</li>
+<li>PonyAI/WeRide (?)</li>
+</ul>
+<p>obviously, Ali cloud has a major benefit among carmakers, which actually give Ali cloud new industry to deep in. traditionally, carmakers doesn’t have strong DevOps team, but now there is a change.</p>
+<p>we can see the changing, as connected vehicles service, sharing cars, MaaS, autonomous vehicles are more and more requring a strong DevOps team. but not the leaders in carmakers realize yet.</p>
+<h4 id="fin-shine"><a href="#fin-shine" class="headerlink" title="fin-shine"></a>fin-shine</h4><p><a href="http://fin-shine.com/" target="_blank" rel="external">SAC cloud</a>, which is a great example for other carmakers to study. basically they are building the common cloud service independently.</p>
+<ul>
+<li>container service &lt;– k8s/docker </li>
+<li>storage &lt;– hdfs/ceph</li>
+<li>big data &lt;– hadoop/sql </li>
+<li>middleware </li>
+<li>applications &lt;– AI, simulation</li>
+</ul>
+<p>it’s an IP for SAC, but on the other hand, to maintain a stable and user-friendly cloud infrastructure is not easy at all. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://github.com/rndevfx/docker-blender-render-cluster" target="_blank" rel="external">docker blender render cluster</a></p>
+<p><a href="https://docs.nvidia.com/ngc/ngc-vgpu-setup-guide/index.html" target="_blank" rel="external">nvidia vgpu</a></p>
+<p><a href="https://engineering.bitnami.com/articles/using-gpus-with-kubernetes.html" target="_blank" rel="external">using GPUs with K8s</a></p>
+<p><a href="https://docs.nvidia.com/datacenter/pdf/kubernetes-install-guide.pdf" target="_blank" rel="external">K8S on nvidia gpus</a></p>
+<p><a href="https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/19193/OpenGL-Direct-Hardware-Rendering-on-Linux" target="_blank" rel="external">openGL direct hardware rendering on Linux</a> </p>
+<p><a href="https://github.com/carla-simulator/carla/issues/1112" target="_blank" rel="external">runinng carla without display</a></p>
+<p><a href="https://partiallydisassembled.net/posts/unity-headless-script.html" target="_blank" rel="external">tips for runing headless unity from a script</a></p>
+<p><a href="https://forum.unity.com/threads/unity-server-instance-without-the-3d-graphics.22283/" target="_blank" rel="external">Unity Server instance without 3d graphics</a></p>
+<p><a href="https://bluesmilery.github.io/blogs/afcb1072/" target="_blank" rel="external">a blog: nvidia device plugin for k8s</a></p>
+<p><a href="https://www.infoq.cn/article/TDfGIikxH9bcgkNyWL6S" target="_blank" rel="external">k8s GPU manage &amp; device plugin mechanism</a></p>
+
+      
+    </div>
+
+    <div>
       
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2019">2019</h2>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/17/review-apollo-2/" rel="next" title="review-apollo (2).md">
+                <i class="fa fa-chevron-left"></i> review-apollo (2).md
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
         </div>
       
-      
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/18/python-modules-in-help/" itemprop="url">
-              
-                <span itemprop="name">python modules in help</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-09-18T09:09:48-04:00"
-              content="2019-09-18" >
-          09-18
-        </time>
-      </div>
-
-    </header>
+      
+    </footer>
   </article>
 
 
 
-    
-
+    <div class="post-spread">
       
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/14/math-in-ADS-system/" itemprop="url">
-              
-                <span itemprop="name">math in ADS system</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-09-14T06:43:04-04:00"
-              content="2019-09-14" >
-          09-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/14/未来5年在哪里-10/" itemprop="url">
-              
-                <span itemprop="name">未来5年在哪里 10</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-09-14T05:11:40-04:00"
-              content="2019-09-14" >
-          09-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/11/npc-wp-planner-in-ADS-simulation/" itemprop="url">
-              
-                <span itemprop="name">npc wp planner in ADS simulation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-09-11T09:52:39-04:00"
-              content="2019-09-11" >
-          09-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/06/a-nested-conditonal-variable-model-in-python/" itemprop="url">
-              
-                <span itemprop="name">a nested conditonal variable model in python</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-09-06T08:06:08-04:00"
-              content="2019-09-06" >
-          09-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="url">
-              
-                <span itemprop="name">vehicle dynamics model in ADS simulation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-09-03T09:08:09-04:00"
-              content="2019-09-03" >
-          09-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/31/未来5年在哪里-9/" itemprop="url">
-              
-                <span itemprop="name">未来5年在哪里-9</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-08-31T23:37:54-04:00"
-              content="2019-08-31" >
-          08-31
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/30/reactjs-introduction/" itemprop="url">
-              
-                <span itemprop="name">reactjs introduction</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-08-30T11:07:50-04:00"
-              content="2019-08-30" >
-          08-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/30/nancyfx-study/" itemprop="url">
-              
-                <span itemprop="name">nancyfx study</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-08-30T09:11:39-04:00"
-              content="2019-08-30" >
-          08-30
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2019/08/24/where-are-you-in-next-5-years-9/" itemprop="url">
-              
-                <span itemprop="name">未来5年在哪里 (8).md</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-08-24T23:45:37-04:00"
-              content="2019-08-24" >
-          08-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2019/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2019/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/archives/2019/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/9/">9</a><a class="extend next" rel="next" href="/archives/2019/page/5/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
-
+    </div>
+  </div>
 
 
           </div>
@@ -682,6 +489,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -702,8 +520,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -776,6 +603,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unity-rendering"><span class="nav-number">2.</span> <span class="nav-text">unity rendering</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#direct-rendering"><span class="nav-number">2.0.1.</span> <span class="nav-text">direct rendering</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#headless-mode"><span class="nav-number">2.0.2.</span> <span class="nav-text">headless mode</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPU-container"><span class="nav-number">3.</span> <span class="nav-text">GPU container</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#k8s-device-plugin"><span class="nav-number">3.0.1.</span> <span class="nav-text">k8s device plugin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nvidia-docker-mechanism"><span class="nav-number">3.0.2.</span> <span class="nav-text">nvidia docker mechanism</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cloud-DevOps"><span class="nav-number">4.</span> <span class="nav-text">cloud DevOps</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#simulation-in-cloud"><span class="nav-number">4.0.1.</span> <span class="nav-text">simulation in cloud</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cloud-vendors-for-carmakers"><span class="nav-number">4.0.2.</span> <span class="nav-text">cloud vendors for carmakers</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fin-shine"><span class="nav-number">4.0.3.</span> <span class="nav-text">fin-shine</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">5.</span> <span class="nav-text">refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -889,11 +732,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
 
 
   
@@ -912,6 +753,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/02/21/gpu-rendering-in-k8s-cloud/';
+          this.page.identifier = '2020/02/21/gpu-rendering-in-k8s-cloud/';
+          this.page.title = 'gpu rendering in k8s cloud';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

@@ -291,6 +291,138 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/05/coding-is-the-system-engineering/" itemprop="url">coding is the system engineering</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-05T23:04:36-04:00">
+                2018-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/05/coding-is-the-system-engineering/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/05/coding-is-the-system-engineering/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>during this week studying: automotive message broker. It’s a framework to support in-vehicle network communication, based on which many vehicle applications can build up.</p>
+<p>After jumped into the source code, soonly I found the dependent third-party libs, e.t. Qt, Glib, libwebsockets. None of these basis libs looks familiar, that’s really headache. </p>
+<p>So had to jump to learn a little about these libs first. Qt is heavy, give up on reading source code, basically to know what’s used for; Glib has a core on eventloop, after review the concept: nonblocking event I/O; and few lighter projects are found, e.g. event.js in RocketEngine. so I was happy to read js source code, but after reading nothing really keep in my head due to don’t know where to use them, neither don’t understand why these implement is necessary. </p>
+<p>maybe a bigger project with more details, so picked moduo, written by a Chinese. there is a book on this project, which started with multi-thread programming issues, no help. same problem, I am not familar with the application scenario, so can’t really catch the essential. </p>
+<p>back to the question: how to effciently read source code?<br>1) I suppose, first to understand the application scenario<br>2) compile and run in debug to track the data flow for projects, which you can’t see the flow by once<br>3) if it’s a framework/foundmental libs, write demo</p>
+<p>The company IT system is not developer-friendly, git, cmake, npm, python lib are missing. that’s maybe the reason I am becoming lazy, if tools at-hand, may give a try; if not, nothing really do. The company has itself gmake system, but the bottom code never been touched. </p>
+<p>Then I compiled the demo libwebsocket, many failures bump out, during school time, I used a lot cmake, g++ with local headers, link to LD/_LIBRARY/_PATH, all out of practice for couple years. </p>
+<p>Anyway, at this moment, I realize that coding is a system enginnering. first to be really familar with OS, then the basic libs, then think about to write applications. </p>
+<p>For me, the first occupy with software is from (industry) application layer, lack of foundmental. now when to do sth, I feel hands are bounded, that push me to the root.</p>
+<p>Rome is not built in one day, OMG.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/31/open-source-project-checked/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1192,7 +1324,7 @@ ResNet
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">146</span>
+                <span class="site-state-item-count">147</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
