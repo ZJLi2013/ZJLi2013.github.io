@@ -93,16 +93,17 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/tags/hadoop/index.html">
+<meta name="description" content="HPCAnsys HPC, OpenFoam in amazon EC2, rescale, these are some samples of current CAE applications in HPC cloud. most CAE simulations, in nut, are solving large sparse matrix, either optmization or dif">
+<meta property="og:type" content="article">
+<meta property="og:title" content="from HPC to cloud computing">
+<meta property="og:url" content="http://yoursite.com/2020/02/25/from-HPC-to-cloud-computing/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="HPCAnsys HPC, OpenFoam in amazon EC2, rescale, these are some samples of current CAE applications in HPC cloud. most CAE simulations, in nut, are solving large sparse matrix, either optmization or dif">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-02-25T08:15:15.279Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="from HPC to cloud computing">
+<meta name="twitter:description" content="HPCAnsys HPC, OpenFoam in amazon EC2, rescale, these are some samples of current CAE applications in HPC cloud. most CAE simulations, in nut, are solving large sparse matrix, either optmization or dif">
 
 
 
@@ -130,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/hadoop/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/02/25/from-HPC-to-cloud-computing/"/>
 
 
 
 
 
-  <title>Tag: hadoop | Serious Autonomous Vehicles</title>
+  <title>from HPC to cloud computing | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,44 +280,165 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h1>hadoop<small>Tag</small>
-      </h1>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/25/from-HPC-to-cloud-computing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">from HPC to cloud computing</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-25T03:13:09-05:00">
+                2020-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/25/from-HPC-to-cloud-computing/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/25/from-HPC-to-cloud-computing/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h3 id="HPC"><a href="#HPC" class="headerlink" title="HPC"></a>HPC</h3><p><a href="https://www.ansys.com/products/platform/ansys-cloud" target="_blank" rel="external">Ansys HPC</a>, <a href="https://www.designworldonline.com/cae-on-the-cloud/" target="_blank" rel="external">OpenFoam in amazon EC2</a>, <a href="https://www.rescale.com" target="_blank" rel="external">rescale</a>, these are some samples of current CAE applications in HPC cloud.</p>
+<p>most CAE simulations, in nut, are solving large sparse matrix, either optmization or differential, which depends on famous linear equations solvers/libs, e.g. Petsc, libMesh, Intel Math Kernel e.t.c, inside which are implemented with message passing interface(MPI), share memory, or similar techs. </p>
+<p>why MPI is a have-to in these applications? because the problem  interested itself is so huge, which is so much computing heavily than windows office, WeChat. </p>
+<p>as engineers want the result more preciesly, the problem interested dimension will increase more. e.g. a normal static stress analysis of vehicle engine is about 6 million elements, each of which will take  6 ~ 12 vertexes, and each vertex has 6 DoF, which gives about <strong>a kinematic matrix with size about 200 million x 200 million</strong>, no single PC can store this much data, and not even to do the matrix computing then.</p>
+<p>so all these problems have to be running on super computers, or high-performance computer(HPC), which have more memory or CPU cores. beyond large memory and CPU cores, also need fast-speed network, as each CPU can do calculation really fast, 2 ~ 4 GHz, so if the system can’t feed data that fast, the CPUs are hungry, which is the third feature of HPC: Gb high-speed internal network.</p>
+<p>as the <strong>NUMA/multi-core CPU architecture</strong> is popular now, to achieve the best performance from these chips is also a hot topic. </p>
+<h3 id="cloud"><a href="#cloud" class="headerlink" title="cloud"></a>cloud</h3><p>if taken HPC as centerlized memory and CPU cores(<strong>the Cathedral</strong>), then cloud is about distributed memory and CPU cores(<strong>the Bazaar</strong>). cloud is more Internet, to connected weak-power nodes anywhere, but totally has great power. the applications in cloud must be easy to decomposed in small pieces, so each weak-power node can handle a little bit. when coming to cloud computing, I’d think about Hadoop, OpenStack, and docker.</p>
+<p>hadoop is about to analysis massive data, which is heavily used in e-commercial, social network, games. docker is the way to package small application and each of the small image can run smoothly in one node, which currently is call <strong>micro-serivce</strong>, which is exactly as the name said, MICRO. OpenStack take care virtualization layer from physical memory, cpu resources, which used about in public cloud, or virtual office env.</p>
+<h3 id="A-or-B"><a href="#A-or-B" class="headerlink" title="A or B"></a>A or B</h3><p>cloud is more about <strong>DevOps</strong>, as each piece of work is not difference from the single PC, but how to deploy and manage a single piece of work in a large cloud is the key, so develop and operations together. compare to HPC, both develop and operation needs professions.</p>
+<p>cloud computing has extended to edge computing, which is more close to normal daily life, and more bussiness-valued; while HPC guys are more like scientist, who do weather forcast, rocket science, molecular dynamics e.t.c.</p>
+<p>finally, the tech itself, cloud or HPC, has nothing to do with the bussiness world. </p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="http://cloudscaling.com/blog/cloud-computing/grid-cloud-hpc-whats-the-diff/" target="_blank" rel="external">cloudscaling: grid, hpc, cloud… what’s the difference</a></p>
+<p><a href="https://www.linkedin.com/pulse/supercomputing-vs-cloud-computing-david-stepania/" target="_blank" rel="external">linkedin: supver computer vs cloud</a></p>
 
-      <h2 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2019/12/28/configure-hadoop-in-2-nodes-cluster/" itemprop="url">
-              
-                <span itemprop="name">configure hadoop in 2-nodes cluster</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-12-28T09:39:10-05:00"
-              content="2019-12-28" >
-          12-28
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/24/mdf4-reader/" rel="next" title="mdf4 reader">
+                <i class="fa fa-chevron-left"></i> mdf4 reader
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -324,6 +446,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -344,8 +477,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -418,6 +560,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HPC"><span class="nav-number">1.</span> <span class="nav-text">HPC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cloud"><span class="nav-number">2.</span> <span class="nav-text">cloud</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-or-B"><span class="nav-number">3.</span> <span class="nav-text">A or B</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">4.</span> <span class="nav-text">refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -531,10 +689,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
@@ -552,6 +710,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/02/25/from-HPC-to-cloud-computing/';
+          this.page.identifier = '2020/02/25/from-HPC-to-cloud-computing/';
+          this.page.title = 'from HPC to cloud computing';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

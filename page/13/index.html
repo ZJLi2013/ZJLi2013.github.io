@@ -291,6 +291,137 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/scrabmle-string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/11/scrabmle-string/" itemprop="url">scrabmle string</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-11T21:07:03-04:00">
+                2018-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/11/scrabmle-string/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/11/scrabmle-string/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/scramble-string/description/" target="_blank" rel="external">scramble string</a> at leetCode 87. sol: get all possible scrambled strings of s1, then compare if s2 is in it.</p>
+<pre><code>for 1-char:   scramble(&quot;a&quot;) --&gt; &quot;a&quot; 
+    for 2-chars :  scramble(&quot;ab&quot;) --&gt; &quot;ba&quot;  
+for 3-chars:  scramble(&quot;abc&quot;) --&gt; &quot;bac&quot;, &quot;cba&quot;,  &quot;acb&quot;, &quot;cba&quot;      for 4-chars:   scramble(&quot;abcd&quot;) --&gt;  (a | bcd) + (ab | cd) +  (abc | d) 
+for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (abc |  de) + (abcd | e) 
+</code></pre><p>from the enumaration, there is always a left-substring and a right-substring, and recursive in each substring. consider the push_back order, there are two:  left-&gt;\right and right-&gt;\left at each two slibings.</p>
+<p>additional routines: how to do substring join and how to delete duplicate string from string-vector.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="function"><span class="built_in">string</span> <span class="title">join</span><span class="params">(<span class="built_in">string</span>&amp; sub1, <span class="built_in">string</span>&amp; sub2)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">string</span> res; </div><div class="line">	 res.reserve(sub1.size() + sub2.size());</div><div class="line">	 </div><div class="line">	 <span class="built_in">string</span>::iterator it;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(it = sub1.begin(); it != sub1.end(); it++)</div><div class="line">		 res.push_back(*it);</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(it = sub2.begin(); it != sub2.end(); it++)</div><div class="line">		 res.push_back(*it);</div><div class="line">	 </div><div class="line">	 <span class="keyword">return</span> res;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> <span class="comment">//<span class="doctag">TODO:</span>  keep in mind the transfer function, and how to design it  </span></div><div class="line"> <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;  scramble(<span class="built_in">string</span>&amp; s)</div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">string</span>  ls, rs; </div><div class="line">	 <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; vls, vrs, vcurs; </div><div class="line">	 </div><div class="line">	 <span class="keyword">if</span>(s.size() == <span class="number">1</span>)</div><div class="line">	 &#123;</div><div class="line">		 vcurs.push_back(s); </div><div class="line">		 <span class="keyword">return</span> vcurs; </div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;s.size(); i++)</div><div class="line">	 &#123;</div><div class="line">		 ls = s.substr(<span class="number">0</span>, i);</div><div class="line">		 rs = s.substr(i, s.size()); </div><div class="line">		 vls = scramble(ls);</div><div class="line">		 vrs = scramble(rs); 		 </div><div class="line">		 </div><div class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> m=<span class="number">0</span>; m&lt; vls.size(); m++)</div><div class="line">			 <span class="keyword">for</span>(<span class="keyword">int</span> n=<span class="number">0</span>; n &lt; vrs.size(); n++)</div><div class="line">			 &#123;				 </div><div class="line">				 vcurs.push_back(join(vls[m], vrs[n])); </div><div class="line">				 vcurs.push_back(join(vrs[n], vls[m])); 			 </div><div class="line">			 &#125;</div><div class="line">	 &#125;</div><div class="line"></div><div class="line"><span class="comment">/*how to delete duplicated string from vector&lt;string&gt; */</span> 	 </div><div class="line">	 <span class="built_in">std</span>::sort(vcurs.begin(), vcurs.end()); </div><div class="line">	 vcurs.erase( <span class="built_in">std</span>::unique(vcurs.begin(), vcurs.end()), vcurs.end()); </div><div class="line">	 <span class="keyword">return</span> vcurs; </div><div class="line"> &#125; </div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">string</span> s1 = <span class="string">"abcd"</span> ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; outs = scramble(s1); </div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;outs.size(); i++)</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; outs[i] &lt;&lt; <span class="built_in">endl</span>; </div><div class="line"></div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>How to write a completed code, meaning, always take care the boundaries correctly, no missing situations. It’s easy to start from scratch and achieve somewhere, but hard to be completed.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/how-dynamic-programming-works/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1480,143 +1611,6 @@ thpool_add_work(callback, args);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-i-o/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/31/pure-C-i-o/" itemprop="url">pure C I/O</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T19:14:28-04:00">
-                2018-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/31/pure-C-i-o/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/31/pure-C-i-o/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>this is a review from <a href="https://www.gnu.org/software/libc/manual/html_node/I_002fO-Overview.html#I_002fO-Overview" target="_blank" rel="external">GNU C programming</a></p>
-<h1 id="stream"><a href="#stream" class="headerlink" title="stream"></a>stream</h1><p>two basic mechanism for representing the connection between your program and the file: streams &amp;  file descriptors.  FD is represented as objects of type int; streams are represented as FILE * objects </p>
-<p>a stream is an abstract concept reprensenting a communication channel to a file, a device, or consider it as a sequence of characters with functions to take characters out of one end, and put characters into the other end, like a pipe. </p>
-<h1 id="file-position"><a href="#file-position" class="headerlink" title="file position"></a>file position</h1><p>an integer representing the number of bytes from the beginning of the file; each time a character read or written, the file position is incremented, namely, access to a file is sequential.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">int</span> <span class="title">ftell</span><span class="params">(FILE \* stream)</span></span>; <span class="comment">//return file position </span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fseek</span><span class="params">(FILE \*stream, <span class="keyword">long</span> <span class="keyword">int</span> offset, <span class="keyword">int</span> whence)</span></span>;</div><div class="line">/\* whence is SEEK\_SET |  SEEK\_CUR | SEEK\_END \*/</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">“write to a file” is always appended sequentially to the end of the file, regardless of the file position; but “read from a file” is used the current file position. which means multiple reading can happens simultaneously with an independent file pointer. In fact, each opening creates an independent file position pointer, even in the same program to open a file twice.  </div><div class="line"></div><div class="line">#<span class="meta"># std streams</span></div><div class="line"></div><div class="line">```c</div><div class="line"></div><div class="line">	FILE *<span class="built_in">stdin</span> ;</div><div class="line">	FILE *<span class="built_in">stdout</span>;</div><div class="line">	FILE *<span class="built_in">stderr</span>;</div><div class="line">	<span class="function">FILE *<span class="title">fopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *openMode)</span></span>;  </div><div class="line">	<span class="comment">/* create a new stream connected to the file */</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">int</span> <span class="title">fclose</span><span class="params">(FILE *stream)</span></span></div><div class="line">	<span class="comment">/* disconnected between the stream and the file, any buffered output is written and any buffered input will discarded */</span></div></pre></td></tr></table></figure>
-<h2 id="ASCII-IO"><a href="#ASCII-IO" class="headerlink" title="ASCII IO"></a>ASCII IO</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, FILE *stream)</span> </span>;</div><div class="line"><span class="comment">/* write a char array into stream. this call doesn't add a newline or terminal null character */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">fgets</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">int</span> n, FILE *stream)</span></span>;</div><div class="line"><span class="comment">/* read n number of char array from stream, default add a newline character */</span></div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> getline(<span class="keyword">char</span> **lineptr, <span class="keyword">size_t</span> *n, FILE *stream);</div><div class="line"><span class="comment">/* read a whole line from stream */</span></div></pre></td></tr></table></figure>
-<h2 id="block-IO"><a href="#block-IO" class="headerlink" title="block IO"></a>block IO</h2><p>usually block stands for either block data or text in fixed-size, instead of characters or lines</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">size_t</span> fread(<span class="keyword">void</span> *data, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> n, FILE *stream);</div><div class="line"><span class="comment">/* read #n block, each block has size from stream, and store in data */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> fwrite(<span class="keyword">const</span> <span class="keyword">void</span> *data, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> n, FILE *stream);</div><div class="line"><span class="comment">/* write #n block, each block has size from buffer data to stream */</span></div></pre></td></tr></table></figure>
-<h2 id="formatted-IO"><a href="#formatted-IO" class="headerlink" title="formatted IO"></a>formatted IO</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span></span>;  <span class="comment">//write to std output</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fprintf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, ...)</span></span>; <span class="function">write to stream</span></div><div class="line"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, ...)</span>; <span class="comment">//write to a string</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">//formatted read from stdin</span></span></div><div class="line"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">// read from stream </span></div><div class="line"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">// read from a string</span></div></pre></td></tr></table></figure>
-<h2 id="EOF"><a href="#EOF" class="headerlink" title="EOF"></a>EOF</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">feof</span><span class="params">(FILE* stream)</span> </span>; </div><div class="line"><span class="comment">/* return nonzero iff end of file indicator is set for stream */</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">ferror</span><span class="params">(FILE* stream)</span> </span>; </div><div class="line"><span class="comment">/* return nonzero iff error indicator is set for stream */</span></div></pre></td></tr></table></figure>
-<h2 id="stream-buffer"><a href="#stream-buffer" class="headerlink" title="stream buffer"></a>stream buffer</h2><p>stream and file is not communicated character-by-character, there is a buffer for I/O.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *stream)</span> </span></div><div class="line"><span class="comment">/* take any buffered output on stream to be delivered to the file */</span></div></pre></td></tr></table></figure>
-<h2 id="file-descriptor"><a href="#file-descriptor" class="headerlink" title="file descriptor"></a>file descriptor</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open64</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename,  <span class="keyword">int</span> flags)</span> </span>;</div><div class="line"><span class="comment">// allow large file mode </span></div><div class="line"><span class="keyword">size_t</span> read(<span class="keyword">int</span> fd,  <span class="keyword">void</span> *buffer, <span class="keyword">size_t</span> size) </div><div class="line"><span class="comment">//  read from fd  size bytes into buffer </span></div><div class="line"><span class="keyword">size_t</span> pread(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size, <span class="keyword">off_t</span>  offset) </div><div class="line"><span class="comment">// start reading from position “offset” </span></div><div class="line"><span class="keyword">size_t</span>  write(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size) </div><div class="line"><span class="keyword">off_t</span>  lseek(<span class="keyword">int</span> fd,  <span class="keyword">off_t</span> offset,  <span class="keyword">int</span> whence)  </div><div class="line"><span class="comment">// change the file position of fd </span></div><div class="line"><span class="function">FILE *<span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *opentype)</span> </span></div><div class="line"><span class="comment">// return a new stream for this fd</span></div></pre></td></tr></table></figure>
-<h2 id="synchronizing-I-O"><a href="#synchronizing-I-O" class="headerlink" title="synchronizing I/O"></a>synchronizing I/O</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sync</span><span class="params">(<span class="keyword">void</span>)</span> </span>;</div><div class="line"><span class="comment">// to ensure all operations finished before they return </span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fsync</span><span class="params">(<span class="keyword">int</span> fd)</span> </span>;</div><div class="line"><span class="comment">// to ensure all data associated with the fd is written to the device</span></div></pre></td></tr></table></figure>
-<h2 id="not-yet"><a href="#not-yet" class="headerlink" title="not yet"></a>not yet</h2><p>async I/O, event I/O, interrupt driven I/O, GPIO …</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1667,7 +1661,7 @@ thpool_add_work(callback, args);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">148</span>
+                <span class="site-state-item-count">149</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
