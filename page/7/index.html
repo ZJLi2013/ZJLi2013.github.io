@@ -291,6 +291,416 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/23/computing-chips-in-AV/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/06/23/computing-chips-in-AV/" itemprop="url">computing chips in AV</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-23T04:16:37-04:00">
+                2019-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/06/23/computing-chips-in-AV/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/06/23/computing-chips-in-AV/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="chips-requirements-in-vehicle"><a href="#chips-requirements-in-vehicle" class="headerlink" title="chips requirements in vehicle"></a>chips requirements in vehicle</h3><p>Bosch :<br><img src="/images/evolution_ee_architecture_bosch.jpg" alt="Bosch"></p>
+<p>BMW:<br><img src="/images/bmw_ee_ architecture.jpg" alt="BMW"></p>
+<p>the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take an example with <a href="http://www.sohu.com/a/291472706_391994" target="_blank" rel="external">Singulato iS6</a>, which has five domains: smart driving,  powertrain, chassis, smart body, smart seat. </p>
+<p>each domain need support by a domain controller unit(DCU), the core of which is a powerful computing chip, which is usually more powerful than traditional ECUs. in average, L2 requires computing power about 10TOPS , L3 needs 60TOPS, L4 needs 100TOPS.</p>
+<h3 id="computing-chips"><a href="#computing-chips" class="headerlink" title="computing chips"></a>computing chips</h3><table>
+<thead>
+<tr>
+<th>product</th>
+<th>MDC600</th>
+<th>Driver PX Pegasus</th>
+<th>EyeQ 4</th>
+<th>BlueBox</th>
+<th>R-car H3</th>
+<th>Journey2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>Huawei</td>
+<td>Nvidia</td>
+<td>Mobileye</td>
+<td>NXP</td>
+<td>Renesas</td>
+<td>Horizon</td>
+</tr>
+<tr>
+<td>TOPS</td>
+<td>352</td>
+<td>320</td>
+<td>2.5</td>
+<td></td>
+<td></td>
+<td>10</td>
+</tr>
+<tr>
+<td>main cores</td>
+<td>8 * 晟腾310</td>
+<td>16 ARM</td>
+<td>VMP</td>
+<td>LS2084A</td>
+<td>4*Arm/A57</td>
+<td>BPU2.0</td>
+</tr>
+<tr>
+<td>other cores</td>
+<td>Ascend 310</td>
+<td>2 TensorCore GPU</td>
+<td></td>
+<td>S32V234</td>
+<td>4*Arm/A53</td>
+<td>FPGA</td>
+</tr>
+<tr>
+<td>AV-level</td>
+<td>L3+</td>
+<td>L5</td>
+<td>L3</td>
+<td>L4(target)</td>
+<td>IVI</td>
+<td>L3</td>
+</tr>
+<tr>
+<td>Camera support</td>
+<td>16</td>
+<td>10</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Lidar support</td>
+<td>8</td>
+<td>6</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>function safety</td>
+<td>ASIL-D</td>
+<td>ASIL-B</td>
+<td>ASIL-D</td>
+<td>ASIL-D(target)</td>
+<td>ASIL-B</td>
+<td>ASIL-B</td>
+</tr>
+</tbody>
+</table>
+<p><img src="computing-chips-in-AV/r-car-h3-block-diagram.jpg" alt="R-car H3"></p>
+<h3 id="products-timeline"><a href="#products-timeline" class="headerlink" title="products timeline"></a>products timeline</h3><h4 id="Tier1s-Tier2s-timeline"><a href="#Tier1s-Tier2s-timeline" class="headerlink" title="Tier1s/Tier2s timeline"></a>Tier1s/Tier2s timeline</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>2018</th>
+<th>2019</th>
+<th>2020</th>
+<th>2021</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aptive</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Bosch</td>
+<td>level2</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Conti</td>
+<td>level2</td>
+<td></td>
+<td></td>
+<td>level3+</td>
+</tr>
+<tr>
+<td>Autoliv</td>
+<td>level2</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Intel</td>
+<td>level3</td>
+<td></td>
+<td>level4+</td>
+</tr>
+<tr>
+<td>Nvidia</td>
+<td>level3</td>
+<td>level4+</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Chinese-OEMs-timeline"><a href="#Chinese-OEMs-timeline" class="headerlink" title="Chinese OEMs timeline"></a>Chinese OEMs timeline</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>2019</th>
+<th>2020</th>
+<th>2021</th>
+<th>2022+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>changan</td>
+<td></td>
+<td></td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>FAW</td>
+<td></td>
+<td></td>
+<td>level4</td>
+<td></td>
+</tr>
+<tr>
+<td>GAC</td>
+<td>level3</td>
+<td></td>
+<td></td>
+<td>level5</td>
+</tr>
+<tr>
+<td>Geely</td>
+<td></td>
+<td>level3</td>
+<td></td>
+<td>level5</td>
+</tr>
+<tr>
+<td>GWM</td>
+<td></td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>SAIC</td>
+<td>level3</td>
+</tr>
+<tr>
+<td>xiaoPeng</td>
+<td></td>
+<td>level3</td>
+</tr>
+<tr>
+<td>WeiMa</td>
+<td></td>
+<td></td>
+<td>level3</td>
+</tr>
+<tr>
+<td>Nio</td>
+<td>level2</td>
+<td></td>
+<td>level4+ </td>
+</tr>
+</tbody>
+</table>
+<h4 id="global-OEMs-timeline"><a href="#global-OEMs-timeline" class="headerlink" title="global OEMs timeline"></a>global OEMs timeline</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>2018</th>
+<th>2019</th>
+<th>2020</th>
+<th>2021</th>
+<th>2022+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ford</td>
+<td>level2</td>
+<td></td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>GM</td>
+<td>level2</td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Fiat-Crysler</td>
+<td></td>
+<td></td>
+<td></td>
+<td>level3+</td>
+</tr>
+<tr>
+<td>Audi</td>
+<td>level2</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Mercedze</td>
+<td>level2</td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Toyota</td>
+<td>level2</td>
+<td></td>
+<td>level3</td>
+<td></td>
+<td>level4</td>
+</tr>
+<tr>
+<td>Honda</td>
+<td></td>
+<td></td>
+<td>level3</td>
+<td>level4</td>
+</tr>
+</tbody>
+</table>
+<h4 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h4><p><a href="http://www.cheyun.com/content/21571" target="_blank" rel="external">Matrix 1.0</a></p>
+<p><a href="http://www.cheyun.com/content/15377" target="_blank" rel="external">the five chip vendors</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/48679466" target="_blank" rel="external">from GPU to ASIC</a></p>
+<p><a href="http://www.sohu.com/a/315849896_100044558" target="_blank" rel="external">hauwei and the others</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/57378600" target="_blank" rel="external">global chips vendors</a></p>
+<p><a href="https://blog.csdn.net/weixin_42229404/article/details/84306658" target="_blank" rel="external">L4 AI chips</a></p>
+<p><a href="https://www.mobileye.com/our-technology/evolution-eyeq-chip/" target="_blank" rel="external">the evolution of EyeQ</a></p>
+<p><a href="https://www.mobileye.com/our-technology/" target="_blank" rel="external">Mobileye tech</a></p>
+<p><a href="https://autonomoustuff.com/wp-content/uploads/2019/05/nxp_bluebox_fact_sheet-whitelabel.pdf" target="_blank" rel="external">NXP bluebox</a></p>
+<p><a href="https://www.renesas.com/us/en/solutions/automotive/soc/r-car-h3.html" target="_blank" rel="external">R-car H3 soc</a></p>
+<p><a href="https://www.nxp.com/products/product-information/functional-safety-for-iso-26262-and-iec-61508:FNCTNLSFTY" target="_blank" rel="external">NXP function safety</a></p>
+<p><a href="http://www.cheyun.com/content/24350" target="_blank" rel="external">horizontal AI matrix2.0</a></p>
+<p><a href="https://community.plm.automation.siemens.com/t5/Digital-Transformations/Cars-mobility-chip-to-city-design-and-the-iPhone-4/ba-p/562778" target="_blank" rel="external">cars, mobility, chip-to-city design and the Iphone4</a></p>
+<p><a href="">2018-2019 汽车域控制器产业研究报告</a></p>
+<p><a href="http://www.sohu.com/a/283587948_607980" target="_blank" rel="external">汽车电子演化</a></p>
+<p><a href="">Global L3 self-driving vehicle market insights 2019</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/65273004" target="_blank" rel="external">self-driving car research report</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/22/Lidar-in-AV/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1786,137 +2196,6 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/01/Apollo2-0-Control-源码-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/01/Apollo2-0-Control-源码-3/" itemprop="url">Apollo2.0 Control 源码 (3)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-01T05:18:50-04:00">
-                2019-05-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/01/Apollo2-0-Control-源码-3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/01/Apollo2-0-Control-源码-3/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>the input of Apollo control module includes: chassis info, localization info, and planning info ,the output is steering angle,  acc,  throttle.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 模块入口</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> APOLLO_MAIN(APP)                                       </span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;                            </div><div class="line">    google::InitGoogleLogging(argv[<span class="number">0</span>]);                        </div><div class="line">    google::ParseCommandLineFlags(&amp;argc, &amp;argv, <span class="literal">true</span>);         </div><div class="line">    signal(SIGINT, apollo::common::apollo_app_sigint_handler); </div><div class="line">    APP apollo_app_;                                           </div><div class="line">    ros::init(argc, argv, apollo_app_.Name());                 </div><div class="line">    apollo_app_.Spin();    <span class="comment">//check previous blog(1)                                  </span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;                                                  </div><div class="line">  &#125;</div><div class="line"></div><div class="line">	</div><div class="line">Status Control::Init()&#123;</div><div class="line">	init_time_ = Clock::NowInSeconds(); </div><div class="line">	common::util::GetProtoFromFile(FLAGS_control_conf_file, &amp;control_conf_);</div><div class="line">	AdapterManager::Init(FLAGS_control_adapter_config_filename);</div><div class="line">	</div><div class="line">	common::monitor::<span class="function">MonitorLogBuffer <span class="title">buffer</span><span class="params">(&amp;monitor_logger_)</span></span>;</div><div class="line">	</div><div class="line">	controller_agent_.Init(&amp;control_conf_); </div><div class="line">	</div><div class="line">	AdapterManager::GetLocalization(); </div><div class="line">	AdapterManager::GetChassis();</div><div class="line">	AdapterManager::GetPlanning(); </div><div class="line">	AdpaterManager::GetControlCommand(); 	AdapterManager::GetMonitor();</div><div class="line">	</div><div class="line">	AdapterManager::AddMonitorCallback(&amp;Control::OnMonitor, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>conf_file:   /modules/control/conf/lincoln.pd/txt, </p>
-<p>which is derieved from </p>
-<p>/modules/calibration/data/mkz8/calibration_table.pd.txt</p>
-<p>the topics in control modules are :</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: LOCALIZATION</div><div class="line">	mode: RECEIVE_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: PLANNING_TRAJECTORY</div><div class="line">	mode: RECEIVE_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: CHASSIS</div><div class="line">	mode: RECEIVE_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: CONTROL_COMMAND</div><div class="line">	mode: PUBLISH_ONLY</div><div class="line">&#125;</div><div class="line"></div><div class="line">config &#123;</div><div class="line">	type: MONITOR</div><div class="line">	mode: DUPLEX</div><div class="line">&#125; </div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">basically, control <span class="keyword">module</span> will receive topic about /localization,  /planning,  /chassis, <span class="keyword">and</span> publish /control_command </div><div class="line"></div><div class="line"></div><div class="line">the controller_agent is an interface <span class="class"><span class="keyword">class</span>, <span class="title">so</span> <span class="title">can</span> <span class="title">support</span> <span class="title">user</span> <span class="title">defined</span> <span class="title">controller</span> <span class="title">algorithms</span>, <span class="title">which</span> <span class="title">only</span> <span class="title">need</span> <span class="title">to</span> <span class="title">configure</span> <span class="title">through</span>  `<span class="title">control_conf</span>` </span></div><div class="line"></div><div class="line">```<span class="title">c</span></div><div class="line"></div><div class="line"><span class="title">Status</span> <span class="title">ControllerAgent</span>::Init(<span class="keyword">const</span> ControlConf* control_conf)</div><div class="line">&#123;</div><div class="line">	RegisterControllers(control_conf); </div><div class="line"></div><div class="line">	InitializeConf(control_conf); </div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> &amp;controller : controller_list_)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">if</span>(controller == <span class="literal">NULL</span> || !controller-&gt;Init(control_conf_).ok())</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">return</span> Status(ErrorCode);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> ControllerAgent::RegisterControllers(<span class="keyword">const</span> ControlConf *control_conf)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">auto</span> active_controller : control_conf-&gt;active_controllers())</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">switch</span>(active_controller)&#123;</div><div class="line">			</div><div class="line">			<span class="keyword">case</span> ControlConf::MPC_CONTROLLER:</div><div class="line">				controller_factory_.Register(</div><div class="line">					ControlConf::MPC_CONTROLLER, </div><div class="line">					[]()-&gt;Controller * &#123;<span class="keyword">return</span> <span class="keyword">new</span> MPCController();&#125;);</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">			</div><div class="line">			<span class="comment">//case LAT_CONTROLLER </span></div><div class="line">			</div><div class="line">			<span class="comment">//case LON_CONTROLLER </span></div><div class="line">			</div><div class="line">		   &#125;</div><div class="line">		&#125;</div><div class="line"> 	&#125;</div><div class="line"> </div><div class="line"> </div><div class="line"> Status Control::Start()&#123;</div><div class="line"> </div><div class="line"> 	<span class="comment">//sleep for advertised channel to ready</span></div><div class="line"> 	</div><div class="line"> 	<span class="built_in">std</span>::this_thread::sleep_for(<span class="built_in">std</span>::chrono::millisecons(<span class="number">1000</span>)); 	</div><div class="line"> 	timer_ = AdapterManager::CreateTimer(ros::Duration(control_conf_.control_period()), </div><div class="line"> 	&amp;Control::OnTimer, <span class="keyword">this</span>);</div><div class="line"> 	</div><div class="line"> 	common::monitor::<span class="function">MonitorLogBuffer <span class="title">buffer</span><span class="params">(&amp;monitor_logger_)</span></span>;</div><div class="line"> 	</div><div class="line"> 	<span class="keyword">return</span> Status::OK();</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> </div><div class="line"> <span class="keyword">void</span> Control::OnTimer(<span class="keyword">const</span> ros::TimerEvent &amp;)</div><div class="line"> &#123;</div><div class="line"> 	<span class="keyword">double</span> start_timestamp = Clock::NowInSeconds();</div><div class="line"> 	</div><div class="line"> 	ControlCommand control_command ;</div><div class="line"> 	Status status = ProduceControlCommand(&amp;control_command);</div><div class="line"> 	</div><div class="line"> 	<span class="keyword">double</span> end_timestamp = Clock::NowInSeconds(); </div><div class="line"> 	</div><div class="line"> 	status.Save(control_command.mutable_header()-&gt;mutable_status());</div><div class="line"> 	</div><div class="line"> 	SendCmd(&amp;control_command);</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> </div><div class="line">  Status Control::ProduceControlCommand(ControlCommand *control_command)</div><div class="line">  &#123;</div><div class="line">  	Status status = CheckInput();</div><div class="line">  	Status status_ts = CheckTimestamp();</div><div class="line"> </div><div class="line"> 	Status status_compute = controller_agent_.ComputeControlCommand(</div><div class="line"> 		&amp;localization_, &amp;chassis_, &amp;trajectory_, control_command);</div><div class="line"> 	</div><div class="line"> 	<span class="keyword">return</span> status;</div><div class="line">  &#125;</div><div class="line"> 		</div><div class="line"> </div><div class="line"> </div><div class="line"> Status ControllerAgent::ComputeControlCommand(</div><div class="line"> 	<span class="keyword">const</span> localization::LocalizationEstimate *localization,</div><div class="line"> 	cosnt canbus::Chassis *chassis, <span class="keyword">const</span> planning::ADCTrajectory *trajectory,</div><div class="line"> 	control::ControlCommand *cmd)&#123;</div><div class="line"> 	<span class="keyword">for</span>(<span class="keyword">auto</span> &amp;controller : controller_list_)</div><div class="line"> 	&#123;</div><div class="line"> 		controller-&gt;ComputeControlCommand(localization, chassis, trajectory, cmd) ;</div><div class="line"> 	&#125;</div><div class="line"> 	<span class="keyword">return</span> status::OK();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>ControllerAgent::ComputeCmd() is the interface, the real control cmd will be computed inside each specified controller modes. there are few controller modes: MPC, Lattice e.g in Apollo.</p>
-<p>in next few days continue work on localization, prediction, and decision modules in Apollo 2.0</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1967,7 +2246,7 @@ generate predicted trajectories for obstacles. e.g. lane sequence(obstacle moves
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">147</span>
+                <span class="site-state-item-count">148</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

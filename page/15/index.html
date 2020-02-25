@@ -291,6 +291,152 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/14/muduo1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/14/muduo1/" itemprop="url">moduo 1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-14T23:35:28-04:00">
+                2018-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/06/14/muduo1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/06/14/muduo1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://github.com/chenshuo/muduo" target="_blank" rel="external">Moduo: A C++ non-blocking network library for multi-threaded server in Linux</a>. </p>
+<h2 id="C-11-features"><a href="#C-11-features" class="headerlink" title="C++ 11 features"></a>C++ 11 features</h2><h3 id="a-functional-bind"><a href="#a-functional-bind" class="headerlink" title="a.    functional, bind"></a>a.    functional, bind</h3><p>in C++11, function declartion can be:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">	return-type func(args)</div><div class="line">//or</div><div class="line">	auto func(args) -&gt; return_type</div><div class="line"></div><div class="line">//	the good part of &quot;-&gt;&quot; is to use &quot;decltype&quot; to decide the return type from future.</div><div class="line"></div><div class="line">	std::function&lt;return_type(arg1_type, arg2_type..)&gt; ;</div><div class="line">	[](type1, type2..)&#123;&#125; ; //lambda func, anonymous func</div><div class="line">	std::forward</div></pre></td></tr></table></figure>
+<p>std::bind() is used to assign existed variables to func parameters during compile-time, and unassigned parameters stand as placeholders, which then replace by real parameters during running-time, and return a new func. bind() can be used to bind static func, global func, class member func.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">	   std::bind(global_func, 1.0, _2) ; </div><div class="line">	   std::bind(&amp;class:memberfunc, classPointer[this], _1); </div><div class="line">``` 		</div><div class="line">		</div><div class="line"></div><div class="line">### b.  multi-threads synchronized primitives </div><div class="line"></div><div class="line">Q: what is condition variable ? </div><div class="line">	</div><div class="line">A: used to block one or more threads, till been notified by another thread or overtime been wakeup. But if all threads are waiting, that&apos;s a problem, so at least for one thread, the condition variable should be true.</div></pre></td></tr></table></figure>
+<pre><code>threadA.wait(condition_variable);
+while(;;)
+{
+    threadB.do();    
+}
+threadB.notify();
+threadA.do();
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">Q: what is mutex?</div><div class="line">	</div><div class="line">A: it works like a lock, to block any other thread to access special part of memory, at any time, only one thread can own the mutex. in reality, to define mutexLock class will manage lock/unlock automatically due to the constructor/destructor of the object. </div><div class="line"></div><div class="line">### c.  rvalue reference, universal reference, std::forward </div><div class="line">	</div><div class="line">Q: why need right-value reference ?</div><div class="line">	</div><div class="line">A: to use rvalue like lvalue, save object/variable copying, the detail is about move constructor. universal reference, means either rvalue reference or lvalue reference,  is to declare a variable /parameter with type T&amp;&amp; for some deduced type T</div><div class="line"></div><div class="line">### d.  functional template, variadic arguments </div><div class="line">	</div><div class="line">basically, it&apos;s to support any type, any number of parameters in function template. </div><div class="line">	</div><div class="line"></div><div class="line">``` </div><div class="line">		template&lt;typename… Args&gt;  class  tuple&#123;&#125; //a template class</div><div class="line">		template&lt;typename T, typename… Args&gt; void func()&#123;&#125; 	</div><div class="line">	/* Args :: a template type parameter pack, a list of parameters</div><div class="line">	   T ::  a normal template type parameter</div><div class="line">  	*/ </div><div class="line"></div><div class="line">		func(T, args...) </div><div class="line">		/* (...) at right of func parameters is meta operator </div><div class="line">		used to unpack &quot;args&quot; into separate arguments  */</div></pre></td></tr></table></figure>
+<h2 id="a-simple-thread-thread-pool-lib"><a href="#a-simple-thread-thread-pool-lib" class="headerlink" title="a simple thread / thread pool lib"></a>a simple thread / thread pool lib</h2><p>take a look at: <a href="https://github.com/mtrebi/thread-pool" target="_blank" rel="external">thread-pool</a> </p>
+<p>basically, a task queue to store all todo tasks; a thread pool, to store the worker threads, each of which takes one task from the task queue continuously till the queue empty. </p>
+<p>racing condition happens when two threads try to take the same task simultaneously, so mutex. and all operators requrieing thread-safe should use mutex, e.g. enqueue/dequeue task<br>then callback functors, how each worker thread deal with the task at hand? to design function template with variadic arguments.</p>
+<h2 id="a-simple-Tcp-network-lib"><a href="#a-simple-Tcp-network-lib" class="headerlink" title="a simple Tcp network lib"></a>a simple Tcp network lib</h2><p>take a look at: <a href="https://github.com/kashimAstro/SimpleNetwork" target="_blank" rel="external">simpleNetwork</a></p>
+<p>in server:  socket() -&gt; bind() -&gt; listen() -&gt; accept() –&gt; send()/write()</p>
+<p>in client: socket() -&gt; connect() -&gt; recv()/send()</p>
+<p>a basic idea is that each connection, the server will create a new thread to handle it. But it consume server quickly. </p>
+<h2 id="I-O-nonblocking-event-driven-amp-multiplex"><a href="#I-O-nonblocking-event-driven-amp-multiplex" class="headerlink" title="I/O nonblocking/event-driven &amp;  multiplex"></a>I/O nonblocking/event-driven &amp;  multiplex</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></div><div class="line"><span class="keyword">int</span> fd; <span class="comment">//file descriptor, non-negative</span></div><div class="line"><span class="keyword">short</span> events; <span class="comment">//events to watch, set by user</span></div><div class="line"><span class="keyword">short</span> revents; <span class="comment">//returned events, return from system kernel</span></div><div class="line">  &#125;;</div><div class="line"></div><div class="line">POLLIN | POLLPRI ; <span class="comment">//event read</span></div><div class="line">POLLOUT | POLLWRBAND ; <span class="comment">//event write</span></div><div class="line">POLLER ; <span class="comment">//event error</span></div><div class="line">POLLHUP ; <span class="comment">//event hang up</span></div></pre></td></tr></table></figure>
+<p>the basic idea of multplex(Linux APIs: poll(), epoll()) is to use one single thread to listen many connections/socket/fd, once any socket is ready for I/O, the thread will execute the write/read callback. </p>
+<p>epoll() on success, return the number of revents or 0; on error return -1</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> &#123;</span></div><div class="line">	__u32 events ;</div><div class="line">	<span class="keyword">union</span>&#123;</div><div class="line">		<span class="keyword">void</span>* ptr,  <span class="comment">//if need to store a pointer </span></div><div class="line">		<span class="keyword">int</span> fd,     <span class="comment">// if need to store socket fd </span></div><div class="line">		__u32 u32, <span class="comment">// to store general 32 bit number </span></div><div class="line">		__u64  u64  <span class="comment">// to store general 64 bit number</span></div><div class="line">	&#125; data;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/05/coding-is-the-system-engineering/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1324,7 +1470,7 @@ ResNet
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">147</span>
+                <span class="site-state-item-count">148</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
