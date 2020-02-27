@@ -291,6 +291,164 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/12/play-with-Docker/" itemprop="url">play with Docker</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-12T11:17:46-04:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/12/play-with-Docker/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/12/play-with-Docker/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Docker-networking"><a href="#Docker-networking" class="headerlink" title="Docker networking"></a>Docker networking</h2><ul>
+<li><p>bridge: the default network driver, only in standalone containers; best when have multiple containers to communicate on the same host machine.</p>
+</li>
+<li><p>host: for standalone containers, the Docker host use the host machine’s networking directly; best when need no isolated from the host machine.</p>
+</li>
+<li><p>overlay: connect multi Docker containers, enable swarm services to communicate with each other, no OS-level routing; best when need containers running on different host machines to communicate.</p>
+</li>
+<li><p>none: disable all networking</p>
+</li>
+</ul>
+<p>the network base is open source project <a href="https://github.com/docker/libnetwork" target="_blank" rel="external">libnetwork</a></p>
+<p>containers can communicate through hostname, or through DNS(the now Docker engine has default built-in DNS server), but in early days, can use external dns, e.g. <a href="http://docs.blowb.org/index.html" target="_blank" rel="external">Blowb</a></p>
+<p>to host docker images, either pull to Docker Hub, or to create a private cloud by <a href="https://doc.owncloud.org/server/10.2/" target="_blank" rel="external">ownCloud</a>, or <code>docker save/export</code>  tools:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker save -o /path/to/save/file  image | gzip</div><div class="line">scp *.tar.gz  remote_user@remote_hostname</div><div class="line">docker load *.tar.gz</div></pre></td></tr></table></figure>
+<h2 id="running-GUI-apps-in-Docker"><a href="#running-GUI-apps-in-Docker" class="headerlink" title="running GUI apps in Docker"></a>running GUI apps in Docker</h2><p>there is a benchmark GUI/openGL test in Linux <code>glxgears</code>. to test the host machine support ssh or container based apps, we can first do the following test: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install mesa-utils</div><div class="line">glxinfo </div><div class="line">glxgears</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">Docker by default is bash/text based, but `nvidia-docker` is a gui-supported Docker engine, which requires Nvidia OpenGL drivers and Nvidia Gpus of course. since the gpu hardware version and the docker engine version, please check the compatability at first. </div><div class="line"><span class="meta"></span></div><div class="line"></div><div class="line">## remote hosted apps</div><div class="line">	</div><div class="line">* configure master and worker nodes communication by setting IP address in the same domain, and setting the master node IP address as the gateway IP address for all worker nodes, basically the master node will work as the swticher.</div><div class="line"></div><div class="line">* install xserver-common,  xserver-utils, as Ubuntu by deafult doesn't have X-server. </div><div class="line"></div><div class="line">```shell</div><div class="line"></div><div class="line">master:~/    ssh -X user@worker</div><div class="line">worker:~/    DISPLAY=:0</div><div class="line">worker:~/	   ./gui_app</div></pre></td></tr></table></figure>
+<ul>
+<li>for docker containers, there is also <code>authority</code> property need take care. </li>
+</ul>
+<h2 id="Dockfile"><a href="#Dockfile" class="headerlink" title="Dockfile"></a>Dockfile</h2><p>when the Docker container starts, usually we want to auto start a shell process, so by <code>CMD</code> or <code>ENTRYPOINT</code> defined in the Dockfile. </p>
+<p>for the base images, e.g.  Ubuntu, busybox, are used as the base for upper applications, usually will use <code>CMD</code> at the end of Dockerfile; but if the Docker container is specially for a certain application, it’s usually using <code>ENTRYPOINT</code>.</p>
+<p>the last line of Ubuntu 16.04 Dockerfile:</p>
+<pre><code>CMD &apos;/bin/bash&apos;
+</code></pre><p>usually in one Dockerfile, there is only one <code>CMD</code> or <code>ENTRYPOINT</code>, and it’s better written in exec format:</p>
+<pre><code>CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
+
+ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
+</code></pre><p>since in shell format: </p>
+<pre><code>CMD exectuable, param1, param2 
+</code></pre><p>Docker will trigger <code>/bin/sh</code> first by default, if not define a shell. and this shell is always the first process in this Docker container, which sometimes is not what we expected.</p>
+<p>when using both <code>CMD</code> and <code>ENTRYPOINT</code> in one Dockfile, the output will looks like append/pipe <code>CMD</code> command after <code>ENTRYPOINT</code> command.  </p>
+<p>a sample of Dockerfile: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">FROM &lt;image&gt;:[&lt;tag&gt;] [AS &lt;name&gt;]</div><div class="line">ADD [--chown=&lt;user&gt;:&lt;group&gt;] &lt;src&gt; ... &lt;dest&gt;</div><div class="line">ADD [" ", ... " "]</div><div class="line">COPY &lt;src&gt; ... &lt;dest&gt;</div><div class="line">RUN &lt;command&gt;</div><div class="line">VOLUME /mount/name</div><div class="line">CMD ["executable", "param1", "param2"]</div><div class="line">CMD command par1 par2</div></pre></td></tr></table></figure>
+<h3 id="from-docker-image-to-dockerfile"><a href="#from-docker-image-to-dockerfile" class="headerlink" title="from docker image to dockerfile"></a>from docker image to dockerfile</h3><p>we can easily <code>pull</code> images from hub, but when we try to build some images directly, there is also way to get Dockfile from existing docker image: <a href="https://stackoverflow.com/questions/19104847/how-to-generate-a-dockerfile-from-an-image" target="_blank" rel="external">dfimage</a> </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo docker pull chenzj/dfimage</div></pre></td></tr></table></figure>
+<h3 id="mount-host-volume-to-container"><a href="#mount-host-volume-to-container" class="headerlink" title="mount host volume to container"></a>mount host volume to container</h3><p>either we can define in Dockerfile by <code>VOLUME</code>, which is create a volume name in the base image, or during runtime, <code>docker run -v /host/volume/path:/container/volume/path</code>, to bind a host volume to current container.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/09/where-are-you-in-next-5-years-8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2071,133 +2229,6 @@ flash
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/03/Apollo-2-0-Localization-源码/" itemprop="url">Apollo 2.0 Localization 源码</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-03T02:36:43-04:00">
-                2019-05-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/03/Apollo-2-0-Localization-源码/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/03/Apollo-2-0-Localization-源码/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>there are two localization methods: RTK and multi-sensor fusion(MSF).  RTK using GPS and IMU inputs, MSF using GPS, IMU and Lidar sensor and HD map as inputs. the output is the localization estimated object instance.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Status Localization::Start()</div><div class="line">&#123;</div><div class="line">	localization_ = localization_factory_.CreateObject(cofig_.type());</div><div class="line">	localization_-&gt;Start();</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status RTKLocalization::Start()&#123;</div><div class="line">	AdapterManager::Init(FLAGS_rtk_adapter_config_file);</div><div class="line">	timer_ = AdapterManager::CreateTimer(ros::Duration(duration), &amp;RTKLocalization::OnTimer, <span class="keyword">this</span>); </div><div class="line">	AdapterManager::GetGps();</div><div class="line">	AdapterManager::GetImu();	</div><div class="line">	tf2_broadcaster_ = <span class="keyword">new</span> tf2_ros::TransformBroadcaster() ;</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::OnTimer(<span class="keyword">const</span> ros::TimerEvent &amp;event)</div><div class="line">&#123;</div><div class="line">	AdapterManager::Observe();</div><div class="line">	PublishLocalization(); </div><div class="line">	RunWatchDog();	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PublishLocalization()&#123;</div><div class="line">	LocalizationEstimate localization ;</div><div class="line">	PrepareLocalizationMsg(&amp;localization);</div><div class="line">	AdapterManager::PublishLocalization(localization);</div><div class="line">	PublishPoseBroadcastTF(localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PrepareLocalizationMsg(LocalizationEstimate *localization)&#123;</div><div class="line">	<span class="keyword">const</span> <span class="keyword">auto</span> &amp;gps_msg = AdapterManager::GetGps()-&gt;GetLatestObserved();</div><div class="line">	Imu imu_msg = AdapterManager::GetImu()-&gt;GetLatestObserved();</div><div class="line">	ComposeLocalizationMsg(gps_msg, imu_msg, localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::ComposeLocalizationMsg(<span class="keyword">const</span> localization::Gps&amp; gps_msg, <span class="keyword">const</span> localization::Imu &amp;img_msg, LocalizationEstimate* localization)</div><div class="line">&#123;</div><div class="line">	<span class="comment">// add header </span></div><div class="line">	<span class="comment">// set measurement time </span></div><div class="line">	<span class="comment">// combine gps and imu </span></div><div class="line">	</div><div class="line">	<span class="keyword">auto</span> mutable_pose = localization-&gt;mutable_pose(); </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(gps_msg.has_localization())&#123;</div><div class="line">		<span class="keyword">const</span> <span class="keyword">auto</span> &amp;pose = gps_msg.localization();</div><div class="line">		<span class="keyword">if</span>(pose.has_position())&#123; <span class="comment">// update mutable_pose &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_orientation()) &#123; <span class="comment">//update mutable orientation &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_linear_velocity())&#123;&#125;;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(imu.has_linear_acceleration())&#123;	<span class="comment">//update mutable_pose acc &#125;;</span></div><div class="line">	<span class="keyword">if</span>(imu.has_angular_velocity())&#123;&#125;;</div><div class="line">	<span class="keyword">if</span>(imu.has_euler_angles())&#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h2><p><a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf" target="_blank" rel="external">vehicle localization based on multi-sensor fusion</a></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MSFLocalization</span> &#123;</span>	</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">InitParams</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnPointCloud</span><span class="params">(<span class="keyword">const</span> sensor_msgs::PointCloud2 &amp;message)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnRawImu</span><span class="params">(<span class="keyword">const</span> drivers::gnss::Imu &amp;imu_msg)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnGnssRtkObs</span><span class="params">(<span class="keyword">const</span> EpochObservation &amp;raw_obs_msg)</span></span>;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">PublishPoseBroadcastTF</span><span class="params">(<span class="keyword">const</span> LocalizationEstimate&amp; localization)</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status MSFLocalization::Start()</div><div class="line">&#123;</div><div class="line">	AdapterManager::Init(FLAGS_msf_adapter_config_file);</div><div class="line">	Status &amp;&amp;status = Init();</div><div class="line">	</div><div class="line">	AdapterManager::GetRawImu();</div><div class="line">	AdapterManager::ADDRawImuCallback(&amp;MSFLocalization::OnRawImu, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	AdapterManager::GetPointCloud();</div><div class="line">	AdapterManager::AddPointCloudCallback(&amp;MSFLocalization::OnPointCloud, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>there is addtional <a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf/local_map" target="_blank" rel="external"><code>local_map</code></a> module, which will be review later.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2248,7 +2279,7 @@ flash
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">149</span>
+                <span class="site-state-item-count">150</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
