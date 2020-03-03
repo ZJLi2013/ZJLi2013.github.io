@@ -291,6 +291,177 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/boto3-streamingBody-to-BytesIO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="url">boto3 streamingBody to BytesIO</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-03T03:58:34-05:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/03/boto3-streamingBody-to-BytesIO/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="boto3-streamingBody-to-BytesIO"><a href="#boto3-streamingBody-to-BytesIO" class="headerlink" title="boto3 streamingBody to BytesIO"></a>boto3 streamingBody to BytesIO</h1><h3 id="boto3-class-into"><a href="#boto3-class-into" class="headerlink" title="boto3 class into"></a>boto3 class into</h3><ul>
+<li>A <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/session.html" target="_blank" rel="external">Session</a> is about a particular configuration. a custom session: </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">session = boto3.session.Session()</div><div class="line">ads = session.client(<span class="string">'ads'</span>)</div><div class="line">ads_s3 = session.resource(<span class="string">'s3'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/resources.html" target="_blank" rel="external">Resources</a> is an object-oriented interface to AWS. Every resource instance has a number of attributes and methods. These can conceptually be split up into identifiers, attributes, actions, references, sub-resources, and collections.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(bucket_name=<span class="string">"boto3"</span>, key=<span class="string">"test.mdf"</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html" target="_blank" rel="external">Client</a> includes common APIs:</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">copy_object()</div><div class="line">delete_object()</div><div class="line">create_bucket()</div><div class="line">delete_bucket()</div><div class="line">delete_objects()</div><div class="line">download_file()</div><div class="line">download_fileobj()</div><div class="line">get_bucket_location()</div><div class="line">get_bucket_policy()</div><div class="line">get_object()</div><div class="line">head_bucket()</div><div class="line">head_object()</div><div class="line">list_buckets()</div><div class="line">list_objects()</div><div class="line">put_bucket_policy()</div><div class="line">put_object()</div><div class="line">upload_file()</div><div class="line">upload_fileobj()</div></pre></td></tr></table></figure>
+<ul>
+<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#service-resource" target="_blank" rel="external">Service Resource</a> have bucket and object subresources, as well as related actions.</p>
+</li>
+<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#bucket" target="_blank" rel="external">Bucket</a>, is an abstract resource representing a S3 bucket.</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">b = ads_s3.Bucket(<span class="string">'name'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#object" target="_blank" rel="external">Object</a>, is an abstract resource representing a S3 object.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(<span class="string">'bucket_name'</span>, <span class="string">'key'</span>)</div></pre></td></tr></table></figure>
+<h3 id="read-s3-object-amp-pipeline-to-mdfreader"><a href="#read-s3-object-amp-pipeline-to-mdfreader" class="headerlink" title="read s3 object &amp; pipeline to mdfreader"></a>read s3 object &amp; pipeline to mdfreader</h3><p>there are a few try-and-outs. first is to streaming s3 object as BufferedReader, which give a file-like object, and can read(), but <code>BufferedReader</code> looks more like a IO streaming than a file, which can’t seek. </p>
+<h4 id="botocore-response-StreamingBody-as-BufferedReader"><a href="#botocore-response-StreamingBody-as-BufferedReader" class="headerlink" title="botocore.response.StreamingBody as BufferedReader"></a>botocore.response.StreamingBody as BufferedReader</h4><p>the following discussion is really really helpful:<br><a href="https://github.com/boto/boto3/issues/426" target="_blank" rel="external">boto3 issue #426:  how to use botocore.response.StreamingBody as stdin PIPE</a></p>
+<p>at the code of the StreamingBody and it seems to me that is is really a wrapper of a class inheriting from io.IOBase) but only the read method from the raw stream is exposed, so not really a file-like object. it would make a lot of sense to expose the io.IOBase interface in the StreamingBody as we could wrapped S3 objects into a io.BufferedReader or a io.TextIOWrapper.read() get a binary string .  the actual file-like object is found in the ._raw_stream attribute of the StreamingBody class</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> io</div><div class="line">buff_reader = io.BufferedReader(body._raw_stream)</div><div class="line">print(buff_reader)</div><div class="line"><span class="comment"># &lt;_io.BufferedReader&gt;</span></div></pre></td></tr></table></figure>
+<p>wheras this <code>buff_reader</code> is not seekable, which makes <a href="">mdfreader</a> failure, due to its file operate needs  <code>seek()</code> method.</p>
+<p><a href="https://stackoverflow.com/questions/39324151/stream-a-non-seekable-file-like-object-to-multiple-sinks" target="_blank" rel="external">steam a non-seekable file-like object</a></p>
+<h4 id="stdio-stream-to-seekable-file-like-object"><a href="#stdio-stream-to-seekable-file-like-object" class="headerlink" title="stdio stream to seekable file-like object"></a>stdio stream to seekable file-like object</h4><p>so I am thinking to transfer the <code>BufferedReader</code> to a seekable file-like object. first, need to understand why it is not seekable. <code>BufferedRandom</code> is seekable, whereas BufferedReader and BufferedWriter <a href="https://github.com/python/cpython/pull/11216" target="_blank" rel="external">are not</a>. <a href="https://grokbase.com/t/python/python-dev/102j1y1dwn/buffered-streams-design-raw-io-gotchas" target="_blank" rel="external">Buffered streams design:</a> BufferedRandom is only suitable when the file is open for reading <strong>and</strong> writing. The ‘rb’ and ‘wb’ modes should return BufferedReader and BufferedWriter, respectively.</p>
+<p>is it possbile to first  read() the content of BufferedReader to some memory, than transfer it to BufferedRandom? which gives me the try to BufferedReader.read(), which basicaly read all the binaries and store it in-memoryA, <strong>then good news:</strong> in-memory binary streams are also aviable as <a href="https://docs.python.org/3/library/io.html" target="_blank" rel="external">Bytesio</a> objects: </p>
+<pre><code class="python">f = io.BytesIO(<span class="string">b"some in-memory binary data"</span>)
+</code></pre>
+<p>what if assign <code>BytesIO</code> to this in-memoryA. which really gives me a seekable object:</p>
+<pre><code class="python">fid_ = io.BufferedReader(mf4_[<span class="string">'Body'</span>]._raw_stream) ;
+read_in_memory = fid_.read()
+bio_ = io.BytesIO(read_in_memory);
+</code></pre>
+<p>then <code>BytesIO</code> object pointer is much more file-like, to do read() and seek(). </p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html" target="_blank" rel="external">boto3 doc</a></p>
+<p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#examples" target="_blank" rel="external">boto3 s3 api samples</a></p>
+<p><a href="https://github.com/ERS-HCL/MDF4Wrapper" target="_blank" rel="external">mdf4wrapper</a></p>
+<p><a href="https://bytes.com/topic/c/answers/649819-ifstream-file" target="_blank" rel="external">iftream to FILE</a></p>
+<p><a href="https://stackoverflow.com/questions/20935404/what-is-the-concept-behind-file-pointer-or-the-stream-pointer" target="_blank" rel="external">what is the concept behind file pointer or stream pointer</a></p>
+<p><a href="https://stackoverflow.com/questions/10199226/using-io-bufferedreader-on-a-stream-obtained-with-open" target="_blank" rel="external">using io.BufferedReader on a stream obtained with open</a></p>
+<p><a href="https://www.devdungeon.com/content/working-binary-data-python" target="_blank" rel="external">working with binary data in python</a></p>
+<p><a href="https://stackoverflow.com/questions/1035340/reading-binary-file-and-looping-over-each-byte" target="_blank" rel="external">read binary file and loop over each byte</a></p>
+<p><a href="https://github.com/RaRe-Technologies/smart_open" target="_blank" rel="external">smart_open project</a></p>
+<p><a href="https://www.python.org/dev/peps/pep-3116/" target="_blank" rel="external">PEP 3116 – New I/O</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/27/from-HPC-to-cloud-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -678,7 +849,7 @@
       
         
           
-            <h2 id="mdf4-file-in-general"><a href="#mdf4-file-in-general" class="headerlink" title="mdf4 file in general"></a>mdf4 file in general</h2><p><img src="https://www.asam.net/index.php?eID=dumpFile&amp;t=p&amp;p=2964&amp;token=90de1236917c0225cbf3bd53101a81296613d367" alt="image"></p>
+            <h2 id="read-mdf4-in-general"><a href="#read-mdf4-in-general" class="headerlink" title="read mdf4 in general"></a>read mdf4 in general</h2><p><img src="https://www.asam.net/index.php?eID=dumpFile&amp;t=p&amp;p=2964&amp;token=90de1236917c0225cbf3bd53101a81296613d367" alt="image"></p>
 <p>the most important “branch” in the tree is the list of data groups (DG block).</p>
 <p><strong>record</strong> used to store the plain measurement data, the records can either be contianed in one single “data” (DT) block, or distributed over several DT blocks using a “data list” block . </p>
 <p>Each DG block has points to the data block, as well as necessary information to understand and decode the data.</p>
@@ -687,7 +858,8 @@
 <p><img src="https://www.asam.net/index.php?eID=dumpFile&amp;t=f&amp;f=195&amp;token=cb0391ba3e0fb5ee7fb91c9f4b8307e45e1e8f08" alt="image"></p>
 <p>the record layout of ID 1, will be described by one channel group, the record layout of ID 2 by another channel group. Both channel groups must be children of the DT block’s parent data group.</p>
 <h4 id="channels"><a href="#channels" class="headerlink" title="channels"></a>channels</h4><p>Each channel describes a recorded signal and how its values are encoded in the records for the channel’s parent CG block.</p>
-<h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><ul>
+<h2 id="vector-APIs"><a href="#vector-APIs" class="headerlink" title="vector APIs"></a>vector APIs</h2><p>which is licensed by <a href="https://www.vector.com/int/en/products/application-areas/ecu-calibration/measurement/mdf/" target="_blank" rel="external">vector</a></p>
+<ul>
 <li>GetFileManager()</li>
 <li>OpenFile()</li>
 <li>GetChannelByName()</li>
@@ -726,12 +898,46 @@
 <li>ImportFile()</li>
 <li>ReleaseFile()</li>
 </ul>
-<h2 id="asammdf"><a href="#asammdf" class="headerlink" title="asammdf"></a><a href="https://asammdf.readthedocs.io/en/master/api.html#mdf4" target="_blank" rel="external">asammdf</a></h2><p>which is open source LSP licensed. </p>
-<h2 id="mdfreader"><a href="#mdfreader" class="headerlink" title="mdfreader"></a><a href="https://github.com/ratal/mdfreader" target="_blank" rel="external">mdfreader</a></h2><p>which is open source LSP licensed.</p>
-<p>if need integration in in-house tool, I’d take a deeper view about these two readers.</p>
-<h2 id="a-bit"><a href="#a-bit" class="headerlink" title="a bit"></a>a bit</h2><p>a few years ago I was in CAE field, dealing with different kind of CAE format, e.g .nas. during that time, there is a similar need to have a file transfer from vendor specified format to python format e.t.c. </p>
+<p>I am not reading this C++ code. </p>
+<h2 id="asammdf"><a href="#asammdf" class="headerlink" title="asammdf"></a><a href="https://github.com/danielhrisca/asammdf" target="_blank" rel="external">asammdf</a></h2><h3 id="MDF-class"><a href="#MDF-class" class="headerlink" title="MDF class"></a>MDF class</h3><ul>
+<li><strong>init</strong>(name=None, ): name can be either <code>string</code> or <code>BytesIO</code></li>
+<li>filter(channels, ) </li>
+<li>get_group(index, channels=None, )</li>
+<li>iter_channels(,)</li>
+<li>iter_get(channel_name=None,group_id=None, group_index=None, )</li>
+<li>iter_groups()</li>
+<li>to_dataframe(), generate pandas DataFrame</li>
+<li>whereis(channel_name)</li>
+</ul>
+<h3 id="MDF4-class"><a href="#MDF4-class" class="headerlink" title="MDF4 class"></a>MDF4 class</h3><p>includes <code>data_group</code>, <code>channel_group</code>, <code>channels</code>, <code>data_block</code>, <code>data_location</code>, <code>record_size</code> e.t.c</p>
+<ul>
+<li>get(channel_name=None, group=None, )</li>
+<li>get_can_signal()</li>
+<li>get_channel_name(group, index)</li>
+<li>get_channel_unit(channel_name=Nont, group=None, )</li>
+<li>get_master(index, data=None, ), return the master channel samples for given group</li>
+<li>info() </li>
+</ul>
+<p>the following are sub data blocks of MDF4: </p>
+<ul>
+<li>Channel class </li>
+<li>ChannelGroup class</li>
+<li>DataGroup class </li>
+<li>DataList class</li>
+<li>DataBlock class</li>
+<li>HeaderBlock class</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mdf = MDF4(<span class="string">"basic.mf4"</span>)</div><div class="line">db_info = mdf.info()</div></pre></td></tr></table></figure>
+<p>all <code>group</code>, <code>channel</code> data is packages as <code>python dict</code>. the most exciting part, as asam-mdf can support <code>BytesIO</code>, which gives the way to read mdf files stores in Amazon S3:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">    mf4_ = obj_api.get_object("bucket_name", "sample.mf4")</div><div class="line">    fid_ = io.BufferedReader(mf4_['Body']._raw_stream) ;</div><div class="line">    read_in_memory = fid_.read()</div><div class="line">    bio_ = io.BytesIO(read_in_memory);</div><div class="line">    if bio_.seekable(): </div><div class="line">        mdf_ = MDF(bio_)</div><div class="line">        mdf_.info()</div><div class="line">``` </div><div class="line"></div><div class="line">### installation of asam-mdf</div><div class="line"></div><div class="line">* [install pandas](https://www.pypandas.cn/en/docs/installation.html#installing-using-your-linux-distribution’s-package-manager)</div><div class="line"></div><div class="line">`python3 -m pip install pandas` (not working)</div><div class="line"></div><div class="line">`sudo apt-get install python3-pandas` </div><div class="line"></div><div class="line">* [install canmatrix](https://canmatrix.readthedocs.io/en/latest/installation.html)</div><div class="line"></div><div class="line">`sudo python3 setup.py install` </div><div class="line"></div><div class="line">* install pathlib2 </div><div class="line"></div><div class="line">`sudo -H pip3 install pathlib2 `</div><div class="line"></div><div class="line">if `WARNING: pip is being invoked by an old script wrapper. This will fail in a future version of pip.`</div><div class="line">using: `sudo -H python3 -m pip install（包名）`</div><div class="line"></div><div class="line"></div><div class="line">## [mdfreader](https://github.com/ratal/mdfreader)</div><div class="line"></div><div class="line">which is open source LSP licensed. and the APIs are clear about getChannels, and read data from each channel, which was my first choice. but later found out it's difficult to support streamIO input, which was the best format I can reached from Amazon S3 pipeline.</div><div class="line"></div><div class="line"></div><div class="line">##### MdfInfo</div><div class="line"></div><div class="line">* read_info()</div><div class="line">* list_channels()</div><div class="line"></div><div class="line">##### Mdf</div><div class="line"></div><div class="line">* read()</div><div class="line">* filter_channel_names()</div><div class="line">* get_channel_data()</div><div class="line">* get_channel_unit()</div><div class="line">* keep_channels()</div><div class="line"></div><div class="line">```python</div><div class="line">import mdfreader</div><div class="line">filename="basic.mf4"</div><div class="line">file_info=mdfreader.MdfInfo()</div><div class="line">channels = file_info.list_channels(filename)</div><div class="line">print(channels)</div><div class="line">file_pointer = mdfreader.Mdf(filename)</div><div class="line">keys_ = file_pointer.keys()</div><div class="line">for k_ in keys_:</div><div class="line">    chan1 = file_pointer.get_channel_data(k_)</div><div class="line">    print(chan1)</div></pre></td></tr></table></figure>
+<h2 id="python-necessary"><a href="#python-necessary" class="headerlink" title="python necessary"></a>python necessary</h2><h3 id="buffered-io"><a href="#buffered-io" class="headerlink" title="buffered io"></a>buffered io</h3><p><a href="https://docs.python.org/zh-cn/3/library/io.html" target="_blank" rel="external">binary I/O</a>, usually used in following: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">f = open(<span class="string">"mdf_file"</span>, <span class="string">"rb"</span>)</div><div class="line">type(f)</div><div class="line">&lt;type <span class="string">'_io.BufferedReader'</span>&gt;</div></pre></td></tr></table></figure>
+<p><strong>open(file, mode=’r’, buffering=-1, encoding=…)</strong></p>
+<p>if<code>mode=&#39;b&#39;</code>, the returned content is bytes object, can’t encoding. if <code>buffereing</code> is not setted, for binary file with buffering with a fixed length. when with <code>mode=&#39;w/r/t</code>, it returns <code>io.TextIOwrapper</code>, if <code>mode=rb</code>, it returns <code>io.BufferedReader</code>, else if <code>mode=wb</code>, it returns <code>io.BufferedWriter</code>, else <code>mode=wrb</code>, it returns <code>io.BufferedRandom</code>. <a href="https://docs.python.org/zh-cn/3/library/functions.html#open" target="_blank" rel="external">check here</a></p>
+<h4 id="dict-built-in-funs"><a href="#dict-built-in-funs" class="headerlink" title="dict built-in funs"></a>dict built-in funs</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cmp(dict1, dict2) ;</div><div class="line">len(dict)</div><div class="line">str(dict)</div><div class="line">dict.clear()</div><div class="line">dict.get(key)</div><div class="line">dict.has_key(key)</div><div class="line">dict.items()</div><div class="line">dict.keys()</div><div class="line">dict.values()</div><div class="line">pop(key)</div></pre></td></tr></table></figure>
+<h2 id="a-bit-about-readers"><a href="#a-bit-about-readers" class="headerlink" title="a bit about readers"></a>a bit about readers</h2><p>a few years ago I was in CAE field, dealing with different kind of CAE format, e.g .nas. during that time, there is a similar need to have a file transfer from vendor specified format to python format e.t.c. </p>
 <p>so now it comes again, which is funny to know adapters in CAE and autonomous driving design.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.vector.com/int/en/products/application-areas/ecu-calibration/measurement/mdf/" target="_blank" rel="external">mdf4.lib from VECTOR</a></p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://asammdf.readthedocs.io/en/master/api.html#mdf4" target="_blank" rel="external">asammdf API doc</a></p>
 <p><a href="https://www.asam.net/standards/detail/mdf/wiki/" target="_blank" rel="external">asam mdf4 doc</a></p>
 
           
@@ -1989,279 +2195,11 @@ $ curpid=`ps -p $$ -o ppid=`
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" itemprop="url">ADS stack in ros talk to lgsvl</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-04T23:02:13-05:00">
-                2020-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h2 id="learning-is-about-repeat-100-times"><a href="#learning-is-about-repeat-100-times" class="headerlink" title="learning is about repeat 100 times !"></a>learning is about repeat 100 times !</h2><p>this maybe the third time to go through ROS, which still looks fresh, but does give a whole picture about how ROS works in ADS dev. </p>
-<ul>
-<li>what is ros topic and message </li>
-</ul>
-<p>the topic is the channel where nodes are subscribed for to read messages or where the nodes publish those messages; the message is the data itself, previously defined. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rostopic echo [topic]</div><div class="line"></div><div class="line">rostopic list </div><div class="line"></div><div class="line">rosmsg show [message]</div><div class="line"></div><div class="line">rosrun [package_name] [node_name]</div><div class="line"></div><div class="line">rospack find [package_name]</div><div class="line"></div><div class="line">rosnode info [node_name]</div></pre></td></tr></table></figure>
-<ul>
-<li>what is a publisher/subscriber</li>
-</ul>
-<p>a publisher (node) publishes messages to a particular topic. <a href="http://wiki.ros.org/roscpp/Overview/Publishers%20and%20Subscribers" target="_blank" rel="external">publish()</a> is asynchronous, and only does work if there are subscribers connected on that topic. <code>publish()</code> itself is very fast, and it does as little work as possible:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">serialize the message to a buffer </div><div class="line">push the buffer onto a queue for later processing</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ros::Publisher advertise(const std::string&amp; topic, uint32_t queue_size, bool latch = false);</div></pre></td></tr></table></figure>
-<p>the <code>queue size</code> is defined in  publihser/outgoing message queue. if publishing faster than roscpp can send the message over the wire, roscpp will start dropping OLD messages. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ros::Subscriber subscribe(const std::string&amp; topic, uint32_t queue_size, &lt;callback, which may involve multiple arguments&gt;, const ros::TransportHints&amp; transport_hints = ros::TransportHints());</div></pre></td></tr></table></figure>
-<p>the queue_size is the incoming message/subscriber queue size, roscpp will use for your callback. if messages are arriving too fast and you are unable to keep up, roscpp will start throwing away OLD messages.</p>
-<p><a href="https://answers.ros.org/question/243855/how-do-publishersubscriber-message-queues-work/" target="_blank" rel="external">in summary</a>: </p>
-<pre><code>* publish() is asynchronous.
-* When you publish, messages are pushed into a queue (A) for later processing. This queue is immediately pushed into the outgoing/publisher queue (B) . PS: If no one subscribes to the topic, the end is here.
-* When a subscriber subscribes to that topic. Messages will be sent/pushed from the corresponding outgoing/publisher queue (B) to the incoming/subscriber queue (C).--&gt; this is done by internal thread
-* When you spin/ callback, the messages handled are from the incoming/subscriber queue (C).
-</code></pre><ul>
-<li><a href="http://wiki.ros.org/Messages" target="_blank" rel="external">messages</a></li>
-</ul>
-<p><strong>msg</strong> files are simple text files for specifying the data structure of a message. These files are stored in the msg subdirectory of a package. the publisher and subscriber must send and receive the same <strong>type/topic</strong> of message</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&quot;op&quot;: &quot;publish&quot;, &quot;topic&quot;: &quot;/talker&quot;, &quot;msg&quot;: &#123;&quot;data&quot; : &quot;_my_message&quot; &#125;&#125;</div></pre></td></tr></table></figure>
-<p>lgsvl defines the rosBridge class, which has a Reader() and Writer(), corresponding to Subsciber and Publisher, respectfually. </p>
-<h2 id="rosBridge-in-lgsvl"><a href="#rosBridge-in-lgsvl" class="headerlink" title="rosBridge in lgsvl"></a>rosBridge in lgsvl</h2><p>rosbridge is an adapter for non-ros apps to talk with ros. it’s common to package ADS software as ros node during dev stage, and rosbridge is the common way to integrate simulator with ADS software.</p>
-<p>the base implementation of <code>rosBridge</code> in lgsvl is as following: </p>
-<h4 id="RosBridge-cs"><a href="#RosBridge-cs" class="headerlink" title="RosBridge.cs"></a>RosBridge.cs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ConcurrentQueue&lt;Action&gt;  QueuedActions ;</div><div class="line">Dictionary&lt;string, Tuple&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;&gt; Readers ;</div></pre></td></tr></table></figure>
-<p>the topic is packaged as:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123; &quot;op&quot;:  &quot;subscribe or publish or call_service or service_response or set_level&quot;,</div><div class="line">  &quot;topic&quot;:  &#123;&#125;,</div><div class="line">  &quot;type&quot;:  &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>AddReader(topic, callback)</li>
-</ul>
-<p>a few types/topices supported: </p>
-<pre><code>Deteced3DObjectArray, 
-
-Deteced2DObjectArray, 
-
-VehicleControlData, 
-
-Autoware.VehicleCmd, 
-
-TwistStamped, 
-
-Apollo.control_command 
-</code></pre><p>which is the list of ros messages that lgsvl can parsing.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(!Readers.ContainsKey(topic))</div><div class="line">&#123;</div><div class="line">   Readers.Add(topic, Tuple.Create&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;(msg=&gt;converter(msg),  new List&lt;Action&lt;object&gt;&gt;()) ) ;</div><div class="line"></div><div class="line">&#125;  </div><div class="line"></div><div class="line">Readers[topic].Item2.Add(msg=&gt;callback(T)msg));</div></pre></td></tr></table></figure>
-<p><code>AddReader</code> is the subscriber nodes in lgsvl. in <code>Sensor</code> group, there are three sensors do <code>AddReader</code>: </p>
-<pre><code>GroundTruth3DVisualizer 
-
-VehicleControlSensor 
-
-GroudTruth2DVisualizer
-</code></pre><p>which means, lgsvl server can read these three typies of messsages. </p>
-<p>if there is no rendering/visual needs, only vehicle conroller (acc, brake) message is required for lgsvl. </p>
-<ul>
-<li>AddWriter(topic)</li>
-</ul>
-<p>the types/topic supported are: </p>
-<pre><code>ImageData, 
-PointCloudData, 
-Detected3DObjectData, 
-Detected2DObjectData, 
-SignalDataArray, 
-DetectedRadarObjectData, 
-CanBusData, 
-GpsData, 
-ImuData, 
-CorrectedImuData, 
-GpsOdometryData, 
-ClockData
-</code></pre><p><code>AddWriter()</code> is a writer adapter, which returns a special type/topic writer/publisher. <code>AddWriter</code> is the publisher nodes in lgsvl, in <code>Sensor</code> group, the following sensors can publish message out:</p>
-<pre><code>LidarSensor 
-SignalSensor
- GpsInsSensor
-GpsOdometrySensor
-DepthCameraSensor
-ImuSensor
-SemanticCameraSensor
-GroudTruth2DSensor
-CanBusSensor
-RadarSensor
-GroudTruth3DSensor
-ClockSensor
-GpsSensor
-ColorCameraSensor
-</code></pre><ul>
-<li>AddService(topic, callback)</li>
-</ul>
-<ul>
-<li>OnMessage(sender, args)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">if (args.op==&quot;publish&quot;)</div><div class="line">&#123;</div><div class="line">   topic = json[&quot;topic&quot;]</div><div class="line">   Readers.TryGetValue(topic, out readerPair)</div><div class="line">   var parse = readerPair.Item1 ; </div><div class="line">   var readers = readerPair.Item2; </div><div class="line">   var msg = parse(json[&quot;msg&quot;]);</div><div class="line">   foreach (var reader in readers)</div><div class="line">   &#123;</div><div class="line">     QueuedActions.Enqueue(()=&gt;reader(msg));   //</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<p>ros subscriber uses a callback mechanism, when the message is coming, all readers who subscribe this topic will read in this message. </p>
-<h4 id="RosWriter-cs"><a href="#RosWriter-cs" class="headerlink" title="RosWriter.cs"></a>RosWriter.cs</h4><p>the message output is in the format as:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">  &quot;op&quot; :  &quot;publish&quot; ,</div><div class="line">  &quot;topic&quot; :  Topic, </div><div class="line">  &quot;msg&quot;:  message </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="websocket-in-ros-bridge"><a href="#websocket-in-ros-bridge" class="headerlink" title="websocket in ros bridge"></a>websocket in ros bridge</h4><p>the implementation of ros bridge in lgsvl is by <code>WebSocket</code>, which maintained a continously communication pipeline, for external ros nodes publishers.</p>
-<h2 id="ros-ads-talk-to-lgsvl-rosbridge"><a href="#ros-ads-talk-to-lgsvl-rosbridge" class="headerlink" title="ros ads talk to lgsvl rosbridge"></a>ros ads talk to lgsvl rosbridge</h2><p>from the previous section, lgsvl talk to external ros nodes (which is the ADS stack) through rosbridge, and which needs external inputs, e.g. vehicle control command, 2d/3d ground truth visualizer. and the ADS stack ros nodes can subscribes Gps, canbus, Lidar, Radar, GroudTruth, SemanticCamera, DeepCamera topics through lgsvl rosbrige.</p>
-<p>so the pipeline are simple as following:</p>
-<pre><code>lgsvl rosbridge  --&gt;  {gps, radar, camera, lidar, groudTruth message} --&gt;  ADS stack nodes 
-
-ADS stack nodes --&gt;  {vehicle control command message} --&gt; lgsvl rosbridge 
-</code></pre><p>usually, the ADS stack nodes are a few related ros nodes, including RTK/GPS sensor, Lidar/Camera/Radar sensors, hdmap node, data fusion node e.t.c.</p>
-<h4 id="run-ROS-ADS-stack"><a href="#run-ROS-ADS-stack" class="headerlink" title="run ROS ADS stack"></a>run ROS ADS stack</h4><p>the following nodes are used commonly in ADS dev:</p>
-<ul>
-<li><p>gps_node</p>
-<pre><code>subscribe: /gps, /odom e.t.c
-
-publish: /sensor/data topics
-</code></pre></li>
-<li><p>camera_node</p>
-<pre><code>subscribe: /camera/raw_data
-
-publish:  /objects_list,  /lane_object e.t.c
-</code></pre></li>
-<li><p>radar_node</p>
-<pre><code>subscribe:  /radar/raw_data
-
-publish: /obstacle/velocity , /obstacle/distance
-</code></pre></li>
-<li><p>hdmap_node</p>
-<pre><code>subcribe: /rtk/data, /ins/data. 
-
-publish:  /lane/info,  /speed_limit e.t.c.
-</code></pre></li>
-<li><p>fusion_node </p>
-<pre><code>subscribe topics: /canbus, rtk/data, /ifv_lane,  /radar/blind, /radar/corner, /esr, /velodey, /lane/info e.t.c
-
-publish topics: /object_list/, /road/info, /vehicle/status and visual related messages e.t.c.
-</code></pre></li>
-<li><p>planning_node </p>
-<pre><code>subscribe topics:  /object_list,  /road/info, /vehicle/status from fusion_node
-
-publish topics: /vehicle/cmd_ctl 
-</code></pre></li>
-</ul>
-<h4 id="ADS-ros-launch"><a href="#ADS-ros-launch" class="headerlink" title="ADS ros launch"></a>ADS ros launch</h4><p>the previous section has a basic idea about what kind of ROS nodes usually needs to run the ADS stack. In road test or simulaiton test, we prefer a simple way to launch all ADS related nodes in one launch.</p>
-<p>which usually give a simple launch file to start all nodes, or a shell script to start each ros nodes sequencially. </p>
-<h4 id="system-verification"><a href="#system-verification" class="headerlink" title="system verification"></a>system verification</h4><p>ros is a common solution to package ADS stack and integrate with the simulation env during SIL sysem verification, as well as road test data collection. since ROS is the cheap solution for ADS dev and test, compared to CAEape/Vector, Dspace solution.</p>
-<p>on the other hand, due to the hardware computing limitation, drivers depends, and espeically the ros is mostly run in Linux kind of non-realtime OS, which is not good for domain controller(HAD) test. so during the real test envrionment, we need to consider these true issues.</p>
-<p>another topic is about how to quick build up a user-friend verification pipeline for, which keeps as little modification as possible, but can run in both simulation verification and physical verification.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://wiki.ros.org/ROS/Tutorials" target="_blank" rel="external">ros overview</a></p>
-<p><a href="https://msadowski.github.io/ros-web-tutorial-pt1/" target="_blank" rel="external">understand rosbridge:  simple ROS UI</a></p>
-<p><a href="http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality" target="_blank" rel="external">roslibjs</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2307,7 +2245,7 @@ publish topics: /vehicle/cmd_ctl
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">150</span>
+                <span class="site-state-item-count">151</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2320,7 +2258,7 @@ publish topics: /vehicle/cmd_ctl
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

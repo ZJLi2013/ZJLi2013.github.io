@@ -291,6 +291,274 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" itemprop="url">ADS stack in ros talk to lgsvl</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-04T23:02:13-05:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h2 id="learning-is-about-repeat-100-times"><a href="#learning-is-about-repeat-100-times" class="headerlink" title="learning is about repeat 100 times !"></a>learning is about repeat 100 times !</h2><p>this maybe the third time to go through ROS, which still looks fresh, but does give a whole picture about how ROS works in ADS dev. </p>
+<ul>
+<li>what is ros topic and message </li>
+</ul>
+<p>the topic is the channel where nodes are subscribed for to read messages or where the nodes publish those messages; the message is the data itself, previously defined. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rostopic echo [topic]</div><div class="line"></div><div class="line">rostopic list </div><div class="line"></div><div class="line">rosmsg show [message]</div><div class="line"></div><div class="line">rosrun [package_name] [node_name]</div><div class="line"></div><div class="line">rospack find [package_name]</div><div class="line"></div><div class="line">rosnode info [node_name]</div></pre></td></tr></table></figure>
+<ul>
+<li>what is a publisher/subscriber</li>
+</ul>
+<p>a publisher (node) publishes messages to a particular topic. <a href="http://wiki.ros.org/roscpp/Overview/Publishers%20and%20Subscribers" target="_blank" rel="external">publish()</a> is asynchronous, and only does work if there are subscribers connected on that topic. <code>publish()</code> itself is very fast, and it does as little work as possible:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">serialize the message to a buffer </div><div class="line">push the buffer onto a queue for later processing</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ros::Publisher advertise(const std::string&amp; topic, uint32_t queue_size, bool latch = false);</div></pre></td></tr></table></figure>
+<p>the <code>queue size</code> is defined in  publihser/outgoing message queue. if publishing faster than roscpp can send the message over the wire, roscpp will start dropping OLD messages. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ros::Subscriber subscribe(const std::string&amp; topic, uint32_t queue_size, &lt;callback, which may involve multiple arguments&gt;, const ros::TransportHints&amp; transport_hints = ros::TransportHints());</div></pre></td></tr></table></figure>
+<p>the queue_size is the incoming message/subscriber queue size, roscpp will use for your callback. if messages are arriving too fast and you are unable to keep up, roscpp will start throwing away OLD messages.</p>
+<p><a href="https://answers.ros.org/question/243855/how-do-publishersubscriber-message-queues-work/" target="_blank" rel="external">in summary</a>: </p>
+<pre><code>* publish() is asynchronous.
+* When you publish, messages are pushed into a queue (A) for later processing. This queue is immediately pushed into the outgoing/publisher queue (B) . PS: If no one subscribes to the topic, the end is here.
+* When a subscriber subscribes to that topic. Messages will be sent/pushed from the corresponding outgoing/publisher queue (B) to the incoming/subscriber queue (C).--&gt; this is done by internal thread
+* When you spin/ callback, the messages handled are from the incoming/subscriber queue (C).
+</code></pre><ul>
+<li><a href="http://wiki.ros.org/Messages" target="_blank" rel="external">messages</a></li>
+</ul>
+<p><strong>msg</strong> files are simple text files for specifying the data structure of a message. These files are stored in the msg subdirectory of a package. the publisher and subscriber must send and receive the same <strong>type/topic</strong> of message</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&quot;op&quot;: &quot;publish&quot;, &quot;topic&quot;: &quot;/talker&quot;, &quot;msg&quot;: &#123;&quot;data&quot; : &quot;_my_message&quot; &#125;&#125;</div></pre></td></tr></table></figure>
+<p>lgsvl defines the rosBridge class, which has a Reader() and Writer(), corresponding to Subsciber and Publisher, respectfually. </p>
+<h2 id="rosBridge-in-lgsvl"><a href="#rosBridge-in-lgsvl" class="headerlink" title="rosBridge in lgsvl"></a>rosBridge in lgsvl</h2><p>rosbridge is an adapter for non-ros apps to talk with ros. it’s common to package ADS software as ros node during dev stage, and rosbridge is the common way to integrate simulator with ADS software.</p>
+<p>the base implementation of <code>rosBridge</code> in lgsvl is as following: </p>
+<h4 id="RosBridge-cs"><a href="#RosBridge-cs" class="headerlink" title="RosBridge.cs"></a>RosBridge.cs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ConcurrentQueue&lt;Action&gt;  QueuedActions ;</div><div class="line">Dictionary&lt;string, Tuple&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;&gt; Readers ;</div></pre></td></tr></table></figure>
+<p>the topic is packaged as:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123; &quot;op&quot;:  &quot;subscribe or publish or call_service or service_response or set_level&quot;,</div><div class="line">  &quot;topic&quot;:  &#123;&#125;,</div><div class="line">  &quot;type&quot;:  &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>AddReader(topic, callback)</li>
+</ul>
+<p>a few types/topices supported: </p>
+<pre><code>Deteced3DObjectArray, 
+
+Deteced2DObjectArray, 
+
+VehicleControlData, 
+
+Autoware.VehicleCmd, 
+
+TwistStamped, 
+
+Apollo.control_command 
+</code></pre><p>which is the list of ros messages that lgsvl can parsing.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(!Readers.ContainsKey(topic))</div><div class="line">&#123;</div><div class="line">   Readers.Add(topic, Tuple.Create&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;(msg=&gt;converter(msg),  new List&lt;Action&lt;object&gt;&gt;()) ) ;</div><div class="line"></div><div class="line">&#125;  </div><div class="line"></div><div class="line">Readers[topic].Item2.Add(msg=&gt;callback(T)msg));</div></pre></td></tr></table></figure>
+<p><code>AddReader</code> is the subscriber nodes in lgsvl. in <code>Sensor</code> group, there are three sensors do <code>AddReader</code>: </p>
+<pre><code>GroundTruth3DVisualizer 
+
+VehicleControlSensor 
+
+GroudTruth2DVisualizer
+</code></pre><p>which means, lgsvl server can read these three typies of messsages. </p>
+<p>if there is no rendering/visual needs, only vehicle conroller (acc, brake) message is required for lgsvl. </p>
+<ul>
+<li>AddWriter(topic)</li>
+</ul>
+<p>the types/topic supported are: </p>
+<pre><code>ImageData, 
+PointCloudData, 
+Detected3DObjectData, 
+Detected2DObjectData, 
+SignalDataArray, 
+DetectedRadarObjectData, 
+CanBusData, 
+GpsData, 
+ImuData, 
+CorrectedImuData, 
+GpsOdometryData, 
+ClockData
+</code></pre><p><code>AddWriter()</code> is a writer adapter, which returns a special type/topic writer/publisher. <code>AddWriter</code> is the publisher nodes in lgsvl, in <code>Sensor</code> group, the following sensors can publish message out:</p>
+<pre><code>LidarSensor 
+SignalSensor
+ GpsInsSensor
+GpsOdometrySensor
+DepthCameraSensor
+ImuSensor
+SemanticCameraSensor
+GroudTruth2DSensor
+CanBusSensor
+RadarSensor
+GroudTruth3DSensor
+ClockSensor
+GpsSensor
+ColorCameraSensor
+</code></pre><ul>
+<li>AddService(topic, callback)</li>
+</ul>
+<ul>
+<li>OnMessage(sender, args)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">if (args.op==&quot;publish&quot;)</div><div class="line">&#123;</div><div class="line">   topic = json[&quot;topic&quot;]</div><div class="line">   Readers.TryGetValue(topic, out readerPair)</div><div class="line">   var parse = readerPair.Item1 ; </div><div class="line">   var readers = readerPair.Item2; </div><div class="line">   var msg = parse(json[&quot;msg&quot;]);</div><div class="line">   foreach (var reader in readers)</div><div class="line">   &#123;</div><div class="line">     QueuedActions.Enqueue(()=&gt;reader(msg));   //</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>ros subscriber uses a callback mechanism, when the message is coming, all readers who subscribe this topic will read in this message. </p>
+<h4 id="RosWriter-cs"><a href="#RosWriter-cs" class="headerlink" title="RosWriter.cs"></a>RosWriter.cs</h4><p>the message output is in the format as:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">  &quot;op&quot; :  &quot;publish&quot; ,</div><div class="line">  &quot;topic&quot; :  Topic, </div><div class="line">  &quot;msg&quot;:  message </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="websocket-in-ros-bridge"><a href="#websocket-in-ros-bridge" class="headerlink" title="websocket in ros bridge"></a>websocket in ros bridge</h4><p>the implementation of ros bridge in lgsvl is by <code>WebSocket</code>, which maintained a continously communication pipeline, for external ros nodes publishers.</p>
+<h2 id="ros-ads-talk-to-lgsvl-rosbridge"><a href="#ros-ads-talk-to-lgsvl-rosbridge" class="headerlink" title="ros ads talk to lgsvl rosbridge"></a>ros ads talk to lgsvl rosbridge</h2><p>from the previous section, lgsvl talk to external ros nodes (which is the ADS stack) through rosbridge, and which needs external inputs, e.g. vehicle control command, 2d/3d ground truth visualizer. and the ADS stack ros nodes can subscribes Gps, canbus, Lidar, Radar, GroudTruth, SemanticCamera, DeepCamera topics through lgsvl rosbrige.</p>
+<p>so the pipeline are simple as following:</p>
+<pre><code>lgsvl rosbridge  --&gt;  {gps, radar, camera, lidar, groudTruth message} --&gt;  ADS stack nodes 
+
+ADS stack nodes --&gt;  {vehicle control command message} --&gt; lgsvl rosbridge 
+</code></pre><p>usually, the ADS stack nodes are a few related ros nodes, including RTK/GPS sensor, Lidar/Camera/Radar sensors, hdmap node, data fusion node e.t.c.</p>
+<h4 id="run-ROS-ADS-stack"><a href="#run-ROS-ADS-stack" class="headerlink" title="run ROS ADS stack"></a>run ROS ADS stack</h4><p>the following nodes are used commonly in ADS dev:</p>
+<ul>
+<li><p>gps_node</p>
+<pre><code>subscribe: /gps, /odom e.t.c
+
+publish: /sensor/data topics
+</code></pre></li>
+<li><p>camera_node</p>
+<pre><code>subscribe: /camera/raw_data
+
+publish:  /objects_list,  /lane_object e.t.c
+</code></pre></li>
+<li><p>radar_node</p>
+<pre><code>subscribe:  /radar/raw_data
+
+publish: /obstacle/velocity , /obstacle/distance
+</code></pre></li>
+<li><p>hdmap_node</p>
+<pre><code>subcribe: /rtk/data, /ins/data. 
+
+publish:  /lane/info,  /speed_limit e.t.c.
+</code></pre></li>
+<li><p>fusion_node </p>
+<pre><code>subscribe topics: /canbus, rtk/data, /ifv_lane,  /radar/blind, /radar/corner, /esr, /velodey, /lane/info e.t.c
+
+publish topics: /object_list/, /road/info, /vehicle/status and visual related messages e.t.c.
+</code></pre></li>
+<li><p>planning_node </p>
+<pre><code>subscribe topics:  /object_list,  /road/info, /vehicle/status from fusion_node
+
+publish topics: /vehicle/cmd_ctl 
+</code></pre></li>
+</ul>
+<h4 id="ADS-ros-launch"><a href="#ADS-ros-launch" class="headerlink" title="ADS ros launch"></a>ADS ros launch</h4><p>the previous section has a basic idea about what kind of ROS nodes usually needs to run the ADS stack. In road test or simulaiton test, we prefer a simple way to launch all ADS related nodes in one launch.</p>
+<p>which usually give a simple launch file to start all nodes, or a shell script to start each ros nodes sequencially. </p>
+<h4 id="system-verification"><a href="#system-verification" class="headerlink" title="system verification"></a>system verification</h4><p>ros is a common solution to package ADS stack and integrate with the simulation env during SIL sysem verification, as well as road test data collection. since ROS is the cheap solution for ADS dev and test, compared to CAEape/Vector, Dspace solution.</p>
+<p>on the other hand, due to the hardware computing limitation, drivers depends, and espeically the ros is mostly run in Linux kind of non-realtime OS, which is not good for domain controller(HAD) test. so during the real test envrionment, we need to consider these true issues.</p>
+<p>another topic is about how to quick build up a user-friend verification pipeline for, which keeps as little modification as possible, but can run in both simulation verification and physical verification.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://wiki.ros.org/ROS/Tutorials" target="_blank" rel="external">ros overview</a></p>
+<p><a href="https://msadowski.github.io/ros-web-tutorial-pt1/" target="_blank" rel="external">understand rosbridge:  simple ROS UI</a></p>
+<p><a href="http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality" target="_blank" rel="external">roslibjs</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/mobile-vehicle-interface/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1731,204 +1999,11 @@ sudo apt-get install xserver-xorg-core  xserver-xorg  xorg
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/recent-thoughts-in-ADS/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/29/recent-thoughts-in-ADS/" itemprop="url">recent thoughts in ADS</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-29T08:56:20-05:00">
-                2019-11-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/11/29/recent-thoughts-in-ADS/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/11/29/recent-thoughts-in-ADS/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>the following are some pieces of ideas during  discussion and online resources.</p>
-<h2 id="system-engineering-in-practical"><a href="#system-engineering-in-practical" class="headerlink" title="system engineering in practical"></a>system engineering in practical</h2><p>the following idea is coming from the expert of system engineering. </p>
-<p>originally, system engineering or model based design sounds come from aerospace, defense department. the feature of these products: </p>
-<p>1) they are the most complex system</p>
-<p>2) they are sponsored by the goverment</p>
-<p>3) they are unique and no competitors</p>
-<p>which means they don’t need worry about money and time, so to gurantee the product finally works, they can design from top to down in a long time. </p>
-<p>the degrade order of requirements level comes as:</p>
-<p>areospace, defense product &gt;&gt;  vehicle level product &gt;&gt;  industry level product &gt;&gt; customer level product</p>
-<p>usually the techs used in the top level is gradually degrading into the next lower level in years. e.g. GPS, Internet, autonomous e.t.c. at the same time, the metholodies from top level go to lower level as well. </p>
-<p>I suppose that’s why system engineeering design comes to vehicle industry. however, does it really work in this competitional industry?  I got the first experince when running scenaio testes in simulation SIL. as the system engineering team define the test cases/scenarios, e.g. 400 test scenarios; on the other hand, the vehicle test team does the road test a few times every week.the result is, most time the 400 test scenarios never catch a system failure; but most road test failure scenario does can be repeated in the simulation env.</p>
-<p>system engineering based design doesn’t fit well. there are a lot reasons. at first, traditionally the design lifetime of a new vehicle model is about 3~5 years, and startup EV companies recently has even shorter design life cycle, about 1~2 years. so a top-down design at the early time, to cover every aspect of a new model, does almost not make sense. in the V development model, most fresh engineers thought the top-down design is done once for all, the reality is most early stage system engineering desgin need be reconstructured. </p>
-<p>secondly, system engineering design usually is abstract and high beyond and except engineering considerations, as the system engineers mostly doesn’t have engineering experience in most sections of the sysetem. which results in the system engineering based requirements are not testable, can’t measure during section implementation.</p>
-<p>there are a few suggestions to set a workable system engineering process: </p>
-<p>the system engineering team should sit by the develop teams and test teams, they should have a lot of communication, and balance the high-level requirements and also testable, measurable, implementable requirements. basically, system engineering design should have product/component developers as input.</p>
-<p>both the system engineers and developers should understand the whole V model, including system requirements, component requirements are iteratable.</p>
-<p>focus on the special requirement, and not always start from the top, each special requirement is like a point, and all these existing points(already finished requirements) will merged to the whole picture finally.</p>
-<p>take an example, during the road test, there will come a new requirement to have a HMI visulization,  then focus on this HMI requirement, cause this requirements may not exist in the top down design. but it is the actual need.</p>
-<h2 id="system-test-and-verification-CI-CD"><a href="#system-test-and-verification-CI-CD" class="headerlink" title="system test and verification CI/CD"></a>system test and verification CI/CD</h2><p>as most OEMs have said they will massive product L3 ADS around 2022, it is the time to jump into the ADS system test and verification. just knew that Nvidia has the full-stack hardware lines: the AI chips in car(e.g. Xavier), the AI training workstation(e.g. DGX), and the ADS system verifcation platform(e.g. Constallation box).</p>
-<h4 id="data-needs"><a href="#data-needs" class="headerlink" title="data needs"></a>data needs</h4><p>the ADS development depends a lot on data infrastructure:</p>
-<pre><code>data collect --&gt; data storage --&gt; data analysis
-</code></pre><p>there are many small pieces as well, e.g. data cleaning, labeling, training, mining, visulization e.t.c</p>
-<p>from different dev stage or teams, there are different focus. </p>
-<ul>
-<li><p>road test/sensor team, they need a lot of online vehicle status/sensor data check, data logging, visulization(dev HMI), as well as offline data analysis and storage </p>
-</li>
-<li><p>perception team, need a lot of raw image/radar data, used to train, mine, as well as to query and store.</p>
-</li>
-<li><p>planning/control team, need high quality data to test algorithms as well as a good structured in-car computer.</p>
-</li>
-<li><p>HMI team, are focusing on friendly data display </p>
-</li>
-<li><p>fleet operation team, need think about how to transfer data in cloud, vehicle, OEM data centers e.t.c.</p>
-</li>
-</ul>
-<p>sooner or later, data pipepline built up is a have to choice.</p>
-<h4 id="data-collection-vendors"><a href="#data-collection-vendors" class="headerlink" title="data collection vendors"></a>data collection vendors</h4><p>road test data collection equipment used in ADS development, is actually not a very big market, compared to in-var computers. but still there are a few vendors already. </p>
-<ul>
-<li>the top chip OEMs, e.g.  Nvidia, Intel has these products.</li>
-<li>chip poxy, e.g.  Inspire </li>
-<li>traditional vehicle test vendors, e.g. Dspace, Vector, Prescan</li>
-<li>startups, e.g. horizon </li>
-</ul>
-<h4 id="Nvidia-constellation"><a href="#Nvidia-constellation" class="headerlink" title="Nvidia constellation"></a>Nvidia constellation</h4><p>ADS system test usually includes simulation test and road test. and the road test is also called vehicle-in-loop, which is highly expensive and not easy to repeat; then is hardware-in-loop(HIL) test, basically including only the domain controller/ECU in test loop; finally is the  is software-in-loop(SIL) test, which is most controllable but also not that reliable.</p>
-<p>in practical, it’s not easy to build up a closed-loop verification(CI/CD) process from SIL to HIL to road test. and once CI/CD is setted up, the whole team can be turned into data/simulation/test driven.  </p>
-<p>the difficult and hidden part is the supporting toolchain development. Most vehicle test vendors have their special full-stack solution toolchains, but most of them are too eco-customized, it’s really difficult for ADS team, specially OEMs, to follow a speical vendor solution.</p>
-<p>another reason, test vehicles include components from different vendors, e.g. camera from sony, radar from bosch, Lidar from a Chinese startup, logging equipment from dSpace, and ECUs from Conti. which makes it difficult to fit this mixed system into a Vector verification platform. </p>
-<p>Nvidia Constallation is trying to meet the gap from SIL, HIL to road test. as it can suppport most customized ECUs.</p>
-<ul>
-<li><p>from road test to HIL, it use the exactly same chip. </p>
-</li>
-<li><p>for road test resimulation,  Nvidia offer a sim env, and the road test log can feed in directly</p>
-</li>
-</ul>
-<p>the ability to do resimulation of road test is a big step, the input is directly scanned images/cloud points, even lgsvl, Carla has no such direct support. but resimulation is really useful for CI/CD. Nvidia constallation as said, is the solution from captured data to KPIs.</p>
-<p>another big thing is about their high-level scenario description language(HLSDL), which I think is more abstract than OpenScenario. the HLSDL engine use hyper-parameters, SOTIF embedded scenario idea, and optimized scenario generator, which should be massive, random as well as KPI significantly, it should be a good scenario engine if it has these features. </p>
-<h2 id="Bosch-VMS"><a href="#Bosch-VMS" class="headerlink" title="Bosch VMS"></a>Bosch VMS</h2><p>vehicle management system(VMS) is cloud nature framework from Bosch, which is used to meet the similar requirements as Nvidia’s solution, to bring the closed-loop(CI/CD) from road test data collection, data anlaysis to fleet management. they have a few applications based on VMS:</p>
-<ul>
-<li>fleet batteries management(FBM)</li>
-</ul>
-<p>for single vehicle’s diaglostic, prediction; and for the EV market, FBM can be used as certification for second-hand EV dealers</p>
-<ul>
-<li>road coefficient system(RCS)</li>
-</ul>
-<p>Bosch has both in-vehicle data collection box and cloud server, RCS will be taken as additional sensor for ADS in prodcut</p>
-<ul>
-<li>VMS in itself</li>
-</ul>
-<p>Bosch would like to think VMS as the PLM for ADS, from design, test, to deployment. and it shoul be easy to integrate many dev tools, e.g. labeling, simulation e.t.c</p>
-<h2 id="what-about-safety"><a href="#what-about-safety" class="headerlink" title="what about safety"></a>what about safety</h2><p>as mentioned previously, 80% of Tesla FSD is to handle AI computing, Nvidia Xavier has about 50% GPU; Mobileye has very limited support for AI. all right, Tesla is most AI aggressive, then Nvidia, then Mobileye is most conserved. which make OEMs take Mobileye solution as more safety, but AI does better performance in perception, so how to balance these two ways? </p>
-<p>I realized the greats of Mobileye’s new concept: <code>responsibility sensitive safety</code>(RSS), RSS can be used as the ADS safety boundary, but inside either AI or CV make the house power. a lot of AI research on mixed traditional algorithms with AI algorithms, RSS sounds the good solution. would be nice to build a general <code>RSS Mixing AI</code>(RMA) framework.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1974,7 +2049,7 @@ sudo apt-get install xserver-xorg-core  xserver-xorg  xorg
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">150</span>
+                <span class="site-state-item-count">151</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1987,7 +2062,7 @@ sudo apt-get install xserver-xorg-core  xserver-xorg  xorg
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
