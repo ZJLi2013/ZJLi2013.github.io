@@ -291,6 +291,170 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/" itemprop="url">ads ros and lgsvl talk in dockers</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-14T08:45:38-05:00">
+                2020-01-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="backgound"><a href="#backgound" class="headerlink" title="backgound"></a>backgound</h3><p>previously, we had integrated ads ros nodes into one launch file. now we try to put ads nodes into docker, and talk to lgsvl simulator in another docker. </p>
+<h4 id="run-dockerimage"><a href="#run-dockerimage" class="headerlink" title="run dockerimage"></a>run dockerimage</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker build -t ads_ros . </div><div class="line">docker run -it ads_ros  /bin/bash</div></pre></td></tr></table></figure>
+<h4 id="unable-to-run-cakin-make-in-dockerfile"><a href="#unable-to-run-cakin-make-in-dockerfile" class="headerlink" title="unable to run cakin_make in dockerfile"></a>unable to run cakin_make in dockerfile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">RUN /bin/bash -c &apos;. /opt/ros/kinetic/setup.bash; cd &lt;into the desired folder e.g. ~/catkin_ws/src&gt;; catkin_make&apos;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">#### dockerfile for ads ros</div><div class="line"></div><div class="line">``` </div><div class="line">FROM ros:kinetic </div><div class="line"></div><div class="line"># create local catkin workspace </div><div class="line">ENV CATKIN_WS=/root/catkin_ws</div><div class="line">ENV ROS_DISTRO=kinetic</div><div class="line">RUN mkdir -p $CATKIN_WS/src</div><div class="line"></div><div class="line">## install catkin_make </div><div class="line">## https://docs.ros.org/api/catkin/html/user_guide/installation.html</div><div class="line">RUN APT_INSTALL=&quot;apt-get install -y --no-install-recommends&quot; &amp;&amp; \</div><div class="line">    apt-get update &amp;&amp; \</div><div class="line">    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \</div><div class="line">        build-essential \</div><div class="line">        apt-utils \</div><div class="line">        ca-certificates \ </div><div class="line">        psmisc \</div><div class="line">        cmake \</div><div class="line">        vim \ </div><div class="line">        python-catkin-pkg \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-catkin  \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-tf  \</div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-turtlesim \</div><div class="line">        ros-$&#123;CATKIN_WS&#125;-rosbridge-suite </div><div class="line">        iputils-ping \   </div><div class="line">        net-tools </div><div class="line">### add third-party headers</div><div class="line"># RUN source ~/.bashrc </div><div class="line"># copy ads ros into ws</div><div class="line">COPY /src $CATKIN_WS/src</div><div class="line">### build msgs </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make --pkg pcl_msgs pb_msgs autoware_msgs mobileye_msgs ibeo_msgs nmea_msgs &apos;                   </div><div class="line">### build ros nodes </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make &apos;</div><div class="line"># copy ros scripts</div><div class="line">COPY /script $CATKIN_WS/scripts </div><div class="line"># run ros shell</div><div class="line">WORKDIR $&#123;CATKIN_WS&#125;/scripts</div></pre></td></tr></table></figure>
+<h4 id="ros-envs"><a href="#ros-envs" class="headerlink" title="ros envs"></a>ros envs</h4><p>set <code>ROS_IP</code> on all involved containers to their IP, and set <code>ROS_MASTER_URI</code> to the IP of the roscore container. That would avoid the DNS problem. understand <a href="http://wiki.ros.org/ROS/EnvironmentVariables" target="_blank" rel="external">ros environment variables</a></p>
+<ul>
+<li><p>$ROS_ROOT :   set the location whre the ROS core packages are installed </p>
+</li>
+<li><p>$ROS_MASTER_URI :  a required setting that tells nodes where they can locate the master</p>
+</li>
+<li><p>$ROS_IP or $ROS_HOSTNAME : sets the declared network address of a ROS node</p>
+</li>
+</ul>
+<h4 id="get-docker-container’s-IP"><a href="#get-docker-container’s-IP" class="headerlink" title="get docker container’s IP"></a>get docker container’s IP</h4><pre><code>docker inspect -f &quot;{{ .NetworkSettings.Networks.<network_name>.IPAddress }}&quot; &lt;container_name||container_id&gt; 
+</network_name></code></pre><p>tips, network_name: e.g. host, bridge, ingress e.t.c.</p>
+<p>with <a href="https://docs.docker.com/network/host/" target="_blank" rel="external">docker host net</a>, then the container doesn’t have its own IP address allocated, but the application is available on the host’s IP address with customized port.</p>
+<h4 id="run-roscore-in-docker-and-talk-to-rosnodes-at-host"><a href="#run-roscore-in-docker-and-talk-to-rosnodes-at-host" class="headerlink" title="run roscore in docker and talk to rosnodes at host"></a>run roscore in docker and talk to rosnodes at host</h4><ul>
+<li><p>start roscore from docker container as following :</p>
+<p>  sudo docker run -it –net host ads_ros /bin/bash<br>  roscore </p>
+</li>
+<li><p>start other ros nodes at host </p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">rosnode list  ## &gt;&gt;&gt;  /rosout </div><div class="line">source $ROS_PACKAGE/setup.sh</div><div class="line">rosrun rtk_sensor rtk_sensor   ### run successfully </div><div class="line">``` </div><div class="line"></div><div class="line">how to understand ?  once the docker container start with `host network`, the `roscore` run inside docker, is same as run in the host machine !! </div><div class="line"><span class="meta"></span></div><div class="line"></div><div class="line">#### ads ros in docker talk to lgsvl in another docker with HOST network </div><div class="line"></div><div class="line">* once we start ads ros docker as following: </div><div class="line"></div><div class="line">```shell</div><div class="line">sudo docker run -it --net host ads_ros /bin/bash</div><div class="line">roscore </div><div class="line">``` </div><div class="line"></div><div class="line">* start lgsvl in docker: </div><div class="line"></div><div class="line">```shell</div><div class="line"><span class="meta">#</span>! /usr/bin/env bash</div><div class="line">xhost + </div><div class="line">sudo nvidia-docker run -it  -p 8080:8080  -e DISPLAY=unix$DISPLAY --net host -v /tmp/.X11-unix:/tmp/.X11-unix lgsvlsimulator /bin/bash</div></pre></td></tr></table></figure>
+<p>then access webUI in host machine, and add <code>host: 10.20.181.132</code> in <code>Clusters</code> page, and  add <code>10.20.181.132:9090</code> for Selected Vehicles. as lgsvl is also in <code>host network</code>. so these two docker can communicate through ros well !! </p>
+<h4 id="ads-ros-container-talk-to-lgsvl-container-with-ROS-IP"><a href="#ads-ros-container-talk-to-lgsvl-container-with-ROS-IP" class="headerlink" title="ads ros container talk to lgsvl container with ROS_IP"></a>ads ros container talk to lgsvl container with ROS_IP</h4><p>since lgsvl will run in docker swarm env, we can’t depend on <code>host network</code>, which requires ROS_IP env. the following test is in one host machine. </p>
+<ul>
+<li>in host terminal </li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">export ROS_MASTER_URI=http://192.168.0.10:11311</div><div class="line">export ROS_HOSTNAME=192.168.0.10</div><div class="line">export ROS_IP=192.168.0.10   </div><div class="line"></div><div class="line">roscore </div><div class="line">``` </div><div class="line"></div><div class="line">* in ads ros docker </div><div class="line"></div><div class="line">```shell</div><div class="line">sudo docker run -it \ </div><div class="line">     --env ROS_MASTER_URI=http://10.20.181.132:11311 \ </div><div class="line">     --env ROS_IP=10.20.181.132 \ </div><div class="line">     ads_ros /bin/bash</div><div class="line"></div><div class="line">rosnod list </div><div class="line">``` </div><div class="line"></div><div class="line">however, when start `roscore` in docker, it reports:</div><div class="line"></div><div class="line">```shell</div><div class="line">Unable to contact my own server at [http://10.20.181.132:33818/].</div><div class="line">This usually means that the network is not configured properly.</div><div class="line"></div><div class="line">A common cause is that the machine cannot ping itself.  Please check</div><div class="line">for errors by running:</div><div class="line"></div><div class="line">	ping 10.20.181.132</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">if checking the IP address inside the docker container by `ifconfig`, which reports `172.17.0.3`, which then make sense that the container can't talk to `10.20.181.132`, which means we can't assign a special IP address for a docker container. so reset in the docker container as:</div><div class="line"></div><div class="line">```shell</div><div class="line">export ROS_MASTER_URI=http://172.17.0.3:11311</div><div class="line">export ROS_HOSTNAME=172.17.0.3</div></pre></td></tr></table></figure>
+<p>actually, the host terminal can talk to the ads ros container directly, with no need to set <code>$ROS_HOSTNAME</code> &amp; <code>$ROS_MASTER_URI</code> specially; as well as another docker container in this host machine, e.g. lgsvl. </p>
+<p>a little bit knowledge about docker network. so each docker container does have an virtual IP, e.g. 172.17.0.1. while if run the docker image with <code>host network</code>, there is no special container IP, but the container directly share the IP of the host machine. as multi docker containers run in the same host machine, even without <code>host network</code>, they are in the same network range, so they can communicate to each other. additionaly for <code>ros_master</code>, which may requires to add <code>$ROS_HOSTNAME</code> &amp; <code>$ROS_MASTER_URI</code>.</p>
+<ul>
+<li>start lgsvl in another docker </li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>! /usr/bin/env bash</div><div class="line">xhost + </div><div class="line">sudo nvidia-docker run -it \ </div><div class="line">     -p 8080:8080 \  </div><div class="line">     -e DISPLAY=unix$DISPLAY \ </div><div class="line">     -v /tmp/.X11-unix:/tmp/.X11-unix \ </div><div class="line">     --env ROS_MASTER_URI=http://172.17.0.3:11311  \ </div><div class="line">     --env ROS_HOSTNAME=172.17.0.3   </div><div class="line">     lgsvlsimulator /bin/bash</div></pre></td></tr></table></figure>
+<h4 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h4><p>so far, we have host ads ros in one docker, and lgsvl in another docker, and they are in the same machine, and they can talk to each other. the next thing is to put ads ros and lgsvl in one image.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://wiki.ros.org/rosdep" target="_blank" rel="external">rosdep</a></p>
+<p><a href="https://stackoverflow.com/questions/35742807/docker-1-10-containers-ip-in-lan/39285950#39285950" target="_blank" rel="external">docker 1.10 container’s IP in LAN</a></p>
+<p><a href="https://answers.ros.org/question/244424/listening-to-ros-messages-in-docker-containers/" target="_blank" rel="external">listening to ROS messages in docker containers</a></p>
+<p><a href="https://answers.ros.org/question/228292/exposing-ros-containers-to-host-machine/" target="_blank" rel="external">exposing ROS containers to host machine</a></p>
+<p><a href="https://takacsmark.com/how-to-get-docker-container-ip-address/" target="_blank" rel="external">why you need IP address of Docker container</a></p>
+<p><a href="https://answers.ros.org/question/312577/catkin_make-command-not-found-executing-by-a-dockerfile/" target="_blank" rel="external">catkin_make not found in dockerfile</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1803,166 +1967,6 @@ verify: Service converged
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/08/where-are-you-in-next-4-years-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/08/where-are-you-in-next-4-years-2/" itemprop="url">where are you in next 4 years (2)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-08T03:23:55-05:00">
-                2019-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/08/where-are-you-in-next-4-years-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/08/where-are-you-in-next-4-years-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h3><p>joined the  zhongguancun self-driving car workshow today, different level than PlusAI’s tech show at last weekend. there are a few goverment speakers, e.g. zhongguancun tech officer. and sensor suppliers, e.g. SueStar, zhongke hui yan, holo matic, self-driving solution suppliers, e.g. pony.ai; xiantong tech e.t.c, and media press and investors, interesting thing the investors doesn’t look promising. </p>
-<p>as mentioned last time, the ADS solution suppliers and most sensor startups join the champion, in about 2 years. and goverment are invovled with policy-friendy support. just the captial market or investors don’t buy it at this moment.</p>
-<h3 id="XianTong"><a href="#XianTong" class="headerlink" title="XianTong"></a>XianTong</h3><p>XianTong, focused in city road cleaning, which is a special focus, rather than passenger vehicles, pacakge trucks, or small delivery robotics.  </p>
-<p>They have some data in the cleanning serivces in large cities, e.g. beijing, shanghai, hangzhou, and Europen. </p>
-<ul>
-<li>current cleaner laybor’s harsh and dangerous working env </li>
-<li>current cleaner laybor’s limitation to working hours, benefits requirements</li>
-</ul>
-<p>they mentioned the city cleaning market is about 300 billions in China, which looks promising, but how much percent of the cleaning vechiles in this market is not talked.</p>
-<p>it’s maybe about 20% ~ 60%, as there are a lot human resources, city green plant needs e.t.c, which eats a lot of money, and the current cleaner vehicle products that support ADS maybe has an even smaller part in the whole vehicles used in city cleaning services. </p>
-<p>so the whole city clearning service market sounds promising, but down to the clearning vehicles, and especailly without a matured and in-market cleaner vehicle product, it’s really difficult to digest and dig golden from the market. </p>
-<p>I have a feeling, most startups has the similar gap, they do vision big, e.g. to assist the city, the companies, the bussiness, the end customers run/live more efficiently/enjoyable/profitable.</p>
-<p>but the reality is not that friendly for them, as they spent investor’s money, which expect to get profitable return in a short time. which may push the startups to draw big pictures far beyond their ability, or even far beyond the whole industry’s ability.</p>
-<p>as well as they draw big pictures, they are very limited to deep into the market, to understand the customers, to design the products with original creativity. </p>
-<h3 id="creativity-or-application"><a href="#creativity-or-application" class="headerlink" title="creativity or application"></a>creativity or application</h3><p>for investors, these a special industry-application based startups, I think, at most may get investing profit at 1 ~ 4 times.</p>
-<p>maybe it’s a good idea to understand the successful invest cases happened in last 5 years. And I am afraid that’s also a self-centered option, that most CV happened in high-tech, Internet-based startups. </p>
-<p>cause the current self-driving market, especially the startups in China, which focus in ADS full-stack solutions, sensors, services providers, are not a game-change player. </p>
-<p>in history, the first successful company to product PCs, smart phones, Internet searching serivce, social network servie, taxing service, booking (restrount) service, food delivery service, they are game changers. and somehow they are most talked in public, in investers, and most understandable by most knowledge consumers, e.g. engineers.</p>
-<p>but are they the whole picture of the national economy?  what about the local seafood resturant, the local auto repair shops; or the company who product pig’s food, who product customers’ bikes; or the sales company who sell steel to Afria.</p>
-<p>The economy is more plentiful and complex, than a mind-straight knowledge consumer can image. For a long time, I didn’t realise the local food restarant or a local gym, but they do higher money payback, and definitely higher social status, than a fixed income engineer. </p>
-<p>so don’t try to find out the secret of each component of the whole economy, and then try to find out the most optimized way to live a life. there is no, or every way to live a life, it is the most optimized way.</p>
-<p>so the CEOs of these startups, are not crazy to image themselves as the game changers, like Steve Jobs, so they know their energy.</p>
-<h3 id="surviving-first"><a href="#surviving-first" class="headerlink" title="surviving first"></a>surviving first</h3><p>since as they know their limitation, so they are not nuts, so they are just enough energy to find a way to survive, even not in a good shape.</p>
-<p>that’s the other part, as an naive young man, always forgot the fact that surviving is not beautiful most times.</p>
-<p>the nature has tell the lesson: the young brids only kill his/her brothers/sisters, then he/she can survive to grow into adult. for the deers in Afria plant, each minite is either run to survive or being eaten.</p>
-<p>companies or human as a single, has the same situation, even the goverment try to make it a little less harsh, but most time to survive is difficult.</p>
-<h3 id="market-sharing"><a href="#market-sharing" class="headerlink" title="market sharing"></a>market sharing</h3><p>as a young man, 1000 billion market sounds like a piece of cake, when comes to the small company, who work so hard to get a million level sale, sounds like a piece of shit.</p>
-<p>and that’s another naive mind about the reality. like I can’ see the money return from a local seafood resturout, and when I found out it does get more than a million every year, the whole me is shocked.</p>
-<p>so there is no big or small piece of cake, as it come to survive. most CEOs, they are not nuzy, and they know clearly in their heart, that their company need to survivie and make a profitable income, and that’s enough, to change the world is not most people’s responsibility, but survive it is. however, these CEOs in publich, they talk their company or product as the game-changers, that’s what the investors’ want they to say.</p>
-<p>so don’t think the market is too small any more, as well as it can support a family to live a life.</p>
-<p>dream is not the option to most people, that’s the final summary. but survive is a have-to.</p>
-<h3 id="life-is-evergreen"><a href="#life-is-evergreen" class="headerlink" title="life is evergreen"></a>life is evergreen</h3><p>life is not only about surviving. if else, human society is an animal world. thinking reasonal always give the doomed impression, and the life in blue; once more perceptual in mind, the day is sunny and joyful.</p>
-<p>“the theory is grey, but the tree of life is evergreen”</p>
-<h3 id="develop-team-in-OEM"><a href="#develop-team-in-OEM" class="headerlink" title="develop team in OEM"></a>develop team in OEM</h3><p>as <a href="https://zhuanlan.zhihu.com/p/95984348" target="_blank" rel="external">mentioned</a>, currently there are plenty of system simulation verification special suppliers, e.g. 51 vr, baidu, tencent, alibaba e.t.c, and definitely there softwares are more matured than our team. I am afriad jsut at this moment, the leader teams in OEM don’t realize that to build a simualtion tool espcially to support L3 is mission-impossible. if else, the requirements for simulation, should come from suppliers, rather than build OEM’s own simualtion develop team.</p>
-<p>I still remember the first day to join this team, sounds like we are really creating something amazing, and nobody else there have more advantages than us. then gradually I realize we can’t customize the Unity engine, we can’t support matured cloud support, we can’t even implement the data pipeline for road test log and analysis. most current team members work stay in requirements level, and in a shadow mode. and actually most of these needs, does have a few external companies/teams have better solution. </p>
-<p>there does a lot existing issues, from software architecture to ADS algorithms restructure, but these work is mostly not done by OEM develop team.</p>
-<p>the second-level developing team, can’t make the top-class ADS product. as the new company will split out, this team is less possible to survive in the market, or the leaders have to set up a new developing team.</p>
-<p>if AI is the direction, that’s another huge blank for this team. I think either go to the ADS software architecture or to AI is a better choice now.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2013,7 +2017,7 @@ verify: Service converged
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">152</span>
+                <span class="site-state-item-count">153</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
