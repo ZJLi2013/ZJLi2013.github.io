@@ -93,16 +93,17 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/archives/2018/page/2/index.html">
+<meta name="description" content="previously reviewed a few open source mdf readers as well as get basic concept about mdf. here is a working process with asammdf, which is step by step to understand this lib. the basic problem here i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="asam mdf reader">
+<meta property="og:url" content="http://yoursite.com/2020/03/07/asam-mdf-reader/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="previously reviewed a few open source mdf readers as well as get basic concept about mdf. here is a working process with asammdf, which is step by step to understand this lib. the basic problem here i">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-03-07T07:40:47.092Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="asam mdf reader">
+<meta name="twitter:description" content="previously reviewed a few open source mdf readers as well as get basic concept about mdf. here is a working process with asammdf, which is step by step to understand this lib. the basic problem here i">
 
 
 
@@ -130,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/page/2/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/07/asam-mdf-reader/"/>
 
 
 
 
 
-  <title>Archive | Serious Autonomous Vehicles</title>
+  <title>asam mdf reader | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left  page-archive  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,402 +280,169 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-    <span class="archive-page-counter">
-      
-      
-       
-        
-      Great! 155 posts in total. Keep on posting.
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/07/asam-mdf-reader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
     </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">asam mdf reader</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-07T02:40:17-05:00">
+                2020-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/07/asam-mdf-reader/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/07/asam-mdf-reader/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
 
       
       
-      
 
+      
+        <p><a href="https://zjli2013.github.io/2020/02/24/mdf4-reader/" target="_blank" rel="external">previously</a> reviewed a few open source mdf readers as well as get basic concept about mdf. here is a working process with asammdf, which is step by step to understand this lib.</p>
+<p>the basic problem here is to read a special signal data, not know its channel and group id.</p>
+<h4 id="first-try"><a href="#first-try" class="headerlink" title="first try"></a>first try</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">reader = MDF4(file_name)</div><div class="line">data_dict = reader.info()</div><div class="line">print(<span class="string">"the total len of dict: "</span>, len(data_dict))</div><div class="line">print(data_dict.keys())</div><div class="line">block_ =  data_dict[<span class="string">'group 117'</span>]</div><div class="line">channel_metadata = reader.get_channel_metadata(<span class="string">'t'</span>, <span class="number">117</span>)</div><div class="line">channel117_comment = reader.get_channel_comment(<span class="string">'t'</span>, <span class="number">117</span>)</div><div class="line">channel117_name = reader.get_channel_name(<span class="number">117</span>, <span class="number">0</span>)</div><div class="line">pattern=<span class="string">"channel 123"</span></div><div class="line"><span class="keyword">for</span> key <span class="keyword">in</span> block_ :</div><div class="line">    r1 = re.search(pattern, str(block_[key]), re.M|re.I)</div><div class="line">    <span class="keyword">if</span> r1:</div><div class="line">       print(key)</div><div class="line"></div><div class="line">data_ = reader.get(<span class="string">"channel 123"</span>) <span class="comment">#doesn't work, as it reports can't find Channel</span></div><div class="line">data_ = reader.get(<span class="string">"fus_lidar_camera"</span>, <span class="string">"group 123"</span>) <span class="comment">#doesn't work, as it reports can't find the Group</span></div><div class="line">data_ = reader.get(<span class="string">"fus_lidar_camera"</span>) <span class="comment">#works</span></div></pre></td></tr></table></figure>
+<p>so first, “channel 123” is actually not the name. and with the right name can reading data, but no guarantee which group this channel is from, and further can’t know is there additional groups has record this type of data.</p>
+<h4 id="second-try"><a href="#second-try" class="headerlink" title="second try"></a>second try</h4><p>as mentioned <a href="https://asammdf.readthedocs.io/en/latest/api.html#mdf4" target="_blank" rel="external">mdf4 groups</a> have attributes, how about to access these <strong>attributes</strong>. so far, especially helpful attributes are:</p>
+<ul>
+<li><p>groups:list, list of data group dicts </p>
+</li>
+<li><p>channels_db:dict, used for fast channel access by name. for each name key the value is a list of (group index, channel index) tuples</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">channels = reader.groups[<span class="number">2</span>] <span class="comment">#with the same order as found in mdf, even with index 0, 1, ...</span></div><div class="line">print(<span class="string">"type of channels: "</span>, type(channels)) <span class="comment">#dict</span></div><div class="line"><span class="keyword">if</span> <span class="string">"fus.ObjData_Qm_TC.FusObj.i17.alpPiYawAngle"</span> <span class="keyword">in</span> channels:   print(channels[<span class="string">"fus.ObjData_Qm_TC.FusObj.i17.alpPiYawAngle"</span>].id) <span class="comment">#none</span></div><div class="line">print(<span class="string">" chanels type: "</span> , type(channels[<span class="string">"channels"</span>])) <span class="comment">#list </span></div><div class="line">print(<span class="string">" chanels len: "</span> , len(channels[<span class="string">"channels"</span>])) <span class="comment">#577</span></div><div class="line">print(<span class="string">"chanel_group type: "</span> , type(channels[<span class="string">"channel_group"</span>])) <span class="comment"># ChannelGroup object</span></div><div class="line">print(<span class="string">"chanel_group len: "</span> , len(channels[<span class="string">"channel_group"</span>])) <span class="comment">#17</span></div><div class="line">print(<span class="string">" data_group type: "</span> , type(channels[<span class="string">"data_group"</span>])) <span class="comment">#DataGroup object</span></div><div class="line">print(<span class="string">" data_group len: "</span> , len(channels[<span class="string">"data_group"</span>])) <span class="comment">#10</span></div></pre></td></tr></table></figure>
+<p>which is far more less as expected, but give an good exploring about the reader’s attributes.</p>
+<h4 id="third-try"><a href="#third-try" class="headerlink" title="third try"></a>third try</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">reader = MDF4(file_name)</div><div class="line">cdb = reader.channels_db</div><div class="line"><span class="comment">#print("size of c_db ", len(cdb))</span></div><div class="line"><span class="comment">#print("type of cdb ", type(cdb))</span></div><div class="line"></div><div class="line"><span class="comment">#for more sigles interested, please append to this list</span></div><div class="line">sig_list = [<span class="string">'sensor_1'</span>, <span class="string">'sensor_2'</span>, <span class="string">'sensor_3'</span>]</div><div class="line"></div><div class="line"><span class="keyword">for</span> sig <span class="keyword">in</span> sig_list:</div><div class="line">    <span class="keyword">if</span> sig <span class="keyword">in</span> cdb:</div><div class="line">        print(cdb[sig])</div><div class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> cdb[sig]:</div><div class="line">            (gid, cid) = item</div><div class="line">            alp = reader.get(sig, gid, cid)</div><div class="line">            print(<span class="string">"type of current sig "</span>, type(alp))</div><div class="line">            print(<span class="string">"size of current sig "</span>, len(alp))</div><div class="line">            <span class="comment">#alp is the raw sig data, here is only test print</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        print(sig, <span class="string">" is not in cdb"</span></div></pre></td></tr></table></figure>
+<p>which gives me the right way to access the interested signals’ raw data. combing with <strong>s3 streaming body read</strong>, as mentioned in previous mdf-reader, which finally gives the powerful pipeline from reading mdf4 files from s3 storage to downside appilication</p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.runoob.com/python3/python3-reg-expressions.html" target="_blank" rel="external">pyton reg</a></p>
+<p><a href="https://techeplanet.com/python-string-contains/" target="_blank" rel="external">python substring</a></p>
+
+      
+    </div>
+
+    <div>
       
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2018">2018</h2>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" rel="next" title="design a nodejs web server from db to s3">
+                <i class="fa fa-chevron-left"></i> design a nodejs web server from db to s3
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
         </div>
       
-      
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/12/01/reinforce-learning-in-simulator/" itemprop="url">
-              
-                <span itemprop="name">reinforcement learning in simulator</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-12-01T10:14:26-05:00"
-              content="2018-12-01" >
-          12-01
-        </time>
-      </div>
-
-    </header>
+      
+    </footer>
   </article>
 
 
 
-    
-
+    <div class="post-spread">
       
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/27/pYTHON-again/" itemprop="url">
-              
-                <span itemprop="name">pYTHON again</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-27T00:05:45-04:00"
-              content="2018-10-27" >
-          10-27
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/11/the-OK-and-not-OK-in-my-life/" itemprop="url">
-              
-                <span itemprop="name">the OK and not OK in my life</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-11T18:42:04-04:00"
-              content="2018-10-11" >
-          10-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/02/Btree-max-path-sum/" itemprop="url">
-              
-                <span itemprop="name">Btree max path sum</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-02T20:22:46-04:00"
-              content="2018-10-02" >
-          10-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/01/when-pure-loop-doesn-t-work-out/" itemprop="url">
-              
-                <span itemprop="name">when pure loop doesn't work out</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-01T23:02:00-04:00"
-              content="2018-10-01" >
-          10-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/01/Btree-traversal/" itemprop="url">
-              
-                <span itemprop="name">Btree traversal</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-10-01T23:01:14-04:00"
-              content="2018-10-01" >
-          10-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/24/construct-a-self-balanced-BStree/" itemprop="url">
-              
-                <span itemprop="name">construct a self balanced BStree</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-24T17:59:21-04:00"
-              content="2018-09-24" >
-          09-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="url">
-              
-                <span itemprop="name">construct BTree from pre/in/post-order input</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:33:49-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/construct-BTree-from-breadth-order-input/" itemprop="url">
-              
-                <span itemprop="name">construct BTree from breadth-order input</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:32:22-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/19/print-combinatorics/" itemprop="url">
-              
-                <span itemprop="name">print combinatorics</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-09-19T17:30:23-04:00"
-              content="2018-09-19" >
-          09-19
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2018/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/2018/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2018/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2018/page/5/">5</a><a class="extend next" rel="next" href="/archives/2018/page/3/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
-
+    </div>
+  </div>
 
 
           </div>
@@ -682,6 +450,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -702,8 +481,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -776,6 +564,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#first-try"><span class="nav-number">1.</span> <span class="nav-text">first try</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#second-try"><span class="nav-number">2.</span> <span class="nav-text">second try</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#third-try"><span class="nav-number">3.</span> <span class="nav-text">third try</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number"></span> <span class="nav-text">refer</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -889,11 +693,9 @@
   
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
 
 
   
@@ -912,6 +714,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/07/asam-mdf-reader/';
+          this.page.identifier = '2020/03/07/asam-mdf-reader/';
+          this.page.title = 'asam mdf reader';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   

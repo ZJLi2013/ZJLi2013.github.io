@@ -291,6 +291,178 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/25/design-scenarios-in-ADS-simulation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="url">design scenarios in ADS simulation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-25T10:15:24-04:00">
+                2019-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/25/design-scenarios-in-ADS-simulation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/25/design-scenarios-in-ADS-simulation/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>to design scenarios in self-driving test, one reference is: <a href="https://www.nhtsa.gov/document/framework-automated-driving-system-testable-cases-and-scenarios" target="_blank" rel="external">a framework for automated driving system testable cases and sceanrios</a>, most other scenario classifications have almost the same elements: ODD, e.g. road types, road surfaces; OEDR, namely object and event detection and response, e.g. static obstacles, other road actors, traffic signature, environment conditions, special zones; and failure mode behaviors.</p>
+<p>in general, test cases can be grouped as black box test, in which the scenario parterners’ behavior is not pre-defined or unpredictable, e.g. random traffic flow(npcs) scenario, or white box test, where the npcs behavior is pre-defined, e.g. following user-define routings. white box testing is helpful to support performance metrics; while black-box testing is helpful to verify the system completeness and robust.</p>
+<p>as for ADS test, there are a few chanllenges coming from:</p>
+<ul>
+<li><p>heuristics decision-making algorithms, deep-learning algorithms, which is not mathematically completed</p>
+</li>
+<li><p>the test case completeness, as the number of tests required to achieve statistically significant to claim safe would be staggering</p>
+</li>
+<li><p>undefined conditions or assumptions</p>
+</li>
+</ul>
+<p>a sample test scenario set maybe looks like: </p>
+<table>
+<thead>
+<tr>
+<th>ODD</th>
+<th>OEDR-obj</th>
+<th>OEDR-loc</th>
+<th>maneuver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>in rump</td>
+<td>static obstacles</td>
+<td>in front of current lane</td>
+<td></td>
+</tr>
+<tr>
+<td>in rump</td>
+<td>static obstacles</td>
+<td>in front of targe lane</td>
+<td></td>
+</tr>
+<tr>
+<td>in rump</td>
+<td>dynamic obstacles</td>
+<td>in front of current lane</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scenarios-runner"><a href="#scenarios-runner" class="headerlink" title="scenarios_runner"></a>scenarios_runner</h3><p><a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external">carla</a> has offered an scenario engine, which is helpful to define scenarios by test_criteria and behaviors, of course the timeout as well.</p>
+<p><code>test_criteria</code>, is like an underline boundary for the scenario to keep, if not, the scenario failed. e.g. max_speed_limitation, collision e.t.c. these are test criterias, no matter simualtion test or physical test, that have to follow the same criterias; in old ways, we always try to find a way to evaluate the simulation result, and thought this may be very complex, but as no clue to go complex further, simple criterias actually is good. even for reinforcement learning, the simple criterias is good enough for the agent to learn the drive policy. </p>
+<p>of course, I can expect there are some expert system about test criterias.  </p>
+<p>For simulation itself, there has another metric to descibe how close the simulation itself to physical world, namley to performance how well the simulator is, which is beyond here.</p>
+<p><code>behaivor</code> is a good way to describe the dynamic processing in the scenario. e.g. npc follow lane to next intersection, and stop in right lane, ego follow npc till the stop area.</p>
+<p>OpenScenario has similar ideas to descibe the dynamic. to support <code>behaivor</code>, the simulator should have the features to control ego and npc with the atomic behaviors, e.g. lane-follow, lane-change, stop at intersection e.t.c. </p>
+<p>in lg simulator, npc has simple AI routing and lane-following API, basically is limited to follow pre-defined behaviors; ego has only cruise-control, but external planner is avialable through ROS.</p>
+<p>for both <code>test_criteria</code> and <code>behavior</code>, carla has a few existing atomic elements, which is a good idea to build up complex scenarios. </p>
+<h3 id="OpenScenario"><a href="#OpenScenario" class="headerlink" title="OpenScenario"></a>OpenScenario</h3><p>not sure if this is a project still on-going, carla has interface and a few other open source parsers there, but as it is a standard in popular projects, e.g. PEGUS, should be worthy to take further study.  </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/18/model-based-design-sucks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2012,161 +2184,6 @@ multi path                     +-1m
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/Manhanton-SC-review/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/12/Manhanton-SC-review/" itemprop="url">Manhanton SC review</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-12T10:37:16-04:00">
-                2019-06-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/12/Manhanton-SC-review/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/12/Manhanton-SC-review/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="conjunctions"><a href="#conjunctions" class="headerlink" title="conjunctions"></a>conjunctions</h3><p>the seven conjunctions can used to connect two independent clauses:</p>
-<pre><code>For,   And, Nor,  But, Or,  Yet, So
-</code></pre><p>comma only cant connect two sentences;  but can connect two independent clauses using a semicolon(;)</p>
-<p>semicolon is often followed by a transition expression, (however, therefore, in addition), but these expression are not conjunctions, so must use semicolons, not commas to join.</p>
-<h3 id="noun-modifiers"><a href="#noun-modifiers" class="headerlink" title="noun modifiers"></a>noun modifiers</h3><p>in the format:  prepositon,  part participle, presetn participle without commas. put the noun and its modifier as close together as possible </p>
-<p>“ comma which” is a nonessential modifier</p>
-<h3 id="relative-pronouns"><a href="#relative-pronouns" class="headerlink" title="relative pronouns"></a>relative pronouns</h3><p>which,  cant modify people, </p>
-<p>who/ whom, must modify people </p>
-<p>whose,  can modify either people or things</p>
-<p>where, can modify a noun place,  can’t modify a metaphorical place, such as situation, case …</p>
-<p>when,  can modify a noun event or time </p>
-<h3 id="Noun-Modifier-markers"><a href="#Noun-Modifier-markers" class="headerlink" title="Noun Modifier markers"></a>Noun Modifier markers</h3><p>any -ing that are not verbs and not separated from the rest of the sentence by comma will either be a noun, or a modifier of another noun.</p>
-<p>any “comma -ing” is adverbial modifiers </p>
-<h3 id="adverbial-modifier"><a href="#adverbial-modifier" class="headerlink" title="adverbial modifier"></a>adverbial modifier</h3><p>in the format of:  prepositional phrase,  present participle with commas , past participle with commas </p>
-<p>the adverbial modifier must modify a certain verb or clause at a right position, not structurally closer to another verb or clause </p>
-<h3 id="participle-modifiers"><a href="#participle-modifiers" class="headerlink" title="participle modifiers"></a>participle modifiers</h3><p>when using particples, the information present earlier in the sentence leads to or results in the information presented later in the sentence .</p>
-<h3 id="subordinators"><a href="#subordinators" class="headerlink" title="subordinators"></a>subordinators</h3><p>subordernate clause provides additional info about the main clause.  common subordinatetor markers:</p>
-<pre><code>although,  before,  unless, because,  that, so that, 
- if, yet, after, while, since, when. 
-</code></pre><p>and using only one connected word per “connection” . .   </p>
-<h3 id="which-vs-ing"><a href="#which-vs-ing" class="headerlink" title="which vs  -ing"></a>which vs  -ing</h3><p>whenever using <code>which</code>, must refer to a noun,  can’t modify a whole clause. </p>
-<p>so if need to modify the whole clause, use  an  adverbial modifier(either -ing, or past) </p>
-<h2 id="quantity"><a href="#quantity" class="headerlink" title="quantity"></a>quantity</h2><p>countable modifiers:   </p>
-<pre><code>many,  few, fewer,  fewest,  number of ,  numerous 
-</code></pre><p>uncountable modifiers:  </p>
-<pre><code>much, little, less, least, amount of , great 
-</code></pre><p>more, enough,  all works with both countable and uncountable. </p>
-<h2 id="parallelism"><a href="#parallelism" class="headerlink" title="parallelism"></a>parallelism</h2><p>comparable sentence parts must be structurally and logically similar </p>
-<h2 id="comparison"><a href="#comparison" class="headerlink" title="comparison"></a>comparison</h2><p>comparison are a subset of parallelism, which requires parallelism between two elements, but also require the two compared items are fundamentally the same type of thing </p>
-<pre><code>like,  unlike,  as, than,  as adj as, 
- different from,  in contrast to/with 
-</code></pre><h3 id="like-vs-as"><a href="#like-vs-as" class="headerlink" title="like vs  as"></a>like vs  as</h3><p><code>like</code> is used to compare nouns, pronouns or noun phrase, never put a clause or prepositional phrase after like.</p>
-<p><code>as</code> can used to compare two clauses.  </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2217,7 +2234,7 @@ multi path                     +-1m
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">154</span>
+                <span class="site-state-item-count">155</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

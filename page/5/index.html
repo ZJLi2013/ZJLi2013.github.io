@@ -291,6 +291,172 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/configure-pgAdmin4-in-server-mode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/13/configure-pgAdmin4-in-server-mode/" itemprop="url">configure pgAdmin4 in server mode</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-13T06:35:25-04:00">
+                2019-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/13/configure-pgAdmin4-in-server-mode/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/13/configure-pgAdmin4-in-server-mode/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>pgSQL is common used to store hd map in ADS stack, and the client is usually pgAdmin4. in big tech companies, e.g. Tencent, Alibaba, Uber e.t.c, their <code>data infrastructure</code> for ADS stack development is usually based on pgSQL. for our team work, we also store most map info in pgSQL, and for better development toolchain, there is a need to configure the client pgAdmin4 as a web server, rather than request every developer to install a copy of pgAdmin4 at their local side.</p>
+<p>in LAN web server, apache2 is used to serve a few services, so there is a need to configure multi virutal host in Aapche2, with differnt port and same IP.</p>
+<h2 id="pgSQLServer"><a href="#pgSQLServer" class="headerlink" title="pgSQLServer"></a>pgSQLServer</h2><ul>
+<li><p><a href="https://www.postgresql.org/download/linux/ubuntu/" target="_blank" rel="external">official install postgresql</a></p>
+</li>
+<li><p><a href="https://www.postgresql.org/docs/current/server-start.html" target="_blank" rel="external">start pgSQLserver</a></p>
+</li>
+<li><p>jump into pgSQL server:</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">/etc/init.d/postgresql start </div><div class="line"></div><div class="line">sudo su - postgres</div></pre></td></tr></table></figure>
+<h2 id="pgAdmin4"><a href="#pgAdmin4" class="headerlink" title="pgAdmin4"></a>pgAdmin4</h2><p>installed by <code>apt-get install pgadmin4</code>, will put pgAdmin4 under local user or root permission, which will be rejected if accessed by remote clients, whose permission is <code>www-data</code></p>
+<p>so it’s better to install from src and in a different Python virtual env.</p>
+<ul>
+<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-programming-environment-on-an-ubuntu-18-04-server" target="_blank" rel="external">setup Python virtual Env</a></p>
+</li>
+<li><p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">install pgAdmin4 from src</a></p>
+</li>
+</ul>
+<p>there maybe a few errors as following:</p>
+<pre><code>*  No package &apos;libffi&apos; found  
+
+*  error: invalid command &apos;bdist_wheel&apos; [sol](https://stackoverflow.com/questions/34819221/why-is-python-setup-py-saying-invalid-command-bdist-wheel-on-travis-ci)
+
+* error: command &apos;x86_64-linux-gnu-gcc&apos; failed with exit status 1, [sol](https://stackoverflow.com/questions/21530577/fatal-error-python-h-no-such-file-or-directory)
+</code></pre><h2 id="configure-pgAdmin4"><a href="#configure-pgAdmin4" class="headerlink" title="configure pgAdmin4"></a>configure pgAdmin4</h2><p>follow <a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">this configure pgadmin4 in Server mode</a></p>
+<h2 id="configure-Apache2"><a href="#configure-Apache2" class="headerlink" title="configure Apache2"></a>configure Apache2</h2><p>follow previous blog to set Apache2 for pgadmin4:</p>
+<pre><code class="script">&lt;VirtualHost *:8084&gt;
+    ServerName 10.20.181.119:8084
+    ErrorLog  &quot;/var/www/pgadmin4/logs/error.log&quot;
+    WSGIDaemonProcess pgadmin  python-home=/home/david/py_venv/pgenv
+    WSGIScriptAlias /pgadmin4 /home/david/py_venv/pgenv/lib/python3.5/site-packages/pgadmin4/pgAdmin4.wsgi
+
+    &lt;Directory &quot;/home/david/py_venv/pgenv/lib/python3.5/site-packages/pgadmin4/&quot;&gt;
+        WSGIProcessGroup pgadmin
+        WSGIApplicationGroup %{GLOBAL}
+        Require all granted
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>restart Apache2 server will make this works.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://serverfault.com/questions/601140/whats-the-difference-between-sudo-su-postgres-and-sudo-u-postgres" target="_blank" rel="external">why sudo - su</a></p>
+<p><a href="https://www.godaddy.com/garage/how-to-install-postgresql-on-ubuntu-14-04/" target="_blank" rel="external">godaddy about sudo - su</a></p>
+<p><a href="https://www.digitalocean.com/community/tutorials/how-to-install-configure-pgadmin4-server-mode" target="_blank" rel="external">configure pgadmin4 in Server mode</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/host-mod-wsgi-in-Apache2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2052,207 +2218,6 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="url">vehicle dynamics model in ADS simulation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-03T09:08:09-04:00">
-                2019-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/03/vehicle-dynamics-model-in-ADS-simulation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/03/vehicle-dynamics-model-in-ADS-simulation/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-<h2 id="VD-background"><a href="#VD-background" class="headerlink" title="VD background"></a>VD background</h2><p>usually to simualate vehicle dynamic(VD) system, either by physical model, e.g. pysical models of engine, gearbox, powertrain; or parameter model, which doesn’t take into the physical process of the dynamic system, but tracking the system’s input, output and fit their relationship with polynomail equation or functions with multi-pieces. </p>
-<p><code>traction force</code> is derived from engine torque, which goes to gearbox(powertrain system) and then divided by radius of wheels, then distribute to wheels. </p>
-<h3 id="traction-torque"><a href="#traction-torque" class="headerlink" title="traction torque"></a>traction torque</h3><ul>
-<li><p>air drag </p>
-</li>
-<li><p>air lift force </p>
-</li>
-<li><p>traction force </p>
-<p>  $$ F(traction) = F(air drag) + F(air lift force) + F(tire drag) + acc * mass $$</p>
-</li>
-</ul>
-<p>in a detail way, the equation above should split into lateral state equation and longitudional state equation, if consider driver control module, which will give <code>laterl control equation</code> and <code>longitudional control equation</code>. </p>
-<h3 id="brake-torque-and-ABS-system"><a href="#brake-torque-and-ABS-system" class="headerlink" title="brake torque and ABS system"></a>brake torque and ABS system</h3><p>ABS(anti-block system) works in the situation, when driver input <code>brake torque</code> is larger than the max <code>ground-tire torque</code> can attached between tire and ground. </p>
-<p>once max <code>ground-tire torque</code> is achieved, namely the max fore-aft force <code>T</code> is achived, the traction direction <code>traction slip angular</code> decceleration will leap, this is the dead-blocking situation, and when it happens, the driver input <code>brake torque</code> is saturated.  </p>
-<p>to avoid block situation happens, usually track decelleration of <code>traction slip angular</code> during <code>brake torque</code> increase, if the value of <code>decelleration of slip traction angular</code> is beyond a threshold value, ABS controller will trigger to decease <code>brake torque</code>.</p>
-<h3 id="drive-stability"><a href="#drive-stability" class="headerlink" title="drive stability"></a>drive stability</h3><p>the driving stability is mainly due to forces on tires, sepcially the lateral angular velocity derived from <code>Lateral Force</code></p>
-<p><img src="https://upload.wikimedia.org/wikipedia/en/6/65/Tire_Force_Variation1.jpg" alt="image"></p>
-<h3 id="lateral-control"><a href="#lateral-control" class="headerlink" title="lateral control"></a>lateral control</h3><p>taking driver as one element, the driveing system is a close-loop control system. the system works on a road situation:</p>
-<ul>
-<li>the driver pre-expect a driving path(predefined path) and operate the steering wheel to some certain angular </li>
-<li>the vehicle take a move with a real driving path(real path)</li>
-<li>the real path is not exactly fitted to the predefined path, leading the driver take an additional conpensation control</li>
-</ul>
-<h3 id="longitudinal-control"><a href="#longitudinal-control" class="headerlink" title="longitudinal control"></a>longitudinal control</h3><p>similar as lateral control</p>
-<h2 id="VD-in-Unity"><a href="#VD-in-Unity" class="headerlink" title="VD in Unity"></a>VD in Unity</h2><p>any vehicle in Unity is a combination of:  4 wheels colliders and 1 car collider.</p>
-<p><img src="http://www.theappguruz.com/app/uploads/2018/06/car-as-per-unity.png" alt="image"></p>
-<h3 id="WheelConllider"><a href="#WheelConllider" class="headerlink" title="WheelConllider"></a>WheelConllider</h3><p>1) AxleInfo</p>
-<p><code>AxleInfo</code> represents the pair of wheels, so for 4-wheel vehicle, there are two AxleInfo objects. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">AxleInfo</span> </span></div><div class="line">&#123;</div><div class="line">  WheelCollider  left ;</div><div class="line">  WheelCollider right; </div><div class="line">  GameObject leftVisual ;</div><div class="line">  GameObject  rightVisual ;</div><div class="line">  <span class="keyword">bool</span> motor ;    <span class="meta">#enable movement of this wheel pair</span></div><div class="line">  <span class="keyword">bool</span> steering ; <span class="meta"># enable rotation of this wheel pair </span></div><div class="line">  <span class="keyword">float</span> brakeBias = <span class="number">0.5f</span>; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>2) core parameters </p>
-<ul>
-<li><p>wheel damping rate </p>
-</li>
-<li><p>suspension distance </p>
-</li>
-<li><p>Force apply point distance (where ground force act on wheel) </p>
-</li>
-<li><p>suspension spring </p>
-</li>
-<li><p>forwardSlip(slip angle),   tire slip in the rolling(tractional) direction, which is used in calculating torque</p>
-</li>
-<li><p>sidewaySlip, the lateral direction slip, which leads to stability issue.</p>
-</li>
-</ul>
-<p><img src="http://www.theappguruz.com/app/uploads/2018/06/physics-of-wheel-collider.png" alt="physical of wheel"></p>
-<p>3) visualization</p>
-<p>the <code>WheelCollider</code> GameObject is always fixed relative to the vehicle body, usually need to setup another visual GameObject to represent turn and roll.</p>
-<p><a href="https://github.com/lgsvl/simulator/blob/master/Assets/Scripts/Controllers/VehicleController.cs" target="_blank" rel="external">implementation from lg-sim</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">void ApplyLocalPositionToVisuals(WheelCollider collider, GameObject visual)</div><div class="line">    &#123;</div><div class="line">        Transform visualWheel = visual.transform;</div><div class="line"></div><div class="line">        Vector3 position;</div><div class="line">        Quaternion rotation;</div><div class="line">        collider.GetWorldPose(out position, out rotation);</div><div class="line"></div><div class="line">        visualWheel.transform.position = position;</div><div class="line">        visualWheel.transform.rotation = rotation;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p>4) WheelCollider.ConfigureVehicleSubsteps</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">public void ConfigureVehicleSubsteps(float speedThreshold, int stepsBelowThreshold, int stepsAboveThreshold);</div></pre></td></tr></table></figure>
-<p>Every time a fixed update happens, the vehicle simulation splits this fixed delta time into smaller sub-steps and calculates suspension and tire forces per each smaller delta. Then, it would sum up all resulting forces and torques, integrate them, and apply to the vehicle’s body.</p>
-<p>5) WheelCollider.GetGroundHit<br>return the ground collision data for the wheel, namely <a href="https://docs.unity3d.com/ScriptReference/WheelHit.html" target="_blank" rel="external"><code>WheelHit</code></a></p>
-<h3 id="wheel-friction-curve"><a href="#wheel-friction-curve" class="headerlink" title="wheel friction curve"></a>wheel friction curve</h3><p>for wheels’ forward(rolling) direction and sideways direction, first need to determine how much the tire is slipping, which is based on speed difference between the tire’s rubber and the road,<br>then this slip is used to find out the tire force exerted on the contact point </p>
-<p>the wheel friction curve taks a measure of tire slip as an Input and give a force as output.  </p>
-<p>The property of real tires is that for low slip they can exert high forces, since the rubber compensates for the slip by stretching. Later when the slip gets really high, the forces are reduced as the tire starts to slide or spin</p>
-<p>1) AnimationCurve<br><a href="https://docs.unity3d.com/ScriptReference/AnimationCurve.html" target="_blank" rel="external">unity official</a></p>
-<p>store a collection of Keyframes that can be evaluated over time  </p>
-<h3 id="vehicleController-in-lg-sim"><a href="#vehicleController-in-lg-sim" class="headerlink" title="vehicleController() in lg-sim"></a>vehicleController() in lg-sim</h3><p>1) the controllable parameters:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">currentGear </div><div class="line">currentRPM</div><div class="line">currentSpeed </div><div class="line">currentTorque</div><div class="line">currentInput </div><div class="line">steerInput</div></pre></td></tr></table></figure>
-<p>2)  math interpolate function used</p>
-<pre><code>Mathf.Lerp(a, b, t)
-</code></pre><p>a -&gt; the start value </p>
-<p>b -&gt; the end value</p>
-<p>t -&gt; the interpolation value between start and end </p>
-<p>3) fixedUpdate()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// cal trace force by rigidbody</div><div class="line">rigidbody.AddForce(air_drag)</div><div class="line">rigidbody.AddForce(air_lift)</div><div class="line">rigidbody.AddForceAtPosition(tire_drag, act_position)</div><div class="line">// update current driving torque</div><div class="line">currentTorque = rpmCurve.Evalue(currentRPM / maxRPM) * gearRaion * AdjustedMaxTorque </div><div class="line">// apply torque </div><div class="line">// apply traction control</div><div class="line">// update speed</div><div class="line">currentSpeed = rigidbody.velocity.magnitude</div><div class="line">// update fuel info</div><div class="line">fuelLevel -= deltaConsumption</div><div class="line">// update engine temp</div><div class="line">// update turn signal light</div></pre></td></tr></table></figure>
-<p>4) ApplyTorque()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">float torquePerWheel = accelInput * (currentTorque / numberofWheels) </div><div class="line">foreach(axle in axles):</div><div class="line">	if(axle.left.motor):</div><div class="line">		axle.left.motorTorque = torquePerWheel</div><div class="line">	if(axle.right.motor):</div><div class="line">		axle.right.motorTorque = torquePerWheel</div></pre></td></tr></table></figure>
-<p>5) TractionControl()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">TractionControl()</div><div class="line">&#123;</div><div class="line">	AdjustTractionControlTorque(axle.hitLeft.forwardSlip)</div><div class="line">&#125;</div><div class="line">			</div><div class="line">AdjustTractionControlTorque(forwardSlip)</div><div class="line">&#123;</div><div class="line">   if(forwardSlip &gt; SlipLimit)</div><div class="line">	tractionMaxTorque -= 10 </div><div class="line">   else </div><div class="line">        tractionMaxTorque += 10 </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>in lg-sim, the VD model is still simple, as there is only traction/logitudional control. </p>
-<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="http://www.jeyzhang.com/how-to-insert-equations-in-markdown.html" target="_blank" rel="external">add equation in markdown</a></p>
-<p><a href="https://docs.unity3d.com/Manual/class-WheelCollider.html" target="_blank" rel="external">wheelcollider doc</a></p>
-<p><a href="https://docs.unity3d.com/ScriptReference/WheelCollider.html" target="_blank" rel="external">whell collider official</a></p>
-<p><a href="https://docs.unity3d.com/Manual/WheelColliderTutorial.html" target="_blank" rel="external">whellcollider tutorial</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2303,7 +2268,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">154</span>
+                <span class="site-state-item-count">155</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
