@@ -93,16 +93,17 @@
 
 
 
-<meta name="description" content="what I don&apos;t know">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Serious Autonomous Vehicles">
-<meta property="og:url" content="http://yoursite.com/tags/Tesla/index.html">
+<meta name="description" content="backgroundfor now, we had design a file server from db to s3 and mf reader to feed data to the ads test module, which run in SIMD mode, e.g. k8s. for a closed-loop SIL, another component is how to rec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="design a logger from ws to db">
+<meta property="og:url" content="http://yoursite.com/2020/03/09/design-a-logger-from-ws-to-db/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="what I don&apos;t know">
+<meta property="og:description" content="backgroundfor now, we had design a file server from db to s3 and mf reader to feed data to the ads test module, which run in SIMD mode, e.g. k8s. for a closed-loop SIL, another component is how to rec">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-03-09T07:54:30.662Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Serious Autonomous Vehicles">
-<meta name="twitter:description" content="what I don&apos;t know">
+<meta name="twitter:title" content="design a logger from ws to db">
+<meta name="twitter:description" content="backgroundfor now, we had design a file server from db to s3 and mf reader to feed data to the ads test module, which run in SIMD mode, e.g. k8s. for a closed-loop SIL, another component is how to rec">
 
 
 
@@ -130,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/Tesla/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/09/design-a-logger-from-ws-to-db/"/>
 
 
 
 
 
-  <title>Tag: Tesla | Serious Autonomous Vehicles</title>
+  <title>design a logger from ws to db | Serious Autonomous Vehicles</title>
   
 
 
@@ -161,7 +162,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -279,44 +280,165 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h1>Tesla<small>Tag</small>
-      </h1>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/design-a-logger-from-ws-to-db/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">design a logger from ws to db</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-09T03:54:00-04:00">
+                2020-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/09/design-a-logger-from-ws-to-db/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/09/design-a-logger-from-ws-to-db/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>for now, we had <a href="https://zjli2013.github.io/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" target="_blank" rel="external">design a file server from db to s3</a> and <a href="https://zjli2013.github.io/2020/03/07/asam-mdf-reader/" target="_blank" rel="external">mf reader</a> to feed data to the ads test module, which run in SIMD mode, e.g. k8s. for a closed-loop SIL, another component is how to record test message/outputs to database. </p>
+<p>I am thinking firstly <a href="https://stackoverflow.com/questions/1066413/eventdriven-webframework-for-python" target="_blank" rel="external">event driven webframework python</a>, or <a href="https://github.com/quantmind/pulsar" target="_blank" rel="external">plusar</a>, which is a popular python event-driven project. as lgsvl pythonAPI is really a good choice to transfer message among server and clients. so the basic idea is to integrate websocket/tcp channel inside aeb model</p>
+<h2 id="websocket-vs-tcp"><a href="#websocket-vs-tcp" class="headerlink" title="websocket vs tcp"></a>websocket vs tcp</h2><p>most ADAS models developed in OEM are matlab based, and the most common communication protocol in Matlab is <a href="https://www.mathworks.com/matlabcentral/fileexchange/345-tcp-udp-ip-toolbox-2-0-6" target="_blank" rel="external">UDP</a>, a little review about <a href="https://www.diffen.com/difference/TCP_vs_UDP" target="_blank" rel="external">tcp vs udp</a>, I personally don’t like udp, no reason. so narrow to <strong>TCP</strong>, the further question is:  should it be <a href="https://stackoverflow.com/questions/16945345/differences-between-tcp-sockets-and-web-sockets-one-more-time" target="_blank" rel="external">a raw TCP or Websocket</a>),  websocket enables a stream of messages instead of a stream of bytes. WebSockets is built on normal TCP sockets and uses frame headers that contains the size of each frame and indicate which frames are part of a message. The WebSocket API re-assembles the TCP chunks of data into frames which are assembled into messages before invoking the message event handler once per message. WebSocket is basically an application protocol (with reference to the ISO/OSI network stack), message-oriented, which makes use of TCP as transport layer. btw, TCP is bidirectional because it can send data in both directions, and it is full-duplex because it can do that simultaneously, without requiring line turnarounds, at the API level</p>
+<p>for ADAS test outputs, it’s plain txt, I’d prefer <strong>websocket</strong>. so make the decision. </p>
+<h3 id="matlab-websocket-client"><a href="#matlab-websocket-client" class="headerlink" title="matlab websocket client"></a>matlab websocket client</h3><p>there is an github project: <a href="https://github.com/jebej/MatlabWebSocket" target="_blank" rel="external">matlab websocket</a>, which is enough to implement a simple websocket in Matlab. <a href="https://stackoverflow.com/questions/20645774/can-matlab-talk-to-a-websocket" target="_blank" rel="external">discussion at stackoverflow</a></p>
+<p>basically, here we bind a weboscket client to the adas model, in matlab. which is a good choice, so when runnign adas model in massively, the whole system looks like multi ws clients concurrently communicate with one ws server, which is well separated from adas model, and can freely implmented in either nodejs, python or c# e.t.c., totally friendly to other third-party data analysis tools in down-stream.</p>
+<h2 id="multi-write-db-concurrently"><a href="#multi-write-db-concurrently" class="headerlink" title="multi-write db concurrently"></a>multi-write db concurrently</h2><p>once we get the message from ws clients, we need transfer all of them to a database, e.g. pySQL. but the first thing need to understand is <a href="https://stackoverflow.com/questions/32087233/how-does-mysql-handle-concurrent-inserts" target="_blank" rel="external">whether SQL can concurrent inserts</a>. if there are multiple INSERT statements, they are queued and performed in sequence, concurrently with the SELECT statements. SQL doesn’t support parallel data inserts into the same table, with InnoDB or MyISAM storage engine. </p>
+<p>this also answered another question, why not directly adas model write to db, since the parallel runinng cases increase, writing DB will be the bottleneck. so has the websocket middle level, is a good choice. </p>
+<h2 id="nodejs-solution"><a href="#nodejs-solution" class="headerlink" title="nodejs solution"></a>nodejs solution</h2><p>nodejs is really powerful to implement the solution above. basically, a <a href="https://www.npmjs.com/package/nodejs-websocket" target="_blank" rel="external">ws server</a> and <a href="https://github.com/mysqljs/mysql" target="_blank" rel="external">sql writer: mysqljs</a></p>
+<h2 id="python-solution"><a href="#python-solution" class="headerlink" title="python solution"></a>python solution</h2><p>similar as nodejs, python has matured websocket module and ORM moduel to write db. </p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.liaoxuefeng.com/wiki/897692888725344/923056653167136" target="_blank" rel="external">liaoxuefeng tcp</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/29150809" target="_blank" rel="external">zhihu mysql lock</a></p>
+<p><a href="https://www.runoob.com/nodejs/nodejs-mysql.html" target="_blank" rel="external">nodejs connect mysql</a></p>
 
-      <h2 class="post-title">
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2019/11/26/what-about-Tesla/" itemprop="url">
-              
-                <span itemprop="name">what about Tesla</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2019-11-26T10:05:01-05:00"
-              content="2019-11-26" >
-          11-26
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/07/asam-mdf-reader/" rel="next" title="asam mdf reader">
+                <i class="fa fa-chevron-left"></i> asam mdf reader
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -324,6 +446,17 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -344,8 +477,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -418,6 +560,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket-vs-tcp"><span class="nav-number">2.</span> <span class="nav-text">websocket vs tcp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#matlab-websocket-client"><span class="nav-number">2.1.</span> <span class="nav-text">matlab websocket client</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multi-write-db-concurrently"><span class="nav-number">3.</span> <span class="nav-text">multi-write db concurrently</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nodejs-solution"><span class="nav-number">4.</span> <span class="nav-text">nodejs solution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-solution"><span class="nav-number">5.</span> <span class="nav-text">python solution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">5.1.</span> <span class="nav-text">refer</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -531,10 +689,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
@@ -552,6 +710,18 @@
       <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/09/design-a-logger-from-ws-to-db/';
+          this.page.identifier = '2020/03/09/design-a-logger-from-ws-to-db/';
+          this.page.title = 'design a logger from ws to db';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
