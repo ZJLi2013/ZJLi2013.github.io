@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="websocket," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="backgroudpreviously, we designed a logger module from ws to db/, this blog is one real implementation of the python solution. high concurrent ws server onlinesingle server with multi clients: a simple">
+<meta name="keywords" content="websocket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="high concurrent ws log server">
+<meta property="og:url" content="http://yoursite.com/2020/03/11/high-concurrent-ws-log-server/index.html">
+<meta property="og:site_name" content="Serious Autonomous Vehicles">
+<meta property="og:description" content="backgroudpreviously, we designed a logger module from ws to db/, this blog is one real implementation of the python solution. high concurrent ws server onlinesingle server with multi clients: a simple">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-03-11T07:57:33.517Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="high concurrent ws log server">
+<meta name="twitter:description" content="backgroudpreviously, we designed a logger module from ws to db/, this blog is one real implementation of the python solution. high concurrent ws server onlinesingle server with multi clients: a simple">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/11/high-concurrent-ws-log-server/"/>
+
+
+
+
+
+  <title>high concurrent ws log server | Serious Autonomous Vehicles</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Serious Autonomous Vehicles</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/11/high-concurrent-ws-log-server/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">high concurrent ws log server</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-11T03:50:40-04:00">
+                2020-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/11/high-concurrent-ws-log-server/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/11/high-concurrent-ws-log-server/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h2><p>previously, we designed <a href="https://zjli2013.github.io/2020/03/09/design-a-logger-from-ws-to-db" target="_blank" rel="external">a logger module from ws to db</a>/, this blog is one real implementation of the python solution.</p>
+<h2 id="high-concurrent-ws-server-online"><a href="#high-concurrent-ws-server-online" class="headerlink" title="high concurrent ws server online"></a>high concurrent ws server online</h2><h4 id="single-server-with-multi-clients-a-simple-C"><a href="#single-server-with-multi-clients-a-simple-C" class="headerlink" title="single server with multi clients: a simple C++"></a><a href="https://www.codeproject.com/articles/7785/single-server-with-multiple-clients-a-simple-cplus" target="_blank" rel="external">single server with multi clients: a simple C++</a></h4><ul>
+<li><p>the server is started first, and wait for the incoming client calls, periodically report its status: how many clients keep connected. meanwhile, once an incoming call is detected and accepted, the server will create a separate thread to handle this client. therefore, the server creates as many separate sessions as there are incoming clients. </p>
+</li>
+<li><p>how handle multiple clients? once an incoming client call is received and accepted, the main server thread will create a new thread, and pass the client connection to this thread</p>
+</li>
+<li><p>what if client threads need access some global variables? a semaphore instance ish helpful.</p>
+</li>
+</ul>
+<h4 id="how-ws-server-handles-multiple-incomming-connections"><a href="#how-ws-server-handles-multiple-incomming-connections" class="headerlink" title="how ws server handles multiple incomming connections"></a><a href="https://stackoverflow.com/questions/28516962/how-websocket-server-handles-multiple-incoming-connection-requests" target="_blank" rel="external">how ws server handles multiple incomming connections</a></h4><ul>
+<li><p>socket object is often thought to represent a connection, but not entirely true, since they can be active or passive.  a socket object in <strong>passive/listen</strong> mode is created by listen() for incoming connection requets. by definition, such a socket is not a connection, it just listen for conenction requets.</p>
+</li>
+<li><p><strong>accept()</strong> doesn’t change the state of the <strong>passive</strong> socket created by <strong>listen()</strong> previously, but it returns an <strong>active/connected</strong> socket, which represents a real conenction. after <strong>accept()</strong> has returned the connected socket object, it can be called again on the passive socket, and again and again. or known as <code>accept loop</code></p>
+</li>
+<li><p>But call <code>accept()</code> takes time, can’t it miss incoming conenction requests? it won’t, there is a queue of pending connection requests, it is handled automatically by TCP/IP stack of the OS. meaning, while <code>accept()</code> can only deal with incoming connection request <strong>one-by-one</strong>, no incoming request will be missed even when they are incoming at a high rate. </p>
+</li>
+</ul>
+<h2 id="python-env-setup"><a href="#python-env-setup" class="headerlink" title="python env setup"></a>python env setup</h2><p><code>websockets</code> module requires python3.6, the python version in bare OS is 3.5, which gives:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">  File <span class="string">"/usr/lib/python3/dist-packages/websockets/compatibility.py"</span>, line <span class="number">8</span></div><div class="line">    asyncio_ensure_future = asyncio.<span class="keyword">async</span>           <span class="comment"># Python &lt; 3.5</span></div><div class="line">                                       ^</div><div class="line">SyntaxError: invalid syntaxß</div><div class="line">``` </div><div class="line"></div><div class="line">basically, [asyncio.<span class="keyword">async</span>](https://stackoverflow.com/questions/<span class="number">51292523</span>/why-does-asyncio-ensure-future-asyncio-<span class="keyword">async</span>-<span class="keyword">raise</span>-a-syntaxerror-invalid-synt) <span class="keyword">and</span> another depend module [discord.py](https://github.com/Rapptz/discord.py/issues/<span class="number">1396</span>), require python &lt; <span class="number">3.5</span>v, then gives another error:</div><div class="line"></div><div class="line">```python</div><div class="line">TypeError: unsupported operand type(s) <span class="keyword">for</span> -=: <span class="string">'Retry'</span> <span class="keyword">and</span> <span class="string">'int'</span></div></pre></td></tr></table></figure>
+<p>the <a href="https://www.jianshu.com/p/b2d308c0311d" target="_blank" rel="external">Retry error</a> fixed by adding the following lines to <code>~/.pip/pip.conf</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">global</span>]</div><div class="line">index-url = https://pypi.tuna.tsinghua.edu.cn/simple</div><div class="line">``` </div><div class="line"><span class="keyword">in</span> a bare system <span class="keyword">with</span> pre-installed python3<span class="number">.5</span>, I did the following steps: </div><div class="line"></div><div class="line">```python</div><div class="line">sudo apt install software-properties-common</div><div class="line">sudo add-apt-repository ppa:deadsnakes/ppa</div><div class="line">sudo apt-get install python3<span class="number">.7</span> </div><div class="line">sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3<span class="number">.7</span> <span class="number">2</span></div><div class="line">sudo apt-get install python3-websockets</div><div class="line">sudo apt-get install python3-websocket</div><div class="line">sudo apt-get install python3-sqlalchemy</div><div class="line">sudo pip3 install threadpool</div><div class="line">sudo apt-get remove --purge python3-websocket  <span class="comment">#based on python3.5</span></div><div class="line">sudo apt-get install python3-websocket  <span class="comment">#based on python3.7</span></div></pre></td></tr></table></figure>
+<p>which gives another error:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/var/lib/dpkg/info/python3-websocket.postinst: 6: /var/lib/dpkg/info/python3-websocket.postinst: py3compile: not found</div><div class="line">dpkg: error processing package python3-websocket (--configure):</div><div class="line"> subprocess installed post-installation script returned error exit status 127</div><div class="line">Errors were encountered while processing:</div><div class="line"> python3-websocket</div><div class="line">E: Sub-process /usr/bin/dpkg returned an error code (1)</div></pre></td></tr></table></figure>
+<p>which then be <a href="https://askubuntu.com/questions/438345/how-to-remove-install-a-package-that-is-not-fully-installed" target="_blank" rel="external">fixed</a> by go to <code>/var/lib/dpkg/info/</code> and delete all <code>python3-websocket.*</code> files:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo rm /var/lib/dpkg/info/[package_name].*</div><div class="line">sudo dpkg --configure -a</div><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
+<p>everything looks good, but still report: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ModuleNotFoundError: No module named &apos;websockets&apos;</div></pre></td></tr></table></figure>
+<p><strong>Gave up setting up with the bare python</strong>, then create a new conda env, and ran the following settings inside, clean and simple: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pip install websockets</div><div class="line">pip install websocket-client  <span class="comment">#rather websocket</span></div><div class="line">pip install threadpool</div><div class="line">pip install sqlalchemy</div><div class="line">pip install psycopg2</div></pre></td></tr></table></figure>
+<p>during remote test, if ws server down unexpected, need <a href="https://unix.stackexchange.com/questions/140021/how-to-close-ports-in-linux" target="_blank" rel="external">kill the ws pid</a>:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">sudo netstat -tlnp  #find the special running port and its pid </div><div class="line">kill $pid</div><div class="line">``` </div><div class="line">or `kill $(lsof -t -i:$port)`</div><div class="line"><span class="meta"></span></div><div class="line">## websockets &amp; websocket-client</div><div class="line"></div><div class="line">the long-lived connection sample from [ws-client](https://github.com/websocket-client/websocket-client) is good base, as here need to test a high concurrent clients, we add `threadpool`:</div><div class="line"></div><div class="line">```python</div><div class="line">  def on_open(ws, num):</div><div class="line">      def run(*args): ##args</div><div class="line">          for i in range(3):</div><div class="line">              time.sleep(1)</div><div class="line">              message = "your_message"</div><div class="line">              ws.send(json.dumps(message))</div><div class="line">          time.sleep(1)</div><div class="line">          ws.close()</div><div class="line">          print("thread terminating...")</div><div class="line">      thread.start_new_thread(run, ())</div><div class="line"> </div><div class="line"> def on_start(num):</div><div class="line">      websocket.enableTrace(True)</div><div class="line">      ws = websocket.WebSocketApp("ws://localhost:8888/",</div><div class="line">                                on_message = on_message,</div><div class="line">                                on_error = on_error,</div><div class="line">                                on_close = on_close)</div><div class="line">      ws.on_open = on_open(ws, num)</div><div class="line">      ws.run_forever()</div><div class="line">  </div><div class="line">  def threadpool_test():</div><div class="line">      start_time = time.time()</div><div class="line">      pool = ThreadPool(100)</div><div class="line">      test = list()</div><div class="line">      for itr in range(100):</div><div class="line">          test.append(itr)</div><div class="line">      requests = makeRequests(on_start, test)</div><div class="line">      [pool.putRequest(req) for req in requests]</div><div class="line">      pool.wait()</div><div class="line">      print('%d second'% (time.time() - start_time))</div></pre></td></tr></table></figure>
+<p>in <a href="">ws-client src</a>, we see: </p>
+<ul>
+<li><p>on_open: callable object which is called at opening websocket. this function has one argument. The argument is this class object. but all customized callback func can add more arguments, which is helpful.</p>
+</li>
+<li><p>on_message: callable object which is called when received data. on_message has 2 arguments. The 1st argument is this class object. the 2nd argument is utf-8 string which we get from the server.</p>
+</li>
+</ul>
+<p>we can implement a simple <a href="">sqlalchemy orm</a> db-writer, and add to the ws-server:</p>
+<pre><code class="python"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(self, websocket, path)</span>:</span>
+     raw_ = <span class="keyword">await</span> websocket.recv()
+     jdata = json.loads(raw_)
+     orm_obj = orm_(jdata)
+     <span class="keyword">try</span>:
+         self.dbwriter_.write(orm_obj)
+         print(jdata, <span class="string">"write to db successfully"</span>)
+     <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+         dbwriter_.rollback()
+         print(e)
+
+     greeting = <span class="string">"hello from server"</span>
+     <span class="keyword">await</span> websocket.send(greeting)
+     print(<span class="string">f"&gt; <span class="subst">{greeting}</span>"</span>)
+
+ <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span>
+     <span class="keyword">if</span> self.host <span class="keyword">and</span> self.port :
+         start_server = websockets.serve(self.process, self.host, self.port)
+     <span class="keyword">else</span>:
+         start_server = websockets.serve(self.process, <span class="string">"localhost"</span>, <span class="number">8867</span>)
+     asyncio.get_event_loop().run_until_complete(start_server)
+     asyncio.get_event_loop().run_forever()
+</code></pre>
+<h2 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h2><p>in reality, each ws-client is integrated to one upper application, which generate messages/log, and send to ws-server, inside which write to db, due to <code>asyncio</code>, the performance is good so far. in future, we maybe need some buffer at ws-server. </p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://mcguirev10.com/2019/01/15/simple-multi-client-websocket-server.html" target="_blank" rel="external">a simple multi-client ws server</a></p>
+<p><a href="https://www.toptal.com/tornado/simple-python-websocket-server" target="_blank" rel="external">create a simple python sw server using Tornado</a></p>
+<p><a href="https://websockets.readthedocs.io/en/stable/intro.html" target="_blank" rel="external">python: websockets</a></p>
+<p><a href="https://docs.python.org/3/library/json.html" target="_blank" rel="external">python: json</a></p>
+<p><a href="https://chrisarndt.de/projects/threadpool/api/" target="_blank" rel="external">python: threadpool</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/websocket/" rel="tag"># websocket</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/09/design-a-logger-from-ws-to-db/" rel="next" title="design a logger from ws to db">
+                <i class="fa fa-chevron-left"></i> design a logger from ws to db
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="David Z.J. Lee" />
+          <p class="site-author-name" itemprop="name">David Z.J. Lee</p>
+           
+              <p class="site-description motion-element" itemprop="description">what I don't know</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">157</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ZJLi2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/zhengjia13/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#backgroud"><span class="nav-number">1.</span> <span class="nav-text">backgroud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#high-concurrent-ws-server-online"><span class="nav-number">2.</span> <span class="nav-text">high concurrent ws server online</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#single-server-with-multi-clients-a-simple-C"><span class="nav-number">2.0.1.</span> <span class="nav-text">single server with multi clients: a simple C++</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#how-ws-server-handles-multiple-incomming-connections"><span class="nav-number">2.0.2.</span> <span class="nav-text">how ws server handles multiple incomming connections</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python-env-setup"><span class="nav-number">3.</span> <span class="nav-text">python env setup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#in-summary"><span class="nav-number">4.</span> <span class="nav-text">in summary</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#refer"><span class="nav-number">4.1.</span> <span class="nav-text">refer</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Z.J. Lee</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/11/high-concurrent-ws-log-server/';
+          this.page.identifier = '2020/03/11/high-concurrent-ws-log-server/';
+          this.page.title = 'high concurrent ws log server';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
