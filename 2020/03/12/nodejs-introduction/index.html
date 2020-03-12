@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="callback / asnyc123456var fs = require(&quot;fs&quot;) ;fs.readFile(&quot;input.txt&quot;, function(err, data)&amp;#123;	if(err) return console.error(err);	console.log(data.toString());&amp;#125;) the async fun take the callback">
+<meta name="keywords" content="nodejs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs introduction">
+<meta property="og:url" content="http://yoursite.com/2020/03/12/nodejs-introduction/index.html">
+<meta property="og:site_name" content="Serious Autonomous Vehicles">
+<meta property="og:description" content="callback / asnyc123456var fs = require(&quot;fs&quot;) ;fs.readFile(&quot;input.txt&quot;, function(err, data)&amp;#123;	if(err) return console.error(err);	console.log(data.toString());&amp;#125;) the async fun take the callback">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-03-12T10:07:58.481Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs introduction">
+<meta name="twitter:description" content="callback / asnyc123456var fs = require(&quot;fs&quot;) ;fs.readFile(&quot;input.txt&quot;, function(err, data)&amp;#123;	if(err) return console.error(err);	console.log(data.toString());&amp;#125;) the async fun take the callback">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/12/nodejs-introduction/"/>
+
+
+
+
+
+  <title>nodejs introduction | Serious Autonomous Vehicles</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Serious Autonomous Vehicles</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/12/nodejs-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nodejs introduction</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-12T06:07:23-04:00">
+                2020-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/12/nodejs-introduction/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/12/nodejs-introduction/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="callback-asnyc"><a href="#callback-asnyc" class="headerlink" title="callback / asnyc"></a>callback / asnyc</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>) ;</div><div class="line"></div><div class="line">fs.readFile(<span class="string">"input.txt"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</div><div class="line">	<span class="built_in">console</span>.log(data.toString());</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>the async fun take the callback fun as its last parameter. </p>
+<h3 id="event-loop"><a href="#event-loop" class="headerlink" title="event loop"></a>event loop</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>)</div><div class="line"><span class="keyword">var</span> emitter = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"><span class="keyword">var</span> connectH = <span class="function"><span class="keyword">function</span> <span class="title">connected</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"connected"</span>)</div><div class="line">		emitter.emit(<span class="string">'data_received'</span>); <span class="comment">// trig 'data_received'</span></div><div class="line">&#125;</div><div class="line">emitter.on(<span class="string">'connection'</span>, connectH);</div><div class="line">emitter.on(<span class="string">'data_received'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'data received'</span>);</div><div class="line">&#125;)</div><div class="line">emitter.emit(<span class="string">'connection'</span>); <span class="comment">// trig 'connection'</span></div></pre></td></tr></table></figure>
+<h3 id="event-emitter"><a href="#event-emitter" class="headerlink" title="event emitter"></a>event emitter</h3><p>when async IO is done, will send an event to the Event queue. e.g. when fs.readStream() open a file will trig an event. e.t.c</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">addListener(event, listener)</div><div class="line">on(event, listener) #listening</div><div class="line">emit(evnet, [arg1], ...)   #trig</div></pre></td></tr></table></figure>
+<h3 id="file-system"><a href="#file-system" class="headerlink" title="file system"></a>file system</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var fs = require("fs")</div><div class="line">fs.open("input.log", "r+", function(err, fd)&#123;&#125;);</div><div class="line">fs.state("input.log", function(err, stats_info)&#123;&#125;);</div><div class="line">fs.readFile("input.log", function(err, data)&#123;</div><div class="line">		if(err)&#123;</div><div class="line">			return console.error(err);</div><div class="line">		&#125;</div><div class="line">		console.log(data.toString());</div><div class="line">&#125;);</div><div class="line">fs.writeFile("output.log", function(err)&#123;</div><div class="line">	if(err)&#123; return console.error(err);&#125;</div><div class="line">	console.log("write successfully")</div><div class="line">&#125;);</div><div class="line">fs.read(fd,buffer, [args..]) #read binary stream</div></pre></td></tr></table></figure>
+<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h3><p>as js language has only txt bytes data, to deal with binary data, introduce <code>Buffer</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Buffer.alloc(size)</div><div class="line">Buffer.from(buffer||array||string)</div><div class="line">Buffer.write()  #write to buffer</div><div class="line">buffer.toString() #read from buffer</div><div class="line">buffer.toJSON()</div></pre></td></tr></table></figure>
+<h3 id="stream"><a href="#stream" class="headerlink" title="stream"></a>stream</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var fs=require("fs");</div><div class="line">var readerStream = fs.createReadstream("input.file")</div><div class="line">readerStream.on('data', function(chunk, err)&#123;&#125;)</div><div class="line">var writeStream = fs.createWriteStream("output.file")</div><div class="line">writeStream.on('finished', function()&#123;&#125;)</div><div class="line">readerStream.pipe(writeStream); #pipe from a reader stream to a writer stream</div></pre></td></tr></table></figure>
+<h3 id="module-system"><a href="#module-system" class="headerlink" title="module system"></a>module system</h3><p>to enable different nodejs files can use each other, there is a module system, the module can be a nodejs file, or JSON, or compiled C/C++ code.</p>
+<p>nodejs has <code>exports</code> and <code>require</code> used to export modules’ APIs to external usage, or access external APIs.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</div><div class="line">exports.method = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</div></pre></td></tr></table></figure>
+<p>the first way export the object itself, the second way only export the certain method.</p>
+<h3 id="Global-Object"><a href="#Global-Object" class="headerlink" title="Global Object"></a>Global Object</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log()</div><div class="line"><span class="built_in">console</span>.error()</div></pre></td></tr></table></figure>
+<h3 id="common-modules"><a href="#common-modules" class="headerlink" title="common modules"></a>common modules</h3><ul>
+<li>path </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</div><div class="line">path.join(<span class="string">"/user/"</span>, <span class="string">"test1"</span>); </div><div class="line">path.dirname(p_);</div></pre></td></tr></table></figure>
+<ul>
+<li>http server </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">request, response</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> url_path = request.url ;</div><div class="line">	server(url_path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span>(err)&#123;</div><div class="line">			<span class="built_in">console</span>.log(err);</div><div class="line">			response.writeHead(<span class="number">404</span>, <span class="string">"xx"</span>);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			response.writeHeead(<span class="number">200</span>, <span class="string">"yy"</span>);</div><div class="line">			response.write(data.toString());</div><div class="line">		&#125;</div><div class="line">		response.end();</div><div class="line">   &#125;);</div><div class="line">&#125;).listen(<span class="number">8080</span>);</div></pre></td></tr></table></figure>
+<ul>
+<li>http client </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</div><div class="line">url = <span class="string">"http://localhost:8080/index.html"</span></div><div class="line"><span class="keyword">var</span> req = http.request(url, callback);</div><div class="line"><span class="keyword">var</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</div><div class="line">   <span class="keyword">var</span> body = <span class="string">''</span> ;</div><div class="line">	response.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">		body += data; </div><div class="line">	&#125;);</div><div class="line">	response.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(body);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="Express"><a href="#Express" class="headerlink" title="Express"></a>Express</h3><p>Express has <code>requst</code> and <code>response</code> object to handle request and reponse. <code>express.static</code> can handle static resources, e.g. image, css e.t.c</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">"repress"</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.use(<span class="string">'/public'</span>, express.static(<span class="string">'public'</span>));</div><div class="line">app.get(<span class="string">'/index'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;&#125;)</div><div class="line">app.get(<span class="string">'/user'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> response = &#123;</div><div class="line">		<span class="string">"name"</span>: req.query.name,</div><div class="line">		<span class="string">"id"</span>: req.query.id</div><div class="line">	&#125;;</div><div class="line">	res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">&#125;);</div><div class="line">app.post(<span class="string">'/user'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> response = &#123;</div><div class="line">		<span class="string">"name"</span> : req.body.name ;</div><div class="line">		<span class="string">"id"</span> : req.body.id </div><div class="line">	&#125;;</div><div class="line">	res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">&#125;); </div><div class="line">app.post(<span class="string">'file_upload'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> des_file = __dirname + <span class="string">"/"</span> + req.files[<span class="number">0</span>].originalname ;</div><div class="line">	fs.readFile(req.files[<span class="number">0</span>].path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">		fs.writeFile(des_file, data, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)&#123;<span class="built_in">console</span>.error(err);&#125;</div><div class="line">			<span class="keyword">else</span>&#123;</div><div class="line">				<span class="keyword">var</span> response = &#123;</div><div class="line">						<span class="attr">message</span>: <span class="string">"file uploaded successfully"</span> ,</div><div class="line">						<span class="attr">filename</span>: req.files[<span class="number">0</span>].originalname</div><div class="line">				&#125;;</div><div class="line">			&#125;</div><div class="line">			res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">		&#125;);</div><div class="line">	&#125;);</div><div class="line">&#125;)</div><div class="line"><span class="keyword">var</span> server = app.listen(<span class="number">8080</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</div></pre></td></tr></table></figure>
+<p><code>res</code> is what send from server to client, for both <code>/get</code>, <code>/post</code> methods. <a href="https://www.tutorialspoint.com/nodejs/nodejs_request_object.htm" target="_blank" rel="external">req object</a> represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers e.t.c</p>
+<ul>
+<li>req.body</li>
+</ul>
+<p>contains key-value pairs of data submitted in the request body. by default, it’s undefined, and is populated when using body-parsing middleware. e.g. <strong>body-parser</strong></p>
+<ul>
+<li>req.cookies</li>
+</ul>
+<p>when using cookie-parser middleware, this property is an object that contains cookies send by the request</p>
+<ul>
+<li>req.path </li>
+</ul>
+<p>contains the path part of the request url</p>
+<ul>
+<li>req.query </li>
+</ul>
+<p>an object containing a property for each query string parameter in the route</p>
+<ul>
+<li>req.route</li>
+</ul>
+<p>the current mathced route, a string </p>
+<h2 id="data-access-object-DAO"><a href="#data-access-object-DAO" class="headerlink" title="data access object(DAO)"></a>data access object(DAO)</h2><p>Dao pattern is used to <a href="https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm" target="_blank" rel="external">separate</a> low level data accessing API or operations form high level business services. usually there are three parts:</p>
+<ul>
+<li><p>DAO interface, which defines the standard operations to be performed on a model object </p>
+</li>
+<li><p>DAO class, the class that implement DAO interfaces, this class is responsible to get data from database, or other storage mechanism</p>
+</li>
+<li><p>model object, a simple POJO containing get/set methods to store data retrieved using DAO class</p>
+</li>
+</ul>
+<p>o/r mapping (orm) is used a lot to map database itme to a special class, and it’s easy to use, but a little drawback of orm is it assume the database is <a href="https://www.open-open.com/lib/view/open1425277196118.html" target="_blank" rel="external">normalized well</a>. DAO is a middleware to do directly SQL mapping, who mapes SQL query language to the output class. </p>
+<h3 id="separting-models-logic-and-daos"><a href="#separting-models-logic-and-daos" class="headerlink" title="separting models, logic and daos"></a>separting models, logic and daos</h3><ul>
+<li><p>routes.js, where to put routes, usually referenced as <code>controllers</code></p>
+</li>
+<li><p>models.js, where to put functions talk to database, usually referenced as <code>dao layer</code></p>
+</li>
+<li><p>views.js</p>
+</li>
+</ul>
+<p>these three components can put under <a href="https://github.com/csanz/node-expressjs-example" target="_blank" rel="external">app</a>;  all static data usually put under <code>public</code> folder; the Express <code>package.json</code> and <code>index.js</code> are at the same level as <code>app</code>.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.runoob.com/nodejs/" target="_blank" rel="external">nodejs at runoob.com</a></p>
+<p><a href="https://www.jianshu.com/p/dab01487a9df" target="_blank" rel="external">nodejs &amp; mysql</a></p>
+<p><a href="https://www.open-open.com/lib/view/open1425277196118.html" target="_blank" rel="external">bearcat-dao introduction</a></p>
+<p><a href="https://koajs.com" target="_blank" rel="external">koa</a></p>
+<p><a href="https://github.com/paulmillr/chokidar" target="_blank" rel="external">chokidar</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/11/high-concurrent-ws-log-server/" rel="next" title="high concurrent ws log server">
+                <i class="fa fa-chevron-left"></i> high concurrent ws log server
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="David Z.J. Lee" />
+          <p class="site-author-name" itemprop="name">David Z.J. Lee</p>
+           
+              <p class="site-description motion-element" itemprop="description">what I don't know</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">158</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ZJLi2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/zhengjia13/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#callback-asnyc"><span class="nav-number">1.</span> <span class="nav-text">callback / asnyc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#event-loop"><span class="nav-number">2.</span> <span class="nav-text">event loop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#event-emitter"><span class="nav-number">3.</span> <span class="nav-text">event emitter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file-system"><span class="nav-number">4.</span> <span class="nav-text">file system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#buffer"><span class="nav-number">5.</span> <span class="nav-text">buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stream"><span class="nav-number">6.</span> <span class="nav-text">stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-system"><span class="nav-number">7.</span> <span class="nav-text">module system</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Global-Object"><span class="nav-number">8.</span> <span class="nav-text">Global Object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#common-modules"><span class="nav-number">9.</span> <span class="nav-text">common modules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Express"><span class="nav-number">10.</span> <span class="nav-text">Express</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-access-object-DAO"><span class="nav-number"></span> <span class="nav-text">data access object(DAO)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#separting-models-logic-and-daos"><span class="nav-number">1.</span> <span class="nav-text">separting models, logic and daos</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number"></span> <span class="nav-text">refer</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Z.J. Lee</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/12/nodejs-introduction/';
+          this.page.identifier = '2020/03/12/nodejs-introduction/';
+          this.page.title = 'nodejs introduction';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -291,6 +291,201 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/12/nodejs-introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/12/nodejs-introduction/" itemprop="url">nodejs introduction</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-12T06:07:23-04:00">
+                2020-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/12/nodejs-introduction/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/12/nodejs-introduction/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="callback-asnyc"><a href="#callback-asnyc" class="headerlink" title="callback / asnyc"></a>callback / asnyc</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>) ;</div><div class="line"></div><div class="line">fs.readFile(<span class="string">"input.txt"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</div><div class="line">	<span class="built_in">console</span>.log(data.toString());</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>the async fun take the callback fun as its last parameter. </p>
+<h3 id="event-loop"><a href="#event-loop" class="headerlink" title="event loop"></a>event loop</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>)</div><div class="line"><span class="keyword">var</span> emitter = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"><span class="keyword">var</span> connectH = <span class="function"><span class="keyword">function</span> <span class="title">connected</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"connected"</span>)</div><div class="line">		emitter.emit(<span class="string">'data_received'</span>); <span class="comment">// trig 'data_received'</span></div><div class="line">&#125;</div><div class="line">emitter.on(<span class="string">'connection'</span>, connectH);</div><div class="line">emitter.on(<span class="string">'data_received'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'data received'</span>);</div><div class="line">&#125;)</div><div class="line">emitter.emit(<span class="string">'connection'</span>); <span class="comment">// trig 'connection'</span></div></pre></td></tr></table></figure>
+<h3 id="event-emitter"><a href="#event-emitter" class="headerlink" title="event emitter"></a>event emitter</h3><p>when async IO is done, will send an event to the Event queue. e.g. when fs.readStream() open a file will trig an event. e.t.c</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">addListener(event, listener)</div><div class="line">on(event, listener) #listening</div><div class="line">emit(evnet, [arg1], ...)   #trig</div></pre></td></tr></table></figure>
+<h3 id="file-system"><a href="#file-system" class="headerlink" title="file system"></a>file system</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var fs = require("fs")</div><div class="line">fs.open("input.log", "r+", function(err, fd)&#123;&#125;);</div><div class="line">fs.state("input.log", function(err, stats_info)&#123;&#125;);</div><div class="line">fs.readFile("input.log", function(err, data)&#123;</div><div class="line">		if(err)&#123;</div><div class="line">			return console.error(err);</div><div class="line">		&#125;</div><div class="line">		console.log(data.toString());</div><div class="line">&#125;);</div><div class="line">fs.writeFile("output.log", function(err)&#123;</div><div class="line">	if(err)&#123; return console.error(err);&#125;</div><div class="line">	console.log("write successfully")</div><div class="line">&#125;);</div><div class="line">fs.read(fd,buffer, [args..]) #read binary stream</div></pre></td></tr></table></figure>
+<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h3><p>as js language has only txt bytes data, to deal with binary data, introduce <code>Buffer</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Buffer.alloc(size)</div><div class="line">Buffer.from(buffer||array||string)</div><div class="line">Buffer.write()  #write to buffer</div><div class="line">buffer.toString() #read from buffer</div><div class="line">buffer.toJSON()</div></pre></td></tr></table></figure>
+<h3 id="stream"><a href="#stream" class="headerlink" title="stream"></a>stream</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var fs=require("fs");</div><div class="line">var readerStream = fs.createReadstream("input.file")</div><div class="line">readerStream.on('data', function(chunk, err)&#123;&#125;)</div><div class="line">var writeStream = fs.createWriteStream("output.file")</div><div class="line">writeStream.on('finished', function()&#123;&#125;)</div><div class="line">readerStream.pipe(writeStream); #pipe from a reader stream to a writer stream</div></pre></td></tr></table></figure>
+<h3 id="module-system"><a href="#module-system" class="headerlink" title="module system"></a>module system</h3><p>to enable different nodejs files can use each other, there is a module system, the module can be a nodejs file, or JSON, or compiled C/C++ code.</p>
+<p>nodejs has <code>exports</code> and <code>require</code> used to export modules’ APIs to external usage, or access external APIs.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</div><div class="line">exports.method = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</div></pre></td></tr></table></figure>
+<p>the first way export the object itself, the second way only export the certain method.</p>
+<h3 id="Global-Object"><a href="#Global-Object" class="headerlink" title="Global Object"></a>Global Object</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log()</div><div class="line"><span class="built_in">console</span>.error()</div></pre></td></tr></table></figure>
+<h3 id="common-modules"><a href="#common-modules" class="headerlink" title="common modules"></a>common modules</h3><ul>
+<li>path </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</div><div class="line">path.join(<span class="string">"/user/"</span>, <span class="string">"test1"</span>); </div><div class="line">path.dirname(p_);</div></pre></td></tr></table></figure>
+<ul>
+<li>http server </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">request, response</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> url_path = request.url ;</div><div class="line">	server(url_path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span>(err)&#123;</div><div class="line">			<span class="built_in">console</span>.log(err);</div><div class="line">			response.writeHead(<span class="number">404</span>, <span class="string">"xx"</span>);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			response.writeHeead(<span class="number">200</span>, <span class="string">"yy"</span>);</div><div class="line">			response.write(data.toString());</div><div class="line">		&#125;</div><div class="line">		response.end();</div><div class="line">   &#125;);</div><div class="line">&#125;).listen(<span class="number">8080</span>);</div></pre></td></tr></table></figure>
+<ul>
+<li>http client </li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</div><div class="line">url = <span class="string">"http://localhost:8080/index.html"</span></div><div class="line"><span class="keyword">var</span> req = http.request(url, callback);</div><div class="line"><span class="keyword">var</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</div><div class="line">   <span class="keyword">var</span> body = <span class="string">''</span> ;</div><div class="line">	response.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">		body += data; </div><div class="line">	&#125;);</div><div class="line">	response.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(body);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="Express"><a href="#Express" class="headerlink" title="Express"></a>Express</h3><p>Express has <code>requst</code> and <code>response</code> object to handle request and reponse. <code>express.static</code> can handle static resources, e.g. image, css e.t.c</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">"repress"</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.use(<span class="string">'/public'</span>, express.static(<span class="string">'public'</span>));</div><div class="line">app.get(<span class="string">'/index'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;&#125;)</div><div class="line">app.get(<span class="string">'/user'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> response = &#123;</div><div class="line">		<span class="string">"name"</span>: req.query.name,</div><div class="line">		<span class="string">"id"</span>: req.query.id</div><div class="line">	&#125;;</div><div class="line">	res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">&#125;);</div><div class="line">app.post(<span class="string">'/user'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> response = &#123;</div><div class="line">		<span class="string">"name"</span> : req.body.name ;</div><div class="line">		<span class="string">"id"</span> : req.body.id </div><div class="line">	&#125;;</div><div class="line">	res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">&#125;); </div><div class="line">app.post(<span class="string">'file_upload'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> des_file = __dirname + <span class="string">"/"</span> + req.files[<span class="number">0</span>].originalname ;</div><div class="line">	fs.readFile(req.files[<span class="number">0</span>].path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">		fs.writeFile(des_file, data, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)&#123;<span class="built_in">console</span>.error(err);&#125;</div><div class="line">			<span class="keyword">else</span>&#123;</div><div class="line">				<span class="keyword">var</span> response = &#123;</div><div class="line">						<span class="attr">message</span>: <span class="string">"file uploaded successfully"</span> ,</div><div class="line">						<span class="attr">filename</span>: req.files[<span class="number">0</span>].originalname</div><div class="line">				&#125;;</div><div class="line">			&#125;</div><div class="line">			res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">		&#125;);</div><div class="line">	&#125;);</div><div class="line">&#125;)</div><div class="line"><span class="keyword">var</span> server = app.listen(<span class="number">8080</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</div></pre></td></tr></table></figure>
+<p><code>res</code> is what send from server to client, for both <code>/get</code>, <code>/post</code> methods. <a href="https://www.tutorialspoint.com/nodejs/nodejs_request_object.htm" target="_blank" rel="external">req object</a> represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers e.t.c</p>
+<ul>
+<li>req.body</li>
+</ul>
+<p>contains key-value pairs of data submitted in the request body. by default, it’s undefined, and is populated when using body-parsing middleware. e.g. <strong>body-parser</strong></p>
+<ul>
+<li>req.cookies</li>
+</ul>
+<p>when using cookie-parser middleware, this property is an object that contains cookies send by the request</p>
+<ul>
+<li>req.path </li>
+</ul>
+<p>contains the path part of the request url</p>
+<ul>
+<li>req.query </li>
+</ul>
+<p>an object containing a property for each query string parameter in the route</p>
+<ul>
+<li>req.route</li>
+</ul>
+<p>the current mathced route, a string </p>
+<h2 id="data-access-object-DAO"><a href="#data-access-object-DAO" class="headerlink" title="data access object(DAO)"></a>data access object(DAO)</h2><p>Dao pattern is used to <a href="https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm" target="_blank" rel="external">separate</a> low level data accessing API or operations form high level business services. usually there are three parts:</p>
+<ul>
+<li><p>DAO interface, which defines the standard operations to be performed on a model object </p>
+</li>
+<li><p>DAO class, the class that implement DAO interfaces, this class is responsible to get data from database, or other storage mechanism</p>
+</li>
+<li><p>model object, a simple POJO containing get/set methods to store data retrieved using DAO class</p>
+</li>
+</ul>
+<p>o/r mapping (orm) is used a lot to map database itme to a special class, and it’s easy to use, but a little drawback of orm is it assume the database is <a href="https://www.open-open.com/lib/view/open1425277196118.html" target="_blank" rel="external">normalized well</a>. DAO is a middleware to do directly SQL mapping, who mapes SQL query language to the output class. </p>
+<h3 id="separting-models-logic-and-daos"><a href="#separting-models-logic-and-daos" class="headerlink" title="separting models, logic and daos"></a>separting models, logic and daos</h3><ul>
+<li><p>routes.js, where to put routes, usually referenced as <code>controllers</code></p>
+</li>
+<li><p>models.js, where to put functions talk to database, usually referenced as <code>dao layer</code></p>
+</li>
+<li><p>views.js</p>
+</li>
+</ul>
+<p>these three components can put under <a href="https://github.com/csanz/node-expressjs-example" target="_blank" rel="external">app</a>;  all static data usually put under <code>public</code> folder; the Express <code>package.json</code> and <code>index.js</code> are at the same level as <code>app</code>.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.runoob.com/nodejs/" target="_blank" rel="external">nodejs at runoob.com</a></p>
+<p><a href="https://www.jianshu.com/p/dab01487a9df" target="_blank" rel="external">nodejs &amp; mysql</a></p>
+<p><a href="https://www.open-open.com/lib/view/open1425277196118.html" target="_blank" rel="external">bearcat-dao introduction</a></p>
+<p><a href="https://koajs.com" target="_blank" rel="external">koa</a></p>
+<p><a href="https://github.com/paulmillr/chokidar" target="_blank" rel="external">chokidar</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/11/high-concurrent-ws-log-server/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1847,218 +2042,6 @@ bio_ = io.BytesIO(read_in_memory);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/24/mdf4-reader/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/24/mdf4-reader/" itemprop="url">mdf4 reader</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-24T23:14:52-05:00">
-                2020-02-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/02/24/mdf4-reader/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/02/24/mdf4-reader/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="read-mdf4-in-general"><a href="#read-mdf4-in-general" class="headerlink" title="read mdf4 in general"></a>read mdf4 in general</h2><p><img src="https://www.asam.net/index.php?eID=dumpFile&amp;t=p&amp;p=2964&amp;token=90de1236917c0225cbf3bd53101a81296613d367" alt="image"></p>
-<p>the most important “branch” in the tree is the list of data groups (DG block).</p>
-<p><strong>record</strong> used to store the plain measurement data, the records can either be contianed in one single “data” (DT) block, or distributed over several DT blocks using a “data list” block . </p>
-<p>Each DG block has points to the data block, as well as necessary information to understand and decode the data.</p>
-<p>the sub-tree of DG is channel group(CG) blocks and channel(CN) blocks. </p>
-<h5 id="record-layout"><a href="#record-layout" class="headerlink" title="record layout"></a>record layout</h5><p>each record contains all signal values which have the same time stamp, in the same channel. for different channel groups(CG), each record must start with a “record id”</p>
-<p><img src="https://www.asam.net/index.php?eID=dumpFile&amp;t=f&amp;f=195&amp;token=cb0391ba3e0fb5ee7fb91c9f4b8307e45e1e8f08" alt="image"></p>
-<p>the record layout of ID 1, will be described by one channel group, the record layout of ID 2 by another channel group. Both channel groups must be children of the DT block’s parent data group.</p>
-<h4 id="channels"><a href="#channels" class="headerlink" title="channels"></a>channels</h4><p>Each channel describes a recorded signal and how its values are encoded in the records for the channel’s parent CG block.</p>
-<h2 id="vector-APIs"><a href="#vector-APIs" class="headerlink" title="vector APIs"></a>vector APIs</h2><p>which is licensed by <a href="https://www.vector.com/int/en/products/application-areas/ecu-calibration/measurement/mdf/" target="_blank" rel="external">vector</a></p>
-<ul>
-<li>GetFileManager()</li>
-<li>OpenFile()</li>
-<li>GetChannelByName()</li>
-<li>GetChannelGroup()</li>
-<li>CreaterDataPointer()</li>
-<li>GetRecordCount()</li>
-<li>SetReadMode()</li>
-<li>SeekPos()</li>
-<li>GetPos()</li>
-<li>GetTimeSec()</li>
-<li>ReadPhysValueDouble(pChannle, &amp;value, &amp;isvalid)</li>
-<li>ReadRawValueDouble(pChannel, &amp;rawValue)</li>
-<li>ReadPhysValueDouble(pChannel, &amp;phyValue)</li>
-<li>MultiReadPhysValueDouble(pChannel, valueBuffer, size, &amp;read)</li>
-</ul>
-<h2 id="turbolab"><a href="#turbolab" class="headerlink" title="turbolab"></a><a href="https://www.turbolab.de/mdf_libf.htm" target="_blank" rel="external">turbolab</a></h2><p>ReadFileMF4 class:</p>
-<ul>
-<li>Open()</li>
-<li>Seek(pos)</li>
-<li>Read(Size, Buffer)</li>
-<li>Close()</li>
-</ul>
-<p>CMdf4Calc class :</p>
-<ul>
-<li>Cmdf4Calc(pChan, pblock)</li>
-<li>Cmdf4Calc(pChan, mf4file)</li>
-</ul>
-<p>cmf4DataGroup class:</p>
-<ul>
-<li>GetRecord()</li>
-<li>GetRawValueFromRecord()</li>
-<li>GetValueFromRecord()</li>
-</ul>
-<p>mdf4FileImport class :</p>
-<ul>
-<li>ImportFile()</li>
-<li>ReleaseFile()</li>
-</ul>
-<p>I am not reading this C++ code. </p>
-<h2 id="asammdf"><a href="#asammdf" class="headerlink" title="asammdf"></a><a href="https://github.com/danielhrisca/asammdf" target="_blank" rel="external">asammdf</a></h2><h3 id="MDF-class"><a href="#MDF-class" class="headerlink" title="MDF class"></a>MDF class</h3><ul>
-<li><strong>init</strong>(name=None, ): name can be either <code>string</code> or <code>BytesIO</code></li>
-<li>filter(channels, ) </li>
-<li>get_group(index, channels=None, )</li>
-<li>iter_channels(,)</li>
-<li>iter_get(channel_name=None,group_id=None, group_index=None, )</li>
-<li>iter_groups()</li>
-<li>to_dataframe(), generate pandas DataFrame</li>
-<li>whereis(channel_name)</li>
-</ul>
-<h3 id="MDF4-class"><a href="#MDF4-class" class="headerlink" title="MDF4 class"></a>MDF4 class</h3><p>includes <code>data_group</code>, <code>channel_group</code>, <code>channels</code>, <code>data_block</code>, <code>data_location</code>, <code>record_size</code> e.t.c</p>
-<ul>
-<li>get(channel_name=None, group=None, )</li>
-<li>get_can_signal()</li>
-<li>get_channel_name(group, index)</li>
-<li>get_channel_unit(channel_name=Nont, group=None, )</li>
-<li>get_master(index, data=None, ), return the master channel samples for given group</li>
-<li>info() </li>
-</ul>
-<p>the following are sub data blocks of MDF4: </p>
-<ul>
-<li>Channel class </li>
-<li>ChannelGroup class</li>
-<li>DataGroup class </li>
-<li>DataList class</li>
-<li>DataBlock class</li>
-<li>HeaderBlock class</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mdf = MDF4(<span class="string">"basic.mf4"</span>)</div><div class="line">db_info = mdf.info()</div></pre></td></tr></table></figure>
-<p>all <code>group</code>, <code>channel</code> data is packages as <code>python dict</code>. the most exciting part, as asam-mdf can support <code>BytesIO</code>, which gives the way to read mdf files stores in Amazon S3:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">    mf4_ = obj_api.get_object("bucket_name", "sample.mf4")</div><div class="line">    fid_ = io.BufferedReader(mf4_['Body']._raw_stream) ;</div><div class="line">    read_in_memory = fid_.read()</div><div class="line">    bio_ = io.BytesIO(read_in_memory);</div><div class="line">    if bio_.seekable(): </div><div class="line">        mdf_ = MDF(bio_)</div><div class="line">        mdf_.info()</div><div class="line">``` </div><div class="line"></div><div class="line">### installation of asam-mdf</div><div class="line"></div><div class="line">* [install pandas](https://www.pypandas.cn/en/docs/installation.html#installing-using-your-linux-distribution’s-package-manager)</div><div class="line"></div><div class="line">`python3 -m pip install pandas` (not working)</div><div class="line"></div><div class="line">`sudo apt-get install python3-pandas` </div><div class="line"></div><div class="line">* [install canmatrix](https://canmatrix.readthedocs.io/en/latest/installation.html)</div><div class="line"></div><div class="line">`sudo python3 setup.py install` </div><div class="line"></div><div class="line">* install pathlib2 </div><div class="line"></div><div class="line">`sudo -H pip3 install pathlib2 `</div><div class="line"></div><div class="line">if `WARNING: pip is being invoked by an old script wrapper. This will fail in a future version of pip.`</div><div class="line">using: `sudo -H python3 -m pip install（包名）`</div><div class="line"></div><div class="line"></div><div class="line">## [mdfreader](https://github.com/ratal/mdfreader)</div><div class="line"></div><div class="line">which is open source LSP licensed. and the APIs are clear about getChannels, and read data from each channel, which was my first choice. but later found out it's difficult to support streamIO input, which was the best format I can reached from Amazon S3 pipeline.</div><div class="line"></div><div class="line"></div><div class="line">##### MdfInfo</div><div class="line"></div><div class="line">* read_info()</div><div class="line">* list_channels()</div><div class="line"></div><div class="line">##### Mdf</div><div class="line"></div><div class="line">* read()</div><div class="line">* filter_channel_names()</div><div class="line">* get_channel_data()</div><div class="line">* get_channel_unit()</div><div class="line">* keep_channels()</div><div class="line"></div><div class="line">```python</div><div class="line">import mdfreader</div><div class="line">filename="basic.mf4"</div><div class="line">file_info=mdfreader.MdfInfo()</div><div class="line">channels = file_info.list_channels(filename)</div><div class="line">print(channels)</div><div class="line">file_pointer = mdfreader.Mdf(filename)</div><div class="line">keys_ = file_pointer.keys()</div><div class="line">for k_ in keys_:</div><div class="line">    chan1 = file_pointer.get_channel_data(k_)</div><div class="line">    print(chan1)</div></pre></td></tr></table></figure>
-<h2 id="python-necessary"><a href="#python-necessary" class="headerlink" title="python necessary"></a>python necessary</h2><h3 id="buffered-io"><a href="#buffered-io" class="headerlink" title="buffered io"></a>buffered io</h3><p><a href="https://docs.python.org/zh-cn/3/library/io.html" target="_blank" rel="external">binary I/O</a>, usually used in following: </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">f = open(<span class="string">"mdf_file"</span>, <span class="string">"rb"</span>)</div><div class="line">type(f)</div><div class="line">&lt;type <span class="string">'_io.BufferedReader'</span>&gt;</div></pre></td></tr></table></figure>
-<p><strong>open(file, mode=’r’, buffering=-1, encoding=…)</strong></p>
-<p>if<code>mode=&#39;b&#39;</code>, the returned content is bytes object, can’t encoding. if <code>buffereing</code> is not setted, for binary file with buffering with a fixed length. when with <code>mode=&#39;w/r/t</code>, it returns <code>io.TextIOwrapper</code>, if <code>mode=rb</code>, it returns <code>io.BufferedReader</code>, else if <code>mode=wb</code>, it returns <code>io.BufferedWriter</code>, else <code>mode=wrb</code>, it returns <code>io.BufferedRandom</code>. <a href="https://docs.python.org/zh-cn/3/library/functions.html#open" target="_blank" rel="external">check here</a></p>
-<h4 id="dict-built-in-funs"><a href="#dict-built-in-funs" class="headerlink" title="dict built-in funs"></a>dict built-in funs</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cmp(dict1, dict2) ;</div><div class="line">len(dict)</div><div class="line">str(dict)</div><div class="line">dict.clear()</div><div class="line">dict.get(key)</div><div class="line">dict.has_key(key)</div><div class="line">dict.items()</div><div class="line">dict.keys()</div><div class="line">dict.values()</div><div class="line">pop(key)</div></pre></td></tr></table></figure>
-<h2 id="a-bit-about-readers"><a href="#a-bit-about-readers" class="headerlink" title="a bit about readers"></a>a bit about readers</h2><p>a few years ago I was in CAE field, dealing with different kind of CAE format, e.g .nas. during that time, there is a similar need to have a file transfer from vendor specified format to python format e.t.c. </p>
-<p>so now it comes again, which is funny to know adapters in CAE and autonomous driving design.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://asammdf.readthedocs.io/en/master/api.html#mdf4" target="_blank" rel="external">asammdf API doc</a></p>
-<p><a href="https://www.asam.net/standards/detail/mdf/wiki/" target="_blank" rel="external">asam mdf4 doc</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2109,7 +2092,7 @@ bio_ = io.BytesIO(read_in_memory);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">157</span>
+                <span class="site-state-item-count">158</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2122,7 +2105,7 @@ bio_ = io.BytesIO(read_in_memory);
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
