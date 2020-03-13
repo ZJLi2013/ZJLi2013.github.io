@@ -291,6 +291,143 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-i-o/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/31/pure-C-i-o/" itemprop="url">pure C I/O</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T19:14:28-04:00">
+                2018-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/31/pure-C-i-o/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/31/pure-C-i-o/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this is a review from <a href="https://www.gnu.org/software/libc/manual/html_node/I_002fO-Overview.html#I_002fO-Overview" target="_blank" rel="external">GNU C programming</a></p>
+<h1 id="stream"><a href="#stream" class="headerlink" title="stream"></a>stream</h1><p>two basic mechanism for representing the connection between your program and the file: streams &amp;  file descriptors.  FD is represented as objects of type int; streams are represented as FILE * objects </p>
+<p>a stream is an abstract concept reprensenting a communication channel to a file, a device, or consider it as a sequence of characters with functions to take characters out of one end, and put characters into the other end, like a pipe. </p>
+<h1 id="file-position"><a href="#file-position" class="headerlink" title="file position"></a>file position</h1><p>an integer representing the number of bytes from the beginning of the file; each time a character read or written, the file position is incremented, namely, access to a file is sequential.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">int</span> <span class="title">ftell</span><span class="params">(FILE \* stream)</span></span>; <span class="comment">//return file position </span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fseek</span><span class="params">(FILE \*stream, <span class="keyword">long</span> <span class="keyword">int</span> offset, <span class="keyword">int</span> whence)</span></span>;</div><div class="line">/\* whence is SEEK\_SET |  SEEK\_CUR | SEEK\_END \*/</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">“write to a file” is always appended sequentially to the end of the file, regardless of the file position; but “read from a file” is used the current file position. which means multiple reading can happens simultaneously with an independent file pointer. In fact, each opening creates an independent file position pointer, even in the same program to open a file twice.  </div><div class="line"></div><div class="line">#<span class="meta"># std streams</span></div><div class="line"></div><div class="line">```c</div><div class="line"></div><div class="line">	FILE *<span class="built_in">stdin</span> ;</div><div class="line">	FILE *<span class="built_in">stdout</span>;</div><div class="line">	FILE *<span class="built_in">stderr</span>;</div><div class="line">	<span class="function">FILE *<span class="title">fopen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *openMode)</span></span>;  </div><div class="line">	<span class="comment">/* create a new stream connected to the file */</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">int</span> <span class="title">fclose</span><span class="params">(FILE *stream)</span></span></div><div class="line">	<span class="comment">/* disconnected between the stream and the file, any buffered output is written and any buffered input will discarded */</span></div></pre></td></tr></table></figure>
+<h2 id="ASCII-IO"><a href="#ASCII-IO" class="headerlink" title="ASCII IO"></a>ASCII IO</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fputs</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, FILE *stream)</span> </span>;</div><div class="line"><span class="comment">/* write a char array into stream. this call doesn't add a newline or terminal null character */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">char</span> *<span class="title">fgets</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">int</span> n, FILE *stream)</span></span>;</div><div class="line"><span class="comment">/* read n number of char array from stream, default add a newline character */</span></div><div class="line"></div><div class="line"><span class="keyword">ssize_t</span> getline(<span class="keyword">char</span> **lineptr, <span class="keyword">size_t</span> *n, FILE *stream);</div><div class="line"><span class="comment">/* read a whole line from stream */</span></div></pre></td></tr></table></figure>
+<h2 id="block-IO"><a href="#block-IO" class="headerlink" title="block IO"></a>block IO</h2><p>usually block stands for either block data or text in fixed-size, instead of characters or lines</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">size_t</span> fread(<span class="keyword">void</span> *data, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> n, FILE *stream);</div><div class="line"><span class="comment">/* read #n block, each block has size from stream, and store in data */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> fwrite(<span class="keyword">const</span> <span class="keyword">void</span> *data, <span class="keyword">size_t</span> size, <span class="keyword">size_t</span> n, FILE *stream);</div><div class="line"><span class="comment">/* write #n block, each block has size from buffer data to stream */</span></div></pre></td></tr></table></figure>
+<h2 id="formatted-IO"><a href="#formatted-IO" class="headerlink" title="formatted IO"></a>formatted IO</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span></span>;  <span class="comment">//write to std output</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fprintf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, ...)</span></span>; <span class="function">write to stream</span></div><div class="line"><span class="keyword">int</span> <span class="title">sprintf</span><span class="params">(<span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, ...)</span>; <span class="comment">//write to a string</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">scanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">//formatted read from stdin</span></span></div><div class="line"><span class="keyword">int</span> <span class="title">fscanf</span><span class="params">(FILE *stream, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">// read from stream </span></div><div class="line"><span class="keyword">int</span> <span class="title">sscanf</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">template</span>, …)</span> <span class="comment">// read from a string</span></div></pre></td></tr></table></figure>
+<h2 id="EOF"><a href="#EOF" class="headerlink" title="EOF"></a>EOF</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">feof</span><span class="params">(FILE* stream)</span> </span>; </div><div class="line"><span class="comment">/* return nonzero iff end of file indicator is set for stream */</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">ferror</span><span class="params">(FILE* stream)</span> </span>; </div><div class="line"><span class="comment">/* return nonzero iff error indicator is set for stream */</span></div></pre></td></tr></table></figure>
+<h2 id="stream-buffer"><a href="#stream-buffer" class="headerlink" title="stream buffer"></a>stream buffer</h2><p>stream and file is not communicated character-by-character, there is a buffer for I/O.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fflush</span><span class="params">(FILE *stream)</span> </span></div><div class="line"><span class="comment">/* take any buffered output on stream to be delivered to the file */</span></div></pre></td></tr></table></figure>
+<h2 id="file-descriptor"><a href="#file-descriptor" class="headerlink" title="file descriptor"></a>file descriptor</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> flags)</span></span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">open64</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename,  <span class="keyword">int</span> flags)</span> </span>;</div><div class="line"><span class="comment">// allow large file mode </span></div><div class="line"><span class="keyword">size_t</span> read(<span class="keyword">int</span> fd,  <span class="keyword">void</span> *buffer, <span class="keyword">size_t</span> size) </div><div class="line"><span class="comment">//  read from fd  size bytes into buffer </span></div><div class="line"><span class="keyword">size_t</span> pread(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size, <span class="keyword">off_t</span>  offset) </div><div class="line"><span class="comment">// start reading from position “offset” </span></div><div class="line"><span class="keyword">size_t</span>  write(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size) </div><div class="line"><span class="keyword">off_t</span>  lseek(<span class="keyword">int</span> fd,  <span class="keyword">off_t</span> offset,  <span class="keyword">int</span> whence)  </div><div class="line"><span class="comment">// change the file position of fd </span></div><div class="line"><span class="function">FILE *<span class="title">fdopen</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *opentype)</span> </span></div><div class="line"><span class="comment">// return a new stream for this fd</span></div></pre></td></tr></table></figure>
+<h2 id="synchronizing-I-O"><a href="#synchronizing-I-O" class="headerlink" title="synchronizing I/O"></a>synchronizing I/O</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sync</span><span class="params">(<span class="keyword">void</span>)</span> </span>;</div><div class="line"><span class="comment">// to ensure all operations finished before they return </span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">fsync</span><span class="params">(<span class="keyword">int</span> fd)</span> </span>;</div><div class="line"><span class="comment">// to ensure all data associated with the fd is written to the device</span></div></pre></td></tr></table></figure>
+<h2 id="not-yet"><a href="#not-yet" class="headerlink" title="not yet"></a>not yet</h2><p>async I/O, event I/O, interrupt driven I/O, GPIO …</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/26/Linux-at-work/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1624,144 +1761,6 @@ make: *** [tests] Error 1
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/19/muduo2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/19/muduo2/" itemprop="url">moduo 2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-19T22:16:11-04:00">
-                2018-06-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/19/muduo2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/19/muduo2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>The several classes defined in Moduo: TcpServer,  Acceptor, TcpConnection, EventLoop, epoller, channel, eventLoopThread, eventLoopThreadPool.</p>
-<h2 id="1-TcpServer-construction"><a href="#1-TcpServer-construction" class="headerlink" title="1) TcpServer construction"></a>1) TcpServer construction</h2><p>each TcpServer suppose have multi- tcp connections, the acceptor works as the main I/O thread, which listen the server-side I/O socket, and handle all client input connections at first, (later will assign the connection task to each worker thread from pool). so the input argument “loop” during TcpServer construction is the main I/O eventLoop. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">TcpServer::TcpServer(EventLoop* loop,</div><div class="line">                     <span class="keyword">const</span> InetAddress&amp; listenAddr,</div><div class="line">                     <span class="keyword">const</span> <span class="built_in">string</span>&amp; nameArg,</div><div class="line">                     Option option)</div><div class="line">  : loop_(CHECK_NOTNULL(loop)),	                  ipPort_(listenAddr.toIpPort()),</div><div class="line">    name_(nameArg),</div><div class="line">    acceptor_(<span class="keyword">new</span> Acceptor(loop, listenAddr, option == kReusePort)),</div><div class="line">    threadPool_(<span class="keyword">new</span> EventLoopThreadPool(loop, name_)),		    connectionCallback_(defaultConnectionCallback),</div><div class="line">    messageCallback_(defaultMessageCallback),</div><div class="line">    nextConnId_(<span class="number">1</span>)</div><div class="line">&#123;</div><div class="line">  acceptor_-&gt;setNewConnectionCallback(</div><div class="line">      boost::bind(&amp;TcpServer::newConnection, <span class="keyword">this</span>, _1, _2));</div><div class="line">&#125;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">one advantage of bind/callback is to <span class="keyword">import</span> functors to different <span class="class"><span class="keyword">class</span> <span class="title">domain</span>. <span class="title">and</span> <span class="title">server</span> <span class="title">has</span> <span class="title">always</span> <span class="title">one</span> <span class="title">I</span>/<span class="title">O</span> <span class="title">socket</span>, <span class="title">but</span> <span class="title">client</span>-<span class="title">socket</span>-<span class="title">fd</span> <span class="title">suppose</span> <span class="title">be</span> <span class="title">a</span> <span class="title">lot</span>. </span></div><div class="line"></div><div class="line">## 2) <span class="title">TcpServer</span> <span class="title">newConnection</span></div><div class="line"><span class="title">Each</span> <span class="title">new</span> <span class="title">tcp</span> <span class="title">connection</span>, <span class="title">will</span> <span class="title">assign</span> <span class="title">a</span> <span class="title">worker</span> <span class="title">thread</span> <span class="title">to</span> <span class="title">execute</span> <span class="title">the</span> <span class="title">speical</span> <span class="title">callback</span> <span class="title">functor</span> <span class="title">for</span> <span class="title">this</span> <span class="title">new</span> <span class="title">connection</span>, <span class="title">How</span> <span class="title">to</span> <span class="title">schedule</span> <span class="title">thread</span> <span class="title">in</span> <span class="title">threadpool</span> <span class="title">is</span> <span class="title">implemented</span> <span class="title">by</span> <span class="title">round</span>-<span class="title">robin</span>, <span class="title">which</span> <span class="title">are</span> <span class="title">implemented</span> <span class="title">as</span>:</div><div class="line"></div><div class="line">```c</div><div class="line">ioLoop-&gt;runInLoop(boost::bind(&amp;TcpConnection::connectEstablished, conn));  </div><div class="line">EventLoopThreadPool::getNextLoop()</div></pre></td></tr></table></figure>
-<h3 id="does-each-worker-thread-run-EventLoop-loop-which-will-call-epoll-wait-and-execute-all-active-channels-suppose-no"><a href="#does-each-worker-thread-run-EventLoop-loop-which-will-call-epoll-wait-and-execute-all-active-channels-suppose-no" class="headerlink" title="does each worker thread run EventLoop.loop(), which will call epoll_wait(), and execute all active channels? suppose no."></a>does each worker thread run EventLoop.loop(), which will call epoll_wait(), and execute all active channels? suppose no.</h3><h2 id="3-TcpConnection-construction"><a href="#3-TcpConnection-construction" class="headerlink" title="3) TcpConnection construction"></a>3) TcpConnection construction</h2><p>each new client connection will reponse to a new socket fd, and a new channel. (channel is actually the container of socket fd); and the functors on this connection is also imported to channel callbacks. basically from outside, we only see channel objects, TcpConnection object is the inner class. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">TcpConnection::TcpConnection(EventLoop* loop,</div><div class="line">                             <span class="keyword">const</span> <span class="built_in">string</span>&amp; nameArg,</div><div class="line">                             <span class="keyword">int</span> sockfd,</div><div class="line">                             <span class="keyword">const</span> InetAddress&amp; localAddr,</div><div class="line">                             <span class="keyword">const</span> InetAddress&amp; peerAddr)</div><div class="line">  : loop_(CHECK_NOTNULL(loop)),</div><div class="line">    name_(nameArg),</div><div class="line">    state_(kConnecting),</div><div class="line">    reading_(<span class="literal">true</span>),</div><div class="line">    socket_(<span class="keyword">new</span> Socket(sockfd)),</div><div class="line">    channel_(<span class="keyword">new</span> Channel(loop, sockfd)),</div><div class="line">    localAddr_(localAddr),</div><div class="line">    peerAddr_(peerAddr),</div><div class="line">    highWaterMark_(<span class="number">64</span>*<span class="number">1024</span>*<span class="number">1024</span>)</div><div class="line">&#123;</div><div class="line">  channel_-&gt;setReadCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleRead, <span class="keyword">this</span>, _1));</div><div class="line">  channel_-&gt;setWriteCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleWrite, <span class="keyword">this</span>));</div><div class="line">  channel_-&gt;setCloseCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleClose, <span class="keyword">this</span>));</div><div class="line">  channel_-&gt;setErrorCallback(</div><div class="line">      boost::bind(&amp;TcpConnection::handleError, <span class="keyword">this</span>));</div><div class="line">  LOG_DEBUG &lt;&lt; <span class="string">"TcpConnection::ctor["</span> &lt;&lt;  name_ &lt;&lt; <span class="string">"] at "</span> &lt;&lt; <span class="keyword">this</span></div><div class="line">            &lt;&lt; <span class="string">" fd="</span> &lt;&lt; sockfd;</div><div class="line">  socket_-&gt;setKeepAlive(<span class="literal">true</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>so where are channel (read/write/error/close) handleEvent callbacks triggered? it is during the eventloop.loop, after epoller return the active events, based on the status of each revent, special handleEvent is called.</p>
-<h2 id="4-eventLoop-construction"><a href="#4-eventLoop-construction" class="headerlink" title="4) eventLoop construction"></a>4) eventLoop construction</h2><p>during constrution of eventLoop, a new poller is created based on this eventLoop itself, also a new wakeupfd and a new wakeupChannel. the purpose of wakeup fd/channel is to  immediately wake up the work thread, rather than waiting till PollTime. and the wakeupfd bind handleRead, in which read one byte to make this wakeupfd I/O readable, which then is ready for I/O. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">EventLoop::EventLoop()</div><div class="line">  : looping_(<span class="literal">false</span>),</div><div class="line">    quit_(<span class="literal">false</span>),</div><div class="line">    eventHandling_(<span class="literal">false</span>),</div><div class="line">    callingPendingFunctors_(<span class="literal">false</span>),</div><div class="line">    iteration_(<span class="number">0</span>),</div><div class="line">    threadId_(CurrentThread::tid()),</div><div class="line">    poller_(Poller::newDefaultPoller(<span class="keyword">this</span>)),</div><div class="line">    timerQueue_(<span class="keyword">new</span> TimerQueue(<span class="keyword">this</span>)),</div><div class="line">    wakeupFd_(createEventfd()),		</div><div class="line">    wakeupChannel_(<span class="keyword">new</span> Channel(<span class="keyword">this</span>, wakeupFd_)),</div><div class="line">    currentActiveChannel_(<span class="literal">NULL</span>)</div><div class="line">&#123;</div><div class="line">  LOG_DEBUG &lt;&lt; <span class="string">"EventLoop created "</span> &lt;&lt; <span class="keyword">this</span> &lt;&lt; <span class="string">" in thread "</span> &lt;&lt; threadId_;</div><div class="line">  <span class="keyword">if</span> (t_loopInThisThread)</div><div class="line">  &#123;</div><div class="line">    LOG_FATAL &lt;&lt; <span class="string">"Another EventLoop "</span> &lt;&lt; t_loopInThisThread</div><div class="line">              &lt;&lt; <span class="string">" exists in this thread "</span> &lt;&lt; threadId_;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span></div><div class="line">  &#123;</div><div class="line">    t_loopInThisThread = <span class="keyword">this</span>;</div><div class="line">  &#125;</div><div class="line">  wakeupChannel_-&gt;setReadCallback(</div><div class="line">      boost::bind(&amp;EventLoop::handleRead, <span class="keyword">this</span>));	    <span class="comment">// we are always reading the wakeupfd</span></div><div class="line">  wakeupChannel_-&gt;enableReading();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>“activeChannels” suppose to be a class variable, which is shared by eventLoop objects, but it’s ok to keep a copy for each eventLoop object to avoid multi-thread competing. and suppose epoll_wait() is thread-safe, so later during construction of eventLoopThreadPool, multi eventLoopThreads won’t conflict with “active channels”</p>
-<h2 id="5-epoller-construction"><a href="#5-epoller-construction" class="headerlink" title="5) epoller construction"></a>5) epoller construction</h2><p>epoller object is created during eventloop construction. since the three interface of epoll instance are thread-safe, they look like global funcs.</p>
-<p>epoll_create(), return an epfd referring to the new epoll instance, this epfd is used by all subsequent calsl to the epoll interface. </p>
-<p>epoll_wait(), return all ready events on the epoll instance referred by epfd. </p>
-<p>epoll_ctl(), traverse the red-black tree strucutre to return the existing fd, or add new fd to the tree. </p>
-<h2 id="6-channel-construction"><a href="#6-channel-construction" class="headerlink" title="6) channel construction"></a>6) channel construction</h2><p>channel is the container of one fd, and is related to one eventLoop. channel is not responsible to create/delete fd, the real owner of each fd is TcpConnection or acceptor. Channel object works like a pipe to send fd from inner object TcpConnection to the eventLoop. the advantage  here is eventLoop is independent from connections. </p>
-<h2 id="7-channel-update"><a href="#7-channel-update" class="headerlink" title="7) channel:update()"></a>7) channel:update()</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">channel::update() --&gt;</div><div class="line">	loop-&gt;updateChannel() --&gt; </div><div class="line">		poller-&gt;updateChannel() --&gt;</div><div class="line">			<span class="comment">//poller maintain a channel list, call epoll_ctl to add/return/delete the requiring channel</span></div></pre></td></tr></table></figure>
-<h2 id="8-one-epoll-threadpool-vs-per-thread-per-epoll"><a href="#8-one-epoll-threadpool-vs-per-thread-per-epoll" class="headerlink" title="8) one epoll + threadpool vs per thread per epoll"></a>8) one epoll + threadpool vs per thread per epoll</h2><p>the first method, one global epoll listens all new connections, and send each connection callback to a new thread to execute. method 2, to listen the server I/O socket need to bind a unique epoll, in Moduo which is the acceptor epoll. then all client connection socket will be dealt with their own worker epoll.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1812,7 +1811,7 @@ make: *** [tests] Error 1
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">158</span>
+                <span class="site-state-item-count">159</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="lgsvl,Docker," />
+  <meta name="keywords" content="pure C," />
 
 
 
@@ -93,20 +93,18 @@
 
 
 
-<meta name="description" content="backgroundpreviously tried to run Vulkan in virtual display, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node h">
-<meta name="keywords" content="lgsvl,Docker">
+<meta name="description" content="pointer assignment12345678910111213141516171819202122232425262728293031323334int main()&amp;#123;  int a = 10 ;  int *pa = &amp;amp;a ;  cout &amp;lt;&amp;lt; &quot;pa add &quot; &amp;lt;&amp;lt; &amp;amp;pa &amp;lt;&amp;lt; &quot;pa val &quot; &amp;lt;&amp;lt; *p">
+<meta name="keywords" content="pure C">
 <meta property="og:type" content="article">
-<meta property="og:title" content=" deploy lgsvl in docker swarm 3">
-<meta property="og:url" content="http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/index.html">
+<meta property="og:title" content="pure c&#x2F;c++ pointer">
+<meta property="og:url" content="http://yoursite.com/2020/03/13/pure-c-c-pointer/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="backgroundpreviously tried to run Vulkan in virtual display, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node h">
+<meta property="og:description" content="pointer assignment12345678910111213141516171819202122232425262728293031323334int main()&amp;#123;  int a = 10 ;  int *pa = &amp;amp;a ;  cout &amp;lt;&amp;lt; &quot;pa add &quot; &amp;lt;&amp;lt; &amp;amp;pa &amp;lt;&amp;lt; &quot;pa val &quot; &amp;lt;&amp;lt; *p">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://docs.docker.com/engine/swarm/images/ingress-lb.png">
-<meta property="og:updated_time" content="2020-01-15T11:25:43.528Z">
+<meta property="og:updated_time" content="2020-03-13T08:50:53.247Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" deploy lgsvl in docker swarm 3">
-<meta name="twitter:description" content="backgroundpreviously tried to run Vulkan in virtual display, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node h">
-<meta name="twitter:image" content="https://docs.docker.com/engine/swarm/images/ingress-lb.png">
+<meta name="twitter:title" content="pure c&#x2F;c++ pointer">
+<meta name="twitter:description" content="pointer assignment12345678910111213141516171819202122232425262728293031323334int main()&amp;#123;  int a = 10 ;  int *pa = &amp;amp;a ;  cout &amp;lt;&amp;lt; &quot;pa add &quot; &amp;lt;&amp;lt; &amp;amp;pa &amp;lt;&amp;lt; &quot;pa val &quot; &amp;lt;&amp;lt; *p">
 
 
 
@@ -134,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/13/pure-c-c-pointer/"/>
 
 
 
 
 
-  <title> deploy lgsvl in docker swarm 3 | Serious Autonomous Vehicles</title>
+  <title>pure c/c++ pointer | Serious Autonomous Vehicles</title>
   
 
 
@@ -293,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/pure-c-c-pointer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -310,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"> deploy lgsvl in docker swarm 3</h1>
+          <h1 class="post-title" itemprop="name headline">pure c/c++ pointer</h1>
         
 
         <div class="post-meta">
@@ -322,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-15T08:04:41-05:00">
-                2019-12-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-13T04:49:57-04:00">
+                2020-03-13
               </time>
             
 
@@ -341,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/12/15/deploy-lgsvl-in-docker-swarm-3/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/13/pure-c-c-pointer/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/15/deploy-lgsvl-in-docker-swarm-3/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/13/pure-c-c-pointer/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -368,39 +366,18 @@
       
 
       
-        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>previously tried to <a href="https://zjli2013.github.io/2019/12/04/running-Vulkan-in-virtual-display/" target="_blank" rel="external">run Vulkan in virtual display</a>, which failed as I understand virtual display configure didn’t fit well with Vulkan. so this solution is direct display to allow each node has plugged monitor(which is called <strong>PC cluster</strong>). for future in cloud support, current solution won’t work. and earlier, also tried to <a href="https://zjli2013.github.io/2019/11/21/deploy-lgsvl-in-docker-swarm-2/" target="_blank" rel="external">deploy lgsvl in docker  swarm</a>, which so far can work with Vulkan as well, after a little bit <a href="https://zjli2013.github.io/2019/11/29/X11-GUI-in-docker/" target="_blank" rel="external">understand X11</a></p>
-<p>a few demo test can run as followning:</p>
-<h4 id="deploy-glxgears-OpenGL-in-PC-cluster"><a href="#deploy-glxgears-OpenGL-in-PC-cluster" class="headerlink" title="deploy glxgears/OpenGL in PC cluster"></a>deploy glxgears/OpenGL in PC cluster</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0 </div><div class="line">xhost + </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears</div></pre></td></tr></table></figure>
-<h4 id="deploy-vkcube-Vulkan-in-PC-cluster"><a href="#deploy-vkcube-Vulkan-in-PC-cluster" class="headerlink" title="deploy vkcube/Vulkan in PC cluster"></a>deploy vkcube/Vulkan in PC cluster</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0 </div><div class="line">xhost +  </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==manager&apos;  --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/vkcube</div></pre></td></tr></table></figure>
-<h4 id="deploy-service-with-“node-role-worker”"><a href="#deploy-service-with-“node-role-worker”" class="headerlink" title="deploy service with “node.role==worker”"></a>deploy service with “node.role==worker”</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">export DISPLAY=:0</div><div class="line">xhost + </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --constraint &apos;node.role==worker&apos;  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/glxgears</div></pre></td></tr></table></figure>
-<h4 id="deploy-service-in-whole-swarm"><a href="#deploy-service-in-whole-swarm" class="headerlink" title="deploy service in whole swarm"></a>deploy service in whole swarm</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xhost + </div><div class="line">export DISPLAY=:0 </div><div class="line">sudo docker service create --name glx --generic-resource &quot;gpu=1&quot; --replicas 2  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host  192.168.0.10:5000/vkcube</div></pre></td></tr></table></figure>
-<p>which deploy vkcube service in both manager and worker node:</p>
-<pre><code>overall progress: 2 out of 2 tasks 
-1/2: running   [==================================================&gt;]     
-2/2: running   [==================================================&gt;] 
-verify: Service converged 
-</code></pre><h4 id="understand-Xauthority"><a href="#understand-Xauthority" class="headerlink" title="understand .Xauthority"></a>understand .Xauthority</h4><p>as docker service can run with <code>--mount</code> arguments, which give the first try to copy <code>.Xauthority</code> to manager node, but <code>.X11-unix</code> is not copyable, which is not a normal file, but a socket.</p>
-<p>in <code>docker service create</code>, when create a OpenGL/vulkan service in one remote worker node, and using <code>$DISPLAY=:0</code>, which means the display happens at the remote worker node. so in this way, the remote worker node is played the <code>Xserver</code> role; and since the vulkan service is actually run in the remote worker node, so the remote worker node is <code>Xclient</code> ? </p>
-<p>assuming the lower implement of <code>docker swarm service</code>is based on <code>ssh</code>, then when the manager node start the service, it will build the ssh tunnel to the remote worker node, and with the $DISPLAY variable as null; even if the docker swarm can start the ssh tunnel with <code>-X</code>, which by default, will use the manager node’s <code>$DISPLAY=localhost:10.0</code></p>
-<p><code>Xauthority cookie</code> is used to grant access to Xserver, so first make sure which machine is the Xserver, then the Xauthority should be included in that Xserer host machine. a few testes: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ssh in worker: echo $DISPLAY --&gt;  localhost:10.0</div><div class="line"></div><div class="line">xeyes --&gt; display in master monitor </div><div class="line"></div><div class="line">ssh in worker: xauth list --&gt; &#123;worker/unix:0  MIT-MAGIC-COOKIE-1  19282b0a651789ed27950801ef6f1441; worker/unix:10  MIT-MAGIC-COOKIE-1  a6cbe81637207bf0c168b3ad20a9267a &#125;</div><div class="line"></div><div class="line">in master: xauth list --&gt; &#123; ubuntu/unix:1  MIT-MAGIC-COOKIE-1  ee227cb9465ac073a072b9d263b4954e; ubuntu/unix:0  MIT-MAGIC-COOKIE-1  75893fb66941792235adba22362c4a6f; ubuntu/unix:10  MIT-MAGIC-COOKIE-1  785f20eb0ade772ceffb24eadeede645 &#125;</div></pre></td></tr></table></figure>
-<p>so which cookie is is for this $DISPLAY ? it shouldb be the one on <code>ubuntu/unix:10</code>;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh in worker:  export DISPLAY=:0</div><div class="line">xeyes  --&gt; display in worker monitor</div></pre></td></tr></table></figure>
-<p>then it use the cookie:  <code>worker/unix:0</code>.</p>
-<h4 id="deploy-lgsvl-service-in-swarm"><a href="#deploy-lgsvl-service-in-swarm" class="headerlink" title="deploy lgsvl service in swarm"></a>deploy lgsvl service in swarm</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">xhost + </div><div class="line">export DISPLAY=:0</div><div class="line">sudo docker service create --name lgsvl --generic-resource &quot;gpu=1&quot; --replicas 2  --env DISPLAY --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  --network host --publish published=8080,target=8080  192.168.0.10:5000/lgsvl</div></pre></td></tr></table></figure>
-<p>which gives:</p>
-<pre><code>overall progress: 0 out of 2 tasks 
-1/2: container cannot be disconnected from host network or connected to host network
-2/2: container cannot be disconnected from host network or connected to host network
-</code></pre><p>basically, the service is deployed in <code>ingress network</code> by default, but as well, the service is configured with <code>host network</code>. so it conflict.</p>
-<h2 id="swarm-network"><a href="#swarm-network" class="headerlink" title="swarm network"></a>swarm network</h2><p><img src="https://docs.docker.com/engine/swarm/images/ingress-lb.png" alt="image"></p>
-<p>the <a href="https://docs.docker.com/engine/swarm/services/#publish-a%20services-ports-using-the-routing-mesh" target="_blank" rel="external">routing mesh</a> is the default internal balancer in swarm network; the other choice is to <a href="https://docs.docker.com/engine/swarm/services/#publish-a-services-ports-directly-on-the-swarm-node" target="_blank" rel="external">deploy serivce directly on the node</a>, namely <code>bypassing routing mesh</code>, which ask the service run in <code>global mode</code> and with pubished port setting as <code>mode=host</code>, which should be the same as <code>--network host</code> in <code>replicas mode</code>. </p>
-<p>the limitation of bypassing routing mesh, is only one task on one node, and access the published port can only require the service from this special node, which doesn’ make sense in cloud env.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">docker service create \</div><div class="line">     --mode global \</div><div class="line">     --publish mode=host,target=80,published=8080 \</div><div class="line">     --generic-resource &quot;gpu=1&quot;  \</div><div class="line">     --env DISPLAY  \</div><div class="line">     --mount src=&quot;tmp&quot;,dst=&quot;/root/.Xauthority&quot;  \</div><div class="line">     --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot;  \</div><div class="line">     --network host  \</div><div class="line">     --name lgsvl \</div><div class="line">     lgsvl:latest</div></pre></td></tr></table></figure>
-<p>tips: –mount src=”X11-unix”,dst=”/tmp/.X11-unix” is kind of cached. so once docker image has ran in worker node, then it doesn’t need to pass this parameter again, but once worker node restart, it need this parameter again</p>
-<p>in summary about swarm netowrk, the routing mesh should be the right solution for cloud deployment. so how to bypass <code>--network host</code> ? </p>
-<p>the reason of <code>host network</code> is the lgsvl server and webUI can works in same host; if not, there is kind of cross-domain security failures, which actually is another topic, namely, how to host lgsvl and webUI/React in different hosts.</p>
-<p>need some study of webUI in next post.</p>
+        <h3 id="pointer-assignment"><a href="#pointer-assignment" class="headerlink" title="pointer assignment"></a>pointer assignment</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> a = <span class="number">10</span> ;</div><div class="line">  <span class="keyword">int</span> *pa = &amp;a ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pa add "</span> &lt;&lt; &amp;pa &lt;&lt; <span class="string">"pa val "</span> &lt;&lt; *pa &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> b = <span class="number">22</span>;</div><div class="line">  <span class="keyword">int</span> *pb = &amp;b ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pb add "</span> &lt;&lt; &amp;pb &lt;&lt; <span class="string">"pb val "</span> &lt;&lt; *pb &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> d = <span class="number">100</span> ;</div><div class="line">  <span class="keyword">int</span> *pd = &amp;d ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pd add "</span> &lt;&lt; &amp;pd &lt;&lt; <span class="string">"pd val "</span> &lt;&lt; *pd &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> *pc = pb ; <span class="comment">//pointer assignment </span></div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pc add "</span> &lt;&lt; &amp;pc &lt;&lt; <span class="string">"pc val "</span> &lt;&lt; *pc &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  pb = pd ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pb add "</span> &lt;&lt; &amp;pb &lt;&lt; <span class="string">"pb val "</span> &lt;&lt; *pb &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pd add "</span> &lt;&lt; &amp;pd &lt;&lt; <span class="string">"pd val "</span> &lt;&lt; *pd &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  pd = pa ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pd add "</span> &lt;&lt; &amp;pd &lt;&lt; <span class="string">"pd val "</span> &lt;&lt; *pd &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  pa = pc ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pa add "</span> &lt;&lt; &amp;pa &lt;&lt; <span class="string">"pa val "</span> &lt;&lt; *pa &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pc add "</span> &lt;&lt; &amp;pc &lt;&lt; <span class="string">"pc val "</span> &lt;&lt; *pc &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">/* </span></div><div class="line">pb add 0x7fff5e744b30pb val 22</div><div class="line">pd add 0x7fff5e744b28pd val 100</div><div class="line">pc add 0x7fff5e744b20pc val 22</div><div class="line">pb add 0x7fff5e744b30pb val 100</div><div class="line">pd add 0x7fff5e744b28pd val 100</div><div class="line">pd add 0x7fff5e744b28pd val 10</div><div class="line">pa add 0x7fff5e744b40pa val 22</div><div class="line">pc add 0x7fff5e744b20pc val 22</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>pointer assigment used a lot in linked list problems, the sample above is a pointer solution for <code>linked list reverse</code>. consider pointer as a container with an address to another object. pointer assignment, e.g. <code>pointerA = pointerB</code> only changes the content in the container. but the address of the container itself doesn’t change. and with  *(dereference) the pointer, we can see the content is changed. </p>
+<p>further, taken <code>pc</code>, <code>pb</code>, <code>pd</code> as another example.<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pc = pb ;</div><div class="line">pb = pd;</div></pre></td></tr></table></figure></p>
+<p>the first line will make container <code>pc</code> to store what is stored in container <code>pb</code>, in another word, the first line will make <code>pc</code> point to the address, which is stored in <code>pb</code>. </p>
+<p>and the second line will then put what’s stored in container <code>pd</code> to container <code>pb</code>. </p>
+<p>after this two updates, <code>pc</code> points to the original content in <code>pb</code>; <code>pb</code>  and <code>pd</code> points to the same content. obviously, what’s inside <code>pc</code> now, has nothing to do with pointer <code>pb</code>.  </p>
+<h3 id="pointer-forward"><a href="#pointer-forward" class="headerlink" title="pointer++ forward"></a>pointer++ forward</h3><p>the basic scenario is as following, will <code>p2</code> move forward as well ? </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> *p1 = &amp;int_var ;</div><div class="line"><span class="keyword">int</span> *p2 = p1; </div><div class="line">p1++ ;</div></pre></td></tr></table></figure>
+<p>we can see from the following <code>test.c</code>,  <code>p2</code> won’t move forward as <code>p1++</code>.  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> a[<span class="number">4</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125; ; </div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" a addr "</span> &lt;&lt; &amp;a &lt;&lt; <span class="string">" a val "</span> &lt;&lt; *a &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> *p = a ;</div><div class="line">  <span class="keyword">int</span> *q = p ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" p addr "</span> &lt;&lt; &amp;p &lt;&lt; <span class="string">" p val "</span> &lt;&lt; *p &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" q addr "</span> &lt;&lt; &amp;q &lt;&lt; <span class="string">" q val "</span> &lt;&lt; *q &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line"> </div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">3</span>; i++)&#123;</div><div class="line">      q++;</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" a addr "</span> &lt;&lt; &amp;a &lt;&lt; <span class="string">" a val "</span> &lt;&lt; *a &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" p addr "</span> &lt;&lt; &amp;p &lt;&lt; <span class="string">" p val "</span> &lt;&lt; *p &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" q addr "</span> &lt;&lt; &amp;q &lt;&lt; <span class="string">" q val "</span> &lt;&lt; *q &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line"> </div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> a addr 0x7fff5e968bb0 a val 1</div><div class="line"> p addr 0x7fff5e968b40 p val 1</div><div class="line"> q addr 0x7fff5e968b38 q val 1</div><div class="line"> a addr 0x7fff5e968bb0 a val 1</div><div class="line"> p addr 0x7fff5e968b40 p val 1</div><div class="line"> q addr 0x7fff5e968b38 q val 4</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p><code>pointer++</code> can be reviewed as a same type pointer in current pointer’s neighbor, then do a pointer assigment: </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span>* tmp_p = <span class="number">0x7fff5e744b30</span> ; </div><div class="line"><span class="keyword">int</span>* p1 = <span class="number">0x7fff5e744b28</span> ; </div><div class="line">p1 = tmp_p ;</div><div class="line">``` </div><div class="line"></div><div class="line">##<span class="meta"># int++</span></div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums ;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">     nums.push_back(i);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">int</span> p=<span class="number">0</span>;</div><div class="line">  <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"nums[p++] "</span> &lt;&lt; nums[p++] &lt;&lt; <span class="string">" p val "</span> &lt;&lt; p &lt;&lt; <span class="built_in">endl</span> ; </div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">/* nums[p++]: 0 p val:  1 */</span></div></pre></td></tr></table></figure>
 
       
     </div>
@@ -430,9 +407,7 @@ verify: Service converged
       
         <div class="post-tags">
           
-            <a href="/tags/lgsvl/" rel="tag"># lgsvl</a>
-          
-            <a href="/tags/Docker/" rel="tag"># Docker</a>
+            <a href="/tags/pure-C/" rel="tag"># pure C</a>
           
         </div>
       
@@ -445,8 +420,8 @@ verify: Service converged
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/08/where-are-you-in-next-4-years-1/" rel="next" title="where are you in next 4 years (1)">
-                <i class="fa fa-chevron-left"></i> where are you in next 4 years (1)
+              <a href="/2020/03/12/nodejs-introduction/" rel="next" title="nodejs introduction">
+                <i class="fa fa-chevron-left"></i> nodejs introduction
               </a>
             
           </div>
@@ -454,10 +429,6 @@ verify: Service converged
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/15/web-service-bypass-in-lgsvl/" rel="prev" title="web service bypass in lgsvl">
-                web service bypass in lgsvl <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -605,7 +576,7 @@ verify: Service converged
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-glxgears-OpenGL-in-PC-cluster"><span class="nav-number">1.0.1.</span> <span class="nav-text">deploy glxgears/OpenGL in PC cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-vkcube-Vulkan-in-PC-cluster"><span class="nav-number">1.0.2.</span> <span class="nav-text">deploy vkcube/Vulkan in PC cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-service-with-“node-role-worker”"><span class="nav-number">1.0.3.</span> <span class="nav-text">deploy service with “node.role==worker”</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-service-in-whole-swarm"><span class="nav-number">1.0.4.</span> <span class="nav-text">deploy service in whole swarm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#understand-Xauthority"><span class="nav-number">1.0.5.</span> <span class="nav-text">understand .Xauthority</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#deploy-lgsvl-service-in-swarm"><span class="nav-number">1.0.6.</span> <span class="nav-text">deploy lgsvl service in swarm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#swarm-network"><span class="nav-number">2.</span> <span class="nav-text">swarm network</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#pointer-assignment"><span class="nav-number">1.</span> <span class="nav-text">pointer assignment</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pointer-forward"><span class="nav-number">2.</span> <span class="nav-text">pointer++ forward</span></a></li></ol></div>
             
 
           </div>
@@ -748,9 +719,9 @@ verify: Service converged
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/12/15/deploy-lgsvl-in-docker-swarm-3/';
-          this.page.identifier = '2019/12/15/deploy-lgsvl-in-docker-swarm-3/';
-          this.page.title = ' deploy lgsvl in docker swarm 3';
+          this.page.url = 'http://yoursite.com/2020/03/13/pure-c-c-pointer/';
+          this.page.identifier = '2020/03/13/pure-c-c-pointer/';
+          this.page.title = 'pure c/c++ pointer';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
