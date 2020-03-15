@@ -291,6 +291,449 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/reinforcement-learning-in-nutshell-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="url">reinforcement learning in nutshell-1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T10:36:19-04:00">
+                2019-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/18/reinforcement-learning-in-nutshell-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="RL-concepts"><a href="#RL-concepts" class="headerlink" title="RL concepts"></a>RL concepts</h3><p>assuming timestep <code>t</code>:</p>
+<ul>
+<li>the environment state <strong>S</strong>(t)</li>
+<li>agent’s action <strong>A</strong>(t)</li>
+<li>discouted future reward <strong>R</strong>(t), which satisfy: </li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;r_{t&plus;2}&space;&plus;&space;...&space;&plus;&space;\gamma^k&space;r_{t&plus;k&plus;1}" title="R_t = r_{t+1} + \gamma r_{t+2} + ... + \gamma^k r_{t+k+1}"></p>
+<pre><code>with current state `s` and taking current action `a`, the env will give the reward `r_{t+1}`. `\gamma` is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent&apos;s value only consider current reward.  check [discount future reward]() in following chapter.
+</code></pre><ul>
+<li><p>agent’s policy <strong>P</strong>(a|s), in current state <code>s</code>, the propability of action <code>a</code></p>
+</li>
+<li><p>agent’s state value <strong>V</strong>(s), in state <code>s</code> and took policy <code>\pi</code>, which usually described as an expectation:</p>
+</li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)" title="V^\pi(s) = E (R_t )"></p>
+<ul>
+<li>agent’s action value <strong>Q</strong>(s, a), which consider both state <code>s</code> and action <code>a</code> effects on value calculation. </li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t&plus;1})&space;=&space;E(r_{t&plus;1}&space;&plus;&space;\gamma&space;V^\pi(s_{t&plus;1}))" title="Q^\pi(s, a) = E_{\pi} ( R_t | s=s_t, a=a_t) = E_{\pi} (R_{t+1}) = E(r_{t+1} + \gamma V^\pi(s_{t+1}))"></p>
+<p><img src="https://latex.codecogs.com/gif.latex?V^\pi&space;(s)&space;=&space;E&space;(&space;Q^\pi(s,&space;a)|_{a&space;\sim&space;\pi(a|s)}&space;)" title="V^\pi (s) = E ( Q^\pi(s, a)|_{a \sim \pi(a|s)} )"></p>
+<p>namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>. </p>
+<ul>
+<li>state transfer propability <strong>P</strong></li>
+<li>explore rate <code>\eta</code>,  it’s the chance to choose non-max value during iteration, similar as mutation.</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-c9a7f64558173b0b.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
+<h3 id="Markov-decision-process"><a href="#Markov-decision-process" class="headerlink" title="Markov decision process"></a>Markov decision process</h3><p>assuming <code>state transfer propability</code>, <code>agent&#39;s policy</code>, and <code>agent&#39;s value</code> follow <code>Markov assumption</code>. namely, the current state transfer propability, agent’s policy and value only relates to current state.</p>
+<p>agent’s value function <strong>V</strong>(s) meets <a href="">Belman’s equation</a>:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?V(S)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;V(S_{t&plus;1})|S_t&space;=s&space;)" title="V(S) = E( R_{t+1} + \gamma V(S_{t+1})|S_t =s )"></p>
+<p>and agent’s action value function <strong>q</strong>(s) also has Belman’s equation:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;a)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;Q(S_{t&plus;1},&space;A_{t&plus;1}&space;)|S_t&space;=s,&space;A_t&space;=a&space;)" title="Q(s, a) = E( R_{t+1} + \gamma Q(S_{t+1}, A_{t+1} )|S_t =s, A_t =a )"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-54bb214db83cc7b2.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
+<p>in general, env’s state is random; the policy to take action is policy <strong>P(a|s)</strong>. Markov Decision process is: state, action, policy, each <code>[state, action, policy]</code> is an <code>episode</code>, which gives the state-action-reward series:</p>
+<pre><code>s0, a0, r1, s1, a1, r2, ... s(n-1),  a(n-1), rn, sn
+</code></pre><p>Markov assumption is state(n+1) is only depends on state(n).</p>
+<h3 id="Belman’s-equation"><a href="#Belman’s-equation" class="headerlink" title="Belman’s equation"></a>Belman’s equation</h3><p>Belman’s equation gives the recurrence relation in two timesteps. the current state value is calcualted from next future status with given current env status.</p>
+<p><img src="https://latex.codecogs.com/gif.latex?v(s)&space;=&space;E(&space;R_(t&plus;1)&space;&plus;&space;\gamma&space;v(S_(t&plus;1))|S_t&space;=&space;s&space;)" title="v(s) = E( R_(t+1) + \gamma v(S_(t+1))|S_t = s )"></p>
+<h3 id="discounted-future-reward"><a href="#discounted-future-reward" class="headerlink" title="discounted future reward"></a>discounted future reward</h3><p>to achieve better reward in long term, always conside the reward as sum of current and future rewards:</p>
+<pre><code>R(t) = r(t) + r(t+1) + ... r(n)
+</code></pre><p>on the other side, as the env state is random in time, the same action doesn’t give the same reward usually, and as time goes, the difference is even larger. think about the B-tree, as it goes deeper, the number of nodes is larger. so the reward in future doesn’t count the same weight as earlier reward, here define the discount ratio <code>\gamma</code> &lt;- [0, 1]</p>
+<pre><code>R(t) = r(t) + \gamma r(t+1) + ... + \gamma^(n-t) r(n)
+
+R(t) = r(t) = \gamma R(t+1) 
+</code></pre><h3 id="policy-iteration"><a href="#policy-iteration" class="headerlink" title="policy iteration"></a>policy iteration</h3><p>there are two steps:  </p>
+<ul>
+<li><p>policy evaluation, with current policy <code>\pi</code> to evaluate state’s value <code>V&#39;</code></p>
+</li>
+<li><p>policy improvment, with the state value <code>V&#39;</code>, with a special policy update strategy(e.g. greedy) to update policy.</p>
+</li>
+</ul>
+<p>the ideal result is to find the <code>fixed point</code> in value space, which corresponds to the optimized policy at current state with current policy update strategy.  </p>
+<p>in policy iteration, we only consider policy-value mapping.<br><img src="https://upload-images.jianshu.io/upload_images/17414314-40038359d36b0b92.png" alt="image"></p>
+<h3 id="value-iteration"><a href="#value-iteration" class="headerlink" title="value iteration"></a>value iteration</h3><p>where policy iteration based valued is implicit, only value iteration explicit by Belman’s equation. this is also a <code>fixed point</code> application, as we can use the explicit mapping (Belman’s equation) in state value space. so there should guarantee existing an optimized policy. </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-6fdea50bdaf6fee7.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
+<h2 id="an-optimization-problem"><a href="#an-optimization-problem" class="headerlink" title="an optimization problem"></a>an optimization problem</h2><p>reiforcement learning solution is to find the optimal value function to achieve the max reward in each timestep, which leads to optimal policy <code>\pi*</code>, or max value func, or max action value func.</p>
+<pre><code>$$ v(s) = max(v_i(s)) foreach i in value funcs $$ 
+
+$$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$ 
+</code></pre><p>mostly the <code>solution space</code> is not known at hand, if else, the optimal solution can get directly. on the other hand, current state, action set tells a little information about the <code>solution space</code>, as they are part of the <code>solution space</code>, so the optimization algorithms used in convex space can be applied here. </p>
+<p>a few common optimization algorithms includes: </p>
+<h3 id="dynamic-programming-DP"><a href="#dynamic-programming-DP" class="headerlink" title="dynamic programming(DP)"></a>dynamic programming(DP)</h3><p>DP can used in both <code>policy evaluation</code> and <code>policy iteration</code>, but in each <code>calculation step</code>(not even one physical step, and in one physical step, there can be hundreds or thousands of calculation steps) iteration, DP has to recalculate all state(t=current) value to the very first state(t=0) value, which is disaster for high-dimensional problem, and DP by default is kind of <code>integer programming</code>, not fitted to <code>continuous domain</code> either.</p>
+<h3 id="Monte-Carlo-MC"><a href="#Monte-Carlo-MC" class="headerlink" title="Monte Carlo (MC)"></a>Monte Carlo (MC)</h3><p>MC gets a few sample solutions in the <code>solution space</code>, and use these samples solution to approxiamte the <code>solution space</code>. in a geometry explaination, the base vectors of the solution space is unknown, but MC finds a few points in this space, then approximate the (nearly) base vectors, then any point in this space can be approximated by the linear combination of the nearly base vectors.</p>
+<p>MC has no ideas of the propability of state transfer, MC doesn’t care the inner relations of state variables, or model-free.</p>
+<p>MC is robost as it’s model free, on the other hand, if the <code>solution space</code> is high-dimensional, there is a high chance the sampling points are limited in a lower dimension, which weak the presentation of MC approximation; also MC needs to reach the final status, which may be not avaiable in some applications. </p>
+<h3 id="time-serial-Time-Difference-TD"><a href="#time-serial-Time-Difference-TD" class="headerlink" title="time-serial Time Difference(TD)"></a>time-serial Time Difference(TD)</h3><p>MC use the whole list of status for each policy evaluation; in 1st order TD, policy evaluation only use next reward and next state value:</p>
+<pre><code>$ v(s) = R(t+1)  + \gamma S(t+1)|S $
+</code></pre><p>for n-th order TD, the update will use n-th reward :</p>
+<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n S(t+n)|S $
+</code></pre><p>it’s clear here, as n-&gt;infinitly, n-th order TD is closer to MC. <strong>so how close is enough usually, namely which n is enough ?</strong></p>
+<h3 id="SARSA"><a href="#SARSA" class="headerlink" title="SARSA"></a>SARSA</h3><p>in TD, there are two ways: on-line policy, where the same one policy is using to both update value func and upate action; while off-line policy, where one policy is used to update value func, the other policy is used to update action. </p>
+<p>SARSA is kind of on-line policy, and the policy is <code>e-greedy</code>, to choose the max value corresponding action in every iteration with a high probablitiy <code>(1-e)</code>, as <code>e</code> is very small.</p>
+<pre><code>$ \delta(t) v(S, A) = R + \gamma (v(S&apos;, A&apos;) - v(S, A)) $
+</code></pre><p>in the iteration equation above, <code>\delta(t)</code> will give the iteration timestep size, <code>S&#39;</code>, <code>A&#39;</code> are next state and next action, compare to pure 1-st order TD, where the next state value is modified as:  $(Q(S’, A’) - Q(S, A)$, in this way <code>value func</code> keep updated in every func, which can be considered as local correction, compared to the unchanged pure 1-st order TD, which may be highly unstable/diverge in long time series. </p>
+<p>as time-serial TD can’t guarantee converge, so this local correction makes SARSA numerical robost.</p>
+<p>SARSA(\lambda) in mutli-step based is same as n-th order TD. </p>
+<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n ( v(S`) - v(S) ) $
+</code></pre><p>the problem of SARSA is <code>v(S, A)</code> may go huge, as the algorithm is on-line policy, which requires huge memory. </p>
+<h3 id="Q-learning"><a href="#Q-learning" class="headerlink" title="Q-learning"></a>Q-learning</h3><p>Q-learning is off-line policy TD. the policy iteration is use <code>e-greedy policy</code>, same as SARSA; while the policy evaluation to update value func use <code>greedy policy</code>. </p>
+<p>in a word: from status <code>S</code>, using <code>e-greedy policy</code> to choose action <code>A</code>, and get reward <code>R</code>, and in status <code>S&#39;</code>, and using <code>greed policy</code> to get action <code>A&#39;</code>.</p>
+<pre><code>$ \delta(t) Q(S, A) = R + \gamma (Q(S&apos;, A&apos;) - Q(S, A)) $   (a)
+</code></pre><p>where $ A<code>= max v(a|S</code>) $. while in SARSA, both <code>S&#39;</code> and <code>A&#39;</code> update using <code>e-greed</code>.</p>
+<p>usually <code>Q(S,A)</code> is called Q-valued.</p>
+<p>the benefit of choosing a different policy to update action, is kind of decouping status and action, so in this way, they can reach more area in <code>real state-action space</code>, which also lead the <code>solution space</code> a little more robost. </p>
+<p>but still equation (a) is not guaranted to converge as time goes. the converged <code>Q(S,A)</code> should be <strong>convex</strong>, which means its second-order derivative must be less than 0, then the max Q values (max extremum) achieves when first-order derivate is 0.</p>
+<p>while Q-learning has the same problem as SARSA, the huge memory to store Q(S,A) table.</p>
+<p>to make intuitive example, think about an robot walk with 2 choice(e.g. turn left, turn right), and the grid world has 20 box in line, which has 2^20 ~= 10e6 elements in Q(S, A). it can’t scale to any real problem. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf" target="_blank" rel="external">Sutton &amp; Barto, Reinforcement learning: an introduction</a></p>
+<p><a href="https://www.cnblogs.com/pinard/p/9426283.html" target="_blank" rel="external">Pinard</a></p>
+<p><a href="https://www.jianshu.com/p/b392405115bb" target="_blank" rel="external">fromeast</a></p>
+<p><a href="http://www.w3.org/1998/Math/MathML" target="_blank" rel="external">mathxml editor</a></p>
+<p><a href="https://www.codecogs.com/latex/eqneditor.php" target="_blank" rel="external">equation html editor</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/26365534" target="_blank" rel="external">fixed point mechanism</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/python-modules-in-help/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/18/python-modules-in-help/" itemprop="url">python modules in help</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T09:09:48-04:00">
+                2019-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/18/python-modules-in-help/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/18/python-modules-in-help/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="unittest"><a href="#unittest" class="headerlink" title="unittest"></a>unittest</h2><h3 id="why-unit-test"><a href="#why-unit-test" class="headerlink" title="why unit test ?"></a>why unit test ?</h3><p>unit test is to test the components of a program automatically. a few good reasons of unit tests:</p>
+<ul>
+<li>test driving practice </li>
+<li>early sanity checking </li>
+<li>for regression test, that the new changes won’t break early work </li>
+<li>unit test is to test the isolated piece of code, usually white box test written by developer; functional test is to test the function requirements, usually black box test written by testers.</li>
+</ul>
+<p>the testcase output can be <code>OK</code>, <code>FAIL</code>, <code>ERROR</code>.</p>
+<h3 id="assertion-functions"><a href="#assertion-functions" class="headerlink" title="assertion functions"></a>assertion functions</h3><ul>
+<li><p>basic boolean asserts:</p>
+<pre><code>assertEqual(arg1, arg2, msg=None)
+assertIsNot(arg1, arg2, msg=None)
+</code></pre></li>
+<li><p>comparative asserts:</p>
+<pre><code>assertAlmostEqual(first, second, places=7, msg=None, delta=None)
+</code></pre></li>
+<li><p>asserts for collections:</p>
+<pre><code>assertListEqual(list1, list2, msg=None)
+assertTupleEqual(tuple1, tuple2, msg=None)
+assertSetEqual(set1, set2, msg=None)
+assertDictEqual(dic1, dic2, msg=None)    
+</code></pre><h3 id="command-line-interface"><a href="#command-line-interface" class="headerlink" title="command line interface"></a>command line interface</h3></li>
+<li><p>run all unittests</p>
+<pre><code>python3 -m unittest discover -v -c
+</code></pre></li>
+<li><p>run single test module</p>
+<pre><code>python3 -m unittest -v -c tests/test_XXXX.py
+</code></pre></li>
+<li><p>run individual test case</p>
+<pre><code>python3 -m unittest -v tests.test_XXX.TestCaseXXX.test_XXX
+</code></pre></li>
+</ul>
+<h2 id="how-to-write-a-unittest"><a href="#how-to-write-a-unittest" class="headerlink" title="how to write a unittest"></a>how to write a unittest</h2><h3 id="unittest-TestCase"><a href="#unittest-TestCase" class="headerlink" title="unittest.TestCase"></a>unittest.TestCase</h3><p>any user defined test class should first derived from <code>unittest.TestCase</code> </p>
+<h3 id="setUp-amp-tearDown"><a href="#setUp-amp-tearDown" class="headerlink" title="setUp() &amp; tearDown()"></a>setUp() &amp; tearDown()</h3><p>setUp() provides the way to set up things before running any method starting with <code>test_xx()</code>  in user defined test class. tearDown() is where to end the setting ups </p>
+<h3 id="depends-on-other-modules-class"><a href="#depends-on-other-modules-class" class="headerlink" title="depends on other modules/class"></a>depends on other modules/class</h3><p>usually the class/methods we try to test have depends on other modules/class, but as unit test want to isolate these depends, so either mock the other methods or fake data. in general there are three types of depends:</p>
+<h4 id="pure-variable"><a href="#pure-variable" class="headerlink" title="pure variable"></a>pure variable</h4><p>this is the most simple case, then you can directly define the same pure type variable in your <code>test_xx()</code> method </p>
+<h4 id="methods-in-other-modules"><a href="#methods-in-other-modules" class="headerlink" title="methods in other modules"></a>methods in other modules</h4><p>here need to use <code>patch</code>, to mock the method and define its return value is your <code>test_xx()</code> method, then in the class where call the real method will be replace by this mocked one.</p>
+<h4 id="methods-in-other-class"><a href="#methods-in-other-class" class="headerlink" title="methods in other class"></a>methods in other class</h4><p>here need to use <code>mock</code>, either MagicMock or Mock will works.</p>
+<h3 id="mock-amp-patch"><a href="#mock-amp-patch" class="headerlink" title="mock &amp; patch"></a>mock &amp; patch</h3><p><a href="https://docs.python.org/3/library/unittest.mock.html" target="_blank" rel="external">mock module</a> is built in <code>unittest.mock</code> after a later Python version, if not, <code>mock</code> module can be installed by <strong>pip install mock</strong>, then directly <code>import mock</code> in code.</p>
+<p>the philosophy of unit test is to isolate classes test, but in reality most classes have some instances of other classes, so to test the ego class isolated from other classes, that’s where <code>mock</code> helps. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> mock <span class="keyword">import</span> MagicMock, patch</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestScenario</span><span class="params">(TestCase)</span>:</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_mock</span><span class="params">(self)</span>:</span></div><div class="line">		sim.method = MagicMock(return_value=<span class="string">"xx"</span>)</div><div class="line">		agent = sim.method()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div><div class="line">		</div><div class="line"><span class="meta">	@patch("module/add_agent")</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_patch</span><span class="params">(self, mock_add_agent)</span>:</span></div><div class="line">		mock_add_agent.return_value = <span class="string">"xx"</span></div><div class="line">		agent = module.add_agent()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div></pre></td></tr></table></figure>
+<p><code>Mock</code> helps to mock the method in a class, while <code>patch</code> helps to mock a global method in a module.</p>
+<h3 id="automatical-unittest-generator"><a href="#automatical-unittest-generator" class="headerlink" title="automatical unittest generator"></a>automatical unittest generator</h3><p>there are projects assit to generate unittest code automatically, e.g <a href="">auger</a></p>
+<h3 id="test-with-while-Loop"><a href="#test-with-while-Loop" class="headerlink" title="test with while Loop"></a>test with while Loop</h3><p>TODO</p>
+<h3 id="test-with-raise-Error"><a href="#test-with-raise-Error" class="headerlink" title="test with raise Error"></a>test with raise Error</h3><p>TODO</p>
+<h2 id="coverage-py"><a href="#coverage-py" class="headerlink" title="coverage.py"></a>coverage.py</h2><ul>
+<li><p>(one time only) install coverage.py</p>
+<p>  pip3 install –user coverage</p>
+</li>
+<li><p>run all tests with coverage</p>
+<p>  ~/.local/bin/coverage run -m unittest discover</p>
+</li>
+<li><p>generate html report</p>
+<p>  ~/.local/bin/coverage html –omit “~/.local/<em>“,”tests/</em>“</p>
+</li>
+</ul>
+<p>ps, output is in htmlcov/index.html</p>
+<h2 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h2><p><code>logging()</code> supports more detail message type(info, warn, error, debug) than <code>print()</code>, and the message format is more strict with <code>\%</code>. while <code>print()</code> works both formatted message and message as string simply:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(<span class="string">"1+1 = "</span>, num)</div><div class="line">print(<span class="string">"1+1 = %d"</span>, % num)</div></pre></td></tr></table></figure>
+<p>the following is a general log class, which can plug in any existing Python project:</p>
+<pre><code class="python">
+<span class="keyword">import</span> logging 
+<span class="keyword">import</span> os 
+
+<span class="class"><span class="keyword">class</span> <span class="title">log</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, logger_name)</span>:</span>
+        self.log = logging.getLogger(logger_name)
+        self.log.setLevel(logging.DEBUG)
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.DEBUG)
+        self.log.addHandler(console_handler)
+
+    <span class="function"><span class="keyword">def</span> <span class="title">set_output_file</span><span class="params">(self, filename)</span>:</span>
+        file_handler = logging.FileHandler(filename)
+        file_handler.setLevel(logging.INFO)
+        formatter = logging.Formatter(<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)
+        file_handler.setFormatter(formatter)
+        self.log.addHandler(file_handler)
+
+<span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span>
+    test = log(<span class="string">'scenario-mm'</span>)
+    file_name = <span class="string">"record.log"</span> 
+    dir_name = <span class="string">"/home/python_test/"</span>
+    <span class="keyword">try</span>:
+        os.makedirs(dir_name)
+    <span class="keyword">except</span> OSError:
+        <span class="keyword">pass</span> 
+    file_path =  os.path.join(dir_name, file_name)
+    test.set_output_file(file_path)
+    test.log.debug(<span class="string">"debug in episode 1..."</span>)
+    test.log.info(<span class="string">"info ..."</span>)
+    test.log.warning(<span class="string">"warn ..."</span>)
+    test2 = log(<span class="string">"zjjj"</span>)
+    test2.set_output_file(<span class="string">'record.log'</span>)
+    test2.log.info(<span class="string">"test2 info"</span>)
+    test2.log.warning(<span class="string">"test2 warn"</span>)
+
+
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    main()
+</code></pre>
+<h2 id="pygame"><a href="#pygame" class="headerlink" title="pygame"></a>pygame</h2><h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.cnblogs.com/beer/p/5075619.html" target="_blank" rel="external">python automatic test series</a></p>
+<p><a href="https://github.com/laffra/auger" target="_blank" rel="external">auger: automated Unittest generation for Python</a></p>
+<p><a href="https://docs.python.org/3/library/unittest.html" target="_blank" rel="external">unittest official</a></p>
+<p><a href="https://github.com/lgsvl/PythonAPI/tree/master/tests" target="_blank" rel="external">unittest in lg-sim project</a></p>
+<p><a href="https://coverage.readthedocs.io/en/stable/" target="_blank" rel="external">coverage.py official</a>  </p>
+<p><a href="https://www.jianshu.com/p/013b9bdecb0d" target="_blank" rel="external">unittest + mock + tox</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/math-in-ADS-system/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1700,288 +2143,11 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/where-are-you-in-next-5-years-9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/24/where-are-you-in-next-5-years-9/" itemprop="url">未来5年在哪里 (8).md</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-24T23:45:37-04:00">
-                2019-08-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/24/where-are-you-in-next-5-years-9/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/24/where-are-you-in-next-5-years-9/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这一系列的思考来源两个事件：深圳汽车电子行业代表来司交流；与全球机器人大赛参展。</p>
-<h2 id="深圳的中小企业-vs-资本大户"><a href="#深圳的中小企业-vs-资本大户" class="headerlink" title="深圳的中小企业  vs  资本大户"></a>深圳的中小企业  vs  资本大户</h2><p><code>布谷鸟</code> 智能驾驶座舱解决方案供应商。主要产品，车载显示屏，仪表屏和基于Android操作系统的上层应用。展示完，第一感受就是深圳华强北来了。</p>
-<p>当年（2007年)，中国风靡深圳山赛手机。甚至多年以后，山赛智能手机成了中国发展的一个典型案例，为众人津津乐道： <code>眼看他起高楼，眼看他宴宾客，眼看他楼塌了。</code>  这个产业最初蓬勃，但凡投资进去的人，都躺着赚钱，只是没能力在蓬勃发展期间为转型蓄力。后来政策、市场、甚至原材料的任何风吹草动，都足以摧毁它。</p>
-<p>这个产业的问题放大了看，就是 <code>华为/阿里</code> 与 <code>中兴/联想</code> 的对比。国内的制造业小企业，最初都是代理、组装、贴标签、山赛货。如果碰到市场爆发，春风得意，赚的盆满钵满。但是，后续如何发展，创始人的vision就立判高下了。</p>
-<p>一个选择是立足长远利益，未雨绸缪，生于有患。在打开了市场之后，立马投入产品和相关技术、供应链、品牌积累。可以接受眼前的低资金回报，选择了艰辛但持久的终成就行业头部的道路。</p>
-<p>一个选择是只看赚钱。自己做产品积累，回钱周期太久，根本不考虑。资本趋利，大不了赚到钱，再转战下一片红海。这是势利的商人思路，他们对某一个具体行业不带任何感情，冷血。任何行业只是一个资本生长的土壤，不管是做手机、地产、保险、造车等等，都不是出于热爱，而是资本逐利。比如，宝能收购万科，就是冷血的资本挑战性情的行业中人。</p>
-<p>但凡对行业还有所爱的，都难以忍受被资方强奸。所以，恒大站出来说要造车，我的第一反应，就是恒大要来强奸造车人。恒大没有对汽车的感情，只不过跟进资本进军汽车领域。资本原本是公司的生产要素之一，但是资本又最不具有公司界限约束，任何外部资本都能挑战公司自身。所以，如何让资本服务于行业公司？</p>
-<h3 id="制造业创业"><a href="#制造业创业" class="headerlink" title="制造业创业"></a>制造业创业</h3><p>回到<code>布谷鸟</code>，号称做车载计算平台，不自己做计算芯片，不自己做车载屏幕，不自己做车载定制Android操作系统，顶多开发几个上层app。这不又是一家华强北组装厂吗。创业还靠廉价组装竞争？相比，北上的创业公司，诸如硬件地平线、软件旷视等算是技术/境界高多了。</p>
-<p>也不得不提本司。背靠大树，天然壁垒，但实际做的还是华强北的活儿。不同之处是，资本压力小，对技术储备有规划但没有环境和姿态的转变。会聘一两个外国人、一两个教授撑面儿，但这几位基本处于边缘，决策、项目规划都不考虑他们。估计其他家，也好不了哪里去。要不然，市场会有反馈的。</p>
-<p>这样的团队/小公司里面，对想要拔高产品/技术见识的年轻人其实很艰难。因为打开市场，销售是关乎存活的，相比产品是自研的，还是贴牌的，有没有底层开发/设计积累都是次要的。</p>
-<p>要去这种小团队做产品/技术，就需要能单挑担子的产品人/技术大牛。当然，付出与回报怎么权衡。给ceo待遇，似乎可以考虑。</p>
-<p>传统制造业大公司里面的小团队，虽然没有自己去开辟市场的压力，大不了内销，但同时带来的问题，是<code>积重</code>的公司元老，对职业经理人，工程师文化，都是严重的挑战。</p>
-<h3 id="公司元老"><a href="#公司元老" class="headerlink" title="公司元老"></a>公司元老</h3><p>经常会看到，职业mba人在中国企业水土不服，或者回国的硅谷工程师对中国企业文化的抱怨。虽然，宏观数据国内企业似乎都很国际化了，底层的/微观的现代公司管理/制度上，却不是一代就能跟上国际的。比如，mbaer到中国公司，很难战胜资源/权利在握的元老们，按照现代管理办法去调整公司，那基本上就等着被边缘化，然后公司不养闲人，下一步就是踢出去。公司又回到原来的管理模式。老人们再次证明自己不瞎折腾，是公司的积重，继续升官发财。</p>
-<p>工程师文化，不管是如google等互联网公司，还是如ford等汽车制造业公司，都比较明显。hr, manager, 甚至leader团队把自己归为工程师团队提供服务的，在衣食住行、工作环境、设备、交流、培训等等都照顾的很好。</p>
-<p>虽然北美是更成熟的资本社会，他们的企业反而不那么见钱就撒网，没见过ford投资移动互联网，google要去收购造车厂，或者发展文化传媒业务的。他们的业务更倾向纵深，专注，在一个领域深耕，然后成为行业头部。这可能也是成熟资本市场的现代化公司该有的样子。</p>
-<p>相比，国内的企业太草莽。国内的工程师只有听命于人。技术积累对绝大多数企业，都是可以谈谈但不会认真做的。这样的情况，当然长远是没前途的。一波政策、市场的红利之后，基本作死。</p>
-<h3 id="人口基数"><a href="#人口基数" class="headerlink" title="人口基数"></a>人口基数</h3><p>国内也有很多有情怀的创业人或中小企业主，他们也许并不甘与政策红利，也想认真做产品。但是，在这个社会没办法。</p>
-<p>美国的创业环境，想想apple, google, facebook，cruise等等创业经历。首先他们自己没有生存压力，出于热爱开始的；创业阶段，市场/政策对他们的包容度很好，允许决策失败；然后，资本市场、专业人才的补充都有成熟的供应体系。</p>
-<p>国内，一方面有廉价的人口红利，但对大部分创业公司，规模经济反而很难真正成为其产品的利好因素，除了资本玩家，比如，摩拜单车、瑞幸咖啡、yy连锁酒店，滴滴出行等等，这些玩家，根本不是在拼产品，而是资本。谁占有更多资本，谁就能笑到最后。</p>
-<p>这样的创业环境，不能培养社会范围内更好的创业土壤，反而破坏了创业各方面的供应系统，包括创始人的初衷，专业人才队伍，资本法务系统建立等等。归结一个词：浮躁。</p>
-<p>人口基数大，在政治家、资本家眼里是好词，但是对个体，就意味着就业竞争、服务质量差、人际关系不温存。</p>
-<h3 id="经历过大公司的年轻人"><a href="#经历过大公司的年轻人" class="headerlink" title="经历过大公司的年轻人"></a>经历过大公司的年轻人</h3><p>在三四线小城市，有很多生活无忧的年轻人。他们大学毕业后，在大城市瞎晃了一年半载，找不到合适的企业，就打道回府了。家里有条件，在当地慢慢都会活的滋润。我是觉得，经历下一个现代化管理的大公司，也是个不错的体验。至少知道人类社会，最优秀的组织体系是怎么运作的。</p>
-<p>当然，没有上升，一辈子在大公司的系统里打工，就有点无趣。不如回家悠哉悠哉。</p>
-<h2 id="世界机器人大会2019"><a href="#世界机器人大会2019" class="headerlink" title="世界机器人大会2019"></a>世界机器人大会2019</h2><p>整体感受，小企业生存多艰。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/20/real-world-env-in-ADS-simulation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/20/real-world-env-in-ADS-simulation/" itemprop="url">real-world env in ADS simulation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-20T06:06:28-04:00">
-                2019-08-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/20/real-world-env-in-ADS-simulation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/20/real-world-env-in-ADS-simulation/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>this topic is based on lg-sim, the advantage is plenty Unity3D resources. to drive planning design, simulation has to keep as real-world env as possible. for <code>L3</code> and below, the high-fidelity is actually most about <code>HD map</code>, since in <code>L3</code> ADS, sensors only cares about the road parternors on road, and <code>planning</code> module take <code>hd map</code> as input. </p>
-<p>so there is a need to build simulation envs based on <code>hd map</code>. </p>
-<h3 id="osm"><a href="#osm" class="headerlink" title="osm"></a>osm</h3><p>in the Unity engine, all in the env(e.g. traffic light, road lanes, lane mark etc) are GameObjects. to describe a map info, one of most common used map format is <code>OSM</code> (another is opendrive, but no open parser in unity yet), however which is not born to used in <code>hd map</code>, but still is very flexible to extend to descripe all info, a <code>hd map</code> requires. e.g. lane id, lane width, lane mark type e.t.c</p>
-<p>the open-source tool <code>OsmImporter</code> is good enough to parse osm meta data into Unity GameObjects. for different map vendors, first to transfer their map format into the extended-osm format. and then can generate all map info related gameObjects in Unity env. that’s the main idea to create real-world env in simualtor.</p>
-<p>the end is to make a toolchain from map vendor input to Unity 3D env.</p>
-<h3 id="waypoints"><a href="#waypoints" class="headerlink" title="waypoints"></a>waypoints</h3><p>in either lg-sim or carla, the npc vehicles in self-driving mode, is actually controlled by following waypoints in the simulator, and <code>waypoints</code> is generated during creating map in step above.</p>
-<p>carla has plenty client APIs to manage the waypoints, and then drive npcs. </p>
-<h3 id="hd-map-tool"><a href="#hd-map-tool" class="headerlink" title="hd-map tool"></a>hd-map tool</h3><p>by default, both lg-sim and carla has a tool to create hd-map, that’s basically mark <code>waypoints</code> on the road in an existing map, which is not strong.  carla later support <code>Vector one</code> to build in map more efficiently.</p>
-<h2 id="L3-virtual-env-generator"><a href="#L3-virtual-env-generator" class="headerlink" title="L3+ virtual env generator"></a>L3+ virtual env generator</h2><p>there are plenty teams working on building/rendering virtual envs directly from sensor data, e.g Lidar cloud point or camera image, and plenty image-AI techs here, which of course gives better immersed experince. and the test task is mostly for perception, data-fusion modules, which is heavier in L3+</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2027,7 +2193,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">159</span>
+                <span class="site-state-item-count">161</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

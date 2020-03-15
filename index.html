@@ -291,6 +291,378 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/stanford-cs-linked-list-problems/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/14/stanford-cs-linked-list-problems/" itemprop="url">stanford cs linked list problems</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-14T23:00:12-04:00">
+                2020-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/14/stanford-cs-linked-list-problems/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/14/stanford-cs-linked-list-problems/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p><a href="http://cslibrary.stanford.edu" target="_blank" rel="external">stanford cs</a> gives me some confidence to deal with linked list.</p>
+<h2 id="linked-list-basics"><a href="#linked-list-basics" class="headerlink" title="linked list basics"></a>linked list basics</h2><p><a href="http://cslibrary.stanford.edu/102/PointersAndMemory.pdf" target="_blank" rel="external">basic pointers</a> as well as <a href="">previous blog</a>: </p>
+<ul>
+<li><p>a <code>pointer</code> stores a reference to another variable(<code>pointee</code>). what stored inside <code>pointer</code> is an reference to its pointee’s type.</p>
+</li>
+<li><p>NULL pointer, points to nothing.</p>
+</li>
+<li><p>pointer assignment <code>p=q</code>, makes the two pointers point to the same pointee, namely the two pointers point to the same pointee memory.</p>
+</li>
+</ul>
+<p>it’s a good habit to remember to check the empty list case. </p>
+<p>define the Linked-List structure:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> &#123;</span></div><div class="line">	<span class="keyword">int</span> val ;</div><div class="line">	ListNode *next;</div><div class="line">	ListNode(<span class="keyword">int</span> x): val(x), next(<span class="literal">NULL</span>)&#123;&#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">typedef</span> ListNode node_ ;</div></pre></td></tr></table></figure>
+<ul>
+<li>iterate over the list with a local pointer</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">node_ *current = head ;</div><div class="line"><span class="keyword">while</span>(current)&#123;</div><div class="line">	current = current-&gt;next;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">for</span>(current=head; current!=<span class="literal">NULL</span>; current=current-&gt;next)&#123;&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>push a new node to the front of the list </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Push</span><span class="params">(ListNode** headRef, <span class="keyword">int</span> val)</span></span>&#123;</div><div class="line">	ListNode newNode = <span class="keyword">new</span> ListNode(val);</div><div class="line">	newNode.next = *headRef ;</div><div class="line">	*headRef = newNode ; </div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">* changes the head pointer by a reference pointer</div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">changetoNull</span><span class="params">(ListNode** head)</span></span>&#123;</div><div class="line">	*head = <span class="literal">NULL</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>build up a list by adding nodes at its head</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">AddatHead</span><span class="params">()</span></span>&#123;</div><div class="line">	ListNode *head = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">		Push(&amp;head, i);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> head;</div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">which gives a <span class="built_in">list</span> &#123;<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>&#125; </div><div class="line"></div><div class="line">* build up a <span class="built_in">list</span> by appending nodes to the tail</div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function">ListNode* <span class="title">BuildwithSpecialCase</span><span class="params">()</span></span>&#123;</div><div class="line">	ListNode* head = <span class="literal">NULL</span> ;</div><div class="line">	ListNode* tail ; </div><div class="line">   Push(&amp;head, <span class="number">1</span>);</div><div class="line">   tail = head ; </div><div class="line">   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">       Push(&amp;(tail-&gt;next), i);</div><div class="line">       tail = tail-&gt;next;</div><div class="line">   &#125;</div><div class="line">   <span class="keyword">return</span> head; </div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">which gives a <span class="built_in">list</span> &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</div><div class="line"></div><div class="line">* build up a <span class="built_in">list</span> with dummy node </div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function">ListNode* <span class="title">BuildWithDummy</span><span class="params">()</span></span>&#123;</div><div class="line">   ListNode dummy = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</div><div class="line">   ListNode* tail = &amp;dummy ; </div><div class="line">   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">   		Push(&amp;(tail-&gt;next), i);</div><div class="line">   		tail = tail-&gt;next;</div><div class="line">   	&#125;</div><div class="line">   	<span class="keyword">return</span> dummy.next ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>which returns a list {1, 2, 3, 4} </p>
+<ul>
+<li>appendNode(), add new node at the tail</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">appendNode</span><span class="params">(ListNode** headRef, <span class="keyword">int</span> val)</span></span>&#123;</div><div class="line">	ListNode *current  = *headRef ;</div><div class="line">	ListNode newNode = <span class="keyword">new</span> ListNode(num);</div><div class="line">	<span class="keyword">if</span>(!current)&#123;</div><div class="line">		current = &amp;newNode ;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		<span class="keyword">while</span>(current-&gt;next)&#123;</div><div class="line">			current = current-&gt;next ;</div><div class="line">		&#125;</div><div class="line">		current-&gt;next = &amp;newNode ;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">* copyList()</div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function">ListNode* <span class="title">copyList</span><span class="params">(ListNode* head)</span></span>&#123;</div><div class="line">	ListNode *current = head ;</div><div class="line">	ListNode *newList = <span class="literal">NULL</span> ;</div><div class="line">	ListNode *tail = <span class="literal">NULL</span> ;</div><div class="line">	</div><div class="line">	<span class="keyword">while</span>(current)&#123;</div><div class="line">		<span class="keyword">if</span>(!newList)&#123;</div><div class="line">			newList = &amp;(<span class="keyword">new</span> ListNode(current-&gt;val));</div><div class="line">			tail = newList ;</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			tail-&gt;next = &amp;(<span class="keyword">new</span> ListNode(current-&gt;val));</div><div class="line">			tail = tail-&gt;next ; </div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> newList ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>copyList() recursive </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">CopyList</span><span class="params">(ListNode* head)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(!head) <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		ListNode *current = head ;</div><div class="line">		ListNode *newList = &amp;(ListNode(current-&gt;val));</div><div class="line">		newList-&gt;next = CopyList(current-&gt;next);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="linked-list-problems-further"><a href="#linked-list-problems-further" class="headerlink" title="linked list problems further"></a>linked list problems further</h2><ul>
+<li>InsertNth()</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertNth</span><span class="params">(node_ **head, <span class="keyword">int</span> index, <span class="keyword">int</span> data)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(index==<span class="number">0</span>) Push(head, data);</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		node_ * cur = *head ;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;index<span class="number">-1</span>; i++)&#123;</div><div class="line">				cur = cur-&gt;next ;</div><div class="line">		&#125;	</div><div class="line">		Push(&amp;*cur-&gt;next), data);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>sortedInsert()</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// be notified, here we using **, to use the pointer of the head, as the head node may be updated  </span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sortedInsert</span><span class="params">(node_ **head, node* newNode)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(*head == <span class="literal">NULL</span> || head-&gt;val &gt;= newNode-&gt;val)&#123;</div><div class="line">		newNode-&gt;next = *head;</div><div class="line">		*head = newNode;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		node_ *cur = *head ;</div><div class="line">		<span class="keyword">while</span>(cur-&gt;next &amp;&amp; cur-&gt;next-&gt;val &lt; newNode-&gt;val)&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125; </div><div class="line">		newNode-&gt;next = cur-&gt;next ;</div><div class="line">		cur-&gt;next = newNode ;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//with dummy head</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sortedInsert</span><span class="params">(node_ **head, node* newNode)</span></span>&#123;</div><div class="line">	<span class="function">node_ <span class="title">dummy</span><span class="params">(<span class="number">0</span>)</span></span>;</div><div class="line">	dummy.next = *head ; 	</div><div class="line">	node_ *cur = &amp;dummy ;</div><div class="line">	<span class="keyword">while</span>(cur-&gt;next &amp;&amp; cur-&gt;next-&gt;val &lt; newNode-&gt;val)&#123;</div><div class="line">		cur = cur-&gt;next;</div><div class="line">	&#125;</div><div class="line">	newNode-&gt;next = cur-&gt;next ;</div><div class="line">	cur-&gt;next = newNode ;</div><div class="line">	*head = dummy-&gt;next;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>insertSort()</li>
+</ul>
+<p>given  as unsorted list, and output with an sorted list</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">InsertSort</span><span class="params">(node_ ** head)</span></span>&#123;</div><div class="line">	node_ *result = <span class="literal">NULL</span> ;</div><div class="line">	node_ *cur = *head ;</div><div class="line">	node_ *next ;</div><div class="line">	<span class="keyword">while</span>(cur)&#123;</div><div class="line">		next = cur-&gt;next ;  <span class="comment">// ticky- note the next pointer, before we change it</span></div><div class="line">		sortedInsert(result, cur);</div><div class="line">		cur = next ;</div><div class="line">	&#125;</div><div class="line">	*head = result ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>append() </li>
+</ul>
+<p>append list b to the end of list a </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">append</span><span class="params">(node_ **a, node_ **b)</span></span>&#123;</div><div class="line">	node_ * cur ;</div><div class="line">	<span class="keyword">if</span>( *a == <span class="literal">NULL</span>)&#123; *a = *b ;&#125;</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		cur = *a ;</div><div class="line">		<span class="keyword">while</span>(cur-&gt;next)&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125;</div><div class="line">		cur-&gt;next = *b ;</div><div class="line">	&#125;</div><div class="line">	*b = <span class="literal">NULL</span> ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>frontBackSplit()</li>
+</ul>
+<p>given a list, split it into two sublists: one for the front half, one for the back half</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">frontBackSplit</span><span class="params">(node_ **head, node_ **front, node_ **back)</span></span>&#123;</div><div class="line">	<span class="keyword">int</span> len = length(head);</div><div class="line">	node_ *cur = *head ;</div><div class="line">	<span class="keyword">if</span>(len &lt; <span class="number">2</span>)&#123;</div><div class="line">		*front = *head;</div><div class="line">		*back = <span class="literal">NULL</span> ;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		<span class="keyword">int</span> half = len/<span class="number">2</span>; </div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;half<span class="number">-1</span>; i++)&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125;</div><div class="line">		*front = *head;		</div><div class="line"> 		*back = cur;</div><div class="line">		cur = <span class="literal">NULL</span> ;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">frontBackSplit2</span><span class="params">(node_ **head, node_ **front, node_ **back)</span></span>&#123;</div><div class="line">	node_ *fast, *slow ;</div><div class="line">	<span class="keyword">if</span>(*head == <span class="literal">NULL</span> || (*head)-&gt;next == <span class="literal">NULL</span>)&#123;</div><div class="line">		*front = *head ;</div><div class="line">		*back = <span class="literal">NULL</span> ;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		slow = head;</div><div class="line">		fast = head-&gt;next ;</div><div class="line">		<span class="keyword">while</span>(fast)&#123;</div><div class="line">			fast = fast-&gt;next;</div><div class="line">			<span class="keyword">if</span>(fast)&#123;</div><div class="line">				fast = fast-&gt;next;</div><div class="line">				slow = slow-&gt;next;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		*front = *head;</div><div class="line">		*back = slow-&gt;next ;</div><div class="line">		slow-&gt;next = <span class="literal">NULL</span> ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>removeDuplicates()</li>
+</ul>
+<p>remove duplicated node from a sorted list </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeDuplicates</span><span class="params">(node_ ** head)</span></span></div><div class="line">&#123;</div><div class="line">	node_ *slow, *fast ;</div><div class="line">	<span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>)&#123;</div><div class="line"> 		<span class="keyword">return</span> ;</div><div class="line">        &#125;</div><div class="line">	slow = *head ;</div><div class="line">	fast = (*head)-&gt;next ;</div><div class="line">	<span class="keyword">while</span>(fast)&#123;</div><div class="line">		<span class="keyword">if</span>(slow-&gt;val == fast-&gt;val)&#123;</div><div class="line">			node_ * needfree = fast ;</div><div class="line">			fast = fast-&gt;next ;</div><div class="line">			<span class="built_in">free</span>(needfree); </div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">		   slow = slow-&gt;next;</div><div class="line">		   fast = fast-&gt;next;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeDuplicate</span><span class="params">(node_ **head)</span></span>&#123;</div><div class="line">	node_ *cur = *head;</div><div class="line">	<span class="keyword">if</span>(cur==<span class="literal">NULL</span>) <span class="keyword">return</span> ;</div><div class="line">	<span class="keyword">while</span>(cur-&gt;next)&#123;</div><div class="line">		<span class="keyword">if</span>(cur-&gt;val == cur-&gt;next-&gt;val)&#123;</div><div class="line">			node_ *nextNext = cur-&gt;next-&gt;next ;</div><div class="line">			<span class="built_in">free</span>(cur-&gt;next);</div><div class="line">			cur-&gt;next = nextNext;</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>moveNode()</li>
+</ul>
+<p>given two list, remove the front node from the second list, and push it onto the front of the first.</p>
+<p>// a = {1, 2, 3};  b = {1, 2, 3}  =&gt;  a={1, 1, 2, 3}, b={2, 3}</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">moveNode</span><span class="params">(node_ **dest, node_ **source)</span></span>&#123;</div><div class="line">	node_ *newNode = *source ; </div><div class="line">	*source = newNode-&gt;next ; </div><div class="line">	newNode-&gt;next = *dest ;</div><div class="line">	*dest = newNode ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>alternatingSplit()</li>
+</ul>
+<p>given a list, split its nodes into two shorter lists. if we number the elements 0, 1, 2, …, then all the even elements go to the first sublist, and all the odd elements go to tthe second</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">alternatingSplit</span><span class="params">(node_ *source, node_ **ahead, node_ **bhead)</span></span>&#123;</div><div class="line">	node_ *a = <span class="literal">NULL</span> ;</div><div class="line">	node_ *b = <span class="literal">NULL</span> ;</div><div class="line">	node_ *cur = *source ;</div><div class="line">	<span class="keyword">while</span>(cur)&#123;</div><div class="line">		moveNode(&amp;a, &amp;cur);</div><div class="line">		<span class="keyword">if</span>(cur)&#123;</div><div class="line">			moveNode(&amp;b, &amp;cur);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	*ahead = a ;</div><div class="line">	*bhead = b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>shuffleMerge()</li>
+</ul>
+<p>given two list, merge their nodes together to make one list, takign nodes alternatively between the two lists </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="function">node_* <span class="title">shufflMerge</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	node_ *res = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line">	<span class="keyword">while</span>(a || b)&#123;</div><div class="line">		<span class="keyword">if</span>(i % <span class="number">2</span> == <span class="number">0</span> &amp;&amp; a)&#123;</div><div class="line">			moveNode(&amp;res, &amp;a);</div><div class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(b)&#123;</div><div class="line">			moveNode(&amp;res, &amp;b);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125; <span class="comment">//but this gives the tail to front order</span></div><div class="line"></div><div class="line"><span class="function">node_* <span class="title">shufflMerge2</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	<span class="function">node_ <span class="title">dummy</span><span class="params">(<span class="number">0</span>)</span></span>;</div><div class="line">	node *tail = &amp;dummy ;</div><div class="line">	<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">		<span class="keyword">if</span>(a==<span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = b;</div><div class="line">			<span class="keyword">break</span> ;</div><div class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(b == <span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = a;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			tail-&gt;next = a ;</div><div class="line">			tail = a ;</div><div class="line">			a = a-&gt;next ;</div><div class="line">			tail-&gt;next = b;</div><div class="line">			tail = b;</div><div class="line">			b = b-&gt;next;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> dummy.next ;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// recursive ?</span></div><div class="line"><span class="function">node_* <span class="title">shufflMerge3</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	node_ *res ;</div><div class="line">	node_ *recur ; </div><div class="line">	<span class="keyword">if</span>(a==<span class="literal">NULL</span>) <span class="keyword">return</span> b ;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(b=<span class="literal">NULL</span>) <span class="keyword">return</span> a ;</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		recur = shuffleMerge3(a-&gt;next, b-&gt;next);</div><div class="line">		res = a ;</div><div class="line">		a-&gt;next = b ;</div><div class="line">		b-&gt;next = recur ;</div><div class="line">		<span class="keyword">return</span> res;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>sortedMerge()</li>
+</ul>
+<p>given two sorted in incresing order listes, merge into one in increasing order </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function">node_ *<span class="title">sortedMerge</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	<span class="function">node_ <span class="title">dummy</span><span class="params">(<span class="number">0</span>)</span></span>;</div><div class="line">        node_ *tail = &amp;dummy ;</div><div class="line">	dummy.next = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">		<span class="keyword">if</span>(a==<span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = b ;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = a;</div><div class="line">			<span class="keyword">break</span> ;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span>(a-&gt;val &lt;= b-&gt;val)&#123;</div><div class="line">			moveNode(&amp;(tail-&gt;next), &amp;a);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			moveNode(&amp;(tail-&gt;next), &amp;b);</div><div class="line">		&#125;</div><div class="line">		tail = tail-&gt;next; </div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> dummy.next ;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// how this works?</span></div><div class="line"><span class="function">node_ *<span class="title">sortedMerge2</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	node_ *result = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">if</span>(a==<span class="literal">NULL</span>) <span class="keyword">return</span> b;</div><div class="line">	<span class="keyword">if</span>(b==<span class="literal">NULL</span>) <span class="keyword">return</span> a;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(a-&gt;val &lt;= b-&gt;val)&#123;</div><div class="line">		result = a;</div><div class="line">		result-&gt;next = sortedMerge2(a-&gt;next, b);</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		result = b;</div><div class="line">		result-&gt;next = sortedMerge2(a, b-&gt;next);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span>  result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>mergeSort()</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">mergeSor</span><span class="params">(node_ ** headRef)</span></span>&#123;</div><div class="line">	node_ *head = *headRef ;</div><div class="line">	node_ *a, *b;</div><div class="line">	<span class="keyword">if</span>( (head==<span class="literal">NULL</span>) || (head-&gt;next == <span class="literal">NULL</span>))&#123;</div><div class="line">		<span class="keyword">return</span> ;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	frontBacksplit(head, &amp;a, &amp;b);</div><div class="line">	mergeSort(&amp;a);</div><div class="line">	mergeSort(&amp;b);</div><div class="line"></div><div class="line">	*headRef = sortedMerge(a,b):</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>reverse()</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(node_ **head)</span></span>&#123;</div><div class="line">	node_ *res = <span class="literal">NULL</span>;</div><div class="line">	node_ *cur = *head ;</div><div class="line">	node_ *next ;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>(cur)&#123;</div><div class="line">		next = cur-&gt;next;</div><div class="line">		cur-&gt;next = res ;</div><div class="line">		res = cur ;</div><div class="line">		cur = next ; </div><div class="line">	&#125;</div><div class="line"></div><div class="line">	*head = res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>recursive reverse()</li>
+</ul>
+<p>// concerned </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">recursiveReverse</span><span class="params">(node_ **head)</span></span>&#123;</div><div class="line">	ndoe_ *first, *rest ;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(*head == <span class="literal">NULL</span>) <span class="keyword">return</span> ;</div><div class="line">	first = *head ;</div><div class="line">	rest = first-&gt;next ;</div><div class="line">	<span class="keyword">if</span>(rest == <span class="literal">NULL</span>) <span class="keyword">return</span> ;	</div><div class="line">	recursiveReverse(&amp;rest);</div><div class="line">	first-&gt;next-&gt;next = first ;</div><div class="line">	first-&gt;next = <span class="literal">NULL</span> ;</div><div class="line">	</div><div class="line">	*head = rest ;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="http://cslibrary.stanford.edu/105/LinkedListProblems.pdf" target="_blank" rel="external">linked list problems</a></p>
+<p><a href="http://cslibrary.stanford.edu/103/LinkedListBasics.pdf" target="_blank" rel="external">linked list basics from standford cs</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/hypervisor-and-gpu-virtualization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/14/hypervisor-and-gpu-virtualization/" itemprop="url">hypervisor and gpu virtualization</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-14T00:18:55-04:00">
+                2020-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/14/hypervisor-and-gpu-virtualization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/14/hypervisor-and-gpu-virtualization/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>to build a private data center for ads training and SIL. a few concepts there:</p>
+<h3 id="linux-remote-desktop"><a href="#linux-remote-desktop" class="headerlink" title="linux remote desktop"></a>linux remote desktop</h3><p>Linux GUI is based on x-protocol, which is kind of CPU based, during deploying gpu-based app in docker swarm, I have studied <a href="https://zjli2013.github.io/2019/11/29/X11-GUI-in-docker/" target="_blank" rel="external">xserver</a>, <code>ssh -X</code> channels give the way for visualization desktop and simple apps(e.g. glxgears) among xserver and xclient. while for really gpu-densive app, e.g. game rendering, machine learning, <code>ssh -X</code> can’t really use gpu resource well, which needs further support from device management mechanism from docker or k8s. </p>
+<h3 id="virutal-machine-cloud-desktop"><a href="#virutal-machine-cloud-desktop" class="headerlink" title="virutal machine/ cloud desktop"></a>virutal machine/ cloud desktop</h3><p>VM is based on <a href="https://www.vmware.com/topics/glossary/content/hypervisor.html?SRC=WWW_US_GP_bare-metal-hypervisor_SiteLink" target="_blank" rel="external">hypervisor</a>, known as a virtual machine monitor(VMM), a type of virtualization software that supports the creation and management of VMs, hypervisor translate requests between the physical and virtual resources, making virtualization possible.</p>
+<p>A hypervisor allows one host computer to support multiple guest VMs by virtually sharing its resources, like memory and processing. </p>
+<p>Generally, there are two types of hypervisors. Type 1 hypervisors, called “bare metal,” run directly on the host’s hardware. Type 2 hypervisors, called “hosted,” run as a software layer on an operating system, like other computer programs, the most common e.g. vmware, citrix. </p>
+<p>When a hypervisor is installed directly on the hardware of a physical machine, between the hardware and the operating system (OS), it is called a <a href="https://www.vmware.com/topics/glossary/content/bare-metal-hypervisor" target="_blank" rel="external">bare metal hypervisor</a>, which separates the OS from the underlying hardware, the software no longer relies on or is limited to specific hardware devices or drivers.</p>
+<h3 id="VDI"><a href="#VDI" class="headerlink" title="VDI"></a>VDI</h3><p>a type of vm application is <a href="https://www.vmware.com/topics/glossary/content/virtual-desktop-infrastructure-vdi" target="_blank" rel="external">virtual desktop inftrastructure(vdi)</a>, VDI hosts desktop environments on a centralized server and deploys them to end-users on request. this process also known as <a href="https://www.vmware.com/topics/glossary/content/server-virtualization" target="_blank" rel="external">server virtualization</a></p>
+<p>VDI is not necessarily requires a physical gpu, without a gpu, we can still run vmware, but the performance is poor. but for many other VM usage, beyond VDI, we still need ways to access GPU devices in VM.</p>
+<h2 id="GPU-techs-in-VM"><a href="#GPU-techs-in-VM" class="headerlink" title="GPU techs in VM"></a>GPU techs in VM</h2><p>vwmare has an introduction about <a href="https://blogs.vmware.com/china/2017/11/09/horizon-7-中的-gpu-方案/" target="_blank" rel="external">gpu tech</a> in vm: </p>
+<ul>
+<li><p>software 3D. using software to mimic GPU calculating. all 3d calculating is done by CPU</p>
+</li>
+<li><p>vsga(vitual shared graphics acceleration), each virtual desktop has a vsga driver, which has a ESXi module, inside which has a GPU driver, which can call the physical gpu, but this shared mode is through Hypervisor</p>
+</li>
+</ul>
+<p><img src="https://blogs.vmware.com/china/files/2017/11/vSGA.png" alt="image"></p>
+<ul>
+<li>vdga(virtual dedicated graphics accleration), or pass through mode, the physical GPU is assigned to a special virtual desktop for one user only.</li>
+</ul>
+<p><img src="http://blogs.vmware.com/china/files/2017/11/vDGA.png" alt="image"></p>
+<ul>
+<li>vgpu, split physical GPU to a few virtual-GPU, each virtual desk can have one vGPU.</li>
+</ul>
+<p><img src="http://blogs.vmware.com/china/files/2017/11/vGPU.png" alt="image"></p>
+<h2 id="VM-vs-docker"><a href="#VM-vs-docker" class="headerlink" title="VM vs docker"></a>VM vs docker</h2><p>docker is a light-weight virtualization way, which  don’t need hypervisor, and the app in docker is access the host physical devices directly, making docker looks like a process, rather than a virtual OS; and scientfic computing apps run in VM is actually using the virtual CPU from hypervisor, which <a href="http://blog.itpub.net/35489/viewspace-2120397/" target="_blank" rel="external">bypass the cpu optimzation</a> used for math calcualting. so usually a physical machine can start hundres or thousands docker, but can only run a few VM.  </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://blog.sina.com.cn/s/blog_59cf67260100l5h4.html" target="_blank" rel="external">linux remote desktop</a></p>
+<p><a href="https://blogs.gartner.com/gunnar-berger/understanding-virtual-desktop-vdi-gpu-technologies/" target="_blank" rel="external">understand vdi gpu tech</a></p>
+<p><a href="https://blogs.vmware.com/apps/2018/09/using-gpus-with-virtual-machines-on-vsphere-part-3-installing-the-nvidia-grid-technology.html" target="_blank" rel="external">nvidia vgpu tech in vSphere</a></p>
+<p><a href="https://www.brightcomputing.com/blog/setting-up-gpu-hypervisors-on-bright-openstack" target="_blank" rel="external">GPU hypervisors on OpenStack </a></p>
+<p><a href="https://cumulusnetworks.com/blog/containers-vs-hypervisors/" target="_blank" rel="external">containers vs hypervisors</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/pure-c-c-pointer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1660,392 +2032,11 @@ bio_ = io.BytesIO(read_in_memory);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/28/ceph-boto3-intro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/28/ceph-boto3-intro/" itemprop="url">ceph & boto3 introduction</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-28T21:16:46-05:00">
-                2020-02-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/02/28/ceph-boto3-intro/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/02/28/ceph-boto3-intro/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="ceph-intro"><a href="#ceph-intro" class="headerlink" title="ceph intro"></a>ceph intro</h2><p>A Ceph Storage Cluster requires at least one Ceph Monitor, Ceph Manager, and Ceph OSD (Object Storage Daemon)</p>
-<h3 id="ceph-storage-cluster"><a href="#ceph-storage-cluster" class="headerlink" title="ceph storage cluster"></a>ceph storage cluster</h3><p>The Ceph File System, Ceph Object Storage and Ceph Block Devices read data from and write data to the Ceph Storage Cluster.</p>
-<p><a href="https://docs.ceph.com/docs/master/rados/operations/" target="_blank" rel="external">cluster operations</a></p>
-<p><a href="https://docs.ceph.com/docs/master/rados/operations/data-placement/" target="_blank" rel="external">data placement</a></p>
-<ul>
-<li><p>pools, which are logical groups for storing objects</p>
-</li>
-<li><p>Placement Groups(PG), PGs are fragments of a logical object pool</p>
-</li>
-<li><p>CRUSH maps, provide the physical topology of the cluster to the CRUSH algorithm to determine where the data for an object and its replicas should be stored, and how to do so across failure domains for added data safety among other things.</p>
-</li>
-<li><p>Balancer, a feature that will automatically optimize the distribution of PGs across devices to achieve a balanced data distribution</p>
-</li>
-</ul>
-<h3 id="Librados-APIs-workflow"><a href="#Librados-APIs-workflow" class="headerlink" title="Librados APIs workflow"></a>Librados APIs workflow</h3><p>apis can interact with: Ceph monitor as well as OSD.</p>
-<ul>
-<li><a href="https://docs.ceph.com/docs/master/rados/api/librados-intro/" target="_blank" rel="external">get libs</a></li>
-</ul>
-<h4 id="configure-a-cluster-handling"><a href="#configure-a-cluster-handling" class="headerlink" title="configure a cluster handling"></a>configure a cluster handling</h4><ul>
-<li>the client app must invoke <code>librados</code> and connected to a Ceph Monitor</li>
-<li>librados retrieves the cluster map </li>
-<li>when the client app wants to read or write data, it creates an I/O context and bind to a pool</li>
-<li>with the I/O context, the client provides the object name to <code>librados</code>, for locating the data. </li>
-<li>then the client application can read or write data</li>
-</ul>
-<p>Thus, the first steps in using the cluster from your app are to 1) create a cluster handle that your app will use to connect to the storage cluster, and then 2) use that handle to connect. To connect to the cluster, the app must supply a monitor address, a username and an authentication key (cephx is enabled by defaul</p>
-<p>an easy way, in Ceph configuration file:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[global]</div><div class="line">mon host = 192.168.0.1</div><div class="line">keyring = /etc/ceph/ceph.client.admin.keyring</div></pre></td></tr></table></figure>
-<p><img src="https://docs.ceph.com/docs/master/_images/ditaa-bd1070de50515485f116a874684956bc7e26c664.png" alt="image"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> rados</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">        cluster = rados.Rados(conffile=<span class="string">''</span>)</div><div class="line"><span class="keyword">except</span> TypeError <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">print</span> <span class="string">'Argument validation error: '</span>, e</div><div class="line">        <span class="keyword">raise</span> e</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Created cluster handle."</span></div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">        cluster.connect()</div><div class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">print</span> <span class="string">"connection error: "</span>, e</div><div class="line">        <span class="keyword">raise</span> e</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">"Connected to the cluster."</span></div></pre></td></tr></table></figure>
-<p>python api, has default <code>admin</code> as id, <code>ceph</code> as cluster name, and <code>ceph.conf</code> as confffile value</p>
-<h4 id="creating-an-I-O-context"><a href="#creating-an-I-O-context" class="headerlink" title="creating an I/O context"></a>creating an I/O context</h4><p>RADOS enables you to interact both synchronously and asynchronously. Once your app has an I/O Context, read/write operations only require you to know the object/xattr name. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">print</span> <span class="string">"\n\nI/O Context and Object Operations"</span></div><div class="line"><span class="keyword">print</span> <span class="string">"================================="</span></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nCreating a context for the 'data' pool"</span></div><div class="line"><span class="keyword">if</span> <span class="keyword">not</span> cluster.pool_exists(<span class="string">'data'</span>):</div><div class="line">        <span class="keyword">raise</span> RuntimeError(<span class="string">'No data pool exists'</span>)</div><div class="line">ioctx = cluster.open_ioctx(<span class="string">'data'</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nWriting object 'hw' with contents 'Hello World!' to pool 'data'."</span></div><div class="line">ioctx.write(<span class="string">"hw"</span>, <span class="string">"Hello World!"</span>)</div><div class="line"><span class="keyword">print</span> <span class="string">"Writing XATTR 'lang' with value 'en_US' to object 'hw'"</span></div><div class="line">ioctx.set_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span>, <span class="string">"en_US"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nWriting object 'bm' with contents 'Bonjour tout le monde!' to pool 'data'."</span></div><div class="line">ioctx.write(<span class="string">"bm"</span>, <span class="string">"Bonjour tout le monde!"</span>)</div><div class="line"><span class="keyword">print</span> <span class="string">"Writing XATTR 'lang' with value 'fr_FR' to object 'bm'"</span></div><div class="line">ioctx.set_xattr(<span class="string">"bm"</span>, <span class="string">"lang"</span>, <span class="string">"fr_FR"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nContents of object 'hw'\n------------------------"</span></div><div class="line"><span class="keyword">print</span> ioctx.read(<span class="string">"hw"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\n\nGetting XATTR 'lang' from object 'hw'"</span></div><div class="line"><span class="keyword">print</span> ioctx.get_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nContents of object 'bm'\n------------------------"</span></div><div class="line"><span class="keyword">print</span> ioctx.read(<span class="string">"bm"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Getting XATTR 'lang' from object 'bm'"</span></div><div class="line"><span class="keyword">print</span> ioctx.get_xattr(<span class="string">"bm"</span>, <span class="string">"lang"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nRemoving object 'hw'"</span></div><div class="line">ioctx.remove_object(<span class="string">"hw"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Removing object 'bm'"</span></div><div class="line">ioctx.remove_object(<span class="string">"bm"</span>)</div></pre></td></tr></table></figure>
-<h4 id="closing-sessions"><a href="#closing-sessions" class="headerlink" title="closing sessions"></a>closing sessions</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">print</span> <span class="string">"\nClosing the connection."</span></div><div class="line">ioctx.close()</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Shutting down the handle."</span></div><div class="line">cluster.shutdown()</div></pre></td></tr></table></figure>
-<h3 id="librados-in-Python"><a href="#librados-in-Python" class="headerlink" title="librados in Python"></a><a href="https://docs.ceph.com/docs/master/rados/api/python/" target="_blank" rel="external">librados in Python</a></h3><h4 id="data-level-operations"><a href="#data-level-operations" class="headerlink" title="data level operations"></a>data level operations</h4><ul>
-<li>configure a cluster handle</li>
-</ul>
-<p>To connect to the Ceph Storage Cluster, your application needs to know where to find the Ceph Monitor. Provide this information to your application by specifying the path to your Ceph configuration file, which contains the location of the initial Ceph monitors.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> rados, sys</div><div class="line">cluster = rados.Rados(conffile=<span class="string">'ceph.conf'</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li>connect to the cluster </li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cluster.connect()</div><div class="line"><span class="keyword">print</span> <span class="string">"\nCluster ID: "</span> + cluster.get_fsid()</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\n\nCluster Statistics"</span></div><div class="line"><span class="keyword">print</span> <span class="string">"=================="</span></div><div class="line">cluster_stats = cluster.get_cluster_stats()</div><div class="line"></div><div class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> cluster_stats.iteritems():</div><div class="line">        <span class="keyword">print</span> key, value</div></pre></td></tr></table></figure>
-<ul>
-<li>manage pools </li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cluster.create_pool(<span class="string">'test'</span>)</div><div class="line">pools = cluster.list_pools()</div><div class="line"><span class="keyword">for</span> pool <span class="keyword">in</span> pools:</div><div class="line">        <span class="keyword">print</span> pool</div><div class="line">cluster.delete_pool(<span class="string">'test'</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li>I/O context </li>
-</ul>
-<p>to read from or write to Ceph Storage cluster, requires ioctx.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ioctx = cluster.open_ioctx($ioctx_name)</div><div class="line"><span class="comment">#</span></div><div class="line">ioctx = cluster.open_ioctx2($pool_id)</div></pre></td></tr></table></figure>
-<p><code>ioctx_name</code> is the name of the pool, <code>pool_id</code> is the ID of the pool</p>
-<ul>
-<li>read, write, remove objects </li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ioctx.write_full(<span class="string">"hw"</span>, <span class="string">"hello"</span>)</div><div class="line">ioctx.read(<span class="string">"hw"</span>)</div><div class="line">ioctx.remove_object(<span class="string">"hw"</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li>with extended attris</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">ioctx.set_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span> <span class="string">"en_US"</span>)</div><div class="line">ioctx.get_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span>)</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">* list objs </div><div class="line"></div><div class="line">```python </div><div class="line"></div><div class="line">obj_itr = ioctx.list_objects()</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		rados_obj = obj_itr.next()</div><div class="line">		print(rados_obj.read())</div></pre></td></tr></table></figure>
-<h4 id="RADOS-S3-api"><a href="#RADOS-S3-api" class="headerlink" title="RADOS S3 api"></a>RADOS S3 api</h4><p>Ceph supports <a href="https://docs.ceph.com/docs/dumpling/radosgw/s3/" target="_blank" rel="external">RESTful API</a> that is compatible with basic data access model of Amazon S3 api.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PUT /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1</div><div class="line">DELETE /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1</div><div class="line">GET /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1</div><div class="line">HEAD /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1  //get object info </div><div class="line">GET /&#123;bucket&#125;/&#123;object&#125;?acl HTTP/1.1</div></pre></td></tr></table></figure>
-<h2 id="Amazon-S3"><a href="#Amazon-S3" class="headerlink" title="Amazon S3"></a>Amazon S3</h2><p>Simple Storage Serivce(s3) is used as file/object storage system to store and share files across Internet. it can store any type of objects, with simple key-value. elastic computing cluster(ec2) is Amazon’s computing service. there are three class in S3: servivce, bucket, object.</p>
-<p>there are two ways to access S3, through SDK(boto), or raw  Restful API(GET, PUT). the following is SDK way.</p>
-<h4 id="create-a-bucket"><a href="#create-a-bucket" class="headerlink" title="create a bucket"></a>create a bucket</h4><p>Put(), Get(), return all objects in the bucket. <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-example-creating-buckets.html" target="_blank" rel="external">Bucket</a> is a storage location to hold files(objects). </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_bucket</span><span class="params">(bucket_name, region=None)</span>:</span></div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">if</span> region <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">			s3_client = boto3.client(<span class="string">'s3'</span>)</div><div class="line">			s3.client.create_bucket(Bucket=bucket_name)</div><div class="line">		<span class="keyword">else</span>:</div><div class="line">            s3_client = boto3.client(<span class="string">'s3'</span>, region_name=region)</div><div class="line">            location = &#123;<span class="string">'LocationConstraint'</span>: region&#125;</div><div class="line">            s3_client.create_bucket(Bucket=bucket_name,</div><div class="line">            CreateBucketConfiguration=location)</div><div class="line">    <span class="keyword">except</span> ClientError <span class="keyword">as</span> e:</div><div class="line">        logging.error(e)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">True</span>			</div><div class="line"></div><div class="line">response = s3_client.list_buckets()</div><div class="line"><span class="keyword">for</span> bucket <span class="keyword">in</span> response[<span class="string">'Buckets'</span>]:</div><div class="line">	<span class="keyword">print</span> bucket</div></pre></td></tr></table></figure>
-<h4 id="upload-files"><a href="#upload-files" class="headerlink" title="upload files"></a>upload files</h4><p>basically to <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html" target="_blank" rel="external">upload a file</a> to an S3 bucket. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload_file</span><span class="params">(file_name, bucket, object_name=None)</span>:</span></div><div class="line">    <span class="keyword">if</span> object_name <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        object_name = file_name</div><div class="line"></div><div class="line">    <span class="comment"># Upload the file</span></div><div class="line">    s3_client = boto3.client(<span class="string">'s3'</span>)</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        response = s3_client.upload_file(file_name, bucket, object_name)</div><div class="line">    <span class="keyword">except</span> ClientError <span class="keyword">as</span> e:</div><div class="line">        logging.error(e)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">True</span></div></pre></td></tr></table></figure>
-<p><code>upload_file()</code> handles large files by splitting them into smaller chunks and uploading each chunk in parallel. which is same logic as ceph to hide the lower-level detail of data splitting and transfering.</p>
-<p><code>upload_fileobj()</code> accepts a readable file-like object, which should be openedin bin mode, not text mode:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">s3 = boto3.client(<span class="string">'s3'</span>)</div><div class="line"><span class="keyword">with</span> open(<span class="string">"FILE_NAME"</span>, <span class="string">"rb"</span>) <span class="keyword">as</span> f:</div><div class="line">    s3.upload_fileobj(f, <span class="string">"BUCKET_NAME"</span>, <span class="string">"OBJECT_NAME"</span>)</div></pre></td></tr></table></figure>
-<p>all <code>Client</code>, <code>Bucket</code> and <code>Object</code> have these two methods. </p>
-<h4 id="download-files"><a href="#download-files" class="headerlink" title="download files"></a>download files</h4><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-example-download-file.html" target="_blank" rel="external">download_file()</a> a pair of upload files method, which accepts the names of bucket and object to download, and the filename to save the downloaded file to.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">s3 = boto3.client(<span class="string">'s3'</span>)</div><div class="line">s3.download_file(<span class="string">'BUCKET_NAME'</span>, <span class="string">'OBJECT_NAME'</span>, <span class="string">'FILE_NAME'</span>)</div></pre></td></tr></table></figure>
-<p>same as upload file, there is a read-only open method: <code>download_fileobj()</code>.</p>
-<h4 id="bucket-policy"><a href="#bucket-policy" class="headerlink" title="bucket policy"></a>bucket policy</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">s3 = boto3.client(<span class="string">'s3'</span>)</div><div class="line">result = s3.get_bucket_policy(Bucket=<span class="string">'BUCKET_NAME'</span>)</div><div class="line">bucket_policy = json.dumps(bucket_policy)</div><div class="line">s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)</div><div class="line">s3.delete_bucket_policy(Bucket=<span class="string">'BUCKET_NAME'</span>)</div><div class="line">control_list = s3.get_bucket_acl(Bucket=<span class="string">'BUCKEET_NAME'</span>)</div></pre></td></tr></table></figure>
-<h4 id="get-objects"><a href="#get-objects" class="headerlink" title="get objects"></a>get objects</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">obj_list = s3.list_objects(Bucket=<span class="string">'bucket_name'</span>)</div><div class="line">obj_cont = s3.get_object(Bucket=<span class="string">'bucket_name'</span>, Key=<span class="string">'file_key'</span>)</div></pre></td></tr></table></figure>
-<p>error: botocore.errorfactory.NoSuchKey: An error occurred (NoSuchKey) when calling the GetObject operation: Unknown</p>
-<h4 id="read-objects-through-url-restful-api"><a href="#read-objects-through-url-restful-api" class="headerlink" title="read objects through url (restful api)"></a>read objects through url (restful api)</h4><p>through url path to get a file/object: <code>https://&lt;bucket-name&gt;.s3.amazonaws.com/&lt;key&gt;</code></p>
-<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="https://docs.ceph.com/docs/master/start/intro/" target="_blank" rel="external">ceph official doc</a></p>
-<p><a href="https://botocore.amazonaws.com/v1/documentation/api/latest/index.html" target="_blank" rel="external">botocore official doc</a></p>
-<p><a href="https://github.com/boto/boto3" target="_blank" rel="external">boto3 github</a></p>
-<p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-examples.html" target="_blank" rel="external">amazon S3 example</a></p>
-<p><a href="https://www.howtoforge.com/how-to-create-an-s3-bucket-object-storage-on-amazon-aws/" target="_blank" rel="external">GUI: create an S3 bucket and store objects in AWS</a></p>
-<p><a href="https://www.cnblogs.com/junneyang/p/5980286.html" target="_blank" rel="external">boto API access S3 object</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/27/from-HPC-to-cloud-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/27/from-HPC-to-cloud-2/" itemprop="url">from HPC to cloud (2) - distributed storage intro</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-27T05:21:54-05:00">
-                2020-02-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/02/27/from-HPC-to-cloud-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/02/27/from-HPC-to-cloud-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="常见分布式存储"><a href="#常见分布式存储" class="headerlink" title="常见分布式存储"></a>常见分布式存储</h2><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><ul>
-<li><a href="https://blog.csdn.net/zds05/article/details/79494870" target="_blank" rel="external">块存储 vs 文件存储</a></li>
-</ul>
-<p>文件存储读写慢，利于共享；块存储读写快，不利于共享。所有磁盘阵列都是基于Block块的模式，而所有的NAS产品都是文件级存储。物理块与文件系统之间的映射关系：扇区→物理块→逻辑块→文件系统。所以，文件级备份，需要一层一层往下查找，最后才能完成整个文件复制。</p>
-<ul>
-<li><a href="https://zhuanlan.zhihu.com/p/39305618" target="_blank" rel="external">对象存储 vs 块存储</a></li>
-</ul>
-<p>富含元数据的对象存储使大规模分析成为企业的有吸引力的命题。对象存储也使得提供和管理跨越地理位置的存储变得相对经济。同时，块存储的属性使其成为高性能业务应用程序、事务数据库和虚拟机的理想选择，这些应用程序需要低延迟、细粒度的数据访问和一致的性能。块存储(云盘)只能被一个主机挂载。</p>
-<ul>
-<li><a href="https://caden16.github.io/对象存储/对象存储VS文件系统/" target="_blank" rel="external">文件存储 vs  对象存储</a></li>
-</ul>
-<p>对象存储(ceph, Linux block device)和文件系统(hdfs, gfs, restful Web API)在接口上的本质区别是对象存储不支持fread(), fwrite()类似的随机位置读写操作，即一个文件PUT到对象存储里以后，如果要读取，只能GET整个文件，如果要修改一个对象，只能重新PUT一个新的到对象存储里，覆盖之前的对象或者形成一个新的版本。对象存储的接口是REST风格的，通常是基于HTTP协议的RESTful Web API，通过HTTP请求中的PUT和GET等操作进行文件的上传即写入和下载即读取，通过DELETE操作删除文件。文件存储读写api如，file.open(); 对象存储读写api如 s3.open()。文件存储，多次读写；对象存储，一次写，多次读。对象存储的容量是无上限的；文件存储的容量达到一定上限，性能会极差。</p>
-<p>对象存储，需要对原数据做解析吗？ </p>
-<h4 id="存储类型"><a href="#存储类型" class="headerlink" title="存储类型"></a>存储类型</h4><ul>
-<li><p>块存储<br>Direct Attach Storage(DAS), 每台主机服务器有独立的存储设备，各存储设备之间无法互通，需要跨主机存取。 Storage Area Network(SAN), 高速网络连接的专业存储服务器，与主机群通过高速i/o连结。</p>
-</li>
-<li><p>文件存储<br>Network Attached Storage(NAS), 连接在网络上并提供存取服务。采用NFS或CIFS命令集访问数据，以文件为传输协议，通过TCP/IP实现网络化存储，可扩展性好、价格便宜、用户易管理</p>
-</li>
-<li><p>对象存储<br>核心是将数据通路（数据读或写）和控制通路（元数据）分离，并且基于对象存储设备（Object-based Storage Device，OSD）构建存储系统。对象存储设备具有一定的智能，它有自己的CPU、内存、网络和磁盘系统. 一般配置metadata server(MDS)。</p>
-</li>
-</ul>
-<h4 id="存储用例"><a href="#存储用例" class="headerlink" title="存储用例"></a>存储用例</h4><ul>
-<li><p>对象存储<br>非结构化(文档、图像、视频等)、备份存档、大数据分析（无实时性）</p>
-</li>
-<li><p>块存储<br>比较适合数据库业务、虚拟机</p>
-</li>
-<li><p>文件存储<br><a href="https://cloud.tencent.com/document/product/582/9129" target="_blank" rel="external">企业共享</a>、hpc大数据分析、流媒体处理，web服务。</p>
-</li>
-</ul>
-<h2 id="容器云"><a href="#容器云" class="headerlink" title="容器云"></a>容器云</h2><h4 id="容器云架构"><a href="#容器云架构" class="headerlink" title="容器云架构"></a>容器云架构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">控制台门户(管理员入口）</div><div class="line">saas(）</div><div class="line">paas(容器，微服务、中间件、cicd)</div><div class="line">资源调度管理平台</div><div class="line">iaas(计算、存储、网络），虚拟化提供资源池，</div></pre></td></tr></table></figure>
-<ul>
-<li>物理机直接架构k8s </li>
-</ul>
-<p>容器云与私有云搭建的硬件资源分开。</p>
-<ul>
-<li>虚拟层上支持k8s</li>
-</ul>
-<p>容器部署在虚拟机上的原因：既需要容器，也需要虚拟机的环境。一般互联网公司倾向分开容器的资源 和  虚拟机的资源。不管是容器云，还是虚拟机，都会有一个web管理平台。考虑弹性升缩，vm更灵活。而如果容器直接部署在x86裸机上，如果没有容器的管理层，docker容器挂了，就无法恢复。</p>
-<h4 id="应用部署容器云-vs-私有云"><a href="#应用部署容器云-vs-私有云" class="headerlink" title="应用部署容器云 vs 私有云"></a>应用部署容器云 vs 私有云</h4><ul>
-<li><p>仿真计算，倾向容器环境</p>
-</li>
-<li><p>CI/CD开发工具、中间件，倾向容器环境</p>
-</li>
-<li><p>web server，倾向容器环境</p>
-</li>
-<li><p>sql，倾向物理机或虚拟机 </p>
-</li>
-</ul>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="">KingStack</a></p>
-<p><a href="">UCloud</a></p>
-<p><a href="">EasyStack</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2091,7 +2082,7 @@ bio_ = io.BytesIO(read_in_memory);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">159</span>
+                <span class="site-state-item-count">161</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

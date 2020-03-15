@@ -291,6 +291,337 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/lg-sim-source-code-review-2019-09/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/22/lg-sim-source-code-review-2019-09/" itemprop="url">lg-sim source code review (2019.09)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T09:02:53-04:00">
+                2019-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/22/lg-sim-source-code-review-2019-09/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/22/lg-sim-source-code-review-2019-09/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>the recent version of lg-sim <a href="https://github.com/lgsvl/simulator" target="_blank" rel="external">2019.09</a> has additionally support for webUI, cloud, which is a big enhencement. the following code review is focusing on new components to support WebUI, cluster management.</p>
+<h2 id="database"><a href="#database" class="headerlink" title="database"></a>database</h2><p>database used <code>sqlite</code> project, which is an embedded in-memory db; the ORM used <code>PetaPoco</code> project; there are a few db related serices, e.g.  vehicleService, simulationService, which will be used in RESTful web request.</p>
+<ul>
+<li><code>DatabaseManager</code>:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">static IDatabaseBuildConfiguration  DbConfig ;</div><div class="line"></div><div class="line">Init()&#123;</div><div class="line"></div><div class="line">	DbConfig = GetConfig(connectionString)</div><div class="line">	using  db =  new SqliteConnection(connectionString)&#123;</div><div class="line">		db.Open()</div><div class="line">&#125;</div><div class="line"></div><div class="line">CreateDefaultDbAssets()&#123;</div><div class="line"></div><div class="line">	using db = Open() </div><div class="line">	if (info.DownloadEnvs != null)&#123;</div><div class="line">		map =  new MapModel()&#123;url = url  LocalPath=localPath;&#125;</div><div class="line">		id =  db.Insert(map)</div><div class="line">	&#125;</div><div class="line">		</div><div class="line">	if (info.DownloadVehicles != null)&#123;&#125;</div><div class="line"></div><div class="line">	if(defaultMap.HasValue)</div><div class="line">	&#123;</div><div class="line">		sim1 = new SimulationModel()&#123; Cluster=0,  Map=defaultMap.Value,   ApiOnly=false&#125;;</div><div class="line">		AddSimulation(db, sim1, noBridgeVehicle);</div><div class="line">		AddSimulation(db, sim, apolloVehicle);</div><div class="line">		db.Insert(simx)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">AddSimulation(IDatabase db, sim,vehicle)&#123;</div><div class="line">	conn = new ConnectionModel()&#123;</div><div class="line">		simulation = id,</div><div class="line">		vehicle = vehicle.Value,</div><div class="line">	&#125;</div><div class="line">	db.Insert(conn)</div><div class="line">&#125;</div><div class="line"></div><div class="line">AddVehicle(db, sim,vehicle)&#123;</div><div class="line">	conn = new VehicleModel()&#123;</div><div class="line">		Url = url ,</div><div class="line">	&#125;</div><div class="line">	db.Insert(vehicle)</div><div class="line">	</div><div class="line">	return vehicle.Id;</div><div class="line">&#125;</div><div class="line"></div><div class="line">PendingVehicleDownloads()&#123;</div><div class="line">	using db=Open()&#123;</div><div class="line">		var sql =  Sql.Builder.From(&quot;vehicles&quot;).Where(&quot;status=00&quot;, &quot;Downloading&quot;);</div><div class="line">		return db.Query&lt;VehicleModel&gt;(sql);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="database-ORMs"><a href="#database-ORMs" class="headerlink" title="database ORMs"></a>database ORMs</h3><p>using <code>PetaPoco</code> to define <code>ORM</code> models, such as<br><code>users</code>, <code>sessions</code>, <code>maps</code>, <code>vehicles</code>, <code>clusters</code>, <code>simulations</code> </p>
+<h4 id="PetaPoco"><a href="#PetaPoco" class="headerlink" title="PetaPoco"></a>PetaPoco</h4><p>a few operators in PetaPoco, such as <code>Page</code>, used to query a page; <code>Single</code>, used to query a single item; <code>Insert</code>; <code>Delete</code>; <code>Update</code></p>
+<h3 id="database-provider"><a href="#database-provider" class="headerlink" title="database provider"></a>database provider</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">SQLiteDatabaseProvider =&gt; </div><div class="line">GetFactory(&quot;Mono.Data.Sqlite.SqliteFactory, Mono.Data.Sqlit&quot;)</div></pre></td></tr></table></figure>
+<p>called inside <code>DatabaseManager::Init()</code>.</p>
+<h3 id="database-services"><a href="#database-services" class="headerlink" title="database services"></a>database services</h3><ul>
+<li><p>VehicleService : IVehicleService </p>
+</li>
+<li><p>MapService </p>
+</li>
+<li><p>NotificationService =&gt;  NotificationManager.SendNotification()</p>
+</li>
+<li><p>DownloadService =&gt;  DownloadManager.AddDownloadToQueue()</p>
+</li>
+<li><p>ClusterService </p>
+</li>
+<li><p>SessionService </p>
+</li>
+<li><p>SimulationService</p>
+</li>
+</ul>
+<h2 id="Web-model"><a href="#Web-model" class="headerlink" title="Web model"></a>Web model</h2><p>web model is where WebUI server located, which is served by <code>Nancy</code> project, in which a new design metholody is applied: Inversin of Control Contaner(IoC), namely <code>控制反转</code> in chinese. IoC is used to inject implementation of class, and manage lifecycle,  dependencies.    </p>
+<p>web model is the server where talk to webUI through routes, which is defined in the React project.</p>
+<h3 id="Nancy"><a href="#Nancy" class="headerlink" title="Nancy"></a>Nancy</h3><p>used to build HTTP based web service,</p>
+<ul>
+<li>FileStream</li>
+<li>StreamResponse  </li>
+<li><a href="https://github.com/grumpydev/TinyIoC" target="_blank" rel="external">TinyIoC</a>   </li>
+<li>UnityBootstrapper : <a href="https://github.com/NancyFx/Nancy/wiki/Bootstrapper" target="_blank" rel="external">DefaultNancyBootstrapper</a>, used to automatic discovery of modules, custm model binders, dependencies.</li>
+</ul>
+<ul>
+<li>/Assets/Scripts/Web/Nancy/NancyUnityUtils</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">ConfigureApplicatinContainer(TinyIoCContainer container)</div><div class="line">&#123;</div><div class="line">  container.Register&lt;UserMapper&gt;();</div><div class="line">  container.Register&lt;IMapService&gt;(); </div><div class="line">  container.Register&lt;IClusterService&gt;();</div><div class="line">  container.Register&lt;IVehicleService&gt;();</div><div class="line">  container.Register&lt;ISimulationService&gt;();</div><div class="line">&#125; </div><div class="line">``` </div><div class="line"></div><div class="line">### route modules </div><div class="line"></div><div class="line">```c#</div><div class="line"></div><div class="line">SimulationModule : NancyModule()</div><div class="line">&#123;</div><div class="line">  class SimulationRequest&#123;&#125;</div><div class="line">  class SimulationResponse&#123;&#125;</div><div class="line">  </div><div class="line">  Get(&quot;/&quot;,  x=&#123;&#125;)</div><div class="line">  Post(&quot;/&quot;,  x=&#123;&#125;)</div><div class="line">  Put(&quot;/&#123;id:long&#125;&quot;, x=&#123;&#125;)</div><div class="line">  Post(&quot;/&#123;id:long&#125;/start&quot;, x=&#123;&#125;)</div><div class="line">  Post(&quot;/&#123;id:long&#125;/stop&quot;, x=&#123;&#125;)  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>inside some of the route modules will do query or update the sqlite database for special objects. till here is the complete web back-end server, with a http server and an in-memory database.</p>
+<p>the webUI frontend is based on React, about React check <a href="https://zjli2013.github.io/2019/08/30/reactjs-introduction/" target="_blank" rel="external">a previous blog</a>. in the React WebUI project will have http requests corresponding to each of routes defined here. </p>
+<p>React front end is very independent framework, which should be handled by an independent team in standard pipeline.</p>
+<h3 id="Config-amp-Loader"><a href="#Config-amp-Loader" class="headerlink" title="Config &amp; Loader"></a>Config &amp; Loader</h3><ul>
+<li>/Assets/Scripts/Web/Config.cs: </li>
+</ul>
+<p>used to define <code>WebHost</code>,  <code>WebPort</code>, <code>ApiHost</code>, <code>ClourUrl</code>, <code>Headless</code>, <code>Sensors</code>, <code>Bridges</code> e.t.c   </p>
+<ul>
+<li>Loader.cs :</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Loader Instance ;    //Loader object is never destroyed, even between scene reloads</div><div class="line"></div><div class="line">Loader.Start()&#123;</div><div class="line"></div><div class="line">	DatabaseManager.Init();</div><div class="line">	var config = new HostConfguration&#123;&#125; ;   // ?</div><div class="line">	Server = new NancyHost(Config.WebHost);</div><div class="line">	Server.Start();</div><div class="line">	DownloadManager.Init();</div><div class="line">&#125;</div><div class="line"></div><div class="line">Loader.StartAsync(simulation)&#123;</div><div class="line"></div><div class="line">	Instance.Actions.Enqueue() =&gt;</div><div class="line">	var db = DatabaseManager.Open()</div><div class="line">	AssetBundle mapBundle = null; </div><div class="line">		</div><div class="line">	simulation.Status &quot;Starting&quot; </div><div class="line">	NotificationManager.SendNotification();</div><div class="line">	Instance.LoaderUI.SetLoaderUIState();</div><div class="line"></div><div class="line">	Instance.SimConfig = new SimlationConfig()&#123;</div><div class="line">		Clusters, ApiOnly, Headless, Interative, TimeOfDay, UseTraffic...</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Loader.SetupScene(simulation)&#123;</div><div class="line"></div><div class="line">	var db = DatabaseManager.Open()</div><div class="line">	foreach var agentConfig in Instance.SimConfig.Agents:</div><div class="line">		var bundlePath = agentConfig.AssetBundle </div><div class="line">		var vehicleBundle = AssetBundle.LoadfromFile(bundlePath)</div><div class="line">		var vehicleAssets = vehicleBundle.GetAllAssetNames();</div><div class="line">		agentConfig.Prefab = vehicleBundle.LoadAsset&lt;GO&gt;(vehicleAssets[0])</div><div class="line">		</div><div class="line">	var sim = CreateSimulationManager();	</div><div class="line">	Instance.CurrentSimulation = simulation </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>DownloadManager</li>
+</ul>
+<pre><code class="c#">
+class Download();
+Init(){ client = new WebClient();  ManageDownloads(); }
+</code></pre>
+<h2 id="network-module"><a href="#network-module" class="headerlink" title="network module"></a>network module</h2><p><code>network module</code> is used for communication among master and clients(workers) in the cluster network for cloud support. the P2P network is built on <code>LiteNetLib</code> which is a reliable UDP lib. </p>
+<h3 id="LiteNetLib"><a href="#LiteNetLib" class="headerlink" title="LiteNetLib"></a>LiteNetLib</h3><p><a href="https://github.com/RevenantX/LiteNetLib" target="_blank" rel="external">LiteNetLib</a>is Udp package, used to P2P communication among master node and slave nodes here, where are defined as <code>MasterManager</code>, <code>ClientManager</code>.</p>
+<p>usage of LiteNetLib can be found in the <a href="https://github.com/RevenantX/LiteNetLib/wiki/NetPacketProcessor-(NetSerializer" target="_blank" rel="external">wiki</a>-usage)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/IoC-in-C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/22/IoC-in-C/" itemprop="url">IoC in C#</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T08:58:37-04:00">
+                2019-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/22/IoC-in-C/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/22/IoC-in-C/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Inversion of Control(IoC) is a design mechanism to decouple components dependencies, a light-weight implementation is: <a href="https://github.com/grumpydev/TinyIoC" target="_blank" rel="external">TinyIoC</a>, which is also part of <a href="http://nancyfx.org" target="_blank" rel="external">Nancy</a>.  </p>
+<p>IoC idea uses commonly in webUI(and backend server) apps,  which is an user friendly solution to cloud deployment management as well as apps in mobile, which should be the right direction in future ADS software tool development.</p>
+<p>the idea of IoC can be explained by the following example from <a href="https://www.tutorialsteacher.com/ioc/register-and-resolve-in-unity-container" target="_blank" rel="external">register and resolve in unity container</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public interface ICar</div><div class="line">&#123;</div><div class="line">    int Run();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class BMW : ICar</div><div class="line">&#123;</div><div class="line">    private int _miles = 0;</div><div class="line"></div><div class="line">    public int Run()</div><div class="line">    &#123;</div><div class="line">        return ++_miles;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Ford : ICar</div><div class="line">&#123;</div><div class="line">    private int _miles = 0;</div><div class="line"></div><div class="line">    public int Run()</div><div class="line">    &#123;</div><div class="line">        return ++_miles;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Driver</div><div class="line">&#123;</div><div class="line">    private ICar _car = null;</div><div class="line"></div><div class="line">    public Driver(ICar car)</div><div class="line">    &#123;</div><div class="line">        _car = car;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void RunCar()</div><div class="line">    &#123;</div><div class="line">        Console.WriteLine(&quot;Running &#123;0&#125; - &#123;1&#125; mile &quot;, _car.GetType().Name, _car.Run());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>the <code>Driver</code> class depends on <code>ICar</code> interface. so when instantiate the <code>Driver</code> class object, need to pass an instance of <code>ICar</code>, e.g.  BMW, Ford as following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Driver driver = new Driver(new Ford());</div><div class="line">driver.RunCar()</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">**to use IoC**, taking UnityContainer framework as example, a few other choices: TinyIoC e.t.c.</div><div class="line"></div><div class="line">```c#</div><div class="line"></div><div class="line"> var container = new UnityContainer();</div></pre></td></tr></table></figure>
+<ul>
+<li>Register </li>
+</ul>
+<p>create an object of the <code>BMW</code> class and inject it through a constructor whenever you need to inject an ojbect of <code>ICar</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">container.Register&lt;ICar, BMW&gt;();</div></pre></td></tr></table></figure>
+<ul>
+<li>Resolve</li>
+</ul>
+<p><code>Resolve</code> will create an object of the <code>Driver</code> class by automatically creating and njecting a <code>BMW</code> object in it, since previously register <code>BMW</code> type with <code>ICar</code>.</p>
+<pre><code class="c#">
+Driver  drv =  container.Resolve&lt;Driver&gt;();
+drv.RunCar()
+</code></pre>
+<h3 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h3><p>there are two obvious advantages with IoC. </p>
+<ul>
+<li><p>the instantiate of dependent class can be done in run time, rather during compile. e.g.  <code>ICar</code> class doesn’t instantiate in <code>Driver</code> definition</p>
+</li>
+<li><p>automatic <code>new class</code> management in back. </p>
+</li>
+</ul>
+<p>the power of IoC will be scaled, once the main app is depends on many little services.    </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/rosbag-tools-in-ADS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1778,454 +2109,11 @@ Listen 8084
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/reinforcement-learning-in-nutshell-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="url">reinforcement learning in nutshell-1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T10:36:19-04:00">
-                2019-09-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/18/reinforcement-learning-in-nutshell-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="RL-concepts"><a href="#RL-concepts" class="headerlink" title="RL concepts"></a>RL concepts</h3><p>assuming timestep <code>t</code>:</p>
-<ul>
-<li>the environment state <strong>S</strong>(t)</li>
-<li>agent’s action <strong>A</strong>(t)</li>
-<li>discouted future reward <strong>R</strong>(t), which satisfy: </li>
-</ul>
-<p><img src="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;r_{t&plus;2}&space;&plus;&space;...&space;&plus;&space;\gamma^k&space;r_{t&plus;k&plus;1}" title="R_t = r_{t+1} + \gamma r_{t+2} + ... + \gamma^k r_{t+k+1}"></p>
-<pre><code>with current state `s` and taking current action `a`, the env will give the reward `r_{t+1}`. `\gamma` is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent&apos;s value only consider current reward.  check [discount future reward]() in following chapter.
-</code></pre><ul>
-<li><p>agent’s policy <strong>P</strong>(a|s), in current state <code>s</code>, the propability of action <code>a</code></p>
-</li>
-<li><p>agent’s state value <strong>V</strong>(s), in state <code>s</code> and took policy <code>\pi</code>, which usually described as an expectation:</p>
-</li>
-</ul>
-<p><img src="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)" title="V^\pi(s) = E (R_t )"></p>
-<ul>
-<li>agent’s action value <strong>Q</strong>(s, a), which consider both state <code>s</code> and action <code>a</code> effects on value calculation. </li>
-</ul>
-<p><img src="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t&plus;1})&space;=&space;E(r_{t&plus;1}&space;&plus;&space;\gamma&space;V^\pi(s_{t&plus;1}))" title="Q^\pi(s, a) = E_{\pi} ( R_t | s=s_t, a=a_t) = E_{\pi} (R_{t+1}) = E(r_{t+1} + \gamma V^\pi(s_{t+1}))"></p>
-<p><img src="https://latex.codecogs.com/gif.latex?V^\pi&space;(s)&space;=&space;E&space;(&space;Q^\pi(s,&space;a)|_{a&space;\sim&space;\pi(a|s)}&space;)" title="V^\pi (s) = E ( Q^\pi(s, a)|_{a \sim \pi(a|s)} )"></p>
-<p>namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>. </p>
-<ul>
-<li>state transfer propability <strong>P</strong></li>
-<li>explore rate <code>\eta</code>,  it’s the chance to choose non-max value during iteration, similar as mutation.</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/17414314-c9a7f64558173b0b.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
-<h3 id="Markov-decision-process"><a href="#Markov-decision-process" class="headerlink" title="Markov decision process"></a>Markov decision process</h3><p>assuming <code>state transfer propability</code>, <code>agent&#39;s policy</code>, and <code>agent&#39;s value</code> follow <code>Markov assumption</code>. namely, the current state transfer propability, agent’s policy and value only relates to current state.</p>
-<p>agent’s value function <strong>V</strong>(s) meets <a href="">Belman’s equation</a>:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?V(S)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;V(S_{t&plus;1})|S_t&space;=s&space;)" title="V(S) = E( R_{t+1} + \gamma V(S_{t+1})|S_t =s )"></p>
-<p>and agent’s action value function <strong>q</strong>(s) also has Belman’s equation:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;a)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;Q(S_{t&plus;1},&space;A_{t&plus;1}&space;)|S_t&space;=s,&space;A_t&space;=a&space;)" title="Q(s, a) = E( R_{t+1} + \gamma Q(S_{t+1}, A_{t+1} )|S_t =s, A_t =a )"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/17414314-54bb214db83cc7b2.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
-<p>in general, env’s state is random; the policy to take action is policy <strong>P(a|s)</strong>. Markov Decision process is: state, action, policy, each <code>[state, action, policy]</code> is an <code>episode</code>, which gives the state-action-reward series:</p>
-<pre><code>s0, a0, r1, s1, a1, r2, ... s(n-1),  a(n-1), rn, sn
-</code></pre><p>Markov assumption is state(n+1) is only depends on state(n).</p>
-<h3 id="Belman’s-equation"><a href="#Belman’s-equation" class="headerlink" title="Belman’s equation"></a>Belman’s equation</h3><p>Belman’s equation gives the recurrence relation in two timesteps. the current state value is calcualted from next future status with given current env status.</p>
-<p><img src="https://latex.codecogs.com/gif.latex?v(s)&space;=&space;E(&space;R_(t&plus;1)&space;&plus;&space;\gamma&space;v(S_(t&plus;1))|S_t&space;=&space;s&space;)" title="v(s) = E( R_(t+1) + \gamma v(S_(t+1))|S_t = s )"></p>
-<h3 id="discounted-future-reward"><a href="#discounted-future-reward" class="headerlink" title="discounted future reward"></a>discounted future reward</h3><p>to achieve better reward in long term, always conside the reward as sum of current and future rewards:</p>
-<pre><code>R(t) = r(t) + r(t+1) + ... r(n)
-</code></pre><p>on the other side, as the env state is random in time, the same action doesn’t give the same reward usually, and as time goes, the difference is even larger. think about the B-tree, as it goes deeper, the number of nodes is larger. so the reward in future doesn’t count the same weight as earlier reward, here define the discount ratio <code>\gamma</code> &lt;- [0, 1]</p>
-<pre><code>R(t) = r(t) + \gamma r(t+1) + ... + \gamma^(n-t) r(n)
-
-R(t) = r(t) = \gamma R(t+1) 
-</code></pre><h3 id="policy-iteration"><a href="#policy-iteration" class="headerlink" title="policy iteration"></a>policy iteration</h3><p>there are two steps:  </p>
-<ul>
-<li><p>policy evaluation, with current policy <code>\pi</code> to evaluate state’s value <code>V&#39;</code></p>
-</li>
-<li><p>policy improvment, with the state value <code>V&#39;</code>, with a special policy update strategy(e.g. greedy) to update policy.</p>
-</li>
-</ul>
-<p>the ideal result is to find the <code>fixed point</code> in value space, which corresponds to the optimized policy at current state with current policy update strategy.  </p>
-<p>in policy iteration, we only consider policy-value mapping.<br><img src="https://upload-images.jianshu.io/upload_images/17414314-40038359d36b0b92.png" alt="image"></p>
-<h3 id="value-iteration"><a href="#value-iteration" class="headerlink" title="value iteration"></a>value iteration</h3><p>where policy iteration based valued is implicit, only value iteration explicit by Belman’s equation. this is also a <code>fixed point</code> application, as we can use the explicit mapping (Belman’s equation) in state value space. so there should guarantee existing an optimized policy. </p>
-<p><img src="https://upload-images.jianshu.io/upload_images/17414314-6fdea50bdaf6fee7.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
-<h2 id="an-optimization-problem"><a href="#an-optimization-problem" class="headerlink" title="an optimization problem"></a>an optimization problem</h2><p>reiforcement learning solution is to find the optimal value function to achieve the max reward in each timestep, which leads to optimal policy <code>\pi*</code>, or max value func, or max action value func.</p>
-<pre><code>$$ v(s) = max(v_i(s)) foreach i in value funcs $$ 
-
-$$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$ 
-</code></pre><p>mostly the <code>solution space</code> is not known at hand, if else, the optimal solution can get directly. on the other hand, current state, action set tells a little information about the <code>solution space</code>, as they are part of the <code>solution space</code>, so the optimization algorithms used in convex space can be applied here. </p>
-<p>a few common optimization algorithms includes: </p>
-<h3 id="dynamic-programming-DP"><a href="#dynamic-programming-DP" class="headerlink" title="dynamic programming(DP)"></a>dynamic programming(DP)</h3><p>DP can used in both <code>policy evaluation</code> and <code>policy iteration</code>, but in each <code>calculation step</code>(not even one physical step, and in one physical step, there can be hundreds or thousands of calculation steps) iteration, DP has to recalculate all state(t=current) value to the very first state(t=0) value, which is disaster for high-dimensional problem, and DP by default is kind of <code>integer programming</code>, not fitted to <code>continuous domain</code> either.</p>
-<h3 id="Monte-Carlo-MC"><a href="#Monte-Carlo-MC" class="headerlink" title="Monte Carlo (MC)"></a>Monte Carlo (MC)</h3><p>MC gets a few sample solutions in the <code>solution space</code>, and use these samples solution to approxiamte the <code>solution space</code>. in a geometry explaination, the base vectors of the solution space is unknown, but MC finds a few points in this space, then approximate the (nearly) base vectors, then any point in this space can be approximated by the linear combination of the nearly base vectors.</p>
-<p>MC has no ideas of the propability of state transfer, MC doesn’t care the inner relations of state variables, or model-free.</p>
-<p>MC is robost as it’s model free, on the other hand, if the <code>solution space</code> is high-dimensional, there is a high chance the sampling points are limited in a lower dimension, which weak the presentation of MC approximation; also MC needs to reach the final status, which may be not avaiable in some applications. </p>
-<h3 id="time-serial-Time-Difference-TD"><a href="#time-serial-Time-Difference-TD" class="headerlink" title="time-serial Time Difference(TD)"></a>time-serial Time Difference(TD)</h3><p>MC use the whole list of status for each policy evaluation; in 1st order TD, policy evaluation only use next reward and next state value:</p>
-<pre><code>$ v(s) = R(t+1)  + \gamma S(t+1)|S $
-</code></pre><p>for n-th order TD, the update will use n-th reward :</p>
-<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n S(t+n)|S $
-</code></pre><p>it’s clear here, as n-&gt;infinitly, n-th order TD is closer to MC. <strong>so how close is enough usually, namely which n is enough ?</strong></p>
-<h3 id="SARSA"><a href="#SARSA" class="headerlink" title="SARSA"></a>SARSA</h3><p>in TD, there are two ways: on-line policy, where the same one policy is using to both update value func and upate action; while off-line policy, where one policy is used to update value func, the other policy is used to update action. </p>
-<p>SARSA is kind of on-line policy, and the policy is <code>e-greedy</code>, to choose the max value corresponding action in every iteration with a high probablitiy <code>(1-e)</code>, as <code>e</code> is very small.</p>
-<pre><code>$ \delta(t) v(S, A) = R + \gamma (v(S&apos;, A&apos;) - v(S, A)) $
-</code></pre><p>in the iteration equation above, <code>\delta(t)</code> will give the iteration timestep size, <code>S&#39;</code>, <code>A&#39;</code> are next state and next action, compare to pure 1-st order TD, where the next state value is modified as:  $(Q(S’, A’) - Q(S, A)$, in this way <code>value func</code> keep updated in every func, which can be considered as local correction, compared to the unchanged pure 1-st order TD, which may be highly unstable/diverge in long time series. </p>
-<p>as time-serial TD can’t guarantee converge, so this local correction makes SARSA numerical robost.</p>
-<p>SARSA(\lambda) in mutli-step based is same as n-th order TD. </p>
-<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n ( v(S`) - v(S) ) $
-</code></pre><p>the problem of SARSA is <code>v(S, A)</code> may go huge, as the algorithm is on-line policy, which requires huge memory. </p>
-<h3 id="Q-learning"><a href="#Q-learning" class="headerlink" title="Q-learning"></a>Q-learning</h3><p>Q-learning is off-line policy TD. the policy iteration is use <code>e-greedy policy</code>, same as SARSA; while the policy evaluation to update value func use <code>greedy policy</code>. </p>
-<p>in a word: from status <code>S</code>, using <code>e-greedy policy</code> to choose action <code>A</code>, and get reward <code>R</code>, and in status <code>S&#39;</code>, and using <code>greed policy</code> to get action <code>A&#39;</code>.</p>
-<pre><code>$ \delta(t) Q(S, A) = R + \gamma (Q(S&apos;, A&apos;) - Q(S, A)) $   (a)
-</code></pre><p>where $ A<code>= max v(a|S</code>) $. while in SARSA, both <code>S&#39;</code> and <code>A&#39;</code> update using <code>e-greed</code>.</p>
-<p>usually <code>Q(S,A)</code> is called Q-valued.</p>
-<p>the benefit of choosing a different policy to update action, is kind of decouping status and action, so in this way, they can reach more area in <code>real state-action space</code>, which also lead the <code>solution space</code> a little more robost. </p>
-<p>but still equation (a) is not guaranted to converge as time goes. the converged <code>Q(S,A)</code> should be <strong>convex</strong>, which means its second-order derivative must be less than 0, then the max Q values (max extremum) achieves when first-order derivate is 0.</p>
-<p>while Q-learning has the same problem as SARSA, the huge memory to store Q(S,A) table.</p>
-<p>to make intuitive example, think about an robot walk with 2 choice(e.g. turn left, turn right), and the grid world has 20 box in line, which has 2^20 ~= 10e6 elements in Q(S, A). it can’t scale to any real problem. </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf" target="_blank" rel="external">Sutton &amp; Barto, Reinforcement learning: an introduction</a></p>
-<p><a href="https://www.cnblogs.com/pinard/p/9426283.html" target="_blank" rel="external">Pinard</a></p>
-<p><a href="https://www.jianshu.com/p/b392405115bb" target="_blank" rel="external">fromeast</a></p>
-<p><a href="http://www.w3.org/1998/Math/MathML" target="_blank" rel="external">mathxml editor</a></p>
-<p><a href="https://www.codecogs.com/latex/eqneditor.php" target="_blank" rel="external">equation html editor</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/26365534" target="_blank" rel="external">fixed point mechanism</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/python-modules-in-help/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/18/python-modules-in-help/" itemprop="url">python modules in help</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T09:09:48-04:00">
-                2019-09-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/18/python-modules-in-help/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/18/python-modules-in-help/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="unittest"><a href="#unittest" class="headerlink" title="unittest"></a>unittest</h2><h3 id="why-unit-test"><a href="#why-unit-test" class="headerlink" title="why unit test ?"></a>why unit test ?</h3><p>unit test is to test the components of a program automatically. a few good reasons of unit tests:</p>
-<ul>
-<li>test driving practice </li>
-<li>early sanity checking </li>
-<li>for regression test, that the new changes won’t break early work </li>
-<li>unit test is to test the isolated piece of code, usually white box test written by developer; functional test is to test the function requirements, usually black box test written by testers.</li>
-</ul>
-<p>the testcase output can be <code>OK</code>, <code>FAIL</code>, <code>ERROR</code>.</p>
-<h3 id="assertion-functions"><a href="#assertion-functions" class="headerlink" title="assertion functions"></a>assertion functions</h3><ul>
-<li><p>basic boolean asserts:</p>
-<pre><code>assertEqual(arg1, arg2, msg=None)
-assertIsNot(arg1, arg2, msg=None)
-</code></pre></li>
-<li><p>comparative asserts:</p>
-<pre><code>assertAlmostEqual(first, second, places=7, msg=None, delta=None)
-</code></pre></li>
-<li><p>asserts for collections:</p>
-<pre><code>assertListEqual(list1, list2, msg=None)
-assertTupleEqual(tuple1, tuple2, msg=None)
-assertSetEqual(set1, set2, msg=None)
-assertDictEqual(dic1, dic2, msg=None)    
-</code></pre><h3 id="command-line-interface"><a href="#command-line-interface" class="headerlink" title="command line interface"></a>command line interface</h3></li>
-<li><p>run all unittests</p>
-<pre><code>python3 -m unittest discover -v -c
-</code></pre></li>
-<li><p>run single test module</p>
-<pre><code>python3 -m unittest -v -c tests/test_XXXX.py
-</code></pre></li>
-<li><p>run individual test case</p>
-<pre><code>python3 -m unittest -v tests.test_XXX.TestCaseXXX.test_XXX
-</code></pre></li>
-</ul>
-<h2 id="how-to-write-a-unittest"><a href="#how-to-write-a-unittest" class="headerlink" title="how to write a unittest"></a>how to write a unittest</h2><h3 id="unittest-TestCase"><a href="#unittest-TestCase" class="headerlink" title="unittest.TestCase"></a>unittest.TestCase</h3><p>any user defined test class should first derived from <code>unittest.TestCase</code> </p>
-<h3 id="setUp-amp-tearDown"><a href="#setUp-amp-tearDown" class="headerlink" title="setUp() &amp; tearDown()"></a>setUp() &amp; tearDown()</h3><p>setUp() provides the way to set up things before running any method starting with <code>test_xx()</code>  in user defined test class. tearDown() is where to end the setting ups </p>
-<h3 id="depends-on-other-modules-class"><a href="#depends-on-other-modules-class" class="headerlink" title="depends on other modules/class"></a>depends on other modules/class</h3><p>usually the class/methods we try to test have depends on other modules/class, but as unit test want to isolate these depends, so either mock the other methods or fake data. in general there are three types of depends:</p>
-<h4 id="pure-variable"><a href="#pure-variable" class="headerlink" title="pure variable"></a>pure variable</h4><p>this is the most simple case, then you can directly define the same pure type variable in your <code>test_xx()</code> method </p>
-<h4 id="methods-in-other-modules"><a href="#methods-in-other-modules" class="headerlink" title="methods in other modules"></a>methods in other modules</h4><p>here need to use <code>patch</code>, to mock the method and define its return value is your <code>test_xx()</code> method, then in the class where call the real method will be replace by this mocked one.</p>
-<h4 id="methods-in-other-class"><a href="#methods-in-other-class" class="headerlink" title="methods in other class"></a>methods in other class</h4><p>here need to use <code>mock</code>, either MagicMock or Mock will works.</p>
-<h3 id="mock-amp-patch"><a href="#mock-amp-patch" class="headerlink" title="mock &amp; patch"></a>mock &amp; patch</h3><p><a href="https://docs.python.org/3/library/unittest.mock.html" target="_blank" rel="external">mock module</a> is built in <code>unittest.mock</code> after a later Python version, if not, <code>mock</code> module can be installed by <strong>pip install mock</strong>, then directly <code>import mock</code> in code.</p>
-<p>the philosophy of unit test is to isolate classes test, but in reality most classes have some instances of other classes, so to test the ego class isolated from other classes, that’s where <code>mock</code> helps. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> mock <span class="keyword">import</span> MagicMock, patch</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestScenario</span><span class="params">(TestCase)</span>:</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_mock</span><span class="params">(self)</span>:</span></div><div class="line">		sim.method = MagicMock(return_value=<span class="string">"xx"</span>)</div><div class="line">		agent = sim.method()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div><div class="line">		</div><div class="line"><span class="meta">	@patch("module/add_agent")</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_patch</span><span class="params">(self, mock_add_agent)</span>:</span></div><div class="line">		mock_add_agent.return_value = <span class="string">"xx"</span></div><div class="line">		agent = module.add_agent()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div></pre></td></tr></table></figure>
-<p><code>Mock</code> helps to mock the method in a class, while <code>patch</code> helps to mock a global method in a module.</p>
-<h3 id="automatical-unittest-generator"><a href="#automatical-unittest-generator" class="headerlink" title="automatical unittest generator"></a>automatical unittest generator</h3><p>there are projects assit to generate unittest code automatically, e.g <a href="">auger</a></p>
-<h3 id="test-with-while-Loop"><a href="#test-with-while-Loop" class="headerlink" title="test with while Loop"></a>test with while Loop</h3><p>TODO</p>
-<h3 id="test-with-raise-Error"><a href="#test-with-raise-Error" class="headerlink" title="test with raise Error"></a>test with raise Error</h3><p>TODO</p>
-<h2 id="coverage-py"><a href="#coverage-py" class="headerlink" title="coverage.py"></a>coverage.py</h2><ul>
-<li><p>(one time only) install coverage.py</p>
-<p>  pip3 install –user coverage</p>
-</li>
-<li><p>run all tests with coverage</p>
-<p>  ~/.local/bin/coverage run -m unittest discover</p>
-</li>
-<li><p>generate html report</p>
-<p>  ~/.local/bin/coverage html –omit “~/.local/<em>“,”tests/</em>“</p>
-</li>
-</ul>
-<p>ps, output is in htmlcov/index.html</p>
-<h2 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h2><p><code>logging()</code> supports more detail message type(info, warn, error, debug) than <code>print()</code>, and the message format is more strict with <code>\%</code>. while <code>print()</code> works both formatted message and message as string simply:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(<span class="string">"1+1 = "</span>, num)</div><div class="line">print(<span class="string">"1+1 = %d"</span>, % num)</div></pre></td></tr></table></figure>
-<p>the following is a general log class, which can plug in any existing Python project:</p>
-<pre><code class="python">
-<span class="keyword">import</span> logging 
-<span class="keyword">import</span> os 
-
-<span class="class"><span class="keyword">class</span> <span class="title">log</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, logger_name)</span>:</span>
-        self.log = logging.getLogger(logger_name)
-        self.log.setLevel(logging.DEBUG)
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.DEBUG)
-        self.log.addHandler(console_handler)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">set_output_file</span><span class="params">(self, filename)</span>:</span>
-        file_handler = logging.FileHandler(filename)
-        file_handler.setLevel(logging.INFO)
-        formatter = logging.Formatter(<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)
-        file_handler.setFormatter(formatter)
-        self.log.addHandler(file_handler)
-
-<span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span>
-    test = log(<span class="string">'scenario-mm'</span>)
-    file_name = <span class="string">"record.log"</span> 
-    dir_name = <span class="string">"/home/python_test/"</span>
-    <span class="keyword">try</span>:
-        os.makedirs(dir_name)
-    <span class="keyword">except</span> OSError:
-        <span class="keyword">pass</span> 
-    file_path =  os.path.join(dir_name, file_name)
-    test.set_output_file(file_path)
-    test.log.debug(<span class="string">"debug in episode 1..."</span>)
-    test.log.info(<span class="string">"info ..."</span>)
-    test.log.warning(<span class="string">"warn ..."</span>)
-    test2 = log(<span class="string">"zjjj"</span>)
-    test2.set_output_file(<span class="string">'record.log'</span>)
-    test2.log.info(<span class="string">"test2 info"</span>)
-    test2.log.warning(<span class="string">"test2 warn"</span>)
-
-
-<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
-    main()
-</code></pre>
-<h2 id="pygame"><a href="#pygame" class="headerlink" title="pygame"></a>pygame</h2><h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.cnblogs.com/beer/p/5075619.html" target="_blank" rel="external">python automatic test series</a></p>
-<p><a href="https://github.com/laffra/auger" target="_blank" rel="external">auger: automated Unittest generation for Python</a></p>
-<p><a href="https://docs.python.org/3/library/unittest.html" target="_blank" rel="external">unittest official</a></p>
-<p><a href="https://github.com/lgsvl/PythonAPI/tree/master/tests" target="_blank" rel="external">unittest in lg-sim project</a></p>
-<p><a href="https://coverage.readthedocs.io/en/stable/" target="_blank" rel="external">coverage.py official</a>  </p>
-<p><a href="https://www.jianshu.com/p/013b9bdecb0d" target="_blank" rel="external">unittest + mock + tox</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2271,7 +2159,7 @@ assertDictEqual(dic1, dic2, msg=None)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">159</span>
+                <span class="site-state-item-count">161</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
