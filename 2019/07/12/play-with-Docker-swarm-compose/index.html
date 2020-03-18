@@ -368,7 +368,7 @@
       
         <h2 id="Docker-swarm"><a href="#Docker-swarm" class="headerlink" title="Docker swarm"></a>Docker swarm</h2><p>docker swarm is Docker nature cluster manager, with built-in DNS service found mechanism, and load-balancing mechanism. compare to k8s, is a light-weight and easy goers.</p>
 <h3 id="create-a-swarm-cluster"><a href="#create-a-swarm-cluster" class="headerlink" title="create a swarm cluster"></a>create a swarm cluster</h3><figure class="highlight bat"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">export MASTER_IP=<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span></div><div class="line"></div><div class="line">docker swarm init --advertise-addr $&#123;MASTER_IP&#125; --name master</div><div class="line"></div><div class="line">docker swarm join --token tokens $&#123;MASTER_IP&#125;  --name  worker1 </div><div class="line"></div><div class="line">docker node ls </div><div class="line"></div><div class="line"># demote/ promote nodeID as manager</div><div class="line">docker node demote/promote nodeID</div><div class="line"></div><div class="line"># rm node </div><div class="line">docker node rm worker1</div><div class="line"># stop swarm <span class="built_in">mode</span> </div><div class="line">docker swarm leave</div></pre></td></tr></table></figure>
-<h3 id="create-service"><a href="#create-service" class="headerlink" title="create service"></a>create service</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker service create  service-name</div><div class="line"><span class="meta"></span></div><div class="line"> # scale service</div><div class="line">docker service scael SERVICE=replicas </div><div class="line"></div><div class="line">docker service rm </div><div class="line"></div><div class="line">docker service inspect</div></pre></td></tr></table></figure>
+<h3 id="create-service"><a href="#create-service" class="headerlink" title="create service"></a>create service</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker service create  service-name</div><div class="line"><span class="meta"></span></div><div class="line"> #<span class="bash"> scale service</span></div><div class="line">docker service scael SERVICE=replicas </div><div class="line"></div><div class="line">docker service rm </div><div class="line"></div><div class="line">docker service inspect</div></pre></td></tr></table></figure>
 <h3 id="create-overlay-network"><a href="#create-overlay-network" class="headerlink" title="create overlay network"></a>create overlay network</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker network create --subnet=192.168.0.0/24  -d overlay ppss-net</div><div class="line"></div><div class="line">docker network rm</div><div class="line"></div><div class="line">docker network connect network-name  docker-node</div></pre></td></tr></table></figure>
 <p>in swarm mode, there are three network created by default:</p>
 <ul>
@@ -567,7 +567,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-count">162</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -580,7 +580,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

@@ -291,6 +291,204 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/" itemprop="url">ROS ADS integrated to python talk to lgsvl</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-10T08:35:12-05:00">
+                2020-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p><a href="https://zjli2013.github.io/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" target="_blank" rel="external">previously</a>, we had done ADS ros package directly talk with lgsvl. the step further is to trigger ADS ros nodes from scenario python script</p>
+<p>a few requirements:</p>
+<ul>
+<li><p>for ADS ros should be integrated with each scenario python script, which means, when the python script finished, the ADS ros should exit</p>
+</li>
+<li><p>the ads ros package shell script is independ of python script </p>
+</li>
+</ul>
+<h4 id="execute-shell-in-Python"><a href="#execute-shell-in-Python" class="headerlink" title="execute shell in Python"></a>execute shell in Python</h4><ul>
+<li>to <a href="http://dreamsyssoft.com/python-scripting-tutorial/shell-tutorial.php" target="_blank" rel="external">call a shell command</a> directly with <code>os.system(cmd)</code> or </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">subprocess.call(&quot;ls -lt&quot;, shell=True)</div></pre></td></tr></table></figure>
+<ul>
+<li>to run shell script with a python subprocess </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proc=subprocess.Popen([&quot;&quot;], stdout=subprocess.PIPE)</div></pre></td></tr></table></figure>
+<p><code>subprocess.Popen()</code> return the process object</p>
+<p>a few helpful commands to debug rosrun:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ps -aux | grep &quot;roscore&quot;  </div><div class="line"></div><div class="line">ps -aux | grep &quot;rosmaster&quot;</div><div class="line"></div><div class="line">killall -9 roscore </div><div class="line"></div><div class="line">killall -9 rosmaster</div></pre></td></tr></table></figure>
+<h2 id="ros1-to-python3"><a href="#ros1-to-python3" class="headerlink" title="ros1 to python3"></a>ros1 to python3</h2><p>there is an real issue, due to the ADS ros package is mostly implemented by ROS1, maintained by the algorithm team. but lgsvl scenario is running with python3. <a href="http://design.ros2.org/articles/changes.html" target="_blank" rel="external">ROS1 matches Python2</a>. so there comes the solution, either to upgrade the ADS ros pakcage to ROS2, or find a way to run ROS1 in python3 env.</p>
+<h4 id="conda-base-env"><a href="#conda-base-env" class="headerlink" title="conda base env"></a>conda base env</h4><p>we had decided to adapt ROS1 in python3 env. as the host machine has conda env, first need to <a href="https://stackoverflow.com/questions/54429210/how-do-i-prevent-conda-from-activating-the-base-environment-by-default" target="_blank" rel="external">disable conda base</a>. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda config --set auto_activate_base false</div></pre></td></tr></table></figure>
+<p>as lgsvl scenario is runned with conda python3 env, inside which used <code>subprocess</code> to run ADS ros shell, in which creates a few new <code>gnome-terminal</code>s, which are non log-in terminal, and the trick things here: even though disabled auto activate base, and the terminal has no header <code>(base)</code>, but when check the python path, it still points to the <code>conda/bin/python</code>, which will fail <code>rosbridge_launch.server</code>, which is a pure ros1 and python2 module.</p>
+<p>so need check if <code>conda --version</code> in the ads ros shell script is  in current terminal, if does, run <code>conda deactivate</code>, which gives error:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CommandNotFoundError: Your shell has not been properly configured to use &apos;conda deactivate&apos;.</div></pre></td></tr></table></figure>
+<p>it looks there is some mess up, with init <code>conda.sh</code> is in <code>~/.bashrc</code>, but during the new terminal ceated, it doens’t confgiure all right. which can be fixed :</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">conda --version </div><div class="line">if [ $? == 0 ]</div><div class="line">then </div><div class="line">    source ~/anaconda3/etc/profile.d/conda.sh</div><div class="line">    conda deactivate</div><div class="line">fi</div></pre></td></tr></table></figure>
+<p>in this way, we run lgsvl scenario in python3, as well as can new with python2 terminals to run ads ros nodes from this python3 terminal</p>
+<h4 id="ros-scripts-path-is-not-python-path"><a href="#ros-scripts-path-is-not-python-path" class="headerlink" title="ros scripts path is not python path"></a>ros scripts path is not python path</h4><p>as we try to separate python scripts from ads ros nodes, so need some global env variable for the ros scripts path. </p>
+<h2 id="kill-all-ros-nodes-gracefully"><a href="#kill-all-ros-nodes-gracefully" class="headerlink" title="kill all ros nodes gracefully"></a>kill all ros nodes gracefully</h2><p>we need restart/shutdown the ads ros nodes package at each time when python scenario script start/stop, which has two steps:</p>
+<ul>
+<li><p>to shutdown ros nodes, e.g.  <a href="https://answers.ros.org/question/237862/rosnode-kill/" target="_blank" rel="external">rosnode kill</a></p>
+</li>
+<li><p>to close all the gnome-terminals to run the ros nodes</p>
+</li>
+</ul>
+<p>the second step is very tricky, need some understand. A terminal is a file. Like /dev/tty. Files do not have a process id. The process that “owns” the terminal is usually called the controlling process, or more correctly, the process group leader. <code>gnome-terminal</code> <a href="https://askubuntu.com/questions/775025/how-to-detect-the-number-of-opened-terminals-by-the-user" target="_blank" rel="external">runs a single pid</a>, it creates a child process for each and every window and/or tab. and can retrieve these child processes by the command:</p>
+<pre><code>$ pgrep -P &lt;pid_of_gnome-terminal&gt;
+</code></pre><p>Many terminals seem to <a href="https://askubuntu.com/questions/640096/how-do-i-check-which-terminal-i-am-using" target="_blank" rel="external">mask themselves as xterm-compatible</a>, which is reported by echo $TERM or echo $COLORTERM. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$! is the PID of the last backgrounded process.</div><div class="line">kill -0 $PID checks whether it&apos;s still running.</div><div class="line">$$ is the PID of the current shell.</div></pre></td></tr></table></figure>
+<pre><code>#! /bin/bash
+
+gnome_pid=`pgrep gnome-terminal`
+subpids=`pgrep -P ${gnome_pid}`
+
+if [ ! $1 ]; then
+   echo &quot;missing the gnome-terminal pid, exit&quot;
+   exit -1
+fi
+
+#shutdown the ros nodes 
+rosnode kill -a  &gt; /dev/null  2&gt;&amp;1
+killall -9 rosmaster &gt; /dev/null  2&gt;&amp;1
+
+#shutdown the terminals where ros nodes hosted
+for pid in $subpids
+do
+        if [[ $pid != $1 ]] ; then
+                echo $pid
+                kill $pid
+        fi
+done
+</code></pre><p>tips: the implement has a litle problem when integrate with lgsvl when the simulation time is short, e.g. 1sec, then <code>ros_clear.sh</code> can’t catch the opened gnome-terminals from <code>ros_start.sh</code>. </p>
+<h4 id="find-the-process-name-using-PID"><a href="#find-the-process-name-using-PID" class="headerlink" title="find the process name using PID"></a><a href="https://www.tecmint.com/find-process-name-pid-number-linux/" target="_blank" rel="external">find the process name using PID</a></h4><pre><code>$ ps aux | grep PID
+$ ps -p PID -o format         
+$ curpid=`ps -p $$ -o ppid=`
+</code></pre><h4 id="the-output-of-ps-aux"><a href="#the-output-of-ps-aux" class="headerlink" title="the output of ps aux"></a><a href="https://www.computernetworkingnotes.com/linux-tutorials/ps-aux-command-and-ps-command-explained.html" target="_blank" rel="external">the output of ps aux</a></h4><ul>
+<li>–&gt;  in the foreground process group<br>s –&gt;  is a session leader </li>
+</ul>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>so far, we integrated ads ros packages into python, which then talk to lgsvl. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.jianshu.com/p/2eb33b491024" target="_blank" rel="external">pythn subprocess from Jianshu</a></p>
+<p><a href="https://www.cnblogs.com/vamei/archive/2012/10/07/2713023.html" target="_blank" rel="external">understand linux process group</a></p>
+<p><a href="https://www.cyberciti.biz/faq/linux-pidof-command-examples-find-pid-of-program/" target="_blank" rel="external">pidof command</a></p>
+<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line/476663#476663" target="_blank" rel="external">which_term</a></p>
+<p><a href="https://stackoverflow.com/questions/9378021/how-to-get-process-details-from-its-pid" target="_blank" rel="external">get the info of a PID</a></p>
+<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line" target="_blank" rel="external">get the pid of running terminal</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1765,240 +1963,6 @@ verify: Service converged
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/running-Vulkan-in-virtual-display/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/04/running-Vulkan-in-virtual-display/" itemprop="url">running Vulkan in virtual display</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-04T09:40:22-05:00">
-                2019-12-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/04/running-Vulkan-in-virtual-display/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/04/running-Vulkan-in-virtual-display/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="install-xserver-xorg-video-dummy"><a href="#install-xserver-xorg-video-dummy" class="headerlink" title="install xserver-xorg-video-dummy"></a>install xserver-xorg-video-dummy</h2><pre><code>apt-cache search xserver-xorg-video-dummy 
-apt-get update 
-sudo apt-get install xserver-xorg-video-dummy
-</code></pre><p>which depends on <code>xorg-video-abi-20</code> and <code>xserver-xorg-core</code>, so need to install <code>xserver-xorg-core</code> first. after update xorg.conf as <a href="https://techoverflow.net/2019/02/23/how-to-run-x-server-using-xserver-xorg-video-dummy-driver-on-ubuntu/" target="_blank" rel="external">run Xserver using xserver-xorg-video-dummy driver</a>, and reboot the machine, which leads both keyboard and mouse doesn’t reponse any more. </p>
-<h3 id="understand-xorg-conf"><a href="#understand-xorg-conf" class="headerlink" title="understand xorg.conf"></a>understand xorg.conf</h3><p>usually, <code>xorg.conf</code> is not in system any more, so most common use, the xorg will configure the system device by default. if additional device need to configure, can run in root <code>X -configure</code>, which will generate <code>xorg.conf.new</code> file at <code>/root</code>.</p>
-<p>there are two <code>xorg.conf</code>, one generated by running <code>X -configure</code>, which located at <code>/root/xorg.conf.new</code> ;  the other is generated by <code>nvidia-xconfigure</code>,  which can be found at <code>/etc/X11/xorg.conf</code>.</p>
-<p>the following list is from <a href="https://www.x.org/releases/X11R7.7/doc/man/man5/xorg.conf.5.xhtml" target="_blank" rel="external">xorg.conf doc</a></p>
-<ul>
-<li>ServerLayout section</li>
-</ul>
-<p>it is at the highest level, they bind together the input and output devices that will be used in a session.</p>
-<p>input devices are described in <code>InputDevice</code> sections, output devices usualy consist of multiple independent components(GPU, monitor), which are defined in <code>Screen</code> section.  each <code>Screen</code> section binds togethere a graphics board(GPU) and a monitor. </p>
-<p>the GPU are described in <code>Device</code> sections and monitors are described in <code>Monitor</code> sections</p>
-<ul>
-<li>FILES section</li>
-</ul>
-<p>used to specify some path names required by the server.</p>
-<p>e.g. ModulePath, FontPath ..</p>
-<ul>
-<li>SERVERFLAGS section</li>
-</ul>
-<p>used to specify global Xorg server options.  all should be <code>Options</code></p>
-<p><code>&quot;AutoAddDevices&quot;</code>,  enabled by default.</p>
-<ul>
-<li>MODULE section</li>
-</ul>
-<p>used to specify which Xorg server (extension) modules shoul be loaded.</p>
-<ul>
-<li>INPUTDEVICE section </li>
-</ul>
-<p>Recent X servers employ HAL or udev backends for input device enumeration and input hotplugging. It is usually not necessary to provide InputDevice sections in the xorg.conf if hotplugging is in use (i.e. AutoAddDevices is enabled). If hotplugging is enabled, InputDevice sections using the mouse, kbd and vmmouse driver will be ignored.</p>
-<p><code>Identifier</code> and <code>Driver</code> are required in all <code>InputDevice</code> sections.  <code>Identifier</code> used to specify the unique name for this input device;  <code>Driver</code> used to specify the name of the driver.</p>
-<p>An InputDevice section is considered active if it is referenced by an active ServerLayout section, if it is referenced by the −keyboard or −pointer command line options, or if it is selected implicitly as the core pointer or keyboard device in the absence of such explicit references. The most commonly used input drivers are evdev(4) on Linux systems, and kbd(4) and mousedrv(4) on other platforms.</p>
-<p>a few driver-independent <code>Options</code> in <code>InputDevice</code>:</p>
-<p><code>CorePointer</code> and <code>CoreKeyboard</code> are the inverse of option <code>Floating</code>, which, when enabled, the input device does not report evens through any master device or control a cursor. the device is only available to clients using X input Extension API.  </p>
-<ul>
-<li>Device section</li>
-</ul>
-<p>there must be at least one, for the video card(GPU) being used. <code>Identifier</code> and <code>Driver</code> are required in all <code>Device</code> sections.</p>
-<ul>
-<li>Monitor Section<br>there must be at least one, for the monitor being used. the default configuration will be created when one isn’t specified.  <code>Identifier</code> is the only mandatory.</li>
-</ul>
-<ul>
-<li>Screen Section<br>There must be at least one, for the “screen” being used, represents the binding of a graphics device (Device section) and a monitor (Monitor section). A Screen section is considered “active” if it is referenced by an active ServerLayout section or by the −screen command line option. The <code>Identifier</code> and <code>Device</code> entries are mandatory. </li>
-</ul>
-<h3 id="debug-keyboard-mouse-not-response-after-X-upgrade"><a href="#debug-keyboard-mouse-not-response-after-X-upgrade" class="headerlink" title="debug keyboard/mouse not response after X upgrade"></a>debug keyboard/mouse not response after X upgrade</h3><ul>
-<li><p>login to Ubuntu safe mode, by <code>F12</code> –&gt;  <code>Esc</code> (to display GRUB2 menu), then <code>enable network</code> –&gt;  <code>root shell</code></p>
-</li>
-<li><p>run <code>X -configure</code></p>
-</li>
-</ul>
-<p>one line say:</p>
-<pre><code>List of video drivers:  dummy, nvidia,  modesetting. 
-</code></pre><h4 id="uninstall-xserver-xorg-video-dummy"><a href="#uninstall-xserver-xorg-video-dummy" class="headerlink" title="uninstall xserver-xorg-video-dummy"></a>uninstall xserver-xorg-video-dummy</h4><p>I thought the dummy video driver is the key reason, so uninstall it, then rerun the lines above, check <code>/var/log/Xorg.0.log</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">[   386.768] List of video drivers:</div><div class="line">[   386.768] 	nvidia</div><div class="line">[   386.768] 	modesetting</div><div class="line">[   386.860] (++) Using config file: &quot;/root/xorg.conf.new&quot;</div><div class="line">[   386.860] (==) Using system config directory &quot;/usr/share/X11/xorg.conf.d&quot;</div><div class="line">[   386.860] (==) ServerLayout &quot;X.org Configured&quot;</div><div class="line">[   386.860] (**) |--&gt;Screen &quot;Screen0&quot; (0)</div><div class="line">[   386.860] (**) |   |--&gt;Monitor &quot;Monitor0&quot;</div><div class="line">[   386.861] (**) |   |--&gt;Device &quot;Card0&quot;</div><div class="line">[   386.861] (**) |   |--&gt;GPUDevice &quot;Card0&quot;</div><div class="line">[   386.861] (**) |--&gt;Input Device &quot;Mouse0&quot;</div><div class="line">[   386.861] (**) |--&gt;Input Device &quot;Keyboard0&quot;</div><div class="line">[   386.861] (==) Automatically adding devices</div><div class="line">[   386.861] (==) Automatically enabling devices</div><div class="line">[   386.861] (==) Automatically adding GPU devices</div><div class="line">[   386.861] (**) ModulePath set to &quot;/usr/lib/xorg/modules&quot;</div><div class="line">[   386.861] (WW) Hotplugging is on, devices using drivers &apos;kbd&apos;, &apos;mouse&apos; or &apos;vmmouse&apos; will be disabled.</div><div class="line">[   386.861] (WW) Disabling Mouse0</div><div class="line">[   386.861] (WW) Disabling Keyboard0</div><div class="line">Xorg detected  mouyourse at device /dev/input/mice.</div><div class="line">Please check your config if the mouse is still not</div><div class="line">operational, as by default Xorg tries to autodetect</div><div class="line">the protocol.</div></pre></td></tr></table></figure>
-<p>there is a warning: <code>(WW) Hotplugging is on, devices using drivers &#39;kbd&#39;, &#39;mouse&#39; or &#39;vmmouse&#39; will be disabled</code></p>
-<h4 id="disable-Hotplugging"><a href="#disable-Hotplugging" class="headerlink" title="disable Hotplugging"></a>disable Hotplugging</h4><p>first generate by <code>X -configure</code> at <code>/root/xorg.conf.new</code>, and copy it to <code>/etc/X11/xorg.conf</code>. then add the additional section in /etc/X11/xorg.conf, , which will disable Hotplugging: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Section &quot;ServerFlags&quot;</div><div class="line">Option &quot;AllowEmptyInput&quot; &quot;True&quot;</div><div class="line">Option &quot;AutoAddDevices&quot; &quot;False&quot;</div><div class="line">EndSection</div></pre></td></tr></table></figure>
-<p>however, it reports: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">(EE) Failed to load module &quot;evdev&quot; (module does not exist, 0)</div><div class="line">(EE) NVIDIA(0): Failed to initialize the GLX module; please check in your X</div><div class="line">(EE) NVIDIA(0):     log file that the GLX module has been loaded in your X</div><div class="line">(EE) NVIDIA(0):     server, and that the module is the NVIDIA GLX module.  If</div><div class="line">(EE) NVIDIA(0):     you continue to encounter problems, Please try</div><div class="line">(EE) NVIDIA(0):     reinstalling the NVIDIA driver.</div><div class="line">(EE) Failed to load module &quot;mouse&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `mouse&apos;</div></pre></td></tr></table></figure>
-<h4 id="switch-to-nvidia-xorg-conf"><a href="#switch-to-nvidia-xorg-conf" class="headerlink" title="switch to nvidia xorg.conf"></a>switch to nvidia xorg.conf</h4><p>which reports:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(EE) Failed to load module &quot;mouse&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `mouse&apos;</div><div class="line">(EE) Failed to load module &quot;evdev&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `evdev&apos;</div></pre></td></tr></table></figure>
-<p>it fix the Nvidia issue, but still can’t fix the input device and driver issue.</p>
-<h4 id="switch-to-evdev-driver"><a href="#switch-to-evdev-driver" class="headerlink" title="switch to evdev driver"></a>switch to evdev driver</h4><p>as mentioned previously, <code>evdev</code> driver is the default driver for Linux, and will be loaded by Xserver by default. so try to both Keyboard and Mouse driver to <code>evdev</code>,</p>
-<p>which reports:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">(EE) No input driver matching `kbd&apos;</div><div class="line">(EE) Failed to load module &quot;kbd&quot; (module does not exist, 0)</div><div class="line">(EE) No input driver matching `mouse&apos;</div><div class="line">(EE) Failed to load module &quot;mouse&quot; (module does not exist, 0)</div></pre></td></tr></table></figure>
-<p>looks it’s the problem of driver, even the default driver is missed. I try to copy master node’s <a href="https://forums.gentoo.org/viewtopic-p-4771817.html" target="_blank" rel="external">/usr/lib/xorg/modules/input/</a> to worker node, then it reports :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(EE) module ABI major version (24) doesn&apos;t match the server&apos;s version (22)</div><div class="line">(EE) Failed to load module &quot;evdev&quot; (module requirement mismatch, 0)</div></pre></td></tr></table></figure>
-<p>which can be fixed by adding <code>Option IgnoreABI</code> .</p>
-<h4 id="delete-customized-keyboard-and-mouse"><a href="#delete-customized-keyboard-and-mouse" class="headerlink" title="delete customized keyboard and mouse"></a>delete customized keyboard and mouse</h4><p>if enable Hotplugging, the X will auto detect the device, I’d try: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">Section &quot;ServerLayout&quot;</div><div class="line">    Identifier     &quot;Layout0&quot;</div><div class="line">    Screen      0  &quot;Screen0&quot; 0 0 </div><div class="line">EndSection</div><div class="line"></div><div class="line"></div><div class="line">Section &quot;Monitor&quot;</div><div class="line">    Identifier     &quot;Monitor0&quot;</div><div class="line">    VendorName     &quot;Unknown&quot;</div><div class="line">    ModelName      &quot;Unknown&quot;</div><div class="line">    HorizSync       28.0 - 33.0</div><div class="line">    VertRefresh     43.0 - 72.0</div><div class="line">    Option         &quot;DPMS&quot;</div><div class="line">EndSection</div><div class="line"></div><div class="line">Section &quot;Device&quot;</div><div class="line">    Identifier     &quot;Device0&quot;</div><div class="line">    Driver         &quot;nvidia&quot;</div><div class="line">    VendorName     &quot;NVIDIA Corporation&quot;</div><div class="line">EndSection</div><div class="line"></div><div class="line">Section &quot;Screen&quot;</div><div class="line">    Identifier     &quot;Screen0&quot;</div><div class="line">    Device         &quot;Device0&quot;</div><div class="line">    Monitor        &quot;Monitor0&quot;</div><div class="line">    DefaultDepth    24</div><div class="line">    SubSection     &quot;Display&quot;</div><div class="line">        Depth       24</div><div class="line">    EndSubSection</div><div class="line">EndSection</div><div class="line"></div><div class="line">Section &quot;ServerFlags&quot;</div><div class="line">  Option &quot;AllowEmptyInput&quot; &quot;True&quot;</div><div class="line">  Option &quot;IgnoreABI&quot; &quot;True&quot;</div><div class="line">EndSection</div></pre></td></tr></table></figure>
-<p>which reports:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(II) No input driver specified, ignoring this device.</div><div class="line">(II) This device may have been added with another device file.</div><div class="line">(II) config/udev: Adding input device Lenovo Precision USB Mouse (/dev/input/mouse0</div></pre></td></tr></table></figure>
-<p>there is no ERROR any more, but looks the default Input driver (evdev?) can’t be found out …</p>
-<h4 id="reinstall-xorg"><a href="#reinstall-xorg" class="headerlink" title="reinstall xorg"></a>reinstall xorg</h4><p>Mouse and keyboard can be driven by evdev or mouse/keyboard driver respectively. Xorg will load only <code>endev</code> automatically, To use mouse and/or keyboard driver instead of evdev they must be loaded in xorg.conf. There is no need to generate xorg.conf unless you want to fine tune your setup or need to customize keyboard layout or mouse/touchpad functionality.</p>
-<ul>
-<li>firstly configure new network interface for worker node:</li>
-</ul>
-<p><a href="https://unix.stackexchange.com/questions/303536/configuring-automatic-dhcp-network-connection-via-command-line-on-ubuntu-14-04" target="_blank" rel="external">configure DHCP network connection</a></p>
-<p>setting at <code>/etc/network/interface</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">auto enp0s25 </div><div class="line">iface enp0s25 inet dhcp</div></pre></td></tr></table></figure>
-<p>ifconfig enp0s25 down<br>ifconfig enp0s25 up</p>
-<ul>
-<li>then reinstall xorg: </li>
-</ul>
-<pre><code>sudo apt-get update 
-sudo apt-get upgrade
-sudo apt-get install xserver-xorg-core  xserver-xorg  xorg
-</code></pre><p>which install these libs, <code>xserver-xorg-input-all</code>, <code>xserver-xorg-input-evdev</code>,  <code>xserver-xorg-inut-wacom</code>, <code>xserver-xorg-input-vmouse</code>,  <code>xserver-xorg-input-synaptics</code>, these are the exact missing parts(input device and drivers).  it looks when uninstall <code>video-dummy</code>, these modules are deleted by accident.</p>
-<ul>
-<li><p>reboot, both keyboard and mouse work !</p>
-</li>
-<li><p>“sudo startx” through ssh</p>
-</li>
-</ul>
-<p>now the user password doesn’t work in normal login, but when ssh login from another machine, the password verify well. which can be fixed by ssh login from remote host first, then run <code>sudo startx</code>, which will bring the user-password verification back</p>
-<h2 id="virtual-display"><a href="#virtual-display" class="headerlink" title="virtual display"></a>virtual display</h2><p><a href="https://xpra.org/trac/wiki/Xdummy" target="_blank" rel="external">xdummy</a></p>
-<p><a href="http://xpra.org/xorg.conf" target="_blank" rel="external">xdummy: xorg.conf</a></p>
-<p>run: <code>Xorg -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./10.log -config ./xorg.conf :10</code> </p>
-<ul>
-<li>test with glxgears/OpengGL works</li>
-</ul>
-<p>1) DISPLAY=localhost:10.0  works</p>
-<p>2) DISPLAY=:0  works, but you can’t see it, cause the worker host is in virtual display</p>
-<ul>
-<li>test with vkcube/Vulkan failed</li>
-</ul>
-<p>in summary, the vitual display can support OpenGL running, but doesn’t support Vulkan yet. <a href="https://unity.com/simulation" target="_blank" rel="external">unity simulation cloud SDK</a> is the vendor’s solution, but licensed.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://xpra.org/xorg.conf" target="_blank" rel="external">sample xorg.conf for dummy device</a></p>
-<p><a href="https://askubuntu.com/questions/940476/keyboard-and-mouse-not-responding-at-reboot-after-xorg-conf-update" target="_blank" rel="external">Keyboard and mouse not responding at reboot after xorg.conf update</a></p>
-<p><a href="https://askubuntu.com/questions/4662/where-is-the-x-org-config-file-how-do-i-configure-x-there" target="_blank" rel="external">how to Xconfigure</a></p>
-<p><a href="https://www.linuxquestions.org/questions/linux-software-2/no-input-drivers-loading-in-x-4175577628/" target="_blank" rel="external">no input drivers loading in X</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2049,7 +2013,7 @@ sudo apt-get install xserver-xorg-core  xserver-xorg  xorg
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-count">162</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2062,7 +2026,7 @@ sudo apt-get install xserver-xorg-core  xserver-xorg  xorg
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

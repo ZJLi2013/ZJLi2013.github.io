@@ -372,7 +372,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rospack find [package-name]</div><div class="line">rospack list </div><div class="line">roscd [package-name]</div><div class="line">``` </div><div class="line"></div><div class="line">take an example, to locate `rosbridge_websocket.launch` </div><div class="line"></div><div class="line">```shell </div><div class="line">rospack find rosbridge*    #rosbridge_server</div><div class="line">roscd rosbridge_server</div><div class="line">cd launch</div></pre></td></tr></table></figure>
 <p>another tool to view ros-launch: <code>roslaunch-logs</code></p>
 <h2 id="write-a-launch-file"><a href="#write-a-launch-file" class="headerlink" title="write a .launch file"></a>write a .launch file</h2><p>launch files, which uses XML format, usually make a directory named “launch” inside the workspace to organize all launch files, and it provides a convenient way to start up multiple nodes and master, it processs in a <a href="http://wiki.ros.org/roslaunch/XML" target="_blank" rel="external">depth-first tarversal order</a>. usually launch files can be put a <code>launch</code> folder under a ros node project. </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">roslaunch package_name launch_file</div><div class="line"><span class="meta">#</span>or </div><div class="line">roslaunch /path/to/launch_file</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">roslaunch package_name launch_file</div><div class="line"><span class="meta">#</span><span class="bash">or </span></div><div class="line">roslaunch /path/to/launch_file</div></pre></td></tr></table></figure>
 <p>an sample launch file:</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">launch</span>&gt;</span> </div><div class="line">   <span class="tag">&lt;<span class="name">node</span> <span class="attr">pkg</span>=<span class="string">"package_name"</span>  <span class="attr">type</span>=<span class="string">" "</span>   <span class="attr">name</span>=<span class="string">" "</span>  <span class="attr">output</span>=<span class="string">" "</span> <span class="attr">args</span>=<span class="string">" "</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">launch</span>&gt;</span></div></pre></td></tr></table></figure>
 <p><code>args</code> can define either env variables or a command.</p>
@@ -381,7 +381,7 @@
 <p>someone(at 2014) said Google’s self-driving simulation has used rviz:</p>
 <p><img src="http://community.bwbot.org/assets/uploads/files/1472264009114-3.png?v=qboavrogdv4" alt="google simulation"> </p>
 <p><a href="http://stevenshi.me/2017/07/11/ros-intermediate-tutorial-2/" target="_blank" rel="external">a sample</a> with rviz to visualize rosbag info: </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> terminal 1 </div><div class="line">roscore </div><div class="line"><span class="meta">#</span> terminal 2 </div><div class="line">rosbag play kitti.bag -l </div><div class="line">rosrun rviz rviz -f kitti-velodyne</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> terminal 1 </span></div><div class="line">roscore </div><div class="line"><span class="meta">#</span><span class="bash"> terminal 2 </span></div><div class="line">rosbag play kitti.bag -l </div><div class="line">rosrun rviz rviz -f kitti-velodyne</div></pre></td></tr></table></figure>
 <h2 id="rosbag"><a href="#rosbag" class="headerlink" title="rosbag"></a>rosbag</h2><p>the sensor ros node will collect data in rosbag during physical or vitual test, then playback rosbag to develop or verify the sensing algorithms. or use to build simulation scene. </p>
 <p>a few <a href="http://wiki.ros.org/rosbag/Commandline" target="_blank" rel="external">common commands</a>, and also rosbag support interactive <a href="http://wiki.ros.org/rosbag/Code%20API" target="_blank" rel="external">C++/Python APIs</a>. </p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rosbag record #use to write a bag file wit contents on the specified topics</div><div class="line">rosbag info #display the contents of bag files </div><div class="line">rosbag play #play back bag file in a time-synchronized fashion</div></pre></td></tr></table></figure>
@@ -410,7 +410,7 @@ cat "&lt;launch&gt; &lt;node  name="demo"  type="rviz" -d="ls `pwd`" /&gt; &lt;/
 cd ~/catkin_ws
 catkin_make --pkg demo
 <span class="meta">
-#</span> add catkin_ws to 
+#</span><span class="bash"> add catkin_ws to </span>
 cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.bashrc
 </code></pre>
 
@@ -547,7 +547,7 @@ cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-count">162</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -560,7 +560,7 @@ cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
