@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="kvm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="kvm backgroundkernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine i">
+<meta name="keywords" content="kvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kvm&#x2F;libvert in linux (1)">
+<meta property="og:url" content="http://yoursite.com/2020/03/24/kvm-libvert-in-linux-1/index.html">
+<meta property="og:site_name" content="Serious Autonomous Vehicles">
+<meta property="og:description" content="kvm backgroundkernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine i">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-03-24T11:10:57.077Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="kvm&#x2F;libvert in linux (1)">
+<meta name="twitter:description" content="kvm backgroundkernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine i">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/24/kvm-libvert-in-linux-1/"/>
+
+
+
+
+
+  <title>kvm/libvert in linux (1) | Serious Autonomous Vehicles</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Serious Autonomous Vehicles</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/kvm-libvert-in-linux-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">kvm/libvert in linux (1)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-24T07:10:18-04:00">
+                2020-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/24/kvm-libvert-in-linux-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/24/kvm-libvert-in-linux-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="kvm-background"><a href="#kvm-background" class="headerlink" title="kvm background"></a>kvm background</h2><p>kernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine is called <code>Host</code>, and the virtual machine(VM) run in host is called <code>Guest</code>. </p>
+<p>kvm itself doesn’t do any hardware emulator, which needs guest space to set an address space through <code>dev/kvm</code> interface, to which provides virtual I/O, e.g. QEMU.</p>
+<p><a href="https://github.com/virt-manager/virt-manager" target="_blank" rel="external">virt-manager</a> is a GUI tool for managing virtual machines via <strong>libvirt</strong>, mostly used by QEMU/KVM virtual machines. </p>
+<ul>
+<li>check kvm model info </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">modinfo kvm</div></pre></td></tr></table></figure>
+<ul>
+<li>whether CPU support hardware virtualization</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">egrep -c <span class="string">'(vmx|svm)'</span> /proc/cpuinfo</div><div class="line">kvm-ok</div></pre></td></tr></table></figure>
+<h2 id="install-kvm"><a href="#install-kvm" class="headerlink" title="install kvm"></a>install kvm</h2><ul>
+<li>install libvirt and qemu packages </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt install qemu qemu-kvm libvirt-bin bridge-utils</div><div class="line">modprobe kvm <span class="comment">#load kvm module</span></div><div class="line">systemctl start libvirtd.service <span class="comment">#</span></div><div class="line">vrish iface-bridge ens33 virbr0 <span class="comment">#create a bridge network mac address</span></div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://www.howtogeek.com/50787/add-a-user-to-a-group-or-second-group-on-linux/" target="_blank" rel="external">add current user</a> to libvirtd group </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo usermod -aG libvirtd $(whoami)</div><div class="line">sudo usermod -aG libvirt-qemu $(whoami)</div><div class="line">sudo reboot</div></pre></td></tr></table></figure>
+<h4 id="network-in-kvm"><a href="#network-in-kvm" class="headerlink" title="network in kvm"></a>network in kvm</h4><ul>
+<li>List of network cards</li>
+</ul>
+<p>go to <code>/sys/class/net</code> there are a few nic:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 docker0 -&gt; ../../devices/virtual/net/docker0</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 docker_gwbridge -&gt; ../../devices/virtual/net/docker_gwbridge</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 eno1 -&gt; ../../devices/pci0000:00/0000:00:1f.6/net/eno1</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 enp4s0f2 -&gt; ../../devices/pci0000:00/0000:00:1c.4/0000:02:00.0/0000:03:03.0/0000:04:00.2/net/enp4s0f2</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 lo -&gt; ../../devices/virtual/net/lo</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 veth1757da9 -&gt; ../../devices/virtual/net/veth1757da9</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 vethd4d0e7f -&gt; ../../devices/virtual/net/vethd4d0e7f</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 virbr0 -&gt; ../../devices/virtual/net/virbr0</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 virbr0-nic -&gt; ../../devices/virtual/net/virbr0-nic</div></pre></td></tr></table></figure>
+<ul>
+<li>multi interfaces on same MAC addresss</li>
+</ul>
+<p>when <a href="https://networkengineering.stackexchange.com/questions/34754/same-mac-on-different-interfaces" target="_blank" rel="external">a switch receives</a> a frame from an interface, it creates an entry in the mac-address table with the source mac and interface. it the source mac is known, it will update the table with the new interface. so bascially if you assign the mac address of an external-network-avialable NIC-A to the special vm, NIC-A is lost. </p>
+<ul>
+<li>virbr0 </li>
+</ul>
+<p>the <code>default</code> bridge NIC of libvirt is <code>virbr0</code>. bridge network means the guest and host share the same physical Network Cards, as well as offer the guest a special IP, which can be used to access the guest directly. the <code>virbr0</code> do <code>network address translation</code>(NAT), basically transfer the internal IP address to an external IP address, which means the internal IP address is un-visiable from outside. </p>
+<p>to add the <code>virbr0</code>, when it is deleted previously: </p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr virbr0</div><div class="line">brctl stp virbr0 on</div><div class="line">brctl setf virbr0 0</div><div class="line">ifconfig virbr0 192.168.122.1 netmask 255.255.255.0 up</div></pre></td></tr></table></figure>
+<p> to disable or delete <code>virbr0</code>:</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">virsh net-destroy default</div><div class="line">virsh net-undefine default</div><div class="line">service libvirtd restart</div><div class="line">ifconfig</div></pre></td></tr></table></figure>
+<p> after starting the vm, can check the bridge network by:</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">virsh domiflist vm-name</div><div class="line">virsh domifaddr vm-name</div></pre></td></tr></table></figure>
+<p> and we can login the vm, (after we assign current user to <code>libvert</code> group), and check NAT is working: </p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh 192.168.122.1 </div><div class="line">ping www.bing.com</div><div class="line">ping 10.20.xxx.xxx  <span class="comment"># ping the host external IP</span></div></pre></td></tr></table></figure>
+<p>basically the vm can access external website, but external web can’t access vm_name.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attach-interface/detach-interface/domiflist</div></pre></td></tr></table></figure>
+<h2 id="create-vm"><a href="#create-vm" class="headerlink" title="create vm"></a>create vm</h2><p>create a virtual machine,  can be done either through <code>virt-install</code> or <code>config.xml</code>:</p>
+<h3 id="virt-install"><a href="#virt-install" class="headerlink" title="virt-install"></a>virt-install</h3><p>check <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">virsh networking doc</a>, but some arg options may out of date. </p>
+<h3 id="config-xml"><a href="#config-xml" class="headerlink" title="config.xml"></a>config.xml</h3><ul>
+<li><p>create volumes </p>
+<p>go to /var/lib/libvirt/images, and create volume as following: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-img create -f qcow2 ubuntu.qcow2 40G</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>check <a href="https://www.jianshu.com/p/4a50c02aa16e" target="_blank" rel="external">qemu-kvm &amp; qemu-img introduction</a></p>
+<ul>
+<li><p>add vm image </p>
+<p>cp ubuntu.iso to <code>/var/lib/libvirt/images</code> as well:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ubuntu.qcow2</div><div class="line">ubuntu-16.04.3-server-amd64.iso</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="vm-xml"><a href="#vm-xml" class="headerlink" title="vm.xml"></a>vm.xml</h4><p>follow an <a href="https://docs.fedoraproject.org/en-US/Fedora/18/html/" target="_blank" rel="external">xml sample</a>: </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">domain</span> <span class="attr">type</span>=<span class="string">'kvm'</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>v1<span class="tag">&lt;/<span class="name">name</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">memory</span>&gt;</span>4048576<span class="tag">&lt;/<span class="name">memory</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">currentMemory</span>&gt;</span>4048576<span class="tag">&lt;/<span class="name">currentMemory</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">vcpu</span>&gt;</span>2<span class="tag">&lt;/<span class="name">vcpu</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">os</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">type</span> <span class="attr">arch</span>=<span class="string">'x86_64'</span> <span class="attr">machine</span>=<span class="string">'pc'</span>&gt;</span>hvm<span class="tag">&lt;/<span class="name">type</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">boot</span> <span class="attr">dev</span>=<span class="string">'cdrom'</span>/&gt;</span> </div><div class="line">       <span class="tag">&lt;/<span class="name">os</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">features</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">acpi</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">apic</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">pae</span>/&gt;</span></div><div class="line">       <span class="tag">&lt;/<span class="name">features</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">clock</span> <span class="attr">offset</span>=<span class="string">'localtime'</span>/&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_poweroff</span>&gt;</span>destroy<span class="tag">&lt;/<span class="name">on_poweroff</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_reboot</span>&gt;</span>restart<span class="tag">&lt;/<span class="name">on_reboot</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_crash</span>&gt;</span>destroy<span class="tag">&lt;/<span class="name">on_crash</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">serial</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">serial</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">console</span> <span class="attr">type</span>=<span class="string">'pty'</span> &gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">type</span>=<span class="string">'serial'</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">console</span>&gt;</span> </div><div class="line">      <span class="tag">&lt;<span class="name">devices</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">emulator</span>&gt;</span>/usr/bin/qemu-system-x86_64<span class="tag">&lt;/<span class="name">emulator</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'disk'</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">driver</span> <span class="attr">name</span>=<span class="string">'qemu'</span> <span class="attr">type</span>=<span class="string">'qcow2'</span>/&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">file</span>=<span class="string">'/var/lib/libvirt/images/ubuntu.qcow2'</span>/&gt;</span> </div><div class="line">           <span class="tag">&lt;<span class="name">target</span> <span class="attr">dev</span>=<span class="string">'hda'</span> <span class="attr">bus</span>=<span class="string">'ide'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;/<span class="name">disk</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'cdrom'</span>&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">file</span>=<span class="string">'/var/lib/libvirt/images/ubuntu-16.04.3-server-amd64.iso'</span>/&gt;</span> </div><div class="line">           <span class="tag">&lt;<span class="name">target</span> <span class="attr">dev</span>=<span class="string">'hdb'</span> <span class="attr">bus</span>=<span class="string">'ide'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;/<span class="name">disk</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">interface</span> <span class="attr">type</span>=<span class="string">'bridge'</span> &gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'52:54:00:98:45:3b'</span> /&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">bridge</span>=<span class="string">'virbr0'</span> /&gt;</span></div><div class="line">	   <span class="tag">&lt;<span class="name">model</span> <span class="attr">type</span>=<span class="string">'virtio'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">interface</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">serial</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">target</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">serial</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">console</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">target</span> <span class="attr">type</span>=<span class="string">'serial'</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">console</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'mouse'</span> <span class="attr">bus</span>=<span class="string">'ps2'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">graphics</span> <span class="attr">type</span>=<span class="string">'vnc'</span> <span class="attr">port</span>=<span class="string">'-1'</span> <span class="attr">autoport</span>=<span class="string">'no'</span> <span class="attr">listen</span> = <span class="string">'0.0.0.0'</span> <span class="attr">keymap</span>=<span class="string">'en-us'</span>&gt;</span></div><div class="line">	   <span class="tag">&lt;<span class="name">listen</span> <span class="attr">type</span>=<span class="string">'address'</span> <span class="attr">address</span>=<span class="string">'0.0.0.0'</span> /&gt;</span></div><div class="line">	 <span class="tag">&lt;/<span class="name">graphics</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">devices</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">domain</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>a few tips about the xml above:</p>
+<ul>
+<li><p><interface> component is necessary for network interface. </interface></p>
+</li>
+<li><p>if not assign a special <code>mac address</code> in the interface. since we had define <code>virbr0</code>, an automatic mac address will be assigned, which is unique from the host machine’s IP, but if ssh login to the guest (ssh username@guest_ip), it actually can ping host machine’s iP or any external ip(www.being.com)</p>
+</li>
+<li><p>\<serial tty=""> compoennt, is setting for <code>console</code>.</serial></p>
+</li>
+</ul>
+<p>finally run the following CLI to start vm: v1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh define vm1.xml </div><div class="line">virsh start ubuntu(the image)</div><div class="line">virsh list</div></pre></td></tr></table></figure>
+<h4 id="tty"><a href="#tty" class="headerlink" title="tty"></a>tty</h4><p><a href="https://www.howtogeek.com/428174/what-is-a-tty-on-linux-and-how-to-use-the-tty-command/" target="_blank" rel="external">tty</a> stands for “teletypewriter”, teletype was the perfect candidate as IO device.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/etc/init/ttyS0.conf </div><div class="line">tty</div><div class="line">$/dev/ttys000</div></pre></td></tr></table></figure>
+<p>the terminal window, which is a software emulation of tty, is interfacet to the pseudo-teletype multiplexor as a pseudo-teletype(PTS), which happens to be nubmer 000</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">who </div><div class="line">david console  Mar 22 21:52 </div><div class="line">david ttys000  Mar 22 21:52</div></pre></td></tr></table></figure>
+<h2 id="libvert"><a href="#libvert" class="headerlink" title="libvert"></a>libvert</h2><p>libvert is a software package to manage vm, including libvirtAPI, libvirtd(daemon process), and virsh tool. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo systemctl restart libvirtd</div><div class="line">systemctl status libvirtd</div></pre></td></tr></table></figure>
+<p>only when <code>libvirtd</code> service is running, can we manage vm through <code>libvert</code>. all configure of the vm is stored ad <code>/etc/libvirt/qemu</code>. for <code>virsh</code> there are two mode:</p>
+<ul>
+<li>immediate way e.g. in host shell <code>virsh list</code> </li>
+<li>interactive shell e.g. by <code>virsh</code> to virsh shell</li>
+</ul>
+<h4 id="common-virsh-commands"><a href="#common-virsh-commands" class="headerlink" title="common virsh commands"></a>common virsh commands</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">virsh &lt;command&gt; &lt;domain-id&gt; [options]</div><div class="line">virsh uri #hypervisor&apos;s URI</div><div class="line">virsh hostname</div><div class="line">virsh nodeinfo </div><div class="line">virsh list (running, idel, paused, shutdown, shutoff, crashed, dying)</div><div class="line">virsh shutdown &lt;domain&gt;</div><div class="line">virsh start &lt;domain&gt;</div><div class="line">virsh destroy &lt;domain&gt;</div><div class="line">virsh undefine &lt;domain&gt;</div><div class="line">virsh create #through config.xml</div><div class="line">virsh connect  #reconnect to hypervisor </div><div class="line">virsh nodeinfo </div><div class="line">virsh define #file domain</div><div class="line">virsh  setmem domain-id kbs #immediately</div><div class="line">virsh sertmaxmem domain-id kbs</div><div class="line">virsh setvcpus domain-id count </div><div class="line">virsh vncdisplay domain-id #listed vnc port</div><div class="line">virsh console &lt;domain&gt;</div></pre></td></tr></table></figure>
+<h4 id="virsh-network-commands"><a href="#virsh-network-commands" class="headerlink" title="virsh network commands"></a>virsh network commands</h4><ul>
+<li>host configure </li>
+</ul>
+<p>Every standard libvirt installation provides NAT based connectivity to virtual machines out of the box. This is the so called ‘default virtual network’ </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">virsh net-list </div><div class="line">virsh net-define /usr/share/libvirt/networks/default.xml</div><div class="line">virsh net-start default</div><div class="line">virsh net-info default</div><div class="line">virsh net-dumpxml default</div></pre></td></tr></table></figure>
+<p>When the <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">libvirt default network</a>is running, you will see an isolated bridge device. This device explicitly does <em>NOT</em> have any physical interfaces added, since it uses NAT + forwarding to connect to outside world. <strong>Do not add interfaces</strong>. Libvirt will add iptables rules to allow traffic to/from guests attached to the virbr0 device in the INPUT, FORWARD, OUTPUT and POSTROUTING chains.</p>
+<p>if <code>default.xml</code> is not found, check <a href="https://blog.programster.org/kvm-missing-default-network" target="_blank" rel="external">fix missing default network</a>, <code>default.xml</code> is sth like:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">network</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>default<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">uuid</span>&gt;</span>9a05da11-e96b-47f3-8253-a3a482e445f5<span class="tag">&lt;/<span class="name">uuid</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">forward</span> <span class="attr">mode</span>=<span class="string">'nat'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">bridge</span> <span class="attr">name</span>=<span class="string">'virbr0'</span> <span class="attr">stp</span>=<span class="string">'on'</span> <span class="attr">delay</span>=<span class="string">'0'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'52:54:00:0a:cd:21'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">ip</span> <span class="attr">address</span>=<span class="string">'192.168.122.1'</span> <span class="attr">netmask</span>=<span class="string">'255.255.255.0'</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">dhcp</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">range</span> <span class="attr">start</span>=<span class="string">'192.168.122.2'</span> <span class="attr">end</span>=<span class="string">'192.168.122.254'</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">dhcp</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">ip</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">network</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>then run:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo virsh net-define --file default.xml</div><div class="line">sudo virsh net-start default</div><div class="line">sudo virsh net-autostart --network default</div></pre></td></tr></table></figure>
+<p>if bind <code>default</code> to <code>virbr0</code> already, need delete this brige first.</p>
+<ul>
+<li>guest configure </li>
+</ul>
+<p>add the following to guest xml configure:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">interface</span> <span class="attr">type</span>=<span class="string">'network'</span>&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">source</span> <span class="attr">network</span>=<span class="string">'default'</span>/&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'00:16:3e:1a:b3:4a'</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">interface</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>more details can check <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">virsh networking doc</a></p>
+<h4 id="snapshots"><a href="#snapshots" class="headerlink" title="snapshots"></a>snapshots</h4><p>snapshots used to save the state(disk mem, time..) of a domain</p>
+<ul>
+<li>create a snapshot for a vm </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-create-as --domain test_vm  \</div><div class="line">--name <span class="string">"test_vm_snapshot1"</span> \ </div><div class="line">--description <span class="string">"test vm snapshot "</span></div></pre></td></tr></table></figure>
+<ul>
+<li>list all snapshots for vm</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-list test_vm</div></pre></td></tr></table></figure>
+<ul>
+<li>display info about a snapshot </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-info --domain test_vm --snapshotname test_vm_snapshot1</div><div class="line">``` </div><div class="line"></div><div class="line">* delete a snapshot </div><div class="line"></div><div class="line">```sh</div><div class="line">virsh snapshot-delete --domain test_vm --snapshotname test_vm_shapshot1</div></pre></td></tr></table></figure>
+<h4 id="manage-volumes"><a href="#manage-volumes" class="headerlink" title="manage volumes"></a>manage volumes</h4><ul>
+<li>create a storage volume</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh vol-create-as default test_vol.qcow2 10G</div><div class="line"><span class="comment"># create test_vol on the deafult storage pool</span></div><div class="line">du -sh /var/lib/libvirt/images/test_vol.qcow2</div></pre></td></tr></table></figure>
+<ul>
+<li>attach  to a vm</li>
+</ul>
+<p>attache <code>test-vol</code> to vm <code>test</code> </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh attach-disk --domain <span class="built_in">test</span> \</div><div class="line">--<span class="built_in">source</span> /var/lib/libvirt/images/<span class="built_in">test</span>-vol.qcow2 \</div><div class="line">--persistent --target vdb</div></pre></td></tr></table></figure>
+<p>which can be check that the vm has added a block device <code>/dev/vdb</code> </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh <span class="built_in">test</span>  <span class="comment">#how to ssh to vm </span></div><div class="line">lsblk --output NAME,SIZE,TYPE</div></pre></td></tr></table></figure>
+<p>or directly grow disk image:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-img resize /var/lib/libvirt/images/test.qcow2 +1G</div></pre></td></tr></table></figure>
+<ul>
+<li>detach from a vm</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh detach-disk --domain <span class="built_in">test</span> --persistent --live --target vdb</div></pre></td></tr></table></figure>
+<ul>
+<li>delete a vm </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh vol-delete test_vol.qcow2 --pool default</div><div class="line">virsh pool-refresh default</div><div class="line">virsh vol-list default</div></pre></td></tr></table></figure>
+<h4 id="fs-virsh-commands"><a href="#fs-virsh-commands" class="headerlink" title="fs virsh commands"></a>fs virsh commands</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">virt-ls -l -d &lt;domain&gt; &lt;directory&gt;</div><div class="line">virt-cat -d &lt;domain&gt; &lt;file_path&gt;</div></pre></td></tr></table></figure>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://www.178linux.com/103971" target="_blank" rel="external">kvm introduction in chinese</a></p>
+<p><a href="https://help.ubuntu.com/community/KVM/Installation" target="_blank" rel="external">kvm pre-install checklist</a></p>
+<p><a href="http://www.yolinux.com/TUTORIALS/LinuxTutorialNetworking.html" target="_blank" rel="external">Linux network configuration</a></p>
+<p><a href="https://help.ubuntu.com/community/KVM/Installation" target="_blank" rel="external">kvm installation official doc</a></p>
+<p><a href="https://graspingtech.com/creating-virtual-machine-virt-install/" target="_blank" rel="external">creating vm with virt-install</a></p>
+<p><a href="https://linuxhint.com/install_kvm_ubuntu/" target="_blank" rel="external">install KVM in ubuntu</a></p>
+<p><a href="https://www.jianshu.com/p/110b60c14a8b" target="_blank" rel="external">jianshu: kvm network configure</a></p>
+<p><a href="https://www.cnblogs.com/CloudMan6/p/5308071.html" target="_blank" rel="external">cloudman: understand virbr0</a></p>
+<p><a href="https://libvirt.org/sources/virshcmdref/html-single/" target="_blank" rel="external">virsh command refer</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/linux/1409_qiaoly_qemuimgages/index.html" target="_blank" rel="external">qcow2  vs  raw</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kvm/" rel="tag"># kvm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/20/real-time-matlab-simulink-code-generation/" rel="next" title="real-time matlab/simulink code generation">
+                <i class="fa fa-chevron-left"></i> real-time matlab/simulink code generation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="David Z.J. Lee" />
+          <p class="site-author-name" itemprop="name">David Z.J. Lee</p>
+           
+              <p class="site-description motion-element" itemprop="description">what I don't know</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">164</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ZJLi2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/zhengjia13/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#kvm-background"><span class="nav-number">1.</span> <span class="nav-text">kvm background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-kvm"><span class="nav-number">2.</span> <span class="nav-text">install kvm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#network-in-kvm"><span class="nav-number">2.0.1.</span> <span class="nav-text">network in kvm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-vm"><span class="nav-number">3.</span> <span class="nav-text">create vm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#virt-install"><span class="nav-number">3.1.</span> <span class="nav-text">virt-install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config-xml"><span class="nav-number">3.2.</span> <span class="nav-text">config.xml</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#vm-xml"><span class="nav-number">3.2.1.</span> <span class="nav-text">vm.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tty"><span class="nav-number">3.2.2.</span> <span class="nav-text">tty</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#libvert"><span class="nav-number">4.</span> <span class="nav-text">libvert</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#common-virsh-commands"><span class="nav-number">4.0.1.</span> <span class="nav-text">common virsh commands</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#virsh-network-commands"><span class="nav-number">4.0.2.</span> <span class="nav-text">virsh network commands</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#snapshots"><span class="nav-number">4.0.3.</span> <span class="nav-text">snapshots</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#manage-volumes"><span class="nav-number">4.0.4.</span> <span class="nav-text">manage volumes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fs-virsh-commands"><span class="nav-number">4.0.5.</span> <span class="nav-text">fs virsh commands</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">5.</span> <span class="nav-text">refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Z.J. Lee</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/03/24/kvm-libvert-in-linux-1/';
+          this.page.identifier = '2020/03/24/kvm-libvert-in-linux-1/';
+          this.page.title = 'kvm/libvert in linux (1)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
