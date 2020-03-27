@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="python," />
+  <meta name="keywords" content="linux,kvm," />
 
 
 
@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="unittestwhy unit test ?unit test is to test the components of a program automatically. a few good reasons of unit tests:  test driving practice  early sanity checking  for regression test, that the ne">
-<meta name="keywords" content="python">
+<meta name="description" content="history of terminalin history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host com">
+<meta name="keywords" content="linux,kvm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python modules in help">
-<meta property="og:url" content="http://yoursite.com/2019/09/18/python-modules-in-help/index.html">
+<meta property="og:title" content="kvm in linux (2)">
+<meta property="og:url" content="http://yoursite.com/2020/03/27/kvm-in-linux-2/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="unittestwhy unit test ?unit test is to test the components of a program automatically. a few good reasons of unit tests:  test driving practice  early sanity checking  for regression test, that the ne">
+<meta property="og:description" content="history of terminalin history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host com">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-19T13:35:00.125Z">
+<meta property="og:updated_time" content="2020-03-27T08:04:55.817Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python modules in help">
-<meta name="twitter:description" content="unittestwhy unit test ?unit test is to test the components of a program automatically. a few good reasons of unit tests:  test driving practice  early sanity checking  for regression test, that the ne">
+<meta name="twitter:title" content="kvm in linux (2)">
+<meta name="twitter:description" content="history of terminalin history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host com">
 
 
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/09/18/python-modules-in-help/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/03/27/kvm-in-linux-2/"/>
 
 
 
 
 
-  <title>python modules in help | Serious Autonomous Vehicles</title>
+  <title>kvm in linux (2) | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +291,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/python-modules-in-help/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/kvm-in-linux-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +308,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python modules in help</h1>
+          <h1 class="post-title" itemprop="name headline">kvm in linux (2)</h1>
         
 
         <div class="post-meta">
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T09:09:48-04:00">
-                2019-09-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-27T04:04:00-04:00">
+                2020-03-27
               </time>
             
 
@@ -339,9 +339,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/09/18/python-modules-in-help/#comments" itemprop="discussionUrl">
+                <a href="/2020/03/27/kvm-in-linux-2/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/18/python-modules-in-help/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/03/27/kvm-in-linux-2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,113 +366,112 @@
       
 
       
-        <h2 id="unittest"><a href="#unittest" class="headerlink" title="unittest"></a>unittest</h2><h3 id="why-unit-test"><a href="#why-unit-test" class="headerlink" title="why unit test ?"></a>why unit test ?</h3><p>unit test is to test the components of a program automatically. a few good reasons of unit tests:</p>
+        <h2 id="history-of-terminal"><a href="#history-of-terminal" class="headerlink" title="history of terminal"></a>history of terminal</h2><p>in history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host computer can run multi-users, each of which needs a terminal. </p>
+<p>when times goes to personal computer(PC), there is no need for multi-users login, so each PC has integrated with I/O device(monitor and keybord)</p>
+<p>nowadays, we have plenty of end-user terminals, e.g. smart phone, smart watch, Ipad e.t.c, all of these are <code>terminal</code>, as the real host computer is in cloud now. </p>
+<p>in a word, any device that can accept input and display output is a <code>terminal</code>, which play the role as the human-machine interface.</p>
+<h4 id="three-kinds-of-terminal"><a href="#three-kinds-of-terminal" class="headerlink" title="three kinds of terminal"></a>three kinds of terminal</h4><p>ssh is TCP/IP protocol, what’s inside is the remote terminal streaming flow.  the TCP/IP plays as the tunnel. of course, any communication protocol can play the role as the <code>tunnel</code>. </p>
 <ul>
-<li>test driving practice </li>
-<li>early sanity checking </li>
-<li>for regression test, that the new changes won’t break early work </li>
-<li>unit test is to test the isolated piece of code, usually white box test written by developer; functional test is to test the function requirements, usually black box test written by testers.</li>
-</ul>
-<p>the testcase output can be <code>OK</code>, <code>FAIL</code>, <code>ERROR</code>.</p>
-<h3 id="assertion-functions"><a href="#assertion-functions" class="headerlink" title="assertion functions"></a>assertion functions</h3><ul>
-<li><p>basic boolean asserts:</p>
-<pre><code>assertEqual(arg1, arg2, msg=None)
-assertIsNot(arg1, arg2, msg=None)
-</code></pre></li>
-<li><p>comparative asserts:</p>
-<pre><code>assertAlmostEqual(first, second, places=7, msg=None, delta=None)
-</code></pre></li>
-<li><p>asserts for collections:</p>
-<pre><code>assertListEqual(list1, list2, msg=None)
-assertTupleEqual(tuple1, tuple2, msg=None)
-assertSetEqual(set1, set2, msg=None)
-assertDictEqual(dic1, dic2, msg=None)    
-</code></pre><h3 id="command-line-interface"><a href="#command-line-interface" class="headerlink" title="command line interface"></a>command line interface</h3></li>
-<li><p>run all unittests</p>
-<pre><code>python3 -m unittest discover -v -c
-</code></pre></li>
-<li><p>run single test module</p>
-<pre><code>python3 -m unittest -v -c tests/test_XXXX.py
-</code></pre></li>
-<li><p>run individual test case</p>
-<pre><code>python3 -m unittest -v tests.test_XXX.TestCaseXXX.test_XXX
-</code></pre></li>
-</ul>
-<h2 id="how-to-write-a-unittest"><a href="#how-to-write-a-unittest" class="headerlink" title="how to write a unittest"></a>how to write a unittest</h2><h3 id="unittest-TestCase"><a href="#unittest-TestCase" class="headerlink" title="unittest.TestCase"></a>unittest.TestCase</h3><p>any user defined test class should first derived from <code>unittest.TestCase</code> </p>
-<h3 id="setUp-amp-tearDown"><a href="#setUp-amp-tearDown" class="headerlink" title="setUp() &amp; tearDown()"></a>setUp() &amp; tearDown()</h3><p>setUp() provides the way to set up things before running any method starting with <code>test_xx()</code>  in user defined test class. tearDown() is where to end the setting ups </p>
-<h3 id="depends-on-other-modules-class"><a href="#depends-on-other-modules-class" class="headerlink" title="depends on other modules/class"></a>depends on other modules/class</h3><p>usually the class/methods we try to test have depends on other modules/class, but as unit test want to isolate these depends, so either mock the other methods or fake data. in general there are three types of depends:</p>
-<h4 id="pure-variable"><a href="#pure-variable" class="headerlink" title="pure variable"></a>pure variable</h4><p>this is the most simple case, then you can directly define the same pure type variable in your <code>test_xx()</code> method </p>
-<h4 id="methods-in-other-modules"><a href="#methods-in-other-modules" class="headerlink" title="methods in other modules"></a>methods in other modules</h4><p>here need to use <code>patch</code>, to mock the method and define its return value is your <code>test_xx()</code> method, then in the class where call the real method will be replace by this mocked one.</p>
-<h4 id="methods-in-other-class"><a href="#methods-in-other-class" class="headerlink" title="methods in other class"></a>methods in other class</h4><p>here need to use <code>mock</code>, either MagicMock or Mock will works.</p>
-<h3 id="mock-amp-patch"><a href="#mock-amp-patch" class="headerlink" title="mock &amp; patch"></a>mock &amp; patch</h3><p><a href="https://docs.python.org/3/library/unittest.mock.html" target="_blank" rel="external">mock module</a> is built in <code>unittest.mock</code> after a later Python version, if not, <code>mock</code> module can be installed by <strong>pip install mock</strong>, then directly <code>import mock</code> in code.</p>
-<p>the philosophy of unit test is to isolate classes test, but in reality most classes have some instances of other classes, so to test the ego class isolated from other classes, that’s where <code>mock</code> helps. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> mock <span class="keyword">import</span> MagicMock, patch</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestScenario</span><span class="params">(TestCase)</span>:</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_mock</span><span class="params">(self)</span>:</span></div><div class="line">		sim.method = MagicMock(return_value=<span class="string">"xx"</span>)</div><div class="line">		agent = sim.method()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div><div class="line">		</div><div class="line"><span class="meta">	@patch("module/add_agent")</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_patch</span><span class="params">(self, mock_add_agent)</span>:</span></div><div class="line">		mock_add_agent.return_value = <span class="string">"xx"</span></div><div class="line">		agent = module.add_agent()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div></pre></td></tr></table></figure>
-<p><code>Mock</code> helps to mock the method in a class, while <code>patch</code> helps to mock a global method in a module.</p>
-<h3 id="automatical-unittest-generator"><a href="#automatical-unittest-generator" class="headerlink" title="automatical unittest generator"></a>automatical unittest generator</h3><p>there are projects assit to generate unittest code automatically, e.g <a href="">auger</a></p>
-<h3 id="test-with-while-Loop"><a href="#test-with-while-Loop" class="headerlink" title="test with while Loop"></a>test with while Loop</h3><p>TODO</p>
-<h3 id="test-with-raise-Error"><a href="#test-with-raise-Error" class="headerlink" title="test with raise Error"></a>test with raise Error</h3><p>TODO</p>
-<h2 id="coverage-py"><a href="#coverage-py" class="headerlink" title="coverage.py"></a>coverage.py</h2><ul>
-<li><p>(one time only) install coverage.py</p>
-<p>  pip3 install –user coverage</p>
+<li><p>local terminal, with usb to keyboard and monitor. </p>
 </li>
-<li><p>run all tests with coverage</p>
-<p>  ~/.local/bin/coverage run -m unittest discover</p>
+<li><p>serial terminal, the guest machine connect to the host machine, who has keyboard and monitor. basically the guest machine borrow the host machine’s IO, which needs the host machine to run a terminal elmulator.</p>
 </li>
-<li><p>generate html report</p>
-<p>  ~/.local/bin/coverage html –omit “~/.local/<em>“,”tests/</em>“</p>
+<li><p>tcp/ip tunnel terminal, e.g. ssh</p>
 </li>
 </ul>
-<p>ps, output is in htmlcov/index.html</p>
-<h2 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h2><p><code>logging()</code> supports more detail message type(info, warn, error, debug) than <code>print()</code>, and the message format is more strict with <code>\%</code>. while <code>print()</code> works both formatted message and message as string simply:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(<span class="string">"1+1 = "</span>, num)</div><div class="line">print(<span class="string">"1+1 = %d"</span>, % num)</div></pre></td></tr></table></figure>
-<p>the following is a general log class, which can plug in any existing Python project:</p>
-<pre><code class="python">
-<span class="keyword">import</span> logging 
-<span class="keyword">import</span> os 
-
-<span class="class"><span class="keyword">class</span> <span class="title">log</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, logger_name)</span>:</span>
-        self.log = logging.getLogger(logger_name)
-        self.log.setLevel(logging.DEBUG)
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.DEBUG)
-        self.log.addHandler(console_handler)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">set_output_file</span><span class="params">(self, filename)</span>:</span>
-        file_handler = logging.FileHandler(filename)
-        file_handler.setLevel(logging.INFO)
-        formatter = logging.Formatter(<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)
-        file_handler.setFormatter(formatter)
-        self.log.addHandler(file_handler)
-
-<span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span>
-    test = log(<span class="string">'scenario-mm'</span>)
-    file_name = <span class="string">"record.log"</span> 
-    dir_name = <span class="string">"/home/python_test/"</span>
-    <span class="keyword">try</span>:
-        os.makedirs(dir_name)
-    <span class="keyword">except</span> OSError:
-        <span class="keyword">pass</span> 
-    file_path =  os.path.join(dir_name, file_name)
-    test.set_output_file(file_path)
-    test.log.debug(<span class="string">"debug in episode 1..."</span>)
-    test.log.info(<span class="string">"info ..."</span>)
-    test.log.warning(<span class="string">"warn ..."</span>)
-    test2 = log(<span class="string">"zjjj"</span>)
-    test2.set_output_file(<span class="string">'record.log'</span>)
-    test2.log.info(<span class="string">"test2 info"</span>)
-    test2.log.warning(<span class="string">"test2 warn"</span>)
-
-
-<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
-    main()
-</code></pre>
-<h2 id="pygame"><a href="#pygame" class="headerlink" title="pygame"></a>pygame</h2><h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.cnblogs.com/beer/p/5075619.html" target="_blank" rel="external">python automatic test series</a></p>
-<p><a href="https://github.com/laffra/auger" target="_blank" rel="external">auger: automated Unittest generation for Python</a></p>
-<p><a href="https://docs.python.org/3/library/unittest.html" target="_blank" rel="external">unittest official</a></p>
-<p><a href="https://github.com/lgsvl/PythonAPI/tree/master/tests" target="_blank" rel="external">unittest in lg-sim project</a></p>
-<p><a href="https://coverage.readthedocs.io/en/stable/" target="_blank" rel="external">coverage.py official</a>  </p>
-<p><a href="https://www.jianshu.com/p/013b9bdecb0d" target="_blank" rel="external">unittest + mock + tox</a></p>
+<p>both local terminal and serial terminal, directly connect to physical device, e.g. VGA interface, usb, serial e.t.c, so both are called  <strong>physical terminal</strong>.  ssh has nothing to do with physical device. </p>
+<h4 id="tty"><a href="#tty" class="headerlink" title="tty"></a>tty</h4><p>in Linux,  <code>/dev/ttyX</code> represents a physical-terminal. from <code>tty1</code> to <code>tty63</code> are all local terminal. during Linux kernal init, 63 local terminals are generated, which can be switched by <code>Fn-Alt-Fx</code>, (x can be 1, 2, 3…). each current terminal is called <strong>focus terminal</strong>. </p>
+<p>focus terminal is taken as global variable, so any input will transfer to current focus terminal. for serial, there is no focus terminal. </p>
+<p>in Linux,  <code>/dev/console</code> represents current <strong>focus terminal</strong>, consider as a pointer to current focus terminal, wherever write sth to <code>/dev/console</code> will present at current focus terminal. </p>
+<p><code>/dev/tty</code> is the global variable itself. whichever terminal you are working with, when write to <code>/dev/tty</code>, it will be present.</p>
+<p><code>/dev/ttyS#num#</code> represents <strong>serial terminal</strong>. </p>
+<h4 id="getty-amp-login"><a href="#getty-amp-login" class="headerlink" title="getty &amp; login"></a>getty &amp; login</h4><p>in multi-terminal time, each terminal must bind to one user, user must first login the terminal, <code>getty</code> is the login process, which is called in <code>init</code>. after login successfully, the terminal <code>tty#num#</code> can be owned by the user. </p>
+<p>there are a few differenet version of <code>getty</code>, e.g. <code>agetty</code> e.t.c.</p>
+<h4 id="pty-amp-pts"><a href="#pty-amp-pts" class="headerlink" title="pty &amp; pts"></a>pty &amp; pts</h4><p>pty stands for <code>pseudo-tty</code>, pty is a (master-slave) pair terminal device, including:  pts <code>pseudo-terminal slave</code>, and ptmx <code>pseudo-terminal master</code>. </p>
+<p>a few concepts as following: </p>
+<ul>
+<li><p>serial terminal  <code>/dev/ttySn</code></p>
+</li>
+<li><p>pseudo-termianl  <code>/dev/pty/</code></p>
+</li>
+<li><p>controlling terminal <code>/dev/tty</code></p>
+</li>
+<li><p>console terminal  <code>/dev/console</code></p>
+</li>
+</ul>
+<h2 id="Linux-Serial-Console"><a href="#Linux-Serial-Console" class="headerlink" title="Linux Serial Console"></a>Linux Serial Console</h2><h4 id="serial-communication"><a href="#serial-communication" class="headerlink" title="serial communication"></a>serial communication</h4><p>in old-style PC, serial is COM interface, also called <code>DB9 interface</code>, with RS-232 standard. </p>
+<p>each user can connect to host machine through a <strong>terminal</strong>. <code>console</code> is same as <code>terminal</code> to connect user to host machine, but <code>console</code> is higher priority than <code>terminal</code>. nowadays less difference between terminal and console.  </p>
+<p><code>Teletype</code> is the earliest terminal device, <code>tty</code> is physical or pseudo terminal connect to the host machine, nowadays <code>tty</code> also used for serial device.</p>
+<p><code>serial</code> is the connection from terminal/keyboard to dev-board. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls /dev/tty*</div></pre></td></tr></table></figure>
+<h4 id="configuration"><a href="#configuration" class="headerlink" title="configuration"></a>configuration</h4><p>Linux kernel must be configured to use the serial port as its console, which is done by passing the kernel the <code>console</code> parameter when the kernel is started by the boot loader.</p>
+<p>the init system should keep a process runnign to monitor the serial console for logins, the monitoring process is traditionally named <strong>getty</strong></p>
+<p>a number of system utilities need to be configured tomake them aware of the console, or configured to prevent them from disrupting the console.</p>
+<h4 id="serial-port"><a href="#serial-port" class="headerlink" title="serial port"></a>serial port</h4><p>Linux names as the first serial port has the file name <code>/dev/ttys0</code>, the second serial port has the file name <code>/dev/ttyS1</code> and so on. most boot loaders have yet another naming scheme, the first serial port is numbered <code>0</code>, the second serial port is numbered <code>1</code></p>
+<h4 id="configure-GRUB-boot-loader"><a href="#configure-GRUB-boot-loader" class="headerlink" title="configure GRUB boot loader"></a>configure GRUB boot loader</h4><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/configure-boot-loader-grub.html" target="_blank" rel="external">configure GRUB to use the serial console</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">info grub</div><div class="line">/boot/grub/grub.cfg</div><div class="line">serial --unit=0 --speed=9600 --word=8 --parity=no --stop=1 </div><div class="line">terminal serial</div></pre></td></tr></table></figure>
+<h4 id="init-system"><a href="#init-system" class="headerlink" title="init system"></a>init system</h4><p>getty is started by <code>init</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">co:2345:respawn:/sbin/getty ttyS0 CON9600 vt102</div></pre></td></tr></table></figure>
+<ul>
+<li><p><code>co</code> is an arbitrary entry, representing <code>console</code></p>
+</li>
+<li><p><code>2345</code>, run levels where this entry gets started. </p>
+</li>
+<li><p><code>respawn</code>, re-run the program if it dies</p>
+</li>
+<li><p><code>/sbin/getty ttyS0 CON9600 vt102</code>, getty connecting to /dev/ttyS0 with the settings for CON9600bps, and the terminal is VT100 model</p>
+</li>
+</ul>
+<h2 id="virsh-console"><a href="#virsh-console" class="headerlink" title="virsh console"></a>virsh console</h2><p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-enable-kvm-virsh-console-access-ubuntu-linux-vm" target="_blank" rel="external">how to</a> connect ubuntu kvm virtual machine through serial console. in earlier version and distributions, it need to configure serial console in grub file, but in Ubuntu it’s very easy adn reliable as most of configurations and settings are already configured in OS.</p>
+<h4 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h4><p>runs ubuntu14.04 guest mahcine on ubuntu 16.04 host machine. how to setup serial console, we have to connect guest machine and login on as root user</p>
+<h4 id="login-through-SSH"><a href="#login-through-SSH" class="headerlink" title="login through SSH"></a>login through SSH</h4><ul>
+<li>connect on KVM guest machine through ssh from host machine </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh 192.168.122.1</div><div class="line">hostname</div></pre></td></tr></table></figure>
+<h4 id="connect-through-VNC"><a href="#connect-through-VNC" class="headerlink" title="connect through VNC"></a>connect through VNC</h4><p>conenct guest machine through VNC viewer and setup <code>serial console</code>. There are times when we need to troubleshoot Virtual Machines with unknown status like Hang in between, IP address issues, password problems, Serial console Hang etc. In case scenarios, we could relay on VNC configuration of KVM Guest Machines. </p>
+<p>vnc viewer is a graphic viewer, so only need add <code>graphics</code> component in <a href="http://www.geekpills.com/wp-content/uploads/2017/08/ubuntu-17.04.txt" target="_blank" rel="external">config.xml</a>:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">graphics</span> <span class="attr">type</span>=<span class="string">'vnc'</span> <span class="attr">port</span>=<span class="string">'-1'</span> <span class="attr">autoport</span>=<span class="string">'yes'</span> <span class="attr">passwd</span>=<span class="string">'mypassword'</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>run <code>virsh vncdisplay #vm_name#</code> we can get our vnc (server) IP, which then can be accessed by <code>vnc guest viewer</code>. here, <code>kvm virtual machine</code> has implemented a vnc server, and any <code>vnc viewer</code> in the same physical machine, can access this vnc server, even without external networking. </p>
+<h4 id="configure-serial-console-in-ubuntu-guest"><a href="#configure-serial-console-in-ubuntu-guest" class="headerlink" title="configure serial console in ubuntu guest"></a>configure serial console in ubuntu guest</h4><p>after getting login console, we can start <code>serial console</code> and enable it with:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># systemctl start serial-getty@ttyS0</span></div><div class="line"><span class="comment"># systemctl enable serial-getty@ttyS0</span></div><div class="line">Created symlink /etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service → /lib/systemd/system/serial-getty@.service.</div></pre></td></tr></table></figure>
+<p>now we can connect <code>serial console</code> with <code>virsh console</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh console vm_name</div></pre></td></tr></table></figure>
+<p>after installnation, reboot first, then the physical machine has dual-OS: <a href="https://www.server-world.info/en/note?os=Ubuntu_14.04&amp;p=kvm&amp;f=2" target="_blank" rel="external">GuestOS and HostOS</a>, which can exit GuestOS by <code>Ctrl + ]</code>, or login GuestOS by <code>virsh consoel #guest_vm#</code></p>
+<p><strong>in summary</strong>, <code>virsh console</code> implement a serial console for kvm guest machine, which connect the guest machine to host machine through <code>serial</code>, which is not a <code>ssh</code>, need new knowledges about <code>serial</code>. </p>
+<h2 id="virsh-console-hangs"><a href="#virsh-console-hangs" class="headerlink" title="virsh console hangs"></a>virsh console hangs</h2><p><code>virsh console vm</code> hangs at: <code>Escape character is ^]</code>, which can exit by <strong>ctrl + ]</strong> </p>
+<h4 id="sol1"><a href="#sol1" class="headerlink" title="sol1:"></a><a href="https://stackoverflow.com/questions/11845280/virsh-console-hangs-at-the-escape-character" target="_blank" rel="external">sol1</a>:</h4><p>go to guest machine/terminal, and edit <code>/etc/default/grub</code>, appending;</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRUB_TERMINAL=serial</div><div class="line">GRUB_SERIAL_COMMAND=<span class="string">"serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1"</span></div></pre></td></tr></table></figure>
+<p>then execute:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">update-grub</div><div class="line">reboot</div></pre></td></tr></table></figure>
+<p>the problem here, as the KVM vm shares the kernel of the host machine, if update <code>grub</code>, the host machine will reboot with serial connection(?)</p>
+<h4 id="Centos-virsh-console-hangs"><a href="#Centos-virsh-console-hangs" class="headerlink" title="Centos virsh console hangs"></a><a href="https://www.cnblogs.com/xieshengsen/p/6215168.html" target="_blank" rel="external">Centos virsh console hangs</a></h4><ul>
+<li><p>go to <code>/etc/securetty</code> and append <code>ttyS0</code></p>
+</li>
+<li><p>append <code>S0:12345:respawn:/sbin/agetty ttyS0 115200</code> to <code>/etc/init/ttyS0.conf</code></p>
+</li>
+<li><p>/etc/grub.conf(Centos) </p>
+</li>
+</ul>
+<p>I only found <code>/boot/grub/grub.cfg</code> in ubuntu. In the <code>kernel</code> line, appending <code>console=ttyS0</code>. but there is no <code>kernel</code> line in <code>ubuntu grub.cfg</code>.</p>
+<h4 id="Ubuntu-virsh-console-hangs"><a href="#Ubuntu-virsh-console-hangs" class="headerlink" title="Ubuntu virsh console hangs"></a><a href="https://www.cnblogs.com/sixloop/p/8044785.html" target="_blank" rel="external">Ubuntu virsh console hangs</a></h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="built_in">disable</span> systemd-networkd-wait-online</div><div class="line">systemctl <span class="built_in">enable</span> serial-getty@ttyS0.service</div><div class="line">systemctl start serial-getty@ttyS0.service</div></pre></td></tr></table></figure>
+<p>which gives: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Mar 27 11:17:18 ubuntu systemd[1]: Started Serial Getty on ttyS0.</div><div class="line">Mar 27 11:17:18 ubuntu agetty[445120]: /dev/ttyS0: not a tty</div></pre></td></tr></table></figure>
+<p>check in <code>/dev/ttyS*</code> : </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">crw-rw---- 1 root dialout 4, 73 Mar 24 09:20 ttyS9</div><div class="line">crw--w---- 1 root tty     4, 64 Mar 24 09:20 ttyS0</div><div class="line">crw-rw---- 1 root dialout 4, 65 Mar 24 09:20 ttyS1</div></pre></td></tr></table></figure>
+<p>interesting here,  <code>ttyS0</code> belongs to <code>tty</code> group, all otehr <code>ttyS#num#</code> belongs to <code>dialout</code> group. </p>
+<h5 id="tty-and-dialout"><a href="#tty-and-dialout" class="headerlink" title="tty and dialout"></a>tty and dialout</h5><p><a href="https://stackoverflow.com/questions/30846176/how-to-change-tty-group-on-linux-build-with-buildroot" target="_blank" rel="external">change /dev/ttyS0 to tty group</a></p>
+<p><a href="https://askubuntu.com/questions/210177/serial-port-terminal-cannot-open-dev-ttys0-permission-denied" target="_blank" rel="external">can’t access /dev/ttyS</a></p>
+<p>add USER to tty/dialout group</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo usermod -a -G tty <span class="variable">$USER</span></div><div class="line">sudo usermod -a -G dialout <span class="variable">$USER</span></div></pre></td></tr></table></figure>
+<p>reboot and go on</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/" target="_blank" rel="external">remote serial console HOWTO</a></p>
+<p><a href="https://www.cnblogs.com/huan-huan/p/8522472.html" target="_blank" rel="external">remote serial console HOWTO in Chinese</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1527544" target="_blank" rel="external">understand Linux terminal history in Chinese</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1533217" target="_blank" rel="external">Linux terminal introduction in Chinese</a></p>
+<p><a href="https://tutorial.linux.doc.embedfire.com/zh_CN/latest/linux_app/uart_tty.html" target="_blank" rel="external">serial communication in Chinese</a></p>
+<p><a href="https://wiki.archlinux.org/index.php/Working_with_the_serial_console" target="_blank" rel="external">arhLinux: working with the serial console</a></p>
+<p><a href="https://www.gnu.org/software/grub/manual/grub/grub.html" target="_blank" rel="external">gnu org: grub</a></p>
+<p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-start-vnc-remote-access-guest-operating-systems" target="_blank" rel="external">geekpills: start vnc remote access for guest operating systems</a></p>
 
       
     </div>
@@ -502,7 +501,9 @@ assertDictEqual(dic1, dic2, msg=None)
       
         <div class="post-tags">
           
-            <a href="/tags/python/" rel="tag"># python</a>
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/kvm/" rel="tag"># kvm</a>
           
         </div>
       
@@ -515,8 +516,8 @@ assertDictEqual(dic1, dic2, msg=None)
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/14/math-in-ADS-system/" rel="next" title="math in ADS system">
-                <i class="fa fa-chevron-left"></i> math in ADS system
+              <a href="/2020/03/24/kvm-libvert-in-linux-1/" rel="next" title="kvm/libvert in linux (1)">
+                <i class="fa fa-chevron-left"></i> kvm/libvert in linux (1)
               </a>
             
           </div>
@@ -524,10 +525,6 @@ assertDictEqual(dic1, dic2, msg=None)
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/09/18/reinforcement-learning-in-nutshell-1/" rel="prev" title="reinforcement learning in nutshell-1">
-                reinforcement learning in nutshell-1 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -675,7 +672,7 @@ assertDictEqual(dic1, dic2, msg=None)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#unittest"><span class="nav-number">1.</span> <span class="nav-text">unittest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#why-unit-test"><span class="nav-number">1.1.</span> <span class="nav-text">why unit test ?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#assertion-functions"><span class="nav-number">1.2.</span> <span class="nav-text">assertion functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#command-line-interface"><span class="nav-number">1.3.</span> <span class="nav-text">command line interface</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#how-to-write-a-unittest"><span class="nav-number">2.</span> <span class="nav-text">how to write a unittest</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#unittest-TestCase"><span class="nav-number">2.1.</span> <span class="nav-text">unittest.TestCase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setUp-amp-tearDown"><span class="nav-number">2.2.</span> <span class="nav-text">setUp() & tearDown()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#depends-on-other-modules-class"><span class="nav-number">2.3.</span> <span class="nav-text">depends on other modules/class</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#pure-variable"><span class="nav-number">2.3.1.</span> <span class="nav-text">pure variable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#methods-in-other-modules"><span class="nav-number">2.3.2.</span> <span class="nav-text">methods in other modules</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#methods-in-other-class"><span class="nav-number">2.3.3.</span> <span class="nav-text">methods in other class</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mock-amp-patch"><span class="nav-number">2.4.</span> <span class="nav-text">mock & patch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#automatical-unittest-generator"><span class="nav-number">2.5.</span> <span class="nav-text">automatical unittest generator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-with-while-Loop"><span class="nav-number">2.6.</span> <span class="nav-text">test with while Loop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#test-with-raise-Error"><span class="nav-number">2.7.</span> <span class="nav-text">test with raise Error</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coverage-py"><span class="nav-number">3.</span> <span class="nav-text">coverage.py</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logging"><span class="nav-number">4.</span> <span class="nav-text">logging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pygame"><span class="nav-number">5.</span> <span class="nav-text">pygame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">6.</span> <span class="nav-text">refer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#history-of-terminal"><span class="nav-number">1.</span> <span class="nav-text">history of terminal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#three-kinds-of-terminal"><span class="nav-number">1.0.1.</span> <span class="nav-text">three kinds of terminal</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tty"><span class="nav-number">1.0.2.</span> <span class="nav-text">tty</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getty-amp-login"><span class="nav-number">1.0.3.</span> <span class="nav-text">getty & login</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pty-amp-pts"><span class="nav-number">1.0.4.</span> <span class="nav-text">pty & pts</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-Serial-Console"><span class="nav-number">2.</span> <span class="nav-text">Linux Serial Console</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#serial-communication"><span class="nav-number">2.0.1.</span> <span class="nav-text">serial communication</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configuration"><span class="nav-number">2.0.2.</span> <span class="nav-text">configuration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serial-port"><span class="nav-number">2.0.3.</span> <span class="nav-text">serial port</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-GRUB-boot-loader"><span class="nav-number">2.0.4.</span> <span class="nav-text">configure GRUB boot loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#init-system"><span class="nav-number">2.0.5.</span> <span class="nav-text">init system</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#virsh-console"><span class="nav-number">3.</span> <span class="nav-text">virsh console</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#setup"><span class="nav-number">3.0.1.</span> <span class="nav-text">setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#login-through-SSH"><span class="nav-number">3.0.2.</span> <span class="nav-text">login through SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#connect-through-VNC"><span class="nav-number">3.0.3.</span> <span class="nav-text">connect through VNC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-serial-console-in-ubuntu-guest"><span class="nav-number">3.0.4.</span> <span class="nav-text">configure serial console in ubuntu guest</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#virsh-console-hangs"><span class="nav-number">4.</span> <span class="nav-text">virsh console hangs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sol1"><span class="nav-number">4.0.1.</span> <span class="nav-text">sol1:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Centos-virsh-console-hangs"><span class="nav-number">4.0.2.</span> <span class="nav-text">Centos virsh console hangs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ubuntu-virsh-console-hangs"><span class="nav-number">4.0.3.</span> <span class="nav-text">Ubuntu virsh console hangs</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tty-and-dialout"><span class="nav-number">4.0.3.1.</span> <span class="nav-text">tty and dialout</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">5.</span> <span class="nav-text">refer</span></a></li></ol></div>
             
 
           </div>
@@ -818,9 +815,9 @@ assertDictEqual(dic1, dic2, msg=None)
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/09/18/python-modules-in-help/';
-          this.page.identifier = '2019/09/18/python-modules-in-help/';
-          this.page.title = 'python modules in help';
+          this.page.url = 'http://yoursite.com/2020/03/27/kvm-in-linux-2/';
+          this.page.identifier = '2020/03/27/kvm-in-linux-2/';
+          this.page.title = 'kvm in linux (2)';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';
