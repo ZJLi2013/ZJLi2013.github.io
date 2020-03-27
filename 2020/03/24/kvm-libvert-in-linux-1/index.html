@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="kvm backgroundkernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine i">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-03-25T01:27:46.911Z">
+<meta property="og:updated_time" content="2020-03-27T06:42:28.351Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kvm&#x2F;libvert in linux (1)">
 <meta name="twitter:description" content="kvm backgroundkernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine i">
@@ -411,7 +411,10 @@
 <p>basically the vm can access external website, but external web can’t access vm_name.</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attach-interface/detach-interface/domiflist</div></pre></td></tr></table></figure>
 <h2 id="create-vm"><a href="#create-vm" class="headerlink" title="create vm"></a>create vm</h2><p>create a virtual machine,  can be done either through <code>virt-install</code> or <code>config.xml</code>:</p>
-<h3 id="virt-install"><a href="#virt-install" class="headerlink" title="virt-install"></a>virt-install</h3><p>check <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">virsh networking doc</a>, but some arg options may out of date. </p>
+<h3 id="virt-install"><a href="#virt-install" class="headerlink" title="virt-install"></a>virt-install</h3><p><code>virt-install</code> has depends on system python, pip. if current ptyhon version is 2.7, it gives warnning and return -1 due to unfound module. so make sure the #PYTHONPATH# point to the correct path if you have multi python in system. and <code>virt-install</code> has to run with <code>root</code>. </p>
+<p>then can start a virtual machine with <a href="https://unix.stackexchange.com/questions/502560/virsh-connected-to-domain-name-escape-character-is" target="_blank" rel="external">following command options</a>)</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">sudo virt-install \</div><div class="line">--name v1 \</div><div class="line">--ram 2048 \</div><div class="line"><span class="comment"># --cdrom=ubuntu-16.04.3-server-amd64.iso \</span></div><div class="line">--disk path=/var/lib/libvirt/images/ubuntu.qcow2 \</div><div class="line">--vcpus 2 \</div><div class="line">--virt-type kvm \</div><div class="line">--os-type linux \</div><div class="line">--os-variant ubuntu16.04 \</div><div class="line">--graphics none \</div><div class="line">--console pty, target_type=serial \</div><div class="line">--location /var/lib/libvirt/images/ubuntu-16.04.3-server-amd64.iso \</div><div class="line">--network bridge:virbr0 \ </div><div class="line">--extra-args console=ttyS0</div></pre></td></tr></table></figure>
+<p>during the installation, the process looks very much like Linux installation on a bare machine. I suppose this way, it’s like install a dual-OS in the bare machine. during the installation, there is an error <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=833706" target="_blank" rel="external">failed to load installer component libc6-udeb</a>, it’s may due to the iso or img has missing component.</p>
 <h3 id="config-xml"><a href="#config-xml" class="headerlink" title="config.xml"></a>config.xml</h3><ul>
 <li><p>create volumes </p>
 <p>go to /var/lib/libvirt/images, and create volume as following: </p>
