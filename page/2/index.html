@@ -291,6 +291,141 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/design-a-logger-from-ws-to-db/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/09/design-a-logger-from-ws-to-db/" itemprop="url">design a logger from ws to db</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-09T03:54:00-04:00">
+                2020-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/09/design-a-logger-from-ws-to-db/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/09/design-a-logger-from-ws-to-db/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>for now, we had <a href="https://zjli2013.github.io/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" target="_blank" rel="external">design a file server from db to s3</a> and <a href="https://zjli2013.github.io/2020/03/07/asam-mdf-reader/" target="_blank" rel="external">mf reader</a> to feed data to the ads test module, which run in SIMD mode, e.g. k8s. for a closed-loop SIL, another component is how to record test message/outputs to database. </p>
+<p>I am thinking firstly <a href="https://stackoverflow.com/questions/1066413/eventdriven-webframework-for-python" target="_blank" rel="external">event driven webframework python</a>, or <a href="https://github.com/quantmind/pulsar" target="_blank" rel="external">plusar</a>, which is a popular python event-driven project. as lgsvl pythonAPI is really a good choice to transfer message among server and clients. so the basic idea is to integrate websocket/tcp channel inside aeb model</p>
+<h2 id="websocket-vs-tcp"><a href="#websocket-vs-tcp" class="headerlink" title="websocket vs tcp"></a>websocket vs tcp</h2><p>most ADAS models developed in OEM are matlab based, and the most common communication protocol in Matlab is <a href="https://www.mathworks.com/matlabcentral/fileexchange/345-tcp-udp-ip-toolbox-2-0-6" target="_blank" rel="external">UDP</a>, a little review about <a href="https://www.diffen.com/difference/TCP_vs_UDP" target="_blank" rel="external">tcp vs udp</a>, I personally don’t like udp, no reason. so narrow to <strong>TCP</strong>, the further question is:  should it be <a href="https://stackoverflow.com/questions/16945345/differences-between-tcp-sockets-and-web-sockets-one-more-time" target="_blank" rel="external">a raw TCP or Websocket</a>),  websocket enables a stream of messages instead of a stream of bytes. WebSockets is built on normal TCP sockets and uses frame headers that contains the size of each frame and indicate which frames are part of a message. The WebSocket API re-assembles the TCP chunks of data into frames which are assembled into messages before invoking the message event handler once per message. WebSocket is basically an application protocol (with reference to the ISO/OSI network stack), message-oriented, which makes use of TCP as transport layer. btw, TCP is bidirectional because it can send data in both directions, and it is full-duplex because it can do that simultaneously, without requiring line turnarounds, at the API level</p>
+<p>for ADAS test outputs, it’s plain txt, I’d prefer <strong>websocket</strong>. so make the decision. </p>
+<h3 id="matlab-websocket-client"><a href="#matlab-websocket-client" class="headerlink" title="matlab websocket client"></a>matlab websocket client</h3><p>there is an github project: <a href="https://github.com/jebej/MatlabWebSocket" target="_blank" rel="external">matlab websocket</a>, which is enough to implement a simple websocket in Matlab. <a href="https://stackoverflow.com/questions/20645774/can-matlab-talk-to-a-websocket" target="_blank" rel="external">discussion at stackoverflow</a></p>
+<p>basically, here we bind a weboscket client to the adas model, in matlab. which is a good choice, so when runnign adas model in massively, the whole system looks like multi ws clients concurrently communicate with one ws server, which is well separated from adas model, and can freely implmented in either nodejs, python or c# e.t.c., totally friendly to other third-party data analysis tools in down-stream.</p>
+<h2 id="multi-write-db-concurrently"><a href="#multi-write-db-concurrently" class="headerlink" title="multi-write db concurrently"></a>multi-write db concurrently</h2><p>once we get the message from ws clients, we need transfer all of them to a database, e.g. pySQL. but the first thing need to understand is <a href="https://stackoverflow.com/questions/32087233/how-does-mysql-handle-concurrent-inserts" target="_blank" rel="external">whether SQL can concurrent inserts</a>. if there are multiple INSERT statements, they are queued and performed in sequence, concurrently with the SELECT statements. SQL doesn’t support parallel data inserts into the same table, with InnoDB or MyISAM storage engine. </p>
+<p>this also answered another question, why not directly adas model write to db, since the parallel runinng cases increase, writing DB will be the bottleneck. so has the websocket middle level, is a good choice. </p>
+<h2 id="nodejs-solution"><a href="#nodejs-solution" class="headerlink" title="nodejs solution"></a>nodejs solution</h2><p>nodejs is really powerful to implement the solution above. basically, a <a href="https://www.npmjs.com/package/nodejs-websocket" target="_blank" rel="external">ws server</a> and <a href="https://github.com/mysqljs/mysql" target="_blank" rel="external">sql writer: mysqljs</a></p>
+<h2 id="python-solution"><a href="#python-solution" class="headerlink" title="python solution"></a>python solution</h2><p>similar as nodejs, python has matured websocket module and ORM moduel to write db. </p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.liaoxuefeng.com/wiki/897692888725344/923056653167136" target="_blank" rel="external">liaoxuefeng tcp</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/29150809" target="_blank" rel="external">zhihu mysql lock</a></p>
+<p><a href="https://www.runoob.com/nodejs/nodejs-mysql.html" target="_blank" rel="external">nodejs connect mysql</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/07/asam-mdf-reader/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1910,234 +2045,6 @@ bio_ = io.BytesIO(read_in_memory);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/review-apollo-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/17/review-apollo-2/" itemprop="url">review-apollo (2).md</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-17T08:56:30-05:00">
-                2020-02-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/02/17/review-apollo-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/02/17/review-apollo-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="review-apollo-2"><a href="#review-apollo-2" class="headerlink" title="review apollo (2)"></a>review apollo (2)</h1><h2 id="EMPlanner"><a href="#EMPlanner" class="headerlink" title="EMPlanner"></a>EMPlanner</h2><p><a href="">in review apollo(1)</a>, we had went through perception, prediction and part of planning module. the ADS planning problem can be summaried with a few input conditions, we can get a few drivable driving path, now <a href="https://github.com/YannZyl/Apollo-Note/blob/master/docs/planning/em_planner.md" target="_blank" rel="external">EMPlanner, here</a> need to find out the best one.</p>
-<p>input conditions:</p>
-<ul>
-<li><p>perception and prediction obstacles and its future(in 5s) trajectory</p>
-</li>
-<li><p>current road status, e.g. special area, pedestrain cross e.t.c.</p>
-</li>
-</ul>
-<p>both <code>path</code> and <code>speed</code> need to be planned or optimized. the core of EMPlanner is <a href="">Dynamic programming(DP)</a>, which is an classic algorithm to search the global optimized solution. the DP garantee each sub-group best solution accumulated to the final global best solution.</p>
-<h3 id="PathOptimizer"><a href="#PathOptimizer" class="headerlink" title="PathOptimizer"></a>PathOptimizer</h3><p>the DP used in path optimizer basic processes:</p>
-<p>starting from current location, in every time, move in x-direction about next n meters(to next location), and sample in y-direction at the next location, calcuate the cost from current location to each of the sampling point at the next location, and save cost value for each path for this sub path segment. (<strong>this is the different from DP to greedy algorithm</strong>), finally we retrieve all the cost values tables for each sub-path, and get the final best solution for the whole path. </p>
-<p>a few question about DP here:</p>
-<ul>
-<li><p>how long in x-direction need to plan ?</p>
-<pre><code>KMinSampleDistance = 40.0
-</code></pre></li>
-<li><p>what size of the interval in x-direction is good ?</p>
-</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">step_length = math::Clamp(init_point.v() * SamplePointLookForwardTime, config_.step_length_min(), config_.step_length_max());</div></pre></td></tr></table></figure>
-<ul>
-<li>how many sample points in y-direction is needed ? </li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">num_sample_per_level = config_.sample_points_num_each_level();</div></pre></td></tr></table></figure>
-<ul>
-<li>how to sample in y-direction and x-direction ?</li>
-</ul>
-<p>which is case by case, depends on the ego’s maneuver as well as the lanes info.</p>
-<p>basically, we had <code>RouteSegments</code>/<code>ReferenceLine</code> set, which includes the filtered referencelines for ego vehicle. for each referenceLine, we can calcuate the cost, then figure out the min cost referenceline as planning module’s output.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">EMPlanner::Plan(&amp;start_point, *frame)</div><div class="line">&#123;</div><div class="line">	foreach reference_line_info in frame-&gt;reference_line_info():</div><div class="line">		PlanOnReferenceLine();</div><div class="line">&#125;</div><div class="line"></div><div class="line">EMPlanner::PlanOnReferenceLine(start_point, frame, reference_line_info)&#123;</div><div class="line">	foreach optmizer in tasks_ :</div><div class="line">		ret = optmizer-&gt;Execute(frame, reference_line_info);</div><div class="line">&#125;</div><div class="line"></div><div class="line">PathOptimizer::Execute(*frame, *reference_line_info)&#123;</div><div class="line">	ret = Process(speedData, reference_line, start_point, path_data);</div><div class="line">&#125;</div><div class="line"></div><div class="line">DpPolyPathOptimizer::Process(SpeedData, ReferenceLine, init_point, path_data)&#123;</div><div class="line">	dp_road_graph.FindPathTunnel();</div><div class="line">&#125;</div><div class="line"></div><div class="line">DPRoadGraph::FindPathTunnel(init_point, &amp;obstacles, *path_data)&#123;</div><div class="line">	CalculateFrenetPoint(init_point, &amp;init_frenet_frame_point_);</div><div class="line">	GenerateMinCostPath(obstacles, &amp;min_cost_path);</div><div class="line">	foreach point in min_cost_path:</div><div class="line">		frenet_path.append(transfer(point));</div><div class="line">	path_data-&gt;SetFrenetPath(frenet_path);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="point2point-cost-calcualation"><a href="#point2point-cost-calcualation" class="headerlink" title="point2point cost calcualation"></a>point2point cost calcualation</h4><p>e.g. from the left interval sample points(in y-direction) to current interval sample points(in y-direction).</p>
-<p>during this cost calcuation, consider pathCost, staticObstacleCost and DynamicObstacleCost. </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">TrajectoryCost::Calculate()&#123;</div><div class="line">	total_cost += CalculatePathCost();</div><div class="line">	total_cost += CalculateStaticObstacleCost();</div><div class="line">	total_cost += CalculateDynamicObstacleCost();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>UpdateNode() </li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">DPRoadGraph::GenerateMinCostPath()&#123;</div><div class="line">	<span class="keyword">for</span>(level=<span class="number">1</span>; level &lt; path_waypoints.size(); ++level)&#123;</div><div class="line">		level_points = path_waypoints[level]; <span class="comment">//all sample points in y-direction at current level </span></div><div class="line">		<span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;level_points.size(); ++i)&#123;</div><div class="line">			cur_point = level_points[i];</div><div class="line">			UpdateNode(prev_dp_points, level, &amp;trajectory_cost, &amp;cur_point);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>PathCost</li>
-</ul>
-<p>from each point at prevous level to current point at current level, consider the length, 1st order(speed), 2sec order(acc) should be smooth, can give a 5th-order polyfit, same as what’d done in referenceLine smoother. for each interval/curve polyfit(by <strong>curve.Evaluate()</strong>), we can re-sampling it more density, so at each new sampling point, calculate its (position, speed, acc)<code>l, dl, ddl</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">TrajectoryCost::CalculatePathCost(curve, start_s, end_s, curr_level)&#123;</div><div class="line">	foreach sampling_point in (end_s - start_s):</div><div class="line">		l = curve.Evalaute(0, sampling_point)</div><div class="line">		// cost from l </div><div class="line">		path_cost +=  l * l * config_.path_l_cost()</div><div class="line">		// cost from dl </div><div class="line">		dl = curve.Evaluate(1, sampling_point)</div><div class="line">		path_cost +=  dl * dl * config_.path_dl_cost()</div><div class="line">		// cost from ddl </div><div class="line">		ddl = curve.Evaluate(2, sampling_point)</div><div class="line">		path_cost +=  ddl * ddl * config_.path_ddl_cost()		</div><div class="line">&#125;</div><div class="line"></div><div class="line">```	</div><div class="line">		</div><div class="line">* StaticObstacleCost</div><div class="line"></div><div class="line">StaticObstacleCost() used the same idea from PathCost, basically, to resampling the interval, and calculate a cost on each of the sampling point. </div><div class="line"></div><div class="line">```c++</div><div class="line">TrajectoryCost::CalculateStaticObstalceCost(curve, start_s, end_s)&#123;</div><div class="line">	foreach curr_s in (end_s - start_s):</div><div class="line">		curr_l = curve.Evaluate(0, curr_s, start_s);</div><div class="line">		foreach obs_boundary :: static_obstacle_boundaries:</div><div class="line">			obstacle_cost += GetCostFromObs(curr_s, curr_l, obs_boundary);</div><div class="line">&#125;</div><div class="line"></div><div class="line">TrajectoryCost::GetCostFrmObs()&#123;</div><div class="line">	delta_l = fabs(adc_l - obs_center); </div><div class="line">	obstacle_cost.safety_cost += config_.obstacle_collision_cost() * Sigmoid(config_.obstacle_collision_distance() - delta_l) ;</div></pre></td></tr></table></figure>
-<ul>
-<li>DynamicObstacleCost </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">TrajectoryCost::CalculateDynamicObstacleCost(curve, start_s, end_s)&#123;</div><div class="line">	foreach timestamp:</div><div class="line">		foreach obstacle_trajectory in dynamic_obstacle_boxes_:</div><div class="line">			obstacle_cost += GetCostBetweenObsBoxes(ego_box, obstacle_trajectory.at(timestamp));</div><div class="line">&#125;</div><div class="line"></div><div class="line">TrajectoryCost::GetCostBetweenObsBoxes(ego_box, &amp;obs_box)&#123;</div><div class="line">	distance = obstacle_box.DistanceTo(ego_box);</div><div class="line">	if(distance &gt; config_.obstacle_ignore_distance())</div><div class="line">		return obstacle_cost ;</div><div class="line">	obstacle_cost.safety_cost += ( config_.obstacle_collision_cost() + 20) * Sigmoid(config_.obstacle_collision_distance() - distance);</div></pre></td></tr></table></figure>
-<p>static obstacles cost calculating is like one space-dimension, only consider cost from the fixed/static obstacle to the fixed sampling points. for dynamic obstacles case, as the obstacle is moving, so we need a time-dimension, to calculate the cost at each time interval, from the current obstacle location to the fixed sampling points.</p>
-<p>for dynamic obstacle cost, there is a risk cost (20), which need to take care.</p>
-<h4 id="min-cost-path"><a href="#min-cost-path" class="headerlink" title="min cost path"></a>min cost path</h4><p>we got the cost matrix from the start_s level to the target_s/final level. but the final level in y-direction has 7 sampling points, all of which are drivable. so backward propagation, to get the best path (or a NODE in DAG)</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">DPRoadGraph::GenerateMinCostPath()&#123;</div><div class="line">	<span class="keyword">for</span>(cur_dp_node : graph_nodes.back())&#123;</div><div class="line">		fake_head.UpdateCost()</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
-<h3 id="SpeedOptimizer"><a href="#SpeedOptimizer" class="headerlink" title="SpeedOptimizer"></a>SpeedOptimizer</h3><p>the previous PathOptimier give the best (s, l) location of ego should arrived at each interval section along the referenceline. so what’s the best speed to reach these interval section ?</p>
-<p>to do speed optimzier, two parts:</p>
-<ul>
-<li><p>constraint speed conditions, e.g. speed limit,  upper/lower boundary of drivable area along the refereneline due to obstacle trajectory</p>
-</li>
-<li><p>speed planning </p>
-</li>
-</ul>
-<h4 id="BoundaryMapper"><a href="#BoundaryMapper" class="headerlink" title="BoundaryMapper()"></a>BoundaryMapper()</h4><p>for each obstalce’s trajectory, sampling in time-dimension, if its trajectory has overlapped with ego’s trajectory, mark the boundary box.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">StBoundaryMapper::CreateStBoundary()&#123;</div><div class="line">	foreach trajectory_point in trajectory:</div><div class="line">		obs_box = obstacle.GetBoundingBox(trajectory_point);</div><div class="line">		<span class="keyword">for</span>(path_s=<span class="number">0.0</span>, path&lt;s &lt; discretized_path.Length(); path_s += step_length)&#123;</div><div class="line">			curr_adc_path_point = discretized_path.EvaluateUsingLinearApproximation();</div><div class="line">			<span class="keyword">if</span>( CheckOverlap(curr_adc_path_point, obs_box, st_boundary_config_.boundary_buffer()) )</div><div class="line">			&#123;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// only when obs trajectory overlapped with ego's trajectory</span></div><div class="line">StBoundaryMapper::MapWithDecision(path_obstacle, decision)&#123;</div><div class="line">	boundary = StBoundary::GenerateStBoundary(lower_points, upper_points);</div><div class="line">	path_obstacle-&gt;SetStBoundary(boundary);</div><div class="line">	<span class="comment">// assign different boundary type </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="SpeedLimitDecider"><a href="#SpeedLimitDecider" class="headerlink" title="SpeedLimitDecider"></a>SpeedLimitDecider</h4><ul>
-<li><p>speed limit</p>
-</li>
-<li><p>centripetal acc limit</p>
-</li>
-<li><p>centripetal force limit </p>
-</li>
-</ul>
-<h4 id="DpStGraph-Search"><a href="#DpStGraph-Search" class="headerlink" title="DpStGraph::Search"></a>DpStGraph::Search</h4><p>so far we have info from <code>boundaryMapper</code>, which tells lower_s and upper_s of safe driving area along reference line, excluding the overlaping area of obstacle’s trajectories; as well as speed limit. so now in the driving safe area, which speed ego should take at each point is also done by <code>DP</code>, speed can be represent in time-space two dimension, in a <code>T-S</code> table. </p>
-<p>so speed DP can transfer to find the min cost [T,S] althrough the whole planning drive path. </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">DpStGraph::Search(speed_data)&#123;</div><div class="line">	InitCostTable().ok();</div><div class="line">	CalculateTotalCost().ok();</div><div class="line">	RetriveSpeedProfile(speed_data).ok();</div><div class="line">&#125;</div><div class="line"></div><div class="line">```	</div><div class="line"></div><div class="line"></div><div class="line">### QpSplineSpeedOptimizer </div><div class="line"></div><div class="line">DPSpeedOptimizer output the value pair of (time, location)(t, s) at each interval, then can get the velocity, acc, angular velocity by differencial among the neighbor intervals. QPSpline is a better way to get a polyfit 2nd-order smoothed speed profile along the referenceLine, which is higher-precision than DP.</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">### SpeedOptimizer and PathOptimizer fusion</div><div class="line"></div><div class="line">PathOptimizer outputs driving path in (accumulated_distance, section_direction distance)(s, l), SpeedOptimizer outputs driving path in (time, accumulated_distance)(t, s). now to get the best/optmized path along the referenceLine, need combine these two outputs.</div><div class="line"></div><div class="line">```c++</div><div class="line">for(cur_rel_time=0.0; cur_rel_time &lt; speed_data_.TotalTime(); cur_rel_time += TimeSec)&#123;</div><div class="line">	speed_data_.EvaluateByTime(cur_rel_time, &amp;speed_point);</div><div class="line">	if(speed_point.s() &gt; path_data_.discretized_path().Length()) break; </div><div class="line">	path_data.GetPathPointWithPathS(speed_point.s(), &amp;path_point);</div><div class="line">	path_point.set_s(path_point.s() + start_s);</div><div class="line">	</div><div class="line">	trajectory_point.mutable_path_point()-&gt;CopyFrom(path_point);</div><div class="line">	 trajectory_point.set_v(speed_point.v());</div><div class="line">    trajectory_point.set_a(speed_point.a());</div><div class="line">    trajectory_point.set_relative_time(speed_point.t() + relative_time);</div><div class="line">    ptr_discretized_trajectory-&gt;AppendTrajectoryPoint(trajectory_point);</div><div class="line">   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>the above fusion is on one ReferenceLine, for all referenceLine, we can reach out the min cost referenceline as following:</p>
-<pre><code class="c++">Frame::FindDriveReferenceLineInfo(){
-    foreach reference_line_info in reference_line_info_ :
-        <span class="keyword">if</span>(reference_line_info.IsDrivable() &amp;&amp; reference_lien_info.Cost &lt; min_cost){
-            drive_reference_line_info_ = &amp;reference_line_info;
-            min_cost = reference_line_info.Cost();
-    }
-
-    <span class="keyword">return</span> drive_reference_line_info_ ;
-}
-</code></pre>
-<h3 id="Planning-in-summary"><a href="#Planning-in-summary" class="headerlink" title="Planning in summary"></a>Planning in summary</h3><p>Planning module has three components, ReferenceLineProvider, Frame and EMPlanner. Frame has <code>ReferencelineInfo</code>, which has everything about once-time planning, including the min-cost ReferenceLineInfo from EMPlanner. EMPlanner do DP and QP for PathPlan and SpeedPlan, seperately, which give a best driving path for each RefereneLine. in the whole, we can reach out the global best(min-cost) referenceLine from EMPlanner, and store back in Frame.</p>
-<h2 id="Control"><a href="#Control" class="headerlink" title="Control"></a>Control</h2><p>Control module readin the planning ReferenceLine (Trajectory, VehicleStatus) and Localization, output control command.</p>
-<pre><code class="c++">ControlComponent::Proc(){
-    chassis_msg = chassis_reader_-&gt;GetLatestObserved();
-    OnChassis(chassis_msg);
-    trajectory_msg = trajectory_reader_-&gt; GetLatestObserved();
-    localization_msg = localization_reader_-&gt; GetLatestObserved();
-
-    status = ProduceControlCommand(&amp;control_command);
-    control_cmd_writter_-&gt;Write();
-}
-</code></pre>
-<h2 id="simulation"><a href="#simulation" class="headerlink" title="simulation"></a>simulation</h2><p>simulation is a system level verification/test tool, there are a few topics: </p>
-<h4 id="simulate-the-world"><a href="#simulate-the-world" class="headerlink" title="simulate the world"></a>simulate the world</h4><p>how to make a virtual world in simulation, quickly, easily, close to real and massively deploy-friendly. </p>
-<p>currently most commericial tools, e.g. PreScan, CarMaker, are supporting well real map(.osm), and on-line/distributed/cloud service, which is good way.</p>
-<p>a few pioneers are trying to make the virtual world by 3D build through image/point cloud scanning. which is maybe the closest way to the physical world, but need large computing resource. </p>
-<h4 id="integrate-ADS-system"><a href="#integrate-ADS-system" class="headerlink" title="integrate ADS system"></a>integrate ADS system</h4><p>how to integrate ADS system to simulation, easily.</p>
-<p>most simulation software/platform is independent from ADS core. </p>
-<p>for in-house prototype team, they both develop ADS and simulate in Matlab. which is pretty common in most OEM teams.</p>
-<p>in product phase, it’s common to package ADS core as ros node, and talk to the simulation software by ROS.</p>
-<h4 id="friendly-API"><a href="#friendly-API" class="headerlink" title="friendly API"></a>friendly API</h4><p>system level simulation has plenty of scenarios, requiring the simulation platform has friendly way to produce massively scenarios. including env, ego/npc behaviors, special cases e.t.c </p>
-<p>most common APIs are Python and Matlab.</p>
-<h4 id="massively-deployment"><a href="#massively-deployment" class="headerlink" title="massively deployment"></a>massively deployment</h4><p>it’s back to the test purpose, simulation needs to cover as much as possible scenarios, which requires IT infrastructure to support massively deployment. e.g. cloud deployment</p>
-<p>`</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2188,7 +2095,7 @@ bio_ = io.BytesIO(read_in_memory);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">165</span>
+                <span class="site-state-item-count">166</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2201,7 +2108,7 @@ bio_ = io.BytesIO(read_in_memory);
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

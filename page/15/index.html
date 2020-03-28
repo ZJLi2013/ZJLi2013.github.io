@@ -291,6 +291,134 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-backtracks-work/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/29/how-backtracks-work/" itemprop="url">how backtracks work</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:39:41-04:00">
+                2018-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/29/how-backtracks-work/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/08/29/how-backtracks-work/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>leetCode 50 (N-Queens):<br>     The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.</p>
+<p>solution: each potentional position for a queen should satisfy no attach, then traverse the 2D grids to find out all good positions; it requires to find all possible combinations, so recursive call will be used also.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div></pre></td><td class="code"><pre><div class="line"> <span class="function"><span class="keyword">bool</span> <span class="title">one_queen_visited</span><span class="params">(<span class="keyword">int</span>** mat, <span class="keyword">int</span> n, pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&amp; queen_idx)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="keyword">int</span> row = queen_idx.first ;</div><div class="line">	 <span class="keyword">int</span> col = queen_idx.second; </div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">	 &#123;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;n; j++)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">if</span>(mat[row][j] == <span class="number">0</span>)</div><div class="line">				mat[row][j] = <span class="number">1</span>;</div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[row][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		<span class="keyword">if</span>(mat[i][col] == <span class="number">0</span>)</div><div class="line">			 mat[i][col] = <span class="number">1</span>;</div><div class="line">		<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][col] == <span class="number">100</span>)</div><div class="line">			 <span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;</div><div class="line">		</div><div class="line">	 <span class="comment">//for left leaning </span></div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&gt;=<span class="number">0</span> &amp;&amp; j&gt;=<span class="number">0</span>; i--, j--)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&lt;n &amp;&amp; j&lt;n; i++, j++)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;	</div><div class="line">	  </div><div class="line">	 <span class="comment">//for right leaning </span></div><div class="line">		<span class="comment">//down</span></div><div class="line">	  <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&lt;n &amp;&amp; j&gt;=<span class="number">0</span>; i++, j--)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;</div><div class="line">	  <span class="comment">//up </span></div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=row, j=col; i&gt;=<span class="number">0</span> &amp;&amp; j&lt;n; i--, j++)</div><div class="line">	 &#123;</div><div class="line">			<span class="keyword">if</span>(mat[i][j] == <span class="number">0</span>)</div><div class="line">				mat[i][j] = <span class="number">1</span>; </div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>(mat[i][j] == <span class="number">100</span>)</div><div class="line">				<span class="keyword">return</span> <span class="literal">false</span>; </div><div class="line">	 &#125;	</div><div class="line"> </div><div class="line">	 mat[row][col] = <span class="number">100</span>;  <span class="comment">//queen location marked as 100</span></div><div class="line">	 <span class="keyword">return</span> <span class="literal">true</span>; </div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="keyword">int</span> backtrack = <span class="number">0</span>; </div><div class="line">	 </div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span>** mat,  <span class="keyword">int</span> n, <span class="keyword">int</span> start_j=<span class="number">0</span>)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="built_in">std</span>::pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;  idx; </div><div class="line">	 <span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;   queens; </div><div class="line">	 <span class="built_in">vector</span>&lt; <span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt; &gt;  queens_v; </div><div class="line">	 <span class="keyword">if</span>(start_j &gt; n) <span class="keyword">return</span> ;   <span class="comment">//end of recursive </span></div><div class="line">	 <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">	 &#123;</div><div class="line">		 <span class="keyword">for</span>(<span class="keyword">int</span> j= ((i==<span class="number">0</span>)? max(start_j, <span class="number">0</span>) : <span class="number">0</span>); j&lt;n; j++)</div><div class="line">		 &#123;</div><div class="line">			 idx =  <span class="built_in">std</span>::make_pair(i, j); </div><div class="line">			 <span class="keyword">if</span>(one_queen_visited(mat, n, idx)) <span class="comment">// find a fit queen position, store into  queens </span></div><div class="line">			 &#123;</div><div class="line">				 queens.push_back(idx);</div><div class="line">			 &#125;</div><div class="line">		 &#125;</div><div class="line">	 &#125; </div><div class="line">	 	 </div><div class="line">	 <span class="keyword">if</span>(queens.size() == n)</div><div class="line">	 &#123;</div><div class="line">		 queens_v.push_back(queens);</div><div class="line">		<span class="keyword">int</span>** mat_copy =  <span class="keyword">new</span> <span class="keyword">int</span>*[n] ;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">		&#123;</div><div class="line">			mat_copy[i] = <span class="keyword">new</span>  <span class="keyword">int</span>[n](); </div><div class="line">		&#125;	</div><div class="line">	</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;queens.size(); i++)</div><div class="line">		&#123;</div><div class="line">			idx =  queens[i];</div><div class="line">			mat_copy[idx.first][idx.second] = <span class="number">1</span> ;</div><div class="line">		&#125;</div><div class="line">	</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n; i++)</div><div class="line">		&#123;</div><div class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;n; j++)</div><div class="line">				<span class="built_in">cout</span>&lt;&lt; mat_copy[i][j] &lt;&lt; <span class="string">' '</span> ;</div><div class="line">			<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">		&#125;</div><div class="line">	 &#125;</div><div class="line">		</div><div class="line">	clean_mat(mat, n);</div><div class="line">	sol(mat, n, ++backtrack); 			</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>I did actually new memory in C++ as following:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span>** mat = (<span class="keyword">int</span>**) <span class="keyword">new</span>(n * <span class="keyword">sizeof</span>(<span class="keyword">int</span>*)); </div><div class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;  i&lt;n; i++)</div><div class="line">	mat[i] = (<span class="keyword">int</span>*) <span class="keyword">new</span>( n * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div></pre></td></tr></table></figure>
+<p>which failed, then realized only malloc works in this way.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-broad-first-search-works/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1537,133 +1665,6 @@ thpool_add_work(callback, args);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/24/pure-C-string/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/24/pure-C-string/" itemprop="url">pure C string</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-24T18:43:37-04:00">
-                2018-07-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/24/pure-C-string/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/07/24/pure-C-string/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="string-initialization"><a href="#string-initialization" class="headerlink" title="string initialization"></a>string initialization</h2><p>in pure C, string is a char array terminating with NULL(‘\0’). To initialize an array of char(string) is with a string literal(a double-quotaed string).</p>
-<p>in general, the string literal is used as the initializer for an array of char; anywhere else, it is a static array of chars, which shouldn’t be modified by a pointer.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* initialize a string in C </span></div><div class="line"> * the size of s1 is taken from the size of the initializer</div><div class="line"> */</div><div class="line">	<span class="keyword">char</span> s1[] = <span class="string">"hello world"</span> ; </div><div class="line"><span class="comment">// or </span></div><div class="line">	<span class="keyword">char</span> s1[<span class="number">12</span>] = <span class="string">"hello world"</span>; </div><div class="line"></div><div class="line"><span class="comment">/* common errors */</span></div><div class="line">	<span class="keyword">char</span> s2[];</div><div class="line">	s2 = <span class="string">"hello world"</span></div><div class="line"><span class="comment">// error: storage size of 's2' isn't known </span></div><div class="line"></div><div class="line">	<span class="keyword">char</span> s2[<span class="number">12</span>];</div><div class="line">	s2 = <span class="string">"hello world"</span></div><div class="line"><span class="comment">// error:  invalid array assignment </span></div><div class="line"><span class="comment">/* there is no "=" operator defined for char array in C </span></div><div class="line">   using strcpy()</div><div class="line">*/</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">## <span class="keyword">char</span> pointer arithmetic </div><div class="line"></div><div class="line">```c</div><div class="line"></div><div class="line">	<span class="keyword">char</span> s1[<span class="number">12</span>];</div><div class="line">	*s1++ ;	</div><div class="line"><span class="comment">/* error:  lvalue requied as increment operand</span></div><div class="line"> * s3 is an array, can't modify the address of an array. the difference between pointer and array </div><div class="line">*/ </div><div class="line">	 <span class="keyword">char</span>* s2 = s1; </div><div class="line">	 *s2++;</div><div class="line"><span class="comment">/* s2 is a pointer to s1, ++ is ok */</span></div></pre></td></tr></table></figure>
-<h2 id="string-h"><a href="#string-h" class="headerlink" title="string.h"></a>string.h</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/* concatenate two strings */</span></div><div class="line"><span class="built_in">strcat</span>(<span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2) ;</div><div class="line"><span class="built_in">strncat</span>(<span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2, <span class="keyword">size_t</span> n); </div><div class="line"></div><div class="line"><span class="comment">/*  locate the first/last occurance of char c in string s */</span></div><div class="line"><span class="built_in">strchr</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">int</span> c);</div><div class="line"><span class="built_in">memchr</span>(<span class="keyword">const</span> <span class="keyword">void</span>* s1, <span class="keyword">int</span> c, <span class="keyword">size_t</span> n);</div><div class="line"><span class="built_in">strrchr</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">int</span> c); </div><div class="line"></div><div class="line"><span class="comment">/*  compare s1 and s2 alphabetically */</span></div><div class="line"><span class="built_in">strcmp</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2);	</div><div class="line"><span class="built_in">strncmp</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2, <span class="keyword">size_t</span> n);</div><div class="line"><span class="built_in">memcmp</span>(<span class="keyword">const</span> <span class="keyword">void</span>* s1, <span class="keyword">const</span> <span class="keyword">void</span>* s2, <span class="keyword">size_t</span> n);</div><div class="line"></div><div class="line"><span class="comment">/*  copy s2 to s1 */</span></div><div class="line"><span class="built_in">strcpy</span>(<span class="keyword">char</span> *s1, <span class="keyword">const</span> <span class="keyword">char</span> *s2); </div><div class="line"><span class="built_in">memcpy</span>(<span class="keyword">void</span>* s1, <span class="keyword">void</span>* s2, <span class="keyword">size_t</span> n);</div><div class="line"></div><div class="line"><span class="comment">/* number of bytes, not including terminating NULL; sizeof() will inlcude the terminating NULL */</span></div><div class="line"><span class="built_in">strlen</span>(<span class="keyword">const</span> <span class="keyword">char</span>* s1); </div><div class="line"></div><div class="line"><span class="comment">/* find the first occurance of substring s2 in s1 */</span></div><div class="line"><span class="built_in">strstr</span>(<span class="keyword">const</span> <span class="keyword">char</span> *s1,  <span class="keyword">const</span> <span class="keyword">char</span> *s2);</div><div class="line"></div><div class="line"><span class="comment">/* split string s1 into a sequence of tokens by s2 */</span></div><div class="line">strtok(<span class="keyword">char</span>* s1, <span class="keyword">const</span> <span class="keyword">char</span>* s2);</div></pre></td></tr></table></figure>
-<p>\<string.h> is replaced by <cstring> in C++.<br>and be aware of <a href="https://www.cs.fsu.edu/~myers/cop3330/notes/strings.html" target="_blank" rel="external">downs of C string</a>.</cstring></string.h></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1714,7 +1715,7 @@ thpool_add_work(callback, args);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">165</span>
+                <span class="site-state-item-count">166</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1727,7 +1728,7 @@ thpool_add_work(callback, args);
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-count">41</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
