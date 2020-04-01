@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
 <meta property="og:description" content="backgroundsooner or later, we are in the direction of gpu virtualization, previously hypervisor and gpu virtual is the first blog. recently, I’d went through openstack/kvm, vnc and now vmware. there i">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-03-28T09:41:14.171Z">
+<meta property="og:updated_time" content="2020-04-01T05:57:36.497Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vmware virtualization">
 <meta name="twitter:description" content="backgroundsooner or later, we are in the direction of gpu virtualization, previously hypervisor and gpu virtual is the first blog. recently, I’d went through openstack/kvm, vnc and now vmware. there i">
@@ -399,8 +399,45 @@
 <p>nowadays there are no limitations on Physical CPU or RAM for Free ESXi. <a href="http://www.vmware.com/products/vsphere-hypervisor/gettingstarted.html" target="_blank" rel="external">here</a></p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Specifications: </div><div class="line">Number of cores per physical CPU: No <span class="built_in">limit</span></div><div class="line">Number of physical CPUs per host: No <span class="built_in">limit</span></div><div class="line">Number of logical CPUs per host: 480</div><div class="line">Maximum vCPUs per virtual machine: 8</div></pre></td></tr></table></figure>
 <h4 id="virtual-desktop-integration-VDI"><a href="#virtual-desktop-integration-VDI" class="headerlink" title="virtual desktop integration (VDI)"></a>virtual desktop integration (VDI)</h4><p>VDI virtualize a desktop OS on a server.  VDI offers centralized desktop management. the vmware tool is <code>VMware Horizon</code></p>
-<h4 id="gpu-support-in-vSphere"><a href="#gpu-support-in-vSphere" class="headerlink" title="gpu support in vSphere"></a>gpu support in vSphere</h4><p>PCI passthrough can be used with any vSphere, including free vSphere Hypervisor. the only limitation is HW, may not supprot virtual well. GPU remotely accessible is our first-priority concern. </p>
-<p>I haven’t go to the settings for gpu passthrough by now, but it looks easier than <a href="">openstack gpu passthrough</a>.</p>
+<h4 id="Horizon"><a href="#Horizon" class="headerlink" title="Horizon"></a>Horizon</h4><p>VMware Horizon can run VDI and apps in IT data center, and make VDI and apps as services to users. Horizon auto manage VDI and apps by simple setup configure files, then deliver apps or data from data center to end-user.</p>
+<p>the modules in Horizon is extended-able and plug-in available:  physical layer, virtualization layer, desktop resource layer, app resource layer and user access. </p>
+<p>Horizon basically delivers desktops and apps as a service. there are three versions:</p>
+<ul>
+<li><p>Horizon standard, a simple VDI.</p>
+</li>
+<li><p>Horizon advanced, can deliver desktops and apps through a unified workspace </p>
+</li>
+<li><p>Horizon enterprise, with a closed-loop management adn automation</p>
+</li>
+</ul>
+<p>the <a href="https://techzone.vmware.com/resource/deploying-hardware-accelerated-graphics-vmware-horizon-7#sec1-sub1" target="_blank" rel="external">Horizon 7</a> has new features: </p>
+<ul>
+<li><p>Blast extrem display protocol</p>
+</li>
+<li><p>instant clone provisioning</p>
+</li>
+<li><p>vm app volumes app delivery </p>
+</li>
+<li><p>user env manager </p>
+</li>
+<li><p>integrated into remote desktop session host(RDSH) sessions </p>
+</li>
+</ul>
+<h4 id="gpu-support-in-vmware"><a href="#gpu-support-in-vmware" class="headerlink" title="gpu support in vmware"></a>gpu support in vmware</h4><p>for vSphere, PCI passthrough can be used with any vSphere, including free vSphere Hypervisor. the only limitation is HW, may not supprot virtual well. GPU remotely accessible is our first-priority concern. </p>
+<p>but vmware recommend their <a href="https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/partners/nvidia/vmware-nvidia-grid-vgpu-faq.pdf" target="_blank" rel="external">Horzion with NV’s vGPU</a><br>which has better flexibility and scalability. </p>
+<p><a href="https://techzone.vmware.com/resource/deploying-hardware-accelerated-graphics-vmware-horizon-7#virtualsharedpassthroughgraphics" target="_blank" rel="external">Horizon support vGPU</a>, the user must install the appropriate vendor driver on the guest vm, all graphics commands are passed directly to GPU without having to be translated by the hypervisor. a vSphere Installation Bundle(VIB) is installed, which aids or perform the scheduling. depending on the card, up to 24 vm can share a GPU. most NV’s GPU which has vGPU feature can support. </p>
+<p>on the other hand, the price of vGPU products(e.g. T4, M10, P6, V100, RTX8000 e.t.c) are 5 ~ 10 times higher than normal customer GPUs. e.g. GeFS not 5~10 times better. and the license fee for vgpu is horrible. </p>
+<p>however, most enterprise still choice the Horzion and vGPU solution, even with this high cost. </p>
+<p><a href="https://www.vmware.com/resources/compatibility/search.php" target="_blank" rel="external">VMware compatibility guide</a></p>
+<h4 id="GPU-VDI-service-in-cloud"><a href="#GPU-VDI-service-in-cloud" class="headerlink" title="GPU VDI service in cloud"></a>GPU VDI service in cloud</h4><ul>
+<li><a href="https://cloud.tencent.com/product/gpu" target="_blank" rel="external">tencent gpu cloud</a></li>
+</ul>
+<p>the gpu types for video decoding is Tesla P4, for  AI and HPC is Tesla v100, and for image workstation(VDI) is an AMD S7150.  </p>
+<ul>
+<li><a href="https://www.aliyun.com/product/ecs/gpu?spm=5176.224200.h2v3icoap.18.34ff6ed6KYchPn&amp;aly_as=aPNPrcAtg" target="_blank" rel="external">ali gpu cloud desktop</a></li>
+</ul>
+<p>the product is call <code>GA1(S7150)</code>, which is specially for cloud desktop.</p>
+<p><a href="https://community.amd.com/thread/230570" target="_blank" rel="external">s7150x2 MxGPU with Horizon 7.5</a></p>
 <h4 id="vnc-vs-vm"><a href="#vnc-vs-vm" class="headerlink" title="vnc vs vm"></a>vnc vs vm</h4><p>virtual network computing (vnc), applications running on one computer but displaying their windows on another. VNC provides remote control of a computer at some other location, any resources that are avaiable at the remote computer are available.  vpn simply connect you to a remote network.</p>
 <p>no doubt, vm is much heavier than vnc. check <a href="https://blog.calsoftinc.com/2017/03/virtual-desktop-infrastructure-vdi-vs-remote-desktop-services-rds.html" target="_blank" rel="external">this blog</a> for compartion from vdi(a vm app) to vnc. vnc can’t tell if the remote is a physical server or a virtual server. come to our user case, we need about 100 separated user space, so virtualization provide better HW efficient and security, compared to deploy a single <code>bare metal OS</code> on the physical machine. </p>
 <p>there are a few Linux based vnc client/server, e.g. <a href="https://linux.die.net/man/1/vncviewer" target="_blank" rel="external">vncviewer CLI</a>, as well as which supports OpenGL well, which helps to support better GPU usage. </p>
@@ -419,6 +456,14 @@
 <p><a href="https://www.dell.com/support/article/en-us/sln288103/how-to-enable-a-vmware-virtual-machine-for-gpu-pass-through?lang=en" target="_blank" rel="external">how to enable vmware vm for GPU pass-through</a></p>
 <p><a href="https://docs.openstack.org/project-deploy-guide/charm-deployment-guide/latest/app-pci-passthrough-gpu.html" target="_blank" rel="external">openstack PCI passthrough</a></p>
 <p><a href="https://serverfault.com/questions/174003/how-can-opengl-graphics-be-displayed-remotely-using-vnc" target="_blank" rel="external">how can openGL graphics be displayed remotely using VNC</a></p>
+<p><a href="http://www.azurew.com/vmware/horizon-7/3647.html" target="_blank" rel="external">vmware Horizon introduction in Chinese</a></p>
+<p><a href="http://www.azurew.com/vmware/esxi-6-7/3622.html" target="_blank" rel="external">vmware ESXi 7.0 U1 test env build up</a></p>
+<p><a href="https://www.sohu.com/a/334627623_314773" target="_blank" rel="external">云游戏能接盘矿卡市场吗</a></p>
+<p><a href="http://www.azurew.com" target="_blank" rel="external">王哥哥的博客</a></p>
+<p><a href="https://mp.sohu.com/profile?xpt=c29odXptdHoxem53c3ZAc29odS5jb20=&amp;_f=index_pagemp_1&amp;spm=smpc.content.author.2.1585641772438lK2g5Sw" target="_blank" rel="external">企业存储的博客</a></p>
+<p><a href="https://blogs.vmware.com/euc/2015/03/nvidia-grid-vgpu-vmware-horizon.html" target="_blank" rel="external">in-depth: nv grid vGPU with vmware horizon 6.1</a></p>
+<p><a href="https://www.nvidia.com/en-us/data-center/graphics-cards-for-virtualization/" target="_blank" rel="external">nvidia gpus recommended for virtualization</a></p>
+<p><a href="https://developer.aliyun.com/ask/215008" target="_blank" rel="external">GPU SRIOV and AMD S7150</a></p>
 
       
     </div>
@@ -617,7 +662,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#VMware-ESXi"><span class="nav-number">1.0.1.</span> <span class="nav-text">VMware ESXi</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VMware-workstation"><span class="nav-number">1.0.2.</span> <span class="nav-text">VMware workstation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VMware-vSphere"><span class="nav-number">1.0.3.</span> <span class="nav-text">VMware vSphere</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#virtual-desktop-integration-VDI"><span class="nav-number">1.0.4.</span> <span class="nav-text">virtual desktop integration (VDI)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpu-support-in-vSphere"><span class="nav-number">1.0.5.</span> <span class="nav-text">gpu support in vSphere</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vnc-vs-vm"><span class="nav-number">1.0.6.</span> <span class="nav-text">vnc vs vm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refee"><span class="nav-number">2.</span> <span class="nav-text">refee</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#VMware-ESXi"><span class="nav-number">1.0.1.</span> <span class="nav-text">VMware ESXi</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VMware-workstation"><span class="nav-number">1.0.2.</span> <span class="nav-text">VMware workstation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VMware-vSphere"><span class="nav-number">1.0.3.</span> <span class="nav-text">VMware vSphere</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#virtual-desktop-integration-VDI"><span class="nav-number">1.0.4.</span> <span class="nav-text">virtual desktop integration (VDI)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Horizon"><span class="nav-number">1.0.5.</span> <span class="nav-text">Horizon</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gpu-support-in-vmware"><span class="nav-number">1.0.6.</span> <span class="nav-text">gpu support in vmware</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GPU-VDI-service-in-cloud"><span class="nav-number">1.0.7.</span> <span class="nav-text">GPU VDI service in cloud</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vnc-vs-vm"><span class="nav-number">1.0.8.</span> <span class="nav-text">vnc vs vm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refee"><span class="nav-number">2.</span> <span class="nav-text">refee</span></a></li></ol></div>
             
 
           </div>
