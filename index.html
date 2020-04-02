@@ -291,6 +291,238 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/gpu-vdi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/02/gpu-vdi/" itemprop="url">gpu vdi</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-02T03:44:08-04:00">
+                2020-04-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/02/gpu-vdi/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/04/02/gpu-vdi/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h2><p>preivously, reviewed:</p>
+<ul>
+<li><p><a href="https://zjli2013.github.io/2020/03/14/hypervisor-and-gpu-virtualization/" target="_blank" rel="external">hypervisor and gpu virtualization</a></p>
+</li>
+<li><p><a href="https://zjli2013.github.io/2020/03/28/vmware-virtualization/" target="_blank" rel="external">vmware virtualization</a></p>
+</li>
+</ul>
+<p>this blog is a little bit futher of vmware and AMD GPU virtualization sln. </p>
+<h2 id="AMD-virtualization"><a href="#AMD-virtualization" class="headerlink" title="AMD virtualization"></a>AMD virtualization</h2><h4 id="S7150x2"><a href="#S7150x2" class="headerlink" title="S7150x2"></a>S7150x2</h4><p>for remote graphic workstation, usually we separate host machine and local machines, where host machine is located in data center, and local machines are the end-user terminals at offices. </p>
+<p>the host OS can be Windows 7/8, Linux, and hypervisor can be vmware ESXi 6.0;  guest os can be windows7/8, supported API includes: DX11.1, OpenGL</p>
+<p>since S7150 has no local IO, os there is no <code>display</code> interface, just like a Nvidia Tesla GPU. </p>
+<h4 id="SR-IOV"><a href="#SR-IOV" class="headerlink" title="SR-IOV"></a>SR-IOV</h4><ul>
+<li>sr-iov arch </li>
+</ul>
+<p><img src="https://docs.microsoft.com/en-us/windows-hardware/drivers/network/images/sriovarchitecture.png" alt="image"></p>
+<ul>
+<li>Physical Function (PF)</li>
+</ul>
+<p>it’s  PCI-Express function of a network adapter that supports single root I/O virtualization(SR-IOV) interface. PF is exposed as a virtual network adapter(vLan) in the host OS, and the GPU driver in install in PF. </p>
+<ul>
+<li>Virtual Function (VF)</li>
+</ul>
+<p>it’s a lightweight PCIe function on a network adapter that supports SR-IOV. VF is associated with the PF on the network adapter, and represents a virtualized instance of the network adapter. each VF has its own PCI configuration space, and shares one or more physical resources(e.g. GPU) on the network adapter. </p>
+<ul>
+<li>GPU SR-IOV</li>
+</ul>
+<p>sr-iov basically split one PF(a PCIe resource) into multi VF(virtual PCIe resource). and each vf has its own Bus/Slot/Function id, which can used to access physical device/resources(e.g. GPU); Nvidia Grid vGPU is a different mechanism, where virtualization is implemented only in host machine side to assign device MAC address.</p>
+<h4 id="GPU-resource-managment"><a href="#GPU-resource-managment" class="headerlink" title="GPU resource managment"></a>GPU resource managment</h4><ul>
+<li>display </li>
+</ul>
+<p>GPU PF mangae the size of frameBuffer to each vf, and display virtualization. </p>
+<ul>
+<li>security check</li>
+</ul>
+<p>PF also do an address audit check and security check</p>
+<ul>
+<li>VF schedule</li>
+</ul>
+<p>GPU vf scheduler is similar as CPU process time-split. in a certain time period, the gpu is occupied by a certain vf. </p>
+<h4 id="Multiuser-GPU-MxGPU"><a href="#Multiuser-GPU-MxGPU" class="headerlink" title="Multiuser GPU(MxGPU)"></a>Multiuser GPU(MxGPU)</h4><p><a href="https://www.amd.com/en/graphics/workstation-virtual-graphics" target="_blank" rel="external">AMD MxGPU</a> is the first hardware-based virtualized GPU solution, based on SR-IOV, and allows up to 16 vm per GPU to work remotely. </p>
+<p><img src="https://www.amd.com/system/files/styles/1200px/private/76826-VDI-infographic-07032017-1260wide.png?itok=S5lPjqXR" alt="image"></p>
+<p>now we see two GPU virtualization solutions:  </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">* Nvidia Tesla vGPU</div><div class="line">* AMD SR-VIO MxGPU</div></pre></td></tr></table></figure>
+<p>vGPU is more software-based virtualization, but the performance is a little better; while MxGPU is hardware based. </p>
+<h2 id="vmware-products"><a href="#vmware-products" class="headerlink" title="vmware products"></a>vmware products</h2><ul>
+<li><p>the license-free products, e.g. vSphere Hypervisor, VMware Remote Console</p>
+</li>
+<li><p>the licensed and 60days-free products, e.g. vSAN, Horizon 7, vSphere</p>
+</li>
+</ul>
+<h2 id="vSphere"><a href="#vSphere" class="headerlink" title="vSphere"></a>vSphere</h2><p>vSphere is the virtualization(hypervisor) layer of vmware products. there are two components: ESXi and vCenter Server. <code>exsi</code> is the core hypervisor, and <code>vcenter</code> is the service to mange multi vm in a network and host resources pool.</p>
+<p><img src="https://docs.vmware.com/en/VMware-vSphere/images/GUID-CC660699-9EEC-4BAF-84AB-D992B0D8F2CA-low.png" alt="image"></p>
+<h4 id="install-and-setup"><a href="#install-and-setup" class="headerlink" title="install and setup"></a>install and setup</h4><p>a few steps including:</p>
+<ul>
+<li><p>install ESXi on at least one host, either interactively or install through vSphere auto deploy, which include vServer. basically, <code>esxi</code> is free, and can be install on system as the hypervisor layer for any future vms. </p>
+</li>
+<li><p>setup esxi, e.g. esxi boot, network settings, direct console, syslog server for remote logging</p>
+</li>
+<li><p>deploy or install vCenter and services controller</p>
+</li>
+</ul>
+<h2 id="Horizon"><a href="#Horizon" class="headerlink" title="Horizon"></a>Horizon</h2><p><img src="https://docs.vmware.com/en/VMware-Horizon-7/7.12/horizon-architecture-planning/images/GUID-5942D59B-AC5A-42F9-AD95-552C728E85AF-high.png" alt="image"></p>
+<ul>
+<li><p>client devices</p>
+</li>
+<li><p>Horizon client </p>
+</li>
+</ul>
+<p>the client software for accesing remote desktops and apps, which will run on client devices. after logging in, users select from a list of remote desktops and apps that they are authorized to use. and admin can configure Horizon client to allow end users to select a display protocol.</p>
+<ul>
+<li>Horizon agent </li>
+</ul>
+<p>it’s installed on all vms, physical machines, storage server that used as <code>sources</code> for remote desktops and apps. if the remote desktop source is a vm, then first need install Horizon Agent service on that vm, and use the vm as a tepmplate, when create a pool from this vm, the agent is automatically installed on every remote desktop.</p>
+<ul>
+<li>Horizon admin</li>
+</ul>
+<p>used to configure Horizon connection server, deploy and manage remote desktops and apps, control user authentication e.t.c.</p>
+<ul>
+<li>Horizon connection server </li>
+</ul>
+<p>serve as a broker for client connections. </p>
+<h4 id="a-rich-user-experience"><a href="#a-rich-user-experience" class="headerlink" title="a rich user experience"></a>a rich user experience</h4><ul>
+<li>usb devices with remote desktops and apps </li>
+</ul>
+<p>basically can configure the ability to use USB devices from virtual desktop</p>
+<ul>
+<li>real-time video for webcams </li>
+</ul>
+<p>basically can use local client(end-user terminal)’s webcam or microphone in a remote desktop or published app. </p>
+<ul>
+<li>3d graphics</li>
+</ul>
+<p>with Blast or PCoIP display protocol enable remote desktop users to run 3D apps, e.g. google earch, CAD.</p>
+<p>vSphere 6.0+ supports NVIDIA vGPU, basically share GPU among vms, as well as support amd GPU by vDAG, basically share gpu by making GPU appear as multiple PCI passthrough devies. </p>
+<h4 id="desktop-or-app-pool"><a href="#desktop-or-app-pool" class="headerlink" title="desktop or app pool"></a>desktop or app pool</h4><p>first create one vm as a base image, then Horizon7 can generate a pool of remote desktops from the base image. similar for apps. </p>
+<p>the benefit of desktop pool, if using vSphere vm as the base, is to automate the process of making as many identical virtual desktops as need, and the pool has manage tools to set or deploy apps to all virtual desktops in the same pool. for user assignment, either <code>dedicated-assignment pool</code>, which means each user is assigned a particular remote desktop adn returns to the same v-desktop at each login. it’s a one-to-one desktop-to-user relationship; or <code>floating-assignment pool</code>, basically users can shift to any v-desktop in the pool.</p>
+<h4 id="security-features"><a href="#security-features" class="headerlink" title="security features"></a>security features</h4><ul>
+<li><p>Horizon Client and Horizon Administrator communicate with a Horizon Connection Server host over secure HTTPS connections. </p>
+</li>
+<li><p>integrate two-factor authentication for user login</p>
+</li>
+<li><p>restrict remote desktop access by matching tags in v-desktop pool, but further restriction need design network topology to force certain clients to connect through. </p>
+</li>
+</ul>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://www.vmware.com/cn.html" target="_blank" rel="external">vmware product lists</a></p>
+<p><a href="http://vga.zol.com.cn/581/5818519_all.html" target="_blank" rel="external">amd S7150 review</a></p>
+<p><a href="https://developer.aliyun.com/ask/215008" target="_blank" rel="external">GPU SR-IOV</a></p>
+<p><a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/network/sr-iov-virtual-functions--vfs-" target="_blank" rel="external">windows driver tech: PF &amp; VF</a></p>
+<p><a href="https://docs.vmware.com/en/VMware-vSphere/6.7/com.vmware.esxi.install.doc/GUID-A71D7F56-6F47-43AB-9C4E-BAA89310F295.html" target="_blank" rel="external">vSphere install and setup doc</a></p>
+<p><a href="https://docs.vmware.com/en/VMware-Horizon-7/index.html" target="_blank" rel="external">horizon7 install and setup doc</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/vmware-virtualization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -310,7 +542,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/03/28/vmware-virtualization/" itemprop="url">vmware virtualization</a></h1>
+                <a class="post-title-link" href="/2020/03/28/vmware-virtualization/" itemprop="url">vmware introduction</a></h1>
         
 
         <div class="post-meta">
@@ -370,7 +602,7 @@
       
         
           
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>sooner or later, we are in the direction of gpu virtualization, previously <a href="">hypervisor and gpu virtual</a> is the first blog. recently, I’d went through openstack/kvm, vnc and now vmware. there is no doubt, any licensed product is not my prefer, but on the hand, it’s more expensive to hire an openstack engineer, compared to pay vmware. </p>
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>sooner or later, we are in the direction of gpu virtualization, previously <a href="https://zjli2013.github.io/2020/03/14/hypervisor-and-gpu-virtualization/" target="_blank" rel="external">hypervisor and gpu virtual</a> is the first blog. recently, I’d went through openstack/kvm, vnc and now vmware. there is no doubt, any licensed product is not my prefer, but on the hand, it’s more expensive to hire an openstack engineer, compared to pay vmware. </p>
 <p>vmware is not a windows-only, I had to throw my old mind first. the basic or back-end idea looks very similar to kvm. anyway, the core is <code>hypervisor layer</code>. once get understand one type of virtualization, it’s really easy to understand another. </p>
 <h4 id="VMware-ESXi"><a href="#VMware-ESXi" class="headerlink" title="VMware ESXi"></a>VMware ESXi</h4><p><a href="https://www.vmware.com/products/esxi-and-esx.html" target="_blank" rel="external">ESXi hypervisor</a> is a Type1 or “bare metal” hypervisor,  also called <strong>vmware hypervisor</strong>, is a thin layer of software that interacts with the underlying resources of a physical computer(host machine), and allocates those resources to other os(guest machine).<br>and can support remotely access, just like kvm.</p>
 <p>check <a href="https://pubs.vmware.com/vsphere-50/index.jsp?topic=%2Fcom.vmware.vsphere.install.doc_50%2FGUID-F3A960E9-57DF-4D2E-9127-A65AA670E643.html" target="_blank" rel="external">vSphere doc</a> about how to set BIOS and manage ESXi remotely.</p>
@@ -2062,196 +2294,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/11/high-concurrent-ws-log-server/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/11/high-concurrent-ws-log-server/" itemprop="url">high concurrent ws log server</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-11T03:50:40-04:00">
-                2020-03-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/11/high-concurrent-ws-log-server/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/11/high-concurrent-ws-log-server/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h2><p>previously, we designed <a href="https://zjli2013.github.io/2020/03/09/design-a-logger-from-ws-to-db" target="_blank" rel="external">a logger module from ws to db</a>/, this blog is one real implementation of the python solution.</p>
-<h2 id="high-concurrent-ws-server-online"><a href="#high-concurrent-ws-server-online" class="headerlink" title="high concurrent ws server online"></a>high concurrent ws server online</h2><h4 id="single-server-with-multi-clients-a-simple-C"><a href="#single-server-with-multi-clients-a-simple-C" class="headerlink" title="single server with multi clients: a simple C++"></a><a href="https://www.codeproject.com/articles/7785/single-server-with-multiple-clients-a-simple-cplus" target="_blank" rel="external">single server with multi clients: a simple C++</a></h4><ul>
-<li><p>the server is started first, and wait for the incoming client calls, periodically report its status: how many clients keep connected. meanwhile, once an incoming call is detected and accepted, the server will create a separate thread to handle this client. therefore, the server creates as many separate sessions as there are incoming clients. </p>
-</li>
-<li><p>how handle multiple clients? once an incoming client call is received and accepted, the main server thread will create a new thread, and pass the client connection to this thread</p>
-</li>
-<li><p>what if client threads need access some global variables? a semaphore instance ish helpful.</p>
-</li>
-</ul>
-<h4 id="how-ws-server-handles-multiple-incomming-connections"><a href="#how-ws-server-handles-multiple-incomming-connections" class="headerlink" title="how ws server handles multiple incomming connections"></a><a href="https://stackoverflow.com/questions/28516962/how-websocket-server-handles-multiple-incoming-connection-requests" target="_blank" rel="external">how ws server handles multiple incomming connections</a></h4><ul>
-<li><p>socket object is often thought to represent a connection, but not entirely true, since they can be active or passive.  a socket object in <strong>passive/listen</strong> mode is created by listen() for incoming connection requets. by definition, such a socket is not a connection, it just listen for conenction requets.</p>
-</li>
-<li><p><strong>accept()</strong> doesn’t change the state of the <strong>passive</strong> socket created by <strong>listen()</strong> previously, but it returns an <strong>active/connected</strong> socket, which represents a real conenction. after <strong>accept()</strong> has returned the connected socket object, it can be called again on the passive socket, and again and again. or known as <code>accept loop</code></p>
-</li>
-<li><p>But call <code>accept()</code> takes time, can’t it miss incoming conenction requests? it won’t, there is a queue of pending connection requests, it is handled automatically by TCP/IP stack of the OS. meaning, while <code>accept()</code> can only deal with incoming connection request <strong>one-by-one</strong>, no incoming request will be missed even when they are incoming at a high rate. </p>
-</li>
-</ul>
-<h2 id="python-env-setup"><a href="#python-env-setup" class="headerlink" title="python env setup"></a>python env setup</h2><p><code>websockets</code> module requires python3.6, the python version in bare OS is 3.5, which gives:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">  File <span class="string">"/usr/lib/python3/dist-packages/websockets/compatibility.py"</span>, line <span class="number">8</span></div><div class="line">    asyncio_ensure_future = asyncio.<span class="keyword">async</span>           <span class="comment"># Python &lt; 3.5</span></div><div class="line">                                       ^</div><div class="line">SyntaxError: invalid syntaxß</div><div class="line">``` </div><div class="line"></div><div class="line">basically, [asyncio.<span class="keyword">async</span>](https://stackoverflow.com/questions/<span class="number">51292523</span>/why-does-asyncio-ensure-future-asyncio-<span class="keyword">async</span>-<span class="keyword">raise</span>-a-syntaxerror-invalid-synt) <span class="keyword">and</span> another depend module [discord.py](https://github.com/Rapptz/discord.py/issues/<span class="number">1396</span>), require python &lt; <span class="number">3.5</span>v, then gives another error:</div><div class="line"></div><div class="line">```python</div><div class="line">TypeError: unsupported operand type(s) <span class="keyword">for</span> -=: <span class="string">'Retry'</span> <span class="keyword">and</span> <span class="string">'int'</span></div></pre></td></tr></table></figure>
-<p>the <a href="https://www.jianshu.com/p/b2d308c0311d" target="_blank" rel="external">Retry error</a> fixed by adding the following lines to <code>~/.pip/pip.conf</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">global</span>]</div><div class="line">index-url = https://pypi.tuna.tsinghua.edu.cn/simple</div><div class="line">``` </div><div class="line"><span class="keyword">in</span> a bare system <span class="keyword">with</span> pre-installed python3<span class="number">.5</span>, I did the following steps: </div><div class="line"></div><div class="line">```python</div><div class="line">sudo apt install software-properties-common</div><div class="line">sudo add-apt-repository ppa:deadsnakes/ppa</div><div class="line">sudo apt-get install python3<span class="number">.7</span> </div><div class="line">sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3<span class="number">.7</span> <span class="number">2</span></div><div class="line">sudo apt-get install python3-websockets</div><div class="line">sudo apt-get install python3-websocket</div><div class="line">sudo apt-get install python3-sqlalchemy</div><div class="line">sudo pip3 install threadpool</div><div class="line">sudo apt-get remove --purge python3-websocket  <span class="comment">#based on python3.5</span></div><div class="line">sudo apt-get install python3-websocket  <span class="comment">#based on python3.7</span></div></pre></td></tr></table></figure>
-<p>which gives another error:  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/var/lib/dpkg/info/python3-websocket.postinst: 6: /var/lib/dpkg/info/python3-websocket.postinst: py3compile: not found</div><div class="line">dpkg: error processing package python3-websocket (--configure):</div><div class="line"> subprocess installed post-installation script returned error exit status 127</div><div class="line">Errors were encountered while processing:</div><div class="line"> python3-websocket</div><div class="line">E: Sub-process /usr/bin/dpkg returned an error code (1)</div></pre></td></tr></table></figure>
-<p>which then be <a href="https://askubuntu.com/questions/438345/how-to-remove-install-a-package-that-is-not-fully-installed" target="_blank" rel="external">fixed</a> by go to <code>/var/lib/dpkg/info/</code> and delete all <code>python3-websocket.*</code> files:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo rm /var/lib/dpkg/info/[package_name].*</div><div class="line">sudo dpkg --configure -a</div><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
-<p>everything looks good, but still report: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ModuleNotFoundError: No module named &apos;websockets&apos;</div></pre></td></tr></table></figure>
-<p><strong>Gave up setting up with the bare python</strong>, then create a new conda env, and ran the following settings inside, clean and simple: </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pip install websockets</div><div class="line">pip install websocket-client  <span class="comment">#rather websocket</span></div><div class="line">pip install threadpool</div><div class="line">pip install sqlalchemy</div><div class="line">pip install psycopg2</div></pre></td></tr></table></figure>
-<p>during remote test, if ws server down unexpected, need <a href="https://unix.stackexchange.com/questions/140021/how-to-close-ports-in-linux" target="_blank" rel="external">kill the ws pid</a>:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">sudo netstat -tlnp  #find the special running port and its pid </div><div class="line">kill $pid</div><div class="line">``` </div><div class="line">or `kill $(lsof -t -i:$port)`</div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"><span class="comment"># websockets &amp; websocket-client</span></span></div><div class="line"></div><div class="line">the long-lived connection sample from [ws-client](https://github.com/websocket-client/websocket-client) is good base, as here need to test a high concurrent clients, we add `threadpool`:</div><div class="line"></div><div class="line">```python</div><div class="line">  def on_open(ws, num):</div><div class="line">      def run(*args): ##args</div><div class="line">          for i in range(3):</div><div class="line">              time.sleep(1)</div><div class="line">              message = "your_message"</div><div class="line">              ws.send(json.dumps(message))</div><div class="line">          time.sleep(1)</div><div class="line">          ws.close()</div><div class="line">          print("thread terminating...")</div><div class="line">      thread.start_new_thread(run, ())</div><div class="line"> </div><div class="line"> def on_start(num):</div><div class="line">      websocket.enableTrace(True)</div><div class="line">      ws = websocket.WebSocketApp("ws://localhost:8888/",</div><div class="line">                                on_message = on_message,</div><div class="line">                                on_error = on_error,</div><div class="line">                                on_close = on_close)</div><div class="line">      ws.on_open = on_open(ws, num)</div><div class="line">      ws.run_forever()</div><div class="line">  </div><div class="line">  def threadpool_test():</div><div class="line">      start_time = time.time()</div><div class="line">      pool = ThreadPool(100)</div><div class="line">      test = list()</div><div class="line">      for itr in range(100):</div><div class="line">          test.append(itr)</div><div class="line">      requests = makeRequests(on_start, test)</div><div class="line">      [pool.putRequest(req) for req in requests]</div><div class="line">      pool.wait()</div><div class="line">      print('%d second'% (time.time() - start_time))</div></pre></td></tr></table></figure>
-<p>in <a href="">ws-client src</a>, we see: </p>
-<ul>
-<li><p>on_open: callable object which is called at opening websocket. this function has one argument. The argument is this class object. but all customized callback func can add more arguments, which is helpful.</p>
-</li>
-<li><p>on_message: callable object which is called when received data. on_message has 2 arguments. The 1st argument is this class object. the 2nd argument is utf-8 string which we get from the server.</p>
-</li>
-</ul>
-<p>we can implement a simple <a href="">sqlalchemy orm</a> db-writer, and add to the ws-server:</p>
-<pre><code class="python"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">process</span><span class="params">(self, websocket, path)</span>:</span>
-     raw_ = <span class="keyword">await</span> websocket.recv()
-     jdata = json.loads(raw_)
-     orm_obj = orm_(jdata)
-     <span class="keyword">try</span>:
-         self.dbwriter_.write(orm_obj)
-         print(jdata, <span class="string">"write to db successfully"</span>)
-     <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
-         dbwriter_.rollback()
-         print(e)
-
-     greeting = <span class="string">"hello from server"</span>
-     <span class="keyword">await</span> websocket.send(greeting)
-     print(<span class="string">f"&gt; <span class="subst">{greeting}</span>"</span>)
-
- <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span>
-     <span class="keyword">if</span> self.host <span class="keyword">and</span> self.port :
-         start_server = websockets.serve(self.process, self.host, self.port)
-     <span class="keyword">else</span>:
-         start_server = websockets.serve(self.process, <span class="string">"localhost"</span>, <span class="number">8867</span>)
-     asyncio.get_event_loop().run_until_complete(start_server)
-     asyncio.get_event_loop().run_forever()
-</code></pre>
-<h2 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h2><p>in reality, each ws-client is integrated to one upper application, which generate messages/log, and send to ws-server, inside which write to db, due to <code>asyncio</code>, the performance is good so far. in future, we maybe need some buffer at ws-server. </p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://mcguirev10.com/2019/01/15/simple-multi-client-websocket-server.html" target="_blank" rel="external">a simple multi-client ws server</a></p>
-<p><a href="https://www.toptal.com/tornado/simple-python-websocket-server" target="_blank" rel="external">create a simple python sw server using Tornado</a></p>
-<p><a href="https://websockets.readthedocs.io/en/stable/intro.html" target="_blank" rel="external">python: websockets</a></p>
-<p><a href="https://docs.python.org/3/library/json.html" target="_blank" rel="external">python: json</a></p>
-<p><a href="https://chrisarndt.de/projects/threadpool/api/" target="_blank" rel="external">python: threadpool</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2302,7 +2344,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">167</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2315,7 +2357,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

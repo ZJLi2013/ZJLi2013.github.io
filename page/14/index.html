@@ -291,6 +291,134 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Btree-max-path-sum/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/02/Btree-max-path-sum/" itemprop="url">Btree max path sum</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-02T20:22:46-04:00">
+                2018-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/02/Btree-max-path-sum/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/10/02/Btree-max-path-sum/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/binary-tree-maximum-path-sum/description/" target="_blank" rel="external">leetCode 124</a>. the first idea is recursive from root to bottom leaf, and return the max from left or right at each node.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">subsum</span><span class="params">(TreeNode* node)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> max_left = <span class="number">0</span>, max_right =<span class="number">0</span>;</div><div class="line">	<span class="keyword">if</span>(node-&gt;left)</div><div class="line">		max_left = subsum(node-&gt;left);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="keyword">return</span> <span class="built_in">std</span>::max(node-&gt;val, subsum(node-&gt;right));</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(node-&gt;right)</div><div class="line">		max_right = subsum(node-&gt;right);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="keyword">return</span> <span class="built_in">std</span>::max(node-&gt;val, subsum(node-&gt;left));</div><div class="line"></div><div class="line">	sum += node-&gt;val + <span class="built_in">std</span>::max(max_left, max_right); </div><div class="line"></div><div class="line">	<span class="keyword">return</span> sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>this will get the max sum branch from top to bottom, but can’t consider the other branch, and there is case when the max sum branch is actually smaller than a subtree sum. so here needs to consider the subtree sum as well, since the root tree can be consider as a subtree, so after implmenting subtree sum, actually no need to consider the other branch sum.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">subsum</span><span class="params">(TreeNode*  node, <span class="built_in">std</span>::priority_queue&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, greater&lt;<span class="keyword">int</span>&gt; &gt;&amp; s)</span></span></div><div class="line">&#123;</div><div class="line"> <span class="keyword">if</span>(node==<span class="literal">nullptr</span>)</div><div class="line">	 <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"> </div><div class="line"> <span class="keyword">int</span> max_left=<span class="number">0</span>, max_right=<span class="number">0</span>;</div><div class="line"> <span class="keyword">int</span> sum=<span class="number">0</span>; </div><div class="line"> <span class="keyword">int</span> subtree_sum = <span class="number">0</span>; </div><div class="line"> <span class="keyword">if</span>(node-&gt;left)&#123;</div><div class="line">	 max_left = subsum(node-&gt;left, s); </div><div class="line">	 subtree_sum += max_left;  </div><div class="line"> &#125;<span class="keyword">else</span></div><div class="line"> &#123;</div><div class="line">	 subtree_sum += node-&gt;val; </div><div class="line">	 <span class="keyword">return</span> <span class="built_in">std</span>::max(node-&gt;val,  subsum(node-&gt;right, s)); </div><div class="line"> &#125;</div><div class="line">	 </div><div class="line"> <span class="keyword">if</span>(node-&gt;right)&#123;</div><div class="line">	 max_right = subsum(node-&gt;right, s);</div><div class="line">	 subtree_sum += max_right;  </div><div class="line"> &#125;<span class="keyword">else</span>&#123;</div><div class="line">	 subtree_sum += node-&gt;val; </div><div class="line">	 <span class="keyword">return</span> <span class="built_in">std</span>::max(node-&gt;val, subsum(node-&gt;left, s)); </div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> sum += node-&gt;val + <span class="built_in">std</span>::max(max_left, max_right);</div><div class="line"></div><div class="line"> <span class="keyword">if</span>(node-&gt;right != <span class="literal">nullptr</span>  || node-&gt;left != <span class="literal">nullptr</span>)</div><div class="line">	subtree_sum += node-&gt;val; </div><div class="line"> <span class="keyword">else</span></div><div class="line">	 subtree_sum -= node-&gt;val; </div><div class="line"> </div><div class="line"> <span class="keyword">if</span>(subtree_sum &gt; sum)&#123;</div><div class="line">	 s.push(subtree_sum); </div><div class="line">	 <span class="built_in">cout</span> &lt;&lt; <span class="string">"s.top= "</span> &lt;&lt; s.top() &lt;&lt; <span class="string">"\n"</span> &lt;&lt; <span class="built_in">endl</span>; </div><div class="line">	 <span class="keyword">while</span>( sum &gt; s.top())</div><div class="line">	 &#123;</div><div class="line">		 s.pop();</div><div class="line">	 &#125;</div><div class="line"> &#125;</div><div class="line"> <span class="keyword">return</span> sum; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>passing priority_queue <code>s</code> as reference, so if <code>subtree\_sum</code> is bigger than the top-bottom branch sum, then it will be pushed into <code>s</code>; but pop out the elements smaller than current branch sum in each recrusive routing.</p>
+<p>finally, compare the largest elemnet in <code>s</code> with top-bottom branch sum.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/01/when-pure-loop-doesn-t-work-out/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1485,140 +1613,6 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-recursive-works-with-passing-reference-variables/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/29/how-recursive-works-with-passing-reference-variables/" itemprop="url">how recursive works with passing reference variables</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:56:44-04:00">
-                2018-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/29/how-recursive-works-with-passing-reference-variables/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/29/how-recursive-works-with-passing-reference-variables/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>leetCode 62(unique paths):<br>        A robot is located at the top-left corner of a m x n grid (marked ‘Start’ in the diagram below). The robot can only move either down or right at any point in time. The robot is trying to reach the bottom-right corner of the grid (marked ‘Finish’ in the diagram below). How many possible unique paths are there?</p>
-<p>solution: it’s easy to model as a math combination problem, assume the  right-step has m; the down-step has n. so each path from top left to bottom right, has (m+n) steps totally. the total unique paths is   C_(m+n)^m </p>
-<p>passing by value: </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span> rm, <span class="keyword">int</span> rn)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> rm==<span class="number">0</span> ? <span class="number">1</span> : (rm+rn)/rm * sol(rm<span class="number">-1</span>, rn);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>what happened if rm-1 changed to  rm–?  </p>
-<pre><code>warning: unsequenced modification and access to &apos;rm&apos;
-</code></pre><p>what about passing as reference ? </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">sol</span><span class="params">(<span class="keyword">int</span>&amp; m, <span class="keyword">int</span>&amp; n)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> m==<span class="number">0</span> ? <span class="number">1</span> : (m+n)/(<span class="keyword">float</span>)m * sol(--m, n);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>if using m– :</p>
-<pre><code>error:  expects an l-value for 1st argument of sol(int&amp;, int&amp;)
-</code></pre><p>m– is only r-value, can’t be used as reference varaible; but –m is r-value. </p>
-<p>for m as a reference variable,  –m is the way to update the content of the address. while m– more like move to the next address?</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1669,7 +1663,7 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">167</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1682,7 +1676,7 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

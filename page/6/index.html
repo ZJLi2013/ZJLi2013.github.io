@@ -291,6 +291,192 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/cruise-webriz-configure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/16/cruise-webriz-configure/" itemprop="url">cruise webriz configure</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-16T07:09:19-04:00">
+                2019-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/16/cruise-webriz-configure/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/16/cruise-webriz-configure/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>during ADS development, ros bag is used a lot to record the sensor, CAN and scenario info, which helps in vehicle test, data fusion, perception.<br><a href="https://github.com/cruise-automation/webviz" target="_blank" rel="external">cruise webviz</a> is an open source tool to visualize rosbag and allow user defined layout in web environment, without the pain to run <code>roscore</code> and other ros nodes.</p>
+<p>while js is not a common tool in my visibility, the way how an js project is organized is really confused at the first time. there are a punch of new things:</p>
+<ul>
+<li><a href="https://create-react-app.dev/" target="_blank" rel="external">react</a></li>
+<li>[regl]<a href="https://www.giacomodebidda.com/how-to-get-started-with-regl-and-webpack/" target="_blank" rel="external">https://www.giacomodebidda.com/how-to-get-started-with-regl-and-webpack/</a>)</li>
+</ul>
+<p>and <code>js</code> functions/modules are really patches, they can be pached anywhere in the project, so usually it requires a patch manager(e.g. lerna) to deal with versions, dependencies etc; and bigger there are packages, which is independent function component.</p>
+<p>webviz has a few packages, e.g. regl-worldview, webviz-core, which has more than 40 patches(modules) used.</p>
+<ul>
+<li><p><a href="https://webviz.io/worldview/#/docs/tutorial/introduction" target="_blank" rel="external">cruise:worldview</a></p>
+</li>
+<li><p><a href="">cruise:webviz core</a></p>
+</li>
+<li><p><a href="https://github.com/cruise-automation/rosbag.js" target="_blank" rel="external">rosbag.js</a></p>
+</li>
+</ul>
+<h2 id="lerna"><a href="#lerna" class="headerlink" title="lerna"></a>lerna</h2><p><a href="https://github.com/lerna/lerna" target="_blank" rel="external">lerna</a> is an open source tool to manage js project with multi packages.</p>
+<ul>
+<li><p><code>lerna init</code> will generate <code>lerna.json</code>, which defines the required modules</p>
+</li>
+<li><p><code>package.json</code> defines useful infomation about the module depencies,  CLI(which give a detail about how things work behind) and project description</p>
+</li>
+<li><p><code>lerna bootstrap --hoist react</code> will install all required modules in the root folder <code>/node_modules</code>, if doesn’t work well, leading to <code>Can&#39;t Resovle module errors</code>,  may need manually install some.</p>
+</li>
+</ul>
+<h2 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h2><p><a href="https://webpack.js.org/guides/getting-started/" target="_blank" rel="external">webpack</a> is an open source tool for js module bundler. </p>
+<p><code>webpack.config.js</code>, defines <code>entry</code>, where the compiler start; <code>output</code> , where the compiler end; <code>module</code>, how to deal with each module; <code>plugin</code>, additionaly content post compiliation; <code>resovle.alias</code> define alias for modules.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var path=require(<span class="string">"path"</span>)</div><div class="line"></div><div class="line">module.exports =&#123;</div><div class="line">	entry: &#123; app:[<span class="string">"./app/main.js"</span>] &#125;</div><div class="line">     	output: &#123;path: path.resolve(__dirname, <span class="string">"build"</span>)&#125; </div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">npm install webpack-dev-server</div><div class="line"></div><div class="line">npm list | head -n <span class="number">1</span> </div><div class="line"></div><div class="line">webpack-dev-server --inline --hot</div></pre></td></tr></table></figure>
+<p>the JS bundle could be loaded from a static HTML page, served with any simple web server. That’s exactly what this /packages/webviz-core/public/index.html file is, which is used for <a href="https://webviz.io/try" target="_blank" rel="external">https://webviz.io/try</a>. The webpack dev server is configured to serve it at /webpack.config.js</p>
+<h2 id="npm-commands"><a href="#npm-commands" class="headerlink" title="npm commands"></a>npm commands</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm config list </div><div class="line">npm install packages@version.minor [-g] [--save]</div><div class="line">npm uninstall packages </div><div class="line">npm search packages</div><div class="line">npm cache clean --force</div></pre></td></tr></table></figure>
+<h2 id="webpack-server"><a href="#webpack-server" class="headerlink" title="webpack-server"></a>webpack-server</h2><p><a href="https://github.com/webpack/docs/wiki/webpack-dev-server" target="_blank" rel="external">webpack-server</a> is a little nodejs Express server. to install it as a CLI tool first, then run it under the webviz project root folder, with optional parameters, e.g.  –host, –port e.t.c</p>
+<h2 id="webviz-configure"><a href="#webviz-configure" class="headerlink" title="webviz configure"></a>webviz configure</h2><ul>
+<li>npm config set registry <a href="https://r.npm.taobao.org" target="_blank" rel="external">https://r.npm.taobao.org</a></li>
+<li>npm install puppeteer –unsafe-perm=true</li>
+<li>npm run bootstrap</li>
+</ul>
+<p>if failed: </p>
+<ul>
+<li>sudo npm cache  clean –force </li>
+<li>npm install -g lerna </li>
+<li>npm run bootstrap     </li>
+<li>sudo npm install/rebuild node-sass </li>
+<li>npm run build</li>
+</ul>
+<p>if failed, manually installed unresovled modules</p>
+<ul>
+<li>npm test   </li>
+</ul>
+<p>if failed based on a few test modules, install then</p>
+<ul>
+<li>npm install  webpack-dev-server –save </li>
+</ul>
+<p>webpack-dev-server.js –host IP –port 8085  #under project root</p>
+<p>a little hack, by default <code>npm install inter-ui</code> <a href="https://github.com/philipbelesky/inter-ui/tree/master/Inter%20(web" target="_blank" rel="external">phli’s inter-ui</a>), where inside<br><code>webviz/packages/webvix-core/src/styles/fonts.module.scess</code>, it uses: <code>url(&quot;~inter-ui/Inter UI (web)/Inter-UI.var.woff2&quot;) format(&quot;woff2-variations&quot;)</code>, modified this line to: <code>url(&quot;~inter-ui/Inter (web)/Inter.var.woff2&quot;) format(&quot;woff2-variations&quot;)</code></p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://tabbles.net/" target="_blank" rel="external">tabbles</a></p>
+<p><a href="https://discourse.ros.org/t/webviz-ros-data-visualization-in-the-browser/9783" target="_blank" rel="external">webviz in ros community</a></p>
+<p><a href="https://stackoverflow.com/questions/33272967/how-to-make-the-webpack-dev-server-run-on-port-80-and-on-0-0-0-0-to-make-it-publ" target="_blank" rel="external">access web-server in LAN</a></p>
+<p><a href="https://github.com/cruise-automation/webviz/issues/161" target="_blank" rel="external">issue: how to run cruise webviz</a></p>
+<p><a href="https://ternaris.com/marv-robotics/" target="_blank" rel="external">Ternaris Marv</a></p>
+<p><a href="https://min.io/" target="_blank" rel="external">minio: high performance object storage for AI</a></p>
+<p><a href="https://github.com/cruise-automation/webviz/issues/247" target="_blank" rel="external">webviz on remote bag</a></p>
+<p><a href="https://github.com/cruise-automation/webviz/issues/118" target="_blank" rel="external">visuaize data from a live server</a></p>
+<p><a href="https://stackoverflow.com/questions/22764407/npm-install-goes-to-dead-in-china" target="_blank" rel="external">npm package install in China</a></p>
+<p><a href="https://npm.taobao.org/package/cnpm" target="_blank" rel="external">taobao.npm</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/13/reinforcement-learning-in-nutshell-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2036,199 +2222,6 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/11/npc-wp-planner-in-ADS-simulation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/11/npc-wp-planner-in-ADS-simulation/" itemprop="url">npc wp planner in ADS simulation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-11T09:52:39-04:00">
-                2019-09-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/11/npc-wp-planner-in-ADS-simulation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/11/npc-wp-planner-in-ADS-simulation/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>a ADS simulation platform should have the three components:</p>
-<ul>
-<li><code>vehicle dynamics model</code></li>
-</ul>
-<p>for game engine(e.g. unReal, Unity3D) based ADS simulation platform, there has simple game-level vehicel dynamics(VD), and in engineering side, there are more precise VD, such as <code>Carsim</code>, <code>CarMaker</code>, and a few smaller ones.</p>
-<ul>
-<li><code>sensor models</code> </li>
-</ul>
-<p>currently camera and Lidar model are pretty good, for mm Radar, which has a frequency around 24G hz or 77G hz, which is far more beyond the digital computer can sample, so to simulate Radar(or Radar model) is not that practicalable.</p>
-<p>as can find in famous simulator, e.g. lg-sim and Carla, they are puting a lot efforts in sensor models, which should be more useful in future.</p>
-<p>another good way of sensor model simulation, is to test and verify the vendor’s sensors. most time, the performance test from vendors are not fit well. and as the physical model of the sensors is not visible, to simualate as a black box is useful then.</p>
-<ul>
-<li><code>scenario describe</code></li>
-</ul>
-<p><code>PEGSUS</code> project used <code>OpenScenario</code> xml language; in other case, the scenario can be described directly in Python. </p>
-<p>basically what need to define during scenario descibtion, includes:</p>
-<ul>
-<li>scenario static env </li>
-<li>scenario npc actors movement</li>
-</ul>
-<p>in more advanced solutions, the process of builing virtual envs directly start from dronze/cars images or cloud point images.</p>
-<p>what’s in this post is one part of npc movement control: lane change.</p>
-<h2 id="lane-change-done-event"><a href="#lane-change-done-event" class="headerlink" title="lane_change_done event"></a>lane_change_done event</h2><p>at default lg-sim, there is a <code>lane-change</code> event, which describes when lane change happens; for a more precise npc control, here adds a <code>lane-chagne-done</code> event, basically to describe when the lane change is done. </p>
-<p>similar to <code>lane-change</code> event, here defines the <code>lane-change-done</code> event in both server and client side. </p>
-<h2 id="Unity-transform-position-vs-local-position"><a href="#Unity-transform-position-vs-local-position" class="headerlink" title="Unity.transform.position  vs  local position"></a>Unity.transform.position  vs  local position</h2><p>here is the math part. Unity has plenty APIs to handle these, which is good to study in.</p>
-<ul>
-<li><p>dot product </p>
-<pre><code>Vector3.Dot()
-</code></pre></li>
-<li><p>cross product </p>
-</li>
-<li><p>p2p distance</p>
-<pre><code>Vector3.Distance()
-</code></pre></li>
-<li><p>interpolate</p>
-<pre><code>Mathf.Lerp()
-</code></pre></li>
-<li><p>world 2 local transfer</p>
-<pre><code>Transform.InverseFromPoint(position)
-</code></pre></li>
-<li><p>camera matrix </p>
-</li>
-<li><p>equations of lines    </p>
-</li>
-</ul>
-<h2 id="waypoints-described-lane"><a href="#waypoints-described-lane" class="headerlink" title="waypoints described lane"></a>waypoints described lane</h2><p>NPC agents are drived by waypoints embedded in the virtual roads, in lg-sim, waypoints is inside <code>LaneSegmentBuilder</code>. but in general the waypoints are not ideal:</p>
-<ul>
-<li>their distance is not unique</li>
-<li>their index in neighboring lanes doesn’t keep consistent</li>
-<li>they don’t care of curves of real roads</li>
-</ul>
-<p>for waypoints based planner, rather AI-based planner, e.g. lane-change planner, the processes are as following: </p>
-<ul>
-<li>get currentTarget in target(current) lane</li>
-</ul>
-<p>which is usually not pointed by the same currentIndex as the previous lane, so need to figure out the closeset wp from the waypoint list in current lane, and this closest wp should be in front of NPC (no consider NPC retrograde).</p>
-<ul>
-<li>keep currentTarget update </li>
-</ul>
-<p>during NPC (lane-change) operation, there is case when the <code>currentTarget</code> is behind NPC position, if it’s not expected, it’s always a error planner, leading NPC header turn over. so need to check currentTarget is always in front of NPC, if not, update currentTarget to next wp. </p>
-<p>1) driving direction vs currentTarget2NPCposition</p>
-<p>driving direction in global <code>dot product</code> currentTarget2NPCposition should greater than zero, if not, update currentTarget </p>
-<p>2) NPC in currentTarget local position</p>
-<p>NPC local position should always in negative axis, if not, update currentTarget. the trick here, can’t use currentTarget in nPC local position, as when NPC is head of currentTarget, NPC will be pointed in reverse, which makes the local coordinate reverse as well. but  currentTarget is the fixed wp always.</p>
-<ul>
-<li>lane-change-done criteria</li>
-</ul>
-<p>ideally when the whole NPC occupied in the target lane, that’s when the lane-change operation done. but that’s never the reality. as then, if there is the next next lane, the NPC is partly in the next next lane, so can’t keep lane change in only one neighboring lane.</p>
-<p>but in reality, highway or express way, the vehicle can’t across two lane in one time. so to keep lane-change-done and done in just the next lane, the criteria is when the NPC position in Z or X direction projection to currentTarget X or Z direction projection is more than half of the lane width:</p>
-<pre><code>Mathf.Abs(frontCenter.position.z - currentTarget.z) &lt; laneWidth/2.0
-</code></pre><p>usually in game engine, NPC can be controlled by AI, will discuss later.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2279,7 +2272,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">167</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2292,7 +2285,7 @@ A2.x + B2.y + C2.z + P2 = 0
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

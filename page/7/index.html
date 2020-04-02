@@ -291,6 +291,199 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/11/npc-wp-planner-in-ADS-simulation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/11/npc-wp-planner-in-ADS-simulation/" itemprop="url">npc wp planner in ADS simulation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-11T09:52:39-04:00">
+                2019-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/11/npc-wp-planner-in-ADS-simulation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/11/npc-wp-planner-in-ADS-simulation/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>a ADS simulation platform should have the three components:</p>
+<ul>
+<li><code>vehicle dynamics model</code></li>
+</ul>
+<p>for game engine(e.g. unReal, Unity3D) based ADS simulation platform, there has simple game-level vehicel dynamics(VD), and in engineering side, there are more precise VD, such as <code>Carsim</code>, <code>CarMaker</code>, and a few smaller ones.</p>
+<ul>
+<li><code>sensor models</code> </li>
+</ul>
+<p>currently camera and Lidar model are pretty good, for mm Radar, which has a frequency around 24G hz or 77G hz, which is far more beyond the digital computer can sample, so to simulate Radar(or Radar model) is not that practicalable.</p>
+<p>as can find in famous simulator, e.g. lg-sim and Carla, they are puting a lot efforts in sensor models, which should be more useful in future.</p>
+<p>another good way of sensor model simulation, is to test and verify the vendor’s sensors. most time, the performance test from vendors are not fit well. and as the physical model of the sensors is not visible, to simualate as a black box is useful then.</p>
+<ul>
+<li><code>scenario describe</code></li>
+</ul>
+<p><code>PEGSUS</code> project used <code>OpenScenario</code> xml language; in other case, the scenario can be described directly in Python. </p>
+<p>basically what need to define during scenario descibtion, includes:</p>
+<ul>
+<li>scenario static env </li>
+<li>scenario npc actors movement</li>
+</ul>
+<p>in more advanced solutions, the process of builing virtual envs directly start from dronze/cars images or cloud point images.</p>
+<p>what’s in this post is one part of npc movement control: lane change.</p>
+<h2 id="lane-change-done-event"><a href="#lane-change-done-event" class="headerlink" title="lane_change_done event"></a>lane_change_done event</h2><p>at default lg-sim, there is a <code>lane-change</code> event, which describes when lane change happens; for a more precise npc control, here adds a <code>lane-chagne-done</code> event, basically to describe when the lane change is done. </p>
+<p>similar to <code>lane-change</code> event, here defines the <code>lane-change-done</code> event in both server and client side. </p>
+<h2 id="Unity-transform-position-vs-local-position"><a href="#Unity-transform-position-vs-local-position" class="headerlink" title="Unity.transform.position  vs  local position"></a>Unity.transform.position  vs  local position</h2><p>here is the math part. Unity has plenty APIs to handle these, which is good to study in.</p>
+<ul>
+<li><p>dot product </p>
+<pre><code>Vector3.Dot()
+</code></pre></li>
+<li><p>cross product </p>
+</li>
+<li><p>p2p distance</p>
+<pre><code>Vector3.Distance()
+</code></pre></li>
+<li><p>interpolate</p>
+<pre><code>Mathf.Lerp()
+</code></pre></li>
+<li><p>world 2 local transfer</p>
+<pre><code>Transform.InverseFromPoint(position)
+</code></pre></li>
+<li><p>camera matrix </p>
+</li>
+<li><p>equations of lines    </p>
+</li>
+</ul>
+<h2 id="waypoints-described-lane"><a href="#waypoints-described-lane" class="headerlink" title="waypoints described lane"></a>waypoints described lane</h2><p>NPC agents are drived by waypoints embedded in the virtual roads, in lg-sim, waypoints is inside <code>LaneSegmentBuilder</code>. but in general the waypoints are not ideal:</p>
+<ul>
+<li>their distance is not unique</li>
+<li>their index in neighboring lanes doesn’t keep consistent</li>
+<li>they don’t care of curves of real roads</li>
+</ul>
+<p>for waypoints based planner, rather AI-based planner, e.g. lane-change planner, the processes are as following: </p>
+<ul>
+<li>get currentTarget in target(current) lane</li>
+</ul>
+<p>which is usually not pointed by the same currentIndex as the previous lane, so need to figure out the closeset wp from the waypoint list in current lane, and this closest wp should be in front of NPC (no consider NPC retrograde).</p>
+<ul>
+<li>keep currentTarget update </li>
+</ul>
+<p>during NPC (lane-change) operation, there is case when the <code>currentTarget</code> is behind NPC position, if it’s not expected, it’s always a error planner, leading NPC header turn over. so need to check currentTarget is always in front of NPC, if not, update currentTarget to next wp. </p>
+<p>1) driving direction vs currentTarget2NPCposition</p>
+<p>driving direction in global <code>dot product</code> currentTarget2NPCposition should greater than zero, if not, update currentTarget </p>
+<p>2) NPC in currentTarget local position</p>
+<p>NPC local position should always in negative axis, if not, update currentTarget. the trick here, can’t use currentTarget in nPC local position, as when NPC is head of currentTarget, NPC will be pointed in reverse, which makes the local coordinate reverse as well. but  currentTarget is the fixed wp always.</p>
+<ul>
+<li>lane-change-done criteria</li>
+</ul>
+<p>ideally when the whole NPC occupied in the target lane, that’s when the lane-change operation done. but that’s never the reality. as then, if there is the next next lane, the NPC is partly in the next next lane, so can’t keep lane change in only one neighboring lane.</p>
+<p>but in reality, highway or express way, the vehicle can’t across two lane in one time. so to keep lane-change-done and done in just the next lane, the criteria is when the NPC position in Z or X direction projection to currentTarget X or Z direction projection is more than half of the lane width:</p>
+<pre><code>Mathf.Abs(frontCenter.position.z - currentTarget.z) &lt; laneWidth/2.0
+</code></pre><p>usually in game engine, NPC can be controlled by AI, will discuss later.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/06/a-nested-conditonal-variable-model-in-python/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1703,161 +1896,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/python-generator-and-asynico/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/16/python-generator-and-asynico/" itemprop="url">python generator and asynico</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T07:54:11-04:00">
-                2019-08-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/16/python-generator-and-asynico/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/16/python-generator-and-asynico/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="python-iterator"><a href="#python-iterator" class="headerlink" title="python iterator"></a>python iterator</h3><p>in python, <code>iterator</code> is any object that follows <code>iterator protocol</code>. which means should include method: <code>__iter()__</code>, <code>next()</code>, if no next element should raise <code>StopIteration</code> exception.</p>
-<p>take an example, <code>dict</code> and <code>list</code> have implemented <code>__iter()__</code> and <code>__getitem__()</code> methods, but not implemented <code>next()</code> method. so they are  <code>iterable</code> but not <code>iterator</code>.</p>
-<h3 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h3><p>to support delay operations, only return result when need, but not immediately return</p>
-<ul>
-<li><p>generator funcion (with <code>yield</code>) </p>
-</li>
-<li><p>generator expression </p>
-</li>
-</ul>
-<p>Python generator in other languages is called <code>coroutines</code> </p>
-<h3 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h3><p><code>yield</code> is almost of <code>return</code>, but it pauses every step after executing the line with <code>yield</code>, and till call <code>next()</code> will continue from the next line of <code>yield</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">	sim.run(timeout, cb)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cb</span><span class="params">()</span>:</span></div><div class="line">    a = <span class="number">1</span> </div><div class="line">	<span class="keyword">yield</span> print(a)</div><div class="line">	a += <span class="number">1</span></div></pre></td></tr></table></figure>
-<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>example: </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cor1</span><span class="params">(name)</span>:</span></div><div class="line">        print(<span class="string">"start cor1..name.."</span>, name)</div><div class="line">        x = <span class="keyword">yield</span> name</div><div class="line">        print(<span class="string">"send value"</span>, x)</div><div class="line"></div><div class="line">cor_ =  cor1(<span class="string">"zj"</span>)</div><div class="line">print(<span class="string">"next return"</span>, next(cor_))</div><div class="line">print(<span class="string">"send return"</span>, cor_.send(<span class="number">6</span>))</div></pre></td></tr></table></figure>
-<p>to run coroutine, need first call next(), then send() is called. namely, if not call next() first, send() will wait, and never be called.</p>
-<p>the thing is, when define a python generator/coroutine, it never will run; only through await(), next() call first, which then trigger the generator/coroutine start.</p>
-<h2 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h2><p>asyncronized IO, event-driven coroutine, so users can add <code>async/await</code> to time-consuming IO.</p>
-<ul>
-<li>event-loop</li>
-</ul>
-<p>event loop will always run, track events and enqueue them, when idle dequeue event and  call event-handling() to deal with it.</p>
-<ul>
-<li>asyncio.Task</li>
-</ul>
-<h3 id="await"><a href="#await" class="headerlink" title="await"></a>await</h3><p>await only decorate async/coroutine, which is a waitable object, it works to hold the current coroutine(async func A) and wait the other coroutine(async func B) to the end.</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">async def funcB():</div><div class="line">	return 1</div><div class="line"></div><div class="line">async def funcA():</div><div class="line">	result = await funcB()</div><div class="line">        return result</div><div class="line"></div><div class="line">run(funcA())</div></pre></td></tr></table></figure>
-<h3 id="multi-task-coroutines"><a href="#multi-task-coroutines" class="headerlink" title="multi-task coroutines"></a>multi-task coroutines</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">loop.create_task()</div><div class="line"></div><div class="line"></div><div class="line">run_until_complete() #block the thread untill coroutine completed</div><div class="line"></div><div class="line">asyncio.sleep() #nonblock event-loop, with `await`, will return the control-priority to event-loop, at the end of sleep, control-priority will back to this coroutine </div><div class="line"></div><div class="line">asyncio.wait(), #nonblock event-loop, immeditialy return coroutine object, and add this corutine object to event-loop</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">the following example:  get the event-loop thread, add coroutine objct(task) in this event-loop, execute task till end.</div><div class="line"></div><div class="line">```python</div><div class="line"></div><div class="line">import asyncio</div><div class="line"></div><div class="line">async def cor1(name):</div><div class="line">        print("executing: ", name)</div><div class="line">        await asyncio.sleep(1)</div><div class="line">        print("executed: ", name)</div><div class="line"></div><div class="line">loop = asyncio.get_event_loop()</div><div class="line">tasks = [cor1("zj_" + str(i)) for i in range(3)]</div><div class="line">wait_cor = asyncio.wait(tasks)</div><div class="line">loop.run_until_complete(wait_cor)</div><div class="line">loop.close()</div><div class="line"></div><div class="line">``` </div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"><span class="comment">## dynamically add coroutine</span></span></div><div class="line"></div><div class="line"></div><div class="line">```shell </div><div class="line"></div><div class="line">loop.call_soon_threadsafe() # add coroutines sequencially  </div><div class="line">asyncio.run_coroutine_threadsafe() #add coroutines async</div></pre></td></tr></table></figure>
-<h4 id="add-coroutine-sequencially"><a href="#add-coroutine-sequencially" class="headerlink" title="add coroutine sequencially"></a>add coroutine sequencially</h4><p>in this sample, main_thread(_loop) will sequencely run from begining to end, during running, there are two coroutines registered, when thread-safe, these two coroutines will be executed.</p>
-<p>the whole process actually looks like run in sequencialy</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> asyncio</div><div class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_loop</span><span class="params">(loop)</span>:</span></div><div class="line">    asyncio.set_event_loop(loop)</div><div class="line">    loop.run_forever()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread_</span><span class="params">(name)</span>:</span></div><div class="line">    print(<span class="string">"executing name:"</span>, name)</div><div class="line">    <span class="keyword">return</span> <span class="string">"return nam:"</span> + name</div><div class="line"></div><div class="line">_loop = asyncio.new_event_loop()</div><div class="line">t = Thread(target=start_loop, args=(_loop,)) <span class="comment">#is a thread or coroutine ?</span></div><div class="line">t.start()</div><div class="line"></div><div class="line"></div><div class="line">handle = _loop.call_soon_threadsafe(thread_, <span class="string">"zj"</span>)</div><div class="line">handle.cancel()</div><div class="line"></div><div class="line">_loop.call_soon_threadsafe(thread_, <span class="string">"zj2"</span>)</div><div class="line"></div><div class="line">print(<span class="string">"main thread non blocking..."</span>)</div><div class="line"></div><div class="line"></div><div class="line">_loop.call_soon_threadsafe(thread_, <span class="string">"zj3"</span>)</div><div class="line"></div><div class="line">print(<span class="string">"main thread on going..."</span>)</div></pre></td></tr></table></figure>
-<h4 id="add-coroutines-async"><a href="#add-coroutines-async" class="headerlink" title="add coroutines async"></a>add coroutines async</h4><p>in this way, add/register async coroutine objects to the event-loop and execute the coroutines when thead-safe</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">future = asyncio.run_coroutine_threadsafe(thread_(<span class="string">"zj"</span>), _loop)</div><div class="line">print(future.result())</div><div class="line"></div><div class="line">asyncio.run_coroutine_threadsafe(thread_(<span class="string">"zj2"</span>), _loop)</div><div class="line"></div><div class="line">print(<span class="string">"main thread non blocking..."</span>)</div><div class="line"></div><div class="line"></div><div class="line">asyncio.run_coroutine_threadsafe(thread_(<span class="string">"zj3"</span>), _loop)</div><div class="line"></div><div class="line">print(<span class="string">"main thread on going..."</span>)</div></pre></td></tr></table></figure>
-<h2 id="async-callback-vs-coroutines"><a href="#async-callback-vs-coroutines" class="headerlink" title="async callback  vs coroutines"></a>async callback  vs coroutines</h2><p>compare callback and coroutines is hot topic in networking and web-js env. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1908,7 +1946,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">167</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1921,7 +1959,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

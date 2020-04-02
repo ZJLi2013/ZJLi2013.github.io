@@ -291,6 +291,182 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/21/gpu-rendering-in-k8s-cloud/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/21/gpu-rendering-in-k8s-cloud/" itemprop="url">gpu rendering in k8s cloud</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-21T01:48:05-05:00">
+                2020-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/21/gpu-rendering-in-k8s-cloud/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/21/gpu-rendering-in-k8s-cloud/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>to deploy simulation in docker swarm, there is a hurting that GPU rendering in docker requires a physical monitor(as $DISPLAY env variable). which is due to GeForece(Quadro 2000) GPUs, for Tesla GPUs there is no depends on monitor. really intertesting to know.</p>
+<p>there were two thoughts how to deploy simulation rendering in cloud, either a gpu rendering cluster, or a headless mode in container cluster.</p>
+<h2 id="unity-rendering"><a href="#unity-rendering" class="headerlink" title="unity rendering"></a>unity rendering</h2><p><a href="https://www.cnblogs.com/alan777/p/6204759.html" target="_blank" rel="external">unity rendering pipeline</a> is as following ：</p>
+<ul>
+<li><p>CPU calculate what need to draw and how to draw</p>
+</li>
+<li><p>CPU send commands to GPU</p>
+</li>
+<li><p>GPU plot </p>
+</li>
+</ul>
+<h4 id="direct-rendering"><a href="#direct-rendering" class="headerlink" title="direct rendering"></a>direct rendering</h4><p><a href="https://unix.stackexchange.com/questions/319052/remote-direct-rendering-for-glx-opengl" target="_blank" rel="external">for remote direct rendering for GLX/openGL</a>, Direct rendering will be done on the X client (the remote machine), then rendering results will be transferred to X server for display. Indirect rendering will transmit GL commands to the X server, where those commands will be rendered using server’s hardware. </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">direct rendering: Yes</div><div class="line">OpenGL vendor string: NVIDIA</div></pre></td></tr></table></figure>
+<p>Direct Rendering Infrasturcture(DRI) means the 3D graphics operations are hardware acclerated, Indirect rendering is used to sya the graphics operations are all done in software.</p>
+<p>DRI enable to communicate directly with gpus, instead of sending graphics data through X server, resulting in 10x faster than going through X server </p>
+<p>for performance, mostly the games/video use direct rendering. </p>
+<h4 id="headless-mode"><a href="#headless-mode" class="headerlink" title="headless mode"></a>headless mode</h4><p>to disable rendering, either with dummy display. there is a blog how to <a href="https://towardsdatascience.com/how-to-run-unity-on-amazon-cloud-or-without-monitor-3c10ce022639" target="_blank" rel="external">run opengl in xdummy in AWS cloud</a>; eitherwith <a href="https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Using-Docker.md" target="_blank" rel="external">Unity headless mode</a>, When running in batch mode, <a href="https://answers.unity.com/questions/159079/batchmode-and-nographics.html" target="_blank" rel="external">do not initialize graphics device at all</a>. This makes it possible to run your automated workflows on machines that don’t even have a GPU. to make a game server running on linux, and use the argument “-batchmode” to make it run in headless mode. <a href="https://forum.unity.com/threads/linux-nographics-support.152916/" target="_blank" rel="external">Linux -nographics support</a> <code>-batchmode</code> is normally the headless flag that works without gpu and audio hw acceleration</p>
+<h2 id="GPU-container"><a href="#GPU-container" class="headerlink" title="GPU container"></a>GPU container</h2><p>a gpu containeris needs to map NVIDIA driver from host to the container, which is now done by <code>nvidia-docker</code>; the other issue is gpu-based app usually has its own (runtime) libs, which needs to install in the containers. e.g. CUDA, deep learning libs, OpengGL/vulkan libs. </p>
+<p><img src="https://static001.infoq.cn/resource/image/25/66/2597b690685978c9a780aa93d6c7c266.png" alt="image"></p>
+<h4 id="k8s-device-plugin"><a href="#k8s-device-plugin" class="headerlink" title="k8s device plugin"></a>k8s device plugin</h4><p>k8s has default <code>device plugin</code> model to support gpu, fpga e.t.c devices, but it’s in progress, nvidia has <a href="https://github.com/NVIDIA/k8s-device-plugin" target="_blank" rel="external">a branch</a> to support gpu as device plugin in k8s. </p>
+<h4 id="nvidia-docker-mechanism"><a href="#nvidia-docker-mechanism" class="headerlink" title="nvidia docker mechanism"></a>nvidia docker mechanism</h4><p>when application call cuda/vulkan API/libs, it further goes to cuda/vulkan runtime, which further ask operations on GPU devices.</p>
+<h2 id="cloud-DevOps"><a href="#cloud-DevOps" class="headerlink" title="cloud DevOps"></a>cloud DevOps</h2><h4 id="simulation-in-cloud"><a href="#simulation-in-cloud" class="headerlink" title="simulation in cloud"></a>simulation in cloud</h4><p>so far, there are plenty of cloud simulation online, e.g. ali, tencent, huawei/octopus, Cognata. so how these products work? all of them has containerized. as our test said, only Tesla GPU is a good one for containers, especially for rendering needs; GeForce GPU requires <code>DISPLAY</code> or physical monitor to be used for rendering. </p>
+<h4 id="cloud-vendors-for-carmakers"><a href="#cloud-vendors-for-carmakers" class="headerlink" title="cloud vendors for carmakers"></a>cloud vendors for carmakers</h4><p>as cloud simulation is heavily infrastructure based, OEMs and cloud suppliers are coming together:</p>
+<ul>
+<li>FAW -&gt; Ali cloud</li>
+<li>GAC -&gt; Tencent Cloud</li>
+<li>SAC -&gt; Ali cloud / fin-shine </li>
+<li>Geely -&gt; Ali cloud </li>
+<li>Changan -&gt; Ali cloud </li>
+<li>GWM -&gt; Ali cloud </li>
+<li>Xpeng, Nio (?)</li>
+<li>PonyAI/WeRide (?)</li>
+</ul>
+<p>obviously, Ali cloud has a major benefit among carmakers, which actually give Ali cloud new industry to deep in. traditionally, carmakers doesn’t have strong DevOps team, but now there is a change.</p>
+<p>we can see the changing, as connected vehicles service, sharing cars, MaaS, autonomous vehicles are more and more requring a strong DevOps team. but not the leaders in carmakers realize yet.</p>
+<h4 id="fin-shine"><a href="#fin-shine" class="headerlink" title="fin-shine"></a>fin-shine</h4><p><a href="http://fin-shine.com/" target="_blank" rel="external">SAC cloud</a>, which is a great example for other carmakers to study. basically they are building the common cloud service independently.</p>
+<ul>
+<li>container service &lt;– k8s/docker </li>
+<li>storage &lt;– hdfs/ceph</li>
+<li>big data &lt;– hadoop/sql </li>
+<li>middleware </li>
+<li>applications &lt;– AI, simulation</li>
+</ul>
+<p>it’s an IP for SAC, but on the other hand, to maintain a stable and user-friendly cloud infrastructure is not easy at all. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://github.com/rndevfx/docker-blender-render-cluster" target="_blank" rel="external">docker blender render cluster</a></p>
+<p><a href="https://docs.nvidia.com/ngc/ngc-vgpu-setup-guide/index.html" target="_blank" rel="external">nvidia vgpu</a></p>
+<p><a href="https://engineering.bitnami.com/articles/using-gpus-with-kubernetes.html" target="_blank" rel="external">using GPUs with K8s</a></p>
+<p><a href="https://docs.nvidia.com/datacenter/pdf/kubernetes-install-guide.pdf" target="_blank" rel="external">K8S on nvidia gpus</a></p>
+<p><a href="https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/19193/OpenGL-Direct-Hardware-Rendering-on-Linux" target="_blank" rel="external">openGL direct hardware rendering on Linux</a> </p>
+<p><a href="https://github.com/carla-simulator/carla/issues/1112" target="_blank" rel="external">runinng carla without display</a></p>
+<p><a href="https://partiallydisassembled.net/posts/unity-headless-script.html" target="_blank" rel="external">tips for runing headless unity from a script</a></p>
+<p><a href="https://forum.unity.com/threads/unity-server-instance-without-the-3d-graphics.22283/" target="_blank" rel="external">Unity Server instance without 3d graphics</a></p>
+<p><a href="https://bluesmilery.github.io/blogs/afcb1072/" target="_blank" rel="external">a blog: nvidia device plugin for k8s</a></p>
+<p><a href="https://www.infoq.cn/article/TDfGIikxH9bcgkNyWL6S" target="_blank" rel="external">k8s GPU manage &amp; device plugin mechanism</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/17/review-apollo-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2067,143 +2243,6 @@ publish topics: /vehicle/cmd_ctl
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/deploy-lgsvl-in-docker-swarm-4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/25/deploy-lgsvl-in-docker-swarm-4/" itemprop="url">deploy lgsvl in docker swarm 4</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-25T05:39:07-05:00">
-                2019-12-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/25/deploy-lgsvl-in-docker-swarm-4/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/25/deploy-lgsvl-in-docker-swarm-4/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p>previously, tried to <a href="https://zjli2013.github.io/2019/12/15/deploy-lgsvl-in-docker-swarm-3/" target="_blank" rel="external">deploy lgsvl</a> in docker swarm, which is failde due to the conflict of host network to run lgsvl and the routing mesh of swarm, as I thought.</p>
-<h3 id="http-listen-on"><a href="#http-listen-on" class="headerlink" title="http listen on *"></a>http listen on *</h3><p>why used <a href="https://github.com/lgsvl/simulator/issues/488#issuecomment-553265946" target="_blank" rel="external">–network=host</a>, is actually not a have-to, the alternative option is to use <code>&quot;*&quot;</code> as <code>Configure.webHost</code>, instead of <code>localhost</code> nor a special IP address, which lead o HttpListener error: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">The requested address is not vaid in this context.</div></pre></td></tr></table></figure>
-<p>then, we can <a href="https://github.com/lgsvl/simulator/issues/488#issuecomment-557746438" target="_blank" rel="external">docker run lgsvl</a> without host network limitations.</p>
-<p>but still, if run by <code>docker service create</code>, it reports failure: <code>Error initiliazing Gtk+</code>. </p>
-<h3 id="Gtk-UI-in-Unity"><a href="#Gtk-UI-in-Unity" class="headerlink" title="Gtk/UI in Unity"></a>Gtk/UI in Unity</h3><p>when starting lgsvl, it pops the resolution window, which is a plugin of Unity Editor, and implemented with <code>gtk</code>, as explained in last section, which leads to the failure to run lgsvl as service in docker swarm.</p>
-<p>the simple solution is to disable resolution selection in Unity Editor.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Build Settings --&gt; Player Settings --&gt;  Disable Resolution</div></pre></td></tr></table></figure>
-<p>then the popup window is bypassed.</p>
-<h3 id="ignore-publish-port"><a href="#ignore-publish-port" class="headerlink" title="ignore publish port"></a>ignore publish port</h3><p>I tried to ignore <code>network host</code> and run directly with routing mesh, but it still doesn’t work. then I remember at the previous blog, when run vkcube or glxgears in docker swarm, it actually does use <code>--network host</code>, so it looks the failure of running lgsvl in docker swarm, is not due to <code>network host</code>, but is due to <code>Gtk/gui</code>. as we can bypass the resolution UI, then directly running as following, works as expected: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo docker service create --name lgsvl --generic-resource &quot;gpu=1&quot; --replicas 2 --env DISPLAY --mount src=&quot;X11-unix&quot;,dst=&quot;/tmp/.X11-unix&quot; --network host lgsvl</div></pre></td></tr></table></figure>
-<h3 id="add-assets-into-container"><a href="#add-assets-into-container" class="headerlink" title="add assets into container"></a>add assets into container</h3><p>another update is to bind  assets from host into lgsvl image, which is stored as sqlite data.db, which is a necessary, as we bypassed the authentication, and the cluster has no access to external Internet.</p>
-<h3 id="where-is-next"><a href="#where-is-next" class="headerlink" title="where is next"></a>where is next</h3><p>in recent two month, had digged into docker swarm to run lgsvl. so far, the main pipeline looks work now, and there are still a lot little fix there.</p>
-<p>to run AV simulation in cloud, is a necessary way to test and verify L3+ AV algorithms/products. previous ADAS test is more on each individual feature itself, e.g. ACC, AEB .e.t.c, all of which are easy to define a benchmark test case, and engineers can easily define the test scenarios systemetically. But for L3+, the env status space is infinite in theory, there is no benchmark test cases any more, and at best we can do is statiscally test cases, which requires a huge number of test cases, which is where virutal simulation test in cloud make sense.</p>
-<p>from tech viewpoint, the next thing is how to drive the L3+ dev by these simulation tools. and another intesting is the data infrastructure setup</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2254,7 +2293,7 @@ publish topics: /vehicle/cmd_ctl
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">167</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2267,7 +2306,7 @@ publish topics: /vehicle/cmd_ctl
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">41</span>
+                <span class="site-state-item-count">43</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
