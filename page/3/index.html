@@ -291,6 +291,218 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/24/mdf4-reader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/24/mdf4-reader/" itemprop="url">mdf4 reader</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-24T23:14:52-05:00">
+                2020-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/24/mdf4-reader/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/24/mdf4-reader/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="read-mdf4-in-general"><a href="#read-mdf4-in-general" class="headerlink" title="read mdf4 in general"></a>read mdf4 in general</h2><p><img src="https://www.asam.net/index.php?eID=dumpFile&amp;t=p&amp;p=2964&amp;token=90de1236917c0225cbf3bd53101a81296613d367" alt="image"></p>
+<p>the most important “branch” in the tree is the list of data groups (DG block).</p>
+<p><strong>record</strong> used to store the plain measurement data, the records can either be contianed in one single “data” (DT) block, or distributed over several DT blocks using a “data list” block . </p>
+<p>Each DG block has points to the data block, as well as necessary information to understand and decode the data.</p>
+<p>the sub-tree of DG is channel group(CG) blocks and channel(CN) blocks. </p>
+<h5 id="record-layout"><a href="#record-layout" class="headerlink" title="record layout"></a>record layout</h5><p>each record contains all signal values which have the same time stamp, in the same channel. for different channel groups(CG), each record must start with a “record id”</p>
+<p><img src="https://www.asam.net/index.php?eID=dumpFile&amp;t=f&amp;f=195&amp;token=cb0391ba3e0fb5ee7fb91c9f4b8307e45e1e8f08" alt="image"></p>
+<p>the record layout of ID 1, will be described by one channel group, the record layout of ID 2 by another channel group. Both channel groups must be children of the DT block’s parent data group.</p>
+<h4 id="channels"><a href="#channels" class="headerlink" title="channels"></a>channels</h4><p>Each channel describes a recorded signal and how its values are encoded in the records for the channel’s parent CG block.</p>
+<h2 id="vector-APIs"><a href="#vector-APIs" class="headerlink" title="vector APIs"></a>vector APIs</h2><p>which is licensed by <a href="https://www.vector.com/int/en/products/application-areas/ecu-calibration/measurement/mdf/" target="_blank" rel="external">vector</a></p>
+<ul>
+<li>GetFileManager()</li>
+<li>OpenFile()</li>
+<li>GetChannelByName()</li>
+<li>GetChannelGroup()</li>
+<li>CreaterDataPointer()</li>
+<li>GetRecordCount()</li>
+<li>SetReadMode()</li>
+<li>SeekPos()</li>
+<li>GetPos()</li>
+<li>GetTimeSec()</li>
+<li>ReadPhysValueDouble(pChannle, &amp;value, &amp;isvalid)</li>
+<li>ReadRawValueDouble(pChannel, &amp;rawValue)</li>
+<li>ReadPhysValueDouble(pChannel, &amp;phyValue)</li>
+<li>MultiReadPhysValueDouble(pChannel, valueBuffer, size, &amp;read)</li>
+</ul>
+<h2 id="turbolab"><a href="#turbolab" class="headerlink" title="turbolab"></a><a href="https://www.turbolab.de/mdf_libf.htm" target="_blank" rel="external">turbolab</a></h2><p>ReadFileMF4 class:</p>
+<ul>
+<li>Open()</li>
+<li>Seek(pos)</li>
+<li>Read(Size, Buffer)</li>
+<li>Close()</li>
+</ul>
+<p>CMdf4Calc class :</p>
+<ul>
+<li>Cmdf4Calc(pChan, pblock)</li>
+<li>Cmdf4Calc(pChan, mf4file)</li>
+</ul>
+<p>cmf4DataGroup class:</p>
+<ul>
+<li>GetRecord()</li>
+<li>GetRawValueFromRecord()</li>
+<li>GetValueFromRecord()</li>
+</ul>
+<p>mdf4FileImport class :</p>
+<ul>
+<li>ImportFile()</li>
+<li>ReleaseFile()</li>
+</ul>
+<p>I am not reading this C++ code. </p>
+<h2 id="asammdf"><a href="#asammdf" class="headerlink" title="asammdf"></a><a href="https://github.com/danielhrisca/asammdf" target="_blank" rel="external">asammdf</a></h2><h3 id="MDF-class"><a href="#MDF-class" class="headerlink" title="MDF class"></a>MDF class</h3><ul>
+<li><strong>init</strong>(name=None, ): name can be either <code>string</code> or <code>BytesIO</code></li>
+<li>filter(channels, ) </li>
+<li>get_group(index, channels=None, )</li>
+<li>iter_channels(,)</li>
+<li>iter_get(channel_name=None,group_id=None, group_index=None, )</li>
+<li>iter_groups()</li>
+<li>to_dataframe(), generate pandas DataFrame</li>
+<li>whereis(channel_name)</li>
+</ul>
+<h3 id="MDF4-class"><a href="#MDF4-class" class="headerlink" title="MDF4 class"></a>MDF4 class</h3><p>includes <code>data_group</code>, <code>channel_group</code>, <code>channels</code>, <code>data_block</code>, <code>data_location</code>, <code>record_size</code> e.t.c</p>
+<ul>
+<li>get(channel_name=None, group=None, )</li>
+<li>get_can_signal()</li>
+<li>get_channel_name(group, index)</li>
+<li>get_channel_unit(channel_name=Nont, group=None, )</li>
+<li>get_master(index, data=None, ), return the master channel samples for given group</li>
+<li>info() </li>
+</ul>
+<p>the following are sub data blocks of MDF4: </p>
+<ul>
+<li>Channel class </li>
+<li>ChannelGroup class</li>
+<li>DataGroup class </li>
+<li>DataList class</li>
+<li>DataBlock class</li>
+<li>HeaderBlock class</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mdf = MDF4(<span class="string">"basic.mf4"</span>)</div><div class="line">db_info = mdf.info()</div></pre></td></tr></table></figure>
+<p>all <code>group</code>, <code>channel</code> data is packages as <code>python dict</code>. the most exciting part, as asam-mdf can support <code>BytesIO</code>, which gives the way to read mdf files stores in Amazon S3:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">    mf4_ = obj_api.get_object("bucket_name", "sample.mf4")</div><div class="line">    fid_ = io.BufferedReader(mf4_['Body']._raw_stream) ;</div><div class="line">    read_in_memory = fid_.read()</div><div class="line">    bio_ = io.BytesIO(read_in_memory);</div><div class="line">    if bio_.seekable(): </div><div class="line">        mdf_ = MDF(bio_)</div><div class="line">        mdf_.info()</div><div class="line">``` </div><div class="line"></div><div class="line">### installation of asam-mdf</div><div class="line"></div><div class="line">* [install pandas](https://www.pypandas.cn/en/docs/installation.html#installing-using-your-linux-distribution’s-package-manager)</div><div class="line"></div><div class="line">`python3 -m pip install pandas` (not working)</div><div class="line"></div><div class="line">`sudo apt-get install python3-pandas` </div><div class="line"></div><div class="line">* [install canmatrix](https://canmatrix.readthedocs.io/en/latest/installation.html)</div><div class="line"></div><div class="line">`sudo python3 setup.py install` </div><div class="line"></div><div class="line">* install pathlib2 </div><div class="line"></div><div class="line">`sudo -H pip3 install pathlib2 `</div><div class="line"></div><div class="line">if `WARNING: pip is being invoked by an old script wrapper. This will fail in a future version of pip.`</div><div class="line">using: `sudo -H python3 -m pip install（包名）`</div><div class="line"></div><div class="line"></div><div class="line">## [mdfreader](https://github.com/ratal/mdfreader)</div><div class="line"></div><div class="line">which is open source LSP licensed. and the APIs are clear about getChannels, and read data from each channel, which was my first choice. but later found out it's difficult to support streamIO input, which was the best format I can reached from Amazon S3 pipeline.</div><div class="line"></div><div class="line"></div><div class="line">##### MdfInfo</div><div class="line"></div><div class="line">* read_info()</div><div class="line">* list_channels()</div><div class="line"></div><div class="line">##### Mdf</div><div class="line"></div><div class="line">* read()</div><div class="line">* filter_channel_names()</div><div class="line">* get_channel_data()</div><div class="line">* get_channel_unit()</div><div class="line">* keep_channels()</div><div class="line"></div><div class="line">```python</div><div class="line">import mdfreader</div><div class="line">filename="basic.mf4"</div><div class="line">file_info=mdfreader.MdfInfo()</div><div class="line">channels = file_info.list_channels(filename)</div><div class="line">print(channels)</div><div class="line">file_pointer = mdfreader.Mdf(filename)</div><div class="line">keys_ = file_pointer.keys()</div><div class="line">for k_ in keys_:</div><div class="line">    chan1 = file_pointer.get_channel_data(k_)</div><div class="line">    print(chan1)</div></pre></td></tr></table></figure>
+<h2 id="python-necessary"><a href="#python-necessary" class="headerlink" title="python necessary"></a>python necessary</h2><h3 id="buffered-io"><a href="#buffered-io" class="headerlink" title="buffered io"></a>buffered io</h3><p><a href="https://docs.python.org/zh-cn/3/library/io.html" target="_blank" rel="external">binary I/O</a>, usually used in following: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">f = open(<span class="string">"mdf_file"</span>, <span class="string">"rb"</span>)</div><div class="line">type(f)</div><div class="line">&lt;type <span class="string">'_io.BufferedReader'</span>&gt;</div></pre></td></tr></table></figure>
+<p><strong>open(file, mode=’r’, buffering=-1, encoding=…)</strong></p>
+<p>if<code>mode=&#39;b&#39;</code>, the returned content is bytes object, can’t encoding. if <code>buffereing</code> is not setted, for binary file with buffering with a fixed length. when with <code>mode=&#39;w/r/t</code>, it returns <code>io.TextIOwrapper</code>, if <code>mode=rb</code>, it returns <code>io.BufferedReader</code>, else if <code>mode=wb</code>, it returns <code>io.BufferedWriter</code>, else <code>mode=wrb</code>, it returns <code>io.BufferedRandom</code>. <a href="https://docs.python.org/zh-cn/3/library/functions.html#open" target="_blank" rel="external">check here</a></p>
+<h4 id="dict-built-in-funs"><a href="#dict-built-in-funs" class="headerlink" title="dict built-in funs"></a>dict built-in funs</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">cmp(dict1, dict2) ;</div><div class="line">len(dict)</div><div class="line">str(dict)</div><div class="line">dict.clear()</div><div class="line">dict.get(key)</div><div class="line">dict.has_key(key)</div><div class="line">dict.items()</div><div class="line">dict.keys()</div><div class="line">dict.values()</div><div class="line">pop(key)</div></pre></td></tr></table></figure>
+<h2 id="a-bit-about-readers"><a href="#a-bit-about-readers" class="headerlink" title="a bit about readers"></a>a bit about readers</h2><p>a few years ago I was in CAE field, dealing with different kind of CAE format, e.g .nas. during that time, there is a similar need to have a file transfer from vendor specified format to python format e.t.c. </p>
+<p>so now it comes again, which is funny to know adapters in CAE and autonomous driving design.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://asammdf.readthedocs.io/en/master/api.html#mdf4" target="_blank" rel="external">asammdf API doc</a></p>
+<p><a href="https://www.asam.net/standards/detail/mdf/wiki/" target="_blank" rel="external">asam mdf4 doc</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/21/gpu-rendering-in-k8s-cloud/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2072,177 +2284,6 @@ publish topics: /vehicle/cmd_ctl
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/28/configure-hadoop-in-2-nodes-cluster/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/28/configure-hadoop-in-2-nodes-cluster/" itemprop="url">configure hadoop in 2-nodes cluster</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-28T09:39:10-05:00">
-                2019-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/28/configure-hadoop-in-2-nodes-cluster/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/28/configure-hadoop-in-2-nodes-cluster/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>it’s by accident that I have to jump into data center, where 4 kinds of data need  deal with:</p>
-<ul>
-<li><p>sensor verification, with huge amount of special raw sensor data </p>
-</li>
-<li><p>AI perception training, with huge amout of fusioned sensor data </p>
-</li>
-<li><p>synthetic scenarios data, which used to resimualtion</p>
-</li>
-<li><p>inter-middle status log data for Planning and Control(P&amp;C)</p>
-</li>
-</ul>
-<p>big data tool is a have-to go through for L3+ ADS team, which has already developed in top start-ups, e.g. WeRide and Pony.AI, as well as top OEMs from NA, Europen. Big data, as I understand is at least as same important to business, as to customers. compared to AI, which is more on customer’s experience. and 2B is a trending for Internet+ diserving into traditional industry. anyway, it’s a good try to get some ideas about big data ecosystem. and here is the first step: hadoop</p>
-<h2 id="prepare-jdk-and-hadoop-in-single-node"><a href="#prepare-jdk-and-hadoop-in-single-node" class="headerlink" title="prepare jdk and hadoop in single node"></a>prepare jdk and hadoop in single node</h2><p>Java sounds like a Windows langage, there are a few apps requied Java in Ubuntu, e.g. osm browser e.t.c., but  I can’t tell the difference between <code>jdk</code> and <code>jre</code>, or  openjdk vs Oracle.  <code>jdk</code> is a dev toolkit, which includes <code>jre</code> and beyond. so when it’s always better to set <code>JAVA_HOME</code> to <code>jdk</code> folder. </p>
-<h4 id="jdk-in-ubuntu"><a href="#jdk-in-ubuntu" class="headerlink" title="jdk in ubuntu"></a>jdk in ubuntu</h4><p>there are many different version of jdk, e.g. 8, 9, 11, 13 e.t.c.  here is used <code>jdk-11</code>, which can be download from Oracle website, there are two zip files, the <code>src</code> and the other. the pre-compiled zip is enough to Hadoop in Ubuntu.</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tar xzvf  jdk-11.zip  </div><div class="line">cp -r jdk-11  /usr/local/jdk-11 </div><div class="line">cd /usr/local</div><div class="line">ln -s jdk-11 jdk</div></pre></td></tr></table></figure>
-<p>append JAVA_HOME=/usr/local/jdk &amp;&amp; PATH=$PATH:$JAVA_HOME/bin to <code>~/.bashrc</code>, and can run test <code>java -version</code>.</p>
-<p>what need to be careful here, as the current login user may be not fitted for multi-nodes cluster env, so it’s better to create the <code>hadoop group</code> and <code>hduser</code>, and use <code>hduse</code> as the login user in following steps.</p>
-<h4 id="create-hadoop-user"><a href="#create-hadoop-user" class="headerlink" title="create hadoop user"></a>create hadoop user</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">sudo addgroup  hadoop</div><div class="line">sudo adduser --ingroup hadoop  hduser </div><div class="line">sudo - hduser #login as hduser</div></pre></td></tr></table></figure>
-<p>the other thing about <code>hduser</code>, is not in <code>sudo</code> group, which can be added by:</p>
-<p>curren login user is <code>hduser</code>:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">groups  # hadoop</div><div class="line">su -  # but password doesn't correct</div><div class="line"><span class="meta">#</span>login from the default user terminal</div><div class="line">sudo -i  </div><div class="line">usermod -aG sudo hduser</div><div class="line"><span class="meta">#</span>backto hduser terminal</div><div class="line">groups hduser  # :  hadoop  sudo </div><div class="line">exit </div><div class="line">su - hduser  #re-login as hduser </div><div class="line">``` </div><div class="line"><span class="meta"></span></div><div class="line">#### install and configure hadoop </div><div class="line"></div><div class="line">hadoop installation at Ubuntu is similar to Java, which has src.zip and pre-build.zip, where I directly download the `pre-build.zip`.</div><div class="line"></div><div class="line">another thing need take care is the version of hadoop. since `hadoop 2.x` has no `--daemon` option, which will leads error when master node is with `hadoop 3.x`.</div><div class="line"></div><div class="line">```shell</div><div class="line">tar xzvf  hadoop-3.2.1.zip  </div><div class="line">cp -r hadoop-3.2.1 /usr/local/hadoop-3.2.1</div><div class="line">cd /usr/local</div><div class="line">ln -s hadoop-3.2.1 hadoop</div></pre></td></tr></table></figure>
-<p>add <code>HADOOP_HOME=/usr/local/hadoop</code> and <code>PATH=$PATH:$HADOOP_HOME/bin</code> to <code>~/.bashrc</code>. test with <code>hadoop version</code></p>
-<p><a href="https://www.michael-noll.com/tutorials/running-hadoop-on-ubuntu-linux-multi-node-cluster/" target="_blank" rel="external">hadoop configure is find here</a></p>
-<p>there is another issue with <code>JAVA_HOME not found</code>, which I modify the <code>JAVA_HOME</code> variable in <code>$HADOOP_HOME/etc/hadoop/hadoop_env.sh</code> </p>
-<h4 id="passwordless-access-among-nodes"><a href="#passwordless-access-among-nodes" class="headerlink" title="passwordless access among nodes"></a>passwordless access among nodes</h4><ul>
-<li>generate SSH key pair</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">on maste node:</div><div class="line">ssh-keygen -t rsa -b 4096 -C "master"</div><div class="line">on worker node:</div><div class="line">ssh-keygen -t rsa -b 4096 -C "worker"</div></pre></td></tr></table></figure>
-<p>the following two steps need do on both machines, so that the local machine can ssh access both to itself and to the remote.</p>
-<ul>
-<li><p>enable SSH access to local machine</p>
-<p>  ssh-copy-id hduser@192.168.0.10</p>
-</li>
-</ul>
-<ul>
-<li><p>copy public key to the remote node</p>
-<p>  ssh-copy-id hduser@192.168.0.13</p>
-</li>
-</ul>
-<p><a href="https://linuxize.com/post/how-to-setup-passwordless-ssh-login/" target="_blank" rel="external">tips</a>, if changed the default <code>id_rsa</code> name to sth else, doesn’t work. after the changes above, will generates a <code>known_hosts</code> at local machine, and an <code>authorized_keys</code>, which is the public key of the client ssh, at remote machine. </p>
-<h4 id="test-hadoop"><a href="#test-hadoop" class="headerlink" title="test hadoop"></a>test hadoop</h4><ul>
-<li>on master node</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">hduser@ubuntu:/usr/local/hadoop/sbin$ jps</div><div class="line">128816 SecondaryNameNode</div><div class="line">128563 DataNode</div><div class="line">129156 Jps</div><div class="line">128367 NameNode</div></pre></td></tr></table></figure>
-<ul>
-<li>on worker node:</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hduser@worker:/usr/local/hadoop/logs$ jps</div><div class="line">985 Jps</div><div class="line">831 DataNode</div></pre></td></tr></table></figure>
-<p>and  test with <code>mapreduce</code></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2293,7 +2334,7 @@ publish topics: /vehicle/cmd_ctl
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">167</span>
+                <span class="site-state-item-count">168</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2306,7 +2347,7 @@ publish topics: /vehicle/cmd_ctl
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-count">44</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
