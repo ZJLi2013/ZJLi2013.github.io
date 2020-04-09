@@ -291,6 +291,202 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/rosbag-tools-in-ADS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/21/rosbag-tools-in-ADS/" itemprop="url">rosbag tools in ADS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-21T06:18:47-04:00">
+                2019-10-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/21/rosbag-tools-in-ADS/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/21/rosbag-tools-in-ADS/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>in ADS,  data fusion, sensor performance, L3+ perception, localization algorithms development relys a lot on physicall data collection, commonly in rosbag format with information/data about gps, rtk, camera, Lidar, radar e.t.c.</p>
+<p>to build up the development process systemly is a critial thing, but also ignored by most ADS teams. for large OEMs, each section may have their own test vehicles, e.g. data fusion team,  sensor team e.t.c, but few of them take care data systematically, or build a solution to manage data. one reason is the engineers are lack of ability to give software tool feedbacks/requirements, so they still stay and survive with folders or Excel management, which is definitely not acceptable and scalable for massive product team. </p>
+<p>thanks for ROS open source community conributing a great rosbag database manage tool: <a href="http://wiki.ros.org/TheBagDatabase" target="_blank" rel="external">bag_database</a>. with docker installation, this tool is really easy to configure. a few tips:</p>
+<ul>
+<li>web server IP port in Docker can be accessed from LAN by parameter <code>-p</code> during docker run.</li>
+</ul>
+<h2 id="mount-sbm-drive"><a href="#mount-sbm-drive" class="headerlink" title="mount sbm drive"></a>mount sbm drive</h2><p>as mentioned, most already collected rosbag is stored in a share drive, one way is to mount these data.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo mount -t cifs //share_ip_address/ROS_data /home/david/repo/rosbag_manager/data  -o uid=david -o gid=david -o credentials=/home/david/repo/rosbag_manager/data/.pwd </div><div class="line"></div><div class="line"></div><div class="line">sudo umount -t cifs /home/david/repo/rosbag_manager/data</div></pre></td></tr></table></figure>
+<h2 id="Tomcat-server-configure"><a href="#Tomcat-server-configure" class="headerlink" title="Tomcat server configure"></a>Tomcat server configure</h2><p>bag_database is hosted by Tomcat, the default port is 8080. For our services, which already host pgAdmin4 for map group; gitlab for team work; xml server for system engineering; for webviz. check the port is occupied or not:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">netstat -an | grep 8088</div></pre></td></tr></table></figure>
+<p>so configure <code>/usr/loca/tomcat/conf/server.xml</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">	</div><div class="line">&lt;Service name="Catalina"&gt;</div><div class="line">   &lt;Connector port="your_special_port"</div><div class="line">   ...</div><div class="line">&lt;/Service&gt;</div></pre></td></tr></table></figure>
+<h2 id="a-few-other-tools"><a href="#a-few-other-tools" class="headerlink" title="a few other tools"></a>a few other tools</h2><h3 id="ros-hadoop"><a href="#ros-hadoop" class="headerlink" title="ros_hadoop"></a>ros_hadoop</h3><p><a href="https://github.com/valtech/ros_hadoop" target="_blank" rel="external">ros_hadoop</a> is a rosbag analysis tool based on hdfs data management. which is a more scalable platform for massive ADS data requirements. if there is massive ros bag process in need, ros_hadoop should be a great tool. there is a discussion in <a href="https://discourse.ros.org/t/working-with-large-ros-bag-files-on-hadoop-and-spark/2314" target="_blank" rel="external">ros wiki</a></p>
+<p><img src="https://github.com/valtech/ros_hadoop/blob/master/doc/images/concept.png" alt="image"></p>
+<p><img src="https://github.com/valtech/ros_hadoop/blob/master/doc/images/rosbag-analytics.png" alt="image"></p>
+<h4 id="install-hadoop"><a href="#install-hadoop" class="headerlink" title="install hadoop"></a>install hadoop</h4><p><a href="https://hadoop.apache.org/releases.html" target="_blank" rel="external">apache hadoop download</a></p>
+<p><a href="https://poweruphosting.com/blog/install-hadoop-ubuntu/" target="_blank" rel="external">single alone install</a></p>
+<h4 id="concept-in-hdfs"><a href="#concept-in-hdfs" class="headerlink" title="concept in hdfs"></a>concept in hdfs</h4><ul>
+<li>namenode </li>
+</ul>
+<p>daemon process, used to manage file system</p>
+<ul>
+<li>datanode </li>
+</ul>
+<p>used to data block store and query</p>
+<ul>
+<li>secondary namenode</li>
+</ul>
+<p>used to backup</p>
+<ul>
+<li><p><a href="https://cloud.tencent.com/developer/article/1456436" target="_blank" rel="external">hdfs shell command</a></p>
+</li>
+<li><p><a href="https://www.thomashenson.com/find-hdfs-path-url/" target="_blank" rel="external">hdfs path URL</a></p>
+</li>
+</ul>
+<h4 id="hdfs-site-xml"><a href="#hdfs-site-xml" class="headerlink" title="hdfs-site.xml"></a>hdfs-site.xml</h4><pre><code>/usr/local/hadoop/etc/hadoop/hdfs-site.xml
+</code></pre><p><a href="https://hadoop.apache.org/docs/r2.4.1/hadoop-project-dist/hadoop-hdfs/hdfs-default.xml" target="_blank" rel="external">configure file</a></p>
+<ul>
+<li>dfs.datanode.data.dir -&gt;  local file system where to store data blocks on DataNodes </li>
+<li>dfs.replicaiton -&gt;  num of replicated datablocks for protecting data </li>
+<li>dfs.namenode.https-address -&gt;  location for NameNode URL </li>
+<li>dfs.https.port -&gt; </li>
+</ul>
+<h4 id="copy-local-data-into-hdfs"><a href="#copy-local-data-into-hdfs" class="headerlink" title="copy local data into hdfs"></a>copy local data into hdfs</h4><pre><code class="script">
+hdfs dfs -put /your/local/file/or/folder   [hdfs default data dir]
+
+hdfs dfs -ls
+</code></pre>
+<h3 id="mongodb-store"><a href="#mongodb-store" class="headerlink" title="mongodb_store"></a>mongodb_store</h3><p><a href="https://github.com/strands-project/mongodb_store" target="_blank" rel="external">mongodb_store</a> is a tool to store and analysis ROS systems. also in <a href="https://answers.ros.org/question/240699/ros_databases/" target="_blank" rel="external">ros wiki</a></p>
+<h3 id="mongo-ros"><a href="#mongo-ros" class="headerlink" title="mongo_ros"></a>mongo_ros</h3><p><a href="https://wiki.ros.org/mongo_ros" target="_blank" rel="external">mongo_ros</a> used to store ROS message n MongoDB, with C++ and Python clients.</p>
+<h3 id="mongo-hadoop"><a href="#mongo-hadoop" class="headerlink" title="mongo-hadoop"></a>mongo-hadoop</h3><p><a href="https://github.com/mongodb/mongo-hadoop/" target="_blank" rel="external">mongo-hadoop</a> allows MongoDB to be used as an input source or output destination for Hadoop taskes. </p>
+<h3 id="ros-pandas"><a href="#ros-pandas" class="headerlink" title="ros_pandas"></a>ros_pandas</h3><p><a href="https://nimbus.unl.edu/2014/11/using-rosbag_pandas-to-analyze-rosbag-files/" target="_blank" rel="external">rosbag_pandas</a></p>
+<h3 id="tabbles"><a href="#tabbles" class="headerlink" title="tabbles"></a>tabbles</h3><p><a href="https://tabbles.net/" target="_blank" rel="external">tabbles</a> used to tag any rosbags or folders.</p>
+<h3 id="hdfs-fdw"><a href="#hdfs-fdw" class="headerlink" title="hdfs_fdw"></a>hdfs_fdw</h3><p><a href="https://github.com/EnterpriseDB/hdfs_fdw" target="_blank" rel="external">hdfs for postSQL</a> </p>
+<h2 id="at-the-end"><a href="#at-the-end" class="headerlink" title="at the end"></a>at the end</h2><p>talked with a friend from DiDi software team, most big Internet companies have their own software tool teams in house, which as I know so far, doesn’t exist in any traditional OEMs. is there a need for tool team in OEMs? the common sense is at the early stage, there is no need to develop and maintain in-house tools, the commericial ones should be more efficient; as the department grows bigger and requires more user special development and commericial tools doesn’t meet the needs any more, tool teams may come out. still most decided by the industry culture, OEM’s needs is often pre-defined by big suppliers, so before OEMs are clear their software tool requirements/need, the suppliers already have the solutions there – this situation is epecially true for Chinese OEMs, as their steps is behind Europen suppliers maybe 50 years.\</p>
+<p>I am interested at the bussiness model of <a href="https://autovia.ai/" target="_blank" rel="external">autovia.ai</a>, which focus on <code>distributed machine learning</code> and <code>sensor data analytics</code> in cloud with <code>petabyte of data</code>, with the following skills: </p>
+<ul>
+<li><p>large scale sensor data(rosbag) processing with Apache Spark</p>
+</li>
+<li><p>large scale sensro data(rosbag) training with TensorFlow</p>
+</li>
+<li><p>parallel processing with fast serialization between nodes and clusters </p>
+</li>
+<li><p>hdmap generation tool in cloud </p>
+</li>
+<li><p>metrics and visulization in web</p>
+</li>
+<li><p>loading data directly from hdfs, Amazon S3</p>
+</li>
+</ul>
+<p>all these functions will be a neccessary for a full-stack ADS team in future to development safety products, which I called “ data infrastructure for ADS”.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://moore-mike.com/ros-analysis-part-2.html" target="_blank" rel="external">MooreMike: ros analysis in Jupter</a></p>
+<p><a href="https://askubuntu.com/questions/29535/how-do-i-access-a-mounted-windows-share-from-the-command-line" target="_blank" rel="external">mount smb share drive to ubuntu</a></p>
+<p><a href="https://autovia.ai/" target="_blank" rel="external">autovia.ai</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/safety-guy-in-AV/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2025,242 +2221,6 @@ assertDictEqual(dic1, dic2, msg=None)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/14/math-in-ADS-system/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/14/math-in-ADS-system/" itemprop="url">math in ADS system</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-14T06:43:04-04:00">
-                2019-09-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/14/math-in-ADS-system/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/14/math-in-ADS-system/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>when dealing with plan and control models in ADS system, there are plenty of basic math, and the understanding of these math are definitely helpful to build a better and stronger algorithm.</p>
-<p>to design a ADS software system, there are two parts, the engineering background and software development. enginneering side is the core logic, while software is about how to organize the software and present, especially with new ideas, e.g. cloud based architecture, web user interface.</p>
-<h2 id="vector-analysis"><a href="#vector-analysis" class="headerlink" title="vector analysis"></a>vector analysis</h2><h3 id="coordinate-system"><a href="#coordinate-system" class="headerlink" title="coordinate system"></a>coordinate system</h3><p>asssumed a Cartesian system [O: e1, e2, e3], a vector <strong>r</strong> can be represented as (x, y, z).</p>
-<h3 id="vector-operator"><a href="#vector-operator" class="headerlink" title="vector operator"></a>vector operator</h3><ul>
-<li><p>vector add </p>
-<p>  <strong>a</strong> + <strong>b</strong> = (a_x + b_x) <strong>i</strong> + (a_y + b_y) <strong>j</strong> + (a_z + b_z) <strong>k</strong></p>
-</li>
-</ul>
-<p>the triangle inequality is:</p>
-<p>|<strong>a</strong> + <strong>b</strong>| &lt;= |<strong>a</strong>| + |<strong>b</strong>|</p>
-<ul>
-<li><p>multiply scalar </p>
-<p><strong>a</strong> . <strong>b</strong> =  a . b_x <strong>i</strong> + a . b_y <strong>j</strong> + a . b_z <strong>k</strong>  </p>
-</li>
-</ul>
-<p>namely, by multiplying each direction component of the vector by <code>a</code>.</p>
-<ul>
-<li><p>dot product </p>
-<p><strong>a</strong> . <strong>b</strong> = |a|.|b|. \cos<a,b> = a_x . b_x +  a_y . b_y +  a_z . b_z </a,b></p>
-</li>
-</ul>
-<p>a simple physical explaination: assume <code>a</code> is displacement, <code>b</code> is force, then the power of force in the displacement is by <code>dot product</code>.</p>
-<p>the geometric meaning of <code>dot product</code> is projection. namely, |a|cos<a,b> means project of vector <code>a</code> on vector <code>b</code>, which also gives the decomposion of <code>a</code>, which has a unique <code>projection component vector</code> and <code>vertical component vector</code>.</a,b></p>
-<p><strong>a</strong> =  <strong>a_p</strong> + <strong>a_v</strong></p>
-<p><strong>a_p</strong> = ( <strong>a</strong> . <strong>e_p</strong> ) . <strong>e_p</strong></p>
-<ul>
-<li>cross product </li>
-</ul>
-<p>assume three vectors non-co-plane, (a, b, c), rotating start from a to b, the thumb point to c, which is a right-hand-coordinate system. </p>
-<p>a simple physical meaning: assume <code>a</code> is the force, <code>b</code> is the force arm, then <code>a x b</code> gives the torque, which perpendicular to <a, b=""> plane. </a,></p>
-<p> <strong>a</strong> x <strong>b</strong> = |a||b| \sin<a, b=""> </a,></p>
-<p>the geometric meaning of <code>cross product</code> is the area of parallelogram by <a, b="">. </a,></p>
-<p>base vectors in right-hand Cartesian coordiante system satisfy:</p>
-<pre><code>ei x ej = ek (i != j)
-</code></pre><ul>
-<li><p>mixed product </p>
-<pre><code>$$ a x b \cdot c  $$
-</code></pre></li>
-</ul>
-<p>which gives the volume of parallel hexagonal propped by <a, b,="" c=""></a,></p>
-<h3 id="curve-volume-integration"><a href="#curve-volume-integration" class="headerlink" title="curve(volume) integration"></a>curve(volume) integration</h3><ul>
-<li><p>Gauss integration </p>
-</li>
-<li><p>Stokes integration </p>
-</li>
-</ul>
-<h3 id="scalar-field"><a href="#scalar-field" class="headerlink" title="scalar field"></a>scalar field</h3><ul>
-<li>directional derivative </li>
-</ul>
-<p>assuming vector <code>l</code> in space, its unitfied vector can be present as directional cosine [cos\alpha, cos\beta, cos\gamma]^T. for any function <code>u=u(x, y, z)</code>, who is derivable at <code>M0(x0, y0, z0)</code>, then:</p>
-<pre><code>\frac{\partial u}{\partial l} = dot_product(\Delta u, &lt;\cos \alpha, \cos \beta, \cos \gamme&gt; )
-</code></pre><ul>
-<li><p>gradient </p>
-<pre><code>\Delta u =  \frac{\partial u}{\parial x} \b{i} + \frac{\partial u}{\parial y} \b{j} +  \frac{\partial u}{\parial z} \b{k}
-</code></pre></li>
-</ul>
-<p>the directional derivative which gives the maximum of <code>\Delta u</code> at a point, it’s the gradient direction. the gradient direction in space, stands for the direction from lowest co-value layer to highest co-value layer, which in physical, means the most high rate of change in general. </p>
-<ul>
-<li><p>Halmilton operator </p>
-<pre><code>\Delta  =  \frac{\partial}{\parial x} \b{i} + \frac{\partial}{\parial y} \b{j} +  \frac{\partial}{\parial z} \b{k}
-</code></pre></li>
-</ul>
-<h3 id="vector-field"><a href="#vector-field" class="headerlink" title="vector field"></a>vector field</h3><ul>
-<li>directional derivative</li>
-</ul>
-<p>the gradient field of a vector field gives a tensor field, which raise the dimension one more. the dot product(inner product) of a vector field, decrease to scalar field, the cross product of a vector field keeps a vector field. for a vector field, usually talk about its flux and divergence.</p>
-<h2 id="analytical-geometry"><a href="#analytical-geometry" class="headerlink" title="analytical geometry"></a>analytical geometry</h2><h3 id="plane-equation"><a href="#plane-equation" class="headerlink" title="plane equation"></a>plane equation</h3><p>assume plane <code>\pi</code> in Cartesian coordinate system [O: X, Y, Z], <code>O</code>‘s projection in plane is <code>N</code>,  the directional cosine of <code>ON</code> is <code>(l, m, n)</code>, </p>
-<p>for any point <code>P</code> in plane, <code>NP</code> is always perpendicular to the directional cosine, namely:</p>
-<p>dot_product( <strong>NP</strong>, <strong>(l, m, n)</strong> ) = 0 </p>
-<p>as <code>l**2 + m**2 + n**2 == 1</code>, which gives:</p>
-<pre><code>lx + my + nz - p = 0            (1)
-</code></pre><p>equation 1) is the normalized plane equation. and <code>(l, m, n)</code> is the normal vector of lane <code>\pi</code>, and <code>p</code> should be no lesss than 0.</p>
-<h3 id="linear-equation"><a href="#linear-equation" class="headerlink" title="linear equation"></a>linear equation</h3><p>assumed a line  go across point <code>P_0</code> $(x_0, y_0, z_0)$ and in direction <code>\lamba</code>, then any point <code>P</code> $(x,y,z)$ on this line, satisfy:</p>
-<pre><code>x - x_0 = |PP_0| . l 
-y - y_0 = |PP_0| . m 
-z - z_0 = |PP_0| . n 
-</code></pre><p>taking |PP_0| as <code>t</code>, the equation above is the parmeterized line equation, namely:</p>
-<pre><code>\frac{x-x0}{l} =  \frac{y-y0}{m} =  \frac{z-z0}{n} 
-</code></pre><p>in general, a linear is the cross interface of two linear plane, so its genearl equation is to satisfy both plane equation:</p>
-<pre><code>A1.x + B1.y + C1.z + P1 = 0
-A2.x + B2.y + C2.z + P2 = 0
-</code></pre><h3 id="coordiante-transfer"><a href="#coordiante-transfer" class="headerlink" title="coordiante transfer"></a>coordiante transfer</h3><p>in general, coordiante transfer means <code>base vector</code> linear transfer. assuming original coordinate system [O: e1, e2, e3], and new coordinate system [O’, e1’, e2’, e3’]</p>
-<p>both the original base vector <e1, e2,="" e3=""> and new base vector &lt;e1’, e2’, e3’&gt; prop up the same 3D linear space. </e1,></p>
-<p>and there should be transfer matrix between them:</p>
-<p><strong>e</strong> = matrix[3x3] \cdot <strong>e’</strong></p>
-<p>for any point <code>P</code> transfer from original to new coordinate system, </p>
-<p>{<strong>x</strong>} = {<strong>a</strong>} + {<strong>x’</strong>} . matrix[3x3]</p>
-<p>matrix[3x3] is:</p>
-<table>
-<thead>
-<tr>
-<th>a11</th>
-<th>a21</th>
-<th>a31</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a12</td>
-<td>a22</td>
-<td>a32</td>
-</tr>
-<tr>
-<td>a13</td>
-<td>a23</td>
-<td>a33</td>
-</tr>
-</tbody>
-</table>
-<p>each raw in the matix above, stands for a <code>base vector</code> tranfer from original one to the new one, namely:</p>
-<pre><code>$$ e1&apos; = a11.e1 + a21.e2 + a31.e3 $$ 
-</code></pre><p>the component value of each coordinate, can be simply by:</p>
-<p>x1’ =  <strong>e1’</strong> . <strong>OP’</strong></p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="http://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/" target="_blank" rel="external">write mathematic fomulars in Markdown</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2311,7 +2271,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">168</span>
+                <span class="site-state-item-count">169</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2324,7 +2284,7 @@ A2.x + B2.y + C2.z + P2 = 0
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

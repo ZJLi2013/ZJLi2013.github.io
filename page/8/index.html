@@ -291,6 +291,164 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/threading-and-websockets/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/16/threading-and-websockets/" itemprop="url">threading and websockets</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T09:30:00-04:00">
+                2019-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/16/threading-and-websockets/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/16/threading-and-websockets/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="threading-Thread"><a href="#threading-Thread" class="headerlink" title="threading.Thread"></a>threading.Thread</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">run()</div><div class="line"></div><div class="line">start()</div><div class="line"></div><div class="line">join([time])</div><div class="line"></div><div class="line">isAlive()</div><div class="line"></div><div class="line">getName()</div><div class="line"></div><div class="line">setName()</div></pre></td></tr></table></figure>
+<p>to initialize a thread with:  threadID, name, counter</p>
+<h3 id="start-and-run"><a href="#start-and-run" class="headerlink" title="start() and run()"></a>start() and run()</h3><p>start() once for each thread, run() will not spawn a separate thread, but run in current thread </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">myThread</span><span class="params">(threading.Thread)</span>:</span></div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></div><div class="line">		super(myThread, self).__init__(*args, **kwargs)</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></div><div class="line">		print(<span class="string">"run ... from start()"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">	demo = myThread()</div><div class="line">	demo.start()</div><div class="line">	demo.join()</div></pre></td></tr></table></figure>
+<h3 id="lock-objects"><a href="#lock-objects" class="headerlink" title="lock objects"></a>lock objects</h3><p>a primitive lock does not belongto a certain thread when locked. by default, when constructed, the lock is in <code>unlocked</code> state.</p>
+<ul>
+<li><code>acquire()</code>, will set the lock to <code>locked</code> and return the lock immediately(atom operator); if current lock is <code>locked</code>, then <code>acquire()</code> blocks (the thread) untill the occuping-lock thread calls release().</li>
+</ul>
+<p>if multi-thread blocked by <code>acquire()</code>, only one thread will get the lock when release() is called, but can’t sure which one from the suspended threads</p>
+<h3 id="condition-objects"><a href="#condition-objects" class="headerlink" title="condition objects"></a>condition objects</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">threading.Condition(lock=None)</div><div class="line"></div><div class="line">acquire()</div><div class="line"></div><div class="line">wait()</div><div class="line"></div><div class="line">notify()</div><div class="line"></div><div class="line">release()</div></pre></td></tr></table></figure>
+<p>thread A aquire() the condition variable, to check if condition satification, if not, thread A wait; if satisfied, update the condition variable status and notify all other threads in waiting.</p>
+<h2 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h2><h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p>webocket is better than http when the server need actively push message to client, rather than waiting client request first.</p>
+<p><a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html" target="_blank" rel="external"></a></p>
+<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><p>usually webSocket client has two methods:  <code>send()</code> to send data to server; <code>close()</code> to close websocket connection, as well a few event callbacks:</p>
+<ul>
+<li>onopen(): triggered when websocket instance get connected</li>
+<li>onerror(),</li>
+<li>onclose(), </li>
+<li>onmessage(), which triggered when received data from server.</li>
+</ul>
+<p>when constructing a webSocket instance, a connection is built between server and client. </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// client connect to server </span></div><div class="line"><span class="keyword">var</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8181'</span>);</div><div class="line">ws.onopen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   ws.send(<span class="string">"hello server"</span>);</div><div class="line">&#125;</div><div class="line"><span class="comment">// if need run multi callback</span></div><div class="line">ws.addEventListener(<span class="string">'open'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</div><div class="line">	ws.send(<span class="string">'hello server'</span>);</div><div class="line">	&#125;); </div><div class="line">ws.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> data = event.data ;</div><div class="line">&#125;;</div><div class="line">ws.addEventListener(<span class="string">"message"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> data = event.data ;</div><div class="line">&#125;); </div><div class="line">ws.send(<span class="string">'client message'</span>);</div></pre></td></tr></table></figure>
+<h4 id="onmessage"><a href="#onmessage" class="headerlink" title="onmessage()"></a>onmessage()</h4><p>whenever the server send data, onmessage() events get fired.</p>
+<h3 id="server"><a href="#server" class="headerlink" title="server"></a>server</h3><ul>
+<li>onOpen(), triggered when a new client-server connection setup</li>
+<li>onMessage(), triggered when message received </li>
+<li>onClose(), </li>
+<li>onError(), </li>
+</ul>
+<h3 id="implementation"><a href="#implementation" class="headerlink" title="implementation"></a>implementation</h3><p>in c#, there is websocket-sharp, in python is python-websockets, in js is nodejs-websocket. as well as websocket protocol is satisified, server can write using websocket-sharp, and client in python-websockets. an example is in lg-simulator.</p>
+<p>the message type in websocket can be json or binary, so there should be json parse in c#(SimpleJSON), python(json module) and js (JSON).</p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://stackoverflow.com/questions/16280747/sending-message-to-a-specific-connected-users-using-websocket" target="_blank" rel="external">sending message to a client</a></p>
+<p><a href="https://stackoverflow.com/questions/50618425/websockets-get-message-from-a-websocket-server-and-send-it-to-client" target="_blank" rel="external">sent message from server to client</a></p>
+<p><a href="https://websockets.readthedocs.io/en/stable/" target="_blank" rel="external">python websockets</a></p>
+<p><a href="https://github.com/websockets/ws#server-broadcast" target="_blank" rel="external">nodjs websocket</a></p>
+<p><a href="https://www.vcblog.top/article/494/" target="_blank" rel="external">c# websocket</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/Unet-intro/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1706,147 +1864,6 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/09/where-are-you-in-next-5-years-8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/09/where-are-you-in-next-5-years-8/" itemprop="url">where are you in next 5 years 8</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-09T10:02:09-04:00">
-                2019-07-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/09/where-are-you-in-next-5-years-8/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/09/where-are-you-in-next-5-years-8/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>工薪和自由职业者/创业/老板，退休以后会有什么不同。也许对于工薪阶层，退休的生活也会如上班的：说不上的无奈感，没有痛快酣畅的体验过人生 — 离开了根本不享受的工作，也谈不上享受生活。就像《肖生克的救赎》被放出去的老头，离开了监狱，也融不进社会了。</p>
-<p>有个表哥创业了，做了一个健身品牌，小有所成，进入持续创业，第二份是乡政企业办公软件。两份业很不一样。甚至表哥说，这份业估计一年后就结束，生活还在继续，下一份业在哪里，现在根本想不到，但是也不担心没有。</p>
-<p>认识一个姑娘，88年，澳洲留学读了两年mba就12年回国，用我的眼光看，之后就没正紧上过班，走走玩玩也在这些年学了瑜伽，今年(2019年)开了一家店，32岁了过的跟20岁出头的姑娘一样，到底是没心没肺，还是把生活过成了别人羡慕的样子。她并不符合我的价值观，但是难道这样的人生不值得吗？</p>
-<p>年初在深圳，被这里的年轻人着实震惊了。大公司（华为）加班到凌晨，年轻的生命就像路旁的热带植被在绽放和燃烧。只是大表哥说了句，是被洗脑了。</p>
-<p>老妈在好几个城市工作做，做保姆、帮厨、家政，走到哪里都得到顾客的喜欢，走到哪里都可以有饭吃，根本不担心没有技能，找不到工作。像一个自由职业者。</p>
-<p>打工和创业当老板的mindset，似乎是本质的不同。 创业者/自由职业者，总会有出路，生活处处都通达。</p>
-<p>对比下，打工者的心态。就是处处被堵，操的心一点不少，把脑袋削尖了跟黑压压的长江后浪推前浪的年轻人比拼，担心技术上比不过行家，担心项目被各种原因取消了，担心行业遇冷，担心被老板穿小鞋，担心30岁还没有不可替代的核心，担心35岁要开始讨生活了，担心工资比年轻人高容易被开，也开始担心身体健康、家人健康等等。 采取的解决办法也是围绕着这些压力了，人生没有朝向，谈不上洒脱和享受。</p>
-<p>生活不止眼前的苟且，打工者真是委屈了心，把路走窄了，反而觉得这是唯一的出路。打工解决不了焦虑，必须转变。这世上，除了生死，都是小事。所以无所谓待业；找不到真正实现价值的事业，宁可像无业游民一样活着。</p>
-<h3 id="民企打工"><a href="#民企打工" class="headerlink" title="民企打工"></a>民企打工</h3><p>没有完善的制度，好的方面就是可以立山头，只要说动了领导，技术上可以大胆尝试，当然并不一定能得到支撑。</p>
-<p>没有稳定的做产品的氛围，所以即便立了项目，也不一定能看到项目落地。对产品开发人员，就是不利于积淀。</p>
-<p>这样的氛围下，见风使舵就是生存哲学。</p>
-<p>可以联想到更广大的中小民企，更缺乏完善的产品流程和考评体系，老板一个人的话语权太大，打工者基本没有话语权。</p>
-<h3 id="出来自己干的人，哪些不同的品质？"><a href="#出来自己干的人，哪些不同的品质？" class="headerlink" title="出来自己干的人，哪些不同的品质？"></a>出来自己干的人，哪些不同的品质？</h3><p>首先，压力的来源不该是跟成千上万人挤独木桥。一切可以明确定义的职位，比如，程序员、会计、工程师、个体网商，都挤满了人。而一旦陷入了这种思维，思考就会局限在削尖脑袋挤到这个行业/职位的头部。付出的代价/成本非常不成比例。简言之，就是洗脑了。</p>
-<p>打工只适合初期的资本积累。所以，选择做舞蹈老师、瑜伽教练，咖啡馆老板的，慢慢都会生活和工作双赢，退休了也不愁不知道怎么经营生活。而单一大公司打工的，可能初期会在工作上得意，但是慢慢的生活和工作都会失去，而且退休了根本不会打理生活。</p>
-<p>这些愿意出来自己干的人，更珍惜生活吧。所以不能接受将精力埋没在日复一日的工作中。这些自己出来干的人，都是被逼，当初没机会选择有保险的工作，只能自己走出一条道儿来。</p>
-<p>刻意要避免打工，估计也是自找麻烦。所以平常心。</p>
-<h3 id="做技术的氛围"><a href="#做技术的氛围" class="headerlink" title="做技术的氛围"></a>做技术的氛围</h3><p>到底什么环境/氛围适合做技术？北美的工作环境，相比国内，算是无忧无虑了，虽然有讨厌的印度人，但是如果有心总是有钱有时间捣鼓技术。不过反而，普通人在这样的环境下，是没有表现很强的科研热情。国内相比，待遇，工作的可爱度低，周围的大牛少了，但是反倒人因为生活和人的竞争感，反而会想多学点。</p>
-<p>另一方面，国内的资本家似乎更缺乏对行业的敬畏心，资本家对这个行业就是个格外挣钱工具的心理，当然不会真正给这个行业带来真正伟大的技术推动。比如，当宝能系，恒大都砸出一叠钱说要造车，网上大张旗鼓的招聘，按照自动驾驶的各个模块：感知算法，运动规划，决策控制，地图定位开始招人的时候。一方面是哭笑不得，一方面是无奈，觉得身为工程师只是个棋子罢了，被一个工具/算法/模块给定义了。</p>
-<p>相比这些只有钱的资本家的嘴脸，虽然汽车厂背后也站着资本家，似乎对汽车行业本身也更关心。当然，在中国，总是要面对钱，落地的现实。美国人可以谈vision, 3，5年不出产品，中国的资本市场基本不允许出现。所以，即使在国内的车厂做技术/研究，也是被量产推着。所以，整体氛围是浮躁，也就没办法专心下去</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1897,7 +1914,7 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">168</span>
+                <span class="site-state-item-count">169</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1910,7 +1927,7 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
