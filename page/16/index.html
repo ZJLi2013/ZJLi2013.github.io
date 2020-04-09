@@ -291,6 +291,131 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-socket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/31/pure-C-socket/" itemprop="url">pure C socket</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-31T19:26:58-04:00">
+                2018-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/31/pure-C-socket/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/07/31/pure-C-socket/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this is a review from <a href="https://www.gnu.org/software/libc/manual/html_node/Sockets.html" target="_blank" rel="external">GNU C lib</a>. socket is a two-way communication channel, both read and write can be performed at either end.  </p>
+<h2 id="sys-socket-h"><a href="#sys-socket-h" class="headerlink" title="sys/socket.h"></a>sys/socket.h</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(AF_INET, SOCK_STREAM, protocol)</span></span>; </div><div class="line"><span class="comment">/* return fd for this new socket, or -1 as error */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> socket_fd)</span></span>; </div><div class="line"><span class="comment">/* return 0 when close successfuly, else return -1 */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr, <span class="keyword">socketlen_t</span> len)</span></span>;</div><div class="line"><span class="comment">/* initiate a connection from (client) socket to (server) address; by default, the connection is blocking untill server respond */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> socket, <span class="keyword">int</span> n)</span></span>;</div><div class="line"><span class="comment">/* n specifies the length of queue for pending connections; when the queue fills up, new clients attempting to connect will fail */</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> socket, struct sockaddr *addr,  <span class="keyword">socketlen_t</span> *len_ptr)</span></span>;</div><div class="line"><span class="comment">/* if successfully, accept return a new socket fd, the original (server) socket remains open and unconnected;  the address and len_ptr are used to return information about the name of client socket that initiated this connection */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> send(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current sending socket. no receiver socket explicitly defined, since connection-oriented(TCP)protocol will connect first prior to send/receive  */</span></div><div class="line"></div><div class="line"><span class="keyword">size_t</span> recv(<span class="keyword">int</span> socket, <span class="keyword">const</span> <span class="keyword">void</span> *buffer,  <span class="keyword">size_t</span> size, <span class="keyword">int</span> flags);</div><div class="line"><span class="comment">/* param socket is the fd of current receiving socket */</span></div><div class="line"></div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">#<span class="meta"># network socket </span></div><div class="line"></div><div class="line">I didn't realize GNU C socket I/O is so related to network socket. the missing part when reading muduo, libuv is here. </div><div class="line"></div><div class="line">The server listens the connection requests on the special server socket, then accept each incoming connection. select() blocks/sleeps the program until input is available/ready on the special server socket/fd. </div><div class="line"></div><div class="line">```<span class="function">c</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *<span class="built_in">set</span>)</span> </div><div class="line"><span class="comment">/* initialized the file descriptor set to empty set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *<span class="built_in">set</span>)</span> <span class="comment">/* add fd to set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd,  fd_set *<span class="built_in">set</span>)</span> <span class="comment">/*remove fd from set */</span></div><div class="line"><span class="keyword">void</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> fd_set * <span class="built_in">set</span>)</span>  </div><div class="line"><span class="comment">/* return true(non-zero) if fd is in  set; else return 0 */</span></div><div class="line">STDIN_FILENO ; <span class="comment">/*  file descriptor for std input “1” */</span></div></pre></td></tr></table></figure>
+<p>how to debug server/client code? <a href="https://github.com/alphadose/Alpha-Chat/blob/master/" target="_blank" rel="external">chatRoom</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/pure-C-i-o/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1610,157 +1735,6 @@ make: *** [tests] Error 1
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/20/muduo3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/20/muduo3/" itemprop="url">muduo 3</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-20T17:17:33-04:00">
-                2018-06-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/06/20/muduo3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/06/20/muduo3/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>one concern yesterday: does each worker thread call loop() and run the whole active channels callback ?</p>
-<p>suppose no. let’s track the process :</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tcpServer.start() -&gt;</div><div class="line">	threadPool.start() -&gt;</div><div class="line">		<span class="keyword">new</span> EventLoopThread(eventLoopThread::threadFunc, threadName)</div><div class="line">		eventLoopThread-&gt;startLoop() -&gt;</div><div class="line">	   		thread.start() -&gt; detail::startThread() -&gt; </div><div class="line">	   		runInThread()::func_()</div></pre></td></tr></table></figure>
-<p>the real func_ during creating new eventLoopThread, is threadFunc(), in which call loop.loop().</p>
-<p>first, this loop object is created inside this new eventLoopThread object, no issue that the loop.threadId_ is current threadID. </p>
-<p>when multiple worker threads exist, what happens ?</p>
-<table>
-<thead>
-<tr>
-<th>threads</th>
-<th style="text-align:center">A</th>
-<th style="text-align:center">B</th>
-<th style="text-align:right">C</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>conns</td>
-<td style="text-align:center">T1</td>
-<td style="text-align:center">T2</td>
-<td style="text-align:right">T3</td>
-</tr>
-</tbody>
-</table>
-<p>suppose T1 is assigend to worker thread A, etc. when calling  eventLoopThread A.loop(),  epoll_wait() is first called and return number of active events, epoll_wait() is thread-safe, no worry.</p>
-<p>then activeChannels:HandleEvents() is called. the real executor of this handleEvents is in the TcpConnection objects, namely: T1 or T2 or T3.</p>
-<p>each TcpConnection object has its own loop-, and only the worker thread with the same loop- can execute the events. so even though threadA get the list of all active events, but only events in T1 conenction will be executed by threadA.</p>
-<p>so we can see, in per (worker) thread per epoll, each (worker) epoll looks like only return the active channels/events in current worker thread’s eventLoop. There is no conflict among multiple worker threads, since each worker threas has its own eventLoop. </p>
-<h2 id="how-about-eventLoop-in-server-client"><a href="#how-about-eventLoop-in-server-client" class="headerlink" title="how about eventLoop in server/client"></a>how about eventLoop in server/client</h2><p>the eventLoopThread is kind of triggered inside Muduo, where is Tcp server/client eventLoop triggered ? from outsiders.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1811,7 +1785,7 @@ make: *** [tests] Error 1
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">169</span>
+                <span class="site-state-item-count">170</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1824,7 +1798,7 @@ make: *** [tests] Error 1
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
