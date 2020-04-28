@@ -291,6 +291,350 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/29/未来5年在哪里-12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/29/未来5年在哪里-12/" itemprop="url">未来5年在哪里 12</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-29T10:21:29-04:00">
+                2019-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/29/未来5年在哪里-12/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/29/未来5年在哪里-12/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>国内工作半年了，先后对开源的仿真软件做了定制化实现，对高精地图、ros、场景定义等有了大量快速的接触。同时也搭建了团队的gitlab, jenkins服务, rosbag管理服务、webviz服务，pg地图服务等等，并且也投入了一些时间去搭建数据基础框架，但并没有实际业务需求。在传统oem，用DevOps去规范开发流程，以及探索数据业务、云服务等相对较新颖。相对，新兴的造车企业，会比较好的融合DevOps流程，开发上云。</p>
+<p>本质上是开发ADS支撑工具及数据基础设施，但由于OEM内部的ads开发团队比较弱，这些支撑工具以及数据工具并不发挥价值。作为工具开发者，存在感会变弱。因为离核心业务较远，虽然技术很通用。</p>
+<h3 id="OEM’s-role-in-emerging-tech"><a href="#OEM’s-role-in-emerging-tech" class="headerlink" title="OEM’s role in emerging tech"></a>OEM’s role in emerging tech</h3><p>OEM itself mostly doesn’t build tools itself, even like Ford, who hired a great team to develop CAE tools in early days and build them tremendous, still retired most of them or sell them as packages to pure software vendors later.</p>
+<p>on the other side, the pioneers or leaders of the industry, usually build and apply new methodlogy before the market is there. and after the market is there, they can have the professional team to take in charge. the leaders take the role as incubators, as many Internet startups got the ideas from giants e.g. Google, Facebook e.t.c</p>
+<p>ADS at this moment is the emerging tech, there is no mature solution or tool chain for ADS, so the leaders of automobile makers and suppliers are the guys who should take the lead to set up standards and tools till ADS market goes to mature. and the giants in automobile should catch this great opportunity to take control in long term. </p>
+<p>the problems of Chinese OEMs (sadly there is no strong Chinese suppliers yet),  they are customed to be followers, when US or German auto makers do the research and make the new bussiness stratagey, Chinese OEMs will follow.  as the blog said, Chinese has no friend, neither Chinese goverment.  be the followers or imitators is minimal loss strategy for most Chinese companies as well.  and this is also why west coutry companies are afriad of the competition from Chinese. Chinese take copy others ideas as a strategy to success, rather than a shame.</p>
+<h3 id="a-tool-developer"><a href="#a-tool-developer" class="headerlink" title="a tool developer"></a>a tool developer</h3><p>机缘巧合，职业最初，就属于工具支撑组，开发和维护工具。随着，ads的爆发，more and more software skills are required by tradititional automobile makers and suppliers; and they prefer transfer themselves to modern digital driven. but a special tool is never the core product of auto makers. </p>
+<p>there comes a time, the OEM engineers asked, why you guys build tools, rather than buy from suppliers. The right thing for OEMs is to integrate components, rather than building tools. </p>
+<p>the cost of building tools by OEM itself is really too much after a while we realized. But at first, OEMs thought it was too costy to buy commecial tools, which gives survival space of a small team to grow inside OEM teams.</p>
+<p>actually at the early time, small team dreams big, especially in these days, many open source projects can be used freely. the small team almost support every aspect related to software tools, and as well to add features to simulation platform, which is also based on an open source project <a href="https://github.com/lgsvl/simulator" target="_blank" rel="external">lg-sim</a>, <code>software manager</code> looks like a good role in the team. but the reality is, to customize any tool, will cost a huge energy for a small team, as we are not involved in these open source projects. more, the manager team doesn’t consider an independent tool team. and even like this, we are moving slowly.</p>
+<h3 id="infrasturcture-for-ABC"><a href="#infrasturcture-for-ABC" class="headerlink" title="infrasturcture for ABC"></a>infrasturcture for ABC</h3><p>for ADS startups, they emphasize their infrasturcture features with : </p>
+<ul>
+<li>cloud platform </li>
+<li>remote monitor/control system (for vehicle team management) </li>
+<li>OTA </li>
+<li>data infrastructure(storage, management, analysis)</li>
+</ul>
+<p>and in single vehicle features with powerful computing ability, from GTC 2018 speak, most startup use the powerful Xdriver GPU；</p>
+<ul>
+<li>WeRide </li>
+<li>Momenta</li>
+<li>Tusimple</li>
+<li>AutoX </li>
+<li>Roadstar.AI (dead)</li>
+<li>plusAI</li>
+<li>ponyAI</li>
+</ul>
+<p>all these looks very Internet, but too far from massive vehicle product. the other mind is these teches are actually common for average engineers, but the chanllenge is to build a team, to realy make it work.</p>
+<h3 id="survive-in-OEM"><a href="#survive-in-OEM" class="headerlink" title="survive in OEM"></a>survive in OEM</h3><p>it’s maybe more interested to take myself as an ABC(AI, big data, cloud computing) guy to find application scenarios in automobile industry product development. while ABC application scenarios are not matured yet of course, usually it is driven by leader teams, when it comes to drive by market, may be too late. </p>
+<p>beyond automotive, industry IoT maybe an even general domain to quickly apply ABCs. there should be three steps:</p>
+<ul>
+<li><p>familiar with the tech methods</p>
+</li>
+<li><p>understand the hurting points of the industry </p>
+</li>
+<li><p>product and management update -&gt; value return </p>
+</li>
+</ul>
+<p>the life leap happens to a few lucky guys. most guys are common and grow in a linear speed. there is a burden the more you know, the harder your life. sadly … </p>
+<h3 id="digitalize"><a href="#digitalize" class="headerlink" title="digitalize"></a>digitalize</h3><p>OEMs are involved more and more in transfering digital, smart. previously most invovled in market, ads strategy, supply chain management; and as connected vehicles, self driving, future mobility service bursting in recent years, digitalization is sinking in vehicle product R&amp;D. AI, big data, cloud, blockchain e.t.c. new techs will be transfering the traditional industry. hopefully we can define the new bussniess together.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/lg-sim-source-code-review-2019-09/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/22/lg-sim-source-code-review-2019-09/" itemprop="url">lg-sim source code review (2019.09)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T09:02:53-04:00">
+                2019-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/22/lg-sim-source-code-review-2019-09/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/22/lg-sim-source-code-review-2019-09/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>the recent version of lg-sim <a href="https://github.com/lgsvl/simulator" target="_blank" rel="external">2019.09</a> has additionally support for webUI, cloud, which is a big enhencement. the following code review is focusing on new components to support WebUI, cluster management.</p>
+<h2 id="database"><a href="#database" class="headerlink" title="database"></a>database</h2><p>database used <code>sqlite</code> project, which is an embedded in-memory db; the ORM used <code>PetaPoco</code> project; there are a few db related serices, e.g.  vehicleService, simulationService, which will be used in RESTful web request.</p>
+<ul>
+<li><code>DatabaseManager</code>:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">static IDatabaseBuildConfiguration  DbConfig ;</div><div class="line"></div><div class="line">Init()&#123;</div><div class="line"></div><div class="line">	DbConfig = GetConfig(connectionString)</div><div class="line">	using  db =  new SqliteConnection(connectionString)&#123;</div><div class="line">		db.Open()</div><div class="line">&#125;</div><div class="line"></div><div class="line">CreateDefaultDbAssets()&#123;</div><div class="line"></div><div class="line">	using db = Open() </div><div class="line">	if (info.DownloadEnvs != null)&#123;</div><div class="line">		map =  new MapModel()&#123;url = url  LocalPath=localPath;&#125;</div><div class="line">		id =  db.Insert(map)</div><div class="line">	&#125;</div><div class="line">		</div><div class="line">	if (info.DownloadVehicles != null)&#123;&#125;</div><div class="line"></div><div class="line">	if(defaultMap.HasValue)</div><div class="line">	&#123;</div><div class="line">		sim1 = new SimulationModel()&#123; Cluster=0,  Map=defaultMap.Value,   ApiOnly=false&#125;;</div><div class="line">		AddSimulation(db, sim1, noBridgeVehicle);</div><div class="line">		AddSimulation(db, sim, apolloVehicle);</div><div class="line">		db.Insert(simx)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">AddSimulation(IDatabase db, sim,vehicle)&#123;</div><div class="line">	conn = new ConnectionModel()&#123;</div><div class="line">		simulation = id,</div><div class="line">		vehicle = vehicle.Value,</div><div class="line">	&#125;</div><div class="line">	db.Insert(conn)</div><div class="line">&#125;</div><div class="line"></div><div class="line">AddVehicle(db, sim,vehicle)&#123;</div><div class="line">	conn = new VehicleModel()&#123;</div><div class="line">		Url = url ,</div><div class="line">	&#125;</div><div class="line">	db.Insert(vehicle)</div><div class="line">	</div><div class="line">	return vehicle.Id;</div><div class="line">&#125;</div><div class="line"></div><div class="line">PendingVehicleDownloads()&#123;</div><div class="line">	using db=Open()&#123;</div><div class="line">		var sql =  Sql.Builder.From(&quot;vehicles&quot;).Where(&quot;status=00&quot;, &quot;Downloading&quot;);</div><div class="line">		return db.Query&lt;VehicleModel&gt;(sql);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="database-ORMs"><a href="#database-ORMs" class="headerlink" title="database ORMs"></a>database ORMs</h3><p>using <code>PetaPoco</code> to define <code>ORM</code> models, such as<br><code>users</code>, <code>sessions</code>, <code>maps</code>, <code>vehicles</code>, <code>clusters</code>, <code>simulations</code> </p>
+<h4 id="PetaPoco"><a href="#PetaPoco" class="headerlink" title="PetaPoco"></a>PetaPoco</h4><p>a few operators in PetaPoco, such as <code>Page</code>, used to query a page; <code>Single</code>, used to query a single item; <code>Insert</code>; <code>Delete</code>; <code>Update</code></p>
+<h3 id="database-provider"><a href="#database-provider" class="headerlink" title="database provider"></a>database provider</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">SQLiteDatabaseProvider =&gt; </div><div class="line">GetFactory(&quot;Mono.Data.Sqlite.SqliteFactory, Mono.Data.Sqlit&quot;)</div></pre></td></tr></table></figure>
+<p>called inside <code>DatabaseManager::Init()</code>.</p>
+<h3 id="database-services"><a href="#database-services" class="headerlink" title="database services"></a>database services</h3><ul>
+<li><p>VehicleService : IVehicleService </p>
+</li>
+<li><p>MapService </p>
+</li>
+<li><p>NotificationService =&gt;  NotificationManager.SendNotification()</p>
+</li>
+<li><p>DownloadService =&gt;  DownloadManager.AddDownloadToQueue()</p>
+</li>
+<li><p>ClusterService </p>
+</li>
+<li><p>SessionService </p>
+</li>
+<li><p>SimulationService</p>
+</li>
+</ul>
+<h2 id="Web-model"><a href="#Web-model" class="headerlink" title="Web model"></a>Web model</h2><p>web model is where WebUI server located, which is served by <code>Nancy</code> project, in which a new design metholody is applied: Inversin of Control Contaner(IoC), namely <code>控制反转</code> in chinese. IoC is used to inject implementation of class, and manage lifecycle,  dependencies.    </p>
+<p>web model is the server where talk to webUI through routes, which is defined in the React project.</p>
+<h3 id="Nancy"><a href="#Nancy" class="headerlink" title="Nancy"></a>Nancy</h3><p>used to build HTTP based web service,</p>
+<ul>
+<li>FileStream</li>
+<li>StreamResponse  </li>
+<li><a href="https://github.com/grumpydev/TinyIoC" target="_blank" rel="external">TinyIoC</a>   </li>
+<li>UnityBootstrapper : <a href="https://github.com/NancyFx/Nancy/wiki/Bootstrapper" target="_blank" rel="external">DefaultNancyBootstrapper</a>, used to automatic discovery of modules, custm model binders, dependencies.</li>
+</ul>
+<ul>
+<li>/Assets/Scripts/Web/Nancy/NancyUnityUtils</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">ConfigureApplicatinContainer(TinyIoCContainer container)</div><div class="line">&#123;</div><div class="line">  container.Register&lt;UserMapper&gt;();</div><div class="line">  container.Register&lt;IMapService&gt;(); </div><div class="line">  container.Register&lt;IClusterService&gt;();</div><div class="line">  container.Register&lt;IVehicleService&gt;();</div><div class="line">  container.Register&lt;ISimulationService&gt;();</div><div class="line">&#125; </div><div class="line">``` </div><div class="line"></div><div class="line">### route modules </div><div class="line"></div><div class="line">```c#</div><div class="line"></div><div class="line">SimulationModule : NancyModule()</div><div class="line">&#123;</div><div class="line">  class SimulationRequest&#123;&#125;</div><div class="line">  class SimulationResponse&#123;&#125;</div><div class="line">  </div><div class="line">  Get(&quot;/&quot;,  x=&#123;&#125;)</div><div class="line">  Post(&quot;/&quot;,  x=&#123;&#125;)</div><div class="line">  Put(&quot;/&#123;id:long&#125;&quot;, x=&#123;&#125;)</div><div class="line">  Post(&quot;/&#123;id:long&#125;/start&quot;, x=&#123;&#125;)</div><div class="line">  Post(&quot;/&#123;id:long&#125;/stop&quot;, x=&#123;&#125;)  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>inside some of the route modules will do query or update the sqlite database for special objects. till here is the complete web back-end server, with a http server and an in-memory database.</p>
+<p>the webUI frontend is based on React, about React check <a href="https://zjli2013.github.io/2019/08/30/reactjs-introduction/" target="_blank" rel="external">a previous blog</a>. in the React WebUI project will have http requests corresponding to each of routes defined here. </p>
+<p>React front end is very independent framework, which should be handled by an independent team in standard pipeline.</p>
+<h3 id="Config-amp-Loader"><a href="#Config-amp-Loader" class="headerlink" title="Config &amp; Loader"></a>Config &amp; Loader</h3><ul>
+<li>/Assets/Scripts/Web/Config.cs: </li>
+</ul>
+<p>used to define <code>WebHost</code>,  <code>WebPort</code>, <code>ApiHost</code>, <code>ClourUrl</code>, <code>Headless</code>, <code>Sensors</code>, <code>Bridges</code> e.t.c   </p>
+<ul>
+<li>Loader.cs :</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Loader Instance ;    //Loader object is never destroyed, even between scene reloads</div><div class="line"></div><div class="line">Loader.Start()&#123;</div><div class="line"></div><div class="line">	DatabaseManager.Init();</div><div class="line">	var config = new HostConfguration&#123;&#125; ;   // ?</div><div class="line">	Server = new NancyHost(Config.WebHost);</div><div class="line">	Server.Start();</div><div class="line">	DownloadManager.Init();</div><div class="line">&#125;</div><div class="line"></div><div class="line">Loader.StartAsync(simulation)&#123;</div><div class="line"></div><div class="line">	Instance.Actions.Enqueue() =&gt;</div><div class="line">	var db = DatabaseManager.Open()</div><div class="line">	AssetBundle mapBundle = null; </div><div class="line">		</div><div class="line">	simulation.Status &quot;Starting&quot; </div><div class="line">	NotificationManager.SendNotification();</div><div class="line">	Instance.LoaderUI.SetLoaderUIState();</div><div class="line"></div><div class="line">	Instance.SimConfig = new SimlationConfig()&#123;</div><div class="line">		Clusters, ApiOnly, Headless, Interative, TimeOfDay, UseTraffic...</div><div class="line">	&#125;	</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Loader.SetupScene(simulation)&#123;</div><div class="line"></div><div class="line">	var db = DatabaseManager.Open()</div><div class="line">	foreach var agentConfig in Instance.SimConfig.Agents:</div><div class="line">		var bundlePath = agentConfig.AssetBundle </div><div class="line">		var vehicleBundle = AssetBundle.LoadfromFile(bundlePath)</div><div class="line">		var vehicleAssets = vehicleBundle.GetAllAssetNames();</div><div class="line">		agentConfig.Prefab = vehicleBundle.LoadAsset&lt;GO&gt;(vehicleAssets[0])</div><div class="line">		</div><div class="line">	var sim = CreateSimulationManager();	</div><div class="line">	Instance.CurrentSimulation = simulation </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>DownloadManager</li>
+</ul>
+<pre><code class="c#">
+class Download();
+Init(){ client = new WebClient();  ManageDownloads(); }
+</code></pre>
+<h2 id="network-module"><a href="#network-module" class="headerlink" title="network module"></a>network module</h2><p><code>network module</code> is used for communication among master and clients(workers) in the cluster network for cloud support. the P2P network is built on <code>LiteNetLib</code> which is a reliable UDP lib. </p>
+<h3 id="LiteNetLib"><a href="#LiteNetLib" class="headerlink" title="LiteNetLib"></a>LiteNetLib</h3><p><a href="https://github.com/RevenantX/LiteNetLib" target="_blank" rel="external">LiteNetLib</a>is Udp package, used to P2P communication among master node and slave nodes here, where are defined as <code>MasterManager</code>, <code>ClientManager</code>.</p>
+<p>usage of LiteNetLib can be found in the <a href="https://github.com/RevenantX/LiteNetLib/wiki/NetPacketProcessor-(NetSerializer" target="_blank" rel="external">wiki</a>-usage)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/IoC-in-C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1699,453 +2043,11 @@ Listen 8084
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/29/warm-up-Hilber-space/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/29/warm-up-Hilber-space/" itemprop="url">warm up Hilber space</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-29T10:39:22-04:00">
-                2019-09-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/29/warm-up-Hilber-space/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/29/warm-up-Hilber-space/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="abstract-space"><a href="#abstract-space" class="headerlink" title="abstract space"></a>abstract space</h2><ul>
-<li>Cauchy Series</li>
-</ul>
-<p>in metric space, existing an any positive and small \etta, exist a natural number <code>N</code>, $m, n &gt; N$, which satisfies:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?|x_m&space;-&space;x_n|&space;<&space;\varepsilon" title="|x_m - x_n| < \varepsilon"></p>
-<p>it’s called a Cauchy Series. intuitively, as the numbers goes above, the elements get closer. </p>
-<ul>
-<li>Complete Space </li>
-</ul>
-<p>any Caunchy Series in these abstract space, its convergence is still in the original space. </p>
-<p>e.g. rational number space is not complete space, as <img src="https://latex.codecogs.com/gif.latex?\sqrt{2}" title="\sqrt{2}"> is not in rational number space anymore. </p>
-<p>intuitively, a complete space is like a shell without any holes on its surface. </p>
-<ul>
-<li>Linear Space </li>
-</ul>
-<p>with linear structural set, which can be described by <code>base vector</code>, so any hyper-point in a linear space can be represented by the linear combination of its <code>base</code>, so also called as <code>vector space</code>. in another way, linear space has only <code>add</code> and <code>scalar multi</code> operator.</p>
-<ul>
-<li>Metric Space </li>
-</ul>
-<p>to describe length or distance in linear space, adding  <code>normal</code> in the linear space, gives <code>normed linear space</code> or <code>metric space</code>.</p>
-<ul>
-<li>Banach Space</li>
-</ul>
-<p>a complete metric space</p>
-<ul>
-<li>Inner Product Space </li>
-</ul>
-<p>with <code>inner product</code> feature in metric space. for the infinite space, there are two different sub space, either the inner product of the series converged or not. </p>
-<p>the convergence sub space is a completed space. </p>
-<ul>
-<li>Hilbert Space</li>
-</ul>
-<p>a completed inner product space</p>
-<ul>
-<li>Eurepean Space</li>
-</ul>
-<p>a finite  Hilbert Space. </p>
-<h2 id="functional-analysis"><a href="#functional-analysis" class="headerlink" title="functional analysis"></a>functional analysis</h2><p>the optimzed control theory problem, is to find the functional, under system dynamic constraints, which gives the extremum point(function) in the infinite normed linear space; in general.</p>
-<p>in general, the functional is depends on the system dynamic path, which gives some famuous theorem: Banach fixed point. </p>
-<p>PDE theory, partial geometry, optimized control theory are all part of functional analysis. from computational mechanics field, there is a chance go to PDE theory; from modern control field, there is a chance go to optimized control theory; from modern physics field, the students may also get familiar with partial geometry. the beauty of math is show up, all these big concepts finally arrive to one source:  functional analysis. </p>
-<p>to transfer all these big things into numerial world, which gives CAE solver, DQN solvers e.t.c.</p>
-<h3 id="the-closest-point-property-of-Hilbert-Space"><a href="#the-closest-point-property-of-Hilbert-Space" class="headerlink" title="the closest point property of Hilbert Space"></a>the closest point property of Hilbert Space</h3><p>A subset of <code>A</code> of a vector space is <strong>convex</strong>: if for all a, b belongs to <code>A</code>, all \lamba such that <code>0 &lt; \lamba &lt; 1</code>, the point <img src="https://latex.codecogs.com/gif.latex?\lambda&space;a&space;&plus;&space;(1-\lambda)&space;b" title="\lambda a + (1-\lambda) b"> belongs to <code>A</code></p>
-<p>assuming <code>A</code> is non-empty closed convex set in Hilbert Space <code>H</code>, for any x belongs to <code>H</code>, there is a unique point <code>y</code> of <code>A</code> which is closer to x than any ohter point of <code>A</code>:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?||&space;x&space;-&space;y&space;||&space;=&space;{R}_{a&space;\sphericalangle&space;R}&space;||&space;x&space;-&space;a||" title="|| x - y || = {R}_{a \sphericalangle R} || x - a||"></p>
-<h3 id="orthogonal-expansions"><a href="#orthogonal-expansions" class="headerlink" title="orthogonal expansions"></a>orthogonal expansions</h3><p>if (e_n) is an orthonormal sequence in a Hilbert space <code>H</code>, for any x belongs to <code>H</code>, (x, e_n) is the nth Fourier coefficient of x with respect to (e_n), the Fourier series of x with respect to the sequence (e_n) is the series: </p>
-<p><img src="https://latex.codecogs.com/gif.latex?\sum_i(x,&space;e_i)e_i" title="\sum_i(x, e_i)e_i"></p>
-<ul>
-<li>pointwise converges</li>
-</ul>
-<p><img src="https://latex.codecogs.com/gif.latex?\sum_{n=1}^{\infty&space;}&space;f_n(t)&space;=&space;f(t)" title="\sum_{n=1}^{\infty } f_n(t) = f(t)"></p>
-<p>where <code>f_n</code>is a sequence of functions in <img src="https://latex.codecogs.com/gif.latex?L^2(0,1)" title="L^2(0,1)"></p>
-<ul>
-<li>complete orthonormal sequence </li>
-</ul>
-<p>given an orthonormal sequence of (e_n) and a vector <code>x</code> belongs to <code>H</code> then:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?x&space;=&space;\sum_{n=1}^{\infty&space;}&space;(x,&space;e_n)&space;e_n" title="x = \sum_{n=1}^{\infty } (x, e_n) e_n"></p>
-<p>but only when this sequence is complete, the right-hand side converge to  left-hand side workks.</p>
-<p>an orthonormal sequence (e_n) in Hilbert Space <code>H</code> is complete if the only member of <code>H</code> which is orthogonal to every e_n is the zero vector.</p>
-<p>a complete orthonal sequence in <code>H</code> is also called an <code>orthonormal basis</code> of <code>H</code>.</p>
-<p><code>H</code> is separable if it contains a complete orthonormal sequence, </p>
-<p>the orthogonal complement (which named as E^T) of a subset <code>E</code> of <code>H</code> is the set:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?{&space;x&space;\in&space;H:&space;(x,&space;y)&space;=&space;0&space;for&space;all&space;y&space;\in&space;E}" title="{ x \in H: (x, y) = 0 for all y \in E}"></p>
-<p>for any set <code>E</code> in <code>H</code>, <code>E^T</code> is a closed linear subspace of <code>H</code>.</p>
-<p>the knowledge above gives the convergence in Hilbert Space, application like FEA, once created the orthonormal basis of solution space, the solution function represented by the linear combination of these basis is guranted to convergence. </p>
-<h3 id="Fourier-series"><a href="#Fourier-series" class="headerlink" title="Fourier series"></a>Fourier series</h3><p>it is a complete orthonormal sequence in <code>L^2(-\pi, \pi)</code>, and any function represented by a linear combination of Fourier basis is converged. </p>
-<p>but here Fourier basis is the arithmetic means of the nth partial sum of the Fourier series of f, not the direct basis itself. </p>
-<h3 id="Dual-space"><a href="#Dual-space" class="headerlink" title="Dual space"></a>Dual space</h3><h3 id="FEA-solutions-for-PDE"><a href="#FEA-solutions-for-PDE" class="headerlink" title="FEA solutions for PDE"></a>FEA solutions for PDE</h3><p>PDE can be represented in a differential representation:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?\bigtriangledown&space;\cdot&space;(-k&space;\bigtriangledown&space;T)&space;=&space;g(T,&space;x)&space;,&space;in&space;\Omega" title="\bigtriangledown \cdot (-k \bigtriangledown T) = g(T, x) , in \Omega"></p>
-<p>or an integral representation: </p>
-<p><img src="https://latex.codecogs.com/gif.latex?\int_{\Omega}{&space;\bigtriangledown&space;\cdot&space;(-k&space;\bigtriangledown&space;T)}&space;=\int_{\Omega}&space;g(T,&space;x)&space;,&space;in&space;\Omega" title="\int_{\Omega}{ \bigtriangledown \cdot (-k \bigtriangledown T)} =\int_{\Omega} g(T, x) , in \Omega"></p>
-<p>integral formulation has included existing boundary conditions. by multiplying test function <code>\phi</code> on both side of integral representation, and using Green’s first identity will give the weak formulation(variational formulation) of this PDE.</p>
-<p><img src="https://latex.codecogs.com/gif.latex?\int_{\Omega}&space;\bigtriangledown&space;T&space;\cdot&space;\bigtriangledown&space;\varphi&space;dV&space;&plus;&space;\int_{S}&space;(-k&space;\bigtriangledown&space;T)&space;\cdot&space;\mathbf{n}&space;\varphi&space;dS&space;=&space;\int_{\Omega}&space;g&space;\varphi&space;dV" title="\int_{\Omega} \bigtriangledown T \cdot \bigtriangledown \varphi dV + \int_{S} (-k \bigtriangledown T) \cdot \mathbf{n} \varphi dS = \int_{\Omega} g \varphi dV"></p>
-<p>in FEA, assuming the test function <code>\phi</code> and solution <code>T</code> belong to same Hilbert space, the advantage of Hilbert space, is functions inside can do linear combination, like vectors in a vector space. FEA also provides the error estimates, or bounds for the error. </p>
-<p><img src="https://latex.codecogs.com/gif.latex?\phi&space;\in&space;H&space;;&space;T&space;\in&space;H" title="\phi \in H ; T \in H"></p>
-<p>the weak formulation should be obtained by all test functions in Hilbert space. this is <code>weak formulation</code> due to now it doesn’t exactly requries all points in the domain need meet the differential representation of the PDE, but in a integral sense. so even a discontinuity of first derivative of solution <code>T</code> still works by weak formulation. </p>
-<h3 id="Hilbert-space-and-weak-convergence"><a href="#Hilbert-space-and-weak-convergence" class="headerlink" title="Hilbert space and weak convergence"></a>Hilbert space and weak convergence</h3><p>convergence in another words means, the existence of solution. for CAE, DQN algorithms, the solution space is in Hilbert space. </p>
-<h3 id="Lagrange-and-its-duality"><a href="#Lagrange-and-its-duality" class="headerlink" title="Lagrange and its duality"></a>Lagrange and its duality</h3><p>to transfer a general convex optimization problem with lagrange mulitplier:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?min&space;f(x)&space;\\&space;s.t.&space;c_i(x)&space;<=&space;0&space;\\&space;h_j(x)&space;=&space;0" title="min f(x) \\ s.t. c_i(x) <= 0 \\ h_j(x) = 0"></p>
-<p>=&gt;</p>
-<p><img src="https://latex.codecogs.com/gif.latex?L(x,&space;\alpha,&space;\beta)&space;=&space;f(x)&space;&plus;&space;\sum&space;\alpha_i&space;c_i(x)&space;\sum&space;\beta_j&space;h_j(x)" title="L(x, \alpha, \beta) = f(x) + \sum \alpha_i c_i(x) \sum \beta_j h_j(x)"></p>
-<p>we always looks for meaning solution, so <code>L</code> should exist maximum extremum. if not, as <code>x</code> grow, the system goes divergence, no meaningful solution. define:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?\theta_P(x)&space;=&space;max_{\alpha,&space;\beta&space;\geq&space;0}&space;L(x,&space;\alpha,&space;\beta)" title="\theta_P(x) = max_{\alpha, \beta \geq 0} L(x, \alpha, \beta)"></p>
-<p>so the constrainted system equation equals to :</p>
-<p><img src="https://latex.codecogs.com/gif.latex?min_x&space;\theta_P(x)&space;=&space;min_x&space;max_{\alpha,&space;\beta&space;\geq&space;0}&space;L(x,&space;\alpha,&space;\beta)" title="min_x \theta_P(x) = min_x max_{\alpha, \beta \geq 0} L(x, \alpha, \beta)"></p>
-<p>to rewrite the original equation as: </p>
-<p><img src="https://latex.codecogs.com/gif.latex?\theta_D(\alpha,&space;\beta)=&space;min_x&space;L(x,&space;\alpha,&space;\beta)" title="\theta_D(\alpha, \beta)= min_x L(x, \alpha, \beta)"></p>
-<p>then the system’s duality is defined as :</p>
-<p><img src="https://latex.codecogs.com/gif.latex?max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;\theta_D(\alpha,&space;\beta)=&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;min_x&space;L(x,&space;\alpha,&space;\beta)" title="max_{\alpha, \beta \geqslant 0} \theta_D(\alpha, \beta)= max_{\alpha, \beta \geqslant 0} min_x L(x, \alpha, \beta)"></p>
-<p>for a system, if the original state equation and its duality equation both exist extremum solution, then :</p>
-<p><img src="https://latex.codecogs.com/gif.latex?d^*&space;=&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;min_x&space;L(x,&space;\alpha,&space;\beta)&space;\leqslant&space;min_x&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;L(x,&space;\alpha,&space;\beta)&space;=&space;p^*" title="d^* = max_{\alpha, \beta \geqslant 0} min_x L(x, \alpha, \beta) \leqslant min_x max_{\alpha, \beta \geqslant 0} L(x, \alpha, \beta) = p^*"></p>
-<p>the benefits of duality problems is </p>
-<ul>
-<li><p>the duality problem is always convex,  even when the original problem is non-convex </p>
-</li>
-<li><p>the duality solution give an lower boundary for the original solution</p>
-</li>
-<li><p>when strong duality satisfy, the duality solution is the original solution</p>
-</li>
-</ul>
-<h3 id="Krylov-Space"><a href="#Krylov-Space" class="headerlink" title="Krylov Space"></a>Krylov Space</h3><h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://zhuanlan.zhihu.com/p/37108430" target="_blank" rel="external">convex func</a></p>
-<p><a href="https://www.comsol.com/multiphysics/finite-element-method" target="_blank" rel="external">finite element method</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/38182879" target="_blank" rel="external">Lagranget duality</a></p>
-<p><a href="https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf" target="_blank" rel="external">standford convex optimization</a></p>
-<p><a href="https://danieltakeshi.github.io/2016/10/31/going-deeper-into-reinforcement-learning-understanding-q-learning-and-linear-function-approximation/" target="_blank" rel="external">Going deeper into RF: understaing Q-learning and linear function approximation</a></p>
-<p><a href="">Nicholas Young, an introduction to Hilbert Space</a></p>
-<p><a href="https://www.quora.com/Why-are-Hilbert-spaces-important-for-finite-element-analysis" target="_blank" rel="external">why are Hilbert Space important to finite element analysis</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/reinforcement-learning-in-nutshell-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="url">reinforcement learning in nutshell-1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T10:36:19-04:00">
-                2019-09-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/18/reinforcement-learning-in-nutshell-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="RL-concepts"><a href="#RL-concepts" class="headerlink" title="RL concepts"></a>RL concepts</h3><p>assuming timestep <code>t</code>:</p>
-<ul>
-<li>the environment state <strong>S</strong>(t)</li>
-<li>agent’s action <strong>A</strong>(t)</li>
-<li>discouted future reward <strong>R</strong>(t), which satisfy: </li>
-</ul>
-<p><img src="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;r_{t&plus;2}&space;&plus;&space;...&space;&plus;&space;\gamma^k&space;r_{t&plus;k&plus;1}" title="R_t = r_{t+1} + \gamma r_{t+2} + ... + \gamma^k r_{t+k+1}"></p>
-<pre><code>with current state `s` and taking current action `a`, the env will give the reward `r_{t+1}`. `\gamma` is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent&apos;s value only consider current reward.  check [discount future reward]() in following chapter.
-</code></pre><ul>
-<li><p>agent’s policy <strong>P</strong>(a|s), in current state <code>s</code>, the propability of action <code>a</code></p>
-</li>
-<li><p>agent’s state value <strong>V</strong>(s), in state <code>s</code> and took policy <code>\pi</code>, which usually described as an expectation:</p>
-</li>
-</ul>
-<p><img src="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)" title="V^\pi(s) = E (R_t )"></p>
-<ul>
-<li>agent’s action value <strong>Q</strong>(s, a), which consider both state <code>s</code> and action <code>a</code> effects on value calculation. </li>
-</ul>
-<p><img src="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t&plus;1})&space;=&space;E(r_{t&plus;1}&space;&plus;&space;\gamma&space;V^\pi(s_{t&plus;1}))" title="Q^\pi(s, a) = E_{\pi} ( R_t | s=s_t, a=a_t) = E_{\pi} (R_{t+1}) = E(r_{t+1} + \gamma V^\pi(s_{t+1}))"></p>
-<p><img src="https://latex.codecogs.com/gif.latex?V^\pi&space;(s)&space;=&space;E&space;(&space;Q^\pi(s,&space;a)|_{a&space;\sim&space;\pi(a|s)}&space;)" title="V^\pi (s) = E ( Q^\pi(s, a)|_{a \sim \pi(a|s)} )"></p>
-<p>namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>. </p>
-<ul>
-<li>state transfer propability <strong>P</strong></li>
-<li>explore rate <code>\eta</code>,  it’s the chance to choose non-max value during iteration, similar as mutation.</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/17414314-c9a7f64558173b0b.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
-<h3 id="Markov-decision-process"><a href="#Markov-decision-process" class="headerlink" title="Markov decision process"></a>Markov decision process</h3><p>assuming <code>state transfer propability</code>, <code>agent&#39;s policy</code>, and <code>agent&#39;s value</code> follow <code>Markov assumption</code>. namely, the current state transfer propability, agent’s policy and value only relates to current state.</p>
-<p>agent’s value function <strong>V</strong>(s) meets <a href="">Belman’s equation</a>:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?V(S)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;V(S_{t&plus;1})|S_t&space;=s&space;)" title="V(S) = E( R_{t+1} + \gamma V(S_{t+1})|S_t =s )"></p>
-<p>and agent’s action value function <strong>q</strong>(s) also has Belman’s equation:</p>
-<p><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;a)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;Q(S_{t&plus;1},&space;A_{t&plus;1}&space;)|S_t&space;=s,&space;A_t&space;=a&space;)" title="Q(s, a) = E( R_{t+1} + \gamma Q(S_{t+1}, A_{t+1} )|S_t =s, A_t =a )"></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/17414314-54bb214db83cc7b2.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
-<p>in general, env’s state is random; the policy to take action is policy <strong>P(a|s)</strong>. Markov Decision process is: state, action, policy, each <code>[state, action, policy]</code> is an <code>episode</code>, which gives the state-action-reward series:</p>
-<pre><code>s0, a0, r1, s1, a1, r2, ... s(n-1),  a(n-1), rn, sn
-</code></pre><p>Markov assumption is state(n+1) is only depends on state(n).</p>
-<h3 id="Belman’s-equation"><a href="#Belman’s-equation" class="headerlink" title="Belman’s equation"></a>Belman’s equation</h3><p>Belman’s equation gives the recurrence relation in two timesteps. the current state value is calcualted from next future status with given current env status.</p>
-<p><img src="https://latex.codecogs.com/gif.latex?v(s)&space;=&space;E(&space;R_(t&plus;1)&space;&plus;&space;\gamma&space;v(S_(t&plus;1))|S_t&space;=&space;s&space;)" title="v(s) = E( R_(t+1) + \gamma v(S_(t+1))|S_t = s )"></p>
-<h3 id="discounted-future-reward"><a href="#discounted-future-reward" class="headerlink" title="discounted future reward"></a>discounted future reward</h3><p>to achieve better reward in long term, always conside the reward as sum of current and future rewards:</p>
-<pre><code>R(t) = r(t) + r(t+1) + ... r(n)
-</code></pre><p>on the other side, as the env state is random in time, the same action doesn’t give the same reward usually, and as time goes, the difference is even larger. think about the B-tree, as it goes deeper, the number of nodes is larger. so the reward in future doesn’t count the same weight as earlier reward, here define the discount ratio <code>\gamma</code> &lt;- [0, 1]</p>
-<pre><code>R(t) = r(t) + \gamma r(t+1) + ... + \gamma^(n-t) r(n)
-
-R(t) = r(t) = \gamma R(t+1) 
-</code></pre><h3 id="policy-iteration"><a href="#policy-iteration" class="headerlink" title="policy iteration"></a>policy iteration</h3><p>there are two steps:  </p>
-<ul>
-<li><p>policy evaluation, with current policy <code>\pi</code> to evaluate state’s value <code>V&#39;</code></p>
-</li>
-<li><p>policy improvment, with the state value <code>V&#39;</code>, with a special policy update strategy(e.g. greedy) to update policy.</p>
-</li>
-</ul>
-<p>the ideal result is to find the <code>fixed point</code> in value space, which corresponds to the optimized policy at current state with current policy update strategy.  </p>
-<p>in policy iteration, we only consider policy-value mapping.<br><img src="https://upload-images.jianshu.io/upload_images/17414314-40038359d36b0b92.png" alt="image"></p>
-<h3 id="value-iteration"><a href="#value-iteration" class="headerlink" title="value iteration"></a>value iteration</h3><p>where policy iteration based valued is implicit, only value iteration explicit by Belman’s equation. this is also a <code>fixed point</code> application, as we can use the explicit mapping (Belman’s equation) in state value space. so there should guarantee existing an optimized policy. </p>
-<p><img src="https://upload-images.jianshu.io/upload_images/17414314-6fdea50bdaf6fee7.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
-<h2 id="an-optimization-problem"><a href="#an-optimization-problem" class="headerlink" title="an optimization problem"></a>an optimization problem</h2><p>reiforcement learning solution is to find the optimal value function to achieve the max reward in each timestep, which leads to optimal policy <code>\pi*</code>, or max value func, or max action value func.</p>
-<pre><code>$$ v(s) = max(v_i(s)) foreach i in value funcs $$ 
-
-$$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$ 
-</code></pre><p>mostly the <code>solution space</code> is not known at hand, if else, the optimal solution can get directly. on the other hand, current state, action set tells a little information about the <code>solution space</code>, as they are part of the <code>solution space</code>, so the optimization algorithms used in convex space can be applied here. </p>
-<p>a few common optimization algorithms includes: </p>
-<h3 id="dynamic-programming-DP"><a href="#dynamic-programming-DP" class="headerlink" title="dynamic programming(DP)"></a>dynamic programming(DP)</h3><p>DP can used in both <code>policy evaluation</code> and <code>policy iteration</code>, but in each <code>calculation step</code>(not even one physical step, and in one physical step, there can be hundreds or thousands of calculation steps) iteration, DP has to recalculate all state(t=current) value to the very first state(t=0) value, which is disaster for high-dimensional problem, and DP by default is kind of <code>integer programming</code>, not fitted to <code>continuous domain</code> either.</p>
-<h3 id="Monte-Carlo-MC"><a href="#Monte-Carlo-MC" class="headerlink" title="Monte Carlo (MC)"></a>Monte Carlo (MC)</h3><p>MC gets a few sample solutions in the <code>solution space</code>, and use these samples solution to approxiamte the <code>solution space</code>. in a geometry explaination, the base vectors of the solution space is unknown, but MC finds a few points in this space, then approximate the (nearly) base vectors, then any point in this space can be approximated by the linear combination of the nearly base vectors.</p>
-<p>MC has no ideas of the propability of state transfer, MC doesn’t care the inner relations of state variables, or model-free.</p>
-<p>MC is robost as it’s model free, on the other hand, if the <code>solution space</code> is high-dimensional, there is a high chance the sampling points are limited in a lower dimension, which weak the presentation of MC approximation; also MC needs to reach the final status, which may be not avaiable in some applications. </p>
-<h3 id="time-serial-Time-Difference-TD"><a href="#time-serial-Time-Difference-TD" class="headerlink" title="time-serial Time Difference(TD)"></a>time-serial Time Difference(TD)</h3><p>MC use the whole list of status for each policy evaluation; in 1st order TD, policy evaluation only use next reward and next state value:</p>
-<pre><code>$ v(s) = R(t+1)  + \gamma S(t+1)|S $
-</code></pre><p>for n-th order TD, the update will use n-th reward :</p>
-<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n S(t+n)|S $
-</code></pre><p>it’s clear here, as n-&gt;infinitly, n-th order TD is closer to MC. <strong>so how close is enough usually, namely which n is enough ?</strong></p>
-<h3 id="SARSA"><a href="#SARSA" class="headerlink" title="SARSA"></a>SARSA</h3><p>in TD, there are two ways: on-line policy, where the same one policy is using to both update value func and upate action; while off-line policy, where one policy is used to update value func, the other policy is used to update action. </p>
-<p>SARSA is kind of on-line policy, and the policy is <code>e-greedy</code>, to choose the max value corresponding action in every iteration with a high probablitiy <code>(1-e)</code>, as <code>e</code> is very small.</p>
-<pre><code>$ \delta(t) v(S, A) = R + \gamma (v(S&apos;, A&apos;) - v(S, A)) $
-</code></pre><p>in the iteration equation above, <code>\delta(t)</code> will give the iteration timestep size, <code>S&#39;</code>, <code>A&#39;</code> are next state and next action, compare to pure 1-st order TD, where the next state value is modified as:  $(Q(S’, A’) - Q(S, A)$, in this way <code>value func</code> keep updated in every func, which can be considered as local correction, compared to the unchanged pure 1-st order TD, which may be highly unstable/diverge in long time series. </p>
-<p>as time-serial TD can’t guarantee converge, so this local correction makes SARSA numerical robost.</p>
-<p>SARSA(\lambda) in mutli-step based is same as n-th order TD. </p>
-<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n ( v(S`) - v(S) ) $
-</code></pre><p>the problem of SARSA is <code>v(S, A)</code> may go huge, as the algorithm is on-line policy, which requires huge memory. </p>
-<h3 id="Q-learning"><a href="#Q-learning" class="headerlink" title="Q-learning"></a>Q-learning</h3><p>Q-learning is off-line policy TD. the policy iteration is use <code>e-greedy policy</code>, same as SARSA; while the policy evaluation to update value func use <code>greedy policy</code>. </p>
-<p>in a word: from status <code>S</code>, using <code>e-greedy policy</code> to choose action <code>A</code>, and get reward <code>R</code>, and in status <code>S&#39;</code>, and using <code>greed policy</code> to get action <code>A&#39;</code>.</p>
-<pre><code>$ \delta(t) Q(S, A) = R + \gamma (Q(S&apos;, A&apos;) - Q(S, A)) $   (a)
-</code></pre><p>where $ A<code>= max v(a|S</code>) $. while in SARSA, both <code>S&#39;</code> and <code>A&#39;</code> update using <code>e-greed</code>.</p>
-<p>usually <code>Q(S,A)</code> is called Q-valued.</p>
-<p>the benefit of choosing a different policy to update action, is kind of decouping status and action, so in this way, they can reach more area in <code>real state-action space</code>, which also lead the <code>solution space</code> a little more robost. </p>
-<p>but still equation (a) is not guaranted to converge as time goes. the converged <code>Q(S,A)</code> should be <strong>convex</strong>, which means its second-order derivative must be less than 0, then the max Q values (max extremum) achieves when first-order derivate is 0.</p>
-<p>while Q-learning has the same problem as SARSA, the huge memory to store Q(S,A) table.</p>
-<p>to make intuitive example, think about an robot walk with 2 choice(e.g. turn left, turn right), and the grid world has 20 box in line, which has 2^20 ~= 10e6 elements in Q(S, A). it can’t scale to any real problem. </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf" target="_blank" rel="external">Sutton &amp; Barto, Reinforcement learning: an introduction</a></p>
-<p><a href="https://www.cnblogs.com/pinard/p/9426283.html" target="_blank" rel="external">Pinard</a></p>
-<p><a href="https://www.jianshu.com/p/b392405115bb" target="_blank" rel="external">fromeast</a></p>
-<p><a href="http://www.w3.org/1998/Math/MathML" target="_blank" rel="external">mathxml editor</a></p>
-<p><a href="https://www.codecogs.com/latex/eqneditor.php" target="_blank" rel="external">equation html editor</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/26365534" target="_blank" rel="external">fixed point mechanism</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2191,7 +2093,7 @@ $$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">170</span>
+                <span class="site-state-item-count">172</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2204,7 +2106,7 @@ $$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">46</span>
+                <span class="site-state-item-count">47</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

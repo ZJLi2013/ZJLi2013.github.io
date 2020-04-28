@@ -291,6 +291,362 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/13/play-with-ros/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/13/play-with-ros/" itemprop="url">play with ros</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-13T11:31:42-04:00">
+                2019-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/13/play-with-ros/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/13/play-with-ros/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="ros-filesystem-tools"><a href="#ros-filesystem-tools" class="headerlink" title="ros filesystem tools"></a>ros filesystem tools</h2><p>first check ROS_PACKAGE_PATH, where defines all ROS packages that are within the directories.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rospack find [package-name]</div><div class="line">rospack list </div><div class="line">roscd [package-name]</div><div class="line">``` </div><div class="line"></div><div class="line">take an example, to locate `rosbridge_websocket.launch` </div><div class="line"></div><div class="line">```shell </div><div class="line">rospack find rosbridge*    #rosbridge_server</div><div class="line">roscd rosbridge_server</div><div class="line">cd launch</div></pre></td></tr></table></figure>
+<p>another tool to view ros-launch: <code>roslaunch-logs</code></p>
+<h2 id="write-a-launch-file"><a href="#write-a-launch-file" class="headerlink" title="write a .launch file"></a>write a .launch file</h2><p>launch files, which uses XML format, usually make a directory named “launch” inside the workspace to organize all launch files, and it provides a convenient way to start up multiple nodes and master, it processs in a <a href="http://wiki.ros.org/roslaunch/XML" target="_blank" rel="external">depth-first tarversal order</a>. usually launch files can be put a <code>launch</code> folder under a ros node project. </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">roslaunch package_name launch_file</div><div class="line"><span class="meta">#</span><span class="bash">or </span></div><div class="line">roslaunch /path/to/launch_file</div></pre></td></tr></table></figure>
+<p>an sample launch file:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">launch</span>&gt;</span> </div><div class="line">   <span class="tag">&lt;<span class="name">node</span> <span class="attr">pkg</span>=<span class="string">"package_name"</span>  <span class="attr">type</span>=<span class="string">" "</span>   <span class="attr">name</span>=<span class="string">" "</span>  <span class="attr">output</span>=<span class="string">" "</span> <span class="attr">args</span>=<span class="string">" "</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">launch</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><code>args</code> can define either env variables or a command.</p>
+<p><a href="http://wiki.ros.org/roslaunch/XML/node" target="_blank" rel="external">node/type</a> There must be a corresponding executable with the same name.</p>
+<h2 id="rviz"><a href="#rviz" class="headerlink" title="rviz"></a>rviz</h2><p>rviz can help to playback sensor rosbag at lab. and also the visualization tool in algorithm/simulation development. </p>
+<p>someone(at 2014) said Google’s self-driving simulation has used rviz:</p>
+<p><img src="http://community.bwbot.org/assets/uploads/files/1472264009114-3.png?v=qboavrogdv4" alt="google simulation"> </p>
+<p><a href="http://stevenshi.me/2017/07/11/ros-intermediate-tutorial-2/" target="_blank" rel="external">a sample</a> with rviz to visualize rosbag info: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> terminal 1 </span></div><div class="line">roscore </div><div class="line"><span class="meta">#</span><span class="bash"> terminal 2 </span></div><div class="line">rosbag play kitti.bag -l </div><div class="line">rosrun rviz rviz -f kitti-velodyne</div></pre></td></tr></table></figure>
+<h2 id="rosbag"><a href="#rosbag" class="headerlink" title="rosbag"></a>rosbag</h2><p>the sensor ros node will collect data in rosbag during physical or vitual test, then playback rosbag to develop or verify the sensing algorithms. or use to build simulation scene. </p>
+<p>a few <a href="http://wiki.ros.org/rosbag/Commandline" target="_blank" rel="external">common commands</a>, and also rosbag support interactive <a href="http://wiki.ros.org/rosbag/Code%20API" target="_blank" rel="external">C++/Python APIs</a>. </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rosbag record #use to write a bag file wit contents on the specified topics</div><div class="line">rosbag info #display the contents of bag files </div><div class="line">rosbag play #play back bag file in a time-synchronized fashion</div></pre></td></tr></table></figure>
+<h2 id="kitti-dataset"><a href="#kitti-dataset" class="headerlink" title="kitti dataset"></a>kitti dataset</h2><p><code>are we ready for autonoous driving?</code> – the KITTI vision benchmark suite, which is a famous test dataset in self-driving sensing, prediction also mapping and SLAM algorithm development. </p>
+<p>there are a few benchmars includes:</p>
+<ul>
+<li><p>stereo,  basically rebuild the 3D object from multi 2D images.</p>
+</li>
+<li><p>optical flow, used to detect object movement(speed, direction)</p>
+</li>
+<li>scene flow, include other 3D env info, and  objects from optical flow </li>
+<li>depth </li>
+<li>visual odometry</li>
+<li>object detection </li>
+<li>object tracking </li>
+<li>road/lane detection </li>
+<li>semantic evaluation </li>
+</ul>
+<h2 id="catkin-package"><a href="#catkin-package" class="headerlink" title="catkin package"></a>catkin package</h2><p>catkin is ros package build/manage tool. </p>
+<pre><code class="shell">mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_create_pgk demo std_msgs rviz 
+cd demo
+mkdir launch
+cat "&lt;launch&gt; &lt;node  name="demo"  type="rviz" -d="ls `pwd`" /&gt; &lt;/launch&gt; " &gt;  demo.launch
+cd ~/catkin_ws
+catkin_make --pkg demo
+<span class="meta">
+#</span><span class="bash"> add catkin_ws to </span>
+cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.bashrc
+</code></pre>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker-swarm-compose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/07/12/play-with-Docker-swarm-compose/" itemprop="url">play with Docker swarm/compose</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-12T11:18:26-04:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/07/12/play-with-Docker-swarm-compose/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/07/12/play-with-Docker-swarm-compose/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Docker-swarm"><a href="#Docker-swarm" class="headerlink" title="Docker swarm"></a>Docker swarm</h2><p>docker swarm is Docker nature cluster manager, with built-in DNS service found mechanism, and load-balancing mechanism. compare to k8s, is a light-weight and easy goers.</p>
+<h3 id="create-a-swarm-cluster"><a href="#create-a-swarm-cluster" class="headerlink" title="create a swarm cluster"></a>create a swarm cluster</h3><figure class="highlight bat"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">export MASTER_IP=<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span></div><div class="line"></div><div class="line">docker swarm init --advertise-addr $&#123;MASTER_IP&#125; --name master</div><div class="line"></div><div class="line">docker swarm join --token tokens $&#123;MASTER_IP&#125;  --name  worker1 </div><div class="line"></div><div class="line">docker node ls </div><div class="line"></div><div class="line"># demote/ promote nodeID as manager</div><div class="line">docker node demote/promote nodeID</div><div class="line"></div><div class="line"># rm node </div><div class="line">docker node rm worker1</div><div class="line"># stop swarm <span class="built_in">mode</span> </div><div class="line">docker swarm leave</div></pre></td></tr></table></figure>
+<h3 id="create-service"><a href="#create-service" class="headerlink" title="create service"></a>create service</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker service create  service-name</div><div class="line"><span class="meta"></span></div><div class="line"> #<span class="bash"> scale service</span></div><div class="line">docker service scael SERVICE=replicas </div><div class="line"></div><div class="line">docker service rm </div><div class="line"></div><div class="line">docker service inspect</div></pre></td></tr></table></figure>
+<h3 id="create-overlay-network"><a href="#create-overlay-network" class="headerlink" title="create overlay network"></a>create overlay network</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker network create --subnet=192.168.0.0/24  -d overlay ppss-net</div><div class="line"></div><div class="line">docker network rm</div><div class="line"></div><div class="line">docker network connect network-name  docker-node</div></pre></td></tr></table></figure>
+<p>in swarm mode, there are three network created by default:</p>
+<ul>
+<li>bridge0, the default network</li>
+<li>docker_gwbridge,  local bridge used to connect containers hosted in the same host</li>
+<li>ingress,  is a overlay network used in the swarm cluster</li>
+</ul>
+<p>however, in swarm mode, the default network for service is <code>bridge</code>, to across physical host, services need go through <code>overlay</code> network. </p>
+<h3 id="load-balancing"><a href="#load-balancing" class="headerlink" title="load balancing"></a>load balancing</h3><h4 id="Ingress-load-balancing"><a href="#Ingress-load-balancing" class="headerlink" title="Ingress load balancing"></a>Ingress load balancing</h4><p>expose Docker service to external network env</p>
+<h4 id="Internal-load-balancing"><a href="#Internal-load-balancing" class="headerlink" title="Internal load balancing"></a>Internal load balancing</h4><p>swarm mode has build-in DNS</p>
+<h2 id="Docker-compose"><a href="#Docker-compose" class="headerlink" title="Docker compose"></a>Docker compose</h2><p>docker compose is a manage/build tool to create application, which combine a bunch of micro-services, each of which can be ran as a Docker container.</p>
+<p>the <code>docker-compose.yml</code> configure file has to include  each micro-service Dockerfile, and the application running scripts.</p>
+<h3 id="service-startup-order"><a href="#service-startup-order" class="headerlink" title="service startup order"></a>service startup order</h3><p>the services defined in <code>docker-compose.yml</code> is not necessary depended to each other, so each serice can <code>up</code> individually, but of course they can has based on each other. </p>
+<h3 id="docker-compose-yml"><a href="#docker-compose-yml" class="headerlink" title="docker-compose.yml"></a>docker-compose.yml</h3><p><a href="https://yeasy.gitbooks.io/docker_practice/compose/compose_file.html#volumes" target="_blank" rel="external">best practice</a></p>
+<ul>
+<li><p>build</p>
+<p>path to Dockerfile, can be absolute path or relative (to .yml) path. Compose will buid the image based on </p>
+</li>
+<li><p>context<br>sub-choice under build, point to the Dockerfile</p>
+</li>
+<li><p>image </p>
+<p>the image will be used, if not locally, will pull from hub (vs Dockerfile) </p>
+</li>
+<li><p>containe_name</p>
+</li>
+<li><p>volumes<br>  path to attached volumes, in the format <code>HOST:CONTAINER[:access mode]</code></p>
+</li>
+<li>network_mode</li>
+</ul>
+<p>same as  <code>docker run --network</code></p>
+<ul>
+<li><p>init</p>
+</li>
+<li><p>privileged</p>
+</li>
+</ul>
+<ul>
+<li>command</li>
+</ul>
+<p>override launch command when service contianer start</p>
+<ul>
+<li>environment</li>
+</ul>
+<p>set env variables, in the format <code>ENV:value</code><br>if only <code>ENV</code>, the value will be derived from host machine</p>
+<ul>
+<li>runtime:  nvidia </li>
+</ul>
+<p>to suuport <code>nvidia-docker</code> </p>
+<p>e.g.  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">nvsmi:</div><div class="line">	image: ubuntu:16.04</div><div class="line">	runtime: nvidia</div><div class="line">	environment:</div><div class="line">	     - NVIDIA VISIBLE DEVICES=all</div><div class="line">	command:  nvidia-smi</div></pre></td></tr></table></figure>
+<ul>
+<li>stdin_open</li>
+</ul>
+<p>std io aviable</p>
+<ul>
+<li>tty </li>
+</ul>
+<p>virtual terminal </p>
+<h4 id="sample-yml-from-project"><a href="#sample-yml-from-project" class="headerlink" title="sample yml from project"></a>sample yml from project</h4><p>a sample yml for web app:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">services:</div><div class="line"></div><div class="line">	web:</div><div class="line">	   build: . </div><div class="line">	   links: </div><div class="line">	   		- "db: database"</div><div class="line">   db:</div><div class="line">       image: postgres</div></pre></td></tr></table></figure>
+<p>a sample yml for general <a href="https://github.com/lgsvl/second-ros/blob/master/docker-compose.yml" target="_blank" rel="external">app CI</a>:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">services:</div><div class="line"></div><div class="line">	build:</div><div class="line">	</div><div class="line">		build: </div><div class="line">			context: ./Dockerfile</div><div class="line">	    image:  docker-image</div><div class="line">	    container_name: build_app</div><div class="line">	    volumes:</div><div class="line">	    	- ./build_scripts: /root/build</div><div class="line">	    commands:  /root/build/build.sh</div><div class="line">	   </div><div class="line">	    run:</div><div class="line">	    	context:	./Dockerfile</div><div class="line">	    	image:   docker-iamge</div><div class="line">	    	container_name: run_app</div><div class="line">	    	volumes:</div><div class="line">	    	   - ./run_scripts:/root/run</div><div class="line">	    	environments:</div><div class="line">	    	   -DISPLAY</div><div class="line">	    	   -ROS_MASTER</div><div class="line">	    	network_mode: host</div><div class="line">	    	runtime: nvidia</div><div class="line">	    	command: /root/run/run.sh </div><div class="line">	    </div><div class="line">	    test:</div><div class="line">	       #TODO</div></pre></td></tr></table></figure>
+<h2 id="docker-machine"><a href="#docker-machine" class="headerlink" title="docker-machine"></a>docker-machine</h2><p>docker-machine is a tool to build virtial host when hosted in one physical host or among multi-physical hosts. </p>
+<h2 id="ros-docker"><a href="#ros-docker" class="headerlink" title="ros-docker"></a>ros-docker</h2><p>in self-driving software stack, ros is often used. and there is a need to deploy ros in docker. next time.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1794,446 +2150,11 @@ multi path                     +-1m
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/10/Carmaker-8-0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/10/Carmaker-8-0/" itemprop="url">Carmaker 8.0</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-10T10:47:35-04:00">
-                2019-05-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/10/Carmaker-8-0/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/10/Carmaker-8-0/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>this is from IPG open house Shang Hai </p>
-<h2 id="scenario-generation-task"><a href="#scenario-generation-task" class="headerlink" title="scenario generation task"></a>scenario generation task</h2><h3 id="data-record"><a href="#data-record" class="headerlink" title="data record"></a>data record</h3><p>tracking vehicles, roads, tobstacles</p>
-<p>obj:  lane, road, barries, GPS input, vehicle position/orientation, fixed ID, type</p>
-<p>the goal of recoding is for road building, which will be used in replay.</p>
-<h4 id="road-build"><a href="#road-build" class="headerlink" title="road build"></a>road build</h4><p>GPS input + lane mark info +  vehicle location –&gt;  vehicle  trajectory </p>
-<h3 id="replay"><a href="#replay" class="headerlink" title="replay"></a>replay</h3><p>run config, input as tranversal and longitudial position</p>
-<p>traffic vehicle location, speed </p>
-<h3 id="rearrange"><a href="#rearrange" class="headerlink" title="rearrange"></a>rearrange</h3><p>input as :  traffic vehile info + ego info , list of traffic vehicle info</p>
-<p>traffic vehicle manage:</p>
-<pre><code>1) manuevor control:  free move 
-
-2) spawn control:  lati +   longi --&gt;  23 cases 
-
-3) support external plugins +   manuevor trigger
-</code></pre><h2 id="Synthetic-Scenario"><a href="#Synthetic-Scenario" class="headerlink" title="Synthetic Scenario"></a>Synthetic Scenario</h2><p>junction assistant</p>
-<p>road type + traffic rules +  scenario –&gt;</p>
-<p>support road topology modification</p>
-<p>support different envs: day of time,  weather, </p>
-<p>scenario editor to support opendrive import </p>
-<h3 id="standardization"><a href="#standardization" class="headerlink" title="standardization"></a>standardization</h3><p>PEGASUS  +  ASAM simulation standards </p>
-<p>roads, scenarios, simulation interfaces </p>
-<p>Opendrive –&gt;  road topology </p>
-<p>opENScenario –&gt;  maneuver &amp; anction abstract definitions </p>
-<p>Open simulation interface –&gt; interface developed for PEGASUS </p>
-<h3 id="limitations"><a href="#limitations" class="headerlink" title="limitations"></a>limitations</h3><p>pre-define route for vehicle ? </p>
-<p>the ego car has AI maneuvor ? </p>
-<h2 id="Vitual-Prototype"><a href="#Vitual-Prototype" class="headerlink" title="Vitual Prototype"></a>Vitual Prototype</h2><p>including gearbox loss mode, gas mode,  through look-up table </p>
-<p>including hybrid powertrain architectures:  automatic gearbox + parallel hybrid</p>
-<p>including powertrain masses(engine, tank, gearbox, battery, motor) </p>
-<p>including trailer data set generator </p>
-<p>including damping top mount </p>
-<h2 id="Simulation-test"><a href="#Simulation-test" class="headerlink" title="Simulation test"></a>Simulation test</h2><p>support:: ADAS/AD, POWERTRAIN, Vehicle Dynamics </p>
-<h3 id="steering-system-visual-case"><a href="#steering-system-visual-case" class="headerlink" title="steering system visual case"></a>steering system visual case</h3><p>for less steering will overall comfort and vehicle dynamics </p>
-<p>reference measurements(steering-in-loop simulator) -&gt;  model parameter id +  softare + ECU integration –&gt;  parameterization &amp; validation  -&gt; training </p>
-<h4 id="how-the-steering-system-works"><a href="#how-the-steering-system-works" class="headerlink" title="how the steering system works"></a>how the steering system works</h4><p>open loop to get mechanical characteristics(stiffness, friction..)</p>
-<p>system performance with or without EPS </p>
-<p>1) ideal(basis) model vs  physical model</p>
-<p>how to cowok the physical model with autopilot control model ?</p>
-<h3 id="test-bed"><a href="#test-bed" class="headerlink" title="test bed"></a>test bed</h3><p>to support electrification, durability,  balancing,  driveability,  powertain caillbratio,  connected powertrain </p>
-<h3 id="AI-training-with-synthetic-scenario"><a href="#AI-training-with-synthetic-scenario" class="headerlink" title="AI training with synthetic scenario"></a>AI training with synthetic scenario</h3><p>decion making</p>
-<p>trajectory planning </p>
-<p>image perception </p>
-<p>q: how to make sure AI robost ? –&gt; </p>
-<p>what CarMaker can do for AI? </p>
-<p>1) obj annotation (vehicles, pedestrains) –&gt; auto annotation</p>
-<p>2) semantic segmentation </p>
-<p>e.g. IPG Movier for auto semantic segmentation </p>
-<p>Q: what’s the hardware for ? </p>
-<h2 id="Cloud-amp-CPU-GPU-for-Parallelization"><a href="#Cloud-amp-CPU-GPU-for-Parallelization" class="headerlink" title="Cloud &amp; CPU/GPU for Parallelization"></a>Cloud &amp; CPU/GPU for Parallelization</h2><p>q: how to parallel in docker ? </p>
-<p>1)  test case in each CPUs </p>
-<p>2) even for single test run(with multi sensors, multi cars ) </p>
-<pre><code>resources &amp; distribution 
-</code></pre><p>CPU: vehile model,  drivel model, envs, ideal sensors </p>
-<p>GPU; visual, camera RIS, radar ris, lidar rs </p>
-<h3 id="Test-run-in-prallel"><a href="#Test-run-in-prallel" class="headerlink" title="Test run in prallel"></a>Test run in prallel</h3><p>sensor setup(10 ultra,  5 Radar,  1 Lidar, 1 Camera)</p>
-<p>host pc (with test manager)  +  4 virtual machines  </p>
-<p>output:  key figures,  reports,  statistics,  queries </p>
-<p>open archi for scalable processing( on-premise and cloud)</p>
-<p>big data anaysis with DaSense by NorCom </p>
-<ul>
-<li>how it works ?</li>
-<li>external scheduler mananger, PBS</li>
-<li>HPC light to support local PC parallel</li>
-</ul>
-<h2 id="new-features-in-8-0"><a href="#new-features-in-8-0" class="headerlink" title="new features in 8.0"></a>new features in 8.0</h2><p>virtual test driving 8.0 </p>
-<ul>
-<li>simulink lib (through Simscape) </li>
-<li>Scenario Editor:  vege geenration,  animated 3D objs, new models(vehicles, trailers, trucks, bus, buildings, houses, street furniture, pedestrains)</li>
-<li>visulize road surfaces .. </li>
-<li>ipg movie</li>
-<li>fisheye distortion from external file </li>
-<li>new sensor models(Lidar RSI)</li>
-</ul>
-<p>q: what’s the difference of open source tool vs  commericial ?  </p>
-<h3 id="Lidar-RSI"><a href="#Lidar-RSI" class="headerlink" title="Lidar RSI"></a>Lidar RSI</h3><p>Ideal perfect world –&gt; ground truth </p>
-<p>HiFi –&gt;  false positives &amp; negatives </p>
-<p>raw data –&gt;   RSI </p>
-<p>supporting Lidar type: </p>
-<pre><code>moving laser &amp; photot diode
-
-moving mirrors 
-
-solid state 
-
-flash
-</code></pre><p>input features :</p>
-<ul>
-<li><p>Laser beam, including custom beam pattern, Raytracing rays </p>
-</li>
-<li><p>Scene Interaction, including atmoshpere attenuation, color or material or surface or transparent dependency </p>
-</li>
-<li><p>detection, including threashold, multiple echoes per beam, separability</p>
-</li>
-</ul>
-<p>output features:</p>
-<ul>
-<li>sending &amp; receiving direction of every beam </li>
-<li>light intensity of every beam</li>
-<li>time &amp; lenght of light</li>
-<li>pluse width</li>
-<li>number of interactions </li>
-</ul>
-<h2 id="User-Case-Nio-Pilot"><a href="#User-Case-Nio-Pilot" class="headerlink" title="User Case : Nio Pilot"></a>User Case : Nio Pilot</h2><p>by sun peng </p>
-<h3 id="cases"><a href="#cases" class="headerlink" title="cases"></a>cases</h3><p>inter-city,  parking, closed space, crowded space </p>
-<p>sensors:  3 front camera, 4 surround camera, 4 mm RADARS,  12 Ultra, 1 driver monitor camera </p>
-<p>higway pilot in June </p>
-<p>perception:  camera, radar,  ult, hd map, location  </p>
-<p>planning :  path planning,  maneuvor decsion, system control </p>
-<p>cloud &amp; AI </p>
-<h3 id="simulation-usage"><a href="#simulation-usage" class="headerlink" title="simulation usage"></a>simulation usage</h3><ul>
-<li><p>FDS -&gt; cases -&gt; SIL </p>
-</li>
-<li><p>platform –&gt;  cases -&gt;  regression test,  abstraction &amp; instantiation ;  scene reconsturction(in-house) /  close loop SIL ;  traffic model training(to do) </p>
-</li>
-<li><p>integration -&gt;  HIL </p>
-</li>
-</ul>
-<p>what about vd ? –&gt;  co-work with simulation and physical test, the cover percentage of simulation is about 80%, the left is from </p>
-<h3 id="data-platform"><a href="#data-platform" class="headerlink" title="data platform"></a>data platform</h3><p>upload nodes -&gt; cloud </p>
-<p>med usa API server -&gt; fleet mgmt</p>
-<p>log stash –&gt;  elastic search –&gt; Kibana &amp;  Admin (tensn  and spark )</p>
-<p>I think they are collecting data, and this data for scene building and simulation usage in future </p>
-<h3 id="data-visulazation"><a href="#data-visulazation" class="headerlink" title="data visulazation"></a>data visulazation</h3><h2 id="HIL"><a href="#HIL" class="headerlink" title="HIL"></a>HIL</h2><ul>
-<li><p>lane model simualtion on HIL </p>
-</li>
-<li><p>fusion simulation on HIL </p>
-</li>
-</ul>
-<h2 id="automation-test"><a href="#automation-test" class="headerlink" title="automation test"></a>automation test</h2><p>jenkins master –&gt; jenkins slave (agent IPG) –&gt;   cloud </p>
-<h2 id="goal"><a href="#goal" class="headerlink" title="goal"></a>goal</h2><p>simulation server  &lt;—&gt;  data center </p>
-<p>parallel sim core +  simulation monitor (data exchange service)</p>
-<p>data processing + labelling + case management + traffic model training </p>
-<p>(replay,  SIL, REMODEL, Visuliazation )</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/04/PID-control/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/04/PID-control/" itemprop="url">PID control</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-04T04:27:21-04:00">
-                2019-05-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/05/04/PID-control/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/05/04/PID-control/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="closed-loop-system"><a href="#closed-loop-system" class="headerlink" title="closed loop system"></a>closed loop system</h2><p><code>set point</code> is the desired or command value for the process variable. at any given moment, the difference between the process variable and the set point is used by the control system algorithm to determine the desired actuator output to drive the system.</p>
-<p><code>closed loop system</code>, the process of reading sensors to provide constant feedback and calculating the desired actuator output is repeated continuously and at a fixed loop rate.</p>
-<p><code>control system performance</code> is measured by applying a step fuction as the set point command variable, and then measuring the response of the process variable.</p>
-<p><code>rise time</code> is the amount of time that the system takes to go from 10% to 90% of the steady-state/final.</p>
-<p><code>percent overshoot</code> is the amout that the process variable overshoots the final value, expressed as a percentage of the final value.</p>
-<p><code>settling time</code> is the time required for the process variable to settle to within a certain percentage(5%) of the finla value</p>
-<p><code>steady state error</code> is the final difference between the process variable and set point</p>
-<p><code>disturbance rejection</code> is the measure of how well the control system is able to overcome the effects of disturbances. often there is a disturbance in the system that affects the process variables or the measurements of these variables, it’s important to design a control system that performs satisfactorily during the worst case conditions.</p>
-<p><code>nonlinear system</code> , in which the control parameters that produe a desired response at one operating point might not produce a satisfactory response at another operating point.</p>
-<p><code>deadtime</code> is the delay between when a process variable changes, and when that change can be observed.</p>
-<p><code>loop cycle</code> the interval of time between calls to a control system, system that change quickly or have complex behavior requires faster control loop rates.</p>
-<h2 id="PID-theory"><a href="#PID-theory" class="headerlink" title="PID theory"></a>PID theory</h2><h3 id="proportional-response"><a href="#proportional-response" class="headerlink" title="proportional response"></a>proportional response</h3><p><code>error</code> the difference between the set point and the process variable. the proportional gain(K_g) determins the ratio of the output response to the error signal.</p>
-<p>e.g. the error term has a magnitude of 10, and the K_g is 5, then the proportional response is 50.</p>
-<p>increasing K_g will increase the speed of the control system response, but if K_g is too large, the process variable will oscillate(why?)</p>
-<h3 id="integral-response"><a href="#integral-response" class="headerlink" title="integral response"></a>integral response</h3><p>the integral component sums the error term over time. the result is that even a small error term will cause the integral component to increase slowly. the integral response will continually increase unless the error is zero, so the effect is to driven the steady-state-zero to zero.</p>
-<p><code>integral windup</code> when integral action saturates, still without the controller driving the error signal toward zero</p>
-<h3 id="derivative-response"><a href="#derivative-response" class="headerlink" title="derivative response"></a>derivative response</h3><p>the response is portortional to the rate of change of the process variable. increasing the <code>derivative time</code> will cause the control sytem to react more strongly to changes in the error, and react more quickly.</p>
-<p>in practice, most control system use very small derivative time, since the derivative response is highly sensitive to noise. </p>
-<h2 id="turning"><a href="#turning" class="headerlink" title="turning"></a>turning</h2><p>which is the process of setting the optimal gains of P, I, D to get an ideal response. </p>
-<h3 id="trial-and-error"><a href="#trial-and-error" class="headerlink" title="trial and error"></a>trial and error</h3><p>set I, D as zero, and increas P gain.  Once P has been set to obtain a desired fast response, I starts to increase to stop the oscillatins to achieve a minimal steady state error. once P and I have been set, the D is increased untill the loop is acceptably quick to its set point.</p>
-<h3 id="filtering"><a href="#filtering" class="headerlink" title="filtering"></a>filtering</h3><p>assume a sinusoidla noise with frequency w, the direvative is:</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=\inline&space;y(t)&space;=&space;f(t)&space;&plus;&space;a&space;sin(wt)&space;\\&space;dy/dt&space;=&space;df/dt&space;&plus;&space;aw&space;cos(wt)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\inline&space;y(t)&space;=&space;f(t)&space;&plus;&space;a&space;sin(wt)&space;\\&space;dy/dt&space;=&space;df/dt&space;&plus;&space;aw&space;cos(wt)" title="y(t) = f(t) + a sin(wt) \\ dy/dt = df/dt + aw cos(wt)"></a></p>
-<p>so in practice it’s necessary to limit the high frequency gain of the derivative term, either by adding a low pass filtering of the control signal, or implement the derivative term in a cut-off way.</p>
-<h2 id="Udacity-Self-driving-Car-project-9"><a href="#Udacity-Self-driving-Car-project-9" class="headerlink" title="Udacity Self driving Car project 9"></a>Udacity Self driving Car project 9</h2><pre><code class="c">
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
-</span>{
-    uWS::Hub h ;
-    PID pid ; 
-    pid.Init(pinit, iinit, dinit);
-    h.onMessage(    <span class="comment">// cte, the error </span>
-    {
-        <span class="keyword">double</span> diff = <span class="built_in">fabs</span>(pid.p_error - cte) ; 
-        <span class="keyword">if</span>( diff &gt; <span class="number">0.1</span> &amp;&amp; diff &lt; <span class="number">0.2</span>)
-            thr = <span class="number">0.0</span>; 
-        <span class="keyword">else</span> <span class="keyword">if</span>( diff &gt; <span class="number">0.2</span> &amp;&amp; speed &gt; <span class="number">30</span>)
-            thr = <span class="number">-0.2</span>;
-
-        pid.UpdateError(cte, dt);
-        steer_value = -pid.TotalError(speed);
-    }
-}
-
-<span class="keyword">void</span> PID::UpdateError(<span class="keyword">double</span> cte, <span class="keyword">double</span> dt)
-{
-    d_error = (cte - p_error) /dt ;
-    p_error = cte ;
-    i_error = integral(cte * dt);
-}
-
-<span class="keyword">double</span> PID::TotalError(<span class="keyword">double</span> speed)
-{
-    <span class="keyword">return</span> (Kp - <span class="number">0.0032</span> * speed) * p_error + Ki * i_error + (Kd + <span class="number">0.002</span> * speed) * d_error ;
-}
-</code></pre>
-<p>in real self driving control system, usually divide as latitual and longitual control. and in different scenarios, there are plenty of PID controls. in the future will expose: highway autopilot, auto parking, urban L4 </p>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="http://www.ni.com/en-us/innovations/white-papers/06/pid-theory-explained.html" target="_blank" rel="external">PID theory explained</a></p>
-<p><a href="https://www.cds.caltech.edu/~murray/courses/cds101/fa02/caltech/astrom-ch6.pdf" target="_blank" rel="external">PID control from Caltech</a></p>
-<p><a href="https://github.com/NikolasEnt/PID-controller/blob/master/src/PID.cpp" target="_blank" rel="external">udacity pid control</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2279,7 +2200,7 @@ flash
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">170</span>
+                <span class="site-state-item-count">172</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2292,7 +2213,7 @@ flash
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">46</span>
+                <span class="site-state-item-count">47</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>

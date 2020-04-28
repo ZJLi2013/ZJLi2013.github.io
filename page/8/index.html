@@ -291,6 +291,340 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/nancyfx-study/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/30/nancyfx-study/" itemprop="url">nancyfx study</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T09:11:39-04:00">
+                2019-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/30/nancyfx-study/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/30/nancyfx-study/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://github.com/NancyFx/Nancy/wiki/Documentation" target="_blank" rel="external">document</a>, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me.</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Nancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is designed to handle <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and     <code>PATCH</code> request and provides  a simple, elegant Domain Specific Language(DSL) for returning a response. </p>
+<h3 id="build-to-run-anywhere"><a href="#build-to-run-anywhere" class="headerlink" title="build to run anywhere"></a>build to run anywhere</h3><p>Nancy was designed to not have any dependenceis on existing frameworks, it’s used pretty much wherever you want to. <code>host</code> in Nancy acts as an <code>adaptor</code> for a hosting environment, thus enabling Nancy to run on existing techs, such as ASP.NET, WCF.</p>
+<p>the bare minimum requires to build a Nancy service are the core framework and a host. </p>
+<h3 id="helloworld-service"><a href="#helloworld-service" class="headerlink" title="helloworld service"></a>helloworld service</h3><p>all module should be derived from <code>NancyModule</code>, and define a route handler.  tips: always make the module <code>public</code>, so NancyFx can discover it. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class HelloWorld : NancyModule </div><div class="line">&#123;</div><div class="line">	public HelloModule()</div><div class="line">	&#123;</div><div class="line">		Get[&quot;/&quot;] = parameters =&gt; &quot;Hello World&quot; ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="exploring-modules"><a href="#exploring-modules" class="headerlink" title="exploring modules"></a>exploring modules</h2><p>module is where you define the logic, is the minimum requirement for any Nancy app. module should inherit from <code>NancyModule</code>, then define the behaviors, with <code>routes</code> and <code>actions</code>.</p>
+<h3 id="modules-are-globally-discovered"><a href="#modules-are-globally-discovered" class="headerlink" title="modules are globally discovered"></a>modules are globally discovered</h3><p>the global discovery of modules will perform once and the information is then cached, so not expensive.</p>
+<h2 id="Define-routes"><a href="#Define-routes" class="headerlink" title="Define routes"></a>Define routes</h2><p>to define a <code>Route</code> need to specify a     <code>Method</code> + <code>Pattern</code> + <code>Action</code> + (optional) <code>Condition</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;] = _ =&gt; &#123;</div><div class="line">     	// do sth</div><div class="line">     &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>or async run:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;, runAsnyc: true ] = async(_, token) =&gt; 	  &#123;</div><div class="line">     	// do sth long and tedious</div><div class="line">      &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h3 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h3><p>method is the <code>HTTP method</code> used to access the resource, Nancy support:  <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code>.</p>
+<h3 id="secret-for-selecting-the-right-route-to-invoke"><a href="#secret-for-selecting-the-right-route-to-invoke" class="headerlink" title="secret for selecting the right route to invoke"></a>secret for selecting the right route to invoke</h3><p>in case when two routes capture the same request, remember :</p>
+<ul>
+<li><p>the order in which modules are loaded are non-deterministic </p>
+</li>
+<li><p>routes in a given module are discovered in the order in which they are defined </p>
+</li>
+<li><p>if several possible matches found, the most specific match.</p>
+</li>
+</ul>
+<h3 id="root-path"><a href="#root-path" class="headerlink" title="root path"></a>root path</h3><p>all pathes used in Nancy are relative to <code>root path</code>, which tell Nancy where its resources are stored on the file system, which is defined in <code>IRootPathProvider</code></p>
+<h3 id="static-content"><a href="#static-content" class="headerlink" title="static content"></a>static content</h3><p><code>static content</code> is things e.g. javascript files, css, images etc. Nancy uses a convention based approach to figure out what static content it is able to serve at runtime.</p>
+<p>Nancy supports the notion of having multiple conventions for static content and each convention is represented by a <code>delegate</code> with the signature <code>Func&lt;NancyContext, string, Response&gt;</code> </p>
+<p>the delegate accepts two parameters: the context of the current request and the application root path, the output of the delegate is a standard Nancy <code>Response</code> object or <code>null</code>, which means the convention has no static content.</p>
+<h4 id="define-your-own-conventions-usign-the-bootstrapper"><a href="#define-your-own-conventions-usign-the-bootstrapper" class="headerlink" title="define your own conventions usign the bootstrapper"></a>define your own conventions usign the bootstrapper</h4><p><a href="https://github.com/NancyFx/Nancy/wiki/Managing-static-content" target="_blank" rel="external">link</a></p>
+<h2 id="View-engines"><a href="#View-engines" class="headerlink" title="View engines"></a>View engines</h2><p>view engine, takes a <code>template</code>  and an optional <code>model</code>(the data) and outputs(usually) <code>HTML</code> to be rendered into the browser. in lg-sim, the <code>view</code> is rendered in nodejs. </p>
+<h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p><a href="https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/overview/understanding-models-views-and-controllers-cs" target="_blank" rel="external">model view controller</a></p>
+<ul>
+<li>understand controller </li>
+</ul>
+<p>a controller is reponsible for controlling the flow logic in the app. e.g. what reponse to send back to a user when a user makes a browser request.</p>
+<p>any public method in a controller is exposed as a controller action. </p>
+<ul>
+<li>understand view</li>
+</ul>
+<p>a view contains the HTML markup and content that is send to the browser. in general to return a view for a controller action, need to create a subfolder in the <code>Views</code> folder with the same name as the controller.</p>
+<ul>
+<li>understand model</li>
+</ul>
+<p>the model is anything not inside a controller or a view. e.g. validation logic, database access. the view should only contain logic related to generating the user interface. the controller should only contain the bare minimum of logic required to return the right view. </p>
+<h2 id="C-anonymous"><a href="#C-anonymous" class="headerlink" title="C# anonymous"></a>C# anonymous</h2><p><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/statements-expressions-operators/anonymous-functions" target="_blank" rel="external">c# programming guide</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(input-parameters) =&gt; expression </div><div class="line">(input-parameters) =&gt; &#123;&lt;sequence-of-statements&gt;&#125;</div><div class="line"></div><div class="line">TestDelegate testD = (x) =&gt; &#123;(Console.WriteLine(x);&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>=&gt;</code> is the <code>Lambda</code> operator, on its left is input paramters(if exist). Lambda expression/sequence is equal to a delegate class.</li>
+</ul>
+<ul>
+<li><code>delegate</code> is a refer type, used to pass one function as paramter to another function. e.g. in event handle. </li>
+</ul>
+<h2 id="Nancy-in-lg-sim-WebUI"><a href="#Nancy-in-lg-sim-WebUI" class="headerlink" title="Nancy in lg-sim WebUI"></a>Nancy in lg-sim WebUI</h2><p><a href="https://github.com/lgsvl/simulator/tree/master/Assets/Scripts/Web" target="_blank" rel="external">/Assets/Scripts/Web</a></p>
+<p>a few steps to build  Nancy server: </p>
+<ul>
+<li>Nancyhost.start() </li>
+<li>add NancyModule instance(where define route logic)  </li>
+</ul>
+<p>a few other libs used :</p>
+<ul>
+<li><p>PetaPoco, a light-weight ORM(object relational mapper) framework in C#</p>
+</li>
+<li><p>SQLite</p>
+</li>
+</ul>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://auth0.com/blog/meet-nancy-a-lightweight-web-framework-for-dot-net/" target="_blank" rel="external">meet nancy</a></p>
+<p><a href="http://liulixiang1988.github.io/nancy-webkuang-jia.html#_1" target="_blank" rel="external">nancy doc in chinese</a></p>
+<p>`</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/where-are-you-in-next-5-years-9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/24/where-are-you-in-next-5-years-9/" itemprop="url">未来5年在哪里 (8).md</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-24T23:45:37-04:00">
+                2019-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/24/where-are-you-in-next-5-years-9/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/24/where-are-you-in-next-5-years-9/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这一系列的思考来源两个事件：深圳汽车电子行业代表来司交流；与全球机器人大赛参展。</p>
+<h2 id="深圳的中小企业-vs-资本大户"><a href="#深圳的中小企业-vs-资本大户" class="headerlink" title="深圳的中小企业  vs  资本大户"></a>深圳的中小企业  vs  资本大户</h2><p><code>布谷鸟</code> 智能驾驶座舱解决方案供应商。主要产品，车载显示屏，仪表屏和基于Android操作系统的上层应用。展示完，第一感受就是深圳华强北来了。</p>
+<p>当年（2007年)，中国风靡深圳山赛手机。甚至多年以后，山赛智能手机成了中国发展的一个典型案例，为众人津津乐道： <code>眼看他起高楼，眼看他宴宾客，眼看他楼塌了。</code>  这个产业最初蓬勃，但凡投资进去的人，都躺着赚钱，只是没能力在蓬勃发展期间为转型蓄力。后来政策、市场、甚至原材料的任何风吹草动，都足以摧毁它。</p>
+<p>这个产业的问题放大了看，就是 <code>华为/阿里</code> 与 <code>中兴/联想</code> 的对比。国内的制造业小企业，最初都是代理、组装、贴标签、山赛货。如果碰到市场爆发，春风得意，赚的盆满钵满。但是，后续如何发展，创始人的vision就立判高下了。</p>
+<p>一个选择是立足长远利益，未雨绸缪，生于有患。在打开了市场之后，立马投入产品和相关技术、供应链、品牌积累。可以接受眼前的低资金回报，选择了艰辛但持久的终成就行业头部的道路。</p>
+<p>一个选择是只看赚钱。自己做产品积累，回钱周期太久，根本不考虑。资本趋利，大不了赚到钱，再转战下一片红海。这是势利的商人思路，他们对某一个具体行业不带任何感情，冷血。任何行业只是一个资本生长的土壤，不管是做手机、地产、保险、造车等等，都不是出于热爱，而是资本逐利。比如，宝能收购万科，就是冷血的资本挑战性情的行业中人。</p>
+<p>但凡对行业还有所爱的，都难以忍受被资方强奸。所以，恒大站出来说要造车，我的第一反应，就是恒大要来强奸造车人。恒大没有对汽车的感情，只不过跟进资本进军汽车领域。资本原本是公司的生产要素之一，但是资本又最不具有公司界限约束，任何外部资本都能挑战公司自身。所以，如何让资本服务于行业公司？</p>
+<h3 id="制造业创业"><a href="#制造业创业" class="headerlink" title="制造业创业"></a>制造业创业</h3><p>回到<code>布谷鸟</code>，号称做车载计算平台，不自己做计算芯片，不自己做车载屏幕，不自己做车载定制Android操作系统，顶多开发几个上层app。这不又是一家华强北组装厂吗。创业还靠廉价组装竞争？相比，北上的创业公司，诸如硬件地平线、软件旷视等算是技术/境界高多了。</p>
+<p>也不得不提本司。背靠大树，天然壁垒，但实际做的还是华强北的活儿。不同之处是，资本压力小，对技术储备有规划但没有环境和姿态的转变。会聘一两个外国人、一两个教授撑面儿，但这几位基本处于边缘，决策、项目规划都不考虑他们。估计其他家，也好不了哪里去。要不然，市场会有反馈的。</p>
+<p>这样的团队/小公司里面，对想要拔高产品/技术见识的年轻人其实很艰难。因为打开市场，销售是关乎存活的，相比产品是自研的，还是贴牌的，有没有底层开发/设计积累都是次要的。</p>
+<p>要去这种小团队做产品/技术，就需要能单挑担子的产品人/技术大牛。当然，付出与回报怎么权衡。给ceo待遇，似乎可以考虑。</p>
+<p>传统制造业大公司里面的小团队，虽然没有自己去开辟市场的压力，大不了内销，但同时带来的问题，是<code>积重</code>的公司元老，对职业经理人，工程师文化，都是严重的挑战。</p>
+<h3 id="公司元老"><a href="#公司元老" class="headerlink" title="公司元老"></a>公司元老</h3><p>经常会看到，职业mba人在中国企业水土不服，或者回国的硅谷工程师对中国企业文化的抱怨。虽然，宏观数据国内企业似乎都很国际化了，底层的/微观的现代公司管理/制度上，却不是一代就能跟上国际的。比如，mbaer到中国公司，很难战胜资源/权利在握的元老们，按照现代管理办法去调整公司，那基本上就等着被边缘化，然后公司不养闲人，下一步就是踢出去。公司又回到原来的管理模式。老人们再次证明自己不瞎折腾，是公司的积重，继续升官发财。</p>
+<p>工程师文化，不管是如google等互联网公司，还是如ford等汽车制造业公司，都比较明显。hr, manager, 甚至leader团队把自己归为工程师团队提供服务的，在衣食住行、工作环境、设备、交流、培训等等都照顾的很好。</p>
+<p>虽然北美是更成熟的资本社会，他们的企业反而不那么见钱就撒网，没见过ford投资移动互联网，google要去收购造车厂，或者发展文化传媒业务的。他们的业务更倾向纵深，专注，在一个领域深耕，然后成为行业头部。这可能也是成熟资本市场的现代化公司该有的样子。</p>
+<p>相比，国内的企业太草莽。国内的工程师只有听命于人。技术积累对绝大多数企业，都是可以谈谈但不会认真做的。这样的情况，当然长远是没前途的。一波政策、市场的红利之后，基本作死。</p>
+<h3 id="人口基数"><a href="#人口基数" class="headerlink" title="人口基数"></a>人口基数</h3><p>国内也有很多有情怀的创业人或中小企业主，他们也许并不甘与政策红利，也想认真做产品。但是，在这个社会没办法。</p>
+<p>美国的创业环境，想想apple, google, facebook，cruise等等创业经历。首先他们自己没有生存压力，出于热爱开始的；创业阶段，市场/政策对他们的包容度很好，允许决策失败；然后，资本市场、专业人才的补充都有成熟的供应体系。</p>
+<p>国内，一方面有廉价的人口红利，但对大部分创业公司，规模经济反而很难真正成为其产品的利好因素，除了资本玩家，比如，摩拜单车、瑞幸咖啡、yy连锁酒店，滴滴出行等等，这些玩家，根本不是在拼产品，而是资本。谁占有更多资本，谁就能笑到最后。</p>
+<p>这样的创业环境，不能培养社会范围内更好的创业土壤，反而破坏了创业各方面的供应系统，包括创始人的初衷，专业人才队伍，资本法务系统建立等等。归结一个词：浮躁。</p>
+<p>人口基数大，在政治家、资本家眼里是好词，但是对个体，就意味着就业竞争、服务质量差、人际关系不温存。</p>
+<h3 id="经历过大公司的年轻人"><a href="#经历过大公司的年轻人" class="headerlink" title="经历过大公司的年轻人"></a>经历过大公司的年轻人</h3><p>在三四线小城市，有很多生活无忧的年轻人。他们大学毕业后，在大城市瞎晃了一年半载，找不到合适的企业，就打道回府了。家里有条件，在当地慢慢都会活的滋润。我是觉得，经历下一个现代化管理的大公司，也是个不错的体验。至少知道人类社会，最优秀的组织体系是怎么运作的。</p>
+<p>当然，没有上升，一辈子在大公司的系统里打工，就有点无趣。不如回家悠哉悠哉。</p>
+<h2 id="世界机器人大会2019"><a href="#世界机器人大会2019" class="headerlink" title="世界机器人大会2019"></a>世界机器人大会2019</h2><p>整体感受，小企业生存多艰。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/20/real-world-env-in-ADS-simulation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1481,367 +1815,11 @@ nslookup  10.20.101.119   #reverse (ip 2 domain)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/13/play-with-ros/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/13/play-with-ros/" itemprop="url">play with ros</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-13T11:31:42-04:00">
-                2019-07-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/13/play-with-ros/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/13/play-with-ros/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="ros-filesystem-tools"><a href="#ros-filesystem-tools" class="headerlink" title="ros filesystem tools"></a>ros filesystem tools</h2><p>first check ROS_PACKAGE_PATH, where defines all ROS packages that are within the directories.</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rospack find [package-name]</div><div class="line">rospack list </div><div class="line">roscd [package-name]</div><div class="line">``` </div><div class="line"></div><div class="line">take an example, to locate `rosbridge_websocket.launch` </div><div class="line"></div><div class="line">```shell </div><div class="line">rospack find rosbridge*    #rosbridge_server</div><div class="line">roscd rosbridge_server</div><div class="line">cd launch</div></pre></td></tr></table></figure>
-<p>another tool to view ros-launch: <code>roslaunch-logs</code></p>
-<h2 id="write-a-launch-file"><a href="#write-a-launch-file" class="headerlink" title="write a .launch file"></a>write a .launch file</h2><p>launch files, which uses XML format, usually make a directory named “launch” inside the workspace to organize all launch files, and it provides a convenient way to start up multiple nodes and master, it processs in a <a href="http://wiki.ros.org/roslaunch/XML" target="_blank" rel="external">depth-first tarversal order</a>. usually launch files can be put a <code>launch</code> folder under a ros node project. </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">roslaunch package_name launch_file</div><div class="line"><span class="meta">#</span><span class="bash">or </span></div><div class="line">roslaunch /path/to/launch_file</div></pre></td></tr></table></figure>
-<p>an sample launch file:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">launch</span>&gt;</span> </div><div class="line">   <span class="tag">&lt;<span class="name">node</span> <span class="attr">pkg</span>=<span class="string">"package_name"</span>  <span class="attr">type</span>=<span class="string">" "</span>   <span class="attr">name</span>=<span class="string">" "</span>  <span class="attr">output</span>=<span class="string">" "</span> <span class="attr">args</span>=<span class="string">" "</span> /&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">launch</span>&gt;</span></div></pre></td></tr></table></figure>
-<p><code>args</code> can define either env variables or a command.</p>
-<p><a href="http://wiki.ros.org/roslaunch/XML/node" target="_blank" rel="external">node/type</a> There must be a corresponding executable with the same name.</p>
-<h2 id="rviz"><a href="#rviz" class="headerlink" title="rviz"></a>rviz</h2><p>rviz can help to playback sensor rosbag at lab. and also the visualization tool in algorithm/simulation development. </p>
-<p>someone(at 2014) said Google’s self-driving simulation has used rviz:</p>
-<p><img src="http://community.bwbot.org/assets/uploads/files/1472264009114-3.png?v=qboavrogdv4" alt="google simulation"> </p>
-<p><a href="http://stevenshi.me/2017/07/11/ros-intermediate-tutorial-2/" target="_blank" rel="external">a sample</a> with rviz to visualize rosbag info: </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> terminal 1 </span></div><div class="line">roscore </div><div class="line"><span class="meta">#</span><span class="bash"> terminal 2 </span></div><div class="line">rosbag play kitti.bag -l </div><div class="line">rosrun rviz rviz -f kitti-velodyne</div></pre></td></tr></table></figure>
-<h2 id="rosbag"><a href="#rosbag" class="headerlink" title="rosbag"></a>rosbag</h2><p>the sensor ros node will collect data in rosbag during physical or vitual test, then playback rosbag to develop or verify the sensing algorithms. or use to build simulation scene. </p>
-<p>a few <a href="http://wiki.ros.org/rosbag/Commandline" target="_blank" rel="external">common commands</a>, and also rosbag support interactive <a href="http://wiki.ros.org/rosbag/Code%20API" target="_blank" rel="external">C++/Python APIs</a>. </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">rosbag record #use to write a bag file wit contents on the specified topics</div><div class="line">rosbag info #display the contents of bag files </div><div class="line">rosbag play #play back bag file in a time-synchronized fashion</div></pre></td></tr></table></figure>
-<h2 id="kitti-dataset"><a href="#kitti-dataset" class="headerlink" title="kitti dataset"></a>kitti dataset</h2><p><code>are we ready for autonoous driving?</code> – the KITTI vision benchmark suite, which is a famous test dataset in self-driving sensing, prediction also mapping and SLAM algorithm development. </p>
-<p>there are a few benchmars includes:</p>
-<ul>
-<li><p>stereo,  basically rebuild the 3D object from multi 2D images.</p>
-</li>
-<li><p>optical flow, used to detect object movement(speed, direction)</p>
-</li>
-<li>scene flow, include other 3D env info, and  objects from optical flow </li>
-<li>depth </li>
-<li>visual odometry</li>
-<li>object detection </li>
-<li>object tracking </li>
-<li>road/lane detection </li>
-<li>semantic evaluation </li>
-</ul>
-<h2 id="catkin-package"><a href="#catkin-package" class="headerlink" title="catkin package"></a>catkin package</h2><p>catkin is ros package build/manage tool. </p>
-<pre><code class="shell">mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/src
-catkin_create_pgk demo std_msgs rviz 
-cd demo
-mkdir launch
-cat "&lt;launch&gt; &lt;node  name="demo"  type="rviz" -d="ls `pwd`" /&gt; &lt;/launch&gt; " &gt;  demo.launch
-cd ~/catkin_ws
-catkin_make --pkg demo
-<span class="meta">
-#</span><span class="bash"> add catkin_ws to </span>
-cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.bashrc
-</code></pre>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker-swarm-compose/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/12/play-with-Docker-swarm-compose/" itemprop="url">play with Docker swarm/compose</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-12T11:18:26-04:00">
-                2019-07-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/12/play-with-Docker-swarm-compose/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/12/play-with-Docker-swarm-compose/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Docker-swarm"><a href="#Docker-swarm" class="headerlink" title="Docker swarm"></a>Docker swarm</h2><p>docker swarm is Docker nature cluster manager, with built-in DNS service found mechanism, and load-balancing mechanism. compare to k8s, is a light-weight and easy goers.</p>
-<h3 id="create-a-swarm-cluster"><a href="#create-a-swarm-cluster" class="headerlink" title="create a swarm cluster"></a>create a swarm cluster</h3><figure class="highlight bat"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">export MASTER_IP=<span class="number">192</span>.<span class="number">168</span>.<span class="number">0</span>.<span class="number">1</span></div><div class="line"></div><div class="line">docker swarm init --advertise-addr $&#123;MASTER_IP&#125; --name master</div><div class="line"></div><div class="line">docker swarm join --token tokens $&#123;MASTER_IP&#125;  --name  worker1 </div><div class="line"></div><div class="line">docker node ls </div><div class="line"></div><div class="line"># demote/ promote nodeID as manager</div><div class="line">docker node demote/promote nodeID</div><div class="line"></div><div class="line"># rm node </div><div class="line">docker node rm worker1</div><div class="line"># stop swarm <span class="built_in">mode</span> </div><div class="line">docker swarm leave</div></pre></td></tr></table></figure>
-<h3 id="create-service"><a href="#create-service" class="headerlink" title="create service"></a>create service</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker service create  service-name</div><div class="line"><span class="meta"></span></div><div class="line"> #<span class="bash"> scale service</span></div><div class="line">docker service scael SERVICE=replicas </div><div class="line"></div><div class="line">docker service rm </div><div class="line"></div><div class="line">docker service inspect</div></pre></td></tr></table></figure>
-<h3 id="create-overlay-network"><a href="#create-overlay-network" class="headerlink" title="create overlay network"></a>create overlay network</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">docker network create --subnet=192.168.0.0/24  -d overlay ppss-net</div><div class="line"></div><div class="line">docker network rm</div><div class="line"></div><div class="line">docker network connect network-name  docker-node</div></pre></td></tr></table></figure>
-<p>in swarm mode, there are three network created by default:</p>
-<ul>
-<li>bridge0, the default network</li>
-<li>docker_gwbridge,  local bridge used to connect containers hosted in the same host</li>
-<li>ingress,  is a overlay network used in the swarm cluster</li>
-</ul>
-<p>however, in swarm mode, the default network for service is <code>bridge</code>, to across physical host, services need go through <code>overlay</code> network. </p>
-<h3 id="load-balancing"><a href="#load-balancing" class="headerlink" title="load balancing"></a>load balancing</h3><h4 id="Ingress-load-balancing"><a href="#Ingress-load-balancing" class="headerlink" title="Ingress load balancing"></a>Ingress load balancing</h4><p>expose Docker service to external network env</p>
-<h4 id="Internal-load-balancing"><a href="#Internal-load-balancing" class="headerlink" title="Internal load balancing"></a>Internal load balancing</h4><p>swarm mode has build-in DNS</p>
-<h2 id="Docker-compose"><a href="#Docker-compose" class="headerlink" title="Docker compose"></a>Docker compose</h2><p>docker compose is a manage/build tool to create application, which combine a bunch of micro-services, each of which can be ran as a Docker container.</p>
-<p>the <code>docker-compose.yml</code> configure file has to include  each micro-service Dockerfile, and the application running scripts.</p>
-<h3 id="service-startup-order"><a href="#service-startup-order" class="headerlink" title="service startup order"></a>service startup order</h3><p>the services defined in <code>docker-compose.yml</code> is not necessary depended to each other, so each serice can <code>up</code> individually, but of course they can has based on each other. </p>
-<h3 id="docker-compose-yml"><a href="#docker-compose-yml" class="headerlink" title="docker-compose.yml"></a>docker-compose.yml</h3><p><a href="https://yeasy.gitbooks.io/docker_practice/compose/compose_file.html#volumes" target="_blank" rel="external">best practice</a></p>
-<ul>
-<li><p>build</p>
-<p>path to Dockerfile, can be absolute path or relative (to .yml) path. Compose will buid the image based on </p>
-</li>
-<li><p>context<br>sub-choice under build, point to the Dockerfile</p>
-</li>
-<li><p>image </p>
-<p>the image will be used, if not locally, will pull from hub (vs Dockerfile) </p>
-</li>
-<li><p>containe_name</p>
-</li>
-<li><p>volumes<br>  path to attached volumes, in the format <code>HOST:CONTAINER[:access mode]</code></p>
-</li>
-<li>network_mode</li>
-</ul>
-<p>same as  <code>docker run --network</code></p>
-<ul>
-<li><p>init</p>
-</li>
-<li><p>privileged</p>
-</li>
-</ul>
-<ul>
-<li>command</li>
-</ul>
-<p>override launch command when service contianer start</p>
-<ul>
-<li>environment</li>
-</ul>
-<p>set env variables, in the format <code>ENV:value</code><br>if only <code>ENV</code>, the value will be derived from host machine</p>
-<ul>
-<li>runtime:  nvidia </li>
-</ul>
-<p>to suuport <code>nvidia-docker</code> </p>
-<p>e.g.  </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">nvsmi:</div><div class="line">	image: ubuntu:16.04</div><div class="line">	runtime: nvidia</div><div class="line">	environment:</div><div class="line">	     - NVIDIA VISIBLE DEVICES=all</div><div class="line">	command:  nvidia-smi</div></pre></td></tr></table></figure>
-<ul>
-<li>stdin_open</li>
-</ul>
-<p>std io aviable</p>
-<ul>
-<li>tty </li>
-</ul>
-<p>virtual terminal </p>
-<h4 id="sample-yml-from-project"><a href="#sample-yml-from-project" class="headerlink" title="sample yml from project"></a>sample yml from project</h4><p>a sample yml for web app:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">services:</div><div class="line"></div><div class="line">	web:</div><div class="line">	   build: . </div><div class="line">	   links: </div><div class="line">	   		- "db: database"</div><div class="line">   db:</div><div class="line">       image: postgres</div></pre></td></tr></table></figure>
-<p>a sample yml for general <a href="https://github.com/lgsvl/second-ros/blob/master/docker-compose.yml" target="_blank" rel="external">app CI</a>:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">services:</div><div class="line"></div><div class="line">	build:</div><div class="line">	</div><div class="line">		build: </div><div class="line">			context: ./Dockerfile</div><div class="line">	    image:  docker-image</div><div class="line">	    container_name: build_app</div><div class="line">	    volumes:</div><div class="line">	    	- ./build_scripts: /root/build</div><div class="line">	    commands:  /root/build/build.sh</div><div class="line">	   </div><div class="line">	    run:</div><div class="line">	    	context:	./Dockerfile</div><div class="line">	    	image:   docker-iamge</div><div class="line">	    	container_name: run_app</div><div class="line">	    	volumes:</div><div class="line">	    	   - ./run_scripts:/root/run</div><div class="line">	    	environments:</div><div class="line">	    	   -DISPLAY</div><div class="line">	    	   -ROS_MASTER</div><div class="line">	    	network_mode: host</div><div class="line">	    	runtime: nvidia</div><div class="line">	    	command: /root/run/run.sh </div><div class="line">	    </div><div class="line">	    test:</div><div class="line">	       #TODO</div></pre></td></tr></table></figure>
-<h2 id="docker-machine"><a href="#docker-machine" class="headerlink" title="docker-machine"></a>docker-machine</h2><p>docker-machine is a tool to build virtial host when hosted in one physical host or among multi-physical hosts. </p>
-<h2 id="ros-docker"><a href="#ros-docker" class="headerlink" title="ros-docker"></a>ros-docker</h2><p>in self-driving software stack, ros is often used. and there is a need to deploy ros in docker. next time.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1887,7 +1865,7 @@ cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">170</span>
+                <span class="site-state-item-count">172</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -1900,7 +1878,7 @@ cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">46</span>
+                <span class="site-state-item-count">47</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
