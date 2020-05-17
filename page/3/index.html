@@ -291,6 +291,420 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" itemprop="url">design a nodejs web server from db to s3</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-05T02:00:38-05:00">
+                2020-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>during ADS road test, there are Tb~Pb mount of data generated, e.g. sensor raw data(rosbag, mf4), images, point cloud e.t.c.  <a href="https://zjli2013.github.io/2020/02/28/ceph-boto3-intro/" target="_blank" rel="external">previous few blogs</a> are focusing on data storage. for a more robost and user-friendly data/file server, also need consider database and UI. </p>
+<p>from the end-user/engineers viewpoint, a few basic functions are required: </p>
+<ul>
+<li>query certain features and view the data/files filtered</li>
+<li>download a single/a batch of interested files (for further usage or analysis)</li>
+<li>upload large mount of files quickly to storage (mostly by admin users)</li>
+</ul>
+<h2 id="a-FTP-server-to-support-s3"><a href="#a-FTP-server-to-support-s3" class="headerlink" title="a FTP server to support s3"></a>a FTP server to support s3</h2><p>traditionally, for many large size files to download, FTP is common used.  the prons and corns <a href="https://stackoverflow.com/questions/717200/comparing-http-and-ftp-for-transferring-files" target="_blank" rel="external">comparing fttp and ftp for transfering files</a>: HTTP is more responsive for request-response of small files, but FTP may be better for large files if tuned properly. but nowadays most prefer HTTP. doing search a little more, there are a lot discussions to connect amazon s3 to ftp server:</p>
+<p><a href="https://stackoverflow.com/questions/58233979/need-to-copy-transfer-files-from-amazon-s3-storage-to-ftp-server" target="_blank" rel="external">transfer files from s3 storage to ftp server</a></p>
+<p><a href="https://stackoverflow.com/questions/17126053/ftp-server-using-s3-as-storage" target="_blank" rel="external">FTP server using s3 as storage</a></p>
+<p><a href="https://serverfault.com/questions/336827/using-amazon-s3-as-storage-for-attachments-in-a-web-mail-system" target="_blank" rel="external">using S3 as storage for attachments in a web-mail system</a></p>
+<p><a href="https://stackoverflow.com/questions/23939179/ftp-sftp-access-to-an-amazon-s3-bucket?noredirect=1" target="_blank" rel="external">FTP/SFTP access to amazon s3 bucket</a></p>
+<p>and there are popular ftp clients which support s3, e.g. <a href="https://winscp.net/eng/docs/guide_amazon_s3_sftp#managed" target="_blank" rel="external">winSCP</a>, <a href="https://cyberduck.io" target="_blank" rel="external">cyberduck</a>, of course, aws has it own <a href="(https://aws.amazon.com/sftp/?whats-new-cards.sort-by=item.additionalFields.postDateTime&amp;whats-new-cards.sort-order=desc">sftp client</a>, as well as <a href="https://s3browser.com" target="_blank" rel="external">aws s3 browser windows client</a>), more client tools check <a href="https://stackoverflow.com/questions/13096313/store-each-aws-s3-file-in-a-database-as-a-separate-row" target="_blank" rel="external">here</a></p>
+<p>however, ftp can’t do metadata query. for some cases, e.g. resimulation of all stored scenarios, which makes no difference for each scenario, we can grab one by one and send it to resmiluator; but for many other cases, we need a certain pattern of data, rather than reading the whole storage, then a sql filter is much efficient and helpful. so a simple FTP is not enough in these cases.</p>
+<h2 id="s3-objects-files-to-db"><a href="#s3-objects-files-to-db" class="headerlink" title="s3 objects/files to db"></a>s3 objects/files to db</h2><p>starting from a common bs framework, e.g. react-nodejs, and nodejs can talk to db as well.</p>
+<p>** nodejs query buckets/object header info from s3 server, and update these metadata into db. </p>
+<p>there is a great disscussion about <a href="https://stackoverflow.com/questions/3748/storing-images-in-db-yea-or-nay" target="_blank" rel="external">storing images in db - yea or nay</a>: when manage many TB of images/mdf files, storing file paths in db is the best solution: </p>
+<ul>
+<li>db storage is more expensive than file system storge</li>
+<li>you can super-acc file system access: e.g.  os sendfile() system call to asynchronously send a file directly from fs to network interface, sql can’t</li>
+<li>web server need no special coding to access images in fs</li>
+<li>db win out where transactional integrity between image/file and its metadata are important, since it’s more complex to manage integrity between db metdata to fs data; and it’s difficult to guarantee data has been flushed to disk in the fs </li>
+</ul>
+<p>so for this file server, the metadata include <code>file-path-in-s3</code>, and other user interested items. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">file_id  feature     file_path</div><div class="line">  1          1       http://s3.aws.amazon.com/my-bucket/item1/img1a.jpg</div><div class="line">  2          2       http://s3.aws.amazon.com/my-bucket/item1/img1b.jpg</div><div class="line">  3          3       http://s3.aws.amazon.com/my-bucket/item2/img2a.jpg</div><div class="line">  4          4       http://s3.aws.amazon.com/my-bucket/item2/img2b.jpg</div></pre></td></tr></table></figure>
+<p>** during browser user query/list request, nodejs talk to db, which is a normal bs case.</p>
+<p>** when the browser user want to download a certain file, then nodejs parse the file metadata and talk to s3</p>
+<h2 id="nodejs-to-s3"><a href="#nodejs-to-s3" class="headerlink" title="nodejs to s3"></a>nodejs to s3</h2><h4 id="nodejs-fs-readFile"><a href="#nodejs-fs-readFile" class="headerlink" title="nodejs fs.readFile()"></a>nodejs fs.readFile()</h4><p>taking an example from <a href="https://nodejs.org/api/fs.html" target="_blank" rel="external">official nodejs fs doc</a>: </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line">fs.readFileSync(pathname, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(err)&#123;</div><div class="line">		res.statusCode = <span class="number">500</span> ;</div><div class="line">		res.end(<span class="string">`Err getting file: $[err&#125;`</span>)</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		res.end(data);</div><div class="line">	&#125;</div><div class="line">&#125;); </div><div class="line"></div><div class="line"><span class="keyword">const</span> fileUrl = <span class="keyword">new</span> URL(<span class="string">'file://tmp/mdf'</span>)</div><div class="line">fs.readFileSync(fileUrl);</div></pre></td></tr></table></figure>
+<p>if not file directly, maybe <code>fs.Readstream</code> class is another good choice to read s3 streaming object. <code>fs.readFile()</code> and <code>fs.readFileSync()</code> both read full content of the file in memory before returning the data. <a href="https://nodejs.dev/reading-files-with-nodejs/" target="_blank" rel="external">which means</a>, the big files are going to have a major impact on your memory consumption adn speed of execution of the program. another choice is <a href="https://www.npmjs.com/package/fs-readfile-promise" target="_blank" rel="external">fs-readfile-promise</a>. </p>
+<h4 id="express-res-download"><a href="#express-res-download" class="headerlink" title="express res.download"></a>express res.download</h4><p><code>res</code> object represent the HTTP response that an Express app sends when it gets an HTTP request. <a href="http://expressjs.com/en/api.html#res.download" target="_blank" rel="external">expressjs res.download</a> </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">res.downlaod(<span class="string">'/ads/basic.mf4'</span>, <span class="string">'as_basic.mf4'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(err)&#123;</div><div class="line">		log(<span class="string">`download file error: <span class="subst">$&#123;err&#125;</span>`</span>)</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		log(<span class="string">`download file successfully`</span>)</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="aws-sdk-for-nodejs"><a href="#aws-sdk-for-nodejs" class="headerlink" title="aws sdk for nodejs"></a>aws sdk for nodejs</h4><p>taking an <a href="https://github.com/aws-samples/aws-nodejs-sample/blob/master/sample.js" target="_blank" rel="external">example</a> from <a href="https://amazonaws-china.com/developers/getting-started/nodejs/" target="_blank" rel="external">aws sdk for js</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> aws = <span class="built_in">require</span>(<span class="string">'aws-sdk'</span>)</div><div class="line"><span class="keyword">var</span> s3 = <span class="keyword">new</span> aws.S3()</div><div class="line"></div><div class="line">s3.createBucket(&#123;<span class="attr">Bucket</span>: your_bucket_name, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   <span class="keyword">var</span> params=&#123;<span class="attr">Bucket</span>: your_bucket_name, <span class="attr">Key</span>: your_key, <span class="attr">Body</span>: mf4.streaming&#125;;</div><div class="line">   s3.putObject(params, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">   		<span class="keyword">if</span>(err) <span class="built_in">console</span>.log(err)</div><div class="line">   		<span class="keyword">else</span> <span class="built_in">console</span>.log(<span class="string">"upload data to s3 succesffully"</span>)</div><div class="line">   	&#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>check <a href="">aws sdk for nodejs</a> api for more details. </p>
+<h2 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h2><p>either a FTP server or a nodejs server, it depends on the upper usage cases.</p>
+<ul>
+<li><p>a single large-size(&gt;100mb) file(e.g. mf4, rosbag) download, nodejs with db is ok, as db helps to filter out the file first, and a few miniutes download is needed</p>
+</li>
+<li><p>many of little-size(~1mb) files(e.g. image, json) downlaod, nodejs is strong without doubt. </p>
+</li>
+<li><p>many of large-size files download/upload, a friendly UI is not necessary, comparing to the performance, then FTP may be the solution. </p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/driving-scenarios-on-going/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/04/driving-scenarios-on-going/" itemprop="url">driving scenarios on-going</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-04T04:18:26-05:00">
+                2020-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/04/driving-scenarios-on-going/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/04/driving-scenarios-on-going/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Euro-NCAP-driving-scenarios"><a href="#Euro-NCAP-driving-scenarios" class="headerlink" title="Euro NCAP driving scenarios"></a>Euro NCAP driving scenarios</h2><h3 id="Adaptive-Cruise-Control-ACC"><a href="#Adaptive-Cruise-Control-ACC" class="headerlink" title="Adaptive Cruise Control(ACC)"></a>Adaptive Cruise Control(ACC)</h3><p>ACC is tested in an extended version of AEB. these systems are designed to automatically adapt the speed when approaching a slower moving vehicle or noe that is braking. <strong>notification</strong>, not all systems perform well with stationary obstacles.</p>
+<ul>
+<li><p>a slow moving vehicle test</p>
+</li>
+<li><p>a stationary obstacle(e.g. vehicle) test</p>
+</li>
+</ul>
+<h3 id="autonomous-emergency-braking-AEB"><a href="#autonomous-emergency-braking-AEB" class="headerlink" title="autonomous emergency braking(AEB)"></a>autonomous emergency braking(AEB)</h3><h4 id="AEB-pedestrain"><a href="#AEB-pedestrain" class="headerlink" title="AEB pedestrain"></a><a href="https://www.euroncap.com/en/vehicle-safety/the-ratings-explained/vulnerable-road-user-vru-protection/aeb-pedestrian/" target="_blank" rel="external">AEB pedestrain</a></h4><ul>
+<li><p>an adult pedestrain running from the driver’s side of the vehicle </p>
+</li>
+<li><p>an adult walk from the passenger’s side</p>
+</li>
+<li><p>a child runs from between parked cars on the passenger’s side of the car</p>
+</li>
+<li><p>pedestrain walking in the same direction as the vehicle algnedwith the centre of vehicle </p>
+</li>
+<li><p>pedestrain walking in the same direction as the vehicle offset to one side</p>
+</li>
+</ul>
+<h4 id="AEB-cyclist"><a href="#AEB-cyclist" class="headerlink" title="AEB cyclist"></a><a href="https://www.euroncap.com/en/vehicle-safety/the-ratings-explained/vulnerable-road-user-vru-protection/aeb-cyclist/" target="_blank" rel="external">AEB cyclist</a></h4><ul>
+<li><p>cyclist is crossing the vehicle’s path </p>
+</li>
+<li><p>cyclist is travelling in the same direction </p>
+</li>
+</ul>
+<p>Euro NCAP gives greatest reward if a collision is completely avoided; in some case, if AEB is unable to stop the vehicle completely, still give some points. </p>
+<h3 id="lane-keeping-assist-LKA"><a href="#lane-keeping-assist-LKA" class="headerlink" title="lane keeping assist(LKA)"></a>lane keeping assist(LKA)</h3><ul>
+<li><p>lane centering, a good ADS should continue to support the driver during the manoeuvre and will not resist the driver or deactivate.</p>
+</li>
+<li><p>cut-in test, a npc from adjacent lane merges into the current lane</p>
+</li>
+<li><p>cut-off test, a npc leaves the current lane abruptly to avoid a stopped vehicle ahead</p>
+</li>
+<li><p>swerve around a small obstacle test</p>
+</li>
+<li><p>speed assistance test, to use map data and/or data from sensors to identify the local speed limit </p>
+</li>
+</ul>
+<h2 id="NHTSA-driving-scenarios"><a href="#NHTSA-driving-scenarios" class="headerlink" title="NHTSA driving scenarios"></a>NHTSA driving scenarios</h2><p>a previous blog <a href="">design scenarios in ADS simulation</a> is based on NHTSA. </p>
+<h3 id="forward-collision-prevention"><a href="#forward-collision-prevention" class="headerlink" title="forward collision prevention"></a>forward collision prevention</h3><ul>
+<li>Forward collision warning</li>
+<li>AEB</li>
+<li>pedestrain AEB</li>
+<li>Adaptive lighting</li>
+</ul>
+<h3 id="backing-up-amp-parking"><a href="#backing-up-amp-parking" class="headerlink" title="backing up &amp; parking"></a>backing up &amp; parking</h3><ul>
+<li>rear automatic braking </li>
+<li>backup camera </li>
+<li>rear cross traffic alert</li>
+</ul>
+<h3 id="lane-amp-side-assist"><a href="#lane-amp-side-assist" class="headerlink" title="lane &amp; side assist"></a>lane &amp; side assist</h3><ul>
+<li>lane departure warning</li>
+<li>lane keeping assist</li>
+<li>blind spot detection</li>
+<li>lane centering assist</li>
+</ul>
+<h3 id="maintaing-safe-distance"><a href="#maintaing-safe-distance" class="headerlink" title="maintaing safe distance"></a>maintaing safe distance</h3><ul>
+<li>traffic jam assist</li>
+<li>highway pilot</li>
+<li>ACC </li>
+</ul>
+<h2 id="Matlab-Driving-Scenario-samples"><a href="#Matlab-Driving-Scenario-samples" class="headerlink" title="Matlab Driving Scenario samples"></a>Matlab Driving Scenario samples</h2><h3 id="AEB-for-vulnerable-road-users"><a href="#AEB-for-vulnerable-road-users" class="headerlink" title="AEB (for vulnerable road users)"></a>AEB (for vulnerable road users)</h3><ul>
+<li><p><code>AEB_Bicyclist_Longitudinal_25width</code>, at collision time, the bicycle is 25% of the way across the width of the ego vehicle.</p>
+</li>
+<li><p><code>AEB_CCRb_2_initialGap_12m</code>, a car-to-car rear braking(CCRb) scenario where the ego rear hit a braking agent. the deceleration is 2 m/s^2 with initial gap 12m</p>
+</li>
+<li><p><code>AEB_CCRm_50overlap</code>, a car-to-car rear moving(CCRm) scenario, where the ego rear hits a moving vehicle. at collisio ntime, the ego overlaps with 50% of the width of the moving vehicle</p>
+</li>
+</ul>
+<ul>
+<li><code>AEB_CCRs_-75overlap</code>, a car-to-car stationary(CCRs) sceanrio, where the ego rear hits a stationary vehicle. at collision time, the ego overlaps with 75% of the width of the stationary vehicle. when the ego is to the left of the other vehicle, the percent overlap is negative</li>
+</ul>
+<ul>
+<li><p><code>AEB_Pedestrain_Farside_50width</code>, the ego collides with a pedestrain who is traveling from the left side(far side, assuming vehicle drive on right side of the road). at collision time, the pedestrain is 50% of the way across the width of the ego</p>
+</li>
+<li><p><code>AEB_PedestrainChild_Nearside_50width</code>, the ego collides with a pedestrain who is traveling from the right side(near side), at collision time, the pedestrain is 50% of the way across the width of the ego</p>
+</li>
+</ul>
+<h3 id="Emergency-Lane-Keeping-ELK"><a href="#Emergency-Lane-Keeping-ELK" class="headerlink" title="Emergency Lane Keeping(ELK)"></a>Emergency Lane Keeping(ELK)</h3><ul>
+<li><p><code>ELK_FasterOvertakingVeh_Intent_Vlat_0.5</code>, ego intentionally changes lanes but collides with a faster overtaking vehicle, the ego travels at a lateral velocity of 0.5m/s</p>
+</li>
+<li><p><code>ELK_OncomingVeh_Vlat_0.3</code>, ego unintentionally changes lanes and collides with an oncoming vehicle, with ego’s lateral velocity of 0.3m/s</p>
+</li>
+<li><p><code>ELK_OvertakingVeh_Unintent_Vlat_0.3</code>, ego unintentionally changes lanes, overtake a vehicle in the other lane and collides. the ego travles at a lateral velocity at 0.3m/s</p>
+</li>
+<li><p><code>ELK_RoadEdge_NoBndry_Vlat_0.2</code>,  ego unintentionally changes lanes and ends up to hte road edge, with lateral velocity at 0.2m/s</p>
+</li>
+</ul>
+<h3 id="LKA"><a href="#LKA" class="headerlink" title="LKA"></a>LKA</h3><ul>
+<li><p><code>LKA_DashedLine_Solid_Left_Vlat_0.5</code></p>
+</li>
+<li><p><code>LKA_DashedLine_Unmarked_Right_Vlat_0.5</code></p>
+</li>
+<li><p><code>LKA_RoadEdge_NoBndry_Vlat_0.5</code></p>
+</li>
+<li><p><code>LKA_RoadEdge_NoMarkings_Vlat_0.5</code></p>
+</li>
+<li><p><code>LKA_SolidLine_Dashed_Left_Vlat_0.5</code></p>
+</li>
+<li><p><code>LKA_SolidLine_Unmarked_Right_Vlat_0.5</code></p>
+</li>
+</ul>
+<h2 id="open-source-libs"><a href="#open-source-libs" class="headerlink" title="open source libs"></a>open source libs</h2><ul>
+<li><p><a href="https://github.com/Microsoft/AutonomousDrivingCookbook" target="_blank" rel="external">Microsoft: autonomous driving cookbook</a></p>
+</li>
+<li><p><a href="https://github.com/ZhaobinMo/TrafficNet" target="_blank" rel="external">TrafficNet: an open scenario lib</a></p>
+</li>
+<li><p><a href="https://github.com/Toyota-ITC-SSD/Vehicle-Simulation-Toolkit" target="_blank" rel="external">Toyota: vehicle simulation unity toolkit</a></p>
+</li>
+<li><p><a href="https://github.com/mathworks" target="_blank" rel="external">mathworks: github</a></p>
+</li>
+<li><p><a href="https://drivingstereo-dataset.github.io" target="_blank" rel="external">sensetime: driving stero dataset</a></p>
+</li>
+<li><p><a href="https://opensimulationinterface.github.io/open-simulation-interface/" target="_blank" rel="external">google: open simulator interface</a></p>
+</li>
+<li><p><a href="https://ml4ad.github.io" target="_blank" rel="external">cmu: ml4ad</a></p>
+</li>
+</ul>
+<h2 id="scenarios-in-L2-vs-L3"><a href="#scenarios-in-L2-vs-L3" class="headerlink" title="scenarios in L2 vs L3+"></a>scenarios in L2 vs L3+</h2><p>scenarios in l2 is more like point in the whole driving manuevor, at a certain scenario/point, how the ADAS system response. while L3+ is a continously scenario, along each point during driving is part of the scenario, and inside which all kinds of l2 case scenario can happen. it does make sense to integrate l2 scenario planning response to l3+, which makes l3+ system more strict. </p>
+<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="https://www.euroncap.com/en/vehicle-safety/safety-campaigns/2018-automated-driving-tests/" target="_blank" rel="external">2018 Automated driving test</a></p>
+<p><a href="https://www.mathworks.com/help/driving/ug/euro-ncap-driving-scenarios-in-driving-scenario-designer.html" target="_blank" rel="external">mathworks: Euro NCAP driving scenarios in driving scenario designer</a></p>
+<p><a href="https://cdn.euroncap.com/media/30700/euroncap-roadmap-2025-v4.pdf" target="_blank" rel="external">Euro NCAP roadmap 2025</a></p>
+<p><a href="https://www.nhtsa.gov/vehicle-safety-research" target="_blank" rel="external">nhtsa vehicle safety legacy doc</a></p>
+<p><a href="https://www.nhtsa.gov/equipment/driver-assistance-technologies#forward-collision-prevention-30631" target="_blank" rel="external">NHTSA driver assitance tech</a></p>
+<p><a href="https://silvamfpedro.github.io/thesis-blog/index.html" target="_blank" rel="external">Study and adaptation of the autonomous driving simulator CARLA for ATLASCAR2</a></p>
+<p><a href="https://www.mobileye.com/responsibility-sensitive-safety/rss_on_nhtsa.pdf" target="_blank" rel="external">implementing RSS model on NHTSA pre-crash scenarios</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/boto3-streamingBody-to-BytesIO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1873,338 +2287,6 @@ event_meta_map  &lt;eventID, message_info&gt;
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/15/ads-ros-and-simulator-in-one-docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/15/ads-ros-and-simulator-in-one-docker/" itemprop="url">ads ros and simulator in one docker</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-15T06:16:36-05:00">
-                2020-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/15/ads-ros-and-simulator-in-one-docker/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/15/ads-ros-and-simulator-in-one-docker/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="backround"><a href="#backround" class="headerlink" title="backround"></a>backround</h2><p><a href="https://zjli2013.github.io/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/" target="_blank" rel="external">previously</a>, we had test to run ads ros in one docker container, and lgsvl simulator in another docker container. once they are hosted in the same host machine, the ADS ros nodes and lgsvl can communicate well. based on this work, now it’s the time to integrate ADS ros nodes into the lgsvl docker.</p>
-<p>the basic idea of how to combine multi docker images into one, is <a href="https://docs.docker.com/develop/develop-images/multistage-build/" target="_blank" rel="external">use multistage-build</a>, which I call “image level integration”.</p>
-<h4 id="image-level-integration"><a href="#image-level-integration" class="headerlink" title="image level integration"></a>image level integration</h4><p>basically we have both <code>ads_ros</code> image and <code>lgsvlsimulator</code> image already, and there are a few components from <code>ads_ros</code> can be imported to <code>lgsvlsimulator</code> container: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">FROM ads_ros:latest  AS ADS</div><div class="line">FROM lgsvlsimulator:latest</div><div class="line">RUN mkdir /catkin_ws</div><div class="line">COPY --from=ADS /root/catkin_ws  /catkin_ws</div><div class="line">COPY --from=ADS /opt/ros /opt/ros </div><div class="line">CMD [&quot;/bin/bash&quot;]</div></pre></td></tr></table></figure>
-<p>the problem of <code>image level integration</code>, it actually miss some system level components: <code>/etc/apt/sources.list.d/ros-latest.list</code>, which then can’t update ros modules; other components, e.g. which are installed during building <code>ads_ros</code> image by <code>apt-get install</code>, which are go the system lib path, which of course can distinct out, and copy to <code>lgsvlsimulator</code>, but which is no doubt tedious and easy to miss some components.</p>
-<h4 id="component-level-integration"><a href="#component-level-integration" class="headerlink" title="component level integration"></a>component level integration</h4><p>as <code>ads_ros</code> is really indepent to <code>lgsvlsimulator</code>, so another way is use <code>lgsvlsimulator</code> as base image, then add/build <code>ros</code> component and <code>ads_ros</code> compnents inside.</p>
-<pre><code>FROM ros:kinetic  AS ROS
-# http://wiki.ros.org/kinetic/Installation/Ubuntu
-
-FROM lgsvlsimulator:latest
-RUN mkdir -p /catkin_ws/src
-COPY --from=ROS /opt/ros /opt/ros 
-COPY --from=ROS /etc/apt/sources.list.d/ros1-latest.list /etc/apt/sources.list.d/ros1-latest.list
-# ADD ros key
-RUN apt-key adv --keyserver &apos;hkp://keyserver.ubuntu.com:80&apos; --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-## -------- install ads ros packages in lgsvlsimulator container ------------ ##
-ENV CATKIN_WS=/catkin_ws
-ENV ROS_DISTRO=kinetic
-## https://docs.ros.org/api/catkin/html/user_guide/installation.html
-RUN APT_INSTALL=&quot;apt-get install -y --no-install-recommends&quot; &amp;&amp; \
-    apt-get update &amp;&amp; \
-    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-        build-essential \
-        apt-utils \
-        ca-certificates \ 
-        psmisc \
-        cmake \
-        python-catkin-pkg \ 
-        ros-${ROS_DISTRO}-catkin  \ 
-        ros-${ROS_DISTRO}-tf  \
-        ros-${ROS_DISTRO}-turtlesim \
-        ros-${ROS_DISTRO}-rosbridge-suite \
-        iputils-ping \   
-        net-tools 
-# RUN source ~/.bashrc 
-# copy ads ros into ws
-COPY /ads_ros/src $CATKIN_WS/src
-### build msgs 
-RUN /bin/bash -c &apos;. /opt/ros/${ROS_DISTRO}/setup.bash; cd ${CATKIN_WS}; catkin_make --pkg pcl_msgs autoware_msgs nmea_msgs &apos;                   
-### build ros nodes 
-RUN /bin/bash -c &apos;. /opt/ros/${ROS_DISTRO}/setup.bash; cd ${CATKIN_WS}; catkin_make &apos;
-# copy ros scripts
-COPY /ads_ros/script_docker $CATKIN_WS/script
-###--------finished ads ros package -------------- ### 
-CMD [&quot;/bin/bash&quot;]
-</code></pre><h2 id="runtime-issue"><a href="#runtime-issue" class="headerlink" title="runtime issue"></a>runtime issue</h2><p>with the dockerfile above, we can build the docker image which include both lgsvl and ads ros. one runtime issue is due to lgsvl scenario is run with <code>python3</code>, while our ads ros, especially <code>ros_bridge_launch</code> is based on <code>python2</code>. so need some trick to add <code>python2</code> at <code>$PATH</code> before <code>python3</code> when launch <code>ros_bridge</code>, then exchange back.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/" itemprop="url">ads ros and lgsvl talk in dockers</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-14T08:45:38-05:00">
-                2020-01-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/14/ads-ros-and-lgsvl-talk-in-dockers/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="backgound"><a href="#backgound" class="headerlink" title="backgound"></a>backgound</h3><p>previously, we had integrated ads ros nodes into one launch file. now we try to put ads nodes into docker, and talk to lgsvl simulator in another docker. </p>
-<h4 id="run-dockerimage"><a href="#run-dockerimage" class="headerlink" title="run dockerimage"></a>run dockerimage</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker build -t ads_ros . </div><div class="line">docker run -it ads_ros  /bin/bash</div></pre></td></tr></table></figure>
-<h4 id="unable-to-run-cakin-make-in-dockerfile"><a href="#unable-to-run-cakin-make-in-dockerfile" class="headerlink" title="unable to run cakin_make in dockerfile"></a>unable to run cakin_make in dockerfile</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">RUN /bin/bash -c &apos;. /opt/ros/kinetic/setup.bash; cd &lt;into the desired folder e.g. ~/catkin_ws/src&gt;; catkin_make&apos;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">#### dockerfile for ads ros</div><div class="line"></div><div class="line">``` </div><div class="line">FROM ros:kinetic </div><div class="line"></div><div class="line"># create local catkin workspace </div><div class="line">ENV CATKIN_WS=/root/catkin_ws</div><div class="line">ENV ROS_DISTRO=kinetic</div><div class="line">RUN mkdir -p $CATKIN_WS/src</div><div class="line"></div><div class="line">## install catkin_make </div><div class="line">## https://docs.ros.org/api/catkin/html/user_guide/installation.html</div><div class="line">RUN APT_INSTALL=&quot;apt-get install -y --no-install-recommends&quot; &amp;&amp; \</div><div class="line">    apt-get update &amp;&amp; \</div><div class="line">    DEBIAN_FRONTEND=noninteractive $APT_INSTALL \</div><div class="line">        build-essential \</div><div class="line">        apt-utils \</div><div class="line">        ca-certificates \ </div><div class="line">        psmisc \</div><div class="line">        cmake \</div><div class="line">        vim \ </div><div class="line">        python-catkin-pkg \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-catkin  \ </div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-tf  \</div><div class="line">        ros-$&#123;ROS_DISTRO&#125;-turtlesim \</div><div class="line">        ros-$&#123;CATKIN_WS&#125;-rosbridge-suite </div><div class="line">        iputils-ping \   </div><div class="line">        net-tools </div><div class="line">### add third-party headers</div><div class="line"># RUN source ~/.bashrc </div><div class="line"># copy ads ros into ws</div><div class="line">COPY /src $CATKIN_WS/src</div><div class="line">### build msgs </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make --pkg pcl_msgs pb_msgs autoware_msgs mobileye_msgs ibeo_msgs nmea_msgs &apos;                   </div><div class="line">### build ros nodes </div><div class="line">RUN /bin/bash -c &apos;. /opt/ros/$&#123;ROS_DISTRO&#125;/setup.bash; cd $&#123;CATKIN_WS&#125;; catkin_make &apos;</div><div class="line"># copy ros scripts</div><div class="line">COPY /script $CATKIN_WS/scripts </div><div class="line"># run ros shell</div><div class="line">WORKDIR $&#123;CATKIN_WS&#125;/scripts</div></pre></td></tr></table></figure>
-<h4 id="ros-envs"><a href="#ros-envs" class="headerlink" title="ros envs"></a>ros envs</h4><p>set <code>ROS_IP</code> on all involved containers to their IP, and set <code>ROS_MASTER_URI</code> to the IP of the roscore container. That would avoid the DNS problem. understand <a href="http://wiki.ros.org/ROS/EnvironmentVariables" target="_blank" rel="external">ros environment variables</a></p>
-<ul>
-<li><p>$ROS_ROOT :   set the location whre the ROS core packages are installed </p>
-</li>
-<li><p>$ROS_MASTER_URI :  a required setting that tells nodes where they can locate the master</p>
-</li>
-<li><p>$ROS_IP or $ROS_HOSTNAME : sets the declared network address of a ROS node</p>
-</li>
-</ul>
-<h4 id="get-docker-container’s-IP"><a href="#get-docker-container’s-IP" class="headerlink" title="get docker container’s IP"></a>get docker container’s IP</h4><pre><code>docker inspect -f &quot;{{ .NetworkSettings.Networks.<network_name>.IPAddress }}&quot; &lt;container_name||container_id&gt; 
-</network_name></code></pre><p>tips, network_name: e.g. host, bridge, ingress e.t.c.</p>
-<p>with <a href="https://docs.docker.com/network/host/" target="_blank" rel="external">docker host net</a>, then the container doesn’t have its own IP address allocated, but the application is available on the host’s IP address with customized port.</p>
-<h4 id="run-roscore-in-docker-and-talk-to-rosnodes-at-host"><a href="#run-roscore-in-docker-and-talk-to-rosnodes-at-host" class="headerlink" title="run roscore in docker and talk to rosnodes at host"></a>run roscore in docker and talk to rosnodes at host</h4><ul>
-<li><p>start roscore from docker container as following :</p>
-<p>  sudo docker run -it –net host ads_ros /bin/bash<br>  roscore </p>
-</li>
-<li><p>start other ros nodes at host </p>
-</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">rosnode list  ## &gt;&gt;&gt;  /rosout </div><div class="line">source $ROS_PACKAGE/setup.sh</div><div class="line">rosrun rtk_sensor rtk_sensor   ### run successfully </div><div class="line">``` </div><div class="line"></div><div class="line">how to understand ?  once the docker container start with `host network`, the `roscore` run inside docker, is same as run in the host machine !! </div><div class="line"><span class="meta"></span></div><div class="line"></div><div class="line">#### ads ros in docker talk to lgsvl in another docker with HOST network </div><div class="line"></div><div class="line">* once we start ads ros docker as following: </div><div class="line"></div><div class="line">```shell</div><div class="line">sudo docker run -it --net host ads_ros /bin/bash</div><div class="line">roscore </div><div class="line">``` </div><div class="line"></div><div class="line">* start lgsvl in docker: </div><div class="line"></div><div class="line">```shell</div><div class="line"><span class="meta">#</span>! /usr/bin/env bash</div><div class="line">xhost + </div><div class="line">sudo nvidia-docker run -it  -p 8080:8080  -e DISPLAY=unix$DISPLAY --net host -v /tmp/.X11-unix:/tmp/.X11-unix lgsvlsimulator /bin/bash</div></pre></td></tr></table></figure>
-<p>then access webUI in host machine, and add <code>host: 10.20.181.132</code> in <code>Clusters</code> page, and  add <code>10.20.181.132:9090</code> for Selected Vehicles. as lgsvl is also in <code>host network</code>. so these two docker can communicate through ros well !! </p>
-<h4 id="ads-ros-container-talk-to-lgsvl-container-with-ROS-IP"><a href="#ads-ros-container-talk-to-lgsvl-container-with-ROS-IP" class="headerlink" title="ads ros container talk to lgsvl container with ROS_IP"></a>ads ros container talk to lgsvl container with ROS_IP</h4><p>since lgsvl will run in docker swarm env, we can’t depend on <code>host network</code>, which requires ROS_IP env. the following test is in one host machine. </p>
-<ul>
-<li>in host terminal </li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">export ROS_MASTER_URI=http://192.168.0.10:11311</div><div class="line">export ROS_HOSTNAME=192.168.0.10</div><div class="line">export ROS_IP=192.168.0.10   </div><div class="line"></div><div class="line">roscore </div><div class="line">``` </div><div class="line"></div><div class="line">* in ads ros docker </div><div class="line"></div><div class="line">```shell</div><div class="line">sudo docker run -it \ </div><div class="line">     --env ROS_MASTER_URI=http://10.20.181.132:11311 \ </div><div class="line">     --env ROS_IP=10.20.181.132 \ </div><div class="line">     ads_ros /bin/bash</div><div class="line"></div><div class="line">rosnod list </div><div class="line">``` </div><div class="line"></div><div class="line">however, when start `roscore` in docker, it reports:</div><div class="line"></div><div class="line">```shell</div><div class="line">Unable to contact my own server at [http://10.20.181.132:33818/].</div><div class="line">This usually means that the network is not configured properly.</div><div class="line"></div><div class="line">A common cause is that the machine cannot ping itself.  Please check</div><div class="line">for errors by running:</div><div class="line"></div><div class="line">	ping 10.20.181.132</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">if checking the IP address inside the docker container by `ifconfig`, which reports `172.17.0.3`, which then make sense that the container can't talk to `10.20.181.132`, which means we can't assign a special IP address for a docker container. so reset in the docker container as:</div><div class="line"></div><div class="line">```shell</div><div class="line">export ROS_MASTER_URI=http://172.17.0.3:11311</div><div class="line">export ROS_HOSTNAME=172.17.0.3</div></pre></td></tr></table></figure>
-<p>actually, the host terminal can talk to the ads ros container directly, with no need to set <code>$ROS_HOSTNAME</code> &amp; <code>$ROS_MASTER_URI</code> specially; as well as another docker container in this host machine, e.g. lgsvl. </p>
-<p>a little bit knowledge about docker network. so each docker container does have an virtual IP, e.g. 172.17.0.1. while if run the docker image with <code>host network</code>, there is no special container IP, but the container directly share the IP of the host machine. as multi docker containers run in the same host machine, even without <code>host network</code>, they are in the same network range, so they can communicate to each other. additionaly for <code>ros_master</code>, which may requires to add <code>$ROS_HOSTNAME</code> &amp; <code>$ROS_MASTER_URI</code>.</p>
-<ul>
-<li>start lgsvl in another docker </li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>! /usr/bin/env bash</div><div class="line">xhost + </div><div class="line">sudo nvidia-docker run -it \ </div><div class="line">     -p 8080:8080 \  </div><div class="line">     -e DISPLAY=unix$DISPLAY \ </div><div class="line">     -v /tmp/.X11-unix:/tmp/.X11-unix \ </div><div class="line">     --env ROS_MASTER_URI=http://172.17.0.3:11311  \ </div><div class="line">     --env ROS_HOSTNAME=172.17.0.3   </div><div class="line">     lgsvlsimulator /bin/bash</div></pre></td></tr></table></figure>
-<h4 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h4><p>so far, we have host ads ros in one docker, and lgsvl in another docker, and they are in the same machine, and they can talk to each other. the next thing is to put ads ros and lgsvl in one image.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://wiki.ros.org/rosdep" target="_blank" rel="external">rosdep</a></p>
-<p><a href="https://stackoverflow.com/questions/35742807/docker-1-10-containers-ip-in-lan/39285950#39285950" target="_blank" rel="external">docker 1.10 container’s IP in LAN</a></p>
-<p><a href="https://answers.ros.org/question/244424/listening-to-ros-messages-in-docker-containers/" target="_blank" rel="external">listening to ROS messages in docker containers</a></p>
-<p><a href="https://answers.ros.org/question/228292/exposing-ros-containers-to-host-machine/" target="_blank" rel="external">exposing ROS containers to host machine</a></p>
-<p><a href="https://takacsmark.com/how-to-get-docker-container-ip-address/" target="_blank" rel="external">why you need IP address of Docker container</a></p>
-<p><a href="https://answers.ros.org/question/312577/catkin_make-command-not-found-executing-by-a-dockerfile/" target="_blank" rel="external">catkin_make not found in dockerfile</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2255,7 +2337,7 @@ CMD [&quot;/bin/bash&quot;]
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">172</span>
+                <span class="site-state-item-count">174</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

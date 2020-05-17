@@ -291,6 +291,273 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/22/review-planning-pipelien-in-self-driving-car/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/22/review-planning-pipelien-in-self-driving-car/" itemprop="url">review planning pipelien in self-driving car</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T16:17:01-05:00">
+                2019-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/22/review-planning-pipelien-in-self-driving-car/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/22/review-planning-pipelien-in-self-driving-car/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>when understanding planning in self-driving car, all other modules make sense. </p>
+<h2 id="perception-layer"><a href="#perception-layer" class="headerlink" title="perception layer"></a>perception layer</h2><p>with all concepts such as lidar, radar, camera, sensors, GPS, CAN, data fusion, computer vision, SLAM, AI-based detect/tracking algorithms, they are all perception related, which helps the car to understand itself and the surroundings.</p>
+<p>perception first helps the car understand itself located in the world; then helps to predict the intensions of other vehicles/pedestrains around. </p>
+<h2 id="behavior-layer"><a href="#behavior-layer" class="headerlink" title="behavior layer"></a>behavior layer</h2><p>there are two steps here: behavior predictation, behavior planning. </p>
+<p>based on the prediction info of other agents intensions from previous timestep/configuration, the behavior predictation module predicts current behavior of the self-driving car, which usually implemented either by model based methods or data driven method (AI-trained), and which output all the possible feasible maneuvers for current timestep. </p>
+<p>the car choose only one maneuver at each timestep/configuration, and the behavior planning module is used to weight all the feasible maneuvers from the behavior predictation, and find the most-likely maneuver, which usually is implemented based on a cost function with constraints.</p>
+<p>the all possible manuever is also called trajectory planning, and the choosen manuever is also called motion planning, which is locally-space and time-depended. </p>
+<h2 id="control-layer"><a href="#control-layer" class="headerlink" title="control layer"></a>control layer</h2><p>since motion planning, then send the command to vehicle control actor and update the car physically. </p>
+<h2 id="end-2-end-motion-planning"><a href="#end-2-end-motion-planning" class="headerlink" title="end-2-end motion planning"></a>end-2-end motion planning</h2><p>deep learning is also used to demo end2end motion planning. e.g. from camera output to vehicle control output frame to frame, while many situations may not be trained in the model, so not that realisty. </p>
+<h2 id="path-routine-planning"><a href="#path-routine-planning" class="headerlink" title="path/routine planning"></a>path/routine planning</h2><p>the motion planning pipleline above is happening every timestep for self-driving car and locally.</p>
+<p>at high-level is path/routine planning, bascially given the start point and destination point. there are a few algorithms, like global graph search, random tree, incremental graph search. </p>
+<h2 id="reinforcement-learing-in-simulator"><a href="#reinforcement-learing-in-simulator" class="headerlink" title="reinforcement learing in simulator"></a>reinforcement learing in simulator</h2><p><a href="https://zjli2013.github.io/2018/12/01/reinforce-learning-in-simulator/" target="_blank" rel="external">previous blog</a>, it is also popular to learn behavior in simulation environement and train with reinforcement learning. </p>
+<h2 id="simulation-in-self-driving"><a href="#simulation-in-self-driving" class="headerlink" title="simulation in self-driving"></a>simulation in self-driving</h2><p>how simulation tool chain can accelerate self-driving development ? </p>
+<p>usually simualtion enviornemnt can help to verify and test the perception, behavior, control algorithms. </p>
+<p>if working with reinforcement learning, a virtual simulator is required also.</p>
+<p>what else ?</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/21/where-am-I-in-next-5-years/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/21/where-am-I-in-next-5-years/" itemprop="url">where am I in next 5 years</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-21T15:12:17-05:00">
+                2019-01-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/01/21/where-am-I-in-next-5-years/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/01/21/where-am-I-in-next-5-years/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>I love reading autographies, especially these with life-time stories. it’s a window to explore kinds of life possibilites. and recently I readed &lt;&lt; the only girl &gt;&gt;, Robbin at Rolling Stone magazines in 1970s. </p>
+<p>I remember <a href="https://coolshell.cn/articles/17583.html" target="_blank" rel="external">some toughts</a> about life meanings. there are three kinds:  1) to crazy satisfy yourself, or pursue a free life, live the way you really want. e.g the freelancer;  2) ladder up to the higher social class, which is happening a lot in developing countries, and to be rich and success is the guarantee; 3) enjoy the beauty of nature and civilazation in this short period of life time.</p>
+<p>the last two meanings can not be done immediately, to crazily or desperately satisfy self, is then the easiest way to fight against the fucking environment. like when getting tired of this busy world, I behave more like a hippie, no big deal to anything, and kill time on drama, books, or drugs or sex. </p>
+<p>the hippie lifestyle is momental, it creats a space to seperate from daily troubles; after a few days or nights, I am back to real life, continuing on career stuff.  </p>
+<p>so take it, the reality for me, as born in Asian developing country, with traditional family responsibility, is pursuing career, and of course it helps to take a break, and enjoying hippies, but don’t take it as the life-time way.</p>
+<p>mostly of my inner voices are:  either busy to live or busy to die; problem-solving skills, leadership; to figure out how the economy machine functions in small and big roles; and be the smart guy in market and at office. </p>
+<p>and no need with another degree or matured platform to be problem-solvingable or leadershipable. these skills are in everywhere.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/13/未来五年在哪里（3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1385,329 +1652,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/clone-graph-with-dfs-bfs/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/14/clone-graph-with-dfs-bfs/" itemprop="url">clone graph with dfs & bfs</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-14T18:56:47-05:00">
-                2018-12-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/14/clone-graph-with-dfs-bfs/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/14/clone-graph-with-dfs-bfs/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://leetcode.com/problems/clone-graph/" target="_blank" rel="external">leetcode 133</a>, the solution is traversing the graph, so either bfs or dfs should work.</p>
-<p><code>dfs</code> works like a stack, take an example when processA is running, inside processB is invoked, then processA hang, and go into processB; as processB is running, inside processC is invoked, then processB hanged, and go into processC. e.t.c. so the finished order is from innerest to outest.  <code>dfs</code> will always traverse all possibilities, then return to the outest layer. </p>
-<p>in clone graph,  e.g. </p>
-<pre><code>#0, 1,  2
-#1, 2
-#2, 2 
-</code></pre><p><code>dfs</code> process as: </p>
-<p>first deal with first line, element <code>0</code>, which trick element <code>1</code>, so process goes to second line, and trick element <code>2</code>, so go to third line(done), then return to second line(done), then return to first line, trick second neighbor <code>2</code> go on… </p>
-<p><code>bfs</code> works different, during processA running, processB is invoked, will still run processA to done, but also push processB to job queue, which will run next time. so using <code>bfs</code>, usually has a <code>queue</code> variable to mark unfinished jobs.</p>
- <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">UndirectedGraphNode</span> &#123;</span></div><div class="line">  <span class="keyword">int</span> label ;</div><div class="line">  <span class="built_in">vector</span>&lt;UndirectedGraphNode *&gt; neighbors ;</div><div class="line">  UndirectedGraphNode(<span class="keyword">int</span> x) : label(x) &#123;&#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//graph traversing by bfs</span></div><div class="line"><span class="function">UndirectedGraphNode *<span class="title">cloneGraph</span><span class="params">(UndirectedGraphNode *node)</span></span>&#123;</div><div class="line">      <span class="keyword">if</span>(!node) <span class="keyword">return</span> <span class="literal">nullptr</span> ;</div><div class="line">      UndirectedGraphNode *c_node = <span class="keyword">new</span> UndirectedGraphNode(node-&gt;label);</div><div class="line">      <span class="built_in">queue</span>&lt;UndirectionGraphNode*&gt; qlist ;</div><div class="line">      unorder_map&lt;<span class="keyword">int</span>, UndirectionGraphNode*&gt; <span class="built_in">map</span>;</div><div class="line">      <span class="built_in">map</span>[c_node-&gt;label] = c_node ;</div><div class="line">      qlist.push(c_node);</div><div class="line">      UndirectedGraphNode cur, neighbor = <span class="literal">nullptr</span>;</div><div class="line">      </div><div class="line">      <span class="keyword">while</span>(!qlist.empty())&#123;</div><div class="line">        cur = qlist.front(); qlist.pop();</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cur-&gt;neighbors.size(); i++)&#123;</div><div class="line">         neighbor =  cur-&gt;neighbors[i];</div><div class="line">         <span class="keyword">if</span>(<span class="built_in">map</span>.find(neighbor-&gt;label))</div><div class="line">         &#123;</div><div class="line">           c_node-&gt;neighbors.push_back(neighbor);</div><div class="line">         &#125;<span class="keyword">else</span>&#123;</div><div class="line">           UndirectedGraphNode *tmp = <span class="keyword">new</span> UndirectedGraphNode(neighbor-&gt;label);</div><div class="line">           c_node-&gt;neighbors.push_back(tmp); </div><div class="line">           <span class="built_in">map</span>[tmp-&gt;label] = tmp ;</div><div class="line">           qlist.push(tmp);  <span class="comment">//bfs idea: find new node, push it to queue and deal</span></div><div class="line">           <span class="comment">// with it in next while loop</span></div><div class="line">         &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">      <span class="keyword">return</span> <span class="built_in">map</span>[c_node-&gt;label];</div><div class="line">  &#125;</div><div class="line"></div><div class="line"> <span class="comment">//dfs</span></div><div class="line"> <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(UndirectedGraphNode\* node, unorder_map&lt;<span class="keyword">int</span>, UndirectionGraphNode*&gt;&amp; <span class="built_in">map</span>)</span></span></div><div class="line"> &#123;</div><div class="line">    UndirectedGraphNode * c_node = <span class="literal">nullptr</span>;</div><div class="line">    <span class="keyword">if</span>(!<span class="built_in">map</span>.find(node-&gt;label))&#123;</div><div class="line">      c_node = <span class="keyword">new</span> UndirectedGraphNode(node-&gt;label);</div><div class="line">      <span class="built_in">map</span>[c_node-&gt;label] = c_node;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      c_node = <span class="built_in">map</span>.find(node-&gt;label);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    UndirectedGraphNode* nei;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;node-&gt;neighbors.size(); i++)&#123;</div><div class="line">        nei = node-&gt;neighbors[i];</div><div class="line">        <span class="keyword">if</span>(<span class="built_in">map</span>.find(nei-&gt;label))&#123;</div><div class="line">          c_node-&gt;neighbors.push_back(nei);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">          dfs(nei, <span class="built_in">map</span>);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"> <span class="function">UndirectedGraphNode *<span class="title">cloneGraph</span><span class="params">(UndirectedGraphNode *node)</span></span>&#123;</div><div class="line">   unorder_map&lt;<span class="keyword">int</span>, UndirectionGraphNode*&gt; <span class="built_in">map</span>;</div><div class="line">   dfs(node, <span class="built_in">map</span>);</div><div class="line">   <span class="keyword">return</span> <span class="built_in">map</span>[node-&gt;label]; </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/13/palindrome-partition/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/13/palindrome-partition/" itemprop="url">palinedrome partition with dfs & bfs</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-13T16:19:07-05:00">
-                2018-12-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/13/palindrome-partition/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/12/13/palindrome-partition/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="parlindrome-partition"><a href="#parlindrome-partition" class="headerlink" title="parlindrome partition"></a>parlindrome partition</h2><p><a href="https://leetcode.com/problems/palindrome-partitioning/" target="_blank" rel="external">leetCode 131</a>  <a href="https://www.jiuzhang.com/solution/palindrome-partitioning/#tag-highlight-lang-cpp" target="_blank" rel="external">a sample code</a> :</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> depth, <span class="built_in">string</span> s)</span></span>&#123;</div><div class="line">  <span class="keyword">if</span>(depth == s.size())&#123;</div><div class="line">    v.push_back(v1);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span>(depth&lt;s.size())&#123;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=depth; i&lt;s.size(); i++)&#123;</div><div class="line">      <span class="comment">//left substring </span></div><div class="line">      <span class="keyword">if</span>(palindrome(s.substr(depth, i-depth+<span class="number">1</span>)))&#123;</div><div class="line">        v1.push_back(s.substr(depth, i-depth+<span class="number">1</span>));</div><div class="line">        dfs(i+<span class="number">1</span>, s);</div><div class="line">        v1.pop_back();  </div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>1)  each col in the table is one way to partition the string.e.g.  <code>aab</code>.  col_1 , left string <code>a</code> is palindrome, v1=[<code>a</code>]; feed right string <code>ab</code> to dfs(i+1, s)(depth=0, i=depth)</p>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>a</td>
-<td>a</td>
-</tr>
-<tr>
-<td></td>
-<td>a</td>
-<td>a</td>
-</tr>
-<tr>
-<td>a</td>
-<td></td>
-<td>b</td>
-</tr>
-<tr>
-<td>b</td>
-<td>b</td>
-</tr>
-</tbody>
-</table>
-<p>1.1) col1_1, left string <code>a</code> is palindrome, v1=[<code>a</code>, <code>a</code>];<br>feed right string <code>b</code> into dfs(i+1, s) (depth=1, i=depth)</p>
-<table>
-<thead>
-<tr>
-<th>1</th>
-<th>2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a</td>
-<td>a</td>
-</tr>
-<tr>
-<td></td>
-<td>b</td>
-</tr>
-<tr>
-<td>b</td>
-</tr>
-</tbody>
-</table>
-<p>1.1.1) <code>b</code> will push into v1, make v1=[<code>a</code>, <code>a</code>, <code>b</code>], feed into dfs(i+1, s) (depth=2, i=depth), which will return since depth==s.size().</p>
-<p>the  above dfs()(depth=2, i=depth) returned, the immediate next step is <code>b</code> pop out from v1; also now is the finished of dfs()(depth=1, i=depth), so the immediate next step is the second <code>a</code> pop out.</p>
-<p>1.1.2) so now go to (depth=1, i=depth+1),  push <code>ab</code> into v1, making v1=[<code>a</code>, <code>ab</code>] . but <code>ab</code> is not palindrome, return immediately, then pop out <code>ab</code>.</p>
-<p>1.2) at this time, the very outside dfs()(depth=0, i=depth) is all done, so pop the first <code>a</code> in v1; and go to (depth=0, i=depth+1); then (depth=0, i=depth+2)… </p>
-<h2 id="recursive-of-DFS"><a href="#recursive-of-DFS" class="headerlink" title="recursive of DFS"></a>recursive of DFS</h2><p>another example of recursive dfs.  <a href="https://leetcode.com/problems/sum-root-to-leaf-numbers/" target="_blank" rel="external">leetcode 129 sum root of leaf numbers</a> </p>
-<p>dfs is used to find all the solutions, in a way to go through each branch in the same level first, then go into the next level. </p>
-<p>to traverse all solutions(branches), also need to mark traversing/traversed branches. so usually need:</p>
-<pre><code>to push -&gt;  current traversing element
-to pop -&gt; traversed element 
-</code></pre><p>and a container to hold all solutions.</p>
-<p>if design recursive with returned value, consider the critical condition. e.g. what suppose to return when the last element, and usually design the returned value as local variable in each recursive function, rather than a global variable. </p>
-<p>one more thing is about the traversing direction, from left to right end, then when coding make sure the direction is consistent at all times.</p>
-<h2 id="BFS-to-find-mini-cuts"><a href="#BFS-to-find-mini-cuts" class="headerlink" title="BFS to find mini cuts"></a>BFS to find mini cuts</h2><p><code>DFS</code> is used to solve the kind of problem:  traversal all possible solutions; <a href="https://leetcode.com/problems/palindrome-partitioning-ii/" target="_blank" rel="external">leetcode 132</a> askes for the mini cuts, once find out the mini-cuts solution, done, no traverse all possibilities.</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// define done, cut as class member variable </span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">bool</span>&amp; done)</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> len = s.length();</div><div class="line">  <span class="built_in">string</span> left, right;</div><div class="line">  <span class="keyword">int</span> i =<span class="number">0</span>;</div><div class="line">  <span class="keyword">while</span>(!done &amp;&amp; i&lt;len)&#123;</div><div class="line">    left = s.substr(<span class="number">0</span>, len-i); <span class="comment">//starting from the longest left string</span></div><div class="line">    right = s.substr(len-i, i);</div><div class="line">    <span class="keyword">if</span>(palindrome(left))&#123;</div><div class="line">        cut++;</div><div class="line">        <span class="keyword">if</span>(palindrome(right))</div><div class="line">        &#123;</div><div class="line">          done = <span class="literal">true</span> ;</div><div class="line">        &#125;<span class="keyword">else</span> &#123;</div><div class="line">            bfs(right, done);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    i++;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1758,7 +1702,7 @@ to pop -&gt; traversed element
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">172</span>
+                <span class="site-state-item-count">174</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

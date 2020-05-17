@@ -291,6 +291,624 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/k8s-setup-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/17/k8s-setup-2/" itemprop="url">k8s setup 2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-17T08:50:57-04:00">
+                2020-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/17/k8s-setup-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/17/k8s-setup-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>this blog try to deploy two service in k8s: redis and dashboard. the other is engineering. </p>
+<h2 id="manual-deploy-via-kubectl"><a href="#manual-deploy-via-kubectl" class="headerlink" title="manual deploy via kubectl"></a>manual deploy via kubectl</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">kubectl create ns <span class="built_in">test</span>-busybox</div><div class="line">kubectl run busybox --namespace=<span class="built_in">test</span>-busybox \</div><div class="line">                      --port=8280 \</div><div class="line">                      --image=busybox \</div><div class="line">                      -- sh -c <span class="string">"echo 'Hello' &gt; /var/www/index.html &amp;&amp; httpd -f -p 8280 -h /var/www/"</span></div><div class="line"></div><div class="line">kubectl get pods -n <span class="built_in">test</span>-busybox  <span class="comment">#should display `Running`, but `Pending`</span></div></pre></td></tr></table></figure>
+<ul>
+<li>error1: pending pod</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl describe pods/busybox -n <span class="built_in">test</span>-busybox</div></pre></td></tr></table></figure>
+<p>gives:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Warning  FailedScheduling  &lt;unknown&gt;  default-scheduler  0/2 nodes are available: 1 node(s) had taint &#123;node-role.kubernetes.io/master: &#125;, that the pod didn<span class="string">'t tolerate, 1 node(s) had taint &#123;node.kubernetes.io/unreachable: &#125;, that the pod didn'</span>t tolerate.</div></pre></td></tr></table></figure>
+<p>a few things to check:</p>
+<ul>
+<li><p><code>swapoff -a</code> to close firewall on working node </p>
+</li>
+<li><p><code>kubectl uncordon</code> to make node schedulable <a href="https://github.com/Azure/AKS/issues/856" target="_blank" rel="external">kubectl uncordon</a></p>
+</li>
+</ul>
+<ul>
+<li>error 2: failed create pod sandbox</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Warning  FailedCreatePodSandBox  25s (x4 over 2m2s)  kubelet, ubuntu    Failed to create pod sandbox: rpc error: code = Unknown desc = failed pulling image <span class="string">"k8s.gcr.io/pause:3.2"</span>: Error response from daemon: Get https://k8s.gcr.io/v2/: net/http: request canceled <span class="keyword">while</span> waiting <span class="keyword">for</span> connection (Client.Timeout exceeded <span class="keyword">while</span> awaiting headers)</div></pre></td></tr></table></figure>
+<p>solution is to copy <code>k8s.grc.io/pause:3.2</code> image to <code>ubuntu node</code>, and restart kubelet on working node.</p>
+<ul>
+<li>error 3: no network plugin CNI</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">networkPlugin cni failed to <span class="built_in">set</span> up pod <span class="string">"busybox_test-busybox"</span> network: open /run/flannel/subnet.env: no such file or directory</div></pre></td></tr></table></figure>
+<p><a href="https://github.com/kubernetes/kubernetes/issues/36575" target="_blank" rel="external">a temp solution</a> is to cp <code>/run/flannel/subnet.env</code> from master node to worker node, then restart kubelet at the worker node. as further study, the <code>cp subnet.env</code> to worker node is not the right solution, as every time the worker node shutdown, this <code>subnet.env</code> file will delete, and won’t restart when reboot the worker node the next day.</p>
+<p>so the final solution here is to pull <code>quay.io/coreos/flannel</code> image to worker node, as well as <code>k8s.gcr.io/kube-proxy</code>. in later k8s version, <code>kube-proxy</code> is like a proxy, what’s really inside is the flannel daemon. so we need both <code>kube-proxy</code> and <code>flannel</code> at worker node, to guarantee the network working.</p>
+<p>we can see the <code>busybox</code> service is running well: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">kubectl expose pod busybox --<span class="built_in">type</span>=NodePort   --namespace=<span class="built_in">test</span>-busybox</div><div class="line">kubectl get pods --output=wide -n <span class="built_in">test</span>-busybox</div><div class="line">NAME      READY   STATUS    RESTARTS   AGE     IP         NODE     NOMINATED NODE   READINESS GATES</div><div class="line">busybox   1/1     Running   0          7m57s   10.4.0.3   ubuntu   &lt;none&gt;           &lt;none&gt;</div><div class="line">kubectl get service busybox -n <span class="built_in">test</span>-busybox</div><div class="line">NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE</div><div class="line">busybox   NodePort   10.107.117.219   &lt;none&gt;        8280:32431/TCP   33s</div></pre></td></tr></table></figure>
+<p>but the problem here is, we can’t access this service from host machine. </p>
+<h4 id="exposing-an-external-IP-to-access-an-app-in-cluster"><a href="#exposing-an-external-IP-to-access-an-app-in-cluster" class="headerlink" title="exposing an external IP to access an app in cluster"></a><a href="https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/" target="_blank" rel="external">exposing an external IP to access an app in cluster</a></h4><p>to expose service externally, define the service as either<code>LoadBalancer</code> or <code>NodePort</code> type. but <code>LoaderBalancer</code> <a href="https://github.com/kubernetes/kubernetes/issues/23562" target="_blank" rel="external">requires external third-party: 23562</a> implement of load balancer, e.g. AWS.<br><a href="https://stackoverflow.com/questions/44110876/kubernetes-service-external-ip-pending" target="_blank" rel="external">why loadBalancer service doesn’t work</a>: if you are using a custom Kubernetes Cluster (using minikube, kubeadm or the like). In this case, there is no LoadBalancer integrated (unlike AWS or Google Cloud). With this default setup, you can only use NodePort or an Ingress Controller.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">kubectl apply -f /home/gwm/k8s/busybox.yaml</div><div class="line">kubectl get deployments hello-world  	<span class="comment">#display info of Deployment</span></div><div class="line">kubectl describe deployments hello-world</div><div class="line">kubectl get replicasets		<span class="comment">#display info of ReplicaSet</span></div><div class="line">kubectl describe replicasets</div><div class="line">kubectl expose deployment hello-world --<span class="built_in">type</span>=NodePort --name=my-service  <span class="comment"># create a service object that exposes the deployment </span></div><div class="line">kubectl get services my-service </div><div class="line">kubectl describe services my-service</div><div class="line"><span class="comment">#cleanup when test done</span></div><div class="line">kubectl delete services my-service</div><div class="line">kubectl delete deployment hello-world</div></pre></td></tr></table></figure>
+<p>looks the <code>NodePort</code> service doesn’t work as expected: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">curl http://10.20.180.12:8280 </div><div class="line">curl: (7) Failed to connect to 10.20.180.12 port 8280: Connection refused</div></pre></td></tr></table></figure>
+<p>if pods can’t be cleaned by <code>kubectl delete pods xx</code>, try <code>kubectl delete pod &lt;PODNAME&gt; --grace-period=0 --force --namespace &lt;NAMESPACE&gt;</code>. </p>
+<p><strong>how to access k8s service outside the cluster</strong></p>
+<h2 id="kubectl-config"><a href="#kubectl-config" class="headerlink" title="kubectl config"></a>kubectl config</h2><h4 id="reconfigure-a-node’s-kubelet-in-a-live-cluster"><a href="#reconfigure-a-node’s-kubelet-in-a-live-cluster" class="headerlink" title="reconfigure a node’s kubelet in a live cluster"></a><a href="https://kubernetes.io/docs/tasks/administer-cluster/reconfigure-kubelet/#automatic-rbac-rules-for-node-authorizer" target="_blank" rel="external">reconfigure a node’s kubelet in a live cluster</a></h4><p>Basic workflow overview</p>
+<p>The basic workflow for configuring a kubelet in a live cluster is as follows:</p>
+<pre><code>Write a YAML or JSON configuration file containing the kubelet’s configuration.
+Wrap this file in a ConfigMap and save it to the Kubernetes control plane.
+Update the kubelet’s corresponding Node object to use this ConfigMap.
+</code></pre><ul>
+<li>dump configure file of each node </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">NODE_NAME=<span class="string">"the-name-of-the-node-you-are-reconfiguring"</span>; curl -sSL <span class="string">"http://localhost:8001/api/v1/nodes/<span class="variable">$&#123;NODE_NAME&#125;</span>/proxy/configz"</span> | jq <span class="string">'.kubeletconfig|.kind="KubeletConfiguration"|.apiVersion="kubelet.config.k8s.io/v1beta1"'</span> &gt; kubelet_configz_<span class="variable">$&#123;NODE_NAME&#125;</span></div></pre></td></tr></table></figure>
+<p>our cluster have <code>ubuntu</code> and <code>meng</code>(as leader) two nodes. with these two config files, we found two existing issues: </p>
+<p>1) network config on two nodes doesn’ match each other</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;   <span class="string">"clusterDomain"</span>: <span class="string">"xyz.abc"</span>,</div><div class="line">---</div><div class="line">&gt;   <span class="string">"clusterDomain"</span>: <span class="string">"cluster.local"</span>,</div><div class="line">&lt;     <span class="string">"10.3.0.10"</span></div><div class="line">---</div><div class="line">&gt;     <span class="string">"10.96.0.10"</span></div></pre></td></tr></table></figure>
+<p>after generrating the NODE config files above, we can edit these files, and then push the edited config file to the control plane:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NODE_NAME=meng; kubectl -n kube-system create configmap meng-node-config --from-file=kubelet=kubelet_configz_<span class="variable">$&#123;NODE_NAME&#125;</span> --append-hash -o yaml</div><div class="line">NODE_NAME=ubuntu; kubectl -n kube-system create configmap ubuntu-node-config --from-file=kubelet=kubelet_configz_<span class="variable">$&#123;NODE_NAME&#125;</span> --append-hash -o yaml</div></pre></td></tr></table></figure>
+<p>after this setting up, we can check the new generated configmaps:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kubectl get configmaps -n kube-system</div><div class="line">kubectl edit configmap meng-node-config-t442m526c5 -n kube-system</div></pre></td></tr></table></figure>
+<p>tips: configMaps is also an Object in k8s, just like namespace, pods, svc. but which is only in /tmp, need manually dump. </p>
+<p>namely:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">meng-node-config-t442m526c5          1      35m</div><div class="line">ubuntu-node-config-ghkg27446c        1      18s</div></pre></td></tr></table></figure>
+<ul>
+<li>set node to use new configMap, by <code>kubectl edit node ${NODE_NAME}</code>, and add the following YAML under <code>spec</code>:</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">configSource:</span></div><div class="line"><span class="attr">    configMap:</span></div><div class="line"><span class="attr">        name:</span> <span class="string">CONFIG_MAP_NAME</span> <span class="comment"># replace CONFIG_MAP_NAME with the name of the ConfigMap</span></div><div class="line"><span class="attr">        namespace:</span> <span class="string">kube-system</span></div><div class="line"><span class="attr">        kubeletConfigKey:</span> <span class="string">kubelet</span></div></pre></td></tr></table></figure>
+<ul>
+<li>observe the node begin with the new configuration</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl get node <span class="variable">$&#123;NODE_NAME&#125;</span> -o yaml</div></pre></td></tr></table></figure>
+<p>2) kubectl command doesn’t work at worker node</p>
+<p>basically, worker node always report <code>error: Missing or incomplete configuration info.  Please point to an existing, complete config file</code> when running <code>kubectl</code> command. </p>
+<p>which needs to copy <code>/etc/kubernetes/admin.conf</code> from master to worker, then append <code>cat &quot;export KUBECONFIG=/etc/kubernetes/admin.conf&quot; &gt;&gt; /etc/profile</code> at worker node.</p>
+<p><a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/" target="_blank" rel="external">organizing cluster accesss using kubecnfig files</a></p>
+<h4 id="docker0-iptables-transfer"><a href="#docker0-iptables-transfer" class="headerlink" title="docker0 iptables transfer"></a>docker0 iptables transfer</h4><p>when starting docker engine, <code>docker0</code> VNC is created, and this vnc add its routing rules to the host’s iptables. From docker 1.13.1, the routing rules of <code>docker0</code> vnc is only transfer to localhost of the host machine, namely <code>docker0</code> to any other non-localhost is forbidden, which leads to the service can only be access on the host machine, where this pod/container is running. in multi-nodes k8s, we need enable iptable FORWARD. </p>
+<p>append the following line to <code>ExecStart</code> line in file <code>/lib/systemd/system/docker.service</code>: </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ExecStartPost=/sbin/iptables -I FORWARD -s 0.0.0.0/0 -j ACCEPT</div></pre></td></tr></table></figure>
+<p>then restart docker engine: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker.service</div></pre></td></tr></table></figure>
+<p>after enable docker0 iptable rules, the following test service can be accessed on both nodes. </p>
+<h2 id="virtual-network-flannel"><a href="#virtual-network-flannel" class="headerlink" title="virtual network flannel"></a>virtual network flannel</h2><h4 id="check-running-flanneld"><a href="#check-running-flanneld" class="headerlink" title="check running flanneld"></a>check running flanneld</h4><ul>
+<li><p><code>/etc/cni/net.d/10-flannel.conflist</code> on host machine is the same as <code>/etc/kube-flannel/cni-conf.json</code> in flannel container on master node.</p>
+</li>
+<li><p><code>/run/flannel/subnet.env</code> exist in both flannel container (on master node) and in master host machine. it looks like network configure(subnet.env) is copied from container to host machine. so if there is no <code>flannel container</code> running on some nodes, these nodes won’t have the right network configure. </p>
+</li>
+</ul>
+<p>at master node, <code>HostPath</code> points to: /run/flannel, /etc/cni/net.d, kube-flannel-cfg (ConfigMap); while at working node(due to missing /gcr.io/flannel image), <code>/run/flannel/subnet.env</code> is missed. previously, I thought to cp this file from master node to woker node is the solution, then this file is missed every time to restart worker node. </p>
+<p>once copied both <code>kube-proxy</code> and <code>flannel</code> images to worker node, and restart <code>kubelet</code> at worker node, the cluster should give <code>Running status</code> of all these components. including 2 copies of <code>flannel</code>, one running on master node, and the other running on working node. </p>
+<p>as we are using <code>kubectl</code> to start the cluster, the actual flanneld is <code>/opt/bin/flanneld</code> from the running flannel container, and it maps NIC to the host machine. </p>
+<p>another thing is, <code>flannel</code> is the core of the default <code>kube-proxy</code>, so <code>kube-proxy</code> image is also required on both nodes. <code>coreDNS</code> run two copies on master node.</p>
+<h4 id="Flannel-mechanism"><a href="#Flannel-mechanism" class="headerlink" title="Flannel mechanism"></a><a href="https://www.jianshu.com/p/165a256fb1da" target="_blank" rel="external">Flannel mechanism</a></h4><p>the data flow: <strong>the sending message</strong> go to VNC(virtual network card) <code>docker0</code> on host machine, which transfers to VNC <code>flannel0</code>. this process is P2P. the global <code>etcd</code> service maintain a iptables among nodes, which store the subnet range of each node. 2) the <code>flanneld</code> service on the special node package <strong>the sending message</strong> as UDP package, and delivery to target node, based on the iptables. 3) when the target node received the UDP package, it unpackage the message, and send to its <code>flannel0</code>, then transfer to its <code>docker0</code>. </p>
+<p>1) after flanneld started，will create <code>flannel.1</code> virtual network card. the purpose of <code>flannel.1</code> is for across-host network, including package/unpackage UDP, and maintain iptables among the nodes. </p>
+<p>2) each node also create <code>cni0</code> virtual network card, at the first time to run flannel CNI. the purpose of <code>cni0</code> is same as <code>docker0</code>, and it’s a bridge network, used for communication in the same node. </p>
+<p><img src="https://www.centos.bz/wp-content/uploads/2017/06/flannel-01.png" alt="image"></p>
+<h2 id="deploy-redis-service"><a href="#deploy-redis-service" class="headerlink" title="deploy redis service"></a>deploy redis service</h2><h4 id="create-a-k8s-redis-image"><a href="#create-a-k8s-redis-image" class="headerlink" title="create a k8s-redis image"></a>create a k8s-redis image</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># use existing docker image as a base</div><div class="line">FROM ubuntu:16.04</div><div class="line"></div><div class="line"># Download and install dependency</div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends redis-server</div><div class="line"></div><div class="line"># EXPOSE the port to the Host OS</div><div class="line">EXPOSE 6379</div><div class="line"></div><div class="line"># Tell the image what command it has to execute as it starts as a container</div><div class="line">CMD ["redis-server"]</div></pre></td></tr></table></figure>
+<p>build the image and push to both nodes. </p>
+<h4 id="deploy-a-redis-deployment"><a href="#deploy-a-redis-deployment" class="headerlink" title="deploy a redis-deployment"></a>deploy a redis-deployment</h4><ul>
+<li>create <code>redis-deployment.yaml</code>: </li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">apiVersion: apps/v1</div><div class="line">kind: Deployment</div><div class="line">metadata:</div><div class="line">  labels:</div><div class="line">    app.kubernetes.io/name: load-balancer-example</div><div class="line">  name: kredis-deployment</div><div class="line">spec:</div><div class="line">  replicas: 1</div><div class="line">  selector:</div><div class="line">    matchLabels:</div><div class="line">      app.kubernetes.io/name: load-balancer-example</div><div class="line">  template:</div><div class="line">    metadata:</div><div class="line">      labels:</div><div class="line">        app.kubernetes.io/name: load-balancer-example</div><div class="line">    spec:</div><div class="line">      containers:</div><div class="line">      - image: 10.20.181.119:5000/k8s_redis</div><div class="line">        name: kredis</div><div class="line">        ports:</div><div class="line">        - containerPort: 6379</div></pre></td></tr></table></figure>
+<ul>
+<li>expose deployment as service</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">kubectl create ns <span class="built_in">test</span>-busybox</div><div class="line">kubectl apply -f redis-deployment.yaml</div><div class="line">kubectl get deployments redis-deployment 	<span class="comment">#display info of Deployment</span></div><div class="line">kubectl describe deployments redis-deployment</div><div class="line">kubectl get replicasets		<span class="comment">#display info of ReplicaSet</span></div><div class="line">kubectl describe replicasets</div><div class="line">kubectl expose deployment redis-deployment --<span class="built_in">type</span>=NodePort --name=my-redis  <span class="comment"># create a service object that exposes the deployment </span></div><div class="line">kubectl get services my-redis </div><div class="line">kubectl describe services my-redis </div><div class="line">kubectl get pods --output=wide</div><div class="line"><span class="comment">#clean up later (afer step 3)</span></div><div class="line">kubectl delete services my-redis</div><div class="line">kubectl delete deployment redis-deployment</div></pre></td></tr></table></figure>
+<h4 id="access-as-pod"><a href="#access-as-pod" class="headerlink" title="access as pod"></a>access as pod</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">gwm@meng:~/k8s/alpine$ kubectl get pods --output=wide </div><div class="line">NAME                                 READY   STATUS    RESTARTS   AGE   IP          NODE     NOMINATED NODE   READINESS GATES</div><div class="line">kredis-deployment-7567b7f4b7-wmqgd   1/1     Running   0          16h   10.4.1.18   ubuntu   &lt;none&gt;           &lt;none&gt;</div><div class="line">gwm@meng:~/k8s/alpine$ redis-cli -p 6379</div><div class="line">Could not connect to Redis at 127.0.0.1:6379: Connection refused</div><div class="line">not connected&gt; </div><div class="line">gwm@ubuntu:~$ redis-cli -p 6379</div><div class="line">Could not connect to Redis at 127.0.0.1:6379: Connection refused</div><div class="line">not connected&gt;</div></pre></td></tr></table></figure>
+<p>as we can see here, as <code>redis-server</code> as pod, won’t expose any port. and pod-IP(10.4.1.18) is only accessible inside cluster</p>
+<h4 id="access-as-service"><a href="#access-as-service" class="headerlink" title="access as service"></a>access as service</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">kubectl get services --output=wide </div><div class="line">NAME            TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR</div><div class="line">kredis-deploy   NodePort    10.104.43.224   &lt;none&gt;        6379:31962/TCP   23h   app.kubernetes.io/name=load-balancer-example</div><div class="line">kubernetes      ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP          8d    &lt;none&gt;</div><div class="line">root@ubuntu:~<span class="comment"># docker container inspect 60bfd6c5ccac  | grep 31962 </span></div><div class="line">root@ubuntu:~<span class="comment"># redis-cli -p 31962 </span></div><div class="line">127.0.0.1:31962&gt; </div><div class="line">root@ubuntu:~<span class="comment"># redis-cli -p 31962 -h 10.20.181.132 </span></div><div class="line">10.20.181.132:31962&gt; </div><div class="line">gwm@meng:~$ redis-cli -h 10.20.181.132 -p 31962 </div><div class="line">10.20.181.132:31962&gt;</div></pre></td></tr></table></figure>
+<p>so basically, we can access <code>redis</code> as service with the exposed port <code>31962</code>, and the host node’s IP(10.20.181.132), (rather than the serivce cluster IP(10.104.43.224). </p>
+<p>tips, only check service, won’t tell on which node, the pod is running. so need check the pod, and get its node’s IP. </p>
+<p>with <code>docker StartExec</code> with <code>iptable FORWARD</code>, <code>redis-cli</code> on on both ubuntu node and meng node can access the service. </p>
+<p>in summary:  if we deploy service as NodePort,  we suppose to access the service with its host node’s IP and the exposed port, from external/outside of k8s.</p>
+<h4 id="endpoints"><a href="#endpoints" class="headerlink" title="endpoints"></a>endpoints</h4><p><a href="https://theithollow.com/2019/02/04/kubernetes-endpoints/" target="_blank" rel="external">k8s endpoints</a>. what’s the difference from endpoints to externalIP ? </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">kubectl get endpoints </div><div class="line">NAME         ENDPOINTS           AGE</div><div class="line">kubernetes   10.20.180.12:6443   8d</div></pre></td></tr></table></figure>
+<p>it gives us the kubernetes endpoints, which is avaiable on both meng and ubuntu nodes.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">gwm@meng:~$ curl http://10.20.180.12:6443 </div><div class="line">Client sent an HTTP request to an HTTPS server.</div><div class="line">gwm@ubuntu:~$ curl http://10.20.180.12:6443 </div><div class="line">Client sent an HTTP request to an HTTPS server.</div></pre></td></tr></table></figure>
+<p>not every service has <code>ENDPOINTS</code>, which gives the way to access outside of the cluster. but <code>NodePort</code> type service can bind to the running pod’s host IP with the exported port.</p>
+<p>whenever <a href="https://yq.aliyun.com/articles/679802" target="_blank" rel="external">expose k8s service</a> to either internally or externally, it goes through <code>kube-proxy</code>. when <code>kube-proxy</code> do network transfer, it has two ways: Userspace or Iptables.</p>
+<p>clusterIP, is basically expose internnaly, with the service’s cluster IP; while nodePort type, is basically bind the service’s port to each node, so we can access the service from each node with the node’s IP and this fixed port. </p>
+<h4 id="apiserver"><a href="#apiserver" class="headerlink" title="apiserver"></a>apiserver</h4><p><a href="https://www.jianshu.com/p/a25e9e613f2c" target="_blank" rel="external">core of k8s: API Server</a>, is the RESTful API for resource POST/GET/DELETE/UPDATE. we can access through: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">curl apiserver_ip:apiserver_port/api</div><div class="line">curl apiserver_ip:apiserver_port/api/v1/pods</div><div class="line">curl apiserver_ip:apiserver_port/api/v1/services</div><div class="line">CURL apiserver_ip:apiserver_port/api/v1/proxy/nodes/&#123;name&#125;/pods/</div></pre></td></tr></table></figure>
+<ul>
+<li>check apiServer IP</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kubectl get pods -n kube-system --output=wide</div><div class="line">kube-apiserver-meng            1/1     Running   2          8d     10.20.180.12    meng     &lt;none&gt;           &lt;none&gt;</div></pre></td></tr></table></figure>
+<p>if check the <code>LISTEN</code> ports on both worker and master nodes, there are many k8s related ports, some are accessible, while some are not. </p>
+<h2 id="k8s-dashboard"><a href="#k8s-dashboard" class="headerlink" title="k8s dashboard"></a>k8s dashboard</h2><p>the following is from <a href="https://kuboard.cn/install/install-k8s-dashboard.html#%E5%AE%89%E8%A3%85" target="_blank" rel="external">dashboard doc in cn</a></p>
+<ul>
+<li>download src</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker search kubernetes-dashboard-amd64</div><div class="line">docker pull k8scn/kubernetes-dashboard-amd64</div><div class="line">docker tag k8scn/kubernetes-dashboard-amd64:latest k8s.gcr.io/kubernetes-dashboard-amd64:latest</div></pre></td></tr></table></figure>
+<ul>
+<li>clear old dashboard resources </li>
+</ul>
+<p>if there are old running dashboard, can clear first. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">kubectl get clusterroles kubernetes-dashboard --output=wide </div><div class="line">kubectl get clusterrolebindings kubernetes-dashboard  --output=wide </div><div class="line">kubectl delete clusterroles kubernetes-dashboard </div><div class="line">kubectl delete clusterrolebindings kubernetes-dashboard </div><div class="line">kubectl delete ns kubernetes-dashboard</div></pre></td></tr></table></figure>
+<ul>
+<li>start a fresh dashboard</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kubectl apply -f https://kuboard.cn/install-script/k8s-dashboard/v2.0.0-beta5.yaml </div><div class="line">kubectl apply -f https://kuboard.cn/install-script/k8s-dashboard/auth.yaml</div></pre></td></tr></table></figure>
+<p>or src from <a href="https://github.com/kubernetes/dashboard/blob/master/aio/deploy/recommended.yaml" target="_blank" rel="external">github/dashboard/recommended.yaml</a>, and run:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kubectl create -f admin-user.yaml</div><div class="line">kubectl create -f recommended.yaml</div></pre></td></tr></table></figure>
+<p><code>admin-user.yaml</code> is defined wih <code>admin authorization</code>. if not define or applied, when login to dashboard web UI, it gives some errors like:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">namespaces is forbidden: User <span class="string">"system:serviceaccount:kubernetes-dashboard:kubernetes-dashboard"</span> cannot list resource <span class="string">"namespaces"</span> <span class="keyword">in</span> API group <span class="string">""</span> at the cluster scope</div></pre></td></tr></table></figure>
+<p>so there are two tips during creating dashboard.</p>
+<ul>
+<li><p>auth/admin-user.yaml is required</p>
+</li>
+<li><p>add NodePort type service to expose dashboard. if not, can’ access dashboard on host machine. </p>
+</li>
+</ul>
+<p>refer from <a href="https://tomoyadeng.github.io/blog/2019/08/11/k8s-dashboard-openssl/index.html" target="_blank" rel="external">deploy dashboard &amp;&amp; metrics-server</a></p>
+<ul>
+<li><p>create <code>external-http.yaml</code> to expose NodePort service </p>
+</li>
+<li><p>create <code>admin-user.yaml</code> for admin manage</p>
+</li>
+</ul>
+<ul>
+<li>get the ServiceAccount token</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk <span class="string">'&#123;print $1&#125;'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>go to <code>https://nodeIP.6443</code>, tips, dashboard service is using <code>https</code></li>
+</ul>
+<ul>
+<li>login dashboard</li>
+</ul>
+<p>there are two ways to auth to login dashboard: </p>
+<p>– kubeconfig, the configure to access the cluster</p>
+<p>– token, every service account has a secret with valid Bearer Token, that can used to login to Dashboard. </p>
+<ul>
+<li>system checks</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">kubectl get secrets -n kubernetes-dashboard</div><div class="line">kubectl get serviceaccount -n kubernetes-dashboard</div><div class="line">kubectl describe serviceaccount kubernetes-dashboard  -n kubernetes-dashboard</div></pre></td></tr></table></figure>
+<h4 id="metrics-server"><a href="#metrics-server" class="headerlink" title="metrics-server"></a>metrics-server</h4><p>metrics-server is a replace of Heapster. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl edit deploy -n kubernetes-dashboard dashboard-metrics-scraper</div></pre></td></tr></table></figure>
+<h4 id="roles"><a href="#roles" class="headerlink" title="roles"></a>roles</h4><p>the right way to create a role:</p>
+<ul>
+<li>create a ServiceAccount </li>
+<li>bind a role for the ServiceAccount(cluster-admin role is needed)</li>
+<li>make a ClusterRoleBinding for ServiceAccount </li>
+</ul>
+<h4 id="list-all-container-images-in-all-ns"><a href="#list-all-container-images-in-all-ns" class="headerlink" title="list all container images in all ns"></a><a href="https://kubernetes.io/docs/tasks/access-application-cluster/list-all-running-container-images/" target="_blank" rel="external">list all container images in all ns</a></h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">kubectl get pods --all-namespaces -o jsonpath=<span class="string">"&#123;..image&#125;"</span> |\</div><div class="line">tr -s <span class="string">'[[:space:]]'</span> <span class="string">'\n'</span> |\</div><div class="line">sort |\</div><div class="line">uniq -c</div></pre></td></tr></table></figure>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/" target="_blank" rel="external">kubectl cheatsheet</a></p>
+<p><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/" target="_blank" rel="external">deployments from k8s doc</a></p>
+<p><a href="https://jekhokie.github.io/k8s/busybox/helm/2020/04/23/small-web-server-to-k8s.html" target="_blank" rel="external">deploy tiny web server to k8s</a></p>
+<p><a href="https://learnk8s.io/production-best-practices" target="_blank" rel="external">k8s production best practices</a></p>
+<p><a href="https://github.com/containernetworking/cni/blob/master/SPEC.md" target="_blank" rel="external">cni readme</a></p>
+<p><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/" target="_blank" rel="external">configure network plugins</a>:</p>
+<p><a href="https://www.centos.bz/2017/06/k8s-flannel-network/" target="_blank" rel="external">k8s与flannel网络原理</a></p>
+<p><a href="https://network.51cto.com/art/201908/601109.htm" target="_blank" rel="external">清晰脱俗的直解K8S网络</a></p>
+<p> <a href="https://shogokobayashi.com/2018/09/27/k8s-ex01-iptables-and-docker/" target="_blank" rel="external">k8s: iptables and docker0</a></p>
+<p> <a href="https://blog.csdn.net/whatday/article/details/105197120" target="_blank" rel="external">linux docker and iptables</a></p>
+<p><a href="https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/" target="_blank" rel="external">controlling access to k8s APIserver</a></p>
+<p><a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/" target="_blank" rel="external">understand RBAC auth</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/k8s-setup-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/17/k8s-setup-1/" itemprop="url">k8s setup 1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-17T08:50:13-04:00">
+                2020-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/17/k8s-setup-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/17/k8s-setup-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>so I am now to transfer our swarm docker DevOps env to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things: </p>
+<ul>
+<li><p>a more general abstract object. e.g. pod, service/svc, deployment, secret, namespace/ns, role e.t.c.</p>
+</li>
+<li><p>more DevOps engineering  </p>
+</li>
+</ul>
+<p>previously, I <a href="https://zjli2013.github.io/2020/04/09/play-with-k8s/" target="_blank" rel="external">palyed  with k8s</a> in theory. this time is more about build a k8s cluster in reality. </p>
+<h2 id="install-kubeadm"><a href="#install-kubeadm" class="headerlink" title="install kubeadm"></a>install kubeadm</h2><ul>
+<li><p>kubeadm,  used to initial cluster</p>
+</li>
+<li><p>kubectl, the CLI tool for k8s </p>
+</li>
+<li><p>kubelet, run on all nodes in the cluster</p>
+</li>
+</ul>
+<p>all three commands are required on all nodes. check <a href="https://v1-16.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/" target="_blank" rel="external">install kube officially</a></p>
+<ul>
+<li>swapoff </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo swapoff -a</div></pre></td></tr></table></figure>
+<ul>
+<li>create a file <code>/etc/apt/sources.list.d/kubernetes.list</code> with the following content:</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">deb https://mirrors.aliyun.com/kubernetes/apt/  kubernetes-xenial main</div></pre></td></tr></table></figure>
+<ul>
+<li>add gpg key </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gpg --keyserver keyserver.ubuntu.com --recv-keys BA07F4FB </div><div class="line">gpg --<span class="built_in">export</span> --armor BA07F4FB | sudo apt-key add -</div></pre></td></tr></table></figure>
+<ul>
+<li>apt install</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update </div><div class="line">sudo apt-get install kubelet kubectl kubeadm</div></pre></td></tr></table></figure>
+<p>tips, <code>apt-get install</code> will install v1.18.2. </p>
+<ul>
+<li>restart kubelet </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart kubelet</div></pre></td></tr></table></figure>
+<p>if need degrade to v17.3, do the following: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install -qy --allow-downgrades kubelet=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubeadm=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubectl=1.17.3-00</div></pre></td></tr></table></figure>
+<h4 id="kubeadm-setup"><a href="#kubeadm-setup" class="headerlink" title="kubeadm setup"></a>kubeadm setup</h4><p>we setup k8s with kubeadm tool, which requires a list of images:</p>
+<ul>
+<li>check the required images to start kubeadm</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images list</div></pre></td></tr></table></figure>
+<p>which returns:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">k8s.gcr.io/kube-apiserver:v1.18.2</div><div class="line">k8s.gcr.io/kube-controller-manager:v1.18.2</div><div class="line">k8s.gcr.io/kube-scheduler:v1.18.2</div><div class="line">k8s.gcr.io/kube-proxy:v1.18.2</div><div class="line">k8s.gcr.io/pause:3.2</div><div class="line">k8s.gcr.io/etcd:3.4.3-0</div><div class="line">k8s.gcr.io/coredns:1.6.7</div></pre></td></tr></table></figure>
+<p>the image source above is not aviable, which can be solved by:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images pull --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers/</div></pre></td></tr></table></figure>
+<p>if the command above doesn’t work well, try to <code>docker pull</code> directly and tag the name back to <code>k8s.gcr.io</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span></div><div class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span> k8s.gcr.io/<span class="variable">$imageName</span></div></pre></td></tr></table></figure>
+<h4 id="start-a-k8s-cluster"><a href="#start-a-k8s-cluster" class="headerlink" title="start a k8s cluster"></a>start a k8s cluster</h4><p>after the preparation above, finally start a k8s cluster as:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm init --pod-network-cidr=10.4.0.0/16 --cluster_dns=10.3.0.10</div></pre></td></tr></table></figure>
+<p>futher, check <a href="https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/" target="_blank" rel="external">kubeadm init options</a>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">--pod-network-cidr  <span class="comment"># pod network IP range</span></div><div class="line"></div><div class="line">--service-cidr <span class="comment"># default 10.96.0.0/12</span></div><div class="line"></div><div class="line">--service-dns-domain <span class="comment">#cluster.local</span></div></pre></td></tr></table></figure>
+<p><code>cluster_dns</code> option is used as the cluster DNS/namespace, which will be used in the configureMap for <code>coreDNS</code> forwarding. </p>
+<p>if start successfully, </p>
+<ul>
+<li>then run the following as a regular user to config safety-verficiation:</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir -p <span class="variable">$HOME</span>/.kube</div><div class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</div><div class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</div></pre></td></tr></table></figure>
+<ul>
+<li>check</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo kubectl get nodes   <span class="comment">#both nodes are READY</span></div><div class="line">sudo kubectl get pods -n kube-system  <span class="comment">#check system</span></div><div class="line">sudo kubectl describe pod coredns-xxxx  -n kube-system</div></pre></td></tr></table></figure>
+<h4 id="add-pod-network"><a href="#add-pod-network" class="headerlink" title="add pod network"></a>add pod network</h4><p>pod network, is the network through which the cluster nodes can communicate with each other.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</div></pre></td></tr></table></figure>
+<ul>
+<li>worker node to join the new k8s cluster : </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">kubeadm reset</div><div class="line">sudo swapoff -a </div><div class="line">kubeadm join 10.20.180.12:6443 --token o0pcpc.v3v8bafmbu6e4bcs \</div><div class="line">    --discovery-token-ca-cert-hash sha256:2a15d392821f8c51416e49e6ccd5393df6f93d738b24b2132e9a9a19276f4f54</div></pre></td></tr></table></figure>
+<p>then cp <code>flannel-cni.conflist</code> into worker node. <code>/etc/cni/net.d/10-flannel.conflist</code> to the same path in worker node.</p>
+<p>if check <code>sudo kubectl get pods -n kube-system</code> :  there may come <strong>an error: here found: coredns CrashLoopBackOff or Error</strong></p>
+<p>this is due to <code>DNS/nameserver resolving issue in Ubuntu, where</code>coreDNS service<code>forwarding the k8s cluster service to the host</code>/etc/resolv.conf<code>, which only has</code>127.0.0.1`.  the cause for CoreDNS to have CrashLoopBackOff is when a CoreDNS Pod deployed in Kubernetes detects a loop. A number of <a href="https://github.com/coredns/coredns/tree/master/plugin/loop#troubleshooting-loops-in-kubernetes-clusters" target="_blank" rel="external">workarounds are available</a> to avoid Kubernetes trying to restart the CoreDNS Pod every time CoreDNS detects the loop and exits.</p>
+<p>check the <code>coreDNS configMap</code> by :</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl edit cm coredns -n kube-system</div></pre></td></tr></table></figure>
+<p>we see something like:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  prometheus :9153</div><div class="line">#  forward . /etc/resolv.conf</div><div class="line">  forward . 10.3.0.10</div><div class="line">  cache 30</div><div class="line">  loop</div><div class="line">  reload</div><div class="line">  loadbalance</div></pre></td></tr></table></figure>
+<p>so modify <code>forward line</code> to <code>forward . 10.3.0.10</code>.  or to delete <code>loop</code> service there, which is not good idea.</p>
+<p><a href="https://stackoverflow.com/questions/52645473/coredns-fails-to-run-in-kubernetes-cluster" target="_blank" rel="external">a very good explain</a></p>
+<h4 id="test-cluster"><a href="#test-cluster" class="headerlink" title="test cluster"></a>test cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/08.%E9%AA%8C%E8%AF%81%E9%9B%86%E7%BE%A4%E5%8A%9F%E8%83%BD.md" target="_blank" rel="external">test sample</a></p>
+<h4 id="clear-cluster"><a href="#clear-cluster" class="headerlink" title="clear cluster"></a>clear cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/12.%E6%B8%85%E7%90%86%E9%9B%86%E7%BE%A4.md" target="_blank" rel="external">clear test</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl stop kubelet kube-proxy flanneld docker</div></pre></td></tr></table></figure>
+<h2 id="understand-CNI-container-network-interface"><a href="#understand-CNI-container-network-interface" class="headerlink" title="understand CNI (container network interface)"></a>understand CNI (container network interface)</h2><p>the following network plugin can be found from <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/" target="_blank" rel="external">k8s cluster networking</a></p>
+<ul>
+<li>backgroud</li>
+</ul>
+<p>container network is used to connect (container itself) to other containers, host machine or external network. container in runtime has a few network mode:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">none</div><div class="line"></div><div class="line">host</div><div class="line"></div><div class="line">bridge</div></pre></td></tr></table></figure>
+<p>CNI brings a general network framework, used to manage network configure and network resources. </p>
+<h4 id="coreDNS"><a href="#coreDNS" class="headerlink" title="coreDNS"></a>coreDNS</h4><p>first, run coreDNS as a service in the cluster. then, update <code>kubelet</code> parameters to include IP of coreDNS and the cluster domain. </p>
+<p>if there is no existing running Kube-DNS, or need a different <code>CLusterIP</code> for <code>CoreDNS</code>, then need update <code>kubelet</code> configuration to set <code>cluster_dns</code> and <code>cluster_domain</code> appropriately, which can be modified at:</p>
+<p><code>/etc/systemd/system/kubelet.service/10-kubeadm.conf</code> with additional options appending at <code>kubelet</code> line :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--cluster_dns=10.3.0.10   --cluster_domain=cluster.local</div></pre></td></tr></table></figure>
+<ul>
+<li>restart kubelet service </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl status kubelet </div><div class="line">systemctl daemon-reload </div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
+<h2 id="flannel-mis-usage"><a href="#flannel-mis-usage" class="headerlink" title="flannel mis-usage"></a>flannel mis-usage</h2><p>in the settings above, I manually copy <code>flannel-cni.conflist</code> and <code>/run/flannel/subnet.env</code> to worker node every time, whenever reboot the worker node. if else, the cluster bother the worker node is <code>NotReady</code>.  as we deploy the cluster with <code>kubectl</code>, which is kind of a swarm service deploy tool. so the right way to use <code>flannel</code> should have all <code>k8s.gcr.io/kube-proxy</code>, <code>quay.io/coreos/flannel</code> images at worker node as well. </p>
+<p>for version1.17+, <code>flannel</code> replace the default <code>kube-proxy</code>, but it still requires to have <code>kube-proxy</code> running in each node(kubelet). </p>
+<p>after restart kubelet, checking <code>pods -n kube-system</code>, it shows <code>kube-proxy</code> and <code>flannel</code> on each node has a <code>Running</code> status. <code>coreDNS</code> services has run the same size of copies as the number of nodes, but we can find that all of them are running on leader node.</p>
+<h2 id="understand-pod-in-k8s"><a href="#understand-pod-in-k8s" class="headerlink" title="understand pod in k8s"></a>understand pod in k8s</h2><h4 id="accessing-k8s-pods-from-outside-of-cluster"><a href="#accessing-k8s-pods-from-outside-of-cluster" class="headerlink" title="accessing k8s pods from outside of cluster"></a><a href="http://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/" target="_blank" rel="external">accessing k8s pods from outside of cluster</a></h4><ul>
+<li>hostNetwork: true</li>
+</ul>
+<p>this option applies to k8s pods, which work as <code>--network=host</code> in docker env. </p>
+<p>options can used for create pod: <code>name command args env resources ports stdin tty</code></p>
+<p><a href="https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/" target="_blank" rel="external">create pod/deployment using yaml</a></p>
+<p><a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/" target="_blank" rel="external">k8s task1: define a command and args for a container</a></p>
+<p><a href="https://learnk8s.io/templating-yaml-with-code" target="_blank" rel="external">templating YAML in k8s with real code</a></p>
+<p>but <code>hostNetwork</code> is only yaml supported</p>
+<ul>
+<li>hostPort </li>
+</ul>
+<p>the container port is exposed to the external network at <hostip>:<hostport>. </hostport></hostip></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">spec:</div><div class="line">	containers:</div><div class="line">		ports:</div><div class="line">		- containerPort: 8086</div><div class="line">		  hostPort: 8086</div></pre></td></tr></table></figure>
+<p>hostPort allows to expose a single container port on the hostIP. but the hostIP is dynamic when container restarted </p>
+<ul>
+<li>nodePort </li>
+</ul>
+<p>by default, services are accessible at ClusterIP, which is an internal IP address reachable from inside the cluster. to make the service accessible from outside of the cluster, can create a <code>NodePort</code> type service. </p>
+<p>once this service is created, the kube-proxy, which runs on each node of the cluster, and listens on all network interfaces is instructed to accept connections on port 30000, (from any IP ?). the incoming traffc is forwardedby the kube-proxy to the selected pods in a round-robin fashion.</p>
+<p>this service represents a static endpoint through which the selected pods can be reached. </p>
+<ul>
+<li>Ingress</li>
+</ul>
+<p>The Ingress controller is deployed as a Docker container on top of Kubernetes. Its Docker image contains a load balancer like nginx or HAProxy and a controller daemon.</p>
+<h4 id="view-pods-and-nodes"><a href="#view-pods-and-nodes" class="headerlink" title="view pods and nodes"></a><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/" target="_blank" rel="external">view pods and nodes</a></h4><ul>
+<li>check running pods on which node </li>
+</ul>
+<h4 id="resolv-conf-in-k8s-pod"><a href="#resolv-conf-in-k8s-pod" class="headerlink" title="resolv.conf in k8s pod"></a>resolv.conf in k8s pod</h4><p>run as interactive into a k8s pod, then check its <code>resolv.conf</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">nameserver 10.96.0.10</div><div class="line">search default.svc.cluster.local svc.cluster.local cluster.local</div><div class="line">options ndots:5</div></pre></td></tr></table></figure>
+<p> <code>10.96.0.10</code> is the K8S DNS server IP, which is actually the service IP of <code>kube-dns</code> service.</p>
+<p><strong>interesting</strong>, we can ping neither 10.96.0.10, nor 10.4.0.10, which is not existing service in the cluster, nor 10.3.0.10, which is the coreDNS forwarding IP.</p>
+<p>remember during setup the k8s cluster, we had define the coreDNS forwarding to <code>10.3.0.10</code>, is this why I can’t run <code>curl http://&lt;ip&gt;:&lt;port&gt;</code> works ?</p>
+<p>check coreDNS service:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">kubectl describe  pods coredns-66bff467f8-59g97 -n kube-system </div><div class="line">Name:                 coredns-66bff467f8-59g97</div><div class="line">Node:                 meng/10.20.180.12</div><div class="line">Labels:               k8s-app=kube-dns</div><div class="line">IP:                   10.4.0.6</div></pre></td></tr></table></figure>
+<p>when start <code>coreDNS</code>, is actually used to relace <code>kube-dns</code>. </p>
+<h2 id="understand-service-in-k8s"><a href="#understand-service-in-k8s" class="headerlink" title="understand service in k8s"></a>understand service in k8s</h2><p><a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank" rel="external">doc</a></p>
+<p>Each Pod gets its own IP address, however in a Deployment, the set of Pods running in one moment in time could be different from the set of Pods running that application a moment later.</p>
+<p>A Service in Kubernetes is a REST object, similar to a Pod. you can <code>POST</code> a Service definition to the API server to create a new instance. </p>
+<p>Kubernetes assigns this Service an IP address, sometimes called the <code>clusterIP</code>, </p>
+<h4 id="Virtual-IP-and-service-proxies"><a href="#Virtual-IP-and-service-proxies" class="headerlink" title="Virtual IP and service proxies"></a>Virtual IP and service proxies</h4><p>Every node in a Kubernetes cluster runs a <code>kube-proxy</code>, <code>kube-proxy</code> is responsible for implementing a form of virtual IP for Services, whose is type is any but not <code>ExternalName</code>.</p>
+<h4 id="choosing-own-IP-for-service"><a href="#choosing-own-IP-for-service" class="headerlink" title="choosing own IP for service"></a>choosing own IP for service</h4><p>You can specify your own cluster IP address as part of a Service creation request. The IP address that you choose must be a valid IPv4 or IPv6 address from within the service-cluster-ip-range CIDR range that is configured for the API server</p>
+<h4 id="discovering-services"><a href="#discovering-services" class="headerlink" title="discovering services"></a>discovering services</h4><ul>
+<li><p>ENV variables </p>
+</li>
+<li><p>DNS </p>
+</li>
+</ul>
+<h4 id="headless-services"><a href="#headless-services" class="headerlink" title="headless services"></a>headless services</h4><p>by explicitly specifying “None” for the cluster IP (<code>.spec.clusterIP</code>).</p>
+<h4 id="publishing-services-ServiceTypes"><a href="#publishing-services-ServiceTypes" class="headerlink" title="publishing services(ServiceTypes)"></a>publishing services(ServiceTypes)</h4><p>expose a service to an external IP address, outside of the cluster. </p>
+<p>service has four type:</p>
+<ul>
+<li><p>ClusterIP (default): expose the service on a cluster-internal IP, which is only reachable inside the cluster</p>
+</li>
+<li><p>NodePort: expose the service on each node’s IP at a static port(<code>NodePort</code>), to access : <nodeip>:<nodeport></nodeport></nodeip></p>
+</li>
+<li><p>ExternalName: map the services to an <code>externalName</code></p>
+</li>
+<li><p>LoadBalancer: expose the service externally using third-party load balancer(googl cloud, AWS, kubeadm has none LB)</p>
+</li>
+</ul>
+<p><code>NodePort</code> and <code>LoadBalancer</code> can expose service to public, or outside of the cluster.</p>
+<h4 id="external-IPs"><a href="#external-IPs" class="headerlink" title="external IPs"></a>external IPs</h4><p>if there are external IPs that route to one or more cluster nodes, services can be exposed on those externalIPs. </p>
+<h2 id="yaml-deployment-of-service-pod"><a href="#yaml-deployment-of-service-pod" class="headerlink" title="yaml deployment of service/pod"></a>yaml deployment of service/pod</h2><p>the previous sample <code>busybox</code>, is running as <code>pod</code>, through  <code>kubectl run busybox</code> ?  so there is no external </p>
+<ul>
+<li><a href="https://www.jianshu.com/p/6fd42abd9baa" target="_blank" rel="external">deployment obj</a></li>
+</ul>
+<ul>
+<li><a href="https://blog.csdn.net/wucong60/article/details/81699196" target="_blank" rel="external">using yaml file to create service and expose to public</a><br>some basic knowledge: </li>
+</ul>
+<p>1) pod is like container in docker, which assigned a dynamic IP in runtime, but this pod IP is only visible inside cluster </p>
+<p>2) service is an abstract concept of pod, which has an unique exposed IP, and the running pods belong to this service are managed hidden. </p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/41325087/what-is-the-difference-between-a-pod-and-a-deployment" target="_blank" rel="external">pod or deployment or service</a></li>
+</ul>
+<p>both pod and deployment are full-fledged objects in k8s API. deployment manages creating Pods by means of <code>ReplicaSets</code>, namely create pods with <code>spec</code> taken from the template. since it’s rather unlikely to create pods directly in a production env.</p>
+<p>in production, you will almost never use an <code>object</code> with the type <code>pod</code>. but a <code>deployment</code> object, which needs to keep the <code>replicas(pod)</code> alive. what’s use in practice are:</p>
+<p>1) Deployment object, where to specify app containers with some specifications</p>
+<p>2) service object</p>
+<p>you need <code>service object</code> since pods from deployment object can be killed, scaled up and down, their IP address is not persistent. </p>
+<h2 id="kubectrl-commands"><a href="#kubectrl-commands" class="headerlink" title="kubectrl commands"></a>kubectrl commands</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">kubectl get [pods|nodes|namespaces|services|pv] --ns your_namespace</div><div class="line"></div><div class="line">kubectl describe [pods|nodes|namespaces]</div><div class="line"></div><div class="line">kubectl label pods your_pod  new-label=your_label</div><div class="line"></div><div class="line">kubectl apply -f [.yaml|.json]   <span class="comment">#creates and updates resources in the cluster</span></div><div class="line"></div><div class="line">kubectl create deployment service_name --imae=service_image   <span class="comment">#start a single instance of service</span></div><div class="line"></div><div class="line">kubectl rollout <span class="built_in">history</span> deployment/your_service  <span class="comment">#check history of deployment </span></div><div class="line"></div><div class="line">kubectl expose rc your_sevice --port=80 --target-port=8000</div><div class="line"></div><div class="line">kubectl autoscale deployment your_service --min=MIN_Num --max=MAX_Num</div><div class="line"></div><div class="line">kubectl edit your_service <span class="comment">#edit any API resource in your preferred editor </span></div><div class="line"></div><div class="line">kubectl scale --replicas=3 your_service </div><div class="line"></div><div class="line">kubectl delete [pod|service]</div><div class="line"></div><div class="line">kubectl logs your_pod <span class="comment"># dump pod logs </span></div><div class="line"></div><div class="line">kubectl run -i --tty busybox --image=busybox  -- sh  <span class="comment"># run pod as interactive shell </span></div><div class="line"></div><div class="line">kubectl <span class="built_in">exec</span> -ti your_pod -- ls | nslookup kubernetes.default    <span class="comment">#run command in existing pod (1 container case)</span></div></pre></td></tr></table></figure>
+<p><code>kubectl</code> is pretty much like <code>docker</code> command and more. </p>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://computingforgeeks.com/how-to-setup-3-node-kubernetes-cluster-on-ubuntu-18-04-with-weave-net-cni/" target="_blank" rel="external">blog: setup k8s on 3 ubuntu nodes</a></p>
+<p><a href="https://github.com/containernetworking/cni/blob/master/SPEC.md" target="_blank" rel="external">cni readme</a></p>
+<p><a href="https://silenceper.com/blog/201809/flannel-in-k8s/" target="_blank" rel="external">flannel for k8s from  silenceper</a></p>
+<p><a href="https://blogs.infoblox.com/community/coredns-for-kubernetes-service-discovery/" target="_blank" rel="external">coreDNS for k8s service discovery</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/28/services-deploy-in-docker-swarm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2255,473 +2873,6 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/kvm-libvert-in-linux-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/24/kvm-libvert-in-linux-1/" itemprop="url">kvm/libvert in linux (1)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-24T07:10:18-04:00">
-                2020-03-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/24/kvm-libvert-in-linux-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/24/kvm-libvert-in-linux-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="kvm-background"><a href="#kvm-background" class="headerlink" title="kvm background"></a>kvm background</h2><p>kernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine is called <code>Host</code>, and the virtual machine(VM) run in host is called <code>Guest</code>. </p>
-<p>kvm itself doesn’t do any hardware emulator, which needs guest space to set an address space through <code>dev/kvm</code> interface, to which provides virtual I/O, e.g. QEMU.</p>
-<p><a href="https://github.com/virt-manager/virt-manager" target="_blank" rel="external">virt-manager</a> is a GUI tool for managing virtual machines via <strong>libvirt</strong>, mostly used by QEMU/KVM virtual machines. </p>
-<ul>
-<li>check kvm model info </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">modinfo kvm</div></pre></td></tr></table></figure>
-<ul>
-<li>whether CPU support hardware virtualization</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">egrep -c <span class="string">'(vmx|svm)'</span> /proc/cpuinfo</div><div class="line">kvm-ok</div></pre></td></tr></table></figure>
-<h2 id="install-kvm"><a href="#install-kvm" class="headerlink" title="install kvm"></a>install kvm</h2><ul>
-<li>install libvirt and qemu packages </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt install qemu qemu-kvm libvirt-bin bridge-utils</div><div class="line">modprobe kvm <span class="comment">#load kvm module</span></div><div class="line">systemctl start libvirtd.service <span class="comment">#</span></div><div class="line">vrish iface-bridge ens33 virbr0 <span class="comment">#create a bridge network mac address</span></div></pre></td></tr></table></figure>
-<ul>
-<li><a href="https://www.howtogeek.com/50787/add-a-user-to-a-group-or-second-group-on-linux/" target="_blank" rel="external">add current user</a> to libvirtd group </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo usermod -aG libvirtd $(whoami)</div><div class="line">sudo usermod -aG libvirt-qemu $(whoami)</div><div class="line">sudo reboot</div></pre></td></tr></table></figure>
-<h4 id="network-in-kvm"><a href="#network-in-kvm" class="headerlink" title="network in kvm"></a>network in kvm</h4><p><a href="https://www.linux.com/topic/networking/creating-virtual-machines-kvm-part-2-networking/" target="_blank" rel="external">default network</a> is NAT(network address transation), when you create a new virtual machine, this forwards network traffic through your host system; if the host is connected to the Internet, then your vm have Internet access.</p>
-<p>VM manager also creates an Ethernet bridge between the host and virtual network, so can ping IP address of VM from host, also ok on the other way.</p>
-<ul>
-<li>List of network cards</li>
-</ul>
-<p>go to <code>/sys/class/net</code> there are a few nic:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 docker0 -&gt; ../../devices/virtual/net/docker0</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 docker_gwbridge -&gt; ../../devices/virtual/net/docker_gwbridge</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 eno1 -&gt; ../../devices/pci0000:00/0000:00:1f.6/net/eno1</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 enp4s0f2 -&gt; ../../devices/pci0000:00/0000:00:1c.4/0000:02:00.0/0000:03:03.0/0000:04:00.2/net/enp4s0f2</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 lo -&gt; ../../devices/virtual/net/lo</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 veth1757da9 -&gt; ../../devices/virtual/net/veth1757da9</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 vethd4d0e7f -&gt; ../../devices/virtual/net/vethd4d0e7f</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 virbr0 -&gt; ../../devices/virtual/net/virbr0</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 virbr0-nic -&gt; ../../devices/virtual/net/virbr0-nic</div></pre></td></tr></table></figure>
-<ul>
-<li>multi interfaces on same MAC addresss</li>
-</ul>
-<p>when <a href="https://networkengineering.stackexchange.com/questions/34754/same-mac-on-different-interfaces" target="_blank" rel="external">a switch receives</a> a frame from an interface, it creates an entry in the mac-address table with the source mac and interface. it the source mac is known, it will update the table with the new interface. so bascially if you assign the mac address of an external-network-avialable NIC-A to the special vm, NIC-A is lost. </p>
-<ul>
-<li>virbr0 </li>
-</ul>
-<p>the <code>default</code> bridge NIC of libvirt is <code>virbr0</code>. bridge network means the guest and host share the same physical Network Cards, as well as offer the guest a special IP, which can be used to access the guest directly. the <code>virbr0</code> do <code>network address translation</code>(NAT), basically transfer the internal IP address to an external IP address, which means the internal IP address is un-visiable from outside. </p>
-<p>to add the <code>virbr0</code>, when it is deleted previously: </p>
- <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr virbr0</div><div class="line">brctl stp virbr0 on</div><div class="line">brctl setf virbr0 0</div><div class="line">ifconfig virbr0 192.168.122.1 netmask 255.255.255.0 up</div></pre></td></tr></table></figure>
-<p> to disable or delete <code>virbr0</code>:</p>
- <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">virsh net-destroy default</div><div class="line">virsh net-undefine default</div><div class="line">service libvirtd restart</div><div class="line">ifconfig</div></pre></td></tr></table></figure>
-<p> after starting the vm, can check the bridge network by:</p>
- <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">virsh domiflist vm-name</div><div class="line">virsh domifaddr vm-name</div></pre></td></tr></table></figure>
-<p> and we can login the vm, (after we assign current user to <code>libvert</code> group), and check NAT is working: </p>
- <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh 192.168.122.1 </div><div class="line">ping www.bing.com</div><div class="line">ping 10.20.xxx.xxx  <span class="comment"># ping the host external IP</span></div></pre></td></tr></table></figure>
-<p>basically the vm can access external website, but external web can’t access vm_name.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attach-interface/detach-interface/domiflist</div></pre></td></tr></table></figure>
-<h2 id="create-vm"><a href="#create-vm" class="headerlink" title="create vm"></a>create vm</h2><p>create a virtual machine,  can be done either through <code>virt-install</code> or <code>config.xml</code>:</p>
-<h3 id="virt-install"><a href="#virt-install" class="headerlink" title="virt-install"></a>virt-install</h3><p><code>virt-install</code> has depends on system python, pip. if current ptyhon version is 2.7, it gives warnning and return -1 due to unfound module. so make sure the #PYTHONPATH# point to the correct path if you have multi python in system. and <code>virt-install</code> has to run with <code>root</code>. </p>
-<p>then can start a virtual machine with <a href="https://unix.stackexchange.com/questions/502560/virsh-connected-to-domain-name-escape-character-is" target="_blank" rel="external">following command options</a>)</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">sudo virt-install \</div><div class="line">--name v1 \</div><div class="line">--ram 2048 \</div><div class="line"><span class="comment"># --cdrom=ubuntu-16.04.3-server-amd64.iso \</span></div><div class="line">--disk path=/var/lib/libvirt/images/ubuntu.qcow2 \</div><div class="line">--vcpus 2 \</div><div class="line">--virt-type kvm \</div><div class="line">--os-type linux \</div><div class="line">--os-variant ubuntu16.04 \</div><div class="line">--graphics none \</div><div class="line">--console pty, target_type=serial \</div><div class="line">--location /var/lib/libvirt/images/ubuntu-16.04.3-server-amd64.iso \</div><div class="line">--network bridge:virbr0 \ </div><div class="line">--extra-args console=ttyS0</div></pre></td></tr></table></figure>
-<p>during the installation, the process looks very much like Linux installation on a bare machine. I suppose this way, it’s like install a dual-OS in the bare machine. during the installation, there is an error <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=833706" target="_blank" rel="external">failed to load installer component libc6-udeb</a>, it’s may due to the iso or img has missing component.</p>
-<h3 id="config-xml"><a href="#config-xml" class="headerlink" title="config.xml"></a>config.xml</h3><ul>
-<li><p>create volumes </p>
-<p>go to /var/lib/libvirt/images, and create volume as following: </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-img create -f qcow2 ubuntu.qcow2 40G</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>check <a href="https://www.jianshu.com/p/4a50c02aa16e" target="_blank" rel="external">qemu-kvm &amp; qemu-img introduction</a></p>
-<ul>
-<li><p>add vm image </p>
-<p>cp ubuntu.iso to <code>/var/lib/libvirt/images</code> as well:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ubuntu.qcow2</div><div class="line">ubuntu-16.04.3-server-amd64.iso</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h4 id="vm-xml"><a href="#vm-xml" class="headerlink" title="vm.xml"></a>vm.xml</h4><p>follow an <a href="https://docs.fedoraproject.org/en-US/Fedora/18/html/" target="_blank" rel="external">xml sample</a>: </p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">domain</span> <span class="attr">type</span>=<span class="string">'kvm'</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>v1<span class="tag">&lt;/<span class="name">name</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">memory</span>&gt;</span>4048576<span class="tag">&lt;/<span class="name">memory</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">currentMemory</span>&gt;</span>4048576<span class="tag">&lt;/<span class="name">currentMemory</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">vcpu</span>&gt;</span>2<span class="tag">&lt;/<span class="name">vcpu</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">os</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">type</span> <span class="attr">arch</span>=<span class="string">'x86_64'</span> <span class="attr">machine</span>=<span class="string">'pc'</span>&gt;</span>hvm<span class="tag">&lt;/<span class="name">type</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">boot</span> <span class="attr">dev</span>=<span class="string">'cdrom'</span>/&gt;</span> </div><div class="line">       <span class="tag">&lt;/<span class="name">os</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">features</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">acpi</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">apic</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">pae</span>/&gt;</span></div><div class="line">       <span class="tag">&lt;/<span class="name">features</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">clock</span> <span class="attr">offset</span>=<span class="string">'localtime'</span>/&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_poweroff</span>&gt;</span>destroy<span class="tag">&lt;/<span class="name">on_poweroff</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_reboot</span>&gt;</span>restart<span class="tag">&lt;/<span class="name">on_reboot</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_crash</span>&gt;</span>destroy<span class="tag">&lt;/<span class="name">on_crash</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">serial</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">serial</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">console</span> <span class="attr">type</span>=<span class="string">'pty'</span> &gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">type</span>=<span class="string">'serial'</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">console</span>&gt;</span> </div><div class="line">      <span class="tag">&lt;<span class="name">devices</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">emulator</span>&gt;</span>/usr/bin/qemu-system-x86_64<span class="tag">&lt;/<span class="name">emulator</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'disk'</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">driver</span> <span class="attr">name</span>=<span class="string">'qemu'</span> <span class="attr">type</span>=<span class="string">'qcow2'</span>/&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">file</span>=<span class="string">'/var/lib/libvirt/images/ubuntu.qcow2'</span>/&gt;</span> </div><div class="line">           <span class="tag">&lt;<span class="name">target</span> <span class="attr">dev</span>=<span class="string">'hda'</span> <span class="attr">bus</span>=<span class="string">'ide'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;/<span class="name">disk</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'cdrom'</span>&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">file</span>=<span class="string">'/var/lib/libvirt/images/ubuntu-16.04.3-server-amd64.iso'</span>/&gt;</span> </div><div class="line">           <span class="tag">&lt;<span class="name">target</span> <span class="attr">dev</span>=<span class="string">'hdb'</span> <span class="attr">bus</span>=<span class="string">'ide'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;/<span class="name">disk</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">interface</span> <span class="attr">type</span>=<span class="string">'bridge'</span> &gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'52:54:00:98:45:3b'</span> /&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">bridge</span>=<span class="string">'virbr0'</span> /&gt;</span></div><div class="line">	   <span class="tag">&lt;<span class="name">model</span> <span class="attr">type</span>=<span class="string">'virtio'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">interface</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">serial</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">target</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">serial</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">console</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">target</span> <span class="attr">type</span>=<span class="string">'serial'</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">console</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'mouse'</span> <span class="attr">bus</span>=<span class="string">'ps2'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">graphics</span> <span class="attr">type</span>=<span class="string">'vnc'</span> <span class="attr">port</span>=<span class="string">'-1'</span> <span class="attr">autoport</span>=<span class="string">'no'</span> <span class="attr">listen</span> = <span class="string">'0.0.0.0'</span> <span class="attr">keymap</span>=<span class="string">'en-us'</span>&gt;</span></div><div class="line">	   <span class="tag">&lt;<span class="name">listen</span> <span class="attr">type</span>=<span class="string">'address'</span> <span class="attr">address</span>=<span class="string">'0.0.0.0'</span> /&gt;</span></div><div class="line">	 <span class="tag">&lt;/<span class="name">graphics</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">devices</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">domain</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>a few tips about the xml above:</p>
-<ul>
-<li><p>\<interface\> component is necessary for network interface. </interface\></p>
-</li>
-<li><p>if not assign a special <code>mac address</code> in the interface. since we had define <code>virbr0</code>, an automatic mac address will be assigned, which is unique from the host machine’s IP, but if ssh login to the guest (ssh username@guest_ip), it actually can ping host machine’s iP or any external ip(www.being.com)</p>
-</li>
-<li><p>\<serial tty\=""> compoennt, is setting for <code>console</code>.</serial></p>
-</li>
-</ul>
-<p>finally run the following CLI to start vm: v1:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh define vm1.xml </div><div class="line">virsh start ubuntu(the image)</div><div class="line">virsh list</div></pre></td></tr></table></figure>
-<h2 id="libvert"><a href="#libvert" class="headerlink" title="libvert"></a>libvert</h2><p>libvert is a software package to manage vm, including libvirtAPI, libvirtd(daemon process), and virsh tool. </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo systemctl restart libvirtd</div><div class="line">systemctl status libvirtd</div></pre></td></tr></table></figure>
-<p>only when <code>libvirtd</code> service is running, can we manage vm through <code>libvert</code>. all configure of the vm is stored ad <code>/etc/libvirt/qemu</code>. for <code>virsh</code> there are two mode:</p>
-<ul>
-<li>immediate way e.g. in host shell <code>virsh list</code> </li>
-<li>interactive shell e.g. by <code>virsh</code> to virsh shell</li>
-</ul>
-<h4 id="common-virsh-commands"><a href="#common-virsh-commands" class="headerlink" title="common virsh commands"></a>common virsh commands</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">virsh &lt;command&gt; &lt;domain-id&gt; [options]</div><div class="line">virsh uri #hypervisor&apos;s URI</div><div class="line">virsh hostname</div><div class="line">virsh nodeinfo </div><div class="line">virsh list (running, idel, paused, shutdown, shutoff, crashed, dying)</div><div class="line">virsh shutdown &lt;domain&gt;</div><div class="line">virsh start &lt;domain&gt;</div><div class="line">virsh destroy &lt;domain&gt;</div><div class="line">virsh undefine &lt;domain&gt;</div><div class="line">virsh create #through config.xml</div><div class="line">virsh connect  #reconnect to hypervisor </div><div class="line">virsh nodeinfo </div><div class="line">virsh define #file domain</div><div class="line">virsh  setmem domain-id kbs #immediately</div><div class="line">virsh sertmaxmem domain-id kbs</div><div class="line">virsh setvcpus domain-id count </div><div class="line">virsh vncdisplay domain-id #listed vnc port</div><div class="line">virsh console &lt;domain&gt;</div></pre></td></tr></table></figure>
-<h4 id="virsh-network-commands"><a href="#virsh-network-commands" class="headerlink" title="virsh network commands"></a>virsh network commands</h4><ul>
-<li>host configure </li>
-</ul>
-<p>Every standard libvirt installation provides NAT based connectivity to virtual machines out of the box. This is the so called ‘default virtual network’ </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">virsh net-list </div><div class="line">virsh net-define /usr/share/libvirt/networks/default.xml</div><div class="line">virsh net-start default</div><div class="line">virsh net-info default</div><div class="line">virsh net-dumpxml default</div></pre></td></tr></table></figure>
-<p>When the <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">libvirt default network</a>is running, you will see an isolated bridge device. This device explicitly does <em>NOT</em> have any physical interfaces added, since it uses NAT + forwarding to connect to outside world. <strong>Do not add interfaces</strong>. Libvirt will add iptables rules to allow traffic to/from guests attached to the virbr0 device in the INPUT, FORWARD, OUTPUT and POSTROUTING chains.</p>
-<p>if <code>default.xml</code> is not found, check <a href="https://blog.programster.org/kvm-missing-default-network" target="_blank" rel="external">fix missing default network</a>, <code>default.xml</code> is sth like:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">network</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>default<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">uuid</span>&gt;</span>9a05da11-e96b-47f3-8253-a3a482e445f5<span class="tag">&lt;/<span class="name">uuid</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">forward</span> <span class="attr">mode</span>=<span class="string">'nat'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">bridge</span> <span class="attr">name</span>=<span class="string">'virbr0'</span> <span class="attr">stp</span>=<span class="string">'on'</span> <span class="attr">delay</span>=<span class="string">'0'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'52:54:00:0a:cd:21'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">ip</span> <span class="attr">address</span>=<span class="string">'192.168.122.1'</span> <span class="attr">netmask</span>=<span class="string">'255.255.255.0'</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">dhcp</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">range</span> <span class="attr">start</span>=<span class="string">'192.168.122.2'</span> <span class="attr">end</span>=<span class="string">'192.168.122.254'</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">dhcp</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">ip</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">network</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>then run:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo virsh net-define --file default.xml</div><div class="line">sudo virsh net-start default</div><div class="line">sudo virsh net-autostart --network default</div></pre></td></tr></table></figure>
-<p>if bind <code>default</code> to <code>virbr0</code> already, need delete this brige first.</p>
-<ul>
-<li>guest configure </li>
-</ul>
-<p>add the following to guest xml configure:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">interface</span> <span class="attr">type</span>=<span class="string">'network'</span>&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">source</span> <span class="attr">network</span>=<span class="string">'default'</span>/&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'00:16:3e:1a:b3:4a'</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">interface</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>more details can check <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">virsh networking doc</a></p>
-<h4 id="snapshots"><a href="#snapshots" class="headerlink" title="snapshots"></a>snapshots</h4><p>snapshots used to save the state(disk mem, time..) of a domain</p>
-<ul>
-<li>create a snapshot for a vm </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-create-as --domain test_vm  \</div><div class="line">--name <span class="string">"test_vm_snapshot1"</span> \ </div><div class="line">--description <span class="string">"test vm snapshot "</span></div></pre></td></tr></table></figure>
-<ul>
-<li>list all snapshots for vm</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-list test_vm</div></pre></td></tr></table></figure>
-<ul>
-<li>display info about a snapshot </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-info --domain test_vm --snapshotname test_vm_snapshot1</div><div class="line">``` </div><div class="line"></div><div class="line">* delete a snapshot </div><div class="line"></div><div class="line">```sh</div><div class="line">virsh snapshot-delete --domain test_vm --snapshotname test_vm_shapshot1</div></pre></td></tr></table></figure>
-<h4 id="manage-volumes"><a href="#manage-volumes" class="headerlink" title="manage volumes"></a>manage volumes</h4><ul>
-<li>create a storage volume</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh vol-create-as default test_vol.qcow2 10G</div><div class="line"><span class="comment"># create test_vol on the deafult storage pool</span></div><div class="line">du -sh /var/lib/libvirt/images/test_vol.qcow2</div></pre></td></tr></table></figure>
-<ul>
-<li>attach  to a vm</li>
-</ul>
-<p>attache <code>test-vol</code> to vm <code>test</code> </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh attach-disk --domain <span class="built_in">test</span> \</div><div class="line">--<span class="built_in">source</span> /var/lib/libvirt/images/<span class="built_in">test</span>-vol.qcow2 \</div><div class="line">--persistent --target vdb</div></pre></td></tr></table></figure>
-<p>which can be check that the vm has added a block device <code>/dev/vdb</code> </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh <span class="built_in">test</span>  <span class="comment">#how to ssh to vm </span></div><div class="line">lsblk --output NAME,SIZE,TYPE</div></pre></td></tr></table></figure>
-<p>or directly grow disk image:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-img resize /var/lib/libvirt/images/test.qcow2 +1G</div></pre></td></tr></table></figure>
-<ul>
-<li>detach from a vm</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh detach-disk --domain <span class="built_in">test</span> --persistent --live --target vdb</div></pre></td></tr></table></figure>
-<ul>
-<li>delete a vm </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh vol-delete test_vol.qcow2 --pool default</div><div class="line">virsh pool-refresh default</div><div class="line">virsh vol-list default</div></pre></td></tr></table></figure>
-<h4 id="fs-virsh-commands"><a href="#fs-virsh-commands" class="headerlink" title="fs virsh commands"></a>fs virsh commands</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">virt-ls -l -d &lt;domain&gt; &lt;directory&gt;</div><div class="line">virt-cat -d &lt;domain&gt; &lt;file_path&gt;</div></pre></td></tr></table></figure>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://www.178linux.com/103971" target="_blank" rel="external">kvm introduction in chinese</a></p>
-<p><a href="https://help.ubuntu.com/community/KVM/Installation" target="_blank" rel="external">kvm pre-install checklist</a></p>
-<p><a href="http://www.yolinux.com/TUTORIALS/LinuxTutorialNetworking.html" target="_blank" rel="external">Linux network configuration</a></p>
-<p><a href="https://help.ubuntu.com/community/KVM/Installation" target="_blank" rel="external">kvm installation official doc</a></p>
-<p><a href="https://graspingtech.com/creating-virtual-machine-virt-install/" target="_blank" rel="external">creating vm with virt-install</a></p>
-<p><a href="https://linuxhint.com/install_kvm_ubuntu/" target="_blank" rel="external">install KVM in ubuntu</a></p>
-<p><a href="https://www.jianshu.com/p/110b60c14a8b" target="_blank" rel="external">jianshu: kvm network configure</a></p>
-<p><a href="https://www.cnblogs.com/CloudMan6/p/5308071.html" target="_blank" rel="external">cloudman: understand virbr0</a></p>
-<p><a href="https://libvirt.org/sources/virshcmdref/html-single/" target="_blank" rel="external">virsh command refer</a></p>
-<p><a href="https://www.ibm.com/developerworks/cn/linux/1409_qiaoly_qemuimgages/index.html" target="_blank" rel="external">qcow2  vs  raw</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/real-time-matlab-simulink-code-generation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/20/real-time-matlab-simulink-code-generation/" itemprop="url">real-time matlab/simulink code generation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-20T06:44:35-04:00">
-                2020-03-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/20/real-time-matlab-simulink-code-generation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/20/real-time-matlab-simulink-code-generation/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="real-time-matlab-code-generation"><a href="#real-time-matlab-code-generation" class="headerlink" title="real-time matlab code generation"></a>real-time matlab code generation</h1><h2 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h2><p>Python and Linux vs Matlab and Windows, I prefer the front. but as a teamwork, I have to understand how matlab/Simulink code generation works, especially with real-time model. </p>
-<h2 id="Simulink-Coder"><a href="#Simulink-Coder" class="headerlink" title="Simulink Coder"></a>Simulink Coder</h2><p>previously named as Real-Time workshop(rtw).</p>
-<h4 id="real-time-model-data-structure"><a href="#real-time-model-data-structure" class="headerlink" title="real time model data structure"></a>real time model data structure</h4><p>access rtModel data by using a set of macros analogous to the ssSetxxx and ssGetxxx macros that S-functions use to access SimStruct data, including noninlined S-functions compiled by the code generator.</p>
-<p>You need to use the set of macros rtmGetxxx and rtmSetxxx to access the real-time model data structure. The rtModel is an optimized data structure that replaces SimStruct as the top level data structure for a model. The rtmGetxxx and rtmSetxxx macros are used in the generated code as well as from the main.c or main.cpp module.</p>
-<p>Usage of rtmGetxxx and rtmSetxxx macros is the same as for the ssSetxxx and ssGetxxx versions, except that you replace SimStruct S by real-time model data structure rtM. </p>
-<table>
-<thead>
-<tr>
-<th>rtm macro</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> rtmGetdX(rtm)</td>
-<td>get the derivatives of block continous states</td>
-<td></td>
-</tr>
-<tr>
-<td> rtmGetNumSampleTimes(RT_MDL rtM)</td>
-<td>Get the number of sample times that a block has</td>
-<td></td>
-</tr>
-<tr>
-<td>rtmGetSampleTime(RT_MDL rtM, int TID)</td>
-<td>Get task sample time</td>
-</tr>
-<tr>
-<td>rtmGetStepSize(RT_MDL)</td>
-<td>Return the fundamental step size of the model</td>
-</tr>
-<tr>
-<td>rtmGetT(RT_MDL,t)</td>
-<td>Get the current simulation time </td>
-</tr>
-<tr>
-<td>rtmGetErrorStatus(rtm)</td>
-<td>Get the current error status</td>
-</tr>
-</tbody>
-</table>
-<h4 id="code-generation-to-used-externally"><a href="#code-generation-to-used-externally" class="headerlink" title="code generation to used externally :"></a>code generation to used externally :</h4><p>1) Install the Real-Time Workshop (RTW) Toolbox for MATLAB;</p>
-<p>2) Create the Simulink Model and Prepare it for autocoding;</p>
-<p>3) Correctly configure the RTW options and include a *.tcl file;</p>
-<p>4) Build any S-Functions of the model;</p>
-<p>5) Build the model (generate autocode including makefile);</p>
-<p>6) Tune up the makefile with any missing options/libraries/files;</p>
-<p>7) Integrate autocoded model in RTEMS using the wrapper.</p>
-<h4 id="ert-main"><a href="#ert-main" class="headerlink" title="ert_main()"></a>ert_main()</h4><p>the following is a common sample of real-time model generated C code. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rt_OneStep(<span class="keyword">void</span>)&#123;</div><div class="line">	simulation_custom_step() ;</div><div class="line">&#125;</div><div class="line"></div><div class="line">main()&#123;</div><div class="line">	simulation_initialize();</div><div class="line">	<span class="keyword">while</span>(rtmGetErrorStatus(xx_M) == (<span class="literal">NULL</span>))&#123;</div><div class="line">		 rt_OneStep();</div><div class="line">    &#125;</div><div class="line">    simulation_terminate();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div></pre></td></tr></table></figure>
-<p>if no time interupt setting up, there is a <a href="https://www.mathworks.com/matlabcentral/answers/92639-how-do-i-customize-the-main-function-generated-by-real-time-workshop-embedded-coder-5-2-r2008b" target="_blank" rel="external">Warning: The simulation will run forever. Generated ERT main won’t simulate model step behavior. To change this behavior select the ‘MAT-file logging’ option.</a></p>
-<p>from real-time Matlab/Simulink model to C/C++ code, we need manually set the while-loop break statement. for example, we can  run 100 times or based on some event-trigger.</p>
-<h4 id="Timing"><a href="#Timing" class="headerlink" title="Timing"></a>Timing</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">    uint16_T clockTick1;  <span class="comment">//base rate counter (5s)</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">      uint16_T TID[<span class="number">2</span>];</div><div class="line">    &#125; TaskCounters;  <span class="comment">//subtask counter (0.02s)</span></div><div class="line">  &#125; Timing;</div><div class="line">  </div><div class="line">currentTime =  Timing.clockTick1 * <span class="number">5.0</span> ;</div></pre></td></tr></table></figure>
-<p>absolute timer for sample time: [5.0s, 0.0s]. the resolution of this integer timer is 5.0, which is the step size of the task. so bascially, assuming to run one step need physcially 5s, but inside the module, each internal step is 0.02s. </p>
-<p>if we run a test scenario with 20s, basically we have 4 clockTick1 and inside each clockTick1, we have 250 times internal steps.</p>
-<h2 id="a-few-modification"><a href="#a-few-modification" class="headerlink" title="a few modification"></a>a few modification</h2><p>the following is a few modification based on the auto-generated C code:</p>
-<ul>
-<li>redefine data structure</li>
-</ul>
-<p>matlab coder use most <code>C structure</code> to package signals. in our adas model, most signals have similar inner items, so first I’d like to define a <code>parent structre</code>, then define all other adas signals using <code>typedef</code>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig1 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig2 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig3 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig4 ;</div></pre></td></tr></table></figure>
-<p>with the <code>parent struct</code>, we can define one method to handle all adas signals. </p>
-<ul>
-<li>add trigger model in rt_oneStep()</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">checkTriggerSigs(&amp;FunctionSignal, outputs_name);</div><div class="line">	<span class="keyword">int</span> idx = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span>(; idx&lt;outputs_name.size(); idx++)&#123;</div><div class="line">			<span class="keyword">if</span> ( outputs_name[idx] == <span class="string">"adas_sig1"</span>) &#123;</div><div class="line">				<span class="keyword">double</span> *vals = gd1_struc_2arr(adas_ig1) ; </div><div class="line">				outputs_data.push_back(als);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>( outputs_name[idx] ==  <span class="string">"adas_sig2"</span>) &#123;</div><div class="line">				<span class="keyword">double</span> *vals = gd1_struc_2arr(adas_sig2) ;</div><div class="line">				outputs_data.push_back(vals);</div><div class="line">			&#125;</div><div class="line"></div><div class="line"><span class="comment">// ws msg send model</span></div></pre></td></tr></table></figure>
-<ul>
-<li>add sim_time to break the loop</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">real_T sim_time = <span class="number">5.0</span> ; </div><div class="line">fflush((<span class="literal">NULL</span>));</div><div class="line"><span class="keyword">while</span> (rtmGetErrorStatus(OpenLoopSimulation_M) == (<span class="literal">NULL</span>) &amp;&amp;  (Timing.clockTick1) * <span class="number">5.0</span> &lt;=  sim_time) &#123;</div><div class="line">      rt_OneStep();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h2 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h2><p>the work above is the core modifcation to make real-time matlab/simulink model with trigger model translated to C/C++ code, which can be integrated in <a href="https://zjli2013.github.io/2020/03/18/massively-adas-test-pipeline/" target="_blank" rel="external">massively adas test pipeline</a>.  </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://devel.rtems.org/wiki/Packages/Matlab" target="_blank" rel="external">matlab code generation from rtems</a></p>
-<p><a href="https://www.mathworks.com/company/newsletters/articles/the-joy-of-generating-c-code-from-matlab.html" target="_blank" rel="external">the joy of generating C code from MATLAB</a></p>
-<p><a href="https://ww2.mathworks.cn/products/matlab-coder.html" target="_blank" rel="external">matlab coder introduction</a></p>
-<p><a href="https://www.mathworks.com/help/rtw/index.html" target="_blank" rel="external">matlab code doc</a></p>
-<p><a href="https://www.mathworks.com/help/rtw/ug/use-the-real-time-model-data-structure.html" target="_blank" rel="external">real-time model data structure</a></p>
-<p><a href="https://ww2.mathworks.cn/help/simulink/ug/generate-code-from-rate-based-model.html" target="_blank" rel="external">generate code from rate-based model</a></p>
-<p><a href="https://www.mathworks.com/help/stateflow/ug/schedule-one-subsystem-in-a-single-step.html" target="_blank" rel="external">schedule a subsystem multiple times in a single step</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2772,7 +2923,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">172</span>
+                <span class="site-state-item-count">174</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

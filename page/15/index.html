@@ -291,6 +291,266 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/24/construct-a-self-balanced-BStree/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/24/construct-a-self-balanced-BStree/" itemprop="url">construct a self balanced BStree</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-24T17:59:21-04:00">
+                2018-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/24/construct-a-self-balanced-BStree/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/24/construct-a-self-balanced-BStree/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/description/" target="_blank" rel="external">leetCode 109</a> construct a height-balanced Binary Search tree from input array(sorted or not).</p>
+<p>a self-balanced BStree, which means the left and right kid of each node have no more than 1 height difference, also named as AVL tree. There are three basic routines in implementation of AVL tree:  right <a href="https://en.wikipedia.org/wiki/Tree_rotation" target="_blank" rel="external">tree rotate</a>, left tree rotate, and insert. and each TreeNode requires an additionly <code>height</code> value.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode*  <span class="title">rightRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode*  root_left =  leaf-&gt;left ;</div><div class="line">	TreeNode*  left_right = root_left-&gt;right ;</div><div class="line">	root_left-&gt;right = leaf;</div><div class="line">	leaf-&gt;left = left_right;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_left; </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">leftRotate</span><span class="params">(TreeNode* leaf)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(leaf==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> leaf;</div><div class="line">	</div><div class="line">	TreeNode* root_right = leaf-&gt;right; </div><div class="line">	TreeNode* right_left = root_right-&gt;left; </div><div class="line">	root_right-&gt;left = leaf;</div><div class="line">	leaf-&gt;right =  right_left;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root_right;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function">TreeNode* <span class="title">insert</span><span class="params">(TreeNode* root, <span class="keyword">int</span> key)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(root==<span class="literal">nullptr</span>)</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(key));</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(key &gt; root-&gt;val)</div><div class="line">		root-&gt;right = insert(root-&gt;right, key);</div><div class="line">	</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(key &lt; root-&gt;val)</div><div class="line">			root-&gt;left = insert(root-&gt;left, key);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="keyword">return</span> root; </div><div class="line">	</div><div class="line">	root-&gt;height = <span class="built_in">std</span>::max(height(root-&gt;left), height(root-&gt;right)) + <span class="number">1</span> ; </div><div class="line">	<span class="keyword">int</span> balance = height_dif(root); </div><div class="line">	<span class="keyword">if</span>(balance &gt; <span class="number">1</span> &amp;&amp; key &lt; root-&gt;val )  <span class="comment">//new key inserted in left sub </span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> rightRotate(root); </div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="comment">/* keep in mind,    -1 &lt;= last_balance &lt;= 1 </span></div><div class="line">	   only  key &lt; root-&gt;val, will it possible that current_balance &gt; 1 */</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(balance &lt; <span class="number">-1</span> &amp;&amp; key &gt; root-&gt;val )</div><div class="line">	&#123;	</div><div class="line">		<span class="keyword">return</span> leftRotate(root);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> root; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>at the very first coding I natively pass node pointer by reference:</p>
+<pre><code>TreeNode* insert(TreeNode* &amp;root, int key)
+root-&gt;right = insert(root-&gt;right, key);
+</code></pre><p>since assigned insert() back to the same node pointer again, if passing by reference, each insert will clear the memory-write the same memory all the time, and can’t generate. what actually happen in <code>insert</code> is creating a new object. </p>
+<p>the structure pointer inside structure definition is the trick here. when define <code>root</code> node, both <code>left</code>and <code>right</code> nodes are <code>nullptr</code>, so argument <code>root-&gt;right</code> is <code>nullptr</code>, but the returning <code>root-&gt;right</code> is actually pointing to a node structure memory. </p>
+<p>also <a href="https://en.wikipedia.org/wiki/Null_pointer#Null_Dereferencing" target="_blank" rel="external">nullptr can’t be dereferring</a>,  basically since nullptr doesn’t point to any meaningful object, to dereference a null pointer will cause runtime or immediate crash.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/construct-BTree-from-pre-in-post-order-input/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="url">construct BTree from pre/in/post-order input</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-19T17:33:49-04:00">
+                2018-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/19/construct-BTree-from-pre-in-post-order-input/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/09/19/construct-BTree-from-pre-in-post-order-input/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="pre-amp-in-order-input"><a href="#pre-amp-in-order-input" class="headerlink" title="pre&amp;in-order input"></a>pre&amp;in-order input</h2><p><a href="https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/" target="_blank" rel="external">leetCode105</a> :  given preorder and inorder traversal of a tree, construct the binary tree. </p>
+<p>sol: each top node in Btree, has left-branch and right-branch, and each branch is a similar-structure subtree. so every time pop out the top node, and recursive the two subtrees, which return as the left kid and right kid of current top node.</p>
+<p>the recursive stopped when the list is empty(in real case, this means the node has only either left or right kid);  or stopped when only one element in the list(in real case, the node has both kids, so left or right subtree has only one element).</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode* <span class="title">sol</span><span class="params">(<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; pre,  <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; in)</span></span></div><div class="line"> &#123;</div><div class="line">	 <span class="keyword">if</span>(pre.empty() || in.empty())</div><div class="line">	 &#123;</div><div class="line">		 <span class="keyword">return</span> <span class="literal">nullptr</span>; <span class="comment">//empty left/right node </span></div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">if</span>(pre.size() == <span class="number">1</span> &amp;&amp; in.size() == <span class="number">1</span>) </div><div class="line">	 &#123;</div><div class="line">			 <span class="keyword">return</span> <span class="keyword">new</span> TreeNode(pre.front());</div><div class="line">	 &#125;</div><div class="line">	 </div><div class="line">	 <span class="keyword">int</span> root = pre.front(); </div><div class="line">	 pre.pop_front(); </div><div class="line">	 TreeNode* root_node = <span class="keyword">new</span> TreeNode(root); </div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator in_it, pre_it; </div><div class="line">	 in_it =  <span class="built_in">std</span>::find(in.begin(), in.end(), root);</div><div class="line">	 <span class="keyword">if</span>(in_it == in.end()) <span class="comment">//only one node in inorder list now, wont happen</span></div><div class="line">	 &#123;</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(in.front()));</div><div class="line">	 &#125;</div><div class="line">	 <span class="keyword">int</span> idx =  <span class="built_in">std</span>::distance(in.begin(), in_it);</div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_left_subtree(in.begin(), in_it);</div><div class="line">	 <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_right_subtree(++in_it, in.end());	</div><div class="line">	 in.erase(in_it);</div><div class="line">	 </div><div class="line">	pre_it = pre.begin(); </div><div class="line">	<span class="built_in">std</span>::advance(pre_it, idx); </div><div class="line">	</div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; pre_left_subtree(pre.begin(), pre_it); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; pre_right_subtree(pre_it, pre.end()); 	</div><div class="line">	</div><div class="line">	root_node-&gt;left = sol(pre_left_subtree, in_left_subtree);</div><div class="line">	root_node-&gt;right = sol(pre_right_subtree, in_right_subtree);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> root_node; 	 </div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>in each recursive step, I am using exteral containers, same stragey in <a href="https://zjli2013.github.io/2018/09/11/scrabmle-string/" target="_blank" rel="external">scramble string</a>. is there a one-swap way? </p>
+<h2 id="post-in-order-input"><a href="#post-in-order-input" class="headerlink" title="post/in-order input"></a>post/in-order input</h2><p><a href="https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/description/" target="_blank" rel="external">leetCode106</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function">TreeNode*  <span class="title">sol</span><span class="params">(<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; in,  <span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;&amp; post)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(in.empty() || post.empty())</div><div class="line">		<span class="keyword">return</span> <span class="literal">nullptr</span>; </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(in.size() == <span class="number">1</span> || post.size() == <span class="number">1</span>)</div><div class="line">		<span class="keyword">return</span> (<span class="keyword">new</span> TreeNode(in.front())); <span class="comment">// return the left || right kid </span></div><div class="line">	</div><div class="line">	<span class="comment">//first find out the tree root, the last element in post-order </span></div><div class="line">	<span class="keyword">int</span> root_v =  post.back();</div><div class="line">	TreeNode* root = <span class="keyword">new</span> TreeNode(root_v); </div><div class="line">	post.pop_back(); </div><div class="line">	<span class="comment">//find root_v in  inorder </span></div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator  in_lit =  <span class="built_in">std</span>::find(in.begin(), in.end(), root_v); </div><div class="line">	</div><div class="line">	<span class="comment">//create subtrees recursive </span></div><div class="line">	<span class="keyword">int</span> left_length =  <span class="built_in">std</span>::distance(in.begin(), in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_left_sub(in.begin(), in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; in_right_sub(++in_lit, in.end()); </div><div class="line">	in.erase(in_lit); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt;::iterator post_lit = <span class="built_in">std</span>::next(post.begin(), left_length); </div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; post_left_sub(post.begin(), post_lit);</div><div class="line">	<span class="built_in">list</span>&lt;<span class="keyword">int</span>&gt; post_right_sub(post_lit, post.end()); </div><div class="line">	</div><div class="line">	root-&gt;left = sol(in_left_sub, post_left_sub); </div><div class="line">	root-&gt;right = sol(in_right_sub, post_right_sub);</div><div class="line"></div><div class="line">	<span class="keyword">return</span> root ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/19/construct-BTree-from-breadth-order-input/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1334,271 +1594,6 @@ for 5-chars:  scramble(&quot;abcde&quot;) --&gt; (a | bcde) +  (ab | cde) +  (ab
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/29/how-recursive-works/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/29/how-recursive-works/" itemprop="url">how recursive works</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-29T23:31:12-04:00">
-                2018-08-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/29/how-recursive-works/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/29/how-recursive-works/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>leetCode 46 Permutations: given a collection of distinct integers, return all possible permutations.</p>
-<pre><code>Input: [1, 2, 3]
-
-Output:
-[ [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3, 1,2], 
-[3,2,1] ] 
-</code></pre><p>At first glipmse, it’s middle difficult, jump to recursive implementation. But there always confused failures, e.g. passing vector as reference to the recursive calls, and even do a deep copy of that vector, the base vector is always modified by the copied vector. This problem blocks me a whole day, actually I don’t know how to make a recursive calls work.</p>
-<p>tip1) each recursive fun has its independent local variables ;</p>
-<p>tip2) recursive calls are serialized, namely only when inside recursive fun is done, then the outside recursive will continue.</p>
-<p>tip1 helps to explain when local variables changed unexpected; tip2 helps cause I trend to think all recursive calls are parallezed running, but the real running order is serialized, so no twist.</p>
-<p>simulate how human brain solve this problem:</p>
-<pre><code>&lt;1(fix), 2(fix), 3&gt; ;  &lt;1(fix), 3(fix), 2&gt; …
-</code></pre><p>the first position has n potentional values, then the second position has (n-1) potentional values, etc. so design the very first implementation as:  traverse all potentional values in first position, and push it; then travers all potentional values in next position, and push it; till the last position, while only one element left, and push it. so a new combination is created. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; sol1(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; idx_vector ;</div><div class="line">		</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; nums.size(); i++) </div><div class="line">	&#123;</div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp ;</div><div class="line">		tmp.push_back(nums[i]);  <span class="comment">//the first element in new created vector </span></div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums1 =  nums ;</div><div class="line">		nums1.erase(nums1.begin()+i);  <span class="comment">//the second element in new created vector  </span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt; nums1.size(); j++)</div><div class="line">		&#123;</div><div class="line">			tmp.push_back(nums1[j]);</div><div class="line">			<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums2 = nums1; </div><div class="line">			nums2.erase(nums2.begin() + j);</div><div class="line">			<span class="keyword">if</span>(nums2.size() == <span class="number">1</span>)</div><div class="line">			&#123;</div><div class="line">					tmp.push_back(nums2[<span class="number">0</span>]);</div><div class="line">					idx_vector.push_back(tmp); 	</div><div class="line">					tmp.pop_back();</div><div class="line">			&#125;</div><div class="line">		tmp.pop_back(); </div><div class="line">		&#125;	</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> idx_vector; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>the first implmenation only works for fixed input <1, 3="" 2,="">, so how to design a recursive fun to make this idea more general ? it’s easy to abstract the process above: for ith position in the new combination vector, the potentional values is one less from (i-1)th position, traverse all possible values in ith position and push it, don’t forget pop it out for traversing to the next possible value; and the end of recursive is when only one element left.</1,></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sol</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; tmp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; idx_vector )</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(nums.size() == <span class="number">1</span>)</div><div class="line">	&#123;</div><div class="line">		tmp.push_back(nums[<span class="number">0</span>]);</div><div class="line">		idx_vector.push_back(tmp);</div><div class="line">		tmp.pop_back();</div><div class="line">		<span class="keyword">return</span> ;</div><div class="line">	&#125;</div><div class="line">		</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; nums.size(); i++)</div><div class="line">	&#123;</div><div class="line">		tmp.push_back(nums[i]);</div><div class="line">		<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums2 = nums; </div><div class="line">		nums2.erase(nums2.begin()+i);</div><div class="line">		sol(nums2, tmp, idx_vector);</div><div class="line">		tmp.pop_back();</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>test:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;; 	</div><div class="line">	<span class="keyword">int</span> size =  nums.size(); </div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp ;</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; outs;</div><div class="line">	sol(nums, tmp, outs);</div><div class="line">	</div><div class="line">	<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it ;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt; size*(size<span class="number">-1</span>); i++)</div><div class="line">	&#123;</div><div class="line">		<span class="keyword">for</span>(it = outs[i].begin();  it != outs[i].end(); it++)</div><div class="line">			<span class="built_in">cout</span>&lt;&lt; *it &lt;&lt; <span class="string">' '</span> ; </div><div class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"\n"</span> &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/10/MIT-s094/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/10/MIT-s094/" itemprop="url">MIT 6.S094 Deep Learning for Self Driving Cars</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-10T16:45:19-04:00">
-                2018-08-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/10/MIT-s094/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/08/10/MIT-s094/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="1-Deep-Reinforcement-Learning-link"><a href="#1-Deep-Reinforcement-Learning-link" class="headerlink" title="1 Deep Reinforcement Learning link"></a>1 Deep Reinforcement Learning <a href="https://www.dropbox.com/s/2z7276330jaw37k/lecture2.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps:  motion planning 
-</code></pre><h2 id="2-Convolutional-Neural-Networks-link"><a href="#2-Convolutional-Neural-Networks-link" class="headerlink" title="2 Convolutional Neural Networks link"></a>2 Convolutional Neural Networks <a href="https://www.dropbox.com/s/q34bi7t0udms01x/lecture3.pdf?dl=1" target="_blank" rel="external">link</a></h2><pre><code>apps: End-2-end driving task(pedestrian detect)
-</code></pre><h2 id="3-Recurrent-Neural-Networks-link"><a href="#3-Recurrent-Neural-Networks-link" class="headerlink" title="3 Recurrent Neural Networks link"></a>3 Recurrent Neural Networks <a href="https://goo.gl/qG4Ys9" target="_blank" rel="external">link</a></h2><pre><code>apps: steering control through time
-</code></pre><h3 id="CNN-Project-DeepTesla"><a href="#CNN-Project-DeepTesla" class="headerlink" title="CNN Project: DeepTesla"></a>CNN Project: <a href="http://selfdrivingcars.mit.edu/deeptesla/" target="_blank" rel="external">DeepTesla</a></h3><h3 id="DRL-Project-DeepTraffic"><a href="#DRL-Project-DeepTraffic" class="headerlink" title="DRL Project: DeepTraffic"></a>DRL Project: <a href="http://selfdrivingcars.mit.edu/deeptraffic/" target="_blank" rel="external">DeepTraffic</a></h3><h3 id="Framework-ConvNetJS"><a href="#Framework-ConvNetJS" class="headerlink" title="Framework:  ConvNetJS"></a>Framework:  <a href="https://github.com/karpathy/convnetjs" target="_blank" rel="external">ConvNetJS</a></h3>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1649,7 +1644,7 @@ Output:
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">172</span>
+                <span class="site-state-item-count">174</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

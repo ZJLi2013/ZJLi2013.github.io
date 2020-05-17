@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="k8s," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="backgroundso I am now to transfer our swarm docker DevOps env to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things:   a more general abstra">
+<meta name="keywords" content="k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s setup 1">
+<meta property="og:url" content="http://yoursite.com/2020/05/17/k8s-setup-1/index.html">
+<meta property="og:site_name" content="Serious Autonomous Vehicles">
+<meta property="og:description" content="backgroundso I am now to transfer our swarm docker DevOps env to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things:   a more general abstra">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-05-17T12:50:43.645Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s setup 1">
+<meta name="twitter:description" content="backgroundso I am now to transfer our swarm docker DevOps env to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things:   a more general abstra">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/17/k8s-setup-1/"/>
+
+
+
+
+
+  <title>k8s setup 1 | Serious Autonomous Vehicles</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Serious Autonomous Vehicles</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/k8s-setup-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">k8s setup 1</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-17T08:50:13-04:00">
+                2020-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/17/k8s-setup-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/17/k8s-setup-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>so I am now to transfer our swarm docker DevOps env to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things: </p>
+<ul>
+<li><p>a more general abstract object. e.g. pod, service/svc, deployment, secret, namespace/ns, role e.t.c.</p>
+</li>
+<li><p>more DevOps engineering  </p>
+</li>
+</ul>
+<p>previously, I <a href="https://zjli2013.github.io/2020/04/09/play-with-k8s/" target="_blank" rel="external">palyed  with k8s</a> in theory. this time is more about build a k8s cluster in reality. </p>
+<h2 id="install-kubeadm"><a href="#install-kubeadm" class="headerlink" title="install kubeadm"></a>install kubeadm</h2><ul>
+<li><p>kubeadm,  used to initial cluster</p>
+</li>
+<li><p>kubectl, the CLI tool for k8s </p>
+</li>
+<li><p>kubelet, run on all nodes in the cluster</p>
+</li>
+</ul>
+<p>all three commands are required on all nodes. check <a href="https://v1-16.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/" target="_blank" rel="external">install kube officially</a></p>
+<ul>
+<li>swapoff </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo swapoff -a</div></pre></td></tr></table></figure>
+<ul>
+<li>create a file <code>/etc/apt/sources.list.d/kubernetes.list</code> with the following content:</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">deb https://mirrors.aliyun.com/kubernetes/apt/  kubernetes-xenial main</div></pre></td></tr></table></figure>
+<ul>
+<li>add gpg key </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gpg --keyserver keyserver.ubuntu.com --recv-keys BA07F4FB </div><div class="line">gpg --<span class="built_in">export</span> --armor BA07F4FB | sudo apt-key add -</div></pre></td></tr></table></figure>
+<ul>
+<li>apt install</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update </div><div class="line">sudo apt-get install kubelet kubectl kubeadm</div></pre></td></tr></table></figure>
+<p>tips, <code>apt-get install</code> will install v1.18.2. </p>
+<ul>
+<li>restart kubelet </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart kubelet</div></pre></td></tr></table></figure>
+<p>if need degrade to v17.3, do the following: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install -qy --allow-downgrades kubelet=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubeadm=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubectl=1.17.3-00</div></pre></td></tr></table></figure>
+<h4 id="kubeadm-setup"><a href="#kubeadm-setup" class="headerlink" title="kubeadm setup"></a>kubeadm setup</h4><p>we setup k8s with kubeadm tool, which requires a list of images:</p>
+<ul>
+<li>check the required images to start kubeadm</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images list</div></pre></td></tr></table></figure>
+<p>which returns:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">k8s.gcr.io/kube-apiserver:v1.18.2</div><div class="line">k8s.gcr.io/kube-controller-manager:v1.18.2</div><div class="line">k8s.gcr.io/kube-scheduler:v1.18.2</div><div class="line">k8s.gcr.io/kube-proxy:v1.18.2</div><div class="line">k8s.gcr.io/pause:3.2</div><div class="line">k8s.gcr.io/etcd:3.4.3-0</div><div class="line">k8s.gcr.io/coredns:1.6.7</div></pre></td></tr></table></figure>
+<p>the image source above is not aviable, which can be solved by:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images pull --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers/</div></pre></td></tr></table></figure>
+<p>if the command above doesn’t work well, try to <code>docker pull</code> directly and tag the name back to <code>k8s.gcr.io</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span></div><div class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span> k8s.gcr.io/<span class="variable">$imageName</span></div></pre></td></tr></table></figure>
+<h4 id="start-a-k8s-cluster"><a href="#start-a-k8s-cluster" class="headerlink" title="start a k8s cluster"></a>start a k8s cluster</h4><p>after the preparation above, finally start a k8s cluster as:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm init --pod-network-cidr=10.4.0.0/16 --cluster_dns=10.3.0.10</div></pre></td></tr></table></figure>
+<p>futher, check <a href="https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/" target="_blank" rel="external">kubeadm init options</a>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">--pod-network-cidr  <span class="comment"># pod network IP range</span></div><div class="line"></div><div class="line">--service-cidr <span class="comment"># default 10.96.0.0/12</span></div><div class="line"></div><div class="line">--service-dns-domain <span class="comment">#cluster.local</span></div></pre></td></tr></table></figure>
+<p><code>cluster_dns</code> option is used as the cluster DNS/namespace, which will be used in the configureMap for <code>coreDNS</code> forwarding. </p>
+<p>if start successfully, </p>
+<ul>
+<li>then run the following as a regular user to config safety-verficiation:</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir -p <span class="variable">$HOME</span>/.kube</div><div class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</div><div class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</div></pre></td></tr></table></figure>
+<ul>
+<li>check</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo kubectl get nodes   <span class="comment">#both nodes are READY</span></div><div class="line">sudo kubectl get pods -n kube-system  <span class="comment">#check system</span></div><div class="line">sudo kubectl describe pod coredns-xxxx  -n kube-system</div></pre></td></tr></table></figure>
+<h4 id="add-pod-network"><a href="#add-pod-network" class="headerlink" title="add pod network"></a>add pod network</h4><p>pod network, is the network through which the cluster nodes can communicate with each other.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</div></pre></td></tr></table></figure>
+<ul>
+<li>worker node to join the new k8s cluster : </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">kubeadm reset</div><div class="line">sudo swapoff -a </div><div class="line">kubeadm join 10.20.180.12:6443 --token o0pcpc.v3v8bafmbu6e4bcs \</div><div class="line">    --discovery-token-ca-cert-hash sha256:2a15d392821f8c51416e49e6ccd5393df6f93d738b24b2132e9a9a19276f4f54</div></pre></td></tr></table></figure>
+<p>then cp <code>flannel-cni.conflist</code> into worker node. <code>/etc/cni/net.d/10-flannel.conflist</code> to the same path in worker node.</p>
+<p>if check <code>sudo kubectl get pods -n kube-system</code> :  there may come <strong>an error: here found: coredns CrashLoopBackOff or Error</strong></p>
+<p>this is due to <code>DNS/nameserver resolving issue in Ubuntu, where</code>coreDNS service<code>forwarding the k8s cluster service to the host</code>/etc/resolv.conf<code>, which only has</code>127.0.0.1`.  the cause for CoreDNS to have CrashLoopBackOff is when a CoreDNS Pod deployed in Kubernetes detects a loop. A number of <a href="https://github.com/coredns/coredns/tree/master/plugin/loop#troubleshooting-loops-in-kubernetes-clusters" target="_blank" rel="external">workarounds are available</a> to avoid Kubernetes trying to restart the CoreDNS Pod every time CoreDNS detects the loop and exits.</p>
+<p>check the <code>coreDNS configMap</code> by :</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl edit cm coredns -n kube-system</div></pre></td></tr></table></figure>
+<p>we see something like:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  prometheus :9153</div><div class="line">#  forward . /etc/resolv.conf</div><div class="line">  forward . 10.3.0.10</div><div class="line">  cache 30</div><div class="line">  loop</div><div class="line">  reload</div><div class="line">  loadbalance</div></pre></td></tr></table></figure>
+<p>so modify <code>forward line</code> to <code>forward . 10.3.0.10</code>.  or to delete <code>loop</code> service there, which is not good idea.</p>
+<p><a href="https://stackoverflow.com/questions/52645473/coredns-fails-to-run-in-kubernetes-cluster" target="_blank" rel="external">a very good explain</a></p>
+<h4 id="test-cluster"><a href="#test-cluster" class="headerlink" title="test cluster"></a>test cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/08.%E9%AA%8C%E8%AF%81%E9%9B%86%E7%BE%A4%E5%8A%9F%E8%83%BD.md" target="_blank" rel="external">test sample</a></p>
+<h4 id="clear-cluster"><a href="#clear-cluster" class="headerlink" title="clear cluster"></a>clear cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/12.%E6%B8%85%E7%90%86%E9%9B%86%E7%BE%A4.md" target="_blank" rel="external">clear test</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl stop kubelet kube-proxy flanneld docker</div></pre></td></tr></table></figure>
+<h2 id="understand-CNI-container-network-interface"><a href="#understand-CNI-container-network-interface" class="headerlink" title="understand CNI (container network interface)"></a>understand CNI (container network interface)</h2><p>the following network plugin can be found from <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/" target="_blank" rel="external">k8s cluster networking</a></p>
+<ul>
+<li>backgroud</li>
+</ul>
+<p>container network is used to connect (container itself) to other containers, host machine or external network. container in runtime has a few network mode:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">none</div><div class="line"></div><div class="line">host</div><div class="line"></div><div class="line">bridge</div></pre></td></tr></table></figure>
+<p>CNI brings a general network framework, used to manage network configure and network resources. </p>
+<h4 id="coreDNS"><a href="#coreDNS" class="headerlink" title="coreDNS"></a>coreDNS</h4><p>first, run coreDNS as a service in the cluster. then, update <code>kubelet</code> parameters to include IP of coreDNS and the cluster domain. </p>
+<p>if there is no existing running Kube-DNS, or need a different <code>CLusterIP</code> for <code>CoreDNS</code>, then need update <code>kubelet</code> configuration to set <code>cluster_dns</code> and <code>cluster_domain</code> appropriately, which can be modified at:</p>
+<p><code>/etc/systemd/system/kubelet.service/10-kubeadm.conf</code> with additional options appending at <code>kubelet</code> line :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--cluster_dns=10.3.0.10   --cluster_domain=cluster.local</div></pre></td></tr></table></figure>
+<ul>
+<li>restart kubelet service </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl status kubelet </div><div class="line">systemctl daemon-reload </div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
+<h2 id="flannel-mis-usage"><a href="#flannel-mis-usage" class="headerlink" title="flannel mis-usage"></a>flannel mis-usage</h2><p>in the settings above, I manually copy <code>flannel-cni.conflist</code> and <code>/run/flannel/subnet.env</code> to worker node every time, whenever reboot the worker node. if else, the cluster bother the worker node is <code>NotReady</code>.  as we deploy the cluster with <code>kubectl</code>, which is kind of a swarm service deploy tool. so the right way to use <code>flannel</code> should have all <code>k8s.gcr.io/kube-proxy</code>, <code>quay.io/coreos/flannel</code> images at worker node as well. </p>
+<p>for version1.17+, <code>flannel</code> replace the default <code>kube-proxy</code>, but it still requires to have <code>kube-proxy</code> running in each node(kubelet). </p>
+<p>after restart kubelet, checking <code>pods -n kube-system</code>, it shows <code>kube-proxy</code> and <code>flannel</code> on each node has a <code>Running</code> status. <code>coreDNS</code> services has run the same size of copies as the number of nodes, but we can find that all of them are running on leader node.</p>
+<h2 id="understand-pod-in-k8s"><a href="#understand-pod-in-k8s" class="headerlink" title="understand pod in k8s"></a>understand pod in k8s</h2><h4 id="accessing-k8s-pods-from-outside-of-cluster"><a href="#accessing-k8s-pods-from-outside-of-cluster" class="headerlink" title="accessing k8s pods from outside of cluster"></a><a href="http://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/" target="_blank" rel="external">accessing k8s pods from outside of cluster</a></h4><ul>
+<li>hostNetwork: true</li>
+</ul>
+<p>this option applies to k8s pods, which work as <code>--network=host</code> in docker env. </p>
+<p>options can used for create pod: <code>name command args env resources ports stdin tty</code></p>
+<p><a href="https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/" target="_blank" rel="external">create pod/deployment using yaml</a></p>
+<p><a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/" target="_blank" rel="external">k8s task1: define a command and args for a container</a></p>
+<p><a href="https://learnk8s.io/templating-yaml-with-code" target="_blank" rel="external">templating YAML in k8s with real code</a></p>
+<p>but <code>hostNetwork</code> is only yaml supported</p>
+<ul>
+<li>hostPort </li>
+</ul>
+<p>the container port is exposed to the external network at <hostip>:<hostport>. </hostport></hostip></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">spec:</div><div class="line">	containers:</div><div class="line">		ports:</div><div class="line">		- containerPort: 8086</div><div class="line">		  hostPort: 8086</div></pre></td></tr></table></figure>
+<p>hostPort allows to expose a single container port on the hostIP. but the hostIP is dynamic when container restarted </p>
+<ul>
+<li>nodePort </li>
+</ul>
+<p>by default, services are accessible at ClusterIP, which is an internal IP address reachable from inside the cluster. to make the service accessible from outside of the cluster, can create a <code>NodePort</code> type service. </p>
+<p>once this service is created, the kube-proxy, which runs on each node of the cluster, and listens on all network interfaces is instructed to accept connections on port 30000, (from any IP ?). the incoming traffc is forwardedby the kube-proxy to the selected pods in a round-robin fashion.</p>
+<p>this service represents a static endpoint through which the selected pods can be reached. </p>
+<ul>
+<li>Ingress</li>
+</ul>
+<p>The Ingress controller is deployed as a Docker container on top of Kubernetes. Its Docker image contains a load balancer like nginx or HAProxy and a controller daemon.</p>
+<h4 id="view-pods-and-nodes"><a href="#view-pods-and-nodes" class="headerlink" title="view pods and nodes"></a><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/" target="_blank" rel="external">view pods and nodes</a></h4><ul>
+<li>check running pods on which node </li>
+</ul>
+<h4 id="resolv-conf-in-k8s-pod"><a href="#resolv-conf-in-k8s-pod" class="headerlink" title="resolv.conf in k8s pod"></a>resolv.conf in k8s pod</h4><p>run as interactive into a k8s pod, then check its <code>resolv.conf</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">nameserver 10.96.0.10</div><div class="line">search default.svc.cluster.local svc.cluster.local cluster.local</div><div class="line">options ndots:5</div></pre></td></tr></table></figure>
+<p> <code>10.96.0.10</code> is the K8S DNS server IP, which is actually the service IP of <code>kube-dns</code> service.</p>
+<p><strong>interesting</strong>, we can ping neither 10.96.0.10, nor 10.4.0.10, which is not existing service in the cluster, nor 10.3.0.10, which is the coreDNS forwarding IP.</p>
+<p>remember during setup the k8s cluster, we had define the coreDNS forwarding to <code>10.3.0.10</code>, is this why I can’t run <code>curl http://&lt;ip&gt;:&lt;port&gt;</code> works ?</p>
+<p>check coreDNS service:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">kubectl describe  pods coredns-66bff467f8-59g97 -n kube-system </div><div class="line">Name:                 coredns-66bff467f8-59g97</div><div class="line">Node:                 meng/10.20.180.12</div><div class="line">Labels:               k8s-app=kube-dns</div><div class="line">IP:                   10.4.0.6</div></pre></td></tr></table></figure>
+<p>when start <code>coreDNS</code>, is actually used to relace <code>kube-dns</code>. </p>
+<h2 id="understand-service-in-k8s"><a href="#understand-service-in-k8s" class="headerlink" title="understand service in k8s"></a>understand service in k8s</h2><p><a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank" rel="external">doc</a></p>
+<p>Each Pod gets its own IP address, however in a Deployment, the set of Pods running in one moment in time could be different from the set of Pods running that application a moment later.</p>
+<p>A Service in Kubernetes is a REST object, similar to a Pod. you can <code>POST</code> a Service definition to the API server to create a new instance. </p>
+<p>Kubernetes assigns this Service an IP address, sometimes called the <code>clusterIP</code>, </p>
+<h4 id="Virtual-IP-and-service-proxies"><a href="#Virtual-IP-and-service-proxies" class="headerlink" title="Virtual IP and service proxies"></a>Virtual IP and service proxies</h4><p>Every node in a Kubernetes cluster runs a <code>kube-proxy</code>, <code>kube-proxy</code> is responsible for implementing a form of virtual IP for Services, whose is type is any but not <code>ExternalName</code>.</p>
+<h4 id="choosing-own-IP-for-service"><a href="#choosing-own-IP-for-service" class="headerlink" title="choosing own IP for service"></a>choosing own IP for service</h4><p>You can specify your own cluster IP address as part of a Service creation request. The IP address that you choose must be a valid IPv4 or IPv6 address from within the service-cluster-ip-range CIDR range that is configured for the API server</p>
+<h4 id="discovering-services"><a href="#discovering-services" class="headerlink" title="discovering services"></a>discovering services</h4><ul>
+<li><p>ENV variables </p>
+</li>
+<li><p>DNS </p>
+</li>
+</ul>
+<h4 id="headless-services"><a href="#headless-services" class="headerlink" title="headless services"></a>headless services</h4><p>by explicitly specifying “None” for the cluster IP (<code>.spec.clusterIP</code>).</p>
+<h4 id="publishing-services-ServiceTypes"><a href="#publishing-services-ServiceTypes" class="headerlink" title="publishing services(ServiceTypes)"></a>publishing services(ServiceTypes)</h4><p>expose a service to an external IP address, outside of the cluster. </p>
+<p>service has four type:</p>
+<ul>
+<li><p>ClusterIP (default): expose the service on a cluster-internal IP, which is only reachable inside the cluster</p>
+</li>
+<li><p>NodePort: expose the service on each node’s IP at a static port(<code>NodePort</code>), to access : <nodeip>:<nodeport></nodeport></nodeip></p>
+</li>
+<li><p>ExternalName: map the services to an <code>externalName</code></p>
+</li>
+<li><p>LoadBalancer: expose the service externally using third-party load balancer(googl cloud, AWS, kubeadm has none LB)</p>
+</li>
+</ul>
+<p><code>NodePort</code> and <code>LoadBalancer</code> can expose service to public, or outside of the cluster.</p>
+<h4 id="external-IPs"><a href="#external-IPs" class="headerlink" title="external IPs"></a>external IPs</h4><p>if there are external IPs that route to one or more cluster nodes, services can be exposed on those externalIPs. </p>
+<h2 id="yaml-deployment-of-service-pod"><a href="#yaml-deployment-of-service-pod" class="headerlink" title="yaml deployment of service/pod"></a>yaml deployment of service/pod</h2><p>the previous sample <code>busybox</code>, is running as <code>pod</code>, through  <code>kubectl run busybox</code> ?  so there is no external </p>
+<ul>
+<li><a href="https://www.jianshu.com/p/6fd42abd9baa" target="_blank" rel="external">deployment obj</a></li>
+</ul>
+<ul>
+<li><a href="https://blog.csdn.net/wucong60/article/details/81699196" target="_blank" rel="external">using yaml file to create service and expose to public</a><br>some basic knowledge: </li>
+</ul>
+<p>1) pod is like container in docker, which assigned a dynamic IP in runtime, but this pod IP is only visible inside cluster </p>
+<p>2) service is an abstract concept of pod, which has an unique exposed IP, and the running pods belong to this service are managed hidden. </p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/41325087/what-is-the-difference-between-a-pod-and-a-deployment" target="_blank" rel="external">pod or deployment or service</a></li>
+</ul>
+<p>both pod and deployment are full-fledged objects in k8s API. deployment manages creating Pods by means of <code>ReplicaSets</code>, namely create pods with <code>spec</code> taken from the template. since it’s rather unlikely to create pods directly in a production env.</p>
+<p>in production, you will almost never use an <code>object</code> with the type <code>pod</code>. but a <code>deployment</code> object, which needs to keep the <code>replicas(pod)</code> alive. what’s use in practice are:</p>
+<p>1) Deployment object, where to specify app containers with some specifications</p>
+<p>2) service object</p>
+<p>you need <code>service object</code> since pods from deployment object can be killed, scaled up and down, their IP address is not persistent. </p>
+<h2 id="kubectrl-commands"><a href="#kubectrl-commands" class="headerlink" title="kubectrl commands"></a>kubectrl commands</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">kubectl get [pods|nodes|namespaces|services|pv] --ns your_namespace</div><div class="line"></div><div class="line">kubectl describe [pods|nodes|namespaces]</div><div class="line"></div><div class="line">kubectl label pods your_pod  new-label=your_label</div><div class="line"></div><div class="line">kubectl apply -f [.yaml|.json]   <span class="comment">#creates and updates resources in the cluster</span></div><div class="line"></div><div class="line">kubectl create deployment service_name --imae=service_image   <span class="comment">#start a single instance of service</span></div><div class="line"></div><div class="line">kubectl rollout <span class="built_in">history</span> deployment/your_service  <span class="comment">#check history of deployment </span></div><div class="line"></div><div class="line">kubectl expose rc your_sevice --port=80 --target-port=8000</div><div class="line"></div><div class="line">kubectl autoscale deployment your_service --min=MIN_Num --max=MAX_Num</div><div class="line"></div><div class="line">kubectl edit your_service <span class="comment">#edit any API resource in your preferred editor </span></div><div class="line"></div><div class="line">kubectl scale --replicas=3 your_service </div><div class="line"></div><div class="line">kubectl delete [pod|service]</div><div class="line"></div><div class="line">kubectl logs your_pod <span class="comment"># dump pod logs </span></div><div class="line"></div><div class="line">kubectl run -i --tty busybox --image=busybox  -- sh  <span class="comment"># run pod as interactive shell </span></div><div class="line"></div><div class="line">kubectl <span class="built_in">exec</span> -ti your_pod -- ls | nslookup kubernetes.default    <span class="comment">#run command in existing pod (1 container case)</span></div></pre></td></tr></table></figure>
+<p><code>kubectl</code> is pretty much like <code>docker</code> command and more. </p>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://computingforgeeks.com/how-to-setup-3-node-kubernetes-cluster-on-ubuntu-18-04-with-weave-net-cni/" target="_blank" rel="external">blog: setup k8s on 3 ubuntu nodes</a></p>
+<p><a href="https://github.com/containernetworking/cni/blob/master/SPEC.md" target="_blank" rel="external">cni readme</a></p>
+<p><a href="https://silenceper.com/blog/201809/flannel-in-k8s/" target="_blank" rel="external">flannel for k8s from  silenceper</a></p>
+<p><a href="https://blogs.infoblox.com/community/coredns-for-kubernetes-service-discovery/" target="_blank" rel="external">coreDNS for k8s service discovery</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/k8s/" rel="tag"># k8s</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/28/services-deploy-in-docker-swarm/" rel="next" title="services deploy in docker swarm">
+                <i class="fa fa-chevron-left"></i> services deploy in docker swarm
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/17/k8s-setup-2/" rel="prev" title="k8s setup 2">
+                k8s setup 2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="David Z.J. Lee" />
+          <p class="site-author-name" itemprop="name">David Z.J. Lee</p>
+           
+              <p class="site-description motion-element" itemprop="description">what I don't know</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">174</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ZJLi2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/zhengjia13/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#install-kubeadm"><span class="nav-number">2.</span> <span class="nav-text">install kubeadm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#kubeadm-setup"><span class="nav-number">2.0.1.</span> <span class="nav-text">kubeadm setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#start-a-k8s-cluster"><span class="nav-number">2.0.2.</span> <span class="nav-text">start a k8s cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#add-pod-network"><span class="nav-number">2.0.3.</span> <span class="nav-text">add pod network</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#test-cluster"><span class="nav-number">2.0.4.</span> <span class="nav-text">test cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#clear-cluster"><span class="nav-number">2.0.5.</span> <span class="nav-text">clear cluster</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#understand-CNI-container-network-interface"><span class="nav-number">3.</span> <span class="nav-text">understand CNI (container network interface)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#coreDNS"><span class="nav-number">3.0.1.</span> <span class="nav-text">coreDNS</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flannel-mis-usage"><span class="nav-number">4.</span> <span class="nav-text">flannel mis-usage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#understand-pod-in-k8s"><span class="nav-number">5.</span> <span class="nav-text">understand pod in k8s</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#accessing-k8s-pods-from-outside-of-cluster"><span class="nav-number">5.0.1.</span> <span class="nav-text">accessing k8s pods from outside of cluster</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#view-pods-and-nodes"><span class="nav-number">5.0.2.</span> <span class="nav-text">view pods and nodes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#resolv-conf-in-k8s-pod"><span class="nav-number">5.0.3.</span> <span class="nav-text">resolv.conf in k8s pod</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#understand-service-in-k8s"><span class="nav-number">6.</span> <span class="nav-text">understand service in k8s</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Virtual-IP-and-service-proxies"><span class="nav-number">6.0.1.</span> <span class="nav-text">Virtual IP and service proxies</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#choosing-own-IP-for-service"><span class="nav-number">6.0.2.</span> <span class="nav-text">choosing own IP for service</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#discovering-services"><span class="nav-number">6.0.3.</span> <span class="nav-text">discovering services</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#headless-services"><span class="nav-number">6.0.4.</span> <span class="nav-text">headless services</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#publishing-services-ServiceTypes"><span class="nav-number">6.0.5.</span> <span class="nav-text">publishing services(ServiceTypes)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#external-IPs"><span class="nav-number">6.0.6.</span> <span class="nav-text">external IPs</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yaml-deployment-of-service-pod"><span class="nav-number">7.</span> <span class="nav-text">yaml deployment of service/pod</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kubectrl-commands"><span class="nav-number">8.</span> <span class="nav-text">kubectrl commands</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refere"><span class="nav-number">9.</span> <span class="nav-text">refere</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Z.J. Lee</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/05/17/k8s-setup-1/';
+          this.page.identifier = '2020/05/17/k8s-setup-1/';
+          this.page.title = 'k8s setup 1';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

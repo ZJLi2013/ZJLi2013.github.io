@@ -291,6 +291,473 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/kvm-libvert-in-linux-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/24/kvm-libvert-in-linux-1/" itemprop="url">kvm/libvert in linux (1)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-24T07:10:18-04:00">
+                2020-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/24/kvm-libvert-in-linux-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/24/kvm-libvert-in-linux-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="kvm-background"><a href="#kvm-background" class="headerlink" title="kvm background"></a>kvm background</h2><p>kernel based virtual machine(KVM), is a Linux kernel module, which transfer Linux to a Hypervisor, which depends on the ability of hardware virtualization. usually the physical machine is called <code>Host</code>, and the virtual machine(VM) run in host is called <code>Guest</code>. </p>
+<p>kvm itself doesn’t do any hardware emulator, which needs guest space to set an address space through <code>dev/kvm</code> interface, to which provides virtual I/O, e.g. QEMU.</p>
+<p><a href="https://github.com/virt-manager/virt-manager" target="_blank" rel="external">virt-manager</a> is a GUI tool for managing virtual machines via <strong>libvirt</strong>, mostly used by QEMU/KVM virtual machines. </p>
+<ul>
+<li>check kvm model info </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">modinfo kvm</div></pre></td></tr></table></figure>
+<ul>
+<li>whether CPU support hardware virtualization</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">egrep -c <span class="string">'(vmx|svm)'</span> /proc/cpuinfo</div><div class="line">kvm-ok</div></pre></td></tr></table></figure>
+<h2 id="install-kvm"><a href="#install-kvm" class="headerlink" title="install kvm"></a>install kvm</h2><ul>
+<li>install libvirt and qemu packages </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt install qemu qemu-kvm libvirt-bin bridge-utils</div><div class="line">modprobe kvm <span class="comment">#load kvm module</span></div><div class="line">systemctl start libvirtd.service <span class="comment">#</span></div><div class="line">vrish iface-bridge ens33 virbr0 <span class="comment">#create a bridge network mac address</span></div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://www.howtogeek.com/50787/add-a-user-to-a-group-or-second-group-on-linux/" target="_blank" rel="external">add current user</a> to libvirtd group </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo usermod -aG libvirtd $(whoami)</div><div class="line">sudo usermod -aG libvirt-qemu $(whoami)</div><div class="line">sudo reboot</div></pre></td></tr></table></figure>
+<h4 id="network-in-kvm"><a href="#network-in-kvm" class="headerlink" title="network in kvm"></a>network in kvm</h4><p><a href="https://www.linux.com/topic/networking/creating-virtual-machines-kvm-part-2-networking/" target="_blank" rel="external">default network</a> is NAT(network address transation), when you create a new virtual machine, this forwards network traffic through your host system; if the host is connected to the Internet, then your vm have Internet access.</p>
+<p>VM manager also creates an Ethernet bridge between the host and virtual network, so can ping IP address of VM from host, also ok on the other way.</p>
+<ul>
+<li>List of network cards</li>
+</ul>
+<p>go to <code>/sys/class/net</code> there are a few nic:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 docker0 -&gt; ../../devices/virtual/net/docker0</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 docker_gwbridge -&gt; ../../devices/virtual/net/docker_gwbridge</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 eno1 -&gt; ../../devices/pci0000:00/0000:00:1f.6/net/eno1</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 enp4s0f2 -&gt; ../../devices/pci0000:00/0000:00:1c.4/0000:02:00.0/0000:03:03.0/0000:04:00.2/net/enp4s0f2</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 lo -&gt; ../../devices/virtual/net/lo</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 veth1757da9 -&gt; ../../devices/virtual/net/veth1757da9</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 vethd4d0e7f -&gt; ../../devices/virtual/net/vethd4d0e7f</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 virbr0 -&gt; ../../devices/virtual/net/virbr0</div><div class="line">lrwxrwxrwx 1 root root 0 Mar 24 16:18 virbr0-nic -&gt; ../../devices/virtual/net/virbr0-nic</div></pre></td></tr></table></figure>
+<ul>
+<li>multi interfaces on same MAC addresss</li>
+</ul>
+<p>when <a href="https://networkengineering.stackexchange.com/questions/34754/same-mac-on-different-interfaces" target="_blank" rel="external">a switch receives</a> a frame from an interface, it creates an entry in the mac-address table with the source mac and interface. it the source mac is known, it will update the table with the new interface. so bascially if you assign the mac address of an external-network-avialable NIC-A to the special vm, NIC-A is lost. </p>
+<ul>
+<li>virbr0 </li>
+</ul>
+<p>the <code>default</code> bridge NIC of libvirt is <code>virbr0</code>. bridge network means the guest and host share the same physical Network Cards, as well as offer the guest a special IP, which can be used to access the guest directly. the <code>virbr0</code> do <code>network address translation</code>(NAT), basically transfer the internal IP address to an external IP address, which means the internal IP address is un-visiable from outside. </p>
+<p>to add the <code>virbr0</code>, when it is deleted previously: </p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">brctl addbr virbr0</div><div class="line">brctl stp virbr0 on</div><div class="line">brctl setf virbr0 0</div><div class="line">ifconfig virbr0 192.168.122.1 netmask 255.255.255.0 up</div></pre></td></tr></table></figure>
+<p> to disable or delete <code>virbr0</code>:</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">virsh net-destroy default</div><div class="line">virsh net-undefine default</div><div class="line">service libvirtd restart</div><div class="line">ifconfig</div></pre></td></tr></table></figure>
+<p> after starting the vm, can check the bridge network by:</p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">virsh domiflist vm-name</div><div class="line">virsh domifaddr vm-name</div></pre></td></tr></table></figure>
+<p> and we can login the vm, (after we assign current user to <code>libvert</code> group), and check NAT is working: </p>
+ <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh 192.168.122.1 </div><div class="line">ping www.bing.com</div><div class="line">ping 10.20.xxx.xxx  <span class="comment"># ping the host external IP</span></div></pre></td></tr></table></figure>
+<p>basically the vm can access external website, but external web can’t access vm_name.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">attach-interface/detach-interface/domiflist</div></pre></td></tr></table></figure>
+<h2 id="create-vm"><a href="#create-vm" class="headerlink" title="create vm"></a>create vm</h2><p>create a virtual machine,  can be done either through <code>virt-install</code> or <code>config.xml</code>:</p>
+<h3 id="virt-install"><a href="#virt-install" class="headerlink" title="virt-install"></a>virt-install</h3><p><code>virt-install</code> has depends on system python, pip. if current ptyhon version is 2.7, it gives warnning and return -1 due to unfound module. so make sure the #PYTHONPATH# point to the correct path if you have multi python in system. and <code>virt-install</code> has to run with <code>root</code>. </p>
+<p>then can start a virtual machine with <a href="https://unix.stackexchange.com/questions/502560/virsh-connected-to-domain-name-escape-character-is" target="_blank" rel="external">following command options</a>)</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">sudo virt-install \</div><div class="line">--name v1 \</div><div class="line">--ram 2048 \</div><div class="line"><span class="comment"># --cdrom=ubuntu-16.04.3-server-amd64.iso \</span></div><div class="line">--disk path=/var/lib/libvirt/images/ubuntu.qcow2 \</div><div class="line">--vcpus 2 \</div><div class="line">--virt-type kvm \</div><div class="line">--os-type linux \</div><div class="line">--os-variant ubuntu16.04 \</div><div class="line">--graphics none \</div><div class="line">--console pty, target_type=serial \</div><div class="line">--location /var/lib/libvirt/images/ubuntu-16.04.3-server-amd64.iso \</div><div class="line">--network bridge:virbr0 \ </div><div class="line">--extra-args console=ttyS0</div></pre></td></tr></table></figure>
+<p>during the installation, the process looks very much like Linux installation on a bare machine. I suppose this way, it’s like install a dual-OS in the bare machine. during the installation, there is an error <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=833706" target="_blank" rel="external">failed to load installer component libc6-udeb</a>, it’s may due to the iso or img has missing component.</p>
+<h3 id="config-xml"><a href="#config-xml" class="headerlink" title="config.xml"></a>config.xml</h3><ul>
+<li><p>create volumes </p>
+<p>go to /var/lib/libvirt/images, and create volume as following: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-img create -f qcow2 ubuntu.qcow2 40G</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>check <a href="https://www.jianshu.com/p/4a50c02aa16e" target="_blank" rel="external">qemu-kvm &amp; qemu-img introduction</a></p>
+<ul>
+<li><p>add vm image </p>
+<p>cp ubuntu.iso to <code>/var/lib/libvirt/images</code> as well:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ubuntu.qcow2</div><div class="line">ubuntu-16.04.3-server-amd64.iso</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="vm-xml"><a href="#vm-xml" class="headerlink" title="vm.xml"></a>vm.xml</h4><p>follow an <a href="https://docs.fedoraproject.org/en-US/Fedora/18/html/" target="_blank" rel="external">xml sample</a>: </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">domain</span> <span class="attr">type</span>=<span class="string">'kvm'</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>v1<span class="tag">&lt;/<span class="name">name</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">memory</span>&gt;</span>4048576<span class="tag">&lt;/<span class="name">memory</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">currentMemory</span>&gt;</span>4048576<span class="tag">&lt;/<span class="name">currentMemory</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">vcpu</span>&gt;</span>2<span class="tag">&lt;/<span class="name">vcpu</span>&gt;</span> </div><div class="line">        <span class="tag">&lt;<span class="name">os</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">type</span> <span class="attr">arch</span>=<span class="string">'x86_64'</span> <span class="attr">machine</span>=<span class="string">'pc'</span>&gt;</span>hvm<span class="tag">&lt;/<span class="name">type</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">boot</span> <span class="attr">dev</span>=<span class="string">'cdrom'</span>/&gt;</span> </div><div class="line">       <span class="tag">&lt;/<span class="name">os</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">features</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">acpi</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">apic</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">pae</span>/&gt;</span></div><div class="line">       <span class="tag">&lt;/<span class="name">features</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">clock</span> <span class="attr">offset</span>=<span class="string">'localtime'</span>/&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_poweroff</span>&gt;</span>destroy<span class="tag">&lt;/<span class="name">on_poweroff</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_reboot</span>&gt;</span>restart<span class="tag">&lt;/<span class="name">on_reboot</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">on_crash</span>&gt;</span>destroy<span class="tag">&lt;/<span class="name">on_crash</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">serial</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">serial</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">console</span> <span class="attr">type</span>=<span class="string">'pty'</span> &gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">target</span> <span class="attr">type</span>=<span class="string">'serial'</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">console</span>&gt;</span> </div><div class="line">      <span class="tag">&lt;<span class="name">devices</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">emulator</span>&gt;</span>/usr/bin/qemu-system-x86_64<span class="tag">&lt;/<span class="name">emulator</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'disk'</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">driver</span> <span class="attr">name</span>=<span class="string">'qemu'</span> <span class="attr">type</span>=<span class="string">'qcow2'</span>/&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">file</span>=<span class="string">'/var/lib/libvirt/images/ubuntu.qcow2'</span>/&gt;</span> </div><div class="line">           <span class="tag">&lt;<span class="name">target</span> <span class="attr">dev</span>=<span class="string">'hda'</span> <span class="attr">bus</span>=<span class="string">'ide'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;/<span class="name">disk</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">disk</span> <span class="attr">type</span>=<span class="string">'file'</span> <span class="attr">device</span>=<span class="string">'cdrom'</span>&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">file</span>=<span class="string">'/var/lib/libvirt/images/ubuntu-16.04.3-server-amd64.iso'</span>/&gt;</span> </div><div class="line">           <span class="tag">&lt;<span class="name">target</span> <span class="attr">dev</span>=<span class="string">'hdb'</span> <span class="attr">bus</span>=<span class="string">'ide'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;/<span class="name">disk</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">interface</span> <span class="attr">type</span>=<span class="string">'bridge'</span> &gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'52:54:00:98:45:3b'</span> /&gt;</span></div><div class="line">           <span class="tag">&lt;<span class="name">source</span> <span class="attr">bridge</span>=<span class="string">'virbr0'</span> /&gt;</span></div><div class="line">	   <span class="tag">&lt;<span class="name">model</span> <span class="attr">type</span>=<span class="string">'virtio'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">interface</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">serial</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">target</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">serial</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">console</span> <span class="attr">type</span>=<span class="string">'pty'</span>&gt;</span></div><div class="line">		<span class="tag">&lt;<span class="name">target</span> <span class="attr">type</span>=<span class="string">'serial'</span> <span class="attr">port</span>=<span class="string">'0'</span> /&gt;</span></div><div class="line">	<span class="tag">&lt;/<span class="name">console</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">'mouse'</span> <span class="attr">bus</span>=<span class="string">'ps2'</span>/&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">graphics</span> <span class="attr">type</span>=<span class="string">'vnc'</span> <span class="attr">port</span>=<span class="string">'-1'</span> <span class="attr">autoport</span>=<span class="string">'no'</span> <span class="attr">listen</span> = <span class="string">'0.0.0.0'</span> <span class="attr">keymap</span>=<span class="string">'en-us'</span>&gt;</span></div><div class="line">	   <span class="tag">&lt;<span class="name">listen</span> <span class="attr">type</span>=<span class="string">'address'</span> <span class="attr">address</span>=<span class="string">'0.0.0.0'</span> /&gt;</span></div><div class="line">	 <span class="tag">&lt;/<span class="name">graphics</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">devices</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">domain</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>a few tips about the xml above:</p>
+<ul>
+<li><p>\<interface\> component is necessary for network interface. </interface\></p>
+</li>
+<li><p>if not assign a special <code>mac address</code> in the interface. since we had define <code>virbr0</code>, an automatic mac address will be assigned, which is unique from the host machine’s IP, but if ssh login to the guest (ssh username@guest_ip), it actually can ping host machine’s iP or any external ip(www.being.com)</p>
+</li>
+<li><p>\<serial tty\=""> compoennt, is setting for <code>console</code>.</serial></p>
+</li>
+</ul>
+<p>finally run the following CLI to start vm: v1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh define vm1.xml </div><div class="line">virsh start ubuntu(the image)</div><div class="line">virsh list</div></pre></td></tr></table></figure>
+<h2 id="libvert"><a href="#libvert" class="headerlink" title="libvert"></a>libvert</h2><p>libvert is a software package to manage vm, including libvirtAPI, libvirtd(daemon process), and virsh tool. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo systemctl restart libvirtd</div><div class="line">systemctl status libvirtd</div></pre></td></tr></table></figure>
+<p>only when <code>libvirtd</code> service is running, can we manage vm through <code>libvert</code>. all configure of the vm is stored ad <code>/etc/libvirt/qemu</code>. for <code>virsh</code> there are two mode:</p>
+<ul>
+<li>immediate way e.g. in host shell <code>virsh list</code> </li>
+<li>interactive shell e.g. by <code>virsh</code> to virsh shell</li>
+</ul>
+<h4 id="common-virsh-commands"><a href="#common-virsh-commands" class="headerlink" title="common virsh commands"></a>common virsh commands</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">virsh &lt;command&gt; &lt;domain-id&gt; [options]</div><div class="line">virsh uri #hypervisor&apos;s URI</div><div class="line">virsh hostname</div><div class="line">virsh nodeinfo </div><div class="line">virsh list (running, idel, paused, shutdown, shutoff, crashed, dying)</div><div class="line">virsh shutdown &lt;domain&gt;</div><div class="line">virsh start &lt;domain&gt;</div><div class="line">virsh destroy &lt;domain&gt;</div><div class="line">virsh undefine &lt;domain&gt;</div><div class="line">virsh create #through config.xml</div><div class="line">virsh connect  #reconnect to hypervisor </div><div class="line">virsh nodeinfo </div><div class="line">virsh define #file domain</div><div class="line">virsh  setmem domain-id kbs #immediately</div><div class="line">virsh sertmaxmem domain-id kbs</div><div class="line">virsh setvcpus domain-id count </div><div class="line">virsh vncdisplay domain-id #listed vnc port</div><div class="line">virsh console &lt;domain&gt;</div></pre></td></tr></table></figure>
+<h4 id="virsh-network-commands"><a href="#virsh-network-commands" class="headerlink" title="virsh network commands"></a>virsh network commands</h4><ul>
+<li>host configure </li>
+</ul>
+<p>Every standard libvirt installation provides NAT based connectivity to virtual machines out of the box. This is the so called ‘default virtual network’ </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">virsh net-list </div><div class="line">virsh net-define /usr/share/libvirt/networks/default.xml</div><div class="line">virsh net-start default</div><div class="line">virsh net-info default</div><div class="line">virsh net-dumpxml default</div></pre></td></tr></table></figure>
+<p>When the <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">libvirt default network</a>is running, you will see an isolated bridge device. This device explicitly does <em>NOT</em> have any physical interfaces added, since it uses NAT + forwarding to connect to outside world. <strong>Do not add interfaces</strong>. Libvirt will add iptables rules to allow traffic to/from guests attached to the virbr0 device in the INPUT, FORWARD, OUTPUT and POSTROUTING chains.</p>
+<p>if <code>default.xml</code> is not found, check <a href="https://blog.programster.org/kvm-missing-default-network" target="_blank" rel="external">fix missing default network</a>, <code>default.xml</code> is sth like:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">network</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>default<span class="tag">&lt;/<span class="name">name</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">uuid</span>&gt;</span>9a05da11-e96b-47f3-8253-a3a482e445f5<span class="tag">&lt;/<span class="name">uuid</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">forward</span> <span class="attr">mode</span>=<span class="string">'nat'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">bridge</span> <span class="attr">name</span>=<span class="string">'virbr0'</span> <span class="attr">stp</span>=<span class="string">'on'</span> <span class="attr">delay</span>=<span class="string">'0'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'52:54:00:0a:cd:21'</span>/&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">ip</span> <span class="attr">address</span>=<span class="string">'192.168.122.1'</span> <span class="attr">netmask</span>=<span class="string">'255.255.255.0'</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">dhcp</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">range</span> <span class="attr">start</span>=<span class="string">'192.168.122.2'</span> <span class="attr">end</span>=<span class="string">'192.168.122.254'</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">dhcp</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">ip</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">network</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>then run:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo virsh net-define --file default.xml</div><div class="line">sudo virsh net-start default</div><div class="line">sudo virsh net-autostart --network default</div></pre></td></tr></table></figure>
+<p>if bind <code>default</code> to <code>virbr0</code> already, need delete this brige first.</p>
+<ul>
+<li>guest configure </li>
+</ul>
+<p>add the following to guest xml configure:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">interface</span> <span class="attr">type</span>=<span class="string">'network'</span>&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">source</span> <span class="attr">network</span>=<span class="string">'default'</span>/&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">mac</span> <span class="attr">address</span>=<span class="string">'00:16:3e:1a:b3:4a'</span>/&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">interface</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>more details can check <a href="https://wiki.libvirt.org/page/Networking" target="_blank" rel="external">virsh networking doc</a></p>
+<h4 id="snapshots"><a href="#snapshots" class="headerlink" title="snapshots"></a>snapshots</h4><p>snapshots used to save the state(disk mem, time..) of a domain</p>
+<ul>
+<li>create a snapshot for a vm </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-create-as --domain test_vm  \</div><div class="line">--name <span class="string">"test_vm_snapshot1"</span> \ </div><div class="line">--description <span class="string">"test vm snapshot "</span></div></pre></td></tr></table></figure>
+<ul>
+<li>list all snapshots for vm</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-list test_vm</div></pre></td></tr></table></figure>
+<ul>
+<li>display info about a snapshot </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">virsh snapshot-info --domain test_vm --snapshotname test_vm_snapshot1</div><div class="line">``` </div><div class="line"></div><div class="line">* delete a snapshot </div><div class="line"></div><div class="line">```sh</div><div class="line">virsh snapshot-delete --domain test_vm --snapshotname test_vm_shapshot1</div></pre></td></tr></table></figure>
+<h4 id="manage-volumes"><a href="#manage-volumes" class="headerlink" title="manage volumes"></a>manage volumes</h4><ul>
+<li>create a storage volume</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh vol-create-as default test_vol.qcow2 10G</div><div class="line"><span class="comment"># create test_vol on the deafult storage pool</span></div><div class="line">du -sh /var/lib/libvirt/images/test_vol.qcow2</div></pre></td></tr></table></figure>
+<ul>
+<li>attach  to a vm</li>
+</ul>
+<p>attache <code>test-vol</code> to vm <code>test</code> </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh attach-disk --domain <span class="built_in">test</span> \</div><div class="line">--<span class="built_in">source</span> /var/lib/libvirt/images/<span class="built_in">test</span>-vol.qcow2 \</div><div class="line">--persistent --target vdb</div></pre></td></tr></table></figure>
+<p>which can be check that the vm has added a block device <code>/dev/vdb</code> </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh <span class="built_in">test</span>  <span class="comment">#how to ssh to vm </span></div><div class="line">lsblk --output NAME,SIZE,TYPE</div></pre></td></tr></table></figure>
+<p>or directly grow disk image:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">qemu-img resize /var/lib/libvirt/images/test.qcow2 +1G</div></pre></td></tr></table></figure>
+<ul>
+<li>detach from a vm</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh detach-disk --domain <span class="built_in">test</span> --persistent --live --target vdb</div></pre></td></tr></table></figure>
+<ul>
+<li>delete a vm </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">virsh vol-delete test_vol.qcow2 --pool default</div><div class="line">virsh pool-refresh default</div><div class="line">virsh vol-list default</div></pre></td></tr></table></figure>
+<h4 id="fs-virsh-commands"><a href="#fs-virsh-commands" class="headerlink" title="fs virsh commands"></a>fs virsh commands</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">virt-ls -l -d &lt;domain&gt; &lt;directory&gt;</div><div class="line">virt-cat -d &lt;domain&gt; &lt;file_path&gt;</div></pre></td></tr></table></figure>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://www.178linux.com/103971" target="_blank" rel="external">kvm introduction in chinese</a></p>
+<p><a href="https://help.ubuntu.com/community/KVM/Installation" target="_blank" rel="external">kvm pre-install checklist</a></p>
+<p><a href="http://www.yolinux.com/TUTORIALS/LinuxTutorialNetworking.html" target="_blank" rel="external">Linux network configuration</a></p>
+<p><a href="https://help.ubuntu.com/community/KVM/Installation" target="_blank" rel="external">kvm installation official doc</a></p>
+<p><a href="https://graspingtech.com/creating-virtual-machine-virt-install/" target="_blank" rel="external">creating vm with virt-install</a></p>
+<p><a href="https://linuxhint.com/install_kvm_ubuntu/" target="_blank" rel="external">install KVM in ubuntu</a></p>
+<p><a href="https://www.jianshu.com/p/110b60c14a8b" target="_blank" rel="external">jianshu: kvm network configure</a></p>
+<p><a href="https://www.cnblogs.com/CloudMan6/p/5308071.html" target="_blank" rel="external">cloudman: understand virbr0</a></p>
+<p><a href="https://libvirt.org/sources/virshcmdref/html-single/" target="_blank" rel="external">virsh command refer</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/linux/1409_qiaoly_qemuimgages/index.html" target="_blank" rel="external">qcow2  vs  raw</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/real-time-matlab-simulink-code-generation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/20/real-time-matlab-simulink-code-generation/" itemprop="url">real-time matlab/simulink code generation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-20T06:44:35-04:00">
+                2020-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/20/real-time-matlab-simulink-code-generation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/20/real-time-matlab-simulink-code-generation/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="real-time-matlab-code-generation"><a href="#real-time-matlab-code-generation" class="headerlink" title="real-time matlab code generation"></a>real-time matlab code generation</h1><h2 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h2><p>Python and Linux vs Matlab and Windows, I prefer the front. but as a teamwork, I have to understand how matlab/Simulink code generation works, especially with real-time model. </p>
+<h2 id="Simulink-Coder"><a href="#Simulink-Coder" class="headerlink" title="Simulink Coder"></a>Simulink Coder</h2><p>previously named as Real-Time workshop(rtw).</p>
+<h4 id="real-time-model-data-structure"><a href="#real-time-model-data-structure" class="headerlink" title="real time model data structure"></a>real time model data structure</h4><p>access rtModel data by using a set of macros analogous to the ssSetxxx and ssGetxxx macros that S-functions use to access SimStruct data, including noninlined S-functions compiled by the code generator.</p>
+<p>You need to use the set of macros rtmGetxxx and rtmSetxxx to access the real-time model data structure. The rtModel is an optimized data structure that replaces SimStruct as the top level data structure for a model. The rtmGetxxx and rtmSetxxx macros are used in the generated code as well as from the main.c or main.cpp module.</p>
+<p>Usage of rtmGetxxx and rtmSetxxx macros is the same as for the ssSetxxx and ssGetxxx versions, except that you replace SimStruct S by real-time model data structure rtM. </p>
+<table>
+<thead>
+<tr>
+<th>rtm macro</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> rtmGetdX(rtm)</td>
+<td>get the derivatives of block continous states</td>
+<td></td>
+</tr>
+<tr>
+<td> rtmGetNumSampleTimes(RT_MDL rtM)</td>
+<td>Get the number of sample times that a block has</td>
+<td></td>
+</tr>
+<tr>
+<td>rtmGetSampleTime(RT_MDL rtM, int TID)</td>
+<td>Get task sample time</td>
+</tr>
+<tr>
+<td>rtmGetStepSize(RT_MDL)</td>
+<td>Return the fundamental step size of the model</td>
+</tr>
+<tr>
+<td>rtmGetT(RT_MDL,t)</td>
+<td>Get the current simulation time </td>
+</tr>
+<tr>
+<td>rtmGetErrorStatus(rtm)</td>
+<td>Get the current error status</td>
+</tr>
+</tbody>
+</table>
+<h4 id="code-generation-to-used-externally"><a href="#code-generation-to-used-externally" class="headerlink" title="code generation to used externally :"></a>code generation to used externally :</h4><p>1) Install the Real-Time Workshop (RTW) Toolbox for MATLAB;</p>
+<p>2) Create the Simulink Model and Prepare it for autocoding;</p>
+<p>3) Correctly configure the RTW options and include a *.tcl file;</p>
+<p>4) Build any S-Functions of the model;</p>
+<p>5) Build the model (generate autocode including makefile);</p>
+<p>6) Tune up the makefile with any missing options/libraries/files;</p>
+<p>7) Integrate autocoded model in RTEMS using the wrapper.</p>
+<h4 id="ert-main"><a href="#ert-main" class="headerlink" title="ert_main()"></a>ert_main()</h4><p>the following is a common sample of real-time model generated C code. </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rt_OneStep(<span class="keyword">void</span>)&#123;</div><div class="line">	simulation_custom_step() ;</div><div class="line">&#125;</div><div class="line"></div><div class="line">main()&#123;</div><div class="line">	simulation_initialize();</div><div class="line">	<span class="keyword">while</span>(rtmGetErrorStatus(xx_M) == (<span class="literal">NULL</span>))&#123;</div><div class="line">		 rt_OneStep();</div><div class="line">    &#125;</div><div class="line">    simulation_terminate();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div></pre></td></tr></table></figure>
+<p>if no time interupt setting up, there is a <a href="https://www.mathworks.com/matlabcentral/answers/92639-how-do-i-customize-the-main-function-generated-by-real-time-workshop-embedded-coder-5-2-r2008b" target="_blank" rel="external">Warning: The simulation will run forever. Generated ERT main won’t simulate model step behavior. To change this behavior select the ‘MAT-file logging’ option.</a></p>
+<p>from real-time Matlab/Simulink model to C/C++ code, we need manually set the while-loop break statement. for example, we can  run 100 times or based on some event-trigger.</p>
+<h4 id="Timing"><a href="#Timing" class="headerlink" title="Timing"></a>Timing</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">    uint16_T clockTick1;  <span class="comment">//base rate counter (5s)</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">      uint16_T TID[<span class="number">2</span>];</div><div class="line">    &#125; TaskCounters;  <span class="comment">//subtask counter (0.02s)</span></div><div class="line">  &#125; Timing;</div><div class="line">  </div><div class="line">currentTime =  Timing.clockTick1 * <span class="number">5.0</span> ;</div></pre></td></tr></table></figure>
+<p>absolute timer for sample time: [5.0s, 0.0s]. the resolution of this integer timer is 5.0, which is the step size of the task. so bascially, assuming to run one step need physcially 5s, but inside the module, each internal step is 0.02s. </p>
+<p>if we run a test scenario with 20s, basically we have 4 clockTick1 and inside each clockTick1, we have 250 times internal steps.</p>
+<h2 id="a-few-modification"><a href="#a-few-modification" class="headerlink" title="a few modification"></a>a few modification</h2><p>the following is a few modification based on the auto-generated C code:</p>
+<ul>
+<li>redefine data structure</li>
+</ul>
+<p>matlab coder use most <code>C structure</code> to package signals. in our adas model, most signals have similar inner items, so first I’d like to define a <code>parent structre</code>, then define all other adas signals using <code>typedef</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig1 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig2 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig3 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig4 ;</div></pre></td></tr></table></figure>
+<p>with the <code>parent struct</code>, we can define one method to handle all adas signals. </p>
+<ul>
+<li>add trigger model in rt_oneStep()</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">checkTriggerSigs(&amp;FunctionSignal, outputs_name);</div><div class="line">	<span class="keyword">int</span> idx = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span>(; idx&lt;outputs_name.size(); idx++)&#123;</div><div class="line">			<span class="keyword">if</span> ( outputs_name[idx] == <span class="string">"adas_sig1"</span>) &#123;</div><div class="line">				<span class="keyword">double</span> *vals = gd1_struc_2arr(adas_ig1) ; </div><div class="line">				outputs_data.push_back(als);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>( outputs_name[idx] ==  <span class="string">"adas_sig2"</span>) &#123;</div><div class="line">				<span class="keyword">double</span> *vals = gd1_struc_2arr(adas_sig2) ;</div><div class="line">				outputs_data.push_back(vals);</div><div class="line">			&#125;</div><div class="line"></div><div class="line"><span class="comment">// ws msg send model</span></div></pre></td></tr></table></figure>
+<ul>
+<li>add sim_time to break the loop</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">real_T sim_time = <span class="number">5.0</span> ; </div><div class="line">fflush((<span class="literal">NULL</span>));</div><div class="line"><span class="keyword">while</span> (rtmGetErrorStatus(OpenLoopSimulation_M) == (<span class="literal">NULL</span>) &amp;&amp;  (Timing.clockTick1) * <span class="number">5.0</span> &lt;=  sim_time) &#123;</div><div class="line">      rt_OneStep();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h2 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h2><p>the work above is the core modifcation to make real-time matlab/simulink model with trigger model translated to C/C++ code, which can be integrated in <a href="https://zjli2013.github.io/2020/03/18/massively-adas-test-pipeline/" target="_blank" rel="external">massively adas test pipeline</a>.  </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://devel.rtems.org/wiki/Packages/Matlab" target="_blank" rel="external">matlab code generation from rtems</a></p>
+<p><a href="https://www.mathworks.com/company/newsletters/articles/the-joy-of-generating-c-code-from-matlab.html" target="_blank" rel="external">the joy of generating C code from MATLAB</a></p>
+<p><a href="https://ww2.mathworks.cn/products/matlab-coder.html" target="_blank" rel="external">matlab coder introduction</a></p>
+<p><a href="https://www.mathworks.com/help/rtw/index.html" target="_blank" rel="external">matlab code doc</a></p>
+<p><a href="https://www.mathworks.com/help/rtw/ug/use-the-real-time-model-data-structure.html" target="_blank" rel="external">real-time model data structure</a></p>
+<p><a href="https://ww2.mathworks.cn/help/simulink/ug/generate-code-from-rate-based-model.html" target="_blank" rel="external">generate code from rate-based model</a></p>
+<p><a href="https://www.mathworks.com/help/stateflow/ug/schedule-one-subsystem-in-a-single-step.html" target="_blank" rel="external">schedule a subsystem multiple times in a single step</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/massively-adas-test-pipeline/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1611,420 +2078,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" itemprop="url">design a nodejs web server from db to s3</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-05T02:00:38-05:00">
-                2020-03-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>during ADS road test, there are Tb~Pb mount of data generated, e.g. sensor raw data(rosbag, mf4), images, point cloud e.t.c.  <a href="https://zjli2013.github.io/2020/02/28/ceph-boto3-intro/" target="_blank" rel="external">previous few blogs</a> are focusing on data storage. for a more robost and user-friendly data/file server, also need consider database and UI. </p>
-<p>from the end-user/engineers viewpoint, a few basic functions are required: </p>
-<ul>
-<li>query certain features and view the data/files filtered</li>
-<li>download a single/a batch of interested files (for further usage or analysis)</li>
-<li>upload large mount of files quickly to storage (mostly by admin users)</li>
-</ul>
-<h2 id="a-FTP-server-to-support-s3"><a href="#a-FTP-server-to-support-s3" class="headerlink" title="a FTP server to support s3"></a>a FTP server to support s3</h2><p>traditionally, for many large size files to download, FTP is common used.  the prons and corns <a href="https://stackoverflow.com/questions/717200/comparing-http-and-ftp-for-transferring-files" target="_blank" rel="external">comparing fttp and ftp for transfering files</a>: HTTP is more responsive for request-response of small files, but FTP may be better for large files if tuned properly. but nowadays most prefer HTTP. doing search a little more, there are a lot discussions to connect amazon s3 to ftp server:</p>
-<p><a href="https://stackoverflow.com/questions/58233979/need-to-copy-transfer-files-from-amazon-s3-storage-to-ftp-server" target="_blank" rel="external">transfer files from s3 storage to ftp server</a></p>
-<p><a href="https://stackoverflow.com/questions/17126053/ftp-server-using-s3-as-storage" target="_blank" rel="external">FTP server using s3 as storage</a></p>
-<p><a href="https://serverfault.com/questions/336827/using-amazon-s3-as-storage-for-attachments-in-a-web-mail-system" target="_blank" rel="external">using S3 as storage for attachments in a web-mail system</a></p>
-<p><a href="https://stackoverflow.com/questions/23939179/ftp-sftp-access-to-an-amazon-s3-bucket?noredirect=1" target="_blank" rel="external">FTP/SFTP access to amazon s3 bucket</a></p>
-<p>and there are popular ftp clients which support s3, e.g. <a href="https://winscp.net/eng/docs/guide_amazon_s3_sftp#managed" target="_blank" rel="external">winSCP</a>, <a href="https://cyberduck.io" target="_blank" rel="external">cyberduck</a>, of course, aws has it own <a href="(https://aws.amazon.com/sftp/?whats-new-cards.sort-by=item.additionalFields.postDateTime&amp;whats-new-cards.sort-order=desc">sftp client</a>, as well as <a href="https://s3browser.com" target="_blank" rel="external">aws s3 browser windows client</a>), more client tools check <a href="https://stackoverflow.com/questions/13096313/store-each-aws-s3-file-in-a-database-as-a-separate-row" target="_blank" rel="external">here</a></p>
-<p>however, ftp can’t do metadata query. for some cases, e.g. resimulation of all stored scenarios, which makes no difference for each scenario, we can grab one by one and send it to resmiluator; but for many other cases, we need a certain pattern of data, rather than reading the whole storage, then a sql filter is much efficient and helpful. so a simple FTP is not enough in these cases.</p>
-<h2 id="s3-objects-files-to-db"><a href="#s3-objects-files-to-db" class="headerlink" title="s3 objects/files to db"></a>s3 objects/files to db</h2><p>starting from a common bs framework, e.g. react-nodejs, and nodejs can talk to db as well.</p>
-<p>** nodejs query buckets/object header info from s3 server, and update these metadata into db. </p>
-<p>there is a great disscussion about <a href="https://stackoverflow.com/questions/3748/storing-images-in-db-yea-or-nay" target="_blank" rel="external">storing images in db - yea or nay</a>: when manage many TB of images/mdf files, storing file paths in db is the best solution: </p>
-<ul>
-<li>db storage is more expensive than file system storge</li>
-<li>you can super-acc file system access: e.g.  os sendfile() system call to asynchronously send a file directly from fs to network interface, sql can’t</li>
-<li>web server need no special coding to access images in fs</li>
-<li>db win out where transactional integrity between image/file and its metadata are important, since it’s more complex to manage integrity between db metdata to fs data; and it’s difficult to guarantee data has been flushed to disk in the fs </li>
-</ul>
-<p>so for this file server, the metadata include <code>file-path-in-s3</code>, and other user interested items. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">file_id  feature     file_path</div><div class="line">  1          1       http://s3.aws.amazon.com/my-bucket/item1/img1a.jpg</div><div class="line">  2          2       http://s3.aws.amazon.com/my-bucket/item1/img1b.jpg</div><div class="line">  3          3       http://s3.aws.amazon.com/my-bucket/item2/img2a.jpg</div><div class="line">  4          4       http://s3.aws.amazon.com/my-bucket/item2/img2b.jpg</div></pre></td></tr></table></figure>
-<p>** during browser user query/list request, nodejs talk to db, which is a normal bs case.</p>
-<p>** when the browser user want to download a certain file, then nodejs parse the file metadata and talk to s3</p>
-<h2 id="nodejs-to-s3"><a href="#nodejs-to-s3" class="headerlink" title="nodejs to s3"></a>nodejs to s3</h2><h4 id="nodejs-fs-readFile"><a href="#nodejs-fs-readFile" class="headerlink" title="nodejs fs.readFile()"></a>nodejs fs.readFile()</h4><p>taking an example from <a href="https://nodejs.org/api/fs.html" target="_blank" rel="external">official nodejs fs doc</a>: </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line">fs.readFileSync(pathname, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(err)&#123;</div><div class="line">		res.statusCode = <span class="number">500</span> ;</div><div class="line">		res.end(<span class="string">`Err getting file: $[err&#125;`</span>)</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		res.end(data);</div><div class="line">	&#125;</div><div class="line">&#125;); </div><div class="line"></div><div class="line"><span class="keyword">const</span> fileUrl = <span class="keyword">new</span> URL(<span class="string">'file://tmp/mdf'</span>)</div><div class="line">fs.readFileSync(fileUrl);</div></pre></td></tr></table></figure>
-<p>if not file directly, maybe <code>fs.Readstream</code> class is another good choice to read s3 streaming object. <code>fs.readFile()</code> and <code>fs.readFileSync()</code> both read full content of the file in memory before returning the data. <a href="https://nodejs.dev/reading-files-with-nodejs/" target="_blank" rel="external">which means</a>, the big files are going to have a major impact on your memory consumption adn speed of execution of the program. another choice is <a href="https://www.npmjs.com/package/fs-readfile-promise" target="_blank" rel="external">fs-readfile-promise</a>. </p>
-<h4 id="express-res-download"><a href="#express-res-download" class="headerlink" title="express res.download"></a>express res.download</h4><p><code>res</code> object represent the HTTP response that an Express app sends when it gets an HTTP request. <a href="http://expressjs.com/en/api.html#res.download" target="_blank" rel="external">expressjs res.download</a> </p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">res.downlaod(<span class="string">'/ads/basic.mf4'</span>, <span class="string">'as_basic.mf4'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(err)&#123;</div><div class="line">		log(<span class="string">`download file error: <span class="subst">$&#123;err&#125;</span>`</span>)</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		log(<span class="string">`download file successfully`</span>)</div><div class="line">	&#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4 id="aws-sdk-for-nodejs"><a href="#aws-sdk-for-nodejs" class="headerlink" title="aws sdk for nodejs"></a>aws sdk for nodejs</h4><p>taking an <a href="https://github.com/aws-samples/aws-nodejs-sample/blob/master/sample.js" target="_blank" rel="external">example</a> from <a href="https://amazonaws-china.com/developers/getting-started/nodejs/" target="_blank" rel="external">aws sdk for js</a></p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> aws = <span class="built_in">require</span>(<span class="string">'aws-sdk'</span>)</div><div class="line"><span class="keyword">var</span> s3 = <span class="keyword">new</span> aws.S3()</div><div class="line"></div><div class="line">s3.createBucket(&#123;<span class="attr">Bucket</span>: your_bucket_name, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   <span class="keyword">var</span> params=&#123;<span class="attr">Bucket</span>: your_bucket_name, <span class="attr">Key</span>: your_key, <span class="attr">Body</span>: mf4.streaming&#125;;</div><div class="line">   s3.putObject(params, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">   		<span class="keyword">if</span>(err) <span class="built_in">console</span>.log(err)</div><div class="line">   		<span class="keyword">else</span> <span class="built_in">console</span>.log(<span class="string">"upload data to s3 succesffully"</span>)</div><div class="line">   	&#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>check <a href="">aws sdk for nodejs</a> api for more details. </p>
-<h2 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h2><p>either a FTP server or a nodejs server, it depends on the upper usage cases.</p>
-<ul>
-<li><p>a single large-size(&gt;100mb) file(e.g. mf4, rosbag) download, nodejs with db is ok, as db helps to filter out the file first, and a few miniutes download is needed</p>
-</li>
-<li><p>many of little-size(~1mb) files(e.g. image, json) downlaod, nodejs is strong without doubt. </p>
-</li>
-<li><p>many of large-size files download/upload, a friendly UI is not necessary, comparing to the performance, then FTP may be the solution. </p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/04/driving-scenarios-on-going/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/04/driving-scenarios-on-going/" itemprop="url">driving scenarios on-going</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-04T04:18:26-05:00">
-                2020-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/04/driving-scenarios-on-going/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/04/driving-scenarios-on-going/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Euro-NCAP-driving-scenarios"><a href="#Euro-NCAP-driving-scenarios" class="headerlink" title="Euro NCAP driving scenarios"></a>Euro NCAP driving scenarios</h2><h3 id="Adaptive-Cruise-Control-ACC"><a href="#Adaptive-Cruise-Control-ACC" class="headerlink" title="Adaptive Cruise Control(ACC)"></a>Adaptive Cruise Control(ACC)</h3><p>ACC is tested in an extended version of AEB. these systems are designed to automatically adapt the speed when approaching a slower moving vehicle or noe that is braking. <strong>notification</strong>, not all systems perform well with stationary obstacles.</p>
-<ul>
-<li><p>a slow moving vehicle test</p>
-</li>
-<li><p>a stationary obstacle(e.g. vehicle) test</p>
-</li>
-</ul>
-<h3 id="autonomous-emergency-braking-AEB"><a href="#autonomous-emergency-braking-AEB" class="headerlink" title="autonomous emergency braking(AEB)"></a>autonomous emergency braking(AEB)</h3><h4 id="AEB-pedestrain"><a href="#AEB-pedestrain" class="headerlink" title="AEB pedestrain"></a><a href="https://www.euroncap.com/en/vehicle-safety/the-ratings-explained/vulnerable-road-user-vru-protection/aeb-pedestrian/" target="_blank" rel="external">AEB pedestrain</a></h4><ul>
-<li><p>an adult pedestrain running from the driver’s side of the vehicle </p>
-</li>
-<li><p>an adult walk from the passenger’s side</p>
-</li>
-<li><p>a child runs from between parked cars on the passenger’s side of the car</p>
-</li>
-<li><p>pedestrain walking in the same direction as the vehicle algnedwith the centre of vehicle </p>
-</li>
-<li><p>pedestrain walking in the same direction as the vehicle offset to one side</p>
-</li>
-</ul>
-<h4 id="AEB-cyclist"><a href="#AEB-cyclist" class="headerlink" title="AEB cyclist"></a><a href="https://www.euroncap.com/en/vehicle-safety/the-ratings-explained/vulnerable-road-user-vru-protection/aeb-cyclist/" target="_blank" rel="external">AEB cyclist</a></h4><ul>
-<li><p>cyclist is crossing the vehicle’s path </p>
-</li>
-<li><p>cyclist is travelling in the same direction </p>
-</li>
-</ul>
-<p>Euro NCAP gives greatest reward if a collision is completely avoided; in some case, if AEB is unable to stop the vehicle completely, still give some points. </p>
-<h3 id="lane-keeping-assist-LKA"><a href="#lane-keeping-assist-LKA" class="headerlink" title="lane keeping assist(LKA)"></a>lane keeping assist(LKA)</h3><ul>
-<li><p>lane centering, a good ADS should continue to support the driver during the manoeuvre and will not resist the driver or deactivate.</p>
-</li>
-<li><p>cut-in test, a npc from adjacent lane merges into the current lane</p>
-</li>
-<li><p>cut-off test, a npc leaves the current lane abruptly to avoid a stopped vehicle ahead</p>
-</li>
-<li><p>swerve around a small obstacle test</p>
-</li>
-<li><p>speed assistance test, to use map data and/or data from sensors to identify the local speed limit </p>
-</li>
-</ul>
-<h2 id="NHTSA-driving-scenarios"><a href="#NHTSA-driving-scenarios" class="headerlink" title="NHTSA driving scenarios"></a>NHTSA driving scenarios</h2><p>a previous blog <a href="">design scenarios in ADS simulation</a> is based on NHTSA. </p>
-<h3 id="forward-collision-prevention"><a href="#forward-collision-prevention" class="headerlink" title="forward collision prevention"></a>forward collision prevention</h3><ul>
-<li>Forward collision warning</li>
-<li>AEB</li>
-<li>pedestrain AEB</li>
-<li>Adaptive lighting</li>
-</ul>
-<h3 id="backing-up-amp-parking"><a href="#backing-up-amp-parking" class="headerlink" title="backing up &amp; parking"></a>backing up &amp; parking</h3><ul>
-<li>rear automatic braking </li>
-<li>backup camera </li>
-<li>rear cross traffic alert</li>
-</ul>
-<h3 id="lane-amp-side-assist"><a href="#lane-amp-side-assist" class="headerlink" title="lane &amp; side assist"></a>lane &amp; side assist</h3><ul>
-<li>lane departure warning</li>
-<li>lane keeping assist</li>
-<li>blind spot detection</li>
-<li>lane centering assist</li>
-</ul>
-<h3 id="maintaing-safe-distance"><a href="#maintaing-safe-distance" class="headerlink" title="maintaing safe distance"></a>maintaing safe distance</h3><ul>
-<li>traffic jam assist</li>
-<li>highway pilot</li>
-<li>ACC </li>
-</ul>
-<h2 id="Matlab-Driving-Scenario-samples"><a href="#Matlab-Driving-Scenario-samples" class="headerlink" title="Matlab Driving Scenario samples"></a>Matlab Driving Scenario samples</h2><h3 id="AEB-for-vulnerable-road-users"><a href="#AEB-for-vulnerable-road-users" class="headerlink" title="AEB (for vulnerable road users)"></a>AEB (for vulnerable road users)</h3><ul>
-<li><p><code>AEB_Bicyclist_Longitudinal_25width</code>, at collision time, the bicycle is 25% of the way across the width of the ego vehicle.</p>
-</li>
-<li><p><code>AEB_CCRb_2_initialGap_12m</code>, a car-to-car rear braking(CCRb) scenario where the ego rear hit a braking agent. the deceleration is 2 m/s^2 with initial gap 12m</p>
-</li>
-<li><p><code>AEB_CCRm_50overlap</code>, a car-to-car rear moving(CCRm) scenario, where the ego rear hits a moving vehicle. at collisio ntime, the ego overlaps with 50% of the width of the moving vehicle</p>
-</li>
-</ul>
-<ul>
-<li><code>AEB_CCRs_-75overlap</code>, a car-to-car stationary(CCRs) sceanrio, where the ego rear hits a stationary vehicle. at collision time, the ego overlaps with 75% of the width of the stationary vehicle. when the ego is to the left of the other vehicle, the percent overlap is negative</li>
-</ul>
-<ul>
-<li><p><code>AEB_Pedestrain_Farside_50width</code>, the ego collides with a pedestrain who is traveling from the left side(far side, assuming vehicle drive on right side of the road). at collision time, the pedestrain is 50% of the way across the width of the ego</p>
-</li>
-<li><p><code>AEB_PedestrainChild_Nearside_50width</code>, the ego collides with a pedestrain who is traveling from the right side(near side), at collision time, the pedestrain is 50% of the way across the width of the ego</p>
-</li>
-</ul>
-<h3 id="Emergency-Lane-Keeping-ELK"><a href="#Emergency-Lane-Keeping-ELK" class="headerlink" title="Emergency Lane Keeping(ELK)"></a>Emergency Lane Keeping(ELK)</h3><ul>
-<li><p><code>ELK_FasterOvertakingVeh_Intent_Vlat_0.5</code>, ego intentionally changes lanes but collides with a faster overtaking vehicle, the ego travels at a lateral velocity of 0.5m/s</p>
-</li>
-<li><p><code>ELK_OncomingVeh_Vlat_0.3</code>, ego unintentionally changes lanes and collides with an oncoming vehicle, with ego’s lateral velocity of 0.3m/s</p>
-</li>
-<li><p><code>ELK_OvertakingVeh_Unintent_Vlat_0.3</code>, ego unintentionally changes lanes, overtake a vehicle in the other lane and collides. the ego travles at a lateral velocity at 0.3m/s</p>
-</li>
-<li><p><code>ELK_RoadEdge_NoBndry_Vlat_0.2</code>,  ego unintentionally changes lanes and ends up to hte road edge, with lateral velocity at 0.2m/s</p>
-</li>
-</ul>
-<h3 id="LKA"><a href="#LKA" class="headerlink" title="LKA"></a>LKA</h3><ul>
-<li><p><code>LKA_DashedLine_Solid_Left_Vlat_0.5</code></p>
-</li>
-<li><p><code>LKA_DashedLine_Unmarked_Right_Vlat_0.5</code></p>
-</li>
-<li><p><code>LKA_RoadEdge_NoBndry_Vlat_0.5</code></p>
-</li>
-<li><p><code>LKA_RoadEdge_NoMarkings_Vlat_0.5</code></p>
-</li>
-<li><p><code>LKA_SolidLine_Dashed_Left_Vlat_0.5</code></p>
-</li>
-<li><p><code>LKA_SolidLine_Unmarked_Right_Vlat_0.5</code></p>
-</li>
-</ul>
-<h2 id="open-source-libs"><a href="#open-source-libs" class="headerlink" title="open source libs"></a>open source libs</h2><ul>
-<li><p><a href="https://github.com/Microsoft/AutonomousDrivingCookbook" target="_blank" rel="external">Microsoft: autonomous driving cookbook</a></p>
-</li>
-<li><p><a href="https://github.com/ZhaobinMo/TrafficNet" target="_blank" rel="external">TrafficNet: an open scenario lib</a></p>
-</li>
-<li><p><a href="https://github.com/Toyota-ITC-SSD/Vehicle-Simulation-Toolkit" target="_blank" rel="external">Toyota: vehicle simulation unity toolkit</a></p>
-</li>
-<li><p><a href="https://github.com/mathworks" target="_blank" rel="external">mathworks: github</a></p>
-</li>
-<li><p><a href="https://drivingstereo-dataset.github.io" target="_blank" rel="external">sensetime: driving stero dataset</a></p>
-</li>
-<li><p><a href="https://opensimulationinterface.github.io/open-simulation-interface/" target="_blank" rel="external">google: open simulator interface</a></p>
-</li>
-<li><p><a href="https://ml4ad.github.io" target="_blank" rel="external">cmu: ml4ad</a></p>
-</li>
-</ul>
-<h2 id="scenarios-in-L2-vs-L3"><a href="#scenarios-in-L2-vs-L3" class="headerlink" title="scenarios in L2 vs L3+"></a>scenarios in L2 vs L3+</h2><p>scenarios in l2 is more like point in the whole driving manuevor, at a certain scenario/point, how the ADAS system response. while L3+ is a continously scenario, along each point during driving is part of the scenario, and inside which all kinds of l2 case scenario can happen. it does make sense to integrate l2 scenario planning response to l3+, which makes l3+ system more strict. </p>
-<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="https://www.euroncap.com/en/vehicle-safety/safety-campaigns/2018-automated-driving-tests/" target="_blank" rel="external">2018 Automated driving test</a></p>
-<p><a href="https://www.mathworks.com/help/driving/ug/euro-ncap-driving-scenarios-in-driving-scenario-designer.html" target="_blank" rel="external">mathworks: Euro NCAP driving scenarios in driving scenario designer</a></p>
-<p><a href="https://cdn.euroncap.com/media/30700/euroncap-roadmap-2025-v4.pdf" target="_blank" rel="external">Euro NCAP roadmap 2025</a></p>
-<p><a href="https://www.nhtsa.gov/vehicle-safety-research" target="_blank" rel="external">nhtsa vehicle safety legacy doc</a></p>
-<p><a href="https://www.nhtsa.gov/equipment/driver-assistance-technologies#forward-collision-prevention-30631" target="_blank" rel="external">NHTSA driver assitance tech</a></p>
-<p><a href="https://silvamfpedro.github.io/thesis-blog/index.html" target="_blank" rel="external">Study and adaptation of the autonomous driving simulator CARLA for ATLASCAR2</a></p>
-<p><a href="https://www.mobileye.com/responsibility-sensitive-safety/rss_on_nhtsa.pdf" target="_blank" rel="external">implementing RSS model on NHTSA pre-crash scenarios</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2075,7 +2128,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">172</span>
+                <span class="site-state-item-count">174</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
