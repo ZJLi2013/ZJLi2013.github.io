@@ -291,6 +291,454 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/vmware-virtualization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/28/vmware-virtualization/" itemprop="url">vmware introduction</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-28T05:40:37-04:00">
+                2020-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/28/vmware-virtualization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/28/vmware-virtualization/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>sooner or later, we are in the direction of gpu virtualization, previously <a href="https://zjli2013.github.io/2020/03/14/hypervisor-and-gpu-virtualization/" target="_blank" rel="external">hypervisor and gpu virtual</a> is the first blog. recently, I’d went through openstack/kvm, vnc and now vmware. there is no doubt, any licensed product is not my prefer, but on the hand, it’s more expensive to hire an openstack engineer, compared to pay vmware. </p>
+<p>vmware is not a windows-only, I had to throw my old mind first. the basic or back-end idea looks very similar to kvm. anyway, the core is <code>hypervisor layer</code>. once get understand one type of virtualization, it’s really easy to understand another. </p>
+<h4 id="VMware-ESXi"><a href="#VMware-ESXi" class="headerlink" title="VMware ESXi"></a>VMware ESXi</h4><p><a href="https://www.vmware.com/products/esxi-and-esx.html" target="_blank" rel="external">ESXi hypervisor</a> is a Type1 or “bare metal” hypervisor,  also called <strong>vmware hypervisor</strong>, is a thin layer of software that interacts with the underlying resources of a physical computer(host machine), and allocates those resources to other os(guest machine).<br>and can support remotely access, just like kvm.</p>
+<p>check <a href="https://pubs.vmware.com/vsphere-50/index.jsp?topic=%2Fcom.vmware.vsphere.install.doc_50%2FGUID-F3A960E9-57DF-4D2E-9127-A65AA670E643.html" target="_blank" rel="external">vSphere doc</a> about how to set BIOS and manage ESXi remotely.</p>
+<p> <strong>BIOS boot configuration</strong> can be setted by configuring the boot order in BIOS during startup or by selecting a boot device from the boot device selection menu. the system BIOS has two options. One is for the boot sequence (floppy, CD-ROM, hard disk) and another for the hard disk boot order (USB key, local hard disk).</p>
+<h4 id="VMware-workstation"><a href="#VMware-workstation" class="headerlink" title="VMware workstation"></a>VMware workstation</h4><p>workstation support multi guest os in a single host os(either windows or Linux), is a Type2 hypervisor, run as an app on host OS. one limitation of <code>workstation</code> is it only works in local host, can’t access remotely. </p>
+<ul>
+<li><p>free version,  <code>workstation player</code> </p>
+</li>
+<li><p>licensed version,  <code>workstation prof</code> </p>
+</li>
+</ul>
+<p>in one word, workstation is good enough to multiple hardware usage, but not useful if remote access is required  </p>
+<h4 id="VMware-vSphere"><a href="#VMware-vSphere" class="headerlink" title="VMware vSphere"></a>VMware vSphere</h4><p>the arch of vSphere has three layers:</p>
+<ul>
+<li><p>virtualization layer </p>
+</li>
+<li><p>management layer </p>
+</li>
+<li><p>interface layer(web, sdk, cli, virtual console)</p>
+</li>
+</ul>
+<p>ESXi is the core hypervisor for VMware products, and also is the core of the vSphere package, the other two is: vSphere client and vSphere server.</p>
+<p>vSphere server is enterprise-oriented, which is run based on ESXi layer. vSphere client is a client console/terminal. </p>
+<ul>
+<li><p><a href="https://www.vmware.com/cn/products/vsphere-hypervisor.html" target="_blank" rel="external">free version:  vSphere hypervisor</a></p>
+</li>
+<li><p><a href="https://www.vmware.com/cn/products/vcenter-server.html" target="_blank" rel="external">licensed fee version : vSphere with vServer</a></p>
+</li>
+</ul>
+<p>nowadays there are no limitations on Physical CPU or RAM for Free ESXi. <a href="http://www.vmware.com/products/vsphere-hypervisor/gettingstarted.html" target="_blank" rel="external">here</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Specifications: </div><div class="line">Number of cores per physical CPU: No <span class="built_in">limit</span></div><div class="line">Number of physical CPUs per host: No <span class="built_in">limit</span></div><div class="line">Number of logical CPUs per host: 480</div><div class="line">Maximum vCPUs per virtual machine: 8</div></pre></td></tr></table></figure>
+<h4 id="virtual-desktop-integration-VDI"><a href="#virtual-desktop-integration-VDI" class="headerlink" title="virtual desktop integration (VDI)"></a>virtual desktop integration (VDI)</h4><p>VDI virtualize a desktop OS on a server.  VDI offers centralized desktop management. the vmware tool is <code>VMware Horizon</code></p>
+<h4 id="Horizon"><a href="#Horizon" class="headerlink" title="Horizon"></a>Horizon</h4><p>VMware Horizon can run VDI and apps in IT data center, and make VDI and apps as services to users. Horizon auto manage VDI and apps by simple setup configure files, then deliver apps or data from data center to end-user.</p>
+<p>the modules in Horizon is extended-able and plug-in available:  physical layer, virtualization layer, desktop resource layer, app resource layer and user access. </p>
+<p>Horizon basically delivers desktops and apps as a service. there are three versions:</p>
+<ul>
+<li><p>Horizon standard, a simple VDI.</p>
+</li>
+<li><p>Horizon advanced, can deliver desktops and apps through a unified workspace </p>
+</li>
+<li><p>Horizon enterprise, with a closed-loop management adn automation</p>
+</li>
+</ul>
+<p>the <a href="https://techzone.vmware.com/resource/deploying-hardware-accelerated-graphics-vmware-horizon-7#sec1-sub1" target="_blank" rel="external">Horizon 7</a> has new features: </p>
+<ul>
+<li><p>Blast extrem display protocol</p>
+</li>
+<li><p>instant clone provisioning</p>
+</li>
+<li><p>vm app volumes app delivery </p>
+</li>
+<li><p>user env manager </p>
+</li>
+<li><p>integrated into remote desktop session host(RDSH) sessions </p>
+</li>
+</ul>
+<h4 id="gpu-support-in-vmware"><a href="#gpu-support-in-vmware" class="headerlink" title="gpu support in vmware"></a>gpu support in vmware</h4><p>for vSphere, PCI passthrough can be used with any vSphere, including free vSphere Hypervisor. the only limitation is HW, may not supprot virtual well. GPU remotely accessible is our first-priority concern. </p>
+<p>but vmware recommend their <a href="https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/partners/nvidia/vmware-nvidia-grid-vgpu-faq.pdf" target="_blank" rel="external">Horzion with NV’s vGPU</a><br>which has better flexibility and scalability. </p>
+<p><a href="https://techzone.vmware.com/resource/deploying-hardware-accelerated-graphics-vmware-horizon-7#virtualsharedpassthroughgraphics" target="_blank" rel="external">Horizon support vGPU</a>, the user must install the appropriate vendor driver on the guest vm, all graphics commands are passed directly to GPU without having to be translated by the hypervisor. a vSphere Installation Bundle(VIB) is installed, which aids or perform the scheduling. depending on the card, up to 24 vm can share a GPU. most NV’s GPU which has vGPU feature can support. </p>
+<p>on the other hand, the price of vGPU products(e.g. T4, M10, P6, V100, RTX8000 e.t.c) are 5 ~ 10 times higher than normal customer GPUs. e.g. GeFS not 5~10 times better. and the license fee for vgpu is horrible. </p>
+<p>however, most enterprise still choice the Horzion and vGPU solution, even with this high cost. </p>
+<p><a href="https://www.vmware.com/resources/compatibility/search.php" target="_blank" rel="external">VMware compatibility guide</a></p>
+<h4 id="GPU-VDI-service-in-cloud"><a href="#GPU-VDI-service-in-cloud" class="headerlink" title="GPU VDI service in cloud"></a>GPU VDI service in cloud</h4><ul>
+<li><a href="https://cloud.tencent.com/product/gpu" target="_blank" rel="external">tencent gpu cloud</a></li>
+</ul>
+<p>the gpu types for video decoding is Tesla P4, for  AI and HPC is Tesla v100, and for image workstation(VDI) is an AMD S7150.  </p>
+<ul>
+<li><a href="https://www.aliyun.com/product/ecs/gpu?spm=5176.224200.h2v3icoap.18.34ff6ed6KYchPn&amp;aly_as=aPNPrcAtg" target="_blank" rel="external">ali gpu cloud desktop</a></li>
+</ul>
+<p>the product is call <code>GA1(S7150)</code>, which is specially for cloud desktop.</p>
+<p><a href="https://community.amd.com/thread/230570" target="_blank" rel="external">s7150x2 MxGPU with Horizon 7.5</a></p>
+<h4 id="vnc-vs-vm"><a href="#vnc-vs-vm" class="headerlink" title="vnc vs vm"></a>vnc vs vm</h4><p>virtual network computing (vnc), applications running on one computer but displaying their windows on another. VNC provides remote control of a computer at some other location, any resources that are avaiable at the remote computer are available.  vpn simply connect you to a remote network.</p>
+<p>no doubt, vm is much heavier than vnc. check <a href="https://blog.calsoftinc.com/2017/03/virtual-desktop-infrastructure-vdi-vs-remote-desktop-services-rds.html" target="_blank" rel="external">this blog</a> for compartion from vdi(a vm app) to vnc. vnc can’t tell if the remote is a physical server or a virtual server. come to our user case, we need about 100 separated user space, so virtualization provide better HW efficient and security, compared to deploy a single <code>bare metal OS</code> on the physical machine. </p>
+<p>there are a few Linux based vnc client/server, e.g. <a href="https://linux.die.net/man/1/vncviewer" target="_blank" rel="external">vncviewer CLI</a>, as well as which supports OpenGL well, which helps to support better GPU usage. </p>
+<ul>
+<li><p><a href="https://virtualgl.org" target="_blank" rel="external">virtualGL</a></p>
+</li>
+<li><p><a href="http://www.karlrunge.com/x11vnc/" target="_blank" rel="external">x11vnc</a></p>
+</li>
+</ul>
+<h2 id="refee"><a href="#refee" class="headerlink" title="refee"></a>refee</h2><p><a href="https://www.ibm.com/cloud/learn/vmware" target="_blank" rel="external">an essential vmware introduction from IBM</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/32873934" target="_blank" rel="external">what are vsphere, esxi, vcenter in Chienese</a></p>
+<p><a href="https://www.vmware.com/products/vsphere-hypervisor.html" target="_blank" rel="external">vSphere Hypervisor</a></p>
+<p><a href="https://pubs.vmware.com/vsphere-50/index.jsp?topic=%2Fcom.vmware.vsphere.install.doc_50%2FGUID-F3A960E9-57DF-4D2E-9127-A65AA670E643.html" target="_blank" rel="external">vmware vsphere doc</a></p>
+<p><a href="https://blogs.vmware.com/apps/2018/10/how-to-enable-nvidia-v100-gpu-in-passthrough-mode-on-vsphere-for-machine-learning-and-other-hpc-workloads.html" target="_blank" rel="external">how to enable nvidia gpu in passthrough mode on vSphere</a></p>
+<p><a href="https://docs.nvidia.com/grid/10.0/grid-vgpu-release-notes-vmware-vsphere/index.html" target="_blank" rel="external">nvidia vgpu for vmware release notes</a></p>
+<p><a href="https://www.dell.com/support/article/en-us/sln288103/how-to-enable-a-vmware-virtual-machine-for-gpu-pass-through?lang=en" target="_blank" rel="external">how to enable vmware vm for GPU pass-through</a></p>
+<p><a href="https://docs.openstack.org/project-deploy-guide/charm-deployment-guide/latest/app-pci-passthrough-gpu.html" target="_blank" rel="external">openstack PCI passthrough</a></p>
+<p><a href="https://serverfault.com/questions/174003/how-can-opengl-graphics-be-displayed-remotely-using-vnc" target="_blank" rel="external">how can openGL graphics be displayed remotely using VNC</a></p>
+<p><a href="http://www.azurew.com/vmware/horizon-7/3647.html" target="_blank" rel="external">vmware Horizon introduction in Chinese</a></p>
+<p><a href="http://www.azurew.com/vmware/esxi-6-7/3622.html" target="_blank" rel="external">vmware ESXi 7.0 U1 test env build up</a></p>
+<p><a href="https://www.sohu.com/a/334627623_314773" target="_blank" rel="external">云游戏能接盘矿卡市场吗</a></p>
+<p><a href="http://www.azurew.com" target="_blank" rel="external">王哥哥的博客</a></p>
+<p><a href="https://mp.sohu.com/profile?xpt=c29odXptdHoxem53c3ZAc29odS5jb20=&amp;_f=index_pagemp_1&amp;spm=smpc.content.author.2.1585641772438lK2g5Sw" target="_blank" rel="external">企业存储的博客</a></p>
+<p><a href="https://blogs.vmware.com/euc/2015/03/nvidia-grid-vgpu-vmware-horizon.html" target="_blank" rel="external">in-depth: nv grid vGPU with vmware horizon 6.1</a></p>
+<p><a href="https://www.nvidia.com/en-us/data-center/graphics-cards-for-virtualization/" target="_blank" rel="external">nvidia gpus recommended for virtualization</a></p>
+<p><a href="https://developer.aliyun.com/ask/215008" target="_blank" rel="external">GPU SRIOV and AMD S7150</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/kvm-in-linux-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/27/kvm-in-linux-2/" itemprop="url">kvm in linux (2)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-27T04:04:00-04:00">
+                2020-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/27/kvm-in-linux-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/27/kvm-in-linux-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="history-of-terminal"><a href="#history-of-terminal" class="headerlink" title="history of terminal"></a>history of terminal</h2><p>in history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host computer can run multi-users, each of which needs a terminal. </p>
+<p>when times goes to personal computer(PC), there is no need for multi-users login, so each PC has integrated with I/O device(monitor and keybord)</p>
+<p>nowadays, we have plenty of end-user terminals, e.g. smart phone, smart watch, Ipad e.t.c, all of these are <code>terminal</code>, as the real host computer is in cloud now. </p>
+<p>in a word, any device that can accept input and display output is a <code>terminal</code>, which play the role as the human-machine interface.</p>
+<h4 id="three-kinds-of-terminal"><a href="#three-kinds-of-terminal" class="headerlink" title="three kinds of terminal"></a>three kinds of terminal</h4><p>ssh is TCP/IP protocol, what’s inside is the remote terminal streaming flow.  the TCP/IP plays as the tunnel. of course, any communication protocol can play the role as the <code>tunnel</code>. </p>
+<ul>
+<li><p>local terminal, with usb to keyboard and monitor. </p>
+</li>
+<li><p>serial terminal, the guest machine connect to the host machine, who has keyboard and monitor. basically the guest machine borrow the host machine’s IO, which needs the host machine to run a terminal elmulator.</p>
+</li>
+<li><p>tcp/ip tunnel terminal, e.g. ssh</p>
+</li>
+</ul>
+<p>both local terminal and serial terminal, directly connect to physical device, e.g. VGA interface, usb, serial e.t.c, so both are called  <strong>physical terminal</strong>.  ssh has nothing to do with physical device. </p>
+<h4 id="tty"><a href="#tty" class="headerlink" title="tty"></a>tty</h4><p>in Linux,  <code>/dev/ttyX</code> represents a physical-terminal. from <code>tty1</code> to <code>tty63</code> are all local terminal. during Linux kernal init, 63 local terminals are generated, which can be switched by <code>Fn-Alt-Fx</code>, (x can be 1, 2, 3…). each current terminal is called <strong>focus terminal</strong>. </p>
+<p>focus terminal is taken as global variable, so any input will transfer to current focus terminal. for serial, there is no focus terminal. </p>
+<p>in Linux,  <code>/dev/console</code> represents current <strong>focus terminal</strong>, consider as a pointer to current focus terminal, wherever write sth to <code>/dev/console</code> will present at current focus terminal. </p>
+<p><code>/dev/tty</code> is the global variable itself. whichever terminal you are working with, when write to <code>/dev/tty</code>, it will be present.</p>
+<p><code>/dev/ttyS#num#</code> represents <strong>serial terminal</strong>. </p>
+<h4 id="getty-amp-login"><a href="#getty-amp-login" class="headerlink" title="getty &amp; login"></a>getty &amp; login</h4><p>in multi-terminal time, each terminal must bind to one user, user must first login the terminal, <code>getty</code> is the login process, which is called in <code>init</code>. after login successfully, the terminal <code>tty#num#</code> can be owned by the user. </p>
+<p>there are a few differenet version of <code>getty</code>, e.g. <code>agetty</code> e.t.c.</p>
+<h4 id="pty-amp-pts"><a href="#pty-amp-pts" class="headerlink" title="pty &amp; pts"></a>pty &amp; pts</h4><p>pty stands for <code>pseudo-tty</code>, pty is a (master-slave) pair terminal device, including:  pts <code>pseudo-terminal slave</code>, and ptmx <code>pseudo-terminal master</code>. </p>
+<p>a few concepts as following: </p>
+<ul>
+<li><p>serial terminal  <code>/dev/ttySn</code></p>
+</li>
+<li><p>pseudo-termianl  <code>/dev/pty/</code></p>
+</li>
+<li><p>controlling terminal <code>/dev/tty</code></p>
+</li>
+<li><p>console terminal  <code>/dev/console</code></p>
+</li>
+</ul>
+<h2 id="Linux-Serial-Console"><a href="#Linux-Serial-Console" class="headerlink" title="Linux Serial Console"></a>Linux Serial Console</h2><h4 id="serial-communication"><a href="#serial-communication" class="headerlink" title="serial communication"></a>serial communication</h4><p>in old-style PC, serial is COM interface, also called <code>DB9 interface</code>, with RS-232 standard. </p>
+<p>each user can connect to host machine through a <strong>terminal</strong>. <code>console</code> is same as <code>terminal</code> to connect user to host machine, but <code>console</code> is higher priority than <code>terminal</code>. nowadays less difference between terminal and console.  </p>
+<p><code>Teletype</code> is the earliest terminal device, <code>tty</code> is physical or pseudo terminal connect to the host machine, nowadays <code>tty</code> also used for serial device.</p>
+<p><code>serial</code> is the connection from terminal/keyboard to dev-board. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls /dev/tty*</div></pre></td></tr></table></figure>
+<h4 id="configuration"><a href="#configuration" class="headerlink" title="configuration"></a>configuration</h4><p>Linux kernel must be configured to use the serial port as its console, which is done by passing the kernel the <code>console</code> parameter when the kernel is started by the boot loader.</p>
+<p>the init system should keep a process runnign to monitor the serial console for logins, the monitoring process is traditionally named <strong>getty</strong></p>
+<p>a number of system utilities need to be configured tomake them aware of the console, or configured to prevent them from disrupting the console.</p>
+<h4 id="serial-port"><a href="#serial-port" class="headerlink" title="serial port"></a>serial port</h4><p>Linux names as the first serial port has the file name <code>/dev/ttys0</code>, the second serial port has the file name <code>/dev/ttyS1</code> and so on. most boot loaders have yet another naming scheme, the first serial port is numbered <code>0</code>, the second serial port is numbered <code>1</code></p>
+<h4 id="configure-GRUB-boot-loader"><a href="#configure-GRUB-boot-loader" class="headerlink" title="configure GRUB boot loader"></a>configure GRUB boot loader</h4><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/configure-boot-loader-grub.html" target="_blank" rel="external">configure GRUB to use the serial console</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">info grub</div><div class="line">/boot/grub/grub.cfg</div><div class="line">serial --unit=0 --speed=9600 --word=8 --parity=no --stop=1 </div><div class="line">terminal serial</div></pre></td></tr></table></figure>
+<h4 id="init-system"><a href="#init-system" class="headerlink" title="init system"></a>init system</h4><p>getty is started by <code>init</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">co:2345:respawn:/sbin/getty ttyS0 CON9600 vt102</div></pre></td></tr></table></figure>
+<ul>
+<li><p><code>co</code> is an arbitrary entry, representing <code>console</code></p>
+</li>
+<li><p><code>2345</code>, run levels where this entry gets started. </p>
+</li>
+<li><p><code>respawn</code>, re-run the program if it dies</p>
+</li>
+<li><p><code>/sbin/getty ttyS0 CON9600 vt102</code>, getty connecting to /dev/ttyS0 with the settings for CON9600bps, and the terminal is VT100 model</p>
+</li>
+</ul>
+<h2 id="virsh-console"><a href="#virsh-console" class="headerlink" title="virsh console"></a>virsh console</h2><p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-enable-kvm-virsh-console-access-ubuntu-linux-vm" target="_blank" rel="external">how to</a> connect ubuntu kvm virtual machine through serial console. in earlier version and distributions, it need to configure serial console in grub file, but in Ubuntu it’s very easy adn reliable as most of configurations and settings are already configured in OS.</p>
+<h4 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h4><p>runs ubuntu14.04 guest mahcine on ubuntu 16.04 host machine. how to setup serial console, we have to connect guest machine and login on as root user</p>
+<h4 id="login-through-SSH"><a href="#login-through-SSH" class="headerlink" title="login through SSH"></a>login through SSH</h4><ul>
+<li>connect on KVM guest machine through ssh from host machine </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh 192.168.122.1</div><div class="line">hostname</div></pre></td></tr></table></figure>
+<h4 id="connect-through-VNC"><a href="#connect-through-VNC" class="headerlink" title="connect through VNC"></a>connect through VNC</h4><p>conenct guest machine through VNC viewer and setup <code>serial console</code>. There are times when we need to troubleshoot Virtual Machines with unknown status like Hang in between, IP address issues, password problems, Serial console Hang etc. In case scenarios, we could relay on VNC configuration of KVM Guest Machines. </p>
+<p>vnc viewer is a graphic viewer, so only need add <code>graphics</code> component in <a href="http://www.geekpills.com/wp-content/uploads/2017/08/ubuntu-17.04.txt" target="_blank" rel="external">config.xml</a>:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">graphics</span> <span class="attr">type</span>=<span class="string">'vnc'</span> <span class="attr">port</span>=<span class="string">'-1'</span> <span class="attr">autoport</span>=<span class="string">'yes'</span> <span class="attr">passwd</span>=<span class="string">'mypassword'</span>/&gt;</span></div></pre></td></tr></table></figure>
+<p>run <code>virsh vncdisplay #vm_name#</code> we can get our vnc (server) IP, which then can be accessed by <code>vnc guest viewer</code>. here, <code>kvm virtual machine</code> has implemented a vnc server, and any <code>vnc viewer</code> in the same physical machine, can access this vnc server, even without external networking. </p>
+<h4 id="configure-serial-console-in-ubuntu-guest"><a href="#configure-serial-console-in-ubuntu-guest" class="headerlink" title="configure serial console in ubuntu guest"></a>configure serial console in ubuntu guest</h4><p>after getting login console, we can start <code>serial console</code> and enable it with:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># systemctl start serial-getty@ttyS0</span></div><div class="line"><span class="comment"># systemctl enable serial-getty@ttyS0</span></div><div class="line">Created symlink /etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service → /lib/systemd/system/serial-getty@.service.</div></pre></td></tr></table></figure>
+<p>now we can connect <code>serial console</code> with <code>virsh console</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh console vm_name</div></pre></td></tr></table></figure>
+<p>after installnation, reboot first, then the physical machine has dual-OS: <a href="https://www.server-world.info/en/note?os=Ubuntu_14.04&amp;p=kvm&amp;f=2" target="_blank" rel="external">GuestOS and HostOS</a>, which can exit GuestOS by <code>Ctrl + ]</code>, or login GuestOS by <code>virsh consoel #guest_vm#</code></p>
+<p><strong>in summary</strong>, <code>virsh console</code> implement a serial console for kvm guest machine, which connect the guest machine to host machine through <code>serial</code>, which is not a <code>ssh</code>, need new knowledges about <code>serial</code>. </p>
+<h2 id="virsh-console-hangs"><a href="#virsh-console-hangs" class="headerlink" title="virsh console hangs"></a>virsh console hangs</h2><p><code>virsh console vm</code> hangs at: <code>Escape character is ^]</code>, which can exit by <strong>ctrl + ]</strong> </p>
+<h4 id="sol1"><a href="#sol1" class="headerlink" title="sol1:"></a><a href="https://stackoverflow.com/questions/11845280/virsh-console-hangs-at-the-escape-character" target="_blank" rel="external">sol1</a>:</h4><p>go to guest machine/terminal, and edit <code>/etc/default/grub</code>, appending;</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRUB_TERMINAL=serial</div><div class="line">GRUB_SERIAL_COMMAND=<span class="string">"serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1"</span></div></pre></td></tr></table></figure>
+<p>then execute:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">update-grub</div><div class="line">reboot</div></pre></td></tr></table></figure>
+<p>the problem here, as the KVM vm shares the kernel of the host machine, if update <code>grub</code>, the host machine will reboot with serial connection(?)</p>
+<h4 id="Centos-virsh-console-hangs"><a href="#Centos-virsh-console-hangs" class="headerlink" title="Centos virsh console hangs"></a><a href="https://www.cnblogs.com/xieshengsen/p/6215168.html" target="_blank" rel="external">Centos virsh console hangs</a></h4><ul>
+<li><p>go to <code>/etc/securetty</code> and append <code>ttyS0</code></p>
+</li>
+<li><p>append <code>S0:12345:respawn:/sbin/agetty ttyS0 115200</code> to <code>/etc/init/ttyS0.conf</code></p>
+</li>
+<li><p>/etc/grub.conf(Centos) </p>
+</li>
+</ul>
+<p>I only found <code>/boot/grub/grub.cfg</code> in ubuntu. In the <code>kernel</code> line, appending <code>console=ttyS0</code>. but there is no <code>kernel</code> line in <code>ubuntu grub.cfg</code>.</p>
+<h4 id="Ubuntu-virsh-console-hangs"><a href="#Ubuntu-virsh-console-hangs" class="headerlink" title="Ubuntu virsh console hangs"></a><a href="https://www.cnblogs.com/sixloop/p/8044785.html" target="_blank" rel="external">Ubuntu virsh console hangs</a></h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="built_in">disable</span> systemd-networkd-wait-online</div><div class="line">systemctl <span class="built_in">enable</span> serial-getty@ttyS0.service</div><div class="line">systemctl start serial-getty@ttyS0.service</div></pre></td></tr></table></figure>
+<p>which gives: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Mar 27 11:17:18 ubuntu systemd[1]: Started Serial Getty on ttyS0.</div><div class="line">Mar 27 11:17:18 ubuntu agetty[445120]: /dev/ttyS0: not a tty</div></pre></td></tr></table></figure>
+<p>check in <code>/dev/ttyS*</code> : </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">crw-rw---- 1 root dialout 4, 73 Mar 24 09:20 ttyS9</div><div class="line">crw--w---- 1 root tty     4, 64 Mar 24 09:20 ttyS0</div><div class="line">crw-rw---- 1 root dialout 4, 65 Mar 24 09:20 ttyS1</div></pre></td></tr></table></figure>
+<p>interesting here,  <code>ttyS0</code> belongs to <code>tty</code> group, all otehr <code>ttyS#num#</code> belongs to <code>dialout</code> group. </p>
+<h5 id="tty-and-dialout"><a href="#tty-and-dialout" class="headerlink" title="tty and dialout"></a>tty and dialout</h5><p><a href="https://stackoverflow.com/questions/30846176/how-to-change-tty-group-on-linux-build-with-buildroot" target="_blank" rel="external">change /dev/ttyS0 to tty group</a></p>
+<p><a href="https://askubuntu.com/questions/210177/serial-port-terminal-cannot-open-dev-ttys0-permission-denied" target="_blank" rel="external">can’t access /dev/ttyS</a></p>
+<p>add USER to tty/dialout group</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo usermod -a -G tty <span class="variable">$USER</span></div><div class="line">sudo usermod -a -G dialout <span class="variable">$USER</span></div></pre></td></tr></table></figure>
+<p>reboot and go on</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/" target="_blank" rel="external">remote serial console HOWTO</a></p>
+<p><a href="https://www.cnblogs.com/huan-huan/p/8522472.html" target="_blank" rel="external">remote serial console HOWTO in Chinese</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1527544" target="_blank" rel="external">understand Linux terminal history in Chinese</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1533217" target="_blank" rel="external">Linux terminal introduction in Chinese</a></p>
+<p><a href="https://tutorial.linux.doc.embedfire.com/zh_CN/latest/linux_app/uart_tty.html" target="_blank" rel="external">serial communication in Chinese</a></p>
+<p><a href="https://wiki.archlinux.org/index.php/Working_with_the_serial_console" target="_blank" rel="external">arhLinux: working with the serial console</a></p>
+<p><a href="https://www.gnu.org/software/grub/manual/grub/grub.html" target="_blank" rel="external">gnu org: grub</a></p>
+<p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-start-vnc-remote-access-guest-operating-systems" target="_blank" rel="external">geekpills: start vnc remote access for guest operating systems</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/24/kvm-libvert-in-linux-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1804,280 +2252,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/09/design-a-logger-from-ws-to-db/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/09/design-a-logger-from-ws-to-db/" itemprop="url">design a logger from ws to db</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-09T03:54:00-04:00">
-                2020-03-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/09/design-a-logger-from-ws-to-db/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/09/design-a-logger-from-ws-to-db/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>for now, we had <a href="https://zjli2013.github.io/2020/03/05/design-a-nodejs-web-server-from-db-to-s3/" target="_blank" rel="external">design a file server from db to s3</a> and <a href="https://zjli2013.github.io/2020/03/07/asam-mdf-reader/" target="_blank" rel="external">mf reader</a> to feed data to the ads test module, which run in SIMD mode, e.g. k8s. for a closed-loop SIL, another component is how to record test message/outputs to database. </p>
-<p>I am thinking firstly <a href="https://stackoverflow.com/questions/1066413/eventdriven-webframework-for-python" target="_blank" rel="external">event driven webframework python</a>, or <a href="https://github.com/quantmind/pulsar" target="_blank" rel="external">plusar</a>, which is a popular python event-driven project. as lgsvl pythonAPI is really a good choice to transfer message among server and clients. so the basic idea is to integrate websocket/tcp channel inside aeb model</p>
-<h2 id="websocket-vs-tcp"><a href="#websocket-vs-tcp" class="headerlink" title="websocket vs tcp"></a>websocket vs tcp</h2><p>most ADAS models developed in OEM are matlab based, and the most common communication protocol in Matlab is <a href="https://www.mathworks.com/matlabcentral/fileexchange/345-tcp-udp-ip-toolbox-2-0-6" target="_blank" rel="external">UDP</a>, a little review about <a href="https://www.diffen.com/difference/TCP_vs_UDP" target="_blank" rel="external">tcp vs udp</a>, I personally don’t like udp, no reason. so narrow to <strong>TCP</strong>, the further question is:  should it be <a href="https://stackoverflow.com/questions/16945345/differences-between-tcp-sockets-and-web-sockets-one-more-time" target="_blank" rel="external">a raw TCP or Websocket</a>),  websocket enables a stream of messages instead of a stream of bytes. WebSockets is built on normal TCP sockets and uses frame headers that contains the size of each frame and indicate which frames are part of a message. The WebSocket API re-assembles the TCP chunks of data into frames which are assembled into messages before invoking the message event handler once per message. WebSocket is basically an application protocol (with reference to the ISO/OSI network stack), message-oriented, which makes use of TCP as transport layer. btw, TCP is bidirectional because it can send data in both directions, and it is full-duplex because it can do that simultaneously, without requiring line turnarounds, at the API level</p>
-<p>for ADAS test outputs, it’s plain txt, I’d prefer <strong>websocket</strong>. so make the decision. </p>
-<h3 id="matlab-websocket-client"><a href="#matlab-websocket-client" class="headerlink" title="matlab websocket client"></a>matlab websocket client</h3><p>there is an github project: <a href="https://github.com/jebej/MatlabWebSocket" target="_blank" rel="external">matlab websocket</a>, which is enough to implement a simple websocket in Matlab. <a href="https://stackoverflow.com/questions/20645774/can-matlab-talk-to-a-websocket" target="_blank" rel="external">discussion at stackoverflow</a></p>
-<p>basically, here we bind a weboscket client to the adas model, in matlab. which is a good choice, so when runnign adas model in massively, the whole system looks like multi ws clients concurrently communicate with one ws server, which is well separated from adas model, and can freely implmented in either nodejs, python or c# e.t.c., totally friendly to other third-party data analysis tools in down-stream.</p>
-<h2 id="multi-write-db-concurrently"><a href="#multi-write-db-concurrently" class="headerlink" title="multi-write db concurrently"></a>multi-write db concurrently</h2><p>once we get the message from ws clients, we need transfer all of them to a database, e.g. pySQL. but the first thing need to understand is <a href="https://stackoverflow.com/questions/32087233/how-does-mysql-handle-concurrent-inserts" target="_blank" rel="external">whether SQL can concurrent inserts</a>. if there are multiple INSERT statements, they are queued and performed in sequence, concurrently with the SELECT statements. SQL doesn’t support parallel data inserts into the same table, with InnoDB or MyISAM storage engine. </p>
-<p>this also answered another question, why not directly adas model write to db, since the parallel runinng cases increase, writing DB will be the bottleneck. so has the websocket middle level, is a good choice. </p>
-<h2 id="nodejs-solution"><a href="#nodejs-solution" class="headerlink" title="nodejs solution"></a>nodejs solution</h2><p>nodejs is really powerful to implement the solution above. basically, a <a href="https://www.npmjs.com/package/nodejs-websocket" target="_blank" rel="external">ws server</a> and <a href="https://github.com/mysqljs/mysql" target="_blank" rel="external">sql writer: mysqljs</a></p>
-<h2 id="python-solution"><a href="#python-solution" class="headerlink" title="python solution"></a>python solution</h2><p>similar as nodejs, python has matured websocket module and ORM moduel to write db. </p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.liaoxuefeng.com/wiki/897692888725344/923056653167136" target="_blank" rel="external">liaoxuefeng tcp</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/29150809" target="_blank" rel="external">zhihu mysql lock</a></p>
-<p><a href="https://www.runoob.com/nodejs/nodejs-mysql.html" target="_blank" rel="external">nodejs connect mysql</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/07/asam-mdf-reader/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/07/asam-mdf-reader/" itemprop="url">asam mdf reader</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-07T02:40:17-05:00">
-                2020-03-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/07/asam-mdf-reader/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/07/asam-mdf-reader/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://zjli2013.github.io/2020/02/24/mdf4-reader/" target="_blank" rel="external">previously</a> reviewed a few open source mdf readers as well as get basic concept about mdf. here is a working process with asammdf, which is step by step to understand this lib.</p>
-<p>the basic problem here is to read a special signal data, not know its channel and group id.</p>
-<h4 id="first-try"><a href="#first-try" class="headerlink" title="first try"></a>first try</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">reader = MDF4(file_name)</div><div class="line">data_dict = reader.info()</div><div class="line">print(<span class="string">"the total len of dict: "</span>, len(data_dict))</div><div class="line">print(data_dict.keys())</div><div class="line">block_ =  data_dict[<span class="string">'group 117'</span>]</div><div class="line">channel_metadata = reader.get_channel_metadata(<span class="string">'t'</span>, <span class="number">117</span>)</div><div class="line">channel117_comment = reader.get_channel_comment(<span class="string">'t'</span>, <span class="number">117</span>)</div><div class="line">channel117_name = reader.get_channel_name(<span class="number">117</span>, <span class="number">0</span>)</div><div class="line">pattern=<span class="string">"channel 123"</span></div><div class="line"><span class="keyword">for</span> key <span class="keyword">in</span> block_ :</div><div class="line">    r1 = re.search(pattern, str(block_[key]), re.M|re.I)</div><div class="line">    <span class="keyword">if</span> r1:</div><div class="line">       print(key)</div><div class="line"></div><div class="line">data_ = reader.get(<span class="string">"channel 123"</span>) <span class="comment">#doesn't work, as it reports can't find Channel</span></div><div class="line">data_ = reader.get(<span class="string">"fus_lidar_camera"</span>, <span class="string">"group 123"</span>) <span class="comment">#doesn't work, as it reports can't find the Group</span></div><div class="line">data_ = reader.get(<span class="string">"fus_lidar_camera"</span>) <span class="comment">#works</span></div></pre></td></tr></table></figure>
-<p>so first, “channel 123” is actually not the name. and with the right name can reading data, but no guarantee which group this channel is from, and further can’t know is there additional groups has record this type of data.</p>
-<h4 id="second-try"><a href="#second-try" class="headerlink" title="second try"></a>second try</h4><p>as mentioned <a href="https://asammdf.readthedocs.io/en/latest/api.html#mdf4" target="_blank" rel="external">mdf4 groups</a> have attributes, how about to access these <strong>attributes</strong>. so far, especially helpful attributes are:</p>
-<ul>
-<li><p>groups:list, list of data group dicts </p>
-</li>
-<li><p>channels_db:dict, used for fast channel access by name. for each name key the value is a list of (group index, channel index) tuples</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">channels = reader.groups[<span class="number">2</span>] <span class="comment">#with the same order as found in mdf, even with index 0, 1, ...</span></div><div class="line">print(<span class="string">"type of channels: "</span>, type(channels)) <span class="comment">#dict</span></div><div class="line"><span class="keyword">if</span> <span class="string">"fus.ObjData_Qm_TC.FusObj.i17.alpPiYawAngle"</span> <span class="keyword">in</span> channels:   print(channels[<span class="string">"fus.ObjData_Qm_TC.FusObj.i17.alpPiYawAngle"</span>].id) <span class="comment">#none</span></div><div class="line">print(<span class="string">" chanels type: "</span> , type(channels[<span class="string">"channels"</span>])) <span class="comment">#list </span></div><div class="line">print(<span class="string">" chanels len: "</span> , len(channels[<span class="string">"channels"</span>])) <span class="comment">#577</span></div><div class="line">print(<span class="string">"chanel_group type: "</span> , type(channels[<span class="string">"channel_group"</span>])) <span class="comment"># ChannelGroup object</span></div><div class="line">print(<span class="string">"chanel_group len: "</span> , len(channels[<span class="string">"channel_group"</span>])) <span class="comment">#17</span></div><div class="line">print(<span class="string">" data_group type: "</span> , type(channels[<span class="string">"data_group"</span>])) <span class="comment">#DataGroup object</span></div><div class="line">print(<span class="string">" data_group len: "</span> , len(channels[<span class="string">"data_group"</span>])) <span class="comment">#10</span></div></pre></td></tr></table></figure>
-<p>which is far more less as expected, but give an good exploring about the reader’s attributes.</p>
-<h4 id="third-try"><a href="#third-try" class="headerlink" title="third try"></a>third try</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">reader = MDF4(file_name)</div><div class="line">cdb = reader.channels_db</div><div class="line"><span class="comment">#print("size of c_db ", len(cdb))</span></div><div class="line"><span class="comment">#print("type of cdb ", type(cdb))</span></div><div class="line"></div><div class="line"><span class="comment">#for more sigles interested, please append to this list</span></div><div class="line">sig_list = [<span class="string">'sensor_1'</span>, <span class="string">'sensor_2'</span>, <span class="string">'sensor_3'</span>]</div><div class="line"></div><div class="line"><span class="keyword">for</span> sig <span class="keyword">in</span> sig_list:</div><div class="line">    <span class="keyword">if</span> sig <span class="keyword">in</span> cdb:</div><div class="line">        print(cdb[sig])</div><div class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> cdb[sig]:</div><div class="line">            (gid, cid) = item</div><div class="line">            alp = reader.get(sig, gid, cid)</div><div class="line">            print(<span class="string">"type of current sig "</span>, type(alp))</div><div class="line">            print(<span class="string">"size of current sig "</span>, len(alp))</div><div class="line">            <span class="comment">#alp is the raw sig data, here is only test print</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        print(sig, <span class="string">" is not in cdb"</span></div></pre></td></tr></table></figure>
-<p>which gives me the right way to access the interested signals’ raw data. combing with <strong>s3 streaming body read</strong>, as mentioned in previous mdf-reader, which finally gives the powerful pipeline from reading mdf4 files from s3 storage to downside appilication</p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.runoob.com/python3/python3-reg-expressions.html" target="_blank" rel="external">pyton reg</a></p>
-<p><a href="https://techeplanet.com/python-string-contains/" target="_blank" rel="external">python substring</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2128,7 +2302,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">174</span>
+                <span class="site-state-item-count">176</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -291,6 +291,484 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/23/Linux-iptables/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/23/Linux-iptables/" itemprop="url">Linux iptables</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-23T08:21:38-04:00">
+                2020-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/23/Linux-iptables/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/23/Linux-iptables/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>从<a href="http://www.zsythink.net/archives/1199" target="_blank" rel="external">iptable详解</a>整理的。 理解iptables，是为了更好的理解k8s中网络。</p>
+<p>从逻辑上讲。防火墙可以大体分为主机防火墙和网络防火墙。</p>
+<p>主机防火墙：针对于单个主机进行防护。</p>
+<p>网络防火墙：往往处于网络入口或边缘，针对于网络入口进行防护，服务于防火墙背后的本地局域网。</p>
+<p><strong>iptables</strong>其实不是真正的防火墙，我们可以把它理解成一个客户端代理，用户通过iptables这个代理，将用户的安全设定执行到对应的”安全框架”中，这个”安全框架”才是真正的防火墙，这个框架的名字叫<strong>netfilter</strong></p>
+<p>Netfilter是Linux操作系统核心层内部的一个数据包处理模块，它具有如下功能：</p>
+<ul>
+<li><p>网络地址转换(Network Address Translate)</p>
+</li>
+<li><p>数据包内容修改</p>
+</li>
+<li><p>以及数据包过滤的防火墙功能</p>
+</li>
+</ul>
+<p>规则一般的定义为”如果数据包头符合这样的条件，就这样处理这个数据包”. 规则分别指定了源地址、目的地址、传输协议（如TCP、UDP、ICMP）和服务类型（如HTTP、FTP和SMTP）等.  当数据包与规则匹配时，iptables就根据规则所定义的方法来处理这些数据包，如放行（accept）、拒绝（reject）和丢弃（drop）等。配置防火墙的主要工作就是添加、修改和删除这些规则。</p>
+<p>如果我们想要防火墙能够达到”防火”的目的，则需要在内核中设置关卡，所有进出的报文都要通过这些关卡，经过检查后，符合放行条件的才能放行，符合阻拦条件的则需要被阻止，于是，就出现了input关卡和output关卡，而这些关卡在iptables中不被称为”关卡”,而被称为”链”。当客户端发来的报文访问的目标地址并不是本机，而是其他服务器，当本机的内核支持IP_FORWARD时，我们可以将报文转发给其他服务器。这个时候，我们就会提到iptables中的其他”关卡”，也就是其他”链”，他们就是  “路由前”、”转发”、”路由后”，他们的英文名是</p>
+<p>PREROUTING、FORWARD、POSTROUTING</p>
+<p><img src="http://www.zsythink.net/wp-content/uploads/2017/02/021217_0051_2.png" alt="image"></p>
+<p>当我们定义iptables规则时，所做的操作其实类似于”增删改查”。</p>
+<p>“关卡“/”链“ 包括：  prerouting, INPUT, OUTPUT, FORWARD, POSTROUTING</p>
+<p>表： filter 负责过滤(iptables_filter); nat(network address translation), 网络地址转发， mangle, raw</p>
+<p>表名：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t filter -L (INPUT/OUTPUT/FORWARD/DOCKER-USER/DOCKER-ISOLATION-STAGE/KUBE-EXTERNAL-SERVICES/KUBE-FIREWALL/UBE-FORWARD/KUBE-KUBELET-CANARY/KUBE-SERVICES)</div></pre></td></tr></table></figure>
+<p>-t选项，查看表名(filter/mangle/nat)<br>-L 选项，规则/链名<br>-n 选项，表示不对IP地址进行名称反解，直接显示IP地址。<br>–line-number 选项， 显示规则的编号</p>
+<p>规则大致由两个逻辑单元组成，匹配条件与动作。 </p>
+<ul>
+<li>测试1：拒绝某个远程主机(10.20.180.12)访问当前主机(10.20.181.132)</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t filter -I INPUT -s 10.20.180.12  -j DROP</div></pre></td></tr></table></figure>
+<ul>
+<li>-I 选项, 插入规则到哪个链</li>
+<li>-s 选项，匹配条件中的源地址</li>
+<li>-j 选项，当匹配条件满足，采取的动作</li>
+</ul>
+<ul>
+<li>测试1.1：拒绝某个远程主机(10.20.180.12)访问当前主机(10.20.181.132)，再追加一条接受(10.20.180.12)的访问</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -A INPUT -s 10.20.180.12 -j ACCEPT</div></pre></td></tr></table></figure>
+<ul>
+<li>-A选项，追加规则到某个链。 </li>
+</ul>
+<p>不通 即规则的顺序很重要。如果报文已经被前面的规则匹配到，iptables则会对报文执行对应的动作，即使后面的规则也能匹配到当前报文，很有可能也没有机会再对报文执行相应的动作了。</p>
+<ul>
+<li>测试2: 根据规则编号去删除规则</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables --line -vnL INPUT</div><div class="line">iptables -t filter -D INPUT N</div></pre></td></tr></table></figure>
+<ul>
+<li>-D选项，删除某条链上的第N条规则</li>
+</ul>
+<ul>
+<li>测试2.2: 根据具体的条件去执行删除规则</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -vnL INPUT</div><div class="line">iptables -t filter -D INPUT -s 10.20.180.12 -j DROP</div></pre></td></tr></table></figure>
+<p>修改规则，一般就是删除旧规则，再添加新规则。</p>
+<ul>
+<li>保存规则</li>
+</ul>
+<p>当重启iptables服务或者重启服务器以后，我们平常添加的规则或者对规则所做出的修改都将消失，为了防止这种情况的发生，我们需要将规则”保存”</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables-save &gt; /etc/network/iptables.up.rules</div><div class="line">iptables-apply <span class="comment">#restart iptables</span></div></pre></td></tr></table></figure>
+<ul>
+<li><p>更多关于匹配条件</p>
+<p>-s 选项， 指定源地址作为匹配条件，还可以指定一个网段，或用 逗号分割多个IP;  支持取反。</p>
+<p>-d 选项，指定目标地址作为匹配条件。 </p>
+</li>
+</ul>
+<p>不指定，默认就是（0.0.0.0/0），即所有IP</p>
+<p> -p 选项，指定匹配的报文协议类型。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -t filter -I INPUT -s 10.20.180.12 -d 10.20.181.132 -p tcp -j REJECT</div><div class="line">ssh 10.20.180.12 <span class="comment">#from 10.20.181.132 ssh t0 10.20.180.12 suppose to be rejected. but not ?</span></div></pre></td></tr></table></figure>
+<p> -i选项，匹配报文通过哪块网卡流入本机。</p>
+<h4 id="iptables之网络防火墙"><a href="#iptables之网络防火墙" class="headerlink" title="iptables之网络防火墙"></a>iptables之网络防火墙</h4><p>当外部网络中的主机与网络内部主机通讯时，不管是由外部主机发往内部主机的报文，还是由内部主机发往外部主机的报文，都需要经过iptables所在的主机，由iptables所在的主机进行”过滤并转发”，所以，防火墙主机的主要工作就是”过滤并转发”</p>
+<p><img src="http://www.zsythink.net/wp-content/uploads/2017/05/051017_0955_1.png" alt="image"></p>
+<p>主机B也属于内部网络，同时主机B也能与外部网络进行通讯，如上图所示，主机B有两块网卡，网卡1与网卡2，网卡1的IP地址为10.1.0.3，网卡2的IP地址为192.168.1.146: </p>
+<p><img src="http://www.zsythink.net/wp-content/uploads/2017/05/051017_0955_2.png" alt="image"></p>
+<p>c主机网关指向B主机网卡1的IP地址；A主机网关指向B主机网卡2的IP地址。</p>
+<p>on hostmachine A:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">route add -net 10.1.0.0/16 gw 192.168.1.146 </div><div class="line">ping 10.1.0.1 <span class="comment"># ping machine C, not available</span></div><div class="line">ping 10.1.0.3 <span class="comment"># ping machine B(NIC 2), avaiailable</span></div></pre></td></tr></table></figure>
+<ul>
+<li>为什么10.1.0.1没有回应。</li>
+</ul>
+<p>A主机通过路由表得知，发往10.1.0.0/16网段的报文的网关为B主机，当报文达到B主机时，B主机发现A的目标为10.1.0.1，而自己的IP是10.1.0.3，这时，B主机则需要将这个报文转发给10.1.0.1（也就是C主机），但是，Linux主机在默认情况下，并不会转发报文，如果想要让Linux主机能够转发报文，需要额外的设置，这就是为什么10.1.0.1没有回应的原因，因为B主机压根就没有将A主机的ping请求转发给C主机，C主机压根就没有收到A的ping请求，所以A自然得不到回应</p>
+<ul>
+<li>为什么10.1.0.3会回应。</li>
+</ul>
+<p>这是因为10.1.0.3这个IP与192.168.1.146这个IP都属于B主机，当A主机通过路由表将ping报文发送到B主机上时，B主机发现自己既是192.168.1.146又是10.1.0.3，所以，B主机就直接回应了A主机，并没有将报文转发给谁，所以A主机得到了10.1.0.3的回应</p>
+<ul>
+<li>如何让LINUX主机转发报文</li>
+</ul>
+<p>check <code>/proc/sys/net/ipv4/ip_forward</code>. if content is <code>0</code>, meaning the Linux hostmachine doesn’t forward; if content is <code>1</code>, meaning the Linux hostmachine does forward. </p>
+<p>or </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sysctl -w net.ipv4.ip_forward=1</div></pre></td></tr></table></figure>
+<p>for permenentally allow Linux host forward, update file <code>/etc/sysctl.conf</code>. </p>
+<p>设置linux主机转发报文后， A ping C || C ping A should works.</p>
+<p>如果我们想要使内部的主机能够访问外部主机的web服务，我们应该怎样做呢？ 我们需要在FORWARD链中放行内部主机对外部主机的web请求.</p>
+<ul>
+<li>在B主机上：</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -I FORWARD -j REJECT</div><div class="line">iptables -I FORWARD -s 10.1.0.0/16 -p tcp --dport 80 -j ACCEPT</div></pre></td></tr></table></figure>
+<p>B主机上所有转发(forward)命令，都REJECT。只ACCEPT 内网10.1.0.0/16 网段， 端口80的转发FORWARD. （即内网网段可访问外网)。 C ping A (ok)</p>
+<p>destnation port 目标端口。</p>
+<p>想让A ping C, 需在B主机iptables中再添加如下规则：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -I FORWARD -d 10.1.0.0/16 -p tcp --sport 80 -j ACCEPT</div></pre></td></tr></table></figure>
+<p>source port 源端口。 </p>
+<p>配置规则时，往往需要考虑“双向性”。因为一条规则(forward)，只会匹配最新的规则定义。上述修改完了，A 可以PING C，但C又PING不通A了。 a better way, no matter request from in to out or the othersize, both should FORWARD.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -I FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT</div></pre></td></tr></table></figure>
+<ul>
+<li>更多动作</li>
+</ul>
+<p>NAT, network address translation. 网络地址转换。NAT说白了就是修改报文的IP地址，NAT功能通常会被集成到路由器、防火墙、或独立的NAT设备中。那为什么要修改报文的IP地址呢？</p>
+<p>scenario1 :网络内部有10台主机，它们有各自的IP地址，当网络内部的主机与其他网络中的主机通讯时，则会暴露自己的IP地址，如果我们想要隐藏这些主机的IP地址，该怎么办呢？</p>
+<p>当网络内部的主机向网络外部主机发送报文时，报文会经过防火墙或路由器，当报文经过防火墙或路由器时，将报文的源IP修改为防火墙或者路由器的IP地址，当其他网络中的主机收到这些报文时，显示的源IP地址则是路由器或者防火墙的，而不是那10台主机的IP地址，这样，就起到隐藏网络内部主机IP的作用。同时路由器会维护一张NAT表，记录这个内部主机的IP和端口。当外部网络中的主机进行回应时，外部主机将响应报文发送给路由器，路由器根据刚才NAT表中的映射记录，将响应报文中的目标IP与目标端口再改为内部主机的IP与端口号，然后再将响应报文发送给内部网络中的主机。</p>
+<p>刚才描述的过程中，”IP地址的转换”一共发生了两次。</p>
+<p>内部网络的报文发送出去时，报文的源IP会被修改，也就是源地址转换：Source Network Address Translation，缩写为SNAT。</p>
+<p>外部网络的报文响应时，响应报文的目标IP会再次被修改，也就是目标地址转换：Destinationnetwork address translation，缩写为DNAT。</p>
+<p>不论内网访问外网，Or the otherwise。都会有上述两次IP转换。一般将内网请求外网服务称为snat，外网请求内网服务称为dnat.</p>
+<p>上述场景不仅仅能够隐藏网络内部主机的IP地址，还能够让局域网内的主机共享公网IP，让使用私网IP的主机能够访问互联网。比如，整个公司只有一个公网IP，但是整个公司有10台电脑，我们怎样能让这10台电脑都访问互联网呢？ 只要在路由器上配置公网IP，在私网主机访问公网服务时，报文经过路由器，路由器将报文中的私网IP与端口号进行修改和映射，将其映射为公网IP与端口号，这时，内网主机即可共享公网IP访问互联网上的服务了</p>
+<p>场景2：公司有自己的局域网，网络中有两台主机作为服务器，主机1提供web服务，主机2提供数据库服务，但是这两台服务器在局域网中使用私有IP地址，只能被局域网内的主机访问，互联网无法访问到这两台服务器，整个公司只有一个可用的公网IP。如何让公网访问到公司的内网服务呢？</p>
+<p>将这个公网IP配置到公司的某台主机或路由器上，然后对外宣称，这个IP地址对外提供web服务与数据库服务，于是互联网主机将请求报文发送给这公网 IP地址，也就是说，此时报文中的目标IP为公网IP，当路由器收到报文后，将报文的目标地址改为对应的私网地址，比如，如果报文的目标IP与端口号为：公网IP+3306，我们就将报文的目标地址与端口改为：主机2的私网IP+3306，同理，公网IP+80端口映射为主机1的私网IP+80端口，当私网中的主机回应对应请求报文时，再将回应报文的源地址从私网IP+端口号映射为公网IP+端口号，再由路由器或公网主机发送给互联网中的主机。</p>
+<h6 id="测试环境，同ABC主机。"><a href="#测试环境，同ABC主机。" class="headerlink" title="测试环境，同ABC主机。"></a>测试环境，同ABC主机。</h6><ul>
+<li>SNAT 测试</li>
+</ul>
+<p>on B hostmachine:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 192.168.1.146</div></pre></td></tr></table></figure>
+<p>SNAT规则只能存在于POSTROUTING链与INPUT链中。 “–to-source”就是SNAT动作的常用选项，用于指定SNAT需要将报文的源IP修改为哪个IP地址。此处，即B的公网IP.</p>
+<ul>
+<li>DNAT测试</li>
+</ul>
+<p>on B machine:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -F  <span class="comment">#flash nat table </span></div><div class="line">iptables -t nat -I PREROUTING -d 192.168.1.146 -p tcp --dport 3389 -j DNAT --to-destination 10.1.0.6:3389</div></pre></td></tr></table></figure>
+<p>-j DNAT –to-destination 10.1.0.6:3389”表示将符合条件的报文进行DNAT，也就是目标地址转换，将符合条件的报文的目标地址与目标端口修改为10.1.0.6:3389。 理论上只要完成上述DNAT配置规则即可，但是在测试时，只配置DNAT规则后，并不能正常DNAT，经过测试发现，将相应的SNAT规则同时配置后，即可正常DNAT，于是我们又配置了SNAT:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A POSTROUTING -s 10.1.0.0/16 -j SNAT --to-source 192.168.1.146</div></pre></td></tr></table></figure>
+<h4 id="MASQUERADE"><a href="#MASQUERADE" class="headerlink" title="MASQUERADE"></a>MASQUERADE</h4><p>当我们拨号网上时，每次分配的IP地址往往不同，不会长期分给我们一个固定的IP地址，如果这时，我们想要让内网主机共享公网IP上网，就会很麻烦，因为每次IP地址发生变化以后，我们都要重新配置SNAT规则，这样显示不是很人性化，我们通过MASQUERADE即可解决这个问题。</p>
+<p>MASQUERADE会动态的将源地址转换为可用的IP地址，其实与SNAT实现的功能完全一致，都是修改源地址，只不过SNAT需要指明将报文的源地址改为哪个IP，而MASQUERADE则不用指定明确的IP，会动态的将报文的源地址修改为指定网卡上可用的IP地址。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -I POSTROUTING -s 10.1.0.0/16 -o en1 -j MASQUERADE</div></pre></td></tr></table></figure>
+<p>通过B外网网卡出去的报文在经过POSTROUTING链时，会自动将报文的源地址修改为外网网卡上可用的IP地址，这时，即使外网网卡中的公网IP地址发生了改变，也能够正常的、动态的将内部主机的报文的源IP映射为对应的公网IP。</p>
+<p>可以把MASQUERADE理解为动态的、自动化的SNAT</p>
+<h4 id="REDIRECT"><a href="#REDIRECT" class="headerlink" title="REDIRECT"></a>REDIRECT</h4><p>使用REDIRECT动作可以在本机上进行端口映射</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080</div></pre></td></tr></table></figure>
+<p>经过上述规则映射后，当别的机器访问本机的80端口时，报文会被重定向到本机的8080端口上。<br>REDIRECT规则只能定义在PREROUTING链或者OUTPUT链中。</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.digitalocean.com/community/tutorials/iptables-essentials-common-firewall-rules-and-commands" target="_blank" rel="external">iptables essentials</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1521589" target="_blank" rel="external">ip route, ip rule &amp; iptables 知多少</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/23/k8s-flannel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/23/k8s-flannel/" itemprop="url">k8s: flannel</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-23T08:19:53-04:00">
+                2020-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/23/k8s-flannel/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/23/k8s-flannel/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>k8s networks include a few topics:</p>
+<ul>
+<li><p>pod to pod communication in k8s</p>
+</li>
+<li><p>pod to the host node communication</p>
+</li>
+<li><p>pod to external service URL</p>
+</li>
+<li><p>external request to pod in k8s</p>
+</li>
+</ul>
+<p>the networks have two components: DNS and iptables. DNS used to resovle URL name to IP; iptables used to control network message transfer in/out. </p>
+<h4 id="preparation-image-for-test"><a href="#preparation-image-for-test" class="headerlink" title="preparation image for test"></a>preparation image for test</h4><p>to test network inside pod/docker, we need add the following network tools: </p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="string">iputils-ping</span> <span class="string">\</span> </div><div class="line"><span class="string">net-tools</span> <span class="string">\</span> </div><div class="line"><span class="string">iptables</span> <span class="string">\</span></div><div class="line"><span class="string">iproute</span></div></pre></td></tr></table></figure>
+<h4 id="docker-pod-runtime-privileges"><a href="#docker-pod-runtime-privileges" class="headerlink" title="docker/pod runtime privileges"></a>docker/pod runtime privileges</h4><p>by default, docker doesn’t allow run <code>iptables</code> inside container. and it give errors:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@redisjq:/<span class="comment"># iptables -t nat -L | grep INPUT </span></div><div class="line">iptables v1.6.0: can<span class="string">'t initialize iptables table `nat'</span>: Permission denied (you must be root)</div><div class="line">Perhaps iptables or your kernel needs to be upgraded.</div></pre></td></tr></table></figure>
+<p>which need to add <a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities" target="_blank" rel="external">docker runtime privilege and Linux capabilities</a></p>
+<p><a href="https://www.weave.works/blog/container-capabilities-kubernetes/" target="_blank" rel="external">container capabilities in k8s</a></p>
+<p>In a Kubernetes pod, the names are the same, but everything has to be defined in the pod specification. When implementing this in Kubernetes, you add an array of capabilities under the securityContext tag.</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">securityContext:</div><div class="line">  capabilities:</div><div class="line">    add:</div><div class="line">       - NET_ADMIN</div></pre></td></tr></table></figure>
+<h2 id="k8s-pod-DNS"><a href="#k8s-pod-DNS" class="headerlink" title="k8s pod DNS"></a>k8s pod DNS</h2><p><a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="external">DNS for services and pods</a> introduced four types: </p>
+<ul>
+<li><p>None </p>
+</li>
+<li><p>Default， where POD derived DNS config from the host node where to run pod.</p>
+</li>
+<li><p>ClusterFirst， where POD use DNS info from kube-dns or coreDNS</p>
+</li>
+<li><p>ClusterFirstWithHostNet, as the name explained.</p>
+</li>
+</ul>
+<p>tips, <strong>Default</strong> is not the default DNS policy. If dnsPolicy is not explicitly specified, then <strong>ClusterFirst</strong> is used as default.</p>
+<p>the purpose of pod/service DNS is used to transfer URL to IP, which is the second step after iptabels is understand successfully.</p>
+<p><code>coreDNS</code> is setted during <code>kube-adm init</code> with <code>serverDNS</code>. To do SNAT, the pod/service in K8S need access </p>
+<h5 id="resolv-conf-DNS-inside-pod"><a href="#resolv-conf-DNS-inside-pod" class="headerlink" title="resolv.conf/DNS inside pod :"></a>resolv.conf/DNS inside pod :</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@redisjq:/redis<span class="comment"># cat /etc/resolv.conf </span></div><div class="line">nameserver 10.96.0.10</div><div class="line">search lg.svc.cluster.local svc.cluster.local cluster.local</div><div class="line">options ndots:5</div></pre></td></tr></table></figure>
+<p>clearly, the pod DNS is coming from cluster, which can be check by: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">kubectl describe configmap kubeadm-config -n kube-system </div><div class="line"></div><div class="line">kind: ClusterConfiguration</div><div class="line">kubernetesVersion: v1.18.2</div><div class="line">networking:</div><div class="line">  dnsDomain: cluster.local</div><div class="line">  podSubnet: 10.4.0.0/16</div><div class="line">  serviceSubnet: 10.96.0.0/12</div></pre></td></tr></table></figure>
+<p>and that’s the reason why resolve URL failed, as clusterDNS is kind of random defined. </p>
+<p>the DNS failure gives errors as following inside pod: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">socket.gaierror: [Errno -3] Temporary failure in name resolution</div></pre></td></tr></table></figure>
+<h4 id="docker0-DNS"><a href="#docker0-DNS" class="headerlink" title="docker0 DNS"></a>docker0 DNS</h4><p>docker engine can configure its DNS at <code>/etc/daemon.json</code>, with “dns” section. when running docker in single mode, docker0 looks has host machine’s DNS, but when runnig in swarm mode, need to define additional DNS for external access.</p>
+<h2 id="iptables-in-K8S"><a href="#iptables-in-K8S" class="headerlink" title="iptables in K8S"></a>iptables in K8S</h2><p><a href="https://docs.docker.com/network/iptables/" target="_blank" rel="external">docker and iptables</a></p>
+<p>you should not modify the rules Docker inserts into your iptables policies. Docker installs two custom iptables chains named <code>DOCKER-USER</code> and <code>DOCKER</code>, and it ensures that incoming packets are always checked by these two chains first</p>
+<p>a simple test can found, <code>docker0</code> NIC is bridge is well to bind host network namespace, either export or response request externally. while with <code>flannel.d</code> NIC, pod can’t access external resources.</p>
+<p><a href="https://www.bookstack.cn/read/source-code-reading-notes/kubernetes-kube_proxy_iptables.md" target="_blank" rel="external">code review: kube-proxy iptables</a>: </p>
+<p>iptables has 5 tables and 5 chains.</p>
+<p>the 5 chaines: </p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">PREROUTING:</span> <span class="string">before</span> <span class="string">message</span> <span class="string">into</span> <span class="string">route,</span> <span class="string">the</span> <span class="string">external</span> <span class="string">request</span> <span class="string">DNAT.</span></div><div class="line"><span class="attr">INPUT:</span> <span class="string">message</span> <span class="string">to</span> <span class="string">local</span> <span class="string">host</span> <span class="string">or</span> <span class="string">current</span> <span class="string">network</span> <span class="string">namespace.</span> </div><div class="line"><span class="attr">FORWARD:</span> <span class="string">message</span> <span class="string">forward</span> <span class="string">to</span> <span class="string">other</span> <span class="string">host</span> <span class="string">or</span> <span class="string">other</span> <span class="string">network</span> <span class="string">namespace.</span></div><div class="line"><span class="attr">OUTPUT:</span> <span class="string">message</span> <span class="string">export</span> <span class="string">from</span> <span class="string">current</span> <span class="string">host</span></div><div class="line"><span class="attr">POSTROUTING:</span> <span class="string">after</span> <span class="string">route</span> <span class="string">before</span> <span class="string">NIC,</span> <span class="string">message</span> <span class="string">SNAT</span></div></pre></td></tr></table></figure>
+<p>the 5 tables: </p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">   </div><div class="line">    <span class="string">filter</span> <span class="string">table,</span> <span class="string">used</span> <span class="string">to</span> <span class="string">control</span> <span class="string">the</span> <span class="string">network</span> <span class="string">package</span> <span class="string">need</span> <span class="string">to</span> <span class="string">ACCEPT,</span> <span class="string">or</span> <span class="string">DROP,</span> <span class="string">or</span> <span class="string">REJECT</span> <span class="string">when</span> <span class="string">it</span> <span class="string">comes</span> <span class="string">to</span> <span class="string">a</span> <span class="string">chain</span></div><div class="line"></div><div class="line">    <span class="string">nat(network</span> <span class="string">address</span> <span class="string">translation)</span> <span class="string">table,</span> <span class="string">used</span> <span class="string">to</span> <span class="string">modify</span> <span class="string">the</span> <span class="string">src/target</span> <span class="string">address</span> <span class="string">of</span> <span class="string">network</span> <span class="string">package</span></div><div class="line"></div><div class="line">    <span class="string">mangle</span> <span class="string">table,</span> <span class="string">used</span> <span class="string">to</span> <span class="string">modify</span> <span class="string">IP</span> <span class="string">header</span> <span class="string">info</span> <span class="string">of</span> <span class="string">network</span> <span class="string">package</span></div><div class="line"></div><div class="line">    <span class="string">raw</span> <span class="string">table,</span> </div><div class="line"></div><div class="line">    <span class="string">security</span> <span class="string">table</span></div><div class="line"></div><div class="line"><span class="string">```</span> </div><div class="line"></div><div class="line"><span class="string">for</span> <span class="string">k8s</span> <span class="string">pods/services,</span> <span class="string">mostly</span> <span class="string">consider</span> <span class="string">`filter`</span> <span class="string">and</span> <span class="string">`nat`</span> <span class="string">tables.</span> <span class="string">and</span> <span class="string">k8s</span> <span class="string">expand</span> <span class="string">another</span> <span class="number">7</span> <span class="attr">chains:</span> <span class="string">KUBE-SERVICES、KUBE-EXTERNAL-SERVICES、KUBE-NODEPORTS、KUBE-POSTROUTING、KUBE-MARK-MASQ、KUBE-MARK-DROP、KUBE-FORWARD.</span> </div><div class="line"></div><div class="line"></div><div class="line"><span class="string">![image](https://static.bookstack.cn/projects/source-code-reading-notes/729e704bd9fc39c9223da5185e9ef084.png)</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## virtual network flannel</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#### check running flanneld </span></div><div class="line"></div><div class="line"></div><div class="line"><span class="string">*</span> <span class="string">`/etc/cni/net.d/10-flannel.conflist`</span> <span class="string">on</span> <span class="string">host</span> <span class="string">machine</span> <span class="string">is</span> <span class="string">the</span> <span class="string">same</span> <span class="string">as</span> <span class="string">`/etc/kube-flannel/cni-conf.json`</span> <span class="string">in</span> <span class="string">flannel</span> <span class="string">container</span> <span class="string">on</span> <span class="string">master</span> <span class="string">node.</span></div><div class="line"></div><div class="line"><span class="string">*</span> <span class="string">`/run/flannel/subnet.env`</span> <span class="string">exist</span> <span class="string">in</span> <span class="string">both</span> <span class="string">flannel</span> <span class="string">container</span> <span class="string">(on</span> <span class="string">master</span> <span class="string">node)</span> <span class="string">and</span> <span class="string">in</span> <span class="string">master</span> <span class="string">host</span> <span class="string">machine.</span> <span class="string">it</span> <span class="string">looks</span> <span class="string">like</span> <span class="string">network</span> <span class="string">configure(subnet.env)</span> <span class="string">is</span> <span class="string">copied</span> <span class="string">from</span> <span class="string">container</span> <span class="string">to</span> <span class="string">host</span> <span class="string">machine.</span> <span class="string">so</span> <span class="string">if</span> <span class="string">there</span> <span class="string">is</span> <span class="literal">no</span> <span class="string">`flannel</span> <span class="string">container`</span> <span class="string">running</span> <span class="string">on</span> <span class="string">some</span> <span class="string">nodes,</span> <span class="string">these</span> <span class="string">nodes</span> <span class="string">won't</span> <span class="string">have</span> <span class="string">the</span> <span class="string">right</span> <span class="string">network</span> <span class="string">configure.</span> </div><div class="line"></div><div class="line"><span class="string">at</span> <span class="string">master</span> <span class="string">node,</span> <span class="string">`HostPath`</span> <span class="string">points</span> <span class="attr">to:</span> <span class="string">/run/flannel,</span> <span class="string">/etc/cni/net.d,</span> <span class="string">kube-flannel-cfg</span> <span class="string">(ConfigMap);</span> <span class="string">while</span> <span class="string">at</span> <span class="string">working</span> <span class="string">node(due</span> <span class="string">to</span> <span class="string">missing</span> <span class="string">/gcr.io/flannel</span> <span class="string">image),</span> <span class="string">`/run/flannel/subnet.env`</span> <span class="string">is</span> <span class="string">missed.</span> <span class="string">previously,</span> <span class="string">I</span> <span class="string">thought</span> <span class="string">to</span> <span class="string">cp</span> <span class="string">this</span> <span class="string">file</span> <span class="string">from</span> <span class="string">master</span> <span class="string">node</span> <span class="string">to</span> <span class="string">woker</span> <span class="string">node</span> <span class="string">is</span> <span class="string">the</span> <span class="string">solution,</span> <span class="string">then</span> <span class="string">this</span> <span class="string">file</span> <span class="string">is</span> <span class="string">missed</span> <span class="string">every</span> <span class="string">time</span> <span class="string">to</span> <span class="string">restart</span> <span class="string">worker</span> <span class="string">node.</span> </div><div class="line"></div><div class="line"><span class="string">once</span> <span class="string">copied</span> <span class="string">both</span> <span class="string">`kube-proxy`</span> <span class="string">and</span> <span class="string">`flannel`</span> <span class="string">images</span> <span class="string">to</span> <span class="string">worker</span> <span class="string">node,</span> <span class="string">and</span> <span class="string">restart</span> <span class="string">`kubelet`</span> <span class="string">at</span> <span class="string">worker</span> <span class="string">node,</span> <span class="string">the</span> <span class="string">cluster</span> <span class="string">should</span> <span class="string">give</span> <span class="string">`Running</span> <span class="string">status`</span> <span class="string">of</span> <span class="string">all</span> <span class="string">these</span> <span class="string">components.</span> <span class="string">including</span> <span class="number">2</span> <span class="string">copies</span> <span class="string">of</span> <span class="string">`flannel`,</span> <span class="string">one</span> <span class="string">running</span> <span class="string">on</span> <span class="string">master</span> <span class="string">node,</span> <span class="string">and</span> <span class="string">the</span> <span class="string">other</span> <span class="string">running</span> <span class="string">on</span> <span class="string">working</span> <span class="string">node.</span> </div><div class="line"></div><div class="line"><span class="string">as</span> <span class="string">we</span> <span class="string">are</span> <span class="string">using</span> <span class="string">`kubectl`</span> <span class="string">to</span> <span class="string">start</span> <span class="string">the</span> <span class="string">cluster,</span> <span class="string">the</span> <span class="string">actual</span> <span class="string">flanneld</span> <span class="string">is</span> <span class="string">`/opt/bin/flanneld`</span> <span class="string">from</span> <span class="string">the</span> <span class="string">running</span> <span class="string">flannel</span> <span class="string">container,</span> <span class="string">and</span> <span class="string">it</span> <span class="string">maps</span> <span class="string">NIC</span> <span class="string">to</span> <span class="string">the</span> <span class="string">host</span> <span class="string">machine.</span> </div><div class="line"></div><div class="line"><span class="string">another</span> <span class="string">thing</span> <span class="string">is,</span> <span class="string">`flannel`</span> <span class="string">is</span> <span class="string">the</span> <span class="string">core</span> <span class="string">of</span> <span class="string">the</span> <span class="string">default</span> <span class="string">`kube-proxy`,</span> <span class="string">so</span> <span class="string">`kube-proxy`</span> <span class="string">image</span> <span class="string">is</span> <span class="string">also</span> <span class="string">required</span> <span class="string">on</span> <span class="string">both</span> <span class="string">nodes.</span> <span class="string">`coreDNS`</span> <span class="string">run</span> <span class="string">two</span> <span class="string">copies</span> <span class="string">on</span> <span class="string">master</span> <span class="string">node.</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#### [Flannel mechanism](https://www.jianshu.com/p/165a256fb1da)</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="string">the</span> <span class="string">data</span> <span class="attr">flow:</span> <span class="string">**the</span> <span class="string">sending</span> <span class="string">message**</span> <span class="string">go</span> <span class="string">to</span> <span class="string">VNC(virtual</span> <span class="string">network</span> <span class="string">card)</span> <span class="string">`docker0`</span> <span class="string">on</span> <span class="string">host</span> <span class="string">machine,</span> <span class="string">which</span> <span class="string">transfers</span> <span class="string">to</span> <span class="string">VNC</span> <span class="string">`flannel0`.</span> <span class="string">this</span> <span class="string">process</span> <span class="string">is</span> <span class="string">P2P.</span> <span class="string">the</span> <span class="string">global</span> <span class="string">`etcd`</span> <span class="string">service</span> <span class="string">maintain</span> <span class="string">a</span> <span class="string">iptables</span> <span class="string">among</span> <span class="string">nodes,</span> <span class="string">which</span> <span class="string">store</span> <span class="string">the</span> <span class="string">subnet</span> <span class="string">range</span> <span class="string">of</span> <span class="string">each</span> <span class="string">node.</span> <span class="number">2</span><span class="string">)</span> <span class="string">the</span> <span class="string">`flanneld`</span> <span class="string">service</span> <span class="string">on</span> <span class="string">the</span> <span class="string">special</span> <span class="string">node</span> <span class="string">package</span> <span class="string">**the</span> <span class="string">sending</span> <span class="string">message**</span> <span class="string">as</span> <span class="string">UDP</span> <span class="string">package,</span> <span class="string">and</span> <span class="string">delivery</span> <span class="string">to</span> <span class="string">target</span> <span class="string">node,</span> <span class="string">based</span> <span class="string">on</span> <span class="string">the</span> <span class="string">iptables.</span> <span class="number">3</span><span class="string">)</span> <span class="string">when</span> <span class="string">the</span> <span class="string">target</span> <span class="string">node</span> <span class="string">received</span> <span class="string">the</span> <span class="string">UDP</span> <span class="string">package,</span> <span class="string">it</span> <span class="string">unpackage</span> <span class="string">the</span> <span class="string">message,</span> <span class="string">and</span> <span class="string">send</span> <span class="string">to</span> <span class="string">its</span> <span class="string">`flannel0`,</span> <span class="string">then</span> <span class="string">transfer</span> <span class="string">to</span> <span class="string">its</span> <span class="string">`docker0`.</span> </div><div class="line"></div><div class="line"></div><div class="line"><span class="number">1</span><span class="string">)</span> <span class="string">after</span> <span class="string">flanneld</span> <span class="string">started，will</span> <span class="string">create</span> <span class="string">`flannel.1`</span> <span class="string">virtual</span> <span class="string">network</span> <span class="string">card.</span> <span class="string">the</span> <span class="string">purpose</span> <span class="string">of</span> <span class="string">`flannel.1`</span> <span class="string">is</span> <span class="string">for</span> <span class="string">across-host</span> <span class="string">network,</span> <span class="string">including</span> <span class="string">package/unpackage</span> <span class="string">UDP,</span> <span class="string">and</span> <span class="string">maintain</span> <span class="string">iptables</span> <span class="string">among</span> <span class="string">the</span> <span class="string">nodes.</span> </div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="number">2</span><span class="string">)</span> <span class="string">each</span> <span class="string">node</span> <span class="string">also</span> <span class="string">create</span> <span class="string">`cni0`</span> <span class="string">virtual</span> <span class="string">network</span> <span class="string">card,</span> <span class="string">at</span> <span class="string">the</span> <span class="string">first</span> <span class="string">time</span> <span class="string">to</span> <span class="string">run</span> <span class="string">flannel</span> <span class="string">CNI.</span> <span class="string">the</span> <span class="string">purpose</span> <span class="string">of</span> <span class="string">`cni0`</span> <span class="string">is</span> <span class="string">same</span> <span class="string">as</span> <span class="string">`docker0`,</span> <span class="string">and</span> <span class="string">it's</span> <span class="string">a</span> <span class="string">bridge</span> <span class="string">network,</span> <span class="string">used</span> <span class="string">for</span> <span class="string">communication</span> <span class="string">in</span> <span class="string">the</span> <span class="string">same</span> <span class="string">node.</span> </div><div class="line"></div><div class="line"></div><div class="line"><span class="string">![image](https://www.centos.bz/wp-content/uploads/2017/06/flannel-01.png)</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## test with redis services</span></div><div class="line"></div><div class="line"><span class="string">we</span> <span class="string">had</span> <span class="string">define</span> <span class="string">a</span> <span class="string">`redisjq`</span> <span class="string">pod,</span> <span class="string">the</span> <span class="string">following</span> <span class="string">testes</span> <span class="string">are</span> <span class="string">all</span> <span class="string">in</span> <span class="string">this</span> <span class="attr">pod:</span></div><div class="line"></div><div class="line"><span class="string">```sh</span></div><div class="line"><span class="string">kubectl</span> <span class="string">exec</span> <span class="bullet">-it</span> <span class="string">redisjq</span> <span class="bullet">-n</span> <span class="string">lg</span>  <span class="string">/bin/bash</span></div><div class="line"><span class="string">ping</span> <span class="string">localhost</span> <span class="comment">#ok</span></div><div class="line"><span class="string">ping</span> <span class="number">10.255</span><span class="number">.18</span><span class="number">.3</span> <span class="comment">#not </span></div><div class="line"><span class="string">ping</span> <span class="number">10.3</span><span class="number">.101</span><span class="number">.101</span> <span class="comment">#not</span></div><div class="line"><span class="string">ping</span> <span class="number">10.20</span><span class="number">.180</span><span class="number">.12</span> </div><div class="line"></div><div class="line"><span class="string">ifconfig</span> </div><div class="line"><span class="string">&gt;&gt;eth0,</span>  <span class="number">10.4</span><span class="number">.1</span><span class="number">.46</span></div><div class="line"><span class="string">&gt;&gt;lo,</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+<p>the output above is initial output before we had any network setttings. basically the pod can only ping localhost, neither the host DNS, or the host IP. the vip(10.4.1.46) is not in the same network namespace as host network space. </p>
+<h4 id="flannel-d-pod-on-both-nodes"><a href="#flannel-d-pod-on-both-nodes" class="headerlink" title="flannel.d pod on both  nodes:"></a>flannel.d pod on both  nodes:</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">david@meng:~/k8s/lgsvl$ kubectl get pods kube-flannel-ds-amd64-85d6m  -n kube-system --output=wide</div><div class="line">NAME                          READY   STATUS    RESTARTS   AGE   IP             NODE   NOMINATED NODE   READINESS GATES</div><div class="line">kube-flannel-ds-amd64-85d6m   1/1     Running   5          15d   10.20.180.12   meng   &lt;none&gt;           &lt;none&gt;</div><div class="line"></div><div class="line">david@meng:~/k8s/lgsvl$ kubectl get pods kube-flannel-ds-amd64-fflsl  -n kube-system --output=wide</div><div class="line">NAME                          READY   STATUS    RESTARTS   AGE   IP              NODE     NOMINATED NODE   READINESS GATES</div><div class="line">kube-flannel-ds-amd64-fflsl   1/1     Running   154        15d   10.20.181.132   ubuntu   &lt;none&gt;           &lt;none&gt;</div></pre></td></tr></table></figure>
+<p><code>flannel.d</code> is runing on each node, should triggered by <code>kubelet</code>. <code>flannel.d</code> is used as virtual network interface, to manage across-node pod communication inside k8s. </p>
+<h4 id="coredns-pod-in-meng-node"><a href="#coredns-pod-in-meng-node" class="headerlink" title="coredns pod in meng node"></a>coredns pod in meng node</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">david@meng:~/k8s/lgsvl$ kubectl get pods coredns-66bff467f8-59g97  -n kube-system --output=wide</div><div class="line">NAME                       READY   STATUS    RESTARTS   AGE   IP          NODE   NOMINATED NODE   READINESS GATES</div><div class="line">coredns-66bff467f8-59g97   1/1     Running   4          14d   10.4.0.27   meng   &lt;none&gt;           &lt;none&gt;</div></pre></td></tr></table></figure>
+<p><code>coredns</code> has two replicas, both running on master node(meng), and we can see it only has virtual ip/cluster ip ( 10.4.0.x).</p>
+<h4 id="redisjs-pod-in-ubuntu’s-node"><a href="#redisjs-pod-in-ubuntu’s-node" class="headerlink" title="redisjs pod in ubuntu’s node"></a>redisjs pod in ubuntu’s node</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">david@meng:~/k8s/lgsvl$ kubectl get pods redisjq -n lg --output=wide </div><div class="line">NAME      READY   STATUS    RESTARTS   AGE   IP          NODE     NOMINATED NODE   READINESS GATES</div><div class="line">redisjq   1/1     Running   0          20m   10.4.1.47   ubuntu   &lt;none&gt;           &lt;none&gt;</div><div class="line">``` </div><div class="line"></div><div class="line">by default, working pod is only running at woker node(ubuntu), <span class="built_in">which</span> has clusterIP(10.4.1.47).</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#### pod1 ping pod2 in the same node </span></div><div class="line"></div><div class="line">**ping successfully** there is no doubt <span class="keyword">in</span> the same node, pods can ping each other.</div><div class="line"></div><div class="line"><span class="comment">#### redisjq pod1(10.4.1.47) in ubuntu ping corends pod2(10.4.0.27) in meng</span></div><div class="line"></div><div class="line">```sh</div><div class="line">root@redisjq:/redis<span class="comment"># ping 10.4.0.27 </span></div><div class="line">PING 10.4.0.27 (10.4.0.27) 56(84) bytes of data.</div><div class="line">64 bytes from 10.4.0.27: icmp_seq=1 ttl=62 time=0.757 ms</div></pre></td></tr></table></figure>
+<p><strong>ping successfully</strong>, which is the working of flanneld. </p>
+<h4 id="redisjq-pod1-10-4-1-7-in-ubuntu-ping-hostIP-10-20-181-132-of-ubuntu"><a href="#redisjq-pod1-10-4-1-7-in-ubuntu-ping-hostIP-10-20-181-132-of-ubuntu" class="headerlink" title="redisjq pod1(10.4.1.7) in ubuntu  ping hostIP(10.20.181.132) of ubuntu"></a>redisjq pod1(10.4.1.7) in ubuntu  ping hostIP(10.20.181.132) of ubuntu</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">root@redisjq:/redis<span class="comment"># ping 10.20.181.132</span></div><div class="line">PING 10.20.181.132 (10.20.181.132) 56(84) bytes of data.</div><div class="line">64 bytes from 10.20.181.132: icmp_seq=1 ttl=64 time=0.127 ms</div></pre></td></tr></table></figure>
+<p><strong>ping successfuly</strong>, pod in cluster can ping its host node, sounds no problem. </p>
+<h4 id="redisjq-pod1-10-4-1-7-in-ubuntu-ping-hostIP-10-20-180-12-of-meng"><a href="#redisjq-pod1-10-4-1-7-in-ubuntu-ping-hostIP-10-20-180-12-of-meng" class="headerlink" title="redisjq pod1(10.4.1.7) in ubuntu ping hostIP(10.20.180.12) of meng"></a>redisjq pod1(10.4.1.7) in ubuntu ping hostIP(10.20.180.12) of meng</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root@redisjq:/redis<span class="comment"># ping 10.20.180.12 </span></div><div class="line">PING 10.20.180.12 (10.20.180.12) 56(84) bytes of data.</div></pre></td></tr></table></figure>
+<p><strong>ping failed</strong>, interesting, so pod in cluster can’t ping any non-hosting node’s IP.</p>
+<p>so far, pod with vip can ping any other pod with vip in the cluster, no matter in the same node or not.  pod with vip can only ping its host machine’s physical IP, but pod can’t ping other hostIP.</p>
+<p>namely, the network of pod VIP inside k8s and the bridge network from pod vip to its host is set well. but the network from pod to external IP is not well.</p>
+<p>these 4 tests give a very good understanding about flannel’s function inside k8s: pod to pod in the same node or not. but usually we need SNAT or DNAT. to make SNAT/DNAT avaiable, we need understand <strong>DNS &amp; iptables</strong> of k8s. </p>
+<h2 id="update-iptables-to-allow-pod-access-public-IP"><a href="#update-iptables-to-allow-pod-access-public-IP" class="headerlink" title="update iptables to allow pod access public IP"></a>update iptables to allow pod access public IP</h2><h4 id="cni0-docker0-eno1-flannel-1-in-host-machine-vs-eth0-in-pod"><a href="#cni0-docker0-eno1-flannel-1-in-host-machine-vs-eth0-in-pod" class="headerlink" title="cni0, docker0, eno1, flannel.1 in host machine vs eth0 in pod"></a>cni0, docker0, eno1, flannel.1 in host machine vs eth0 in pod</h4><p>these virtual NIC are common in k8s env. </p>
+<ul>
+<li>on node1 </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cni0: 10.4.1.1</div><div class="line">docker0: 172.17.0.1</div><div class="line">eno1: 10.20.181.132</div><div class="line">flannel.1: 10.4.1.0</div></pre></td></tr></table></figure>
+<ul>
+<li>on pod1, which is running on node1</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">eth0:  10.4.1.48</div></pre></td></tr></table></figure>
+<p><a href="https://www.centos.bz/2017/06/k8s-flannel-network/" target="_blank" rel="external">pod1 -&gt; pod2 network message flow</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod1(10.4.1.48) on node1(10.20.181.132) -&gt; cni0(10.4.1.1) -&gt; flannel.1(10.4.1.0) -&gt; kube-flannel on node1(10.20.181.132) -&gt; kube-flannel on node2(10.20.180.12) -&gt; flannel.1 on node2 -&gt; cni0 on node2 -&gt; pod2(10.4.1.46) on node2</div></pre></td></tr></table></figure>
+<p>to allow network message SNAT, namely to handle <strong>FORWARD</strong> internal clusterIP data to external services, we can add the following newe iptable rule:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -I POSTROUTING -s 10.4.1.0/24 -j MASQUERADE</div></pre></td></tr></table></figure>
+<p>after add the new rule, check inside pod:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">root@redisjq:/redis<span class="comment"># ping 10.20.180.12 </span></div><div class="line">PING 10.20.180.12 (10.20.180.12) 56(84) bytes of data.</div><div class="line">64 bytes from 10.20.180.12: icmp_seq=1 ttl=62 time=0.690 ms</div><div class="line">root@redisjq:/redis<span class="comment"># ping 10.20.181.132</span></div><div class="line">PING 10.20.181.132 (10.20.181.132) 56(84) bytes of data.</div><div class="line">64 bytes from 10.20.181.132: icmp_seq=1 ttl=64 time=0.108 ms</div><div class="line">root@redisjq:/redis<span class="comment"># ping 10.20.180.61 </span></div><div class="line">PING 10.20.180.61 (10.20.180.61) 56(84) bytes of data.</div><div class="line">64 bytes from 10.20.180.61: icmp_seq=1 ttl=126 time=0.366 ms</div><div class="line">root@redisjq:/redis<span class="comment"># ping www.baidu.com</span></div><div class="line">ping: unknown host www.baidu.com</div><div class="line">root@redisjq:/redis<span class="comment"># ping 61.135.169.121   #baidu IP</span></div><div class="line">PING 61.135.169.121 (61.135.169.121) 56(84) bytes of data.</div><div class="line">64 bytes from 61.135.169.121: icmp_seq=1 ttl=51 time=8.16 ms</div></pre></td></tr></table></figure>
+<p>the DNS is not fixed, so we can’t ping <code>www.baidu.com</code>, but we can ping its IP.</p>
+<p>on the other hand, to hanle <strong>FORWARD</strong> external request to internal clusterIP, we can add the following new iptable rule:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">iptables -t nat -I PREROUTING -d 10.4.1.0/24 -j MASQUERADE</div></pre></td></tr></table></figure>
+<p>that’s beauty of iptables. </p>
+<p>as mentioned previously, to handle pod DNS error, we need add <a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/" target="_blank" rel="external">pod/service DNS strategy</a> inside the <code>pod.yaml</code>:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">spec:</span></div><div class="line"><span class="attr">  dnsPolicy:</span> <span class="string">Default</span></div></pre></td></tr></table></figure>
+<p>our k8s cluster has none DNS server itself, so to do SNAT/DNAT, we have to keep <code>Default</code> dns strategy, which make pod/service to use its host machine’s DNS, which is defined at <code>/etc/resovl.conf</code>.</p>
+<p>one thing to take care, some host machine has only <code>nameserver 127.0.0.1</code> in <code>resolv.conf</code>, then we need add the real DNS server.</p>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>with knowledge about iptables and dns, we can make an useful K8S cluster. the left work is make useful pods.</p>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://jimmysong.io/blog/configuring-kubernetes-kube-dns/" target="_blank" rel="external">jimmy song: config K8S DNS: kube-dns</a></p>
+<p><a href="https://askubuntu.com/questions/346838/how-do-i-configure-my-dns-settings-in-ubuntu-server" target="_blank" rel="external">configure DNS settings in Ubuntu</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/90992878" target="_blank" rel="external">zhihu: k8s network</a></p>
+<p><a href="https://www.kubernetes.org.cn/4317.html" target="_blank" rel="external">k8s expose service</a></p>
+<p><a href="https://www.kubernetes.org.cn/6838.html" target="_blank" rel="external">k8s network advance</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1140088" target="_blank" rel="external">docker iptables from tencent cloud</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/k8s-setup-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -442,20 +920,6 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
 <p>then restart docker engine: </p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart docker.service</div></pre></td></tr></table></figure>
 <p>after enable docker0 iptable rules, the following test service can be accessed on both nodes. </p>
-<h2 id="virtual-network-flannel"><a href="#virtual-network-flannel" class="headerlink" title="virtual network flannel"></a>virtual network flannel</h2><h4 id="check-running-flanneld"><a href="#check-running-flanneld" class="headerlink" title="check running flanneld"></a>check running flanneld</h4><ul>
-<li><p><code>/etc/cni/net.d/10-flannel.conflist</code> on host machine is the same as <code>/etc/kube-flannel/cni-conf.json</code> in flannel container on master node.</p>
-</li>
-<li><p><code>/run/flannel/subnet.env</code> exist in both flannel container (on master node) and in master host machine. it looks like network configure(subnet.env) is copied from container to host machine. so if there is no <code>flannel container</code> running on some nodes, these nodes won’t have the right network configure. </p>
-</li>
-</ul>
-<p>at master node, <code>HostPath</code> points to: /run/flannel, /etc/cni/net.d, kube-flannel-cfg (ConfigMap); while at working node(due to missing /gcr.io/flannel image), <code>/run/flannel/subnet.env</code> is missed. previously, I thought to cp this file from master node to woker node is the solution, then this file is missed every time to restart worker node. </p>
-<p>once copied both <code>kube-proxy</code> and <code>flannel</code> images to worker node, and restart <code>kubelet</code> at worker node, the cluster should give <code>Running status</code> of all these components. including 2 copies of <code>flannel</code>, one running on master node, and the other running on working node. </p>
-<p>as we are using <code>kubectl</code> to start the cluster, the actual flanneld is <code>/opt/bin/flanneld</code> from the running flannel container, and it maps NIC to the host machine. </p>
-<p>another thing is, <code>flannel</code> is the core of the default <code>kube-proxy</code>, so <code>kube-proxy</code> image is also required on both nodes. <code>coreDNS</code> run two copies on master node.</p>
-<h4 id="Flannel-mechanism"><a href="#Flannel-mechanism" class="headerlink" title="Flannel mechanism"></a><a href="https://www.jianshu.com/p/165a256fb1da" target="_blank" rel="external">Flannel mechanism</a></h4><p>the data flow: <strong>the sending message</strong> go to VNC(virtual network card) <code>docker0</code> on host machine, which transfers to VNC <code>flannel0</code>. this process is P2P. the global <code>etcd</code> service maintain a iptables among nodes, which store the subnet range of each node. 2) the <code>flanneld</code> service on the special node package <strong>the sending message</strong> as UDP package, and delivery to target node, based on the iptables. 3) when the target node received the UDP package, it unpackage the message, and send to its <code>flannel0</code>, then transfer to its <code>docker0</code>. </p>
-<p>1) after flanneld started，will create <code>flannel.1</code> virtual network card. the purpose of <code>flannel.1</code> is for across-host network, including package/unpackage UDP, and maintain iptables among the nodes. </p>
-<p>2) each node also create <code>cni0</code> virtual network card, at the first time to run flannel CNI. the purpose of <code>cni0</code> is same as <code>docker0</code>, and it’s a bridge network, used for communication in the same node. </p>
-<p><img src="https://www.centos.bz/wp-content/uploads/2017/06/flannel-01.png" alt="image"></p>
 <h2 id="deploy-redis-service"><a href="#deploy-redis-service" class="headerlink" title="deploy redis service"></a>deploy redis service</h2><h4 id="create-a-k8s-redis-image"><a href="#create-a-k8s-redis-image" class="headerlink" title="create a k8s-redis image"></a>create a k8s-redis image</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># use existing docker image as a base</div><div class="line">FROM ubuntu:16.04</div><div class="line"></div><div class="line"># Download and install dependency</div><div class="line">RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends redis-server</div><div class="line"></div><div class="line"># EXPOSE the port to the Host OS</div><div class="line">EXPOSE 6379</div><div class="line"></div><div class="line"># Tell the image what command it has to execute as it starts as a container</div><div class="line">CMD ["redis-server"]</div></pre></td></tr></table></figure>
 <p>build the image and push to both nodes. </p>
 <h4 id="deploy-a-redis-deployment"><a href="#deploy-a-redis-deployment" class="headerlink" title="deploy a redis-deployment"></a>deploy a redis-deployment</h4><ul>
@@ -679,7 +1143,7 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
       
         
           
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>so I am now to transfer our swarm docker DevOps env to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things: </p>
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>transfer from docker swarm to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things: </p>
 <ul>
 <li><p>a more general abstract object. e.g. pod, service/svc, deployment, secret, namespace/ns, role e.t.c.</p>
 </li>
@@ -2425,454 +2889,6 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/28/vmware-virtualization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/28/vmware-virtualization/" itemprop="url">vmware introduction</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-28T05:40:37-04:00">
-                2020-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/28/vmware-virtualization/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/28/vmware-virtualization/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>sooner or later, we are in the direction of gpu virtualization, previously <a href="https://zjli2013.github.io/2020/03/14/hypervisor-and-gpu-virtualization/" target="_blank" rel="external">hypervisor and gpu virtual</a> is the first blog. recently, I’d went through openstack/kvm, vnc and now vmware. there is no doubt, any licensed product is not my prefer, but on the hand, it’s more expensive to hire an openstack engineer, compared to pay vmware. </p>
-<p>vmware is not a windows-only, I had to throw my old mind first. the basic or back-end idea looks very similar to kvm. anyway, the core is <code>hypervisor layer</code>. once get understand one type of virtualization, it’s really easy to understand another. </p>
-<h4 id="VMware-ESXi"><a href="#VMware-ESXi" class="headerlink" title="VMware ESXi"></a>VMware ESXi</h4><p><a href="https://www.vmware.com/products/esxi-and-esx.html" target="_blank" rel="external">ESXi hypervisor</a> is a Type1 or “bare metal” hypervisor,  also called <strong>vmware hypervisor</strong>, is a thin layer of software that interacts with the underlying resources of a physical computer(host machine), and allocates those resources to other os(guest machine).<br>and can support remotely access, just like kvm.</p>
-<p>check <a href="https://pubs.vmware.com/vsphere-50/index.jsp?topic=%2Fcom.vmware.vsphere.install.doc_50%2FGUID-F3A960E9-57DF-4D2E-9127-A65AA670E643.html" target="_blank" rel="external">vSphere doc</a> about how to set BIOS and manage ESXi remotely.</p>
-<p> <strong>BIOS boot configuration</strong> can be setted by configuring the boot order in BIOS during startup or by selecting a boot device from the boot device selection menu. the system BIOS has two options. One is for the boot sequence (floppy, CD-ROM, hard disk) and another for the hard disk boot order (USB key, local hard disk).</p>
-<h4 id="VMware-workstation"><a href="#VMware-workstation" class="headerlink" title="VMware workstation"></a>VMware workstation</h4><p>workstation support multi guest os in a single host os(either windows or Linux), is a Type2 hypervisor, run as an app on host OS. one limitation of <code>workstation</code> is it only works in local host, can’t access remotely. </p>
-<ul>
-<li><p>free version,  <code>workstation player</code> </p>
-</li>
-<li><p>licensed version,  <code>workstation prof</code> </p>
-</li>
-</ul>
-<p>in one word, workstation is good enough to multiple hardware usage, but not useful if remote access is required  </p>
-<h4 id="VMware-vSphere"><a href="#VMware-vSphere" class="headerlink" title="VMware vSphere"></a>VMware vSphere</h4><p>the arch of vSphere has three layers:</p>
-<ul>
-<li><p>virtualization layer </p>
-</li>
-<li><p>management layer </p>
-</li>
-<li><p>interface layer(web, sdk, cli, virtual console)</p>
-</li>
-</ul>
-<p>ESXi is the core hypervisor for VMware products, and also is the core of the vSphere package, the other two is: vSphere client and vSphere server.</p>
-<p>vSphere server is enterprise-oriented, which is run based on ESXi layer. vSphere client is a client console/terminal. </p>
-<ul>
-<li><p><a href="https://www.vmware.com/cn/products/vsphere-hypervisor.html" target="_blank" rel="external">free version:  vSphere hypervisor</a></p>
-</li>
-<li><p><a href="https://www.vmware.com/cn/products/vcenter-server.html" target="_blank" rel="external">licensed fee version : vSphere with vServer</a></p>
-</li>
-</ul>
-<p>nowadays there are no limitations on Physical CPU or RAM for Free ESXi. <a href="http://www.vmware.com/products/vsphere-hypervisor/gettingstarted.html" target="_blank" rel="external">here</a></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Specifications: </div><div class="line">Number of cores per physical CPU: No <span class="built_in">limit</span></div><div class="line">Number of physical CPUs per host: No <span class="built_in">limit</span></div><div class="line">Number of logical CPUs per host: 480</div><div class="line">Maximum vCPUs per virtual machine: 8</div></pre></td></tr></table></figure>
-<h4 id="virtual-desktop-integration-VDI"><a href="#virtual-desktop-integration-VDI" class="headerlink" title="virtual desktop integration (VDI)"></a>virtual desktop integration (VDI)</h4><p>VDI virtualize a desktop OS on a server.  VDI offers centralized desktop management. the vmware tool is <code>VMware Horizon</code></p>
-<h4 id="Horizon"><a href="#Horizon" class="headerlink" title="Horizon"></a>Horizon</h4><p>VMware Horizon can run VDI and apps in IT data center, and make VDI and apps as services to users. Horizon auto manage VDI and apps by simple setup configure files, then deliver apps or data from data center to end-user.</p>
-<p>the modules in Horizon is extended-able and plug-in available:  physical layer, virtualization layer, desktop resource layer, app resource layer and user access. </p>
-<p>Horizon basically delivers desktops and apps as a service. there are three versions:</p>
-<ul>
-<li><p>Horizon standard, a simple VDI.</p>
-</li>
-<li><p>Horizon advanced, can deliver desktops and apps through a unified workspace </p>
-</li>
-<li><p>Horizon enterprise, with a closed-loop management adn automation</p>
-</li>
-</ul>
-<p>the <a href="https://techzone.vmware.com/resource/deploying-hardware-accelerated-graphics-vmware-horizon-7#sec1-sub1" target="_blank" rel="external">Horizon 7</a> has new features: </p>
-<ul>
-<li><p>Blast extrem display protocol</p>
-</li>
-<li><p>instant clone provisioning</p>
-</li>
-<li><p>vm app volumes app delivery </p>
-</li>
-<li><p>user env manager </p>
-</li>
-<li><p>integrated into remote desktop session host(RDSH) sessions </p>
-</li>
-</ul>
-<h4 id="gpu-support-in-vmware"><a href="#gpu-support-in-vmware" class="headerlink" title="gpu support in vmware"></a>gpu support in vmware</h4><p>for vSphere, PCI passthrough can be used with any vSphere, including free vSphere Hypervisor. the only limitation is HW, may not supprot virtual well. GPU remotely accessible is our first-priority concern. </p>
-<p>but vmware recommend their <a href="https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/partners/nvidia/vmware-nvidia-grid-vgpu-faq.pdf" target="_blank" rel="external">Horzion with NV’s vGPU</a><br>which has better flexibility and scalability. </p>
-<p><a href="https://techzone.vmware.com/resource/deploying-hardware-accelerated-graphics-vmware-horizon-7#virtualsharedpassthroughgraphics" target="_blank" rel="external">Horizon support vGPU</a>, the user must install the appropriate vendor driver on the guest vm, all graphics commands are passed directly to GPU without having to be translated by the hypervisor. a vSphere Installation Bundle(VIB) is installed, which aids or perform the scheduling. depending on the card, up to 24 vm can share a GPU. most NV’s GPU which has vGPU feature can support. </p>
-<p>on the other hand, the price of vGPU products(e.g. T4, M10, P6, V100, RTX8000 e.t.c) are 5 ~ 10 times higher than normal customer GPUs. e.g. GeFS not 5~10 times better. and the license fee for vgpu is horrible. </p>
-<p>however, most enterprise still choice the Horzion and vGPU solution, even with this high cost. </p>
-<p><a href="https://www.vmware.com/resources/compatibility/search.php" target="_blank" rel="external">VMware compatibility guide</a></p>
-<h4 id="GPU-VDI-service-in-cloud"><a href="#GPU-VDI-service-in-cloud" class="headerlink" title="GPU VDI service in cloud"></a>GPU VDI service in cloud</h4><ul>
-<li><a href="https://cloud.tencent.com/product/gpu" target="_blank" rel="external">tencent gpu cloud</a></li>
-</ul>
-<p>the gpu types for video decoding is Tesla P4, for  AI and HPC is Tesla v100, and for image workstation(VDI) is an AMD S7150.  </p>
-<ul>
-<li><a href="https://www.aliyun.com/product/ecs/gpu?spm=5176.224200.h2v3icoap.18.34ff6ed6KYchPn&amp;aly_as=aPNPrcAtg" target="_blank" rel="external">ali gpu cloud desktop</a></li>
-</ul>
-<p>the product is call <code>GA1(S7150)</code>, which is specially for cloud desktop.</p>
-<p><a href="https://community.amd.com/thread/230570" target="_blank" rel="external">s7150x2 MxGPU with Horizon 7.5</a></p>
-<h4 id="vnc-vs-vm"><a href="#vnc-vs-vm" class="headerlink" title="vnc vs vm"></a>vnc vs vm</h4><p>virtual network computing (vnc), applications running on one computer but displaying their windows on another. VNC provides remote control of a computer at some other location, any resources that are avaiable at the remote computer are available.  vpn simply connect you to a remote network.</p>
-<p>no doubt, vm is much heavier than vnc. check <a href="https://blog.calsoftinc.com/2017/03/virtual-desktop-infrastructure-vdi-vs-remote-desktop-services-rds.html" target="_blank" rel="external">this blog</a> for compartion from vdi(a vm app) to vnc. vnc can’t tell if the remote is a physical server or a virtual server. come to our user case, we need about 100 separated user space, so virtualization provide better HW efficient and security, compared to deploy a single <code>bare metal OS</code> on the physical machine. </p>
-<p>there are a few Linux based vnc client/server, e.g. <a href="https://linux.die.net/man/1/vncviewer" target="_blank" rel="external">vncviewer CLI</a>, as well as which supports OpenGL well, which helps to support better GPU usage. </p>
-<ul>
-<li><p><a href="https://virtualgl.org" target="_blank" rel="external">virtualGL</a></p>
-</li>
-<li><p><a href="http://www.karlrunge.com/x11vnc/" target="_blank" rel="external">x11vnc</a></p>
-</li>
-</ul>
-<h2 id="refee"><a href="#refee" class="headerlink" title="refee"></a>refee</h2><p><a href="https://www.ibm.com/cloud/learn/vmware" target="_blank" rel="external">an essential vmware introduction from IBM</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/32873934" target="_blank" rel="external">what are vsphere, esxi, vcenter in Chienese</a></p>
-<p><a href="https://www.vmware.com/products/vsphere-hypervisor.html" target="_blank" rel="external">vSphere Hypervisor</a></p>
-<p><a href="https://pubs.vmware.com/vsphere-50/index.jsp?topic=%2Fcom.vmware.vsphere.install.doc_50%2FGUID-F3A960E9-57DF-4D2E-9127-A65AA670E643.html" target="_blank" rel="external">vmware vsphere doc</a></p>
-<p><a href="https://blogs.vmware.com/apps/2018/10/how-to-enable-nvidia-v100-gpu-in-passthrough-mode-on-vsphere-for-machine-learning-and-other-hpc-workloads.html" target="_blank" rel="external">how to enable nvidia gpu in passthrough mode on vSphere</a></p>
-<p><a href="https://docs.nvidia.com/grid/10.0/grid-vgpu-release-notes-vmware-vsphere/index.html" target="_blank" rel="external">nvidia vgpu for vmware release notes</a></p>
-<p><a href="https://www.dell.com/support/article/en-us/sln288103/how-to-enable-a-vmware-virtual-machine-for-gpu-pass-through?lang=en" target="_blank" rel="external">how to enable vmware vm for GPU pass-through</a></p>
-<p><a href="https://docs.openstack.org/project-deploy-guide/charm-deployment-guide/latest/app-pci-passthrough-gpu.html" target="_blank" rel="external">openstack PCI passthrough</a></p>
-<p><a href="https://serverfault.com/questions/174003/how-can-opengl-graphics-be-displayed-remotely-using-vnc" target="_blank" rel="external">how can openGL graphics be displayed remotely using VNC</a></p>
-<p><a href="http://www.azurew.com/vmware/horizon-7/3647.html" target="_blank" rel="external">vmware Horizon introduction in Chinese</a></p>
-<p><a href="http://www.azurew.com/vmware/esxi-6-7/3622.html" target="_blank" rel="external">vmware ESXi 7.0 U1 test env build up</a></p>
-<p><a href="https://www.sohu.com/a/334627623_314773" target="_blank" rel="external">云游戏能接盘矿卡市场吗</a></p>
-<p><a href="http://www.azurew.com" target="_blank" rel="external">王哥哥的博客</a></p>
-<p><a href="https://mp.sohu.com/profile?xpt=c29odXptdHoxem53c3ZAc29odS5jb20=&amp;_f=index_pagemp_1&amp;spm=smpc.content.author.2.1585641772438lK2g5Sw" target="_blank" rel="external">企业存储的博客</a></p>
-<p><a href="https://blogs.vmware.com/euc/2015/03/nvidia-grid-vgpu-vmware-horizon.html" target="_blank" rel="external">in-depth: nv grid vGPU with vmware horizon 6.1</a></p>
-<p><a href="https://www.nvidia.com/en-us/data-center/graphics-cards-for-virtualization/" target="_blank" rel="external">nvidia gpus recommended for virtualization</a></p>
-<p><a href="https://developer.aliyun.com/ask/215008" target="_blank" rel="external">GPU SRIOV and AMD S7150</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/kvm-in-linux-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/27/kvm-in-linux-2/" itemprop="url">kvm in linux (2)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-27T04:04:00-04:00">
-                2020-03-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/27/kvm-in-linux-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/27/kvm-in-linux-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="history-of-terminal"><a href="#history-of-terminal" class="headerlink" title="history of terminal"></a>history of terminal</h2><p>in history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host computer can run multi-users, each of which needs a terminal. </p>
-<p>when times goes to personal computer(PC), there is no need for multi-users login, so each PC has integrated with I/O device(monitor and keybord)</p>
-<p>nowadays, we have plenty of end-user terminals, e.g. smart phone, smart watch, Ipad e.t.c, all of these are <code>terminal</code>, as the real host computer is in cloud now. </p>
-<p>in a word, any device that can accept input and display output is a <code>terminal</code>, which play the role as the human-machine interface.</p>
-<h4 id="three-kinds-of-terminal"><a href="#three-kinds-of-terminal" class="headerlink" title="three kinds of terminal"></a>three kinds of terminal</h4><p>ssh is TCP/IP protocol, what’s inside is the remote terminal streaming flow.  the TCP/IP plays as the tunnel. of course, any communication protocol can play the role as the <code>tunnel</code>. </p>
-<ul>
-<li><p>local terminal, with usb to keyboard and monitor. </p>
-</li>
-<li><p>serial terminal, the guest machine connect to the host machine, who has keyboard and monitor. basically the guest machine borrow the host machine’s IO, which needs the host machine to run a terminal elmulator.</p>
-</li>
-<li><p>tcp/ip tunnel terminal, e.g. ssh</p>
-</li>
-</ul>
-<p>both local terminal and serial terminal, directly connect to physical device, e.g. VGA interface, usb, serial e.t.c, so both are called  <strong>physical terminal</strong>.  ssh has nothing to do with physical device. </p>
-<h4 id="tty"><a href="#tty" class="headerlink" title="tty"></a>tty</h4><p>in Linux,  <code>/dev/ttyX</code> represents a physical-terminal. from <code>tty1</code> to <code>tty63</code> are all local terminal. during Linux kernal init, 63 local terminals are generated, which can be switched by <code>Fn-Alt-Fx</code>, (x can be 1, 2, 3…). each current terminal is called <strong>focus terminal</strong>. </p>
-<p>focus terminal is taken as global variable, so any input will transfer to current focus terminal. for serial, there is no focus terminal. </p>
-<p>in Linux,  <code>/dev/console</code> represents current <strong>focus terminal</strong>, consider as a pointer to current focus terminal, wherever write sth to <code>/dev/console</code> will present at current focus terminal. </p>
-<p><code>/dev/tty</code> is the global variable itself. whichever terminal you are working with, when write to <code>/dev/tty</code>, it will be present.</p>
-<p><code>/dev/ttyS#num#</code> represents <strong>serial terminal</strong>. </p>
-<h4 id="getty-amp-login"><a href="#getty-amp-login" class="headerlink" title="getty &amp; login"></a>getty &amp; login</h4><p>in multi-terminal time, each terminal must bind to one user, user must first login the terminal, <code>getty</code> is the login process, which is called in <code>init</code>. after login successfully, the terminal <code>tty#num#</code> can be owned by the user. </p>
-<p>there are a few differenet version of <code>getty</code>, e.g. <code>agetty</code> e.t.c.</p>
-<h4 id="pty-amp-pts"><a href="#pty-amp-pts" class="headerlink" title="pty &amp; pts"></a>pty &amp; pts</h4><p>pty stands for <code>pseudo-tty</code>, pty is a (master-slave) pair terminal device, including:  pts <code>pseudo-terminal slave</code>, and ptmx <code>pseudo-terminal master</code>. </p>
-<p>a few concepts as following: </p>
-<ul>
-<li><p>serial terminal  <code>/dev/ttySn</code></p>
-</li>
-<li><p>pseudo-termianl  <code>/dev/pty/</code></p>
-</li>
-<li><p>controlling terminal <code>/dev/tty</code></p>
-</li>
-<li><p>console terminal  <code>/dev/console</code></p>
-</li>
-</ul>
-<h2 id="Linux-Serial-Console"><a href="#Linux-Serial-Console" class="headerlink" title="Linux Serial Console"></a>Linux Serial Console</h2><h4 id="serial-communication"><a href="#serial-communication" class="headerlink" title="serial communication"></a>serial communication</h4><p>in old-style PC, serial is COM interface, also called <code>DB9 interface</code>, with RS-232 standard. </p>
-<p>each user can connect to host machine through a <strong>terminal</strong>. <code>console</code> is same as <code>terminal</code> to connect user to host machine, but <code>console</code> is higher priority than <code>terminal</code>. nowadays less difference between terminal and console.  </p>
-<p><code>Teletype</code> is the earliest terminal device, <code>tty</code> is physical or pseudo terminal connect to the host machine, nowadays <code>tty</code> also used for serial device.</p>
-<p><code>serial</code> is the connection from terminal/keyboard to dev-board. </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls /dev/tty*</div></pre></td></tr></table></figure>
-<h4 id="configuration"><a href="#configuration" class="headerlink" title="configuration"></a>configuration</h4><p>Linux kernel must be configured to use the serial port as its console, which is done by passing the kernel the <code>console</code> parameter when the kernel is started by the boot loader.</p>
-<p>the init system should keep a process runnign to monitor the serial console for logins, the monitoring process is traditionally named <strong>getty</strong></p>
-<p>a number of system utilities need to be configured tomake them aware of the console, or configured to prevent them from disrupting the console.</p>
-<h4 id="serial-port"><a href="#serial-port" class="headerlink" title="serial port"></a>serial port</h4><p>Linux names as the first serial port has the file name <code>/dev/ttys0</code>, the second serial port has the file name <code>/dev/ttyS1</code> and so on. most boot loaders have yet another naming scheme, the first serial port is numbered <code>0</code>, the second serial port is numbered <code>1</code></p>
-<h4 id="configure-GRUB-boot-loader"><a href="#configure-GRUB-boot-loader" class="headerlink" title="configure GRUB boot loader"></a>configure GRUB boot loader</h4><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/configure-boot-loader-grub.html" target="_blank" rel="external">configure GRUB to use the serial console</a></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">info grub</div><div class="line">/boot/grub/grub.cfg</div><div class="line">serial --unit=0 --speed=9600 --word=8 --parity=no --stop=1 </div><div class="line">terminal serial</div></pre></td></tr></table></figure>
-<h4 id="init-system"><a href="#init-system" class="headerlink" title="init system"></a>init system</h4><p>getty is started by <code>init</code>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">co:2345:respawn:/sbin/getty ttyS0 CON9600 vt102</div></pre></td></tr></table></figure>
-<ul>
-<li><p><code>co</code> is an arbitrary entry, representing <code>console</code></p>
-</li>
-<li><p><code>2345</code>, run levels where this entry gets started. </p>
-</li>
-<li><p><code>respawn</code>, re-run the program if it dies</p>
-</li>
-<li><p><code>/sbin/getty ttyS0 CON9600 vt102</code>, getty connecting to /dev/ttyS0 with the settings for CON9600bps, and the terminal is VT100 model</p>
-</li>
-</ul>
-<h2 id="virsh-console"><a href="#virsh-console" class="headerlink" title="virsh console"></a>virsh console</h2><p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-enable-kvm-virsh-console-access-ubuntu-linux-vm" target="_blank" rel="external">how to</a> connect ubuntu kvm virtual machine through serial console. in earlier version and distributions, it need to configure serial console in grub file, but in Ubuntu it’s very easy adn reliable as most of configurations and settings are already configured in OS.</p>
-<h4 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h4><p>runs ubuntu14.04 guest mahcine on ubuntu 16.04 host machine. how to setup serial console, we have to connect guest machine and login on as root user</p>
-<h4 id="login-through-SSH"><a href="#login-through-SSH" class="headerlink" title="login through SSH"></a>login through SSH</h4><ul>
-<li>connect on KVM guest machine through ssh from host machine </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh 192.168.122.1</div><div class="line">hostname</div></pre></td></tr></table></figure>
-<h4 id="connect-through-VNC"><a href="#connect-through-VNC" class="headerlink" title="connect through VNC"></a>connect through VNC</h4><p>conenct guest machine through VNC viewer and setup <code>serial console</code>. There are times when we need to troubleshoot Virtual Machines with unknown status like Hang in between, IP address issues, password problems, Serial console Hang etc. In case scenarios, we could relay on VNC configuration of KVM Guest Machines. </p>
-<p>vnc viewer is a graphic viewer, so only need add <code>graphics</code> component in <a href="http://www.geekpills.com/wp-content/uploads/2017/08/ubuntu-17.04.txt" target="_blank" rel="external">config.xml</a>:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">graphics</span> <span class="attr">type</span>=<span class="string">'vnc'</span> <span class="attr">port</span>=<span class="string">'-1'</span> <span class="attr">autoport</span>=<span class="string">'yes'</span> <span class="attr">passwd</span>=<span class="string">'mypassword'</span>/&gt;</span></div></pre></td></tr></table></figure>
-<p>run <code>virsh vncdisplay #vm_name#</code> we can get our vnc (server) IP, which then can be accessed by <code>vnc guest viewer</code>. here, <code>kvm virtual machine</code> has implemented a vnc server, and any <code>vnc viewer</code> in the same physical machine, can access this vnc server, even without external networking. </p>
-<h4 id="configure-serial-console-in-ubuntu-guest"><a href="#configure-serial-console-in-ubuntu-guest" class="headerlink" title="configure serial console in ubuntu guest"></a>configure serial console in ubuntu guest</h4><p>after getting login console, we can start <code>serial console</code> and enable it with:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># systemctl start serial-getty@ttyS0</span></div><div class="line"><span class="comment"># systemctl enable serial-getty@ttyS0</span></div><div class="line">Created symlink /etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service → /lib/systemd/system/serial-getty@.service.</div></pre></td></tr></table></figure>
-<p>now we can connect <code>serial console</code> with <code>virsh console</code>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh console vm_name</div></pre></td></tr></table></figure>
-<p>after installnation, reboot first, then the physical machine has dual-OS: <a href="https://www.server-world.info/en/note?os=Ubuntu_14.04&amp;p=kvm&amp;f=2" target="_blank" rel="external">GuestOS and HostOS</a>, which can exit GuestOS by <code>Ctrl + ]</code>, or login GuestOS by <code>virsh consoel #guest_vm#</code></p>
-<p><strong>in summary</strong>, <code>virsh console</code> implement a serial console for kvm guest machine, which connect the guest machine to host machine through <code>serial</code>, which is not a <code>ssh</code>, need new knowledges about <code>serial</code>. </p>
-<h2 id="virsh-console-hangs"><a href="#virsh-console-hangs" class="headerlink" title="virsh console hangs"></a>virsh console hangs</h2><p><code>virsh console vm</code> hangs at: <code>Escape character is ^]</code>, which can exit by <strong>ctrl + ]</strong> </p>
-<h4 id="sol1"><a href="#sol1" class="headerlink" title="sol1:"></a><a href="https://stackoverflow.com/questions/11845280/virsh-console-hangs-at-the-escape-character" target="_blank" rel="external">sol1</a>:</h4><p>go to guest machine/terminal, and edit <code>/etc/default/grub</code>, appending;</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRUB_TERMINAL=serial</div><div class="line">GRUB_SERIAL_COMMAND=<span class="string">"serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1"</span></div></pre></td></tr></table></figure>
-<p>then execute:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">update-grub</div><div class="line">reboot</div></pre></td></tr></table></figure>
-<p>the problem here, as the KVM vm shares the kernel of the host machine, if update <code>grub</code>, the host machine will reboot with serial connection(?)</p>
-<h4 id="Centos-virsh-console-hangs"><a href="#Centos-virsh-console-hangs" class="headerlink" title="Centos virsh console hangs"></a><a href="https://www.cnblogs.com/xieshengsen/p/6215168.html" target="_blank" rel="external">Centos virsh console hangs</a></h4><ul>
-<li><p>go to <code>/etc/securetty</code> and append <code>ttyS0</code></p>
-</li>
-<li><p>append <code>S0:12345:respawn:/sbin/agetty ttyS0 115200</code> to <code>/etc/init/ttyS0.conf</code></p>
-</li>
-<li><p>/etc/grub.conf(Centos) </p>
-</li>
-</ul>
-<p>I only found <code>/boot/grub/grub.cfg</code> in ubuntu. In the <code>kernel</code> line, appending <code>console=ttyS0</code>. but there is no <code>kernel</code> line in <code>ubuntu grub.cfg</code>.</p>
-<h4 id="Ubuntu-virsh-console-hangs"><a href="#Ubuntu-virsh-console-hangs" class="headerlink" title="Ubuntu virsh console hangs"></a><a href="https://www.cnblogs.com/sixloop/p/8044785.html" target="_blank" rel="external">Ubuntu virsh console hangs</a></h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="built_in">disable</span> systemd-networkd-wait-online</div><div class="line">systemctl <span class="built_in">enable</span> serial-getty@ttyS0.service</div><div class="line">systemctl start serial-getty@ttyS0.service</div></pre></td></tr></table></figure>
-<p>which gives: </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Mar 27 11:17:18 ubuntu systemd[1]: Started Serial Getty on ttyS0.</div><div class="line">Mar 27 11:17:18 ubuntu agetty[445120]: /dev/ttyS0: not a tty</div></pre></td></tr></table></figure>
-<p>check in <code>/dev/ttyS*</code> : </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">crw-rw---- 1 root dialout 4, 73 Mar 24 09:20 ttyS9</div><div class="line">crw--w---- 1 root tty     4, 64 Mar 24 09:20 ttyS0</div><div class="line">crw-rw---- 1 root dialout 4, 65 Mar 24 09:20 ttyS1</div></pre></td></tr></table></figure>
-<p>interesting here,  <code>ttyS0</code> belongs to <code>tty</code> group, all otehr <code>ttyS#num#</code> belongs to <code>dialout</code> group. </p>
-<h5 id="tty-and-dialout"><a href="#tty-and-dialout" class="headerlink" title="tty and dialout"></a>tty and dialout</h5><p><a href="https://stackoverflow.com/questions/30846176/how-to-change-tty-group-on-linux-build-with-buildroot" target="_blank" rel="external">change /dev/ttyS0 to tty group</a></p>
-<p><a href="https://askubuntu.com/questions/210177/serial-port-terminal-cannot-open-dev-ttys0-permission-denied" target="_blank" rel="external">can’t access /dev/ttyS</a></p>
-<p>add USER to tty/dialout group</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo usermod -a -G tty <span class="variable">$USER</span></div><div class="line">sudo usermod -a -G dialout <span class="variable">$USER</span></div></pre></td></tr></table></figure>
-<p>reboot and go on</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/" target="_blank" rel="external">remote serial console HOWTO</a></p>
-<p><a href="https://www.cnblogs.com/huan-huan/p/8522472.html" target="_blank" rel="external">remote serial console HOWTO in Chinese</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1527544" target="_blank" rel="external">understand Linux terminal history in Chinese</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1533217" target="_blank" rel="external">Linux terminal introduction in Chinese</a></p>
-<p><a href="https://tutorial.linux.doc.embedfire.com/zh_CN/latest/linux_app/uart_tty.html" target="_blank" rel="external">serial communication in Chinese</a></p>
-<p><a href="https://wiki.archlinux.org/index.php/Working_with_the_serial_console" target="_blank" rel="external">arhLinux: working with the serial console</a></p>
-<p><a href="https://www.gnu.org/software/grub/manual/grub/grub.html" target="_blank" rel="external">gnu org: grub</a></p>
-<p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-start-vnc-remote-access-guest-operating-systems" target="_blank" rel="external">geekpills: start vnc remote access for guest operating systems</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2923,7 +2939,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">174</span>
+                <span class="site-state-item-count">176</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
