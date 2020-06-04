@@ -291,6 +291,161 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/python-generator-and-asynico/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/16/python-generator-and-asynico/" itemprop="url">python generator and asynico</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T07:54:11-04:00">
+                2019-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/16/python-generator-and-asynico/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/16/python-generator-and-asynico/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="python-iterator"><a href="#python-iterator" class="headerlink" title="python iterator"></a>python iterator</h3><p>in python, <code>iterator</code> is any object that follows <code>iterator protocol</code>. which means should include method: <code>__iter()__</code>, <code>next()</code>, if no next element should raise <code>StopIteration</code> exception.</p>
+<p>take an example, <code>dict</code> and <code>list</code> have implemented <code>__iter()__</code> and <code>__getitem__()</code> methods, but not implemented <code>next()</code> method. so they are  <code>iterable</code> but not <code>iterator</code>.</p>
+<h3 id="generator"><a href="#generator" class="headerlink" title="generator"></a>generator</h3><p>to support delay operations, only return result when need, but not immediately return</p>
+<ul>
+<li><p>generator funcion (with <code>yield</code>) </p>
+</li>
+<li><p>generator expression </p>
+</li>
+</ul>
+<p>Python generator in other languages is called <code>coroutines</code> </p>
+<h3 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h3><p><code>yield</code> is almost of <code>return</code>, but it pauses every step after executing the line with <code>yield</code>, and till call <code>next()</code> will continue from the next line of <code>yield</code>.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">	sim.run(timeout, cb)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cb</span><span class="params">()</span>:</span></div><div class="line">    a = <span class="number">1</span> </div><div class="line">	<span class="keyword">yield</span> print(a)</div><div class="line">	a += <span class="number">1</span></div></pre></td></tr></table></figure>
+<h2 id="coroutines"><a href="#coroutines" class="headerlink" title="coroutines"></a>coroutines</h2><p>example: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cor1</span><span class="params">(name)</span>:</span></div><div class="line">        print(<span class="string">"start cor1..name.."</span>, name)</div><div class="line">        x = <span class="keyword">yield</span> name</div><div class="line">        print(<span class="string">"send value"</span>, x)</div><div class="line"></div><div class="line">cor_ =  cor1(<span class="string">"zj"</span>)</div><div class="line">print(<span class="string">"next return"</span>, next(cor_))</div><div class="line">print(<span class="string">"send return"</span>, cor_.send(<span class="number">6</span>))</div></pre></td></tr></table></figure>
+<p>to run coroutine, need first call next(), then send() is called. namely, if not call next() first, send() will wait, and never be called.</p>
+<p>the thing is, when define a python generator/coroutine, it never will run; only through await(), next() call first, which then trigger the generator/coroutine start.</p>
+<h2 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h2><p>asyncronized IO, event-driven coroutine, so users can add <code>async/await</code> to time-consuming IO.</p>
+<ul>
+<li>event-loop</li>
+</ul>
+<p>event loop will always run, track events and enqueue them, when idle dequeue event and  call event-handling() to deal with it.</p>
+<ul>
+<li>asyncio.Task</li>
+</ul>
+<h3 id="await"><a href="#await" class="headerlink" title="await"></a>await</h3><p>await only decorate async/coroutine, which is a waitable object, it works to hold the current coroutine(async func A) and wait the other coroutine(async func B) to the end.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">async def funcB():</div><div class="line">	return 1</div><div class="line"></div><div class="line">async def funcA():</div><div class="line">	result = await funcB()</div><div class="line">        return result</div><div class="line"></div><div class="line">run(funcA())</div></pre></td></tr></table></figure>
+<h3 id="multi-task-coroutines"><a href="#multi-task-coroutines" class="headerlink" title="multi-task coroutines"></a>multi-task coroutines</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">loop.create_task()</div><div class="line"></div><div class="line"></div><div class="line">run_until_complete() #block the thread untill coroutine completed</div><div class="line"></div><div class="line">asyncio.sleep() #nonblock event-loop, with `await`, will return the control-priority to event-loop, at the end of sleep, control-priority will back to this coroutine </div><div class="line"></div><div class="line">asyncio.wait(), #nonblock event-loop, immeditialy return coroutine object, and add this corutine object to event-loop</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">the following example:  get the event-loop thread, add coroutine objct(task) in this event-loop, execute task till end.</div><div class="line"></div><div class="line">```python</div><div class="line"></div><div class="line">import asyncio</div><div class="line"></div><div class="line">async def cor1(name):</div><div class="line">        print("executing: ", name)</div><div class="line">        await asyncio.sleep(1)</div><div class="line">        print("executed: ", name)</div><div class="line"></div><div class="line">loop = asyncio.get_event_loop()</div><div class="line">tasks = [cor1("zj_" + str(i)) for i in range(3)]</div><div class="line">wait_cor = asyncio.wait(tasks)</div><div class="line">loop.run_until_complete(wait_cor)</div><div class="line">loop.close()</div><div class="line"></div><div class="line">``` </div><div class="line"><span class="meta"></span></div><div class="line">#<span class="bash"><span class="comment">## dynamically add coroutine</span></span></div><div class="line"></div><div class="line"></div><div class="line">```shell </div><div class="line"></div><div class="line">loop.call_soon_threadsafe() # add coroutines sequencially  </div><div class="line">asyncio.run_coroutine_threadsafe() #add coroutines async</div></pre></td></tr></table></figure>
+<h4 id="add-coroutine-sequencially"><a href="#add-coroutine-sequencially" class="headerlink" title="add coroutine sequencially"></a>add coroutine sequencially</h4><p>in this sample, main_thread(_loop) will sequencely run from begining to end, during running, there are two coroutines registered, when thread-safe, these two coroutines will be executed.</p>
+<p>the whole process actually looks like run in sequencialy</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> asyncio</div><div class="line"><span class="keyword">from</span> threading <span class="keyword">import</span> Thread</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_loop</span><span class="params">(loop)</span>:</span></div><div class="line">    asyncio.set_event_loop(loop)</div><div class="line">    loop.run_forever()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread_</span><span class="params">(name)</span>:</span></div><div class="line">    print(<span class="string">"executing name:"</span>, name)</div><div class="line">    <span class="keyword">return</span> <span class="string">"return nam:"</span> + name</div><div class="line"></div><div class="line">_loop = asyncio.new_event_loop()</div><div class="line">t = Thread(target=start_loop, args=(_loop,)) <span class="comment">#is a thread or coroutine ?</span></div><div class="line">t.start()</div><div class="line"></div><div class="line"></div><div class="line">handle = _loop.call_soon_threadsafe(thread_, <span class="string">"zj"</span>)</div><div class="line">handle.cancel()</div><div class="line"></div><div class="line">_loop.call_soon_threadsafe(thread_, <span class="string">"zj2"</span>)</div><div class="line"></div><div class="line">print(<span class="string">"main thread non blocking..."</span>)</div><div class="line"></div><div class="line"></div><div class="line">_loop.call_soon_threadsafe(thread_, <span class="string">"zj3"</span>)</div><div class="line"></div><div class="line">print(<span class="string">"main thread on going..."</span>)</div></pre></td></tr></table></figure>
+<h4 id="add-coroutines-async"><a href="#add-coroutines-async" class="headerlink" title="add coroutines async"></a>add coroutines async</h4><p>in this way, add/register async coroutine objects to the event-loop and execute the coroutines when thead-safe</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">future = asyncio.run_coroutine_threadsafe(thread_(<span class="string">"zj"</span>), _loop)</div><div class="line">print(future.result())</div><div class="line"></div><div class="line">asyncio.run_coroutine_threadsafe(thread_(<span class="string">"zj2"</span>), _loop)</div><div class="line"></div><div class="line">print(<span class="string">"main thread non blocking..."</span>)</div><div class="line"></div><div class="line"></div><div class="line">asyncio.run_coroutine_threadsafe(thread_(<span class="string">"zj3"</span>), _loop)</div><div class="line"></div><div class="line">print(<span class="string">"main thread on going..."</span>)</div></pre></td></tr></table></figure>
+<h2 id="async-callback-vs-coroutines"><a href="#async-callback-vs-coroutines" class="headerlink" title="async callback  vs coroutines"></a>async callback  vs coroutines</h2><p>compare callback and coroutines is hot topic in networking and web-js env. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/dns-server-in-lan/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1948,222 +2103,6 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/22/Lidar-in-AV/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/22/Lidar-in-AV/" itemprop="url">Lidar in  AV</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-22T02:51:30-04:00">
-                2019-06-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/22/Lidar-in-AV/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/22/Lidar-in-AV/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<p>science, religion, music, universe as well as other sources of beauty, are what we humans should look for.  – zj </p>
-<hr>
-<h4 id="operational-theory"><a href="#operational-theory" class="headerlink" title="operational theory"></a>operational theory</h4><p><a href="http://web.pdx.edu/~jduh/courses/geog493f12/Week04.pdf" target="_blank" rel="external">a pulse</a> of light is emitted and the precise time is recorded. the reflection of that pulse is detected and the precise time is recorded. using the constant speed of light and the delay can convert into distance, with the known position and orientation of the sensor,  the xyz position of the reflective surface can be calculated. </p>
-<h4 id="components"><a href="#components" class="headerlink" title="components"></a>components</h4><ul>
-<li><p>laser scanner/emitter and laser detector </p>
-</li>
-<li><p>high-precision clock</p>
-</li>
-<li><p>GPS and GPS ground station<br>  record xyz of the scanner</p>
-</li>
-<li><p>IMU<br>  record angular orientation of the scanner </p>
-</li>
-</ul>
-<h4 id="field-of-view-FOV"><a href="#field-of-view-FOV" class="headerlink" title="field of view(FOV)"></a>field of view(FOV)</h4><p><a href="http://www.wangdali.net/lidar/" target="_blank" rel="external">azimuth</a> with fixed vertical angle resolution, the neighboring laser emmiter-detector pair will create concentric circle, the distance between two neighboring concentric circle will grow with the distance from detected objects to Lidar. </p>
-<p><img src="http://www.wangdali.net/wp-content/uploads/2017/04/point_cloud.png" alt="pic of point cloud concentric circle"></p>
-<h4 id="light-source"><a href="#light-source" class="headerlink" title="light source"></a>light source</h4><p><a href="https://blog.csdn.net/real_myth/article/details/78636592" target="_blank" rel="external">950nm wavelength</a> producer is Si-based, which makes it cheaper than 1550nm, the InGaAs based, making it safer to human eyes as 950nm can burn retina and powerful.</p>
-<p>1550nm is easier to be absorbed by water than 950nm, which makes it performance better in rainy days. </p>
-<p>the laser source emiss lines of pulse every frame, and a few photon return back to Photodetector(光电探测器), there are lots of env photons(noise), we can use narrow-band-filter to tick off some env photons, but not all of them, since the solar radiation is in the range from 905nm 50 1550nm. </p>
-<h4 id="solid-state"><a href="#solid-state" class="headerlink" title="solid-state"></a>solid-state</h4><p>there are two ways ongoing:  <a href="https://www.eefocus.com/automobile-electronics/397344/r0" target="_blank" rel="external">MEMS based</a>,  phased array tech(相位阵列）. MEMS tech is using a micro scaning mirror, either rotate or vibrate to control laser direction. the drawback of micro-mirror is the in the process of relection, lots of laser energy is lost. </p>
-<p>phased array tech(Quanergy) integerated multi micro laser emission into one socket to control laser direction. and the drawback at this moment is the short detection distance. </p>
-<p>the traditional mechanical design Lidar(Velodye) usually has multi light emitters as well as multi corresponded light detectors. while SS-Lidar depends only on one single light emitter and the scanning mirror to control emission direction, which makes it cheaper. for example,  each pair of mechanical <a href="https://www.eefocus.com/automobile-electronics/397344/r0" target="_blank" rel="external">emitter-detector cost</a> <code>200</code> us dollar, so a 64 lines product will cost about <code>12800</code> us dollar, compared to MEMS socket about <code>200</code> us dollar each.</p>
-<h4 id="detection-distance-dd-amp-angle-resolution-ar"><a href="#detection-distance-dd-amp-angle-resolution-ar" class="headerlink" title="detection distance(dd) &amp; angle resolution(ar)"></a>detection distance(dd) &amp; angle resolution(ar)</h4><p>detection distacne with 10 % reflectivity</p>
-<p>vertical angle range(var)</p>
-<p>vertical angle resolution(va_res)</p>
-<table>
-<thead>
-<tr>
-<th>company</th>
-<th>product</th>
-<th>dd(m)</th>
-<th>var</th>
-<th>va_res</th>
-<th>channels</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Hesai</td>
-<td>Pandar40</td>
-<td>200</td>
-<td>23&deg;</td>
-<td>0.33&deg;</td>
-<td>40</td>
-</tr>
-<tr>
-<td>Robo sense</td>
-<td>RS-Lidar-32</td>
-<td>200</td>
-<td>40&deg;</td>
-<td>0.33&deg;</td>
-<td>32</td>
-</tr>
-<tr>
-<td>Velodyne</td>
-<td>HDL-32e</td>
-<td>100</td>
-<td>41.3&deg;</td>
-<td></td>
-<td>32</td>
-</tr>
-<tr>
-<td>Quanergy</td>
-<td>M8</td>
-<td>150</td>
-<td>20&deg;</td>
-<td></td>
-<td>32</td>
-</tr>
-<tr>
-<td>Ibeo</td>
-<td>NSH_32</td>
-<td>80</td>
-<td>16&deg;</td>
-<td>0.2&deg;</td>
-<td>32</td>
-</tr>
-<tr>
-<td>InnoVusion</td>
-<td>Cheetah</td>
-<td>200</td>
-<td>40&deg;</td>
-<td>0.13&deg;</td>
-<td>300</td>
-</tr>
-</tbody>
-</table>
-<h4 id="env-effects"><a href="#env-effects" class="headerlink" title="env effects"></a>env effects</h4><p>what about weather effects? e.g. snow, dust, rain; what about env effects? e.g. temperature, system vibration.</p>
-<h4 id="fusion-with-camera"><a href="#fusion-with-camera" class="headerlink" title="fusion with camera"></a>fusion with camera</h4><h4 id="the-speed-of-productivization"><a href="#the-speed-of-productivization" class="headerlink" title="the speed of productivization"></a>the speed of productivization</h4><p>when I first heard about InnoVusion, the founder <code>Bao Junwei</code> who was working at Baidu AI, then had the idea to produce Lidar around 2015, then he left Baidu and started InnoVusion, at the end of 2016, their first product Cheetah was born. </p>
-<p>this process is really speedy, one thought is the drive force either by capital market or industry needs is becoming so fast that every good chance from idea to product is becoming shorter in time; the other thought, only these highly effective persons will survive in this fast-iteration world. </p>
-<p>some other founders stories are here : <a href="https://blog.csdn.net/McIl9G4065Q/article/details/80416350" target="_blank" rel="external">the AI masters who left from Baidu</a></p>
-<h4 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h4><p><a href="https://www.autonomous-driving-berlin.com/wp-content/uploads/2018/03/D2-SA1_Brumm_Ibeo.pdf" target="_blank" rel="external">Ibeo Next 3D SS-Lidar</a></p>
-<p><a href="https://www.oemoffhighway.com/electronics/sensors/product/21073236/innovusion-inc-innovusion-cheetah-lidar-system" target="_blank" rel="external">Innovusion Cheetah Lidar</a></p>
-<p><a href="https://velodynelidar.com/lidar/products/manual/HDL-32E%20manual_Rev%20A_APR2011.pdf" target="_blank" rel="external">Velodyne HDL_32e product manual</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2214,7 +2153,7 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">176</span>
+                <span class="site-state-item-count">177</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

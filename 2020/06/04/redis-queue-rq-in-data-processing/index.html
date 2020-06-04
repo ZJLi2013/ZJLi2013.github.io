@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="redis," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="backgroundrecently thinking about how to design middleware and frameworks in self-driving team, just like the back-end service in most web servicees, which gives the way to go uppper and go abstract.">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis queue(rq) in data processing">
+<meta property="og:url" content="http://yoursite.com/2020/06/04/redis-queue-rq-in-data-processing/index.html">
+<meta property="og:site_name" content="Serious Autonomous Vehicles">
+<meta property="og:description" content="backgroundrecently thinking about how to design middleware and frameworks in self-driving team, just like the back-end service in most web servicees, which gives the way to go uppper and go abstract.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-06-04T12:50:36.252Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis queue(rq) in data processing">
+<meta name="twitter:description" content="backgroundrecently thinking about how to design middleware and frameworks in self-driving team, just like the back-end service in most web servicees, which gives the way to go uppper and go abstract.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/04/redis-queue-rq-in-data-processing/"/>
+
+
+
+
+
+  <title>redis queue(rq) in data processing | Serious Autonomous Vehicles</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Serious Autonomous Vehicles</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/redis-queue-rq-in-data-processing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">redis queue(rq) in data processing</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-04T08:49:49-04:00">
+                2020-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/04/redis-queue-rq-in-data-processing/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/04/redis-queue-rq-in-data-processing/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>recently thinking about how to design middleware and frameworks in self-driving team, just like the back-end service in most web servicees, which gives the way to go uppper and go abstract. currently many start-up ADS team, espcially Internet-based start-ups, have built-in ADS frameworks and middlewares, to support their daily dev and easily to implement new features. here is an old topic, <a href="https://zjli2013.github.io/2020/04/28/redis-task-queue-2/" target="_blank" rel="external">redis task queue</a>, how to design a robost <code>data pipeline</code> to support ADAS/ADS functions virtual test with physical collected road data.</p>
+<p>the experience to put lgsvl into swarm/k8s brings the idea about <code>micro-services</code>, which is a great way to decouple a large work to a few small pieces of independent but communicatable services. so when coming to handle large data set, which is very common in ADS dev. </p>
+<p>so the first idea is to decouple the <code>data pipeline</code> as a few micro-services:  reader service, process service, post-analysis service e.t.c</p>
+<p>then two questions immediately up:  which data/message type fits, which network communication protocol fits.and beyond these two basic questions, also need a lot work about message adapter among/in services. previously, I designed <code>websocket and json</code> solution. but it’s too tedious to plug in a <code>ws-server/client</code> at the front/end of each service, especially as the number of serivces grows. </p>
+<p>take it back, <code>data pipeline</code> is a heavy data IO work, is it really smart to split the work into a few pieces, then find the network communication among them ? we increase the system complex by introducing additional network communcation moduels, and the only benefit is decouple a heavy data IO work. and more, the network modules need consider cache, job scheduler, load balance issues, as the data process service may take much longer than reader services. </p>
+<p>traditionally, heavy data IO work is common run in <code>batch processing</code>, disregarding network issues, and it’s better to run directly in memory/cache. so I go to <a href="https://github.com/rq/rq" target="_blank" rel="external">rq</a></p>
+<h2 id="interprocess-communication-in-distributed-system"><a href="#interprocess-communication-in-distributed-system" class="headerlink" title="interprocess communication in distributed system"></a>interprocess communication in distributed system</h2><p><code>MPI</code> is the standard for IPC in HPC apps, of course there are <code>Linux IPC</code> libs, which brings more low-level ipc APIs. <code>MPI</code> apps mostly run on high performance computing cluster, which has the samilar API e.g. <code>Allreduce</code> as <code>Hadoop/MapReduce</code>, while the difference <code>MPI/allReduce</code> doesn’t tolerate failure, which means any node failed, the <code>MPI</code> apps failed. Which is the foundmental difference from HPC to distributed system nowadays, really popular as the new infrastructure for cloud and AI. </p>
+<p>in the distributed system, there are a few ways to do interprocess communication:</p>
+<ul>
+<li><p><strong>RESTful protocol</strong>, such as TCP, UDP, websocket. </p>
+</li>
+<li><p><strong>async communication</strong>, there are different ways to implement async interprocess communication, one way is <code>message queue</code>, of course many language, e.g. js, go have some light-weight libs/framework to support ansyc communication interprocessly.</p>
+</li>
+<li><p><strong>rpc</strong>, <a href="">thrift</a> is an Apache project, <a href="">grpc</a> is high efficient with protobuf, but it doesn’t support well service discovery/load balance mechanism inside, which is a limitation in cloud-native applications.  <a href="">dubbo</a> has a better design for service discovery and load balance, the message type by default is <code>json</code>. so all of these can be the corner-stone service in modern micro service envs. also the common <code>micro-service framework</code>, e.g. Spring Cloud has interprocess communication component as well.</p>
+</li>
+</ul>
+<p>for data hungry services, <code>batch processing</code> frameworks, e.g. Spring Batch, Linux Parallel should also consider.</p>
+<h2 id="rq"><a href="#rq" class="headerlink" title="rq"></a>rq</h2><p>the following is from <a href="http://python-rq.org/docs/" target="_blank" rel="external">rq doc</a></p>
+<h4 id="Queues"><a href="#Queues" class="headerlink" title="Queues"></a>Queues</h4><p>a <code>job</code> is a Python object, namely a function that is invoked async in a worker process. <code>enqueueing</code> is simply pushing a reference to the func and its ars onto a queue.</p>
+<p>we can add as many Queue instance as we need in one Redis instance, the Queue instance can’t tell each other, but they are hosted in the same redis instance, which gives the way to find jobs binding to Queue1 in worker2 from Queue2</p>
+<h4 id="jobs"><a href="#jobs" class="headerlink" title="jobs"></a>jobs</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">job1 = q.enqueue(my_func, func_args)</div><div class="line">job2 = Job.create(my_func, ttl=<span class="number">100</span>, failure_ttl=<span class="number">10</span>, depends_on=, description=, func_args)</div><div class="line">q.enqueue_job(job2)</div></pre></td></tr></table></figure>
+<ul>
+<li>timeout: specifies the max runtime of job before it’s interrupted and marked as failed. </li>
+<li>ttl: specifies the maximum queued time(in sec) of the job before it’s dscarded. default is None(infinite TTL)</li>
+<li>failure_ttl: specifies how long(in sec) failed jobs are kept(default to 1 years)</li>
+</ul>
+<p>the following sample is a way to find all <code>rq:job:</code>s, but the return is a bytes object, which need encode as <code>utf-8</code> for any further usage.</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> redis</div><div class="line">r = redis.StrictRedis()</div><div class="line">r.keys()</div><div class="line"><span class="keyword">for</span> key <span class="keyword">in</span> r.scan_iter(<span class="string">"rq:job:*"</span>):</div><div class="line">	print(key.encode(<span class="string">'utf-8'</span>)</div></pre></td></tr></table></figure>
+<h4 id="workers"><a href="#workers" class="headerlink" title="workers"></a>workers</h4><p>workers will read jobs from the given queues(the order is important) in an endless loop, waiting for new work to arrive when all jobs done. each worker will process a single job at a time. by default, workers will start working immediately and wait until new jobs. another mode is <code>burst</code>, where to finish all currently avaiable work and quit asa all given queues are emptied.</p>
+<p><code>rq worker</code> shell script is a simple <code>fetch-fork-execute</code> loop</p>
+<h2 id="connections"><a href="#connections" class="headerlink" title="connections"></a>connections</h2><p>when you want to use multiple connections, you should use <code>Connection</code> contexts or pass connections around explicitly. </p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">conn1 = Redis(<span class="string">'localhost'</span>, <span class="number">6379</span>)</div><div class="line">conn2 = Redis(<span class="string">'remote.host.org'</span>, <span class="number">9836</span>)</div><div class="line"></div><div class="line">q1 = Queue(<span class="string">'foo'</span>, connection=conn1)</div><div class="line">q2 = Queue(<span class="string">'bar'</span>, connection=conn2)</div></pre></td></tr></table></figure>
+<p>Every job that is enqueued on a queue will know what connection it belongs to. The same goes for the workers.<br>within the Connection context, every newly created RQ object instance will have the connection argument set implicitly.</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">setUp</span><span class="params">(self)</span>:</span></div><div class="line">    push_connection(Redis())</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">tearDown</span><span class="params">(self)</span>:</span></div><div class="line">    pop_connection()</div></pre></td></tr></table></figure>
+<p>this should be the way to handle distributed queues. </p>
+<h4 id="results"><a href="#results" class="headerlink" title="results"></a>results</h4><p>if a job returns a <code>non-None</code> value, the worker will write that return value back to the job’s Redis hash under <code>result</code> key. the job’s Redis hash itself expire in 500sec by default after the job is finished.</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">q.enqueue(foo, result_ttl=<span class="number">86400</span>)  <span class="comment"># result expires after 1 day</span></div><div class="line">q.enqueue(func_without_rv, result_ttl=<span class="number">500</span>)  <span class="comment"># job kept explicitly</span></div></pre></td></tr></table></figure>
+<p>when an exception is thrown inside a job, it’s caught by the worker, serialized and stored under <code>exc_info</code> key. By default, jobs should execute within 180 seconds. After that, the worker kills the work horse and puts the job onto the failed queue, indicating the job timed out.</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">q.enqueue(mytask, args=(foo,), kwargs=&#123;<span class="string">'bar'</span>: qux&#125;, job_timeout=<span class="number">600</span>)  <span class="comment"># 10 mins</span></div></pre></td></tr></table></figure>
+<h4 id="job-registries"><a href="#job-registries" class="headerlink" title="job registries"></a>job registries</h4><p>each queue maintains a set of Job Registries. e.g.  <code>StartedJobRegistry</code>, <code>FinishedJobRegistry</code> e.t.c. we can find these after log in <code>redis-cli</code></p>
+<h4 id="version-bug"><a href="#version-bug" class="headerlink" title="version bug"></a>version bug</h4><p>when run <code>rq</code> demo, it reports: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">raise</span> RedisError(<span class="string">"ZADD requires an equal number of "</span></div><div class="line">redis.exceptions.RedisError: ZADD requires an equal number of values <span class="keyword">and</span> scores</div></pre></td></tr></table></figure>
+<p>manually change <code>/rq/registry.py</code>:</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> <span class="comment"># return pipeline.zadd(self.key, &#123;job.id: score&#125;)</span></div><div class="line"><span class="keyword">return</span> pipeline.zadd(self.key, job.id, score)</div></pre></td></tr></table></figure>
+<h2 id="data-pipeline-for-ADS-function-verification"><a href="#data-pipeline-for-ADS-function-verification" class="headerlink" title="data pipeline for ADS function verification"></a>data pipeline for ADS function verification</h2><ul>
+<li>queues </li>
+</ul>
+<p>each queue instance can be taken as a separate namespace in the Redis instance, so the workers only process the jobs in the same queue. but if multi-queues are hosted in the same Redis instance, then Redis api can find Queue A’s jobs in Queue B’s workers. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">conn = Redis() </div><div class="line">mf4q = Queue(<span class="string">'mf4Q'</span>, connection=conn)</div><div class="line">aebq = Queue(<span class="string">'aebQ'</span>, connection=conn)</div><div class="line">dbq = Queue(<span class="string">'dbQ'</span>, connection=conn)</div></pre></td></tr></table></figure>
+<ul>
+<li>jobs</li>
+</ul>
+<p>if the handler_fun has return values, namely status. <code>rq</code> store its status at <code>job.result</code>, thle lifecycle of which can be controlled by <code>result_ttl</code>, e.t.c.</p>
+<p>to control the order of running the jobs, jobs can have <code>depend</code>. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">mf4_jober</span><span class="params">(url_path)</span>:</span></div><div class="line">    mf4_job = mf4q.enqueue(mf4_reader, args=(url_path,), timeout=<span class="number">60</span>, ttl=<span class="number">60</span>, failure_ttl=<span class="number">1</span>,  job_timeout=<span class="number">60</span>, result_ttl=<span class="number">60</span>, job_id=mf4_job_id)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">aeb_jober</span><span class="params">(mf4_frames)</span>:</span></div><div class="line">    aeb_job = aebq.enqueue(aeb_oneStep, args=(i_, ), timeout=<span class="number">60</span>, ttl=<span class="number">20</span>, failure_ttl=<span class="number">1</span>, result_ttl=<span class="number">10</span>, job_id=aeb_job_id)</div><div class="line">	</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">db_jober</span><span class="params">(aeb_frame, idx)</span>:</span></div><div class="line">    db_job= dbq.enqueue(db_oneStep, args=(aeb_frame,), timeout=<span class="number">60</span>, ttl=<span class="number">20</span>, failure_ttl=<span class="number">1</span>, job_id=db_job_id)</div></pre></td></tr></table></figure>
+<ul>
+<li>workers </li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">def mf4_workers(conn, num_workers=1):</div><div class="line">	for i in range(num_workers):</div><div class="line">		worker_ = Worker([mf4q], connection=conn, name=worker_name)</div><div class="line">		workers_.append(worker_)</div><div class="line">	for w in workers_:</div><div class="line">		w.work(burst=True)</div><div class="line">def aeb_workers()</div><div class="line">def db_workers()</div></pre></td></tr></table></figure>
+<ul>
+<li>runners</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">runner</span><span class="params">(conn)</span>:</span></div><div class="line">	mf4_workers(conn)</div><div class="line">	<span class="keyword">for</span> k <span class="keyword">in</span> conn.scan_iter(<span class="string">"rq:job:mf4_job_*"</span>):</div><div class="line">		t_ = k.decode(<span class="string">'utf-8'</span>)</div><div class="line">		j_ = Job.fetch(t_[<span class="number">7</span>:], connection=conn)</div><div class="line">		aeb_jober(j_.result)</div><div class="line">	input(<span class="string">"hold on ..."</span>)</div><div class="line">	aeb_workers(conn)</div></pre></td></tr></table></figure>
+<p>since the output of <code>mf4</code> jobs is the input of <code>aeb</code>, so we need <code>runners</code>, similar for <code>db</code>.</p>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p> <code>rq</code> is a good framework for this level data pipleine. for even bigger and complex system, <code>rq</code> maybe just a middleware, and there should be an even larger framework. the software engineering idea about <code>framework</code> and <code>middleware</code> in a large system gradually become the foundataion of ADS team</p>
+<p>in distributed system, there are a few basic concepts <code>distributed consensus</code>, the popular choice e.g. zookeeper, etcd; <code>interprocess communication</code>, <code>distributed cache</code> e.t.c. really cool to know.</p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://xiaorui.cc/" target="_blank" rel="external">xiaorui blog: rq</a></p>
+<p><a href="https://www.cnblogs.com/jpwahaha/p/10601096.html" target="_blank" rel="external">微服架构中的进程间通信</a></p>
+<p><a href="https://www.cnblogs.com/imyalost/p/6792724.html" target="_blank" rel="external">微服务架构</a></p>
+<p><a href="https://www.tuicool.com/articles/QreqUnU" target="_blank" rel="external">使用gRPC构建微服务</a></p>
+<p><a href="https://blog.csdn.net/fly910905/article/details/100016003" target="_blank" rel="external">微服务, 通信协议对比</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1081697" target="_blank" rel="external">理解批处理的关键设计</a></p>
+<p><a href="https://www.cnblogs.com/rookiemzl/p/9788002.html" target="_blank" rel="external">spring batch 批处理</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/redis/" rel="tag"># redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/23/Linux-iptables/" rel="next" title="Linux iptables">
+                <i class="fa fa-chevron-left"></i> Linux iptables
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="David Z.J. Lee" />
+          <p class="site-author-name" itemprop="name">David Z.J. Lee</p>
+           
+              <p class="site-description motion-element" itemprop="description">what I don't know</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">177</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ZJLi2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/zhengjia13/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#interprocess-communication-in-distributed-system"><span class="nav-number">2.</span> <span class="nav-text">interprocess communication in distributed system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rq"><span class="nav-number">3.</span> <span class="nav-text">rq</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Queues"><span class="nav-number">3.0.1.</span> <span class="nav-text">Queues</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jobs"><span class="nav-number">3.0.2.</span> <span class="nav-text">jobs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#workers"><span class="nav-number">3.0.3.</span> <span class="nav-text">workers</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connections"><span class="nav-number">4.</span> <span class="nav-text">connections</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#results"><span class="nav-number">4.0.1.</span> <span class="nav-text">results</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#job-registries"><span class="nav-number">4.0.2.</span> <span class="nav-text">job registries</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#version-bug"><span class="nav-number">4.0.3.</span> <span class="nav-text">version bug</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#data-pipeline-for-ADS-function-verification"><span class="nav-number">5.</span> <span class="nav-text">data pipeline for ADS function verification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-number">6.</span> <span class="nav-text">summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">7.</span> <span class="nav-text">refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Z.J. Lee</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/06/04/redis-queue-rq-in-data-processing/';
+          this.page.identifier = '2020/06/04/redis-queue-rq-in-data-processing/';
+          this.page.title = 'redis queue(rq) in data processing';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
