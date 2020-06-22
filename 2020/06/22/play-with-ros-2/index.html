@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="linux,kvm," />
+  <meta name="keywords" content="ros," />
 
 
 
@@ -93,18 +93,20 @@
 
 
 
-<meta name="description" content="history of terminalin history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host com">
-<meta name="keywords" content="linux,kvm">
+<meta name="description" content="ros msgsros msgs usually used in C++, as our ADS data tool is implemented in Python, I’d try to build *.msg to python module. find two blogs from ROS doc:  writing a ROS python Makefile create a ros m">
+<meta name="keywords" content="ros">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kvm in linux (2)">
-<meta property="og:url" content="http://yoursite.com/2020/03/27/kvm-in-linux-2/index.html">
+<meta property="og:title" content="play with ros 2">
+<meta property="og:url" content="http://yoursite.com/2020/06/22/play-with-ros-2/index.html">
 <meta property="og:site_name" content="Serious Autonomous Vehicles">
-<meta property="og:description" content="history of terminalin history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host com">
+<meta property="og:description" content="ros msgsros msgs usually used in C++, as our ADS data tool is implemented in Python, I’d try to build *.msg to python module. find two blogs from ROS doc:  writing a ROS python Makefile create a ros m">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-03-27T08:04:55.817Z">
+<meta property="og:image" content="http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers:%20Getting%20Started?action=AttachFile&do=get&target=interactive_marker_architecture.png">
+<meta property="og:updated_time" content="2020-06-22T13:00:00.197Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kvm in linux (2)">
-<meta name="twitter:description" content="history of terminalin history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host com">
+<meta name="twitter:title" content="play with ros 2">
+<meta name="twitter:description" content="ros msgsros msgs usually used in C++, as our ADS data tool is implemented in Python, I’d try to build *.msg to python module. find two blogs from ROS doc:  writing a ROS python Makefile create a ros m">
+<meta name="twitter:image" content="http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers:%20Getting%20Started?action=AttachFile&do=get&target=interactive_marker_architecture.png">
 
 
 
@@ -132,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/03/27/kvm-in-linux-2/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/06/22/play-with-ros-2/"/>
 
 
 
 
 
-  <title>kvm in linux (2) | Serious Autonomous Vehicles</title>
+  <title>play with ros 2 | Serious Autonomous Vehicles</title>
   
 
 
@@ -291,7 +293,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/kvm-in-linux-2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/play-with-ros-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David Z.J. Lee">
@@ -308,7 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">kvm in linux (2)</h1>
+          <h1 class="post-title" itemprop="name headline">play with ros 2</h1>
         
 
         <div class="post-meta">
@@ -320,8 +322,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-27T04:04:00-04:00">
-                2020-03-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-22T08:32:13-04:00">
+                2020-06-22
               </time>
             
 
@@ -339,9 +341,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/03/27/kvm-in-linux-2/#comments" itemprop="discussionUrl">
+                <a href="/2020/06/22/play-with-ros-2/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/27/kvm-in-linux-2/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2020/06/22/play-with-ros-2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -366,112 +368,46 @@
       
 
       
-        <h2 id="history-of-terminal"><a href="#history-of-terminal" class="headerlink" title="history of terminal"></a>history of terminal</h2><p>in history, computer is so huge and hosted at a big room, while the operator stay in another office room with another small machine as terminal to the host computer. as the host computer can run multi-users, each of which needs a terminal. </p>
-<p>when times goes to personal computer(PC), there is no need for multi-users login, so each PC has integrated with I/O device(monitor and keybord)</p>
-<p>nowadays, we have plenty of end-user terminals, e.g. smart phone, smart watch, Ipad e.t.c, all of these are <code>terminal</code>, as the real host computer is in cloud now. </p>
-<p>in a word, any device that can accept input and display output is a <code>terminal</code>, which play the role as the human-machine interface.</p>
-<h4 id="three-kinds-of-terminal"><a href="#three-kinds-of-terminal" class="headerlink" title="three kinds of terminal"></a>three kinds of terminal</h4><p>ssh is TCP/IP protocol, what’s inside is the remote terminal streaming flow.  the TCP/IP plays as the tunnel. of course, any communication protocol can play the role as the <code>tunnel</code>. </p>
+        <h4 id="ros-msgs"><a href="#ros-msgs" class="headerlink" title="ros msgs"></a>ros msgs</h4><p>ros msgs usually used in C++, as our ADS data tool is implemented in Python, I’d try to build <code>*.msg</code> to python module. find two blogs from ROS doc: </p>
+<p><a href="http://wiki.ros.org/rospy_tutorials/Tutorials/Makefile" target="_blank" rel="external">writing a ROS python Makefile</a></p>
+<p><a href="http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv#Common_step_for_msg_and_srv" target="_blank" rel="external">create a ros msg</a></p>
+<p>to build msg into python module, the <code>package.yml</code> should at least include the following lines:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">&lt;buildtool_depend&gt;catkin&lt;/buildtool_depend&gt;</span></div><div class="line"><span class="string">&lt;build_depend&gt;message_generation&lt;/build_depend&gt;</span></div><div class="line"><span class="string">&lt;build_export_depend&gt;rospy&lt;/build_export_depend&gt;</span></div><div class="line"><span class="string">&lt;build_export_depend&gt;std_msgs&lt;/build_export_depend&gt;</span></div><div class="line"><span class="string">&lt;exec_depend&gt;rospy&lt;/exec_depend&gt;</span></div><div class="line"><span class="string">&lt;exec_depend&gt;std_msgs&lt;/exec_depend&gt;</span></div></pre></td></tr></table></figure>
+<p>the default <code>CMakeList.txt</code> looks like: </p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="string">find_package(catkin</span> <span class="string">REQUIED</span> <span class="string">COMPONENTS</span></div><div class="line">	<span class="string">roscpp</span></div><div class="line">	<span class="string">rospy</span></div><div class="line">	<span class="string">std_msgs</span></div><div class="line">	<span class="string">message_generation</span></div><div class="line"><span class="string">)</span> </div><div class="line"></div><div class="line"><span class="string">add_message_files(</span></div><div class="line">	<span class="string">FILES</span></div><div class="line">	<span class="string">custom.msg</span></div><div class="line"><span class="string">)</span></div><div class="line"></div><div class="line"><span class="string">generate_messages(</span></div><div class="line">	<span class="string">DEPENDENCIES</span></div><div class="line">	<span class="string">std_msgs</span></div><div class="line"><span class="string">)</span></div></pre></td></tr></table></figure>
+<p>the generated msg python module is located at <code>~/catkin_ws/devel/lib/python2.7/dist-packages/my_msg_py/msg</code>,which can add to <code>$PYTHONPATH</code> for later usage</p>
+<h4 id="create-ros-node-with-catkin"><a href="#create-ros-node-with-catkin" class="headerlink" title="create ros node with catkin"></a>create ros node with catkin</h4><p>first check your <code>$ROS_PAKCAGE_PATH</code>, the default pkg path is <code>/opt/ros/kinetic/share</code>, append custom pkgs path from <code>~/cakin_ws/devel/share</code>. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/my_catkin_ws/src</div><div class="line">catkin_create_pkg my_pkg [dependencies, e.g. sd_msgs rospy]</div><div class="line">rospack find</div></pre></td></tr></table></figure>
+<p><code>catkin_create_pkg</code> will create a <code>CMakeList.txt</code> at pkg level, and a <code>src</code> folder, where can hold custom nodes definition.</p>
+<h4 id="sensor-serial-data-to-ros-node"><a href="#sensor-serial-data-to-ros-node" class="headerlink" title="sensor serial data to ros node"></a>sensor serial data to ros node</h4><p>sensors(e.g. rtk, imu) to ros is communication from external world to ros sys. Things need to take care:  mostly sensor hardware device doesn’t support ROS driver directly, so first need device serial or CAN or Ethernet to get the raw sensor data, and package it as <code>sensor/raw_msg</code> to publish out; the real ros-defined sensor node, will subscribe <code>sensor/raw_msg</code> and publish the repackaged <code>sensor/data</code> to the ros system, (which usually happened in ros callback).</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">rtk_cb</span><span class="params">(std_msgs::ByteMultiArray raw_msg)</span>:</span></div><div class="line">    rtk_msg = func(raw_msg)</div><div class="line">    pub.publish(rtk_msg)</div><div class="line"></div><div class="line">pub = nodeHandler.advertise&lt;sensor_msgs:NavSatFix&gt;(<span class="string">"/rtk_gps/data"</span>, <span class="number">1</span>)</div><div class="line">sub = nodeHandler.subscribe(<span class="string">"/rtk_gps/raw_data"</span>, <span class="number">1</span>, rtk_cb)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">raw_data_generator</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">try</span>:	</div><div class="line">		<span class="keyword">with</span> open(<span class="string">"/dev/ttyS0"</span>, <span class="string">"r|w"</span>) <span class="keyword">as</span> fd:</div><div class="line">			header = read(fd, buf, header_line)</div><div class="line">			<span class="keyword">while</span> ros::ok():</div><div class="line">				content = read(fd, buf, content_lines)</div><div class="line">				std::msgs::ByteMultiArray raw_msg </div><div class="line">				raw_msg.data.push_back(header)</div><div class="line">				raw_msg.data.push_back(content)	</div><div class="line">				pub.publish(raw_msg)</div><div class="line">		close(fd)</div><div class="line">	<span class="keyword">except</span>:</div><div class="line">		print(<span class="string">"failed to read raw data\n"</span>)</div></pre></td></tr></table></figure>
+<h4 id="sensor-CAN-data-to-ros-node"><a href="#sensor-CAN-data-to-ros-node" class="headerlink" title="sensor CAN data to ros node"></a>sensor CAN data to ros node</h4><p>sensors(such as camera, radar, lidar e.t.c) go to ros sys through Veh CAN Bus. the difference between <strong>CAN</strong> msg and <strong>serial</strong> msg is data atomicity. as serial msg is only one variable, which gurantee atomicity in application level;  while each CAN frame usually include a few variables, which need custom implement atomicity in application level. </p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">thread0 = pthread_create(recv_thread, raw_can_data)</div><div class="line">thread1 = pthread_create(send_thread)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread0</span><span class="params">()</span>:</span></div><div class="line"> 	 recv_data = func(raw_can_data)</div><div class="line">	 pthread_mutex_lock(mutex_lock)</div><div class="line">	 sensor_raw = recv_data </div><div class="line">	 sem_post(sem_0)</div><div class="line">	 pthread_mutex_unlock(mutex_lock)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread1</span><span class="params">()</span>:</span></div><div class="line">	pthread_mutex_lock(mutex_lock)</div><div class="line">	sensor_ros_msg =  sensor_raw </div><div class="line">	pthread_mutex_unlock(mutex_lock)</div><div class="line">	node_.publish(sensor_ros_msg)</div></pre></td></tr></table></figure>
+<h4 id="ros-node-to-external-device"><a href="#ros-node-to-external-device" class="headerlink" title="ros node to external device"></a>ros node to external device</h4><p>another kind of communication, is from ros system to external device/env, such as dSPACE. the external device, if not communication through serial, then usually support Ethernet(udp/tcp), which then need to implement a custom udp/tcp data recv/send func. the ros node subscribe the necessary data, then send it out through udp/tcp.</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cb</span><span class="params">(sensor_msg)</span>:</span></div><div class="line">	data = repack(sensor_msg)</div><div class="line">	udp.send(data)</div><div class="line"></div><div class="line">sub = nodeHandler.subscribe(<span class="string">"/useful/data"</span>, <span class="number">1</span>, cb)</div></pre></td></tr></table></figure>
+<h4 id="xml-rpc-amp-amp-tcpros"><a href="#xml-rpc-amp-amp-tcpros" class="headerlink" title="xml-rpc &amp;&amp; tcpros"></a>xml-rpc &amp;&amp; tcpros</h4><p>the ros sytem has two communication, to register/update ros node, publish/subscribe topics to ros master. this kind of message go through <code>xml-rpc</code>. after worker nodes registered in master node, the P2P communication can generated, and the data is transfered through <code>tcpros</code>. </p>
+<p>each ros node has a <code>xml-rpc</code> server, in code, <code>nodeHandler.advertise()</code> called in publisher/subscriber node, to register their topices to ros master.</p>
+<p>once a subscribe node register to master, which topics it subscribed, master returns a URI as response, then the subscriber and publisher can build connection through this URI. when a publish node register to master, master call <code>publisherUpdate()</code> to notify all subscriber, who subscribe topices from this publisher.</p>
+<h4 id="ros-visual-rviz"><a href="#ros-visual-rviz" class="headerlink" title="ros visual(rviz)"></a>ros visual(rviz)</h4><p><a href="https://github.com/jstnhuang/ros-rviz" target="_blank" rel="external">ros-rviz</a></p>
 <ul>
-<li><p>local terminal, with usb to keyboard and monitor. </p>
-</li>
-<li><p>serial terminal, the guest machine connect to the host machine, who has keyboard and monitor. basically the guest machine borrow the host machine’s IO, which needs the host machine to run a terminal elmulator.</p>
-</li>
-<li><p>tcp/ip tunnel terminal, e.g. ssh</p>
-</li>
+<li>how rviz works ?</li>
 </ul>
-<p>both local terminal and serial terminal, directly connect to physical device, e.g. VGA interface, usb, serial e.t.c, so both are called  <strong>physical terminal</strong>.  ssh has nothing to do with physical device. </p>
-<h4 id="tty"><a href="#tty" class="headerlink" title="tty"></a>tty</h4><p>in Linux,  <code>/dev/ttyX</code> represents a physical-terminal. from <code>tty1</code> to <code>tty63</code> are all local terminal. during Linux kernal init, 63 local terminals are generated, which can be switched by <code>Fn-Alt-Fx</code>, (x can be 1, 2, 3…). each current terminal is called <strong>focus terminal</strong>. </p>
-<p>focus terminal is taken as global variable, so any input will transfer to current focus terminal. for serial, there is no focus terminal. </p>
-<p>in Linux,  <code>/dev/console</code> represents current <strong>focus terminal</strong>, consider as a pointer to current focus terminal, wherever write sth to <code>/dev/console</code> will present at current focus terminal. </p>
-<p><code>/dev/tty</code> is the global variable itself. whichever terminal you are working with, when write to <code>/dev/tty</code>, it will be present.</p>
-<p><code>/dev/ttyS#num#</code> represents <strong>serial terminal</strong>. </p>
-<h4 id="getty-amp-login"><a href="#getty-amp-login" class="headerlink" title="getty &amp; login"></a>getty &amp; login</h4><p>in multi-terminal time, each terminal must bind to one user, user must first login the terminal, <code>getty</code> is the login process, which is called in <code>init</code>. after login successfully, the terminal <code>tty#num#</code> can be owned by the user. </p>
-<p>there are a few differenet version of <code>getty</code>, e.g. <code>agetty</code> e.t.c.</p>
-<h4 id="pty-amp-pts"><a href="#pty-amp-pts" class="headerlink" title="pty &amp; pts"></a>pty &amp; pts</h4><p>pty stands for <code>pseudo-tty</code>, pty is a (master-slave) pair terminal device, including:  pts <code>pseudo-terminal slave</code>, and ptmx <code>pseudo-terminal master</code>. </p>
-<p>a few concepts as following: </p>
+<p>If you want to create a node providing a set of interactive markers, you need to instantiate an InteractiveMarkerServer object. This will handle the connection to the client (usually RViz) and make sure that all changes you make are being transmitted and that your application is being notified of all the actions the user performs on the interactive markers. </p>
+<p><img src="http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers:%20Getting%20Started?action=AttachFile&amp;do=get&amp;target=interactive_marker_architecture.png" alt="image"></p>
 <ul>
-<li><p>serial terminal  <code>/dev/ttySn</code></p>
-</li>
-<li><p>pseudo-termianl  <code>/dev/pty/</code></p>
-</li>
-<li><p>controlling terminal <code>/dev/tty</code></p>
-</li>
-<li><p>console terminal  <code>/dev/console</code></p>
-</li>
+<li>rviz rosbag </li>
 </ul>
-<h2 id="Linux-Serial-Console"><a href="#Linux-Serial-Console" class="headerlink" title="Linux Serial Console"></a>Linux Serial Console</h2><h4 id="serial-communication"><a href="#serial-communication" class="headerlink" title="serial communication"></a>serial communication</h4><p>in old-style PC, serial is COM interface, also called <code>DB9 interface</code>, with RS-232 standard. </p>
-<p>each user can connect to host machine through a <strong>terminal</strong>. <code>console</code> is same as <code>terminal</code> to connect user to host machine, but <code>console</code> is higher priority than <code>terminal</code>. nowadays less difference between terminal and console.  </p>
-<p><code>Teletype</code> is the earliest terminal device, <code>tty</code> is physical or pseudo terminal connect to the host machine, nowadays <code>tty</code> also used for serial device.</p>
-<p><code>serial</code> is the connection from terminal/keyboard to dev-board. </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls /dev/tty*</div></pre></td></tr></table></figure>
-<h4 id="configuration"><a href="#configuration" class="headerlink" title="configuration"></a>configuration</h4><p>Linux kernel must be configured to use the serial port as its console, which is done by passing the kernel the <code>console</code> parameter when the kernel is started by the boot loader.</p>
-<p>the init system should keep a process runnign to monitor the serial console for logins, the monitoring process is traditionally named <strong>getty</strong></p>
-<p>a number of system utilities need to be configured tomake them aware of the console, or configured to prevent them from disrupting the console.</p>
-<h4 id="serial-port"><a href="#serial-port" class="headerlink" title="serial port"></a>serial port</h4><p>Linux names as the first serial port has the file name <code>/dev/ttys0</code>, the second serial port has the file name <code>/dev/ttyS1</code> and so on. most boot loaders have yet another naming scheme, the first serial port is numbered <code>0</code>, the second serial port is numbered <code>1</code></p>
-<h4 id="configure-GRUB-boot-loader"><a href="#configure-GRUB-boot-loader" class="headerlink" title="configure GRUB boot loader"></a>configure GRUB boot loader</h4><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/configure-boot-loader-grub.html" target="_blank" rel="external">configure GRUB to use the serial console</a></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">info grub</div><div class="line">/boot/grub/grub.cfg</div><div class="line">serial --unit=0 --speed=9600 --word=8 --parity=no --stop=1 </div><div class="line">terminal serial</div></pre></td></tr></table></figure>
-<h4 id="init-system"><a href="#init-system" class="headerlink" title="init system"></a>init system</h4><p>getty is started by <code>init</code>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">co:2345:respawn:/sbin/getty ttyS0 CON9600 vt102</div></pre></td></tr></table></figure>
+<p><strong>rviz config</strong> can customize the rviz display, the default located at <code>~/.rviz/default.rviz</code>. </p>
+<p>the idea to play rosbag and render in rviz is to define a custom node, to receive the custom <code>pkg_msg</code> from replayed rosbag, then repckage <code>pkg_msg</code> as corresponded <code>marker/markerArray</code>, then publish these msg out, which will be received by <code>rviz</code></p>
+<p>usually we define a custom node to receive replayed topics from <code>rosbag.play()</code>, and define a callback func to publish its marker objects out. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ros::Publisher markerArray </div><div class="line">def pkg_cb(sensor_pkg):</div><div class="line">	for objIdx in sensor_pkg.ObjNum:</div><div class="line">		prepare_marker(marker, sensor_pkg.objects[objIdx]</div><div class="line">		SensorDisplay.markers.append(marker)	</div><div class="line">	markerArray.publish(SensorDisplay)</div><div class="line">	SensorDisplay-&gt;markers.clear()</div><div class="line"></div><div class="line">subPkg = nodeHandler.subscribe("sensor_pkg", 1, pkg_cb);</div><div class="line">markerArray = nodeHandler.advertise&lt;visulization_msgs::MarkerArray&gt;("sensor_pkg", 1)</div></pre></td></tr></table></figure>
+<h4 id="ros-summary"><a href="#ros-summary" class="headerlink" title="ros summary"></a>ros summary</h4><p>ros is a very common communciation way and message type in ADS dev, many demo are implemented based on ros, which gives a bunch of ros related tools. in this blog, we review three of them:</p>
 <ul>
-<li><p><code>co</code> is an arbitrary entry, representing <code>console</code></p>
-</li>
-<li><p><code>2345</code>, run levels where this entry gets started. </p>
-</li>
-<li><p><code>respawn</code>, re-run the program if it dies</p>
-</li>
-<li><p><code>/sbin/getty ttyS0 CON9600 vt102</code>, getty connecting to /dev/ttyS0 with the settings for CON9600bps, and the terminal is VT100 model</p>
-</li>
+<li>ros based sensor device data collection </li>
+<li>ros rviz </li>
+<li>rosbag.play </li>
 </ul>
-<h2 id="virsh-console"><a href="#virsh-console" class="headerlink" title="virsh console"></a>virsh console</h2><p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-enable-kvm-virsh-console-access-ubuntu-linux-vm" target="_blank" rel="external">how to</a> connect ubuntu kvm virtual machine through serial console. in earlier version and distributions, it need to configure serial console in grub file, but in Ubuntu it’s very easy adn reliable as most of configurations and settings are already configured in OS.</p>
-<h4 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h4><p>runs ubuntu14.04 guest mahcine on ubuntu 16.04 host machine. how to setup serial console, we have to connect guest machine and login on as root user</p>
-<h4 id="login-through-SSH"><a href="#login-through-SSH" class="headerlink" title="login through SSH"></a>login through SSH</h4><ul>
-<li>connect on KVM guest machine through ssh from host machine </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ssh 192.168.122.1</div><div class="line">hostname</div></pre></td></tr></table></figure>
-<h4 id="connect-through-VNC"><a href="#connect-through-VNC" class="headerlink" title="connect through VNC"></a>connect through VNC</h4><p>conenct guest machine through VNC viewer and setup <code>serial console</code>. There are times when we need to troubleshoot Virtual Machines with unknown status like Hang in between, IP address issues, password problems, Serial console Hang etc. In case scenarios, we could relay on VNC configuration of KVM Guest Machines. </p>
-<p>vnc viewer is a graphic viewer, so only need add <code>graphics</code> component in <a href="http://www.geekpills.com/wp-content/uploads/2017/08/ubuntu-17.04.txt" target="_blank" rel="external">config.xml</a>:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">graphics</span> <span class="attr">type</span>=<span class="string">'vnc'</span> <span class="attr">port</span>=<span class="string">'-1'</span> <span class="attr">autoport</span>=<span class="string">'yes'</span> <span class="attr">passwd</span>=<span class="string">'mypassword'</span>/&gt;</span></div></pre></td></tr></table></figure>
-<p>run <code>virsh vncdisplay #vm_name#</code> we can get our vnc (server) IP, which then can be accessed by <code>vnc guest viewer</code>. here, <code>kvm virtual machine</code> has implemented a vnc server, and any <code>vnc viewer</code> in the same physical machine, can access this vnc server, even without external networking. </p>
-<h4 id="configure-serial-console-in-ubuntu-guest"><a href="#configure-serial-console-in-ubuntu-guest" class="headerlink" title="configure serial console in ubuntu guest"></a>configure serial console in ubuntu guest</h4><p>after getting login console, we can start <code>serial console</code> and enable it with:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># systemctl start serial-getty@ttyS0</span></div><div class="line"><span class="comment"># systemctl enable serial-getty@ttyS0</span></div><div class="line">Created symlink /etc/systemd/system/getty.target.wants/serial-getty@ttyS0.service → /lib/systemd/system/serial-getty@.service.</div></pre></td></tr></table></figure>
-<p>now we can connect <code>serial console</code> with <code>virsh console</code>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virsh console vm_name</div></pre></td></tr></table></figure>
-<p>after installnation, reboot first, then the physical machine has dual-OS: <a href="https://www.server-world.info/en/note?os=Ubuntu_14.04&amp;p=kvm&amp;f=2" target="_blank" rel="external">GuestOS and HostOS</a>, which can exit GuestOS by <code>Ctrl + ]</code>, or login GuestOS by <code>virsh consoel #guest_vm#</code></p>
-<p><strong>in summary</strong>, <code>virsh console</code> implement a serial console for kvm guest machine, which connect the guest machine to host machine through <code>serial</code>, which is not a <code>ssh</code>, need new knowledges about <code>serial</code>. </p>
-<h2 id="virsh-console-hangs"><a href="#virsh-console-hangs" class="headerlink" title="virsh console hangs"></a>virsh console hangs</h2><p><code>virsh console vm</code> hangs at: <code>Escape character is ^]</code>, which can exit by <strong>ctrl + ]</strong> </p>
-<h4 id="sol1"><a href="#sol1" class="headerlink" title="sol1:"></a><a href="https://stackoverflow.com/questions/11845280/virsh-console-hangs-at-the-escape-character" target="_blank" rel="external">sol1</a>:</h4><p>go to guest machine/terminal, and edit <code>/etc/default/grub</code>, appending;</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">GRUB_TERMINAL=serial</div><div class="line">GRUB_SERIAL_COMMAND=<span class="string">"serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1"</span></div></pre></td></tr></table></figure>
-<p>then execute:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">update-grub</div><div class="line">reboot</div></pre></td></tr></table></figure>
-<p>the problem here, as the KVM vm shares the kernel of the host machine, if update <code>grub</code>, the host machine will reboot with serial connection(?)</p>
-<h4 id="Centos-virsh-console-hangs"><a href="#Centos-virsh-console-hangs" class="headerlink" title="Centos virsh console hangs"></a><a href="https://www.cnblogs.com/xieshengsen/p/6215168.html" target="_blank" rel="external">Centos virsh console hangs</a></h4><ul>
-<li><p>go to <code>/etc/securetty</code> and append <code>ttyS0</code></p>
-</li>
-<li><p>append <code>S0:12345:respawn:/sbin/agetty ttyS0 115200</code> to <code>/etc/init/ttyS0.conf</code></p>
-</li>
-<li><p>/etc/grub.conf(Centos) </p>
-</li>
-</ul>
-<p>I only found <code>/boot/grub/grub.cfg</code> in ubuntu. In the <code>kernel</code> line, appending <code>console=ttyS0</code>. but there is no <code>kernel</code> line in <code>ubuntu grub.cfg</code>.</p>
-<h4 id="Ubuntu-virsh-console-hangs"><a href="#Ubuntu-virsh-console-hangs" class="headerlink" title="Ubuntu virsh console hangs"></a><a href="https://www.cnblogs.com/sixloop/p/8044785.html" target="_blank" rel="external">Ubuntu virsh console hangs</a></h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="built_in">disable</span> systemd-networkd-wait-online</div><div class="line">systemctl <span class="built_in">enable</span> serial-getty@ttyS0.service</div><div class="line">systemctl start serial-getty@ttyS0.service</div></pre></td></tr></table></figure>
-<p>which gives: </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Mar 27 11:17:18 ubuntu systemd[1]: Started Serial Getty on ttyS0.</div><div class="line">Mar 27 11:17:18 ubuntu agetty[445120]: /dev/ttyS0: not a tty</div></pre></td></tr></table></figure>
-<p>check in <code>/dev/ttyS*</code> : </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">crw-rw---- 1 root dialout 4, 73 Mar 24 09:20 ttyS9</div><div class="line">crw--w---- 1 root tty     4, 64 Mar 24 09:20 ttyS0</div><div class="line">crw-rw---- 1 root dialout 4, 65 Mar 24 09:20 ttyS1</div></pre></td></tr></table></figure>
-<p>interesting here,  <code>ttyS0</code> belongs to <code>tty</code> group, all otehr <code>ttyS#num#</code> belongs to <code>dialout</code> group. </p>
-<h5 id="tty-and-dialout"><a href="#tty-and-dialout" class="headerlink" title="tty and dialout"></a>tty and dialout</h5><p><a href="https://stackoverflow.com/questions/30846176/how-to-change-tty-group-on-linux-build-with-buildroot" target="_blank" rel="external">change /dev/ttyS0 to tty group</a></p>
-<p><a href="https://askubuntu.com/questions/210177/serial-port-terminal-cannot-open-dev-ttys0-permission-denied" target="_blank" rel="external">can’t access /dev/ttyS</a></p>
-<p>add USER to tty/dialout group</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo usermod -a -G tty <span class="variable">$USER</span></div><div class="line">sudo usermod -a -G dialout <span class="variable">$USER</span></div></pre></td></tr></table></figure>
-<p>reboot and go on</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://tldp.org/HOWTO/Remote-Serial-Console-HOWTO/" target="_blank" rel="external">remote serial console HOWTO</a></p>
-<p><a href="https://www.cnblogs.com/huan-huan/p/8522472.html" target="_blank" rel="external">remote serial console HOWTO in Chinese</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1527544" target="_blank" rel="external">understand Linux terminal history in Chinese</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1533217" target="_blank" rel="external">Linux terminal introduction in Chinese</a></p>
-<p><a href="https://tutorial.linux.doc.embedfire.com/zh_CN/latest/linux_app/uart_tty.html" target="_blank" rel="external">serial communication in Chinese</a></p>
-<p><a href="https://wiki.archlinux.org/index.php/Working_with_the_serial_console" target="_blank" rel="external">arhLinux: working with the serial console</a></p>
-<p><a href="https://www.gnu.org/software/grub/manual/grub/grub.html" target="_blank" rel="external">gnu org: grub</a></p>
-<p><a href="http://www.geekpills.com/operating-system/linux/kvm-virtualization-start-vnc-remote-access-guest-operating-systems" target="_blank" rel="external">geekpills: start vnc remote access for guest operating systems</a></p>
+<p>which can support a few kinds of applications, e.g. debuging, replay, data collection.</p>
 
       
     </div>
@@ -501,9 +437,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/linux/" rel="tag"># linux</a>
-          
-            <a href="/tags/kvm/" rel="tag"># kvm</a>
+            <a href="/tags/ros/" rel="tag"># ros</a>
           
         </div>
       
@@ -516,8 +450,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/03/24/kvm-libvert-in-linux-1/" rel="next" title="kvm/libvert in linux (1)">
-                <i class="fa fa-chevron-left"></i> kvm/libvert in linux (1)
+              <a href="/2020/06/04/redis-queue-rq-in-data-processing/" rel="next" title="redis queue(rq) in data processing">
+                <i class="fa fa-chevron-left"></i> redis queue(rq) in data processing
               </a>
             
           </div>
@@ -525,10 +459,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/03/28/vmware-virtualization/" rel="prev" title="vmware introduction">
-                vmware introduction <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -676,7 +606,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#history-of-terminal"><span class="nav-number">1.</span> <span class="nav-text">history of terminal</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#three-kinds-of-terminal"><span class="nav-number">1.0.1.</span> <span class="nav-text">three kinds of terminal</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tty"><span class="nav-number">1.0.2.</span> <span class="nav-text">tty</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getty-amp-login"><span class="nav-number">1.0.3.</span> <span class="nav-text">getty & login</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pty-amp-pts"><span class="nav-number">1.0.4.</span> <span class="nav-text">pty & pts</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-Serial-Console"><span class="nav-number">2.</span> <span class="nav-text">Linux Serial Console</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#serial-communication"><span class="nav-number">2.0.1.</span> <span class="nav-text">serial communication</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configuration"><span class="nav-number">2.0.2.</span> <span class="nav-text">configuration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serial-port"><span class="nav-number">2.0.3.</span> <span class="nav-text">serial port</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-GRUB-boot-loader"><span class="nav-number">2.0.4.</span> <span class="nav-text">configure GRUB boot loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#init-system"><span class="nav-number">2.0.5.</span> <span class="nav-text">init system</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#virsh-console"><span class="nav-number">3.</span> <span class="nav-text">virsh console</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#setup"><span class="nav-number">3.0.1.</span> <span class="nav-text">setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#login-through-SSH"><span class="nav-number">3.0.2.</span> <span class="nav-text">login through SSH</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#connect-through-VNC"><span class="nav-number">3.0.3.</span> <span class="nav-text">connect through VNC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#configure-serial-console-in-ubuntu-guest"><span class="nav-number">3.0.4.</span> <span class="nav-text">configure serial console in ubuntu guest</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#virsh-console-hangs"><span class="nav-number">4.</span> <span class="nav-text">virsh console hangs</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sol1"><span class="nav-number">4.0.1.</span> <span class="nav-text">sol1:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Centos-virsh-console-hangs"><span class="nav-number">4.0.2.</span> <span class="nav-text">Centos virsh console hangs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ubuntu-virsh-console-hangs"><span class="nav-number">4.0.3.</span> <span class="nav-text">Ubuntu virsh console hangs</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#tty-and-dialout"><span class="nav-number">4.0.3.1.</span> <span class="nav-text">tty and dialout</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">5.</span> <span class="nav-text">refer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#ros-msgs"><span class="nav-number">1.</span> <span class="nav-text">ros msgs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#create-ros-node-with-catkin"><span class="nav-number">2.</span> <span class="nav-text">create ros node with catkin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sensor-serial-data-to-ros-node"><span class="nav-number">3.</span> <span class="nav-text">sensor serial data to ros node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sensor-CAN-data-to-ros-node"><span class="nav-number">4.</span> <span class="nav-text">sensor CAN data to ros node</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ros-node-to-external-device"><span class="nav-number">5.</span> <span class="nav-text">ros node to external device</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#xml-rpc-amp-amp-tcpros"><span class="nav-number">6.</span> <span class="nav-text">xml-rpc && tcpros</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ros-visual-rviz"><span class="nav-number">7.</span> <span class="nav-text">ros visual(rviz)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ros-summary"><span class="nav-number">8.</span> <span class="nav-text">ros summary</span></a></li></ol></div>
             
 
           </div>
@@ -819,9 +749,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2020/03/27/kvm-in-linux-2/';
-          this.page.identifier = '2020/03/27/kvm-in-linux-2/';
-          this.page.title = 'kvm in linux (2)';
+          this.page.url = 'http://yoursite.com/2020/06/22/play-with-ros-2/';
+          this.page.identifier = '2020/06/22/play-with-ros-2/';
+          this.page.title = 'play with ros 2';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://zjlee.disqus.com/embed.js';

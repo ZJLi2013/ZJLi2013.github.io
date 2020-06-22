@@ -291,6 +291,168 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/play-with-ros-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/22/play-with-ros-2/" itemprop="url">play with ros 2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-22T08:32:13-04:00">
+                2020-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/22/play-with-ros-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/22/play-with-ros-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="ros-msgs"><a href="#ros-msgs" class="headerlink" title="ros msgs"></a>ros msgs</h4><p>ros msgs usually used in C++, as our ADS data tool is implemented in Python, I’d try to build <code>*.msg</code> to python module. find two blogs from ROS doc: </p>
+<p><a href="http://wiki.ros.org/rospy_tutorials/Tutorials/Makefile" target="_blank" rel="external">writing a ROS python Makefile</a></p>
+<p><a href="http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv#Common_step_for_msg_and_srv" target="_blank" rel="external">create a ros msg</a></p>
+<p>to build msg into python module, the <code>package.yml</code> should at least include the following lines:</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">&lt;buildtool_depend&gt;catkin&lt;/buildtool_depend&gt;</span></div><div class="line"><span class="string">&lt;build_depend&gt;message_generation&lt;/build_depend&gt;</span></div><div class="line"><span class="string">&lt;build_export_depend&gt;rospy&lt;/build_export_depend&gt;</span></div><div class="line"><span class="string">&lt;build_export_depend&gt;std_msgs&lt;/build_export_depend&gt;</span></div><div class="line"><span class="string">&lt;exec_depend&gt;rospy&lt;/exec_depend&gt;</span></div><div class="line"><span class="string">&lt;exec_depend&gt;std_msgs&lt;/exec_depend&gt;</span></div></pre></td></tr></table></figure>
+<p>the default <code>CMakeList.txt</code> looks like: </p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="string">find_package(catkin</span> <span class="string">REQUIED</span> <span class="string">COMPONENTS</span></div><div class="line">	<span class="string">roscpp</span></div><div class="line">	<span class="string">rospy</span></div><div class="line">	<span class="string">std_msgs</span></div><div class="line">	<span class="string">message_generation</span></div><div class="line"><span class="string">)</span> </div><div class="line"></div><div class="line"><span class="string">add_message_files(</span></div><div class="line">	<span class="string">FILES</span></div><div class="line">	<span class="string">custom.msg</span></div><div class="line"><span class="string">)</span></div><div class="line"></div><div class="line"><span class="string">generate_messages(</span></div><div class="line">	<span class="string">DEPENDENCIES</span></div><div class="line">	<span class="string">std_msgs</span></div><div class="line"><span class="string">)</span></div></pre></td></tr></table></figure>
+<p>the generated msg python module is located at <code>~/catkin_ws/devel/lib/python2.7/dist-packages/my_msg_py/msg</code>,which can add to <code>$PYTHONPATH</code> for later usage</p>
+<h4 id="create-ros-node-with-catkin"><a href="#create-ros-node-with-catkin" class="headerlink" title="create ros node with catkin"></a>create ros node with catkin</h4><p>first check your <code>$ROS_PAKCAGE_PATH</code>, the default pkg path is <code>/opt/ros/kinetic/share</code>, append custom pkgs path from <code>~/cakin_ws/devel/share</code>. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/my_catkin_ws/src</div><div class="line">catkin_create_pkg my_pkg [dependencies, e.g. sd_msgs rospy]</div><div class="line">rospack find</div></pre></td></tr></table></figure>
+<p><code>catkin_create_pkg</code> will create a <code>CMakeList.txt</code> at pkg level, and a <code>src</code> folder, where can hold custom nodes definition.</p>
+<h4 id="sensor-serial-data-to-ros-node"><a href="#sensor-serial-data-to-ros-node" class="headerlink" title="sensor serial data to ros node"></a>sensor serial data to ros node</h4><p>sensors(e.g. rtk, imu) to ros is communication from external world to ros sys. Things need to take care:  mostly sensor hardware device doesn’t support ROS driver directly, so first need device serial or CAN or Ethernet to get the raw sensor data, and package it as <code>sensor/raw_msg</code> to publish out; the real ros-defined sensor node, will subscribe <code>sensor/raw_msg</code> and publish the repackaged <code>sensor/data</code> to the ros system, (which usually happened in ros callback).</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">rtk_cb</span><span class="params">(std_msgs::ByteMultiArray raw_msg)</span>:</span></div><div class="line">    rtk_msg = func(raw_msg)</div><div class="line">    pub.publish(rtk_msg)</div><div class="line"></div><div class="line">pub = nodeHandler.advertise&lt;sensor_msgs:NavSatFix&gt;(<span class="string">"/rtk_gps/data"</span>, <span class="number">1</span>)</div><div class="line">sub = nodeHandler.subscribe(<span class="string">"/rtk_gps/raw_data"</span>, <span class="number">1</span>, rtk_cb)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">raw_data_generator</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">try</span>:	</div><div class="line">		<span class="keyword">with</span> open(<span class="string">"/dev/ttyS0"</span>, <span class="string">"r|w"</span>) <span class="keyword">as</span> fd:</div><div class="line">			header = read(fd, buf, header_line)</div><div class="line">			<span class="keyword">while</span> ros::ok():</div><div class="line">				content = read(fd, buf, content_lines)</div><div class="line">				std::msgs::ByteMultiArray raw_msg </div><div class="line">				raw_msg.data.push_back(header)</div><div class="line">				raw_msg.data.push_back(content)	</div><div class="line">				pub.publish(raw_msg)</div><div class="line">		close(fd)</div><div class="line">	<span class="keyword">except</span>:</div><div class="line">		print(<span class="string">"failed to read raw data\n"</span>)</div></pre></td></tr></table></figure>
+<h4 id="sensor-CAN-data-to-ros-node"><a href="#sensor-CAN-data-to-ros-node" class="headerlink" title="sensor CAN data to ros node"></a>sensor CAN data to ros node</h4><p>sensors(such as camera, radar, lidar e.t.c) go to ros sys through Veh CAN Bus. the difference between <strong>CAN</strong> msg and <strong>serial</strong> msg is data atomicity. as serial msg is only one variable, which gurantee atomicity in application level;  while each CAN frame usually include a few variables, which need custom implement atomicity in application level. </p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">thread0 = pthread_create(recv_thread, raw_can_data)</div><div class="line">thread1 = pthread_create(send_thread)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread0</span><span class="params">()</span>:</span></div><div class="line"> 	 recv_data = func(raw_can_data)</div><div class="line">	 pthread_mutex_lock(mutex_lock)</div><div class="line">	 sensor_raw = recv_data </div><div class="line">	 sem_post(sem_0)</div><div class="line">	 pthread_mutex_unlock(mutex_lock)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread1</span><span class="params">()</span>:</span></div><div class="line">	pthread_mutex_lock(mutex_lock)</div><div class="line">	sensor_ros_msg =  sensor_raw </div><div class="line">	pthread_mutex_unlock(mutex_lock)</div><div class="line">	node_.publish(sensor_ros_msg)</div></pre></td></tr></table></figure>
+<h4 id="ros-node-to-external-device"><a href="#ros-node-to-external-device" class="headerlink" title="ros node to external device"></a>ros node to external device</h4><p>another kind of communication, is from ros system to external device/env, such as dSPACE. the external device, if not communication through serial, then usually support Ethernet(udp/tcp), which then need to implement a custom udp/tcp data recv/send func. the ros node subscribe the necessary data, then send it out through udp/tcp.</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cb</span><span class="params">(sensor_msg)</span>:</span></div><div class="line">	data = repack(sensor_msg)</div><div class="line">	udp.send(data)</div><div class="line"></div><div class="line">sub = nodeHandler.subscribe(<span class="string">"/useful/data"</span>, <span class="number">1</span>, cb)</div></pre></td></tr></table></figure>
+<h4 id="xml-rpc-amp-amp-tcpros"><a href="#xml-rpc-amp-amp-tcpros" class="headerlink" title="xml-rpc &amp;&amp; tcpros"></a>xml-rpc &amp;&amp; tcpros</h4><p>the ros sytem has two communication, to register/update ros node, publish/subscribe topics to ros master. this kind of message go through <code>xml-rpc</code>. after worker nodes registered in master node, the P2P communication can generated, and the data is transfered through <code>tcpros</code>. </p>
+<p>each ros node has a <code>xml-rpc</code> server, in code, <code>nodeHandler.advertise()</code> called in publisher/subscriber node, to register their topices to ros master.</p>
+<p>once a subscribe node register to master, which topics it subscribed, master returns a URI as response, then the subscriber and publisher can build connection through this URI. when a publish node register to master, master call <code>publisherUpdate()</code> to notify all subscriber, who subscribe topices from this publisher.</p>
+<h4 id="ros-visual-rviz"><a href="#ros-visual-rviz" class="headerlink" title="ros visual(rviz)"></a>ros visual(rviz)</h4><p><a href="https://github.com/jstnhuang/ros-rviz" target="_blank" rel="external">ros-rviz</a></p>
+<ul>
+<li>how rviz works ?</li>
+</ul>
+<p>If you want to create a node providing a set of interactive markers, you need to instantiate an InteractiveMarkerServer object. This will handle the connection to the client (usually RViz) and make sure that all changes you make are being transmitted and that your application is being notified of all the actions the user performs on the interactive markers. </p>
+<p><img src="http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers:%20Getting%20Started?action=AttachFile&amp;do=get&amp;target=interactive_marker_architecture.png" alt="image"></p>
+<ul>
+<li>rviz rosbag </li>
+</ul>
+<p><strong>rviz config</strong> can customize the rviz display, the default located at <code>~/.rviz/default.rviz</code>. </p>
+<p>the idea to play rosbag and render in rviz is to define a custom node, to receive the custom <code>pkg_msg</code> from replayed rosbag, then repckage <code>pkg_msg</code> as corresponded <code>marker/markerArray</code>, then publish these msg out, which will be received by <code>rviz</code></p>
+<p>usually we define a custom node to receive replayed topics from <code>rosbag.play()</code>, and define a callback func to publish its marker objects out. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ros::Publisher markerArray </div><div class="line">def pkg_cb(sensor_pkg):</div><div class="line">	for objIdx in sensor_pkg.ObjNum:</div><div class="line">		prepare_marker(marker, sensor_pkg.objects[objIdx]</div><div class="line">		SensorDisplay.markers.append(marker)	</div><div class="line">	markerArray.publish(SensorDisplay)</div><div class="line">	SensorDisplay-&gt;markers.clear()</div><div class="line"></div><div class="line">subPkg = nodeHandler.subscribe("sensor_pkg", 1, pkg_cb);</div><div class="line">markerArray = nodeHandler.advertise&lt;visulization_msgs::MarkerArray&gt;("sensor_pkg", 1)</div></pre></td></tr></table></figure>
+<h4 id="ros-summary"><a href="#ros-summary" class="headerlink" title="ros summary"></a>ros summary</h4><p>ros is a very common communciation way and message type in ADS dev, many demo are implemented based on ros, which gives a bunch of ros related tools. in this blog, we review three of them:</p>
+<ul>
+<li>ros based sensor device data collection </li>
+<li>ros rviz </li>
+<li>rosbag.play </li>
+</ul>
+<p>which can support a few kinds of applications, e.g. debuging, replay, data collection.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/redis-queue-rq-in-data-processing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2559,320 +2721,6 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/06/design-a-data-center-for-ADS-applications/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/06/design-a-data-center-for-ADS-applications/" itemprop="url">design a data center for ADS applications</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-06T04:57:57-04:00">
-                2020-04-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/06/design-a-data-center-for-ADS-applications/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/04/06/design-a-data-center-for-ADS-applications/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>A system’s back end can be made up of a number of bare metal servers, data storage facilities, virtual machines, a security mechanism, and services, all built in conformance with a deployment model, and all together responsible for providing a service.</p>
-<h4 id="points-to-consider"><a href="#points-to-consider" class="headerlink" title="points to consider"></a>points to consider</h4><ul>
-<li><p>it’s the primary authority and responsibility of the back end to provide a built-in security mechanism, traffic control and protocols.</p>
-</li>
-<li><p>a central server is responsible for managing and running the system, systematically reviewing the traffic and client request to make certain that everything is running smoothly.</p>
-</li>
-</ul>
-<h2 id="service-viewport"><a href="#service-viewport" class="headerlink" title="service viewport"></a>service viewport</h2><h4 id="busniess-services"><a href="#busniess-services" class="headerlink" title="busniess services"></a>busniess services</h4><p>the most common busniess services or <code>application-as-a-service(aaas)</code> in ADS data center includes:</p>
-<ul>
-<li><p>massively scenario simualtion</p>
-</li>
-<li><p>open-loop re-play simulation </p>
-</li>
-<li><p>AI training </p>
-</li>
-<li><p>sensor data analysis</p>
-</li>
-<li><p>test driven algorithms dev</p>
-</li>
-</ul>
-<h4 id="platform-as-a-service"><a href="#platform-as-a-service" class="headerlink" title="platform as a service"></a>platform as a service</h4><p>busniess services can be considered as the most abstract level services,  paas consider how to support the upper level needs. a few components are obvious:</p>
-<ul>
-<li><p>distributed data storage(aws s3, ceph)</p>
-</li>
-<li><p>massively data analysis(hadoop)</p>
-</li>
-<li><p>massively compute nodes(k8s/docker)</p>
-</li>
-<li><p>vdi server pool</p>
-</li>
-<li><p>sql</p>
-</li>
-<li><p>web server for end-user UI</p>
-</li>
-</ul>
-<h4 id="IaaS"><a href="#IaaS" class="headerlink" title="IaaS"></a>IaaS</h4><p>to support PaaS, we need CPUs, GPUs, network, either in physical mode or virtual mode. the common private cloud vendor would suggest a general virtualization layer, to manage all resources in one shot. but there is always an balance between the easy manage and performance lost. </p>
-<p>for large auto industry OEMs, no doubt <code>easy manage</code> is crucial. so it’s suggested to implement virtual layer(either vmware or customized kvm). if not, I wonder the self-maintainaince will be a disaster in future. </p>
-<h2 id="security-in-cloud"><a href="#security-in-cloud" class="headerlink" title="security in cloud"></a>security in cloud</h2><h4 id="who-is-Cybersecurity-professional"><a href="#who-is-Cybersecurity-professional" class="headerlink" title="who is Cybersecurity professional"></a><a href="https://cloudacademy.com/blog/how-to-become-a-cybersecurity-professional/" target="_blank" rel="external">who is Cybersecurity professional</a></h4><p>the guy who provide security during the development stages of software systems, networks, and data centers. </p>
-<p>must make security measures for any information by designing various defensive systems and strategies against intruders. </p>
-<p> The specialist must create new defensive systems and protocols and report incidents. Granting permissions and privileges to authorized users is also their job.</p>
-<p> The cybersecurity professional must maintain IT security controls documentation, recognize the security gaps, and prepare an action plan accordingly. </p>
-<p> Cybersecurity professionals enable security in IT infrastructure, data, edge devices, and networks.</p>
-<h4 id="Azure-Security-best-practices"><a href="#Azure-Security-best-practices" class="headerlink" title="Azure Security: best practices"></a><a href="https://cloudacademy.com/blog/azure-security-best-practices-you-need-to-know/" target="_blank" rel="external">Azure Security: best practices</a></h4><ul>
-<li><p>control network access </p>
-<p>   At this ring you typically find Firewall policies, Distributed Denial of Service (DDoS) prevention, Intrusion Detection and Intrusion Prevention systems (IDS/IPS), Web Content Filtering, and Vulnerability Management such as Network Anti-Malware, Application Controls, and Antivirus.</p>
-<p>   The second ring is often a Network Security Group (or NSG) applied to the subnet. Network Security Groups allow you to filter network traffic to and from Azure resources in an Azure virtual network.</p>
-<pre><code>all subnets in an Azure Virtual Network (VNet) can communicate freely. By using a network security group for network access control between subnets, you can establish a different security zone or role for each subnet. As such, all subnets should be associated with a properly configured Network Security Group. 
-
-With a virtual server, there is a third ring which is a Network Security Group (NSG) applied to virtual machines network interfaces, 
-
-avoid exposure to the internet with a dedicated WAN connection. Azure offers both site-to-site VPN and ExpressRoute for this purpose.
-</code></pre></li>
-</ul>
-<ul>
-<li>disable remote access (ssh/rdp) </li>
-</ul>
-<p>disable remote access to vm from internet. ssh/rdp only should be provided over a secure dedicated conenction using Just-In-time(JIT) vm access.</p>
-<p> the Just-In-Time VM access policy configures at the NSG to lock down the virtual machines remote management ports. When an authorized user requires access to the VM, they will use Just-In-Time VM Access to request access for up to three hours. After the requested time has elapsed, Azure locks the management ports down to help reduce susceptibility to an attack.</p>
-<ul>
-<li>update vm</li>
-</ul>
-<p>You need to run antivirus and anti-malware. and requires system updates for VMs hosted in Azure</p>
-<ul>
-<li><p>safeguard sensitive data </p>
-</li>
-<li><p>enable encryption </p>
-</li>
-</ul>
-<ul>
-<li><a href="https://docs.microsoft.com/en-us/archive/blogs/azuresecurity/what-does-shared-responsibility-in-the-cloud-mean" target="_blank" rel="external">shared responsibility</a></li>
-</ul>
-<p><img src="https://msdnshared.blob.core.windows.net/media/2016/04/image_thumb601.png" alt="image"></p>
-<h4 id="aws-security-instance-level-security"><a href="#aws-security-instance-level-security" class="headerlink" title="aws security: instance level security"></a><a href="https://cloudacademy.com/blog/aws-security-groups-instance-level-security/" target="_blank" rel="external">aws security: instance level security</a></h4><ul>
-<li><p>AWS security groups, provides security at the protocol and port access level, working much the same way as a firewall – contains a set of rules that filter traffic coming in and out of an EC2 instance. </p>
-</li>
-<li><p>os security path management </p>
-</li>
-<li><p>key pairs(public and private key to login EC2 instance)</p>
-</li>
-</ul>
-<h4 id="aws-security-network-ACL-and-subnets-network-level-security"><a href="#aws-security-network-ACL-and-subnets-network-level-security" class="headerlink" title="aws security: network ACL and subnets: network level security"></a><a href="https://cloudacademy.com/blog/aws-network-acl-vpc-subnets-network-security/" target="_blank" rel="external">aws security: network ACL and subnets: network level security</a></h4><h4 id="aws-security-bastion-hosts"><a href="#aws-security-bastion-hosts" class="headerlink" title="aws security: bastion hosts"></a><a href="https://cloudacademy.com/blog/aws-bastion-host-nat-instances-vpc-peering-security/" target="_blank" rel="external">aws security: bastion hosts</a></h4><p>the connectivity flowing from an end-user to resources on a private subnet through a bastion host: </p>
-<p><img src="https://d1o2okarmduwny.cloudfront.net/wp-content/uploads/2015/11/aws-bastion-host-1.png" alt="image"></p>
-<ul>
-<li>updates to bastion host </li>
-</ul>
-<p>skip bastion if using Session Manager, to securely connect to private instance in virtual private cloud wthout needing bastion host or key-pairs</p>
-<p>now push keys for short periods of time and use IAM policies to restrict access as you see fit. This reduces your compliance and audit footprint as well</p>
-<ul>
-<li>NAT(network address translation) [gateway] instance </li>
-</ul>
-<p>allows private instance outgoing connectivity to the internet while at the same time blocking inboud traffic from the internet </p>
-<ul>
-<li>VPC(virtual private cloud) peering </li>
-</ul>
-<p><img src="https://d1o2okarmduwny.cloudfront.net/wp-content/uploads/2015/11/aws-bastion-host-3.png" alt="image"></p>
-<h4 id="aws-security-identity-and-access-management-IAM"><a href="#aws-security-identity-and-access-management-IAM" class="headerlink" title="aws security: identity and access management(IAM)"></a><a href="https://cloudacademy.com/blog/aws-security-identity-and-access-management-iam/" target="_blank" rel="external">aws security: identity and access management(IAM)</a></h4><p>governs and control user acces to VPC resoruces, it achieves the goal through Users/Group/Roles and Policies.</p>
-<h2 id="network-topology-in-cloud"><a href="#network-topology-in-cloud" class="headerlink" title="network topology in cloud"></a>network topology in cloud</h2><h4 id="network-topology-at-first"><a href="#network-topology-at-first" class="headerlink" title="network topology at first"></a>network topology at first</h4><p>I would consider the data center network topology and security mechanism from the following four points:</p>
-<ul>
-<li>internal network topology</li>
-</ul>
-<p>basically the data center will have an internal network, to connect infrastructures, e.g. data storage nodes, k8s compute nodes, hadoop compute nodes, web server nodes,  vdi server nodes e.t.c.</p>
-<ul>
-<li>network gateway to end-users</li>
-</ul>
-<p>there should be a unique network gateway in data center, which is the only network IO for end-user access.</p>
-<ul>
-<li>network gateway to other private/public cloud</li>
-</ul>
-<p>we also need connect to other IT infrastructure, so needanother network gateway.</p>
-<p>the two gateways above, can be either virtual gateway or physical gateway, depends on our hardware. e.g. vlan, bridge, or physical gateway</p>
-<ul>
-<li>admin pass-through network</li>
-</ul>
-<p>network gateway is the normal user access port, but for admin, specially for sysm management, trouble-shooting, e.t.c, we need a pass-through network, which basically directly connect to internal network of data center,<br>admin pass-through network is speed limited, so only for special admin usage.</p>
-<h4 id="h3c-浅谈数据中心网络架构的发展"><a href="#h3c-浅谈数据中心网络架构的发展" class="headerlink" title="h3c: 浅谈数据中心网络架构的发展"></a><a href="http://www.h3c.com/CN/D_201405/826868_30008_0.htm" target="_blank" rel="external">h3c: 浅谈数据中心网络架构的发展</a></h4><ul>
-<li>接入层，用于连接所有的计算节点，在较大规模的数据中心中，通常以柜顶交换机的形式存在；</li>
-<li>汇聚层，用于接入层的互联，并作为该汇聚区域二三层的边界，同时各种防火墙、负载均衡等业务也部署于此；</li>
-<li>核心层，用于汇聚层的的互联，并实现整个数据中心与外部网络的三层通信。</li>
-</ul>
-<p>传统的数据中心内，服务器主要用于对外提供业务访问，不同的业务通过安全分区及VLAN隔离。一个分区通常集中了该业务所需的计算、网络及存储资源，不同的分区之间或者禁止互访，或者经由核心交换通过三层网络交互，数据中心的网络流量大部分集中于南北向.</p>
-<p>在这种设计下，不同分区间计算资源无法共享，资源利用率低下的问题越来越突出。通过虚拟化技术、云计算管理技术等，将各个分区间的资源进行池化，实现数据中心内资源的有效利用。而随着这些新技术的兴起和应用，新的业务需求如虚拟机迁移、数据同步、数据备份、协同计算等在数据中心内开始实现部署，数据中心内部东西向流量开始大幅度增加。</p>
-<h4 id="h3c-two-layer-network-arch"><a href="#h3c-two-layer-network-arch" class="headerlink" title="h3c: two-layer network arch"></a><a href="http://www.h3c.com/cn/d_201010/697894_30008_0.htm" target="_blank" rel="external">h3c: two-layer network arch</a></h4><ul>
-<li>网络三层互联，或称为，数据中心前端网络互联。“前端网络”，是指数据中心面向企业园区的出口。不同数据中心的前端网络通过ip实现互联，园区或分支的客户端通过前端网络访问各数据中心。</li>
-</ul>
-<ul>
-<li><p>网络两层互联，或称为，数据中心服务器网络互联。在不同数据中心服务器网络接入层，构建一个跨数据中心的搭二层网络(vlan)，以满足服务器集群或虚拟机动态迁移等场景</p>
-</li>
-<li><p>san互联，也称为，后端存储网络互联。借助传输技术，实现主中心、灾备中心间磁盘阵列的数据复制</p>
-</li>
-</ul>
-<p>二层互联的业务需求：保证服务器的高可用集群。</p>
-<p>二层互联设计要点：面对中小企业客户（ip网络）</p>
-<h4 id="openstack-neutron-network-for-cloud"><a href="#openstack-neutron-network-for-cloud" class="headerlink" title="openstack neutron: network for cloud"></a><a href="https://www.cnblogs.com/pmyewei/p/6280445.html" target="_blank" rel="external">openstack neutron: network for cloud</a></h4><ul>
-<li>data flow in data center: </li>
-</ul>
-<ul>
-<li><p>manage(API) network, basically the internal managed network</p>
-</li>
-<li><p>user network</p>
-</li>
-<li><p>external network, including vpn, firewall </p>
-</li>
-<li><p>storage network, connect from computing nodes to storage ndoes </p>
-</li>
-</ul>
-<ul>
-<li>NSX arch</li>
-</ul>
-<p><img src="https://images2015.cnblogs.com/blog/1009737/201701/1009737-20170116004552494-794532203.png" alt="image"></p>
-<p>the left most part is computing nodes, for customers bussniess, the dataflow includes: user-network, storage, internal-network, all of which requires 3 NIC</p>
-<p>the middle part is infrastructure, including managing nodes, shared storage, which brings IP based storage for the left most part.</p>
-<p>the right edge part, is external(internet) network services for users, including network to users, as well as network to Internet, firewall, public IP address translation e.t.c.</p>
-<p><img src="https://images2015.cnblogs.com/blog/1009737/201701/1009737-20170116004801510-1392260872.png" alt="image"></p>
-<h4 id="ceph-subnets"><a href="#ceph-subnets" class="headerlink" title="ceph subnets"></a>ceph subnets</h4><p><img src="http://docs.ceph.org.cn/_images/ditaa-2452ee22ef7d825a489a08e0b935453f2b06b0e6.png" alt="image"></p>
-<p>when consider ceph storage for k8s computing nodes, the public network also includes network switches to k8s, as well as normal user data access network switches.</p>
-<ul>
-<li><p>cluster network (Gb NIC, including osd and monitor)</p>
-</li>
-<li><p>ceph client(to k8s) network (gb)</p>
-</li>
-<li><p>ceph admin/user network(mb)</p>
-</li>
-</ul>
-<h4 id="k8s-subnets"><a href="#k8s-subnets" class="headerlink" title="k8s subnets"></a>k8s subnets</h4><p><a href="https://zhuanlan.zhihu.com/p/90992878" target="_blank" rel="external">understand k8s network：pods, service, ingress</a></p>
-<ul>
-<li><p>pods, all containers in one pod, share the same network namespace. the network namespace of pod is different from that of the host machine, but the two is connected by <code>docker bridge</code> </p>
-</li>
-<li><p>services, handle the load balance among pods, as well as encapsulate the IPs of pods, so we don’t directly deal with the local dynamic IPs of pods.</p>
-</li>
-<li><p>how to access k8s service from exteral, or how user acces the k8s hosted in a remote data center?  <strong><a href="https://www.kuboard.cn/learning/k8s-intermediate/service/ingress.html#ingress" target="_blank" rel="external">ingress for k8s</a></strong></p>
-</li>
-</ul>
-<p><img src="https://upload-images.jianshu.io/upload_images/1401434-5216e7cf94351457.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200" alt="image"></p>
-<p><a href="https://www.jianshu.com/p/ae2889daa0a5" target="_blank" rel="external">flannel</a><br> setup a two-layer network, the ip of pod is assigend by <code>flannel</code>, each node will has a <code>flannel0</code> virtual NIC, used for node-node communication. </p>
-<h4 id="gpu-vdi-subnets"><a href="#gpu-vdi-subnets" class="headerlink" title="gpu vdi subnets"></a>gpu vdi subnets</h4><p>as mentioned in <a href="https://zjli2013.github.io/2020/04/02/gpu-vdi/" target="_blank" rel="external">gpu vdi</a>,  most solution has a customized vdi client, the vm manager internal network is handled by the vendors, maybe communicate through one Gb NIC, the client-server is simple TCP/ip.</p>
-<h4 id="webserver-subnets"><a href="#webserver-subnets" class="headerlink" title="webserver subnets"></a>webserver subnets</h4><p>a few things in mind:</p>
-<ul>
-<li>using vm.</li>
-</ul>
-<p>web servers are better to deploy in vm, so whenever there is a hardware failure, it can detect and automatically transfer to another vm. </p>
-<ul>
-<li>communicate with in-house services </li>
-</ul>
-<p>in ADS data center, most web application need access data from either sql or even storage services directly, which means the web server need both external ingress services as well as handling internal IP access. </p>
-<h4 id="network-manager"><a href="#network-manager" class="headerlink" title="network manager"></a>network manager</h4><p>the above subnet classification only consider each component itself, for a data center in whole, it’s better to manage all networks of internal subnets and access to external Internet in one module: network manager.</p>
-<p>as mentioned in the previous section: <a href="">security in cloud</a>, the network manager module can further add some security mechanisms.  </p>
-<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://cloudacademy.com/blog/cloud-computing-architecture-an-overview/" target="_blank" rel="external">cloud arch: front end &amp; back end</a></p>
-<p><a href="https://cloudacademy.com/learning-paths/az-500-exam-preparation-microsoft-azure-security-technologies-650/" target="_blank" rel="external">Microsoft Azure security tech training courses</a></p>
-<p><a href="https://cloudacademy.com/blog/foundation-certificate-in-cyber-security-fccs-learning-path/" target="_blank" rel="external">introduction the Foundation certificate in Cyber Security</a></p>
-<p><a href="https://www2.cs.duke.edu/courses/fall10/cps296.2/lectures/16RoutingTopology.pdf" target="_blank" rel="external">datacenter network: topology and routing</a></p>
-<p><a href="https://www.sdnlab.com/mininet-topology/" target="_blank" rel="external">miniNet for data center network topology</a></p>
-<p><a href="https://www.cnblogs.com/pmyewei/p/6413875.html" target="_blank" rel="external">openstack neutron: two-layer network</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2923,7 +2771,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">177</span>
+                <span class="site-state-item-count">178</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
