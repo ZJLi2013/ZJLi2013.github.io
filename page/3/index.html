@@ -291,6 +291,140 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/pure-c-c-pointer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/13/pure-c-c-pointer/" itemprop="url">pure c/c++ pointer</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-13T04:49:57-04:00">
+                2020-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/13/pure-c-c-pointer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/13/pure-c-c-pointer/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="pointer-assignment"><a href="#pointer-assignment" class="headerlink" title="pointer assignment"></a>pointer assignment</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> a = <span class="number">10</span> ;</div><div class="line">  <span class="keyword">int</span> *pa = &amp;a ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pa add "</span> &lt;&lt; &amp;pa &lt;&lt; <span class="string">"pa val "</span> &lt;&lt; *pa &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> b = <span class="number">22</span>;</div><div class="line">  <span class="keyword">int</span> *pb = &amp;b ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pb add "</span> &lt;&lt; &amp;pb &lt;&lt; <span class="string">"pb val "</span> &lt;&lt; *pb &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> d = <span class="number">100</span> ;</div><div class="line">  <span class="keyword">int</span> *pd = &amp;d ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pd add "</span> &lt;&lt; &amp;pd &lt;&lt; <span class="string">"pd val "</span> &lt;&lt; *pd &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> *pc = pb ; <span class="comment">//pointer assignment </span></div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pc add "</span> &lt;&lt; &amp;pc &lt;&lt; <span class="string">"pc val "</span> &lt;&lt; *pc &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  pb = pd ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pb add "</span> &lt;&lt; &amp;pb &lt;&lt; <span class="string">"pb val "</span> &lt;&lt; *pb &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pd add "</span> &lt;&lt; &amp;pd &lt;&lt; <span class="string">"pd val "</span> &lt;&lt; *pd &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  pd = pa ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pd add "</span> &lt;&lt; &amp;pd &lt;&lt; <span class="string">"pd val "</span> &lt;&lt; *pd &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  pa = pc ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pa add "</span> &lt;&lt; &amp;pa &lt;&lt; <span class="string">"pa val "</span> &lt;&lt; *pa &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">"pc add "</span> &lt;&lt; &amp;pc &lt;&lt; <span class="string">"pc val "</span> &lt;&lt; *pc &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">/* </span></div><div class="line">pb add 0x7fff5e744b30pb val 22</div><div class="line">pd add 0x7fff5e744b28pd val 100</div><div class="line">pc add 0x7fff5e744b20pc val 22</div><div class="line">pb add 0x7fff5e744b30pb val 100</div><div class="line">pd add 0x7fff5e744b28pd val 100</div><div class="line">pd add 0x7fff5e744b28pd val 10</div><div class="line">pa add 0x7fff5e744b40pa val 22</div><div class="line">pc add 0x7fff5e744b20pc val 22</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p>pointer assigment used a lot in linked list problems, the sample above is a pointer solution for <code>linked list reverse</code>. consider pointer as a container with an address to another object. pointer assignment, e.g. <code>pointerA = pointerB</code> only changes the content in the container. but the address of the container itself doesn’t change. and with  *(dereference) the pointer, we can see the content is changed. </p>
+<p>further, taken <code>pc</code>, <code>pb</code>, <code>pd</code> as another example.<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pc = pb ;</div><div class="line">pb = pd;</div></pre></td></tr></table></figure></p>
+<p>the first line will make container <code>pc</code> to store what is stored in container <code>pb</code>, in another word, the first line will make <code>pc</code> point to the address, which is stored in <code>pb</code>. </p>
+<p>and the second line will then put what’s stored in container <code>pd</code> to container <code>pb</code>. </p>
+<p>after this two updates, <code>pc</code> points to the original content in <code>pb</code>; <code>pb</code>  and <code>pd</code> points to the same content. obviously, what’s inside <code>pc</code> now, has nothing to do with pointer <code>pb</code>.  </p>
+<h3 id="pointer-forward"><a href="#pointer-forward" class="headerlink" title="pointer++ forward"></a>pointer++ forward</h3><p>the basic scenario is as following, will <code>p2</code> move forward as well ? </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> *p1 = &amp;int_var ;</div><div class="line"><span class="keyword">int</span> *p2 = p1; </div><div class="line">p1++ ;</div></pre></td></tr></table></figure>
+<p>we can see from the following <code>test.c</code>,  <code>p2</code> won’t move forward as <code>p1++</code>.  </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="keyword">int</span> a[<span class="number">4</span>] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span> &#125; ; </div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" a addr "</span> &lt;&lt; &amp;a &lt;&lt; <span class="string">" a val "</span> &lt;&lt; *a &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="keyword">int</span> *p = a ;</div><div class="line">  <span class="keyword">int</span> *q = p ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" p addr "</span> &lt;&lt; &amp;p &lt;&lt; <span class="string">" p val "</span> &lt;&lt; *p &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" q addr "</span> &lt;&lt; &amp;q &lt;&lt; <span class="string">" q val "</span> &lt;&lt; *q &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line"> </div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">3</span>; i++)&#123;</div><div class="line">      q++;</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" a addr "</span> &lt;&lt; &amp;a &lt;&lt; <span class="string">" a val "</span> &lt;&lt; *a &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" p addr "</span> &lt;&lt; &amp;p &lt;&lt; <span class="string">" p val "</span> &lt;&lt; *p &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line">  <span class="built_in">cout</span> &lt;&lt; <span class="string">" q addr "</span> &lt;&lt; &amp;q &lt;&lt; <span class="string">" q val "</span> &lt;&lt; *q &lt;&lt; <span class="built_in">endl</span> ;</div><div class="line"> </div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"> a addr 0x7fff5e968bb0 a val 1</div><div class="line"> p addr 0x7fff5e968b40 p val 1</div><div class="line"> q addr 0x7fff5e968b38 q val 1</div><div class="line"> a addr 0x7fff5e968bb0 a val 1</div><div class="line"> p addr 0x7fff5e968b40 p val 1</div><div class="line"> q addr 0x7fff5e968b38 q val 4</div><div class="line">*/</div></pre></td></tr></table></figure>
+<p><code>pointer++</code> can be reviewed as a same type pointer in current pointer’s neighbor, then do a pointer assigment: </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span>* tmp_p = <span class="number">0x7fff5e744b30</span> ; </div><div class="line"><span class="keyword">int</span>* p1 = <span class="number">0x7fff5e744b28</span> ; </div><div class="line">p1 = tmp_p ;</div><div class="line">``` </div><div class="line"></div><div class="line">##<span class="meta"># int++</span></div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; nums ;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">     nums.push_back(i);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">int</span> p=<span class="number">0</span>;</div><div class="line">  <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"nums[p++] "</span> &lt;&lt; nums[p++] &lt;&lt; <span class="string">" p val "</span> &lt;&lt; p &lt;&lt; <span class="built_in">endl</span> ; </div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125; </div><div class="line"></div><div class="line"><span class="comment">/* nums[p++]: 0 p val:  1 */</span></div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/12/nodejs-introduction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1907,141 +2041,6 @@ bio_ = io.BytesIO(read_in_memory);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/25/from-HPC-to-cloud-computing/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/25/from-HPC-to-cloud-computing/" itemprop="url">from HPC to cloud computing</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-25T03:13:09-05:00">
-                2020-02-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/02/25/from-HPC-to-cloud-computing/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/02/25/from-HPC-to-cloud-computing/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="HPC"><a href="#HPC" class="headerlink" title="HPC"></a>HPC</h3><p><a href="https://www.ansys.com/products/platform/ansys-cloud" target="_blank" rel="external">Ansys HPC</a>, <a href="https://www.designworldonline.com/cae-on-the-cloud/" target="_blank" rel="external">OpenFoam in amazon EC2</a>, <a href="https://www.rescale.com" target="_blank" rel="external">rescale</a>, these are some samples of current CAE applications in HPC cloud.</p>
-<p>most CAE simulations, in nut, are solving large sparse matrix, either optmization or differential, which depends on famous linear equations solvers/libs, e.g. Petsc, libMesh, Intel Math Kernel e.t.c, inside which are implemented with message passing interface(MPI), share memory, or similar techs. </p>
-<p>why MPI is a have-to in these applications? because the problem  interested itself is so huge, which is so much computing heavily than windows office, WeChat. </p>
-<p>as engineers want the result more preciesly, the problem interested dimension will increase more. e.g. a normal static stress analysis of vehicle engine is about 6 million elements, each of which will take  6 ~ 12 vertexes, and each vertex has 6 DoF, which gives about <strong>a kinematic matrix with size about 200 million x 200 million</strong>, no single PC can store this much data, and not even to do the matrix computing then.</p>
-<p>so all these problems have to be running on super computers, or high-performance computer(HPC), which have more memory or CPU cores. beyond large memory and CPU cores, also need fast-speed network, as each CPU can do calculation really fast, 2 ~ 4 GHz, so if the system can’t feed data that fast, the CPUs are hungry, which is the third feature of HPC: Gb high-speed internal network.</p>
-<p>as the <strong>NUMA/multi-core CPU architecture</strong> is popular now, to achieve the best performance from these chips is also a hot topic. </p>
-<h3 id="cloud"><a href="#cloud" class="headerlink" title="cloud"></a>cloud</h3><p>if taken HPC as centerlized memory and CPU cores(<strong>the Cathedral</strong>), then cloud is about distributed memory and CPU cores(<strong>the Bazaar</strong>). cloud is more Internet, to connected weak-power nodes anywhere, but totally has great power. the applications in cloud must be easy to decomposed in small pieces, so each weak-power node can handle a little bit. when coming to cloud computing, I’d think about Hadoop, OpenStack, and docker.</p>
-<p>hadoop is about to analysis massive data, which is heavily used in e-commercial, social network, games. docker is the way to package small application and each of the small image can run smoothly in one node, which currently is call <strong>micro-serivce</strong>, which is exactly as the name said, MICRO. OpenStack take care virtualization layer from physical memory, cpu resources, which used about in public cloud, or virtual office env.</p>
-<h3 id="A-or-B"><a href="#A-or-B" class="headerlink" title="A or B"></a>A or B</h3><p>cloud is more about <strong>DevOps</strong>, as each piece of work is not difference from the single PC, but how to deploy and manage a single piece of work in a large cloud is the key, so develop and operations together. compare to HPC, both develop and operation needs professions.</p>
-<p>cloud computing has extended to edge computing, which is more close to normal daily life, and more bussiness-valued; while HPC guys are more like scientist, who do weather forcast, rocket science, molecular dynamics e.t.c.</p>
-<p>finally, the tech itself, cloud or HPC, has nothing to do with the bussiness world. </p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="http://cloudscaling.com/blog/cloud-computing/grid-cloud-hpc-whats-the-diff/" target="_blank" rel="external">cloudscaling: grid, hpc, cloud… what’s the difference</a></p>
-<p><a href="https://www.linkedin.com/pulse/supercomputing-vs-cloud-computing-david-stepania/" target="_blank" rel="external">linkedin: supver computer vs cloud</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2092,7 +2091,7 @@ bio_ = io.BytesIO(read_in_memory);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">178</span>
+                <span class="site-state-item-count">179</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2105,7 +2104,7 @@ bio_ = io.BytesIO(read_in_memory);
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
