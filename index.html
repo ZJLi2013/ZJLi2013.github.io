@@ -291,6 +291,138 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/27/play-with-boost-python-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/27/play-with-boost-python-2/" itemprop="url">play with boost.python 2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-27T07:53:57-04:00">
+                2020-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/27/play-with-boost-python-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/27/play-with-boost-python-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="play-with-boost-python-2"><a href="#play-with-boost-python-2" class="headerlink" title="play with boost.python 2"></a>play with boost.python 2</h1><h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>in <a href="https://zjli2013.github.io" target="_blank" rel="external">1</a>, we have a basic work flow of boost.python. in reality, the C++ project may have multi headers, where define many structs/classes, and include nested structs. here we give an simple example of nested struct/class.</p>
+<h4 id="api-header-hpp"><a href="#api-header-hpp" class="headerlink" title="api_header.hpp"></a>api_header.hpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">	<span class="keyword">float</span> time; </div><div class="line">	<span class="keyword">float</span> dx ;</div><div class="line">	<span class="keyword">float</span> dy ;</div><div class="line">&#125; AEB;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">	AEB out1 ;</div><div class="line">&#125; OP;</div></pre></td></tr></table></figure>
+<h4 id="aeb-hpp"><a href="#aeb-hpp" class="headerlink" title="aeb.hpp"></a>aeb.hpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"api_header.hpp"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">aeb</span> &#123;</span></div><div class="line">    <span class="keyword">public</span>:</div><div class="line">        Student() &#123;&#125;</div><div class="line">	OP op_out ;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">test_op</span><span class="params">()</span></span>&#123;</div><div class="line">            (<span class="keyword">void</span>) <span class="built_in">memset</span>((<span class="keyword">void</span> *)&amp;op_out, <span class="number">0</span>, <span class="keyword">sizeof</span>(OP)); </div><div class="line">            op_out.out1.time = <span class="number">1.0</span> ; </div><div class="line">            op_out.out1.dx = <span class="number">2.0</span> ;</div><div class="line">            op_out.out1.dy = <span class="number">3.0</span> ; </div><div class="line">            AEB o1 = op_out.out1 ;</div><div class="line">            <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; o1.time &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span> ;</div><div class="line">        &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>for each of them, we can write a separate wrapp files.</p>
+<h4 id="api-wrapper-cpp"><a href="#api-wrapper-cpp" class="headerlink" title="api_wrapper.cpp"></a>api_wrapper.cpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Python.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/python.hpp&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"api_struct.h"</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> boost::python;</div><div class="line"></div><div class="line">BOOST_PYTHON_MODULE(api_wrapper) &#123;  </div><div class="line">    </div><div class="line">    class_&lt;AEB&gt;(<span class="string">"AEB"</span>, <span class="string">"aeb struct"</span>)</div><div class="line">            .def_readwrite(<span class="string">"time"</span>, &amp;AEB::time)</div><div class="line">            .def_readwrite(<span class="string">"dx"</span>, &amp;AEB::dx)</div><div class="line">            .def_readwrite(<span class="string">"dy"</span>, &amp;AEB::dy) ;</div><div class="line"></div><div class="line">    class_&lt;OP&gt;(<span class="string">"OP"</span>, <span class="string">"OP struct"</span>)</div><div class="line">            .def_readwrite(<span class="string">"out1"</span>, &amp;OP::out1);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="aeb-wrapper-cpp"><a href="#aeb-wrapper-cpp" class="headerlink" title="aeb_wrapper.cpp"></a>aeb_wrapper.cpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Python.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/python.hpp&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"student.h"</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> boost::python;</div><div class="line"></div><div class="line">BOOST_PYTHON_MODULE(aeb) &#123;                                                                                                                                                                              </div><div class="line">    scope().attr(<span class="string">"__version__"</span>) = <span class="string">"1.0.0"</span>;</div><div class="line">    class_&lt;aeb&gt;(<span class="string">"aeb"</span>, <span class="string">"a class of aeb ADAS"</span>)</div><div class="line">        .def(init&lt;&gt;())</div><div class="line">        .def(init&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">int</span>&gt;())</div><div class="line">        .def_readwrite(<span class="string">"op_out"</span>, &amp;aeb::op_out)</div><div class="line">        .def(<span class="string">"test_op"</span>, &amp;aeb::test_op, <span class="string">"test op"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>compared to previous blog, we had <code>def_readwrite()</code> to include the nested struct in <code>aeb</code> python module, which is dynamic linked during python runtime, so which requires to import <code>api_header</code> module first, then import <code>aeb</code> module.</p>
+<h4 id="build-amp-amp-test"><a href="#build-amp-amp-test" class="headerlink" title="build &amp;&amp; test"></a>build &amp;&amp; test</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">g++ -I/home/anaconda3/envs/aeb/include/python3.6m -I/usr/<span class="built_in">local</span>/include/boost -fPIC wrap_api.cpp -L/usr/<span class="built_in">local</span>/lib/ -lboost_python36 -shared -o wrap_api.so</div><div class="line"></div><div class="line">g++ -I/home/anaconda3/envs/aeb/include/python3.6m -I/usr/<span class="built_in">local</span>/include/boost -fPIC wrap_student.cpp -L/usr/<span class="built_in">local</span>/lib/ -lboost_python36 -shared -o student.so</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> wrap_api</div><div class="line"><span class="keyword">import</span> student</div><div class="line">s = student.Student()</div><div class="line">s.test_op()</div><div class="line">a = s.op_out.out1 </div><div class="line">a.time</div><div class="line">a.dx</div></pre></td></tr></table></figure>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>this basic workflow is enough to package Matlab/Simulink ADAS models C++ code to Python test framework. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/26/boost-python-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2438,257 +2570,6 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/play-with-k8s/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/09/play-with-k8s/" itemprop="url">play with k8s</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T03:31:23-04:00">
-                2020-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/09/play-with-k8s/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/04/09/play-with-k8s/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="basic-k8s"><a href="#basic-k8s" class="headerlink" title="basic k8s"></a>basic k8s</h2><h4 id="kubeadm-init"><a href="#kubeadm-init" class="headerlink" title="kubeadm init"></a>kubeadm init</h4><p>init options can be: </p>
-<ul>
-<li><p><code>--apiserver-bind-port int32</code>, by default, port=6443</p>
-</li>
-<li><p><code>--config string</code>, can pass in a kubeadm.config file to create a kube master node </p>
-</li>
-<li><p><code>--node-name string</code>, attach node name </p>
-</li>
-<li><p><code>--pod-network-cidr string</code>,  used to set the IP address range for all Pods. </p>
-</li>
-<li><p><code>--service-cide string</code>,  set service CIDRs, default value is <code>10.96.0.0/12</code></p>
-</li>
-<li><p><code>--service-dns-domain string</code>, default value is <code>cluster.local</code> </p>
-</li>
-<li><code>--apiserver-advertise-address string</code>, the broadcast listened address by API Server</li>
-</ul>
-<h4 id="nodes-components"><a href="#nodes-components" class="headerlink" title="nodes components"></a>nodes components</h4><table>
-<thead>
-<tr>
-<th>IP</th>
-<th>hostname</th>
-<th>components</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>192.168.0.1</td>
-<td>master</td>
-<td>kube-apiserver, kube-controller-manager, kube-scheduler, etcd, kubelet, docker, flannel, dashboard</td>
-</tr>
-<tr>
-<td>192.168.0.2</td>
-<td>worker</td>
-<td>kubelet, docker, flannel</td>
-</tr>
-</tbody>
-</table>
-<h4 id="ApiServer"><a href="#ApiServer" class="headerlink" title="ApiServer"></a>ApiServer</h4><p>when first launch Kubelet, it will send the Bootstrapping request to kube-apiserver, which then verify the sent token is matched or not. </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">--advertise-address = <span class="variable">$&#123;master_ip&#125;</span></div><div class="line"></div><div class="line">--<span class="built_in">bind</span>-address = <span class="variable">$&#123;master_ip&#125;</span>  <span class="comment">#can't be 127.0.0.1 </span></div><div class="line"></div><div class="line">--insecure-bind-address = <span class="variable">$&#123;master_ip&#125;</span></div><div class="line"></div><div class="line">--token-auth-file = /etc/kubernets/token.csv</div><div class="line"></div><div class="line">--service-node-port-range=<span class="variable">$&#123;NODE_PORT_RANGE&#125;</span></div></pre></td></tr></table></figure>
-<p><a href="https://jimmysong.io/posts/kubernetes-installation-on-centos/" target="_blank" rel="external">how to configure master node</a></p>
-<h4 id="cluster-IP"><a href="#cluster-IP" class="headerlink" title="cluster IP"></a>cluster IP</h4><p>it’s the service IP, which is internal, usually expose the service name.</p>
-<p>the cluse IP default values as following:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">--service-cluster-ip-range=10.254.0.0/16</div><div class="line">--service-node-port-range=30000-32767</div></pre></td></tr></table></figure>
-<h2 id="k8s-in-practice"><a href="#k8s-in-practice" class="headerlink" title="k8s in practice"></a>k8s in practice</h2><p><img src="https://jimmysong.io/kubernetes-handbook/images/kubernetes-high-level-component-archtecture.jpg" alt="image"></p>
-<p><img src="https://jimmysong.io/kubernetes-handbook/images/kubernetes-whole-arch.png" alt="image"></p>
-<p><img src="https://jimmysong.io/kubernetes-handbook/images/kubernetes-layers-arch.png" alt="image"></p>
-<p>blueKing is a k8s solution from TenCent. here is a <a href="https://bk.tencent.com/docs/document/5.1/13/652" target="_blank" rel="external">quickstart</a>: </p>
-<ul>
-<li><p>create a task</p>
-</li>
-<li><p>add agnet for the task </p>
-</li>
-<li><p>run the task &amp; check the sys log </p>
-</li>
-<li><p>create task pipeline (CI/CD)</p>
-</li>
-</ul>
-<h4 id="create-a-new-service-in-k8s"><a href="#create-a-new-service-in-k8s" class="headerlink" title="create a new service in k8s"></a>create a new service in k8s</h4><ul>
-<li>create namespace for speical bussiness</li>
-<li>create serivces, <a href="https://www.jianshu.com/p/3f24bbee72ad" target="_blank" rel="external">pull images from private registry hub</a></li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kubectl create -f  my-nginx-2.yaml</div><div class="line">kubctl get pods -o wide</div></pre></td></tr></table></figure>
-<h4 id="how-external-access-to-k8s-pod-service"><a href="#how-external-access-to-k8s-pod-service" class="headerlink" title="how external access to k8s pod service ?"></a>how external access to k8s pod service ?</h4><p>pod has itw own special IP and a lifecyle period. once the node shutdown, the controller manager can transfer the pod to another node. when multi pods, provides the same service for front-end users, the front end users doesn’t care which pod is exactaly running, then here is the concept of <code>service</code>:</p>
-<pre><code>service is an abstraction which defines a logical set of Pods and a policy by which to access them
-</code></pre><p>service can be defined by <code>yaml</code>, <code>json</code>, the target pod can be define by <code>LabelSeletor</code>. a few ways to expose service:</p>
-<ul>
-<li><p><code>ClusterIP</code>, which is the default way, which only  works inside k8s cluster</p>
-</li>
-<li><p><code>NodePort</code>, which use NAT to provide external access through a special port, the port should be among <code>8400~9000</code>. then in this way, no matter where exactly the pod is running on, when access <code>*.portID</code>, we can get the serivce. </p>
-</li>
-<li><p><code>LoadBalancer</code></p>
-</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">kubectl get services</div><div class="line">kubectl expose your_service --<span class="built_in">type</span>=<span class="string">"NodePort"</span> --port 8889</div><div class="line">kubctl describe your_service</div></pre></td></tr></table></figure>
-<h4 id="use-persistent-volume"><a href="#use-persistent-volume" class="headerlink" title="use persistent volume"></a>use persistent volume</h4><ul>
-<li><p>access external sql </p>
-</li>
-<li><p>use volume </p>
-</li>
-</ul>
-<p><code>volume</code> is for persistent, <code>k8s volume</code> is similar like <code>docker volume</code>, working as dictory, when mount a volume to a pod, all containers in that pod can access that volume. </p>
-<ul>
-<li>EmptyDir</li>
-<li>hostPath</li>
-<li>external storage service(aws, azure), k8s can directly use cloud storage as volume, or distributed storage system(ceph):</li>
-</ul>
-<p><a href="https://www.cnblogs.com/benjamin77/p/9940266.html" target="_blank" rel="external">sample</a></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">apiVersion: v1</div><div class="line">kind: Pod</div><div class="line">metadata: </div><div class="line">	name: using-ebs</div><div class="line">metadata:</div><div class="line">	name: using-ceph</div><div class="line">spec:</div><div class="line">	containers:</div><div class="line">		-image: busybox1</div><div class="line">		 name: using-ebs</div><div class="line">		 volumeMounts:</div><div class="line">		 	-mountPath: /test-ebs</div><div class="line">		 	name: ebs-volume</div><div class="line">		-image: busybox2</div><div class="line">			name: using-ceph</div><div class="line">			volumeMounts:</div><div class="line">				-name: ceph-volume</div><div class="line">				mountPath: /test-ceph</div><div class="line">				</div><div class="line">		volumes:</div><div class="line">		-name: ebs-volume</div><div class="line">		awsElasticBlockStore:</div><div class="line">			volumeID:  <span class="tag">&lt;<span class="name">volume_id</span>&gt;</span></div><div class="line">			fsType: ext4</div><div class="line">		</div><div class="line">		-name: ceph-volume</div><div class="line">		cephfs:</div><div class="line">			path: /path/in/ceph</div><div class="line">			monitors: "10.20.181.112:6679"</div><div class="line">			secretFile: "/etc/ceph/admin/secret"</div></pre></td></tr></table></figure>
-<h4 id="containers-communication-in-same-pod"><a href="#containers-communication-in-same-pod" class="headerlink" title="containers communication in same pod"></a>containers communication in same pod</h4><p>first, <a href="https://www.mirantis.com/blog/multi-container-pods-and-container-communication-in-kubernetes/" target="_blank" rel="external">containers in the same pod</a>, the share same network namespace and same iPC namespace, and shared volumes. </p>
-<ul>
-<li>shared volumes in a pod </li>
-</ul>
-<p>when one container writes logs or other files to the shared directory, and the other container reads from the shared directory. </p>
-<p><img src="https://cdn.mirantis.com/wp-content/uploads/2017/08/MultiContainerPods.png?resize=565x288" alt="image"></p>
-<ul>
-<li>inter-process communication(IPC)</li>
-</ul>
-<p>as they share the same IPC namespace, they can communicate with each other using standard ipc, e.g. POSIX shared memory, SystemV semaphores</p>
-<p><img src="https://cdn.mirantis.com/wp-content/uploads/2017/08/multicontainerpodproducerconsumer.png?resize=565x288" alt="image"></p>
-<ul>
-<li>inter-container network communication</li>
-</ul>
-<p>containers in a pod are accessible via <code>localhost</code>, as they share the same network namespace. for externals, the observable host name is the pod’s name, as containers all have the same IP and port space, so need differnt ports for each container for incoming connections.</p>
-<p><img src="https://cdn.mirantis.com/wp-content/uploads/2017/08/multicontainerwebapp.png?resize=565x288" alt="image"></p>
-<p>basically, the external incoming HTTP request to port 80 is forwarded to port 5000 on localhost, in pod, and which is not visiable to external. </p>
-<h4 id="how-two-services-communicate"><a href="#how-two-services-communicate" class="headerlink" title="how two services communicate"></a><a href="https://stackoverflow.com/questions/45720084/how-to-make-two-kubernetes-services-talk-to-each-other" target="_blank" rel="external">how two services communicate</a></h4><ul>
-<li>ads_runner</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: Service</div><div class="line">metadata:</div><div class="line">	name: ads_runner</div><div class="line">spec:</div><div class="line">	selector:</div><div class="line">		app: ads</div><div class="line">		tier: api</div><div class="line">	ports:</div><div class="line">		-protocol: TCP</div><div class="line">		 port: 5000</div><div class="line">		 nodePort: 30400</div><div class="line">	type: NodePort</div></pre></td></tr></table></figure>
-<p>if there is a need to autoscale the service, check<br><a href="https://stackoverflow.com/questions/37377119/in-kubernetes-how-do-i-autoscale-based-on-the-size-of-a-queue" target="_blank" rel="external">k8s autoscale based on the size of queue</a>. </p>
-<ul>
-<li>redis-job-queue</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: Service</div><div class="line">metadata:</div><div class="line">	name: redis-job-queue</div><div class="line">spec:</div><div class="line">	selector:</div><div class="line">		app: redis</div><div class="line">		tier: broker</div><div class="line">	ports:</div><div class="line">		-portocol: TCP </div><div class="line">		port: 6379</div><div class="line">		targetPort: [the port exposed by Redis pod]</div></pre></td></tr></table></figure>
-<p>ads_runner can reach Redis by address: <code>redis-server:6379</code> in the k8s cluster.</p>
-<p><a href="https://redis.io/topics/replication" target="_blank" rel="external">redis replication</a> has great async mechanism to support multi redis instance simutanously, when need scale the redis service, it is ok to start a few replicas of <code>redis</code> service as well.</p>
-<h4 id="redis-work-queue"><a href="#redis-work-queue" class="headerlink" title="redis work queue"></a>redis work queue</h4><p>check <a href="https://zjli2013.github.io/2020/04/09/redis-task-queue/" target="_blank" rel="external">redis task queue</a>: </p>
-<ul>
-<li>start a storage service(redis) to hold the work queue</li>
-<li>create a queu, and fill it with messages, each message represents one task to be done</li>
-<li>start a job that works on tasks from the queue</li>
-</ul>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://jimmysong.io/kubernetes-handbook/cloud-native/play-with-kubernetes.html" target="_blank" rel="external">jimmysong</a></p>
-<p><a href="https://github.com/Tencent/bk-cmdb" target="_blank" rel="external">BlueKing configure manage DB</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1501395" target="_blank" rel="external">k8s: volumes and persistent storage</a></p>
-<p><a href="https://cdn.mirantis.com/wp-content/uploads/2017/08/MultiContainerPods.png?resize=565x288" target="_blank" rel="external">multi-container pods and container communication in k8s</a></p>
-<p><a href="https://kubernetes.io/docs/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume/" target="_blank" rel="external">k8s doc: communicate between containers in the same pod using a shared volume</a></p>
-<p><a href="https://kubemq.io" target="_blank" rel="external">kubeMQ: k8s message queue broker</a></p>
-<p><a href="https://blog.cloudthat.com/3-types-of-cluster-networking-in-kubernetes/" target="_blank" rel="external">3 types of cluster networking in k8s</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2739,7 +2620,7 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">179</span>
+                <span class="site-state-item-count">180</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

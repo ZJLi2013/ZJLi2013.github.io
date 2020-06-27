@@ -291,6 +291,133 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/Apollo-2-0-Localization-源码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/03/Apollo-2-0-Localization-源码/" itemprop="url">Apollo 2.0 Localization 源码</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-03T02:36:43-04:00">
+                2019-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/03/Apollo-2-0-Localization-源码/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/05/03/Apollo-2-0-Localization-源码/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>there are two localization methods: RTK and multi-sensor fusion(MSF).  RTK using GPS and IMU inputs, MSF using GPS, IMU and Lidar sensor and HD map as inputs. the output is the localization estimated object instance.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Status Localization::Start()</div><div class="line">&#123;</div><div class="line">	localization_ = localization_factory_.CreateObject(cofig_.type());</div><div class="line">	localization_-&gt;Start();</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status RTKLocalization::Start()&#123;</div><div class="line">	AdapterManager::Init(FLAGS_rtk_adapter_config_file);</div><div class="line">	timer_ = AdapterManager::CreateTimer(ros::Duration(duration), &amp;RTKLocalization::OnTimer, <span class="keyword">this</span>); </div><div class="line">	AdapterManager::GetGps();</div><div class="line">	AdapterManager::GetImu();	</div><div class="line">	tf2_broadcaster_ = <span class="keyword">new</span> tf2_ros::TransformBroadcaster() ;</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::OnTimer(<span class="keyword">const</span> ros::TimerEvent &amp;event)</div><div class="line">&#123;</div><div class="line">	AdapterManager::Observe();</div><div class="line">	PublishLocalization(); </div><div class="line">	RunWatchDog();	</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PublishLocalization()&#123;</div><div class="line">	LocalizationEstimate localization ;</div><div class="line">	PrepareLocalizationMsg(&amp;localization);</div><div class="line">	AdapterManager::PublishLocalization(localization);</div><div class="line">	PublishPoseBroadcastTF(localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::PrepareLocalizationMsg(LocalizationEstimate *localization)&#123;</div><div class="line">	<span class="keyword">const</span> <span class="keyword">auto</span> &amp;gps_msg = AdapterManager::GetGps()-&gt;GetLatestObserved();</div><div class="line">	Imu imu_msg = AdapterManager::GetImu()-&gt;GetLatestObserved();</div><div class="line">	ComposeLocalizationMsg(gps_msg, imu_msg, localization);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> RTKLocalization::ComposeLocalizationMsg(<span class="keyword">const</span> localization::Gps&amp; gps_msg, <span class="keyword">const</span> localization::Imu &amp;img_msg, LocalizationEstimate* localization)</div><div class="line">&#123;</div><div class="line">	<span class="comment">// add header </span></div><div class="line">	<span class="comment">// set measurement time </span></div><div class="line">	<span class="comment">// combine gps and imu </span></div><div class="line">	</div><div class="line">	<span class="keyword">auto</span> mutable_pose = localization-&gt;mutable_pose(); </div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(gps_msg.has_localization())&#123;</div><div class="line">		<span class="keyword">const</span> <span class="keyword">auto</span> &amp;pose = gps_msg.localization();</div><div class="line">		<span class="keyword">if</span>(pose.has_position())&#123; <span class="comment">// update mutable_pose &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_orientation()) &#123; <span class="comment">//update mutable orientation &#125;;</span></div><div class="line">		<span class="keyword">if</span>(pose.has_linear_velocity())&#123;&#125;;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(imu.has_linear_acceleration())&#123;	<span class="comment">//update mutable_pose acc &#125;;</span></div><div class="line">	<span class="keyword">if</span>(imu.has_angular_velocity())&#123;&#125;;</div><div class="line">	<span class="keyword">if</span>(imu.has_euler_angles())&#123;&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h2><p><a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf" target="_blank" rel="external">vehicle localization based on multi-sensor fusion</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MSFLocalization</span> &#123;</span>	</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">InitParams</span><span class="params">()</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnPointCloud</span><span class="params">(<span class="keyword">const</span> sensor_msgs::PointCloud2 &amp;message)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnRawImu</span><span class="params">(<span class="keyword">const</span> drivers::gnss::Imu &amp;imu_msg)</span></span>;</div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">OnGnssRtkObs</span><span class="params">(<span class="keyword">const</span> EpochObservation &amp;raw_obs_msg)</span></span>;</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	<span class="function"><span class="keyword">void</span> <span class="title">PublishPoseBroadcastTF</span><span class="params">(<span class="keyword">const</span> LocalizationEstimate&amp; localization)</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">Status MSFLocalization::Start()</div><div class="line">&#123;</div><div class="line">	AdapterManager::Init(FLAGS_msf_adapter_config_file);</div><div class="line">	Status &amp;&amp;status = Init();</div><div class="line">	</div><div class="line">	AdapterManager::GetRawImu();</div><div class="line">	AdapterManager::ADDRawImuCallback(&amp;MSFLocalization::OnRawImu, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	AdapterManager::GetPointCloud();</div><div class="line">	AdapterManager::AddPointCloudCallback(&amp;MSFLocalization::OnPointCloud, <span class="keyword">this</span>);</div><div class="line">	</div><div class="line">	<span class="comment">// ...</span></div><div class="line">	</div><div class="line">	<span class="keyword">return</span> Status::OK();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>there is addtional <a href="https://github.com/ApolloAuto/apollo/tree/r2.0.0/modules/localization/msf/local_map" target="_blank" rel="external"><code>local_map</code></a> module, which will be review later.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/03/Apollo-2-0-Prediction源码/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1663,156 +1790,6 @@ K =  T /  S^-                   （4）
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/31/CarND-term2-Extended-Kalman-Filter/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/31/CarND-term2-Extended-Kalman-Filter/" itemprop="url">CarND(term2): Extended Kalman Filter</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-31T01:49:50-04:00">
-                2019-03-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/31/CarND-term2-Extended-Kalman-Filter/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/31/CarND-term2-Extended-Kalman-Filter/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="sensor-measurement"><a href="#sensor-measurement" class="headerlink" title="sensor measurement"></a>sensor measurement</h2><h3 id="Radar"><a href="#Radar" class="headerlink" title="Radar"></a>Radar</h3><p>radio detection andranging, using radio waves to measure the distance to objects as well as their velocity and angle. Radar used a lot in preventing collions, parking assistance, cruise control. and Radar isn’t affected by weather conditions. </p>
-<p>while Radar can’t tell an object’s shape correctly. and Radar can’t detect objects if they are out of their line of sight.</p>
-<p>the Radar measurement data in EKF proejcct is 3D position and velocity vector <code>(ro, theta, ro_dot)</code> in polar coordinates.</p>
-<h3 id="Lidar"><a href="#Lidar" class="headerlink" title="Lidar"></a>Lidar</h3><p>light detection and ranging, using near-infrared light to scan objects and create 3D map of the enviroment. it’s 360-degree view and can track movements and their directions. but it also depends on weather conditions and can’t detecting the speed of other vehicles well. </p>
-<p>the Lidar measurement data in EKF proeject is 2D position vector <code>(x,y)</code> in Cartesian coordinate system.  </p>
-<p><a href="https://www.intellias.com/the-ultimate-sensor-battle-lidar-vs-radar/" target="_blank" rel="external">compare Radar vs Lidar</a></p>
-<h2 id="server-client-network"><a href="#server-client-network" class="headerlink" title="server - client network"></a>server - client network</h2><p><a href="https://github.com/udacity/CarND-Extended-Kalman-Filter-Project" target="_blank" rel="external">Udacity simulator</a> communicate with EKF controller through websocket. </p>
-<p>in simulators(Udacity carsim, Carla) running time, the message channel between simulator server and external controller need to be open all the time. so the simulator feed the controller with sensor data, and the controller feedback simulator with controlling data. </p>
-<h3 id="uwebSocket"><a href="#uwebSocket" class="headerlink" title="uwebSocket"></a>uwebSocket</h3><p>built once <a href="https://zjli2013.github.io/2018/06/29/gnu-make/" target="_blank" rel="external">uwebSocket</a>, <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank" rel="external">webSocket</a> protocol providing full-duplex communication channel between server and client through a singlt TCP connection. it allows the server to send content ot the client without being first requested by the client, and allowing messages to be passed back and forth while keeping the conenction open. </p>
-<h3 id="sensor-raw-data"><a href="#sensor-raw-data" class="headerlink" title="sensor raw data"></a>sensor raw data</h3><p>every data slice includes a either Lidar or Radar raw measurement and a ground truth measurement. </p>
-<p>The state variable <code>x</code> is described in Cartesian coord, so for Radar measurement processing, there is a coordinate transfer from Cartesian to polar, and which lead it nonlinear, requiring Extended Karman Filter.</p>
-<h3 id="EKF-controller"><a href="#EKF-controller" class="headerlink" title="EKF controller"></a>EKF controller</h3><p>the client side is the EKF controller, which process the sensor measurement.</p>
-<p>define </p>
-<pre><code>system state `x_` ,
-
-  state priori covariance `P_`,
-
-   state transition matrix `F`, 
-
-process covariance `Q_`, 
-
-measurement gain matrix  &apos;H&apos;
-
-measurement covariance &apos;R_&apos; 
-
-kalman filter gain &apos;K&apos;
-</code></pre><p> as discussed in <a href="https://zjli2013.github.io/2019/03/30/卡尔曼滤波/" target="_blank" rel="external">previous blog</a>: </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"> </div><div class="line"><span class="keyword">void</span> KalmanFilter::Predict()</div><div class="line">&#123;</div><div class="line">	x_ = F * x_ ;   </div><div class="line">	P_ = F * P_ * F.transpose() + Q_ ;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">void</span> KalmanFilter::Update(<span class="keyword">const</span> Vector &amp; measurement)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">if</span>(EKF)</div><div class="line">		h = toPolar(x_); </div><div class="line">		y = measurement - h ;</div><div class="line">	<span class="keyword">else</span></div><div class="line">		y = measurement - H * x_ ;</div><div class="line">		 </div><div class="line">	K = P_ * Ht / (H * P_ * Ht + R_);  </div><div class="line">	x_ = x_ + K * y ; </div><div class="line">	P_ = (I - K*H) * P_ ;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1863,7 +1840,7 @@ kalman filter gain &apos;K&apos;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">179</span>
+                <span class="site-state-item-count">180</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

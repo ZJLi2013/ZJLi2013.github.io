@@ -291,6 +291,179 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/27/from-HPC-to-cloud-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/27/from-HPC-to-cloud-2/" itemprop="url">from HPC to cloud (2) - distributed storage intro</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-27T05:21:54-05:00">
+                2020-02-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/27/from-HPC-to-cloud-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/27/from-HPC-to-cloud-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="常见分布式存储"><a href="#常见分布式存储" class="headerlink" title="常见分布式存储"></a>常见分布式存储</h2><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><ul>
+<li><a href="https://blog.csdn.net/zds05/article/details/79494870" target="_blank" rel="external">块存储 vs 文件存储</a></li>
+</ul>
+<p>文件存储读写慢，利于共享；块存储读写快，不利于共享。所有磁盘阵列都是基于Block块的模式，而所有的NAS产品都是文件级存储。物理块与文件系统之间的映射关系：扇区→物理块→逻辑块→文件系统。所以，文件级备份，需要一层一层往下查找，最后才能完成整个文件复制。</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/39305618" target="_blank" rel="external">对象存储 vs 块存储</a></li>
+</ul>
+<p>富含元数据的对象存储使大规模分析成为企业的有吸引力的命题。对象存储也使得提供和管理跨越地理位置的存储变得相对经济。同时，块存储的属性使其成为高性能业务应用程序、事务数据库和虚拟机的理想选择，这些应用程序需要低延迟、细粒度的数据访问和一致的性能。块存储(云盘)只能被一个主机挂载。</p>
+<ul>
+<li><a href="https://caden16.github.io/对象存储/对象存储VS文件系统/" target="_blank" rel="external">文件存储 vs  对象存储</a></li>
+</ul>
+<p>对象存储(ceph, Linux block device)和文件系统(hdfs, gfs, restful Web API)在接口上的本质区别是对象存储不支持fread(), fwrite()类似的随机位置读写操作，即一个文件PUT到对象存储里以后，如果要读取，只能GET整个文件，如果要修改一个对象，只能重新PUT一个新的到对象存储里，覆盖之前的对象或者形成一个新的版本。对象存储的接口是REST风格的，通常是基于HTTP协议的RESTful Web API，通过HTTP请求中的PUT和GET等操作进行文件的上传即写入和下载即读取，通过DELETE操作删除文件。文件存储读写api如，file.open(); 对象存储读写api如 s3.open()。文件存储，多次读写；对象存储，一次写，多次读。对象存储的容量是无上限的；文件存储的容量达到一定上限，性能会极差。</p>
+<p>对象存储，需要对原数据做解析吗？ </p>
+<h4 id="存储类型"><a href="#存储类型" class="headerlink" title="存储类型"></a>存储类型</h4><ul>
+<li><p>块存储<br>Direct Attach Storage(DAS), 每台主机服务器有独立的存储设备，各存储设备之间无法互通，需要跨主机存取。 Storage Area Network(SAN), 高速网络连接的专业存储服务器，与主机群通过高速i/o连结。</p>
+</li>
+<li><p>文件存储<br>Network Attached Storage(NAS), 连接在网络上并提供存取服务。采用NFS或CIFS命令集访问数据，以文件为传输协议，通过TCP/IP实现网络化存储，可扩展性好、价格便宜、用户易管理</p>
+</li>
+<li><p>对象存储<br>核心是将数据通路（数据读或写）和控制通路（元数据）分离，并且基于对象存储设备（Object-based Storage Device，OSD）构建存储系统。对象存储设备具有一定的智能，它有自己的CPU、内存、网络和磁盘系统. 一般配置metadata server(MDS)。</p>
+</li>
+</ul>
+<h4 id="存储用例"><a href="#存储用例" class="headerlink" title="存储用例"></a>存储用例</h4><ul>
+<li><p>对象存储<br>非结构化(文档、图像、视频等)、备份存档、大数据分析（无实时性）</p>
+</li>
+<li><p>块存储<br>比较适合数据库业务、虚拟机</p>
+</li>
+<li><p>文件存储<br><a href="https://cloud.tencent.com/document/product/582/9129" target="_blank" rel="external">企业共享</a>、hpc大数据分析、流媒体处理，web服务。</p>
+</li>
+</ul>
+<h2 id="容器云"><a href="#容器云" class="headerlink" title="容器云"></a>容器云</h2><h4 id="容器云架构"><a href="#容器云架构" class="headerlink" title="容器云架构"></a>容器云架构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">控制台门户(管理员入口）</div><div class="line">saas(）</div><div class="line">paas(容器，微服务、中间件、cicd)</div><div class="line">资源调度管理平台</div><div class="line">iaas(计算、存储、网络），虚拟化提供资源池，</div></pre></td></tr></table></figure>
+<ul>
+<li>物理机直接架构k8s </li>
+</ul>
+<p>容器云与私有云搭建的硬件资源分开。</p>
+<ul>
+<li>虚拟层上支持k8s</li>
+</ul>
+<p>容器部署在虚拟机上的原因：既需要容器，也需要虚拟机的环境。一般互联网公司倾向分开容器的资源 和  虚拟机的资源。不管是容器云，还是虚拟机，都会有一个web管理平台。考虑弹性升缩，vm更灵活。而如果容器直接部署在x86裸机上，如果没有容器的管理层，docker容器挂了，就无法恢复。</p>
+<h4 id="应用部署容器云-vs-私有云"><a href="#应用部署容器云-vs-私有云" class="headerlink" title="应用部署容器云 vs 私有云"></a>应用部署容器云 vs 私有云</h4><ul>
+<li><p>仿真计算，倾向容器环境</p>
+</li>
+<li><p>CI/CD开发工具、中间件，倾向容器环境</p>
+</li>
+<li><p>web server，倾向容器环境</p>
+</li>
+<li><p>sql，倾向物理机或虚拟机 </p>
+</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="">KingStack</a></p>
+<p><a href="">UCloud</a></p>
+<p><a href="">EasyStack</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/25/from-HPC-to-cloud-computing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2119,149 +2292,6 @@ publish topics: /vehicle/cmd_ctl
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/29/mobile-vehicle-interface/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/29/mobile-vehicle-interface/" itemprop="url">mobile vehicle interface</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-29T08:00:38-05:00">
-                2019-12-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/12/29/mobile-vehicle-interface/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/12/29/mobile-vehicle-interface/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>human-machine interface(HMI), in-vehicle device(IVD).</p>
-<p>human-vehicle interface(HVI), e.g. voice control, touch screen, face detection, e.t.c, which does well for young and passion generation, who have great voice, sharp fingers, and good-look face, and all these improving user experienced tech are based on similar AI. </p>
-<p>what about the elders ? which should be, in the next 10 - 20 years, the most tough family and society issues in China, and as well as for Japan right now. </p>
-<p>the basicaly option here is HVI is not enough for the elders groups, or at least is not the only choice for elders, who don’t have great voice, good-look face, or sharp fingers, and even no patient to talk/look/touch with the weak AI system. a very good alternative or additional supportting solution should be mobility vehicle interface(MVI)</p>
-<h2 id="mobility-vehicle-interface"><a href="#mobility-vehicle-interface" class="headerlink" title="mobility vehicle interface"></a>mobility vehicle interface</h2><h4 id="what-kind-of-mobility-device"><a href="#what-kind-of-mobility-device" class="headerlink" title="what kind of mobility device"></a>what kind of mobility device</h4><p>mobility is a general name, for all kinds of mobile devices, especially for Iphone, Android smart phone and personal care robot. </p>
-<h4 id="application-scenarios"><a href="#application-scenarios" class="headerlink" title="application scenarios"></a>application scenarios</h4><p>for an elder, who has daily needs for traffic transfer. e.g. go to hospital, to supermarket, to a special restuarant or a park for dinner or sit down with some old friends. </p>
-<p>the elders are slow in movement and talk, and the current AI based human-vehicle-interface(HVI) definitely make the elders feel pressure.</p>
-<p>a better or alternative solution is let the mobility device to talk to the vehicle, through an interface </p>
-<h4 id="mobility-vehicle-interface-1"><a href="#mobility-vehicle-interface-1" class="headerlink" title="mobility vehicle interface"></a>mobility vehicle interface</h4><p>the mobility vehicle interface(MVI) can be based on existing vehicle OS and mobility OS. there are plenty existing in-vehicle OS, e.g. CarPlayer, Baidu OS, GENIV, QNX e.t.c; and on mobility OS side, the most common are iOS and Andriod.</p>
-<p>most in-vehicle OS can run the same apps on mobility OS, e.g. google navigation map, instant messages, music, emergency call service e.t.c.</p>
-<p>so the first solution is app2app. basically the same app ran in the personal mobility device(PMD) talk to the same app run in vehicle OS. </p>
-<p>PMD has more time with the owner, so has more personality than vehicle, especially as vehicle in future is more like a public service, rather than a personal asset. </p>
-<p>that’s why mobility vehicle interface(MVI) is a good option, especially for elders, who may not enjoy talk to AI.</p>
-<p>beyond the easy to implement at this moment, app2app solution has a few limitations:</p>
-<ul>
-<li><p>the security is mainly provided by the app supplier, which is not a unit solution, as different app suppliers have different security mechanism.</p>
-</li>
-<li><p>as apps hosted in this system is growing, the adapters or interfaces to make the bridge grows too, which decrease the user experince and increase the system cost.</p>
-</li>
-</ul>
-<p>so a better solution is a new mobility-vehicle interface protocol, which is the only bridge between personal mobility and vehicles. and no matter what kind of apps and how many apps hosts in both system, won’t be a burden for the sytem anymore.</p>
-<h4 id="moblity-vehicle-interface-protocol"><a href="#moblity-vehicle-interface-protocol" class="headerlink" title="moblity vehicle interface protocol"></a>moblity vehicle interface protocol</h4>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2312,7 +2342,7 @@ publish topics: /vehicle/cmd_ctl
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">179</span>
+                <span class="site-state-item-count">180</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
