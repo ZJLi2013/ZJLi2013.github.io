@@ -291,6 +291,448 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/29/warm-up-Hilber-space/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/29/warm-up-Hilber-space/" itemprop="url">warm up Hilber space</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-29T10:39:22-04:00">
+                2019-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/29/warm-up-Hilber-space/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/29/warm-up-Hilber-space/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="abstract-space"><a href="#abstract-space" class="headerlink" title="abstract space"></a>abstract space</h2><ul>
+<li>Cauchy Series</li>
+</ul>
+<p>in metric space, existing an any positive and small \etta, exist a natural number <code>N</code>, $m, n &gt; N$, which satisfies:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?|x_m&space;-&space;x_n|&space;<&space;\varepsilon" title="|x_m - x_n| < \varepsilon"></p>
+<p>it’s called a Cauchy Series. intuitively, as the numbers goes above, the elements get closer. </p>
+<ul>
+<li>Complete Space </li>
+</ul>
+<p>any Caunchy Series in these abstract space, its convergence is still in the original space. </p>
+<p>e.g. rational number space is not complete space, as <img src="https://latex.codecogs.com/gif.latex?\sqrt{2}" title="\sqrt{2}"> is not in rational number space anymore. </p>
+<p>intuitively, a complete space is like a shell without any holes on its surface. </p>
+<ul>
+<li>Linear Space </li>
+</ul>
+<p>with linear structural set, which can be described by <code>base vector</code>, so any hyper-point in a linear space can be represented by the linear combination of its <code>base</code>, so also called as <code>vector space</code>. in another way, linear space has only <code>add</code> and <code>scalar multi</code> operator.</p>
+<ul>
+<li>Metric Space </li>
+</ul>
+<p>to describe length or distance in linear space, adding  <code>normal</code> in the linear space, gives <code>normed linear space</code> or <code>metric space</code>.</p>
+<ul>
+<li>Banach Space</li>
+</ul>
+<p>a complete metric space</p>
+<ul>
+<li>Inner Product Space </li>
+</ul>
+<p>with <code>inner product</code> feature in metric space. for the infinite space, there are two different sub space, either the inner product of the series converged or not. </p>
+<p>the convergence sub space is a completed space. </p>
+<ul>
+<li>Hilbert Space</li>
+</ul>
+<p>a completed inner product space</p>
+<ul>
+<li>Eurepean Space</li>
+</ul>
+<p>a finite  Hilbert Space. </p>
+<h2 id="functional-analysis"><a href="#functional-analysis" class="headerlink" title="functional analysis"></a>functional analysis</h2><p>the optimzed control theory problem, is to find the functional, under system dynamic constraints, which gives the extremum point(function) in the infinite normed linear space; in general.</p>
+<p>in general, the functional is depends on the system dynamic path, which gives some famuous theorem: Banach fixed point. </p>
+<p>PDE theory, partial geometry, optimized control theory are all part of functional analysis. from computational mechanics field, there is a chance go to PDE theory; from modern control field, there is a chance go to optimized control theory; from modern physics field, the students may also get familiar with partial geometry. the beauty of math is show up, all these big concepts finally arrive to one source:  functional analysis. </p>
+<p>to transfer all these big things into numerial world, which gives CAE solver, DQN solvers e.t.c.</p>
+<h3 id="the-closest-point-property-of-Hilbert-Space"><a href="#the-closest-point-property-of-Hilbert-Space" class="headerlink" title="the closest point property of Hilbert Space"></a>the closest point property of Hilbert Space</h3><p>A subset of <code>A</code> of a vector space is <strong>convex</strong>: if for all a, b belongs to <code>A</code>, all \lamba such that <code>0 &lt; \lamba &lt; 1</code>, the point <img src="https://latex.codecogs.com/gif.latex?\lambda&space;a&space;&plus;&space;(1-\lambda)&space;b" title="\lambda a + (1-\lambda) b"> belongs to <code>A</code></p>
+<p>assuming <code>A</code> is non-empty closed convex set in Hilbert Space <code>H</code>, for any x belongs to <code>H</code>, there is a unique point <code>y</code> of <code>A</code> which is closer to x than any ohter point of <code>A</code>:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?||&space;x&space;-&space;y&space;||&space;=&space;{R}_{a&space;\sphericalangle&space;R}&space;||&space;x&space;-&space;a||" title="|| x - y || = {R}_{a \sphericalangle R} || x - a||"></p>
+<h3 id="orthogonal-expansions"><a href="#orthogonal-expansions" class="headerlink" title="orthogonal expansions"></a>orthogonal expansions</h3><p>if (e_n) is an orthonormal sequence in a Hilbert space <code>H</code>, for any x belongs to <code>H</code>, (x, e_n) is the nth Fourier coefficient of x with respect to (e_n), the Fourier series of x with respect to the sequence (e_n) is the series: </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\sum_i(x,&space;e_i)e_i" title="\sum_i(x, e_i)e_i"></p>
+<ul>
+<li>pointwise converges</li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?\sum_{n=1}^{\infty&space;}&space;f_n(t)&space;=&space;f(t)" title="\sum_{n=1}^{\infty } f_n(t) = f(t)"></p>
+<p>where <code>f_n</code>is a sequence of functions in <img src="https://latex.codecogs.com/gif.latex?L^2(0,1)" title="L^2(0,1)"></p>
+<ul>
+<li>complete orthonormal sequence </li>
+</ul>
+<p>given an orthonormal sequence of (e_n) and a vector <code>x</code> belongs to <code>H</code> then:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?x&space;=&space;\sum_{n=1}^{\infty&space;}&space;(x,&space;e_n)&space;e_n" title="x = \sum_{n=1}^{\infty } (x, e_n) e_n"></p>
+<p>but only when this sequence is complete, the right-hand side converge to  left-hand side workks.</p>
+<p>an orthonormal sequence (e_n) in Hilbert Space <code>H</code> is complete if the only member of <code>H</code> which is orthogonal to every e_n is the zero vector.</p>
+<p>a complete orthonal sequence in <code>H</code> is also called an <code>orthonormal basis</code> of <code>H</code>.</p>
+<p><code>H</code> is separable if it contains a complete orthonormal sequence, </p>
+<p>the orthogonal complement (which named as E^T) of a subset <code>E</code> of <code>H</code> is the set:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?{&space;x&space;\in&space;H:&space;(x,&space;y)&space;=&space;0&space;for&space;all&space;y&space;\in&space;E}" title="{ x \in H: (x, y) = 0 for all y \in E}"></p>
+<p>for any set <code>E</code> in <code>H</code>, <code>E^T</code> is a closed linear subspace of <code>H</code>.</p>
+<p>the knowledge above gives the convergence in Hilbert Space, application like FEA, once created the orthonormal basis of solution space, the solution function represented by the linear combination of these basis is guranted to convergence. </p>
+<h3 id="Fourier-series"><a href="#Fourier-series" class="headerlink" title="Fourier series"></a>Fourier series</h3><p>it is a complete orthonormal sequence in <code>L^2(-\pi, \pi)</code>, and any function represented by a linear combination of Fourier basis is converged. </p>
+<p>but here Fourier basis is the arithmetic means of the nth partial sum of the Fourier series of f, not the direct basis itself. </p>
+<h3 id="Dual-space"><a href="#Dual-space" class="headerlink" title="Dual space"></a>Dual space</h3><h3 id="FEA-solutions-for-PDE"><a href="#FEA-solutions-for-PDE" class="headerlink" title="FEA solutions for PDE"></a>FEA solutions for PDE</h3><p>PDE can be represented in a differential representation:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?\bigtriangledown&space;\cdot&space;(-k&space;\bigtriangledown&space;T)&space;=&space;g(T,&space;x)&space;,&space;in&space;\Omega" title="\bigtriangledown \cdot (-k \bigtriangledown T) = g(T, x) , in \Omega"></p>
+<p>or an integral representation: </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\int_{\Omega}{&space;\bigtriangledown&space;\cdot&space;(-k&space;\bigtriangledown&space;T)}&space;=\int_{\Omega}&space;g(T,&space;x)&space;,&space;in&space;\Omega" title="\int_{\Omega}{ \bigtriangledown \cdot (-k \bigtriangledown T)} =\int_{\Omega} g(T, x) , in \Omega"></p>
+<p>integral formulation has included existing boundary conditions. by multiplying test function <code>\phi</code> on both side of integral representation, and using Green’s first identity will give the weak formulation(variational formulation) of this PDE.</p>
+<p><img src="https://latex.codecogs.com/gif.latex?\int_{\Omega}&space;\bigtriangledown&space;T&space;\cdot&space;\bigtriangledown&space;\varphi&space;dV&space;&plus;&space;\int_{S}&space;(-k&space;\bigtriangledown&space;T)&space;\cdot&space;\mathbf{n}&space;\varphi&space;dS&space;=&space;\int_{\Omega}&space;g&space;\varphi&space;dV" title="\int_{\Omega} \bigtriangledown T \cdot \bigtriangledown \varphi dV + \int_{S} (-k \bigtriangledown T) \cdot \mathbf{n} \varphi dS = \int_{\Omega} g \varphi dV"></p>
+<p>in FEA, assuming the test function <code>\phi</code> and solution <code>T</code> belong to same Hilbert space, the advantage of Hilbert space, is functions inside can do linear combination, like vectors in a vector space. FEA also provides the error estimates, or bounds for the error. </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\phi&space;\in&space;H&space;;&space;T&space;\in&space;H" title="\phi \in H ; T \in H"></p>
+<p>the weak formulation should be obtained by all test functions in Hilbert space. this is <code>weak formulation</code> due to now it doesn’t exactly requries all points in the domain need meet the differential representation of the PDE, but in a integral sense. so even a discontinuity of first derivative of solution <code>T</code> still works by weak formulation. </p>
+<h3 id="Hilbert-space-and-weak-convergence"><a href="#Hilbert-space-and-weak-convergence" class="headerlink" title="Hilbert space and weak convergence"></a>Hilbert space and weak convergence</h3><p>convergence in another words means, the existence of solution. for CAE, DQN algorithms, the solution space is in Hilbert space. </p>
+<h3 id="Lagrange-and-its-duality"><a href="#Lagrange-and-its-duality" class="headerlink" title="Lagrange and its duality"></a>Lagrange and its duality</h3><p>to transfer a general convex optimization problem with lagrange mulitplier:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?min&space;f(x)&space;\\&space;s.t.&space;c_i(x)&space;<=&space;0&space;\\&space;h_j(x)&space;=&space;0" title="min f(x) \\ s.t. c_i(x) <= 0 \\ h_j(x) = 0"></p>
+<p>=&gt;</p>
+<p><img src="https://latex.codecogs.com/gif.latex?L(x,&space;\alpha,&space;\beta)&space;=&space;f(x)&space;&plus;&space;\sum&space;\alpha_i&space;c_i(x)&space;\sum&space;\beta_j&space;h_j(x)" title="L(x, \alpha, \beta) = f(x) + \sum \alpha_i c_i(x) \sum \beta_j h_j(x)"></p>
+<p>we always looks for meaning solution, so <code>L</code> should exist maximum extremum. if not, as <code>x</code> grow, the system goes divergence, no meaningful solution. define:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?\theta_P(x)&space;=&space;max_{\alpha,&space;\beta&space;\geq&space;0}&space;L(x,&space;\alpha,&space;\beta)" title="\theta_P(x) = max_{\alpha, \beta \geq 0} L(x, \alpha, \beta)"></p>
+<p>so the constrainted system equation equals to :</p>
+<p><img src="https://latex.codecogs.com/gif.latex?min_x&space;\theta_P(x)&space;=&space;min_x&space;max_{\alpha,&space;\beta&space;\geq&space;0}&space;L(x,&space;\alpha,&space;\beta)" title="min_x \theta_P(x) = min_x max_{\alpha, \beta \geq 0} L(x, \alpha, \beta)"></p>
+<p>to rewrite the original equation as: </p>
+<p><img src="https://latex.codecogs.com/gif.latex?\theta_D(\alpha,&space;\beta)=&space;min_x&space;L(x,&space;\alpha,&space;\beta)" title="\theta_D(\alpha, \beta)= min_x L(x, \alpha, \beta)"></p>
+<p>then the system’s duality is defined as :</p>
+<p><img src="https://latex.codecogs.com/gif.latex?max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;\theta_D(\alpha,&space;\beta)=&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;min_x&space;L(x,&space;\alpha,&space;\beta)" title="max_{\alpha, \beta \geqslant 0} \theta_D(\alpha, \beta)= max_{\alpha, \beta \geqslant 0} min_x L(x, \alpha, \beta)"></p>
+<p>for a system, if the original state equation and its duality equation both exist extremum solution, then :</p>
+<p><img src="https://latex.codecogs.com/gif.latex?d^*&space;=&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;min_x&space;L(x,&space;\alpha,&space;\beta)&space;\leqslant&space;min_x&space;max_{\alpha,&space;\beta&space;\geqslant&space;0}&space;L(x,&space;\alpha,&space;\beta)&space;=&space;p^*" title="d^* = max_{\alpha, \beta \geqslant 0} min_x L(x, \alpha, \beta) \leqslant min_x max_{\alpha, \beta \geqslant 0} L(x, \alpha, \beta) = p^*"></p>
+<p>the benefits of duality problems is </p>
+<ul>
+<li><p>the duality problem is always convex,  even when the original problem is non-convex </p>
+</li>
+<li><p>the duality solution give an lower boundary for the original solution</p>
+</li>
+<li><p>when strong duality satisfy, the duality solution is the original solution</p>
+</li>
+</ul>
+<h3 id="Krylov-Space"><a href="#Krylov-Space" class="headerlink" title="Krylov Space"></a>Krylov Space</h3><h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://zhuanlan.zhihu.com/p/37108430" target="_blank" rel="external">convex func</a></p>
+<p><a href="https://www.comsol.com/multiphysics/finite-element-method" target="_blank" rel="external">finite element method</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/38182879" target="_blank" rel="external">Lagranget duality</a></p>
+<p><a href="https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf" target="_blank" rel="external">standford convex optimization</a></p>
+<p><a href="https://danieltakeshi.github.io/2016/10/31/going-deeper-into-reinforcement-learning-understanding-q-learning-and-linear-function-approximation/" target="_blank" rel="external">Going deeper into RF: understaing Q-learning and linear function approximation</a></p>
+<p><a href="">Nicholas Young, an introduction to Hilbert Space</a></p>
+<p><a href="https://www.quora.com/Why-are-Hilbert-spaces-important-for-finite-element-analysis" target="_blank" rel="external">why are Hilbert Space important to finite element analysis</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/reinforcement-learning-in-nutshell-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="url">reinforcement learning in nutshell-1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T10:36:19-04:00">
+                2019-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/18/reinforcement-learning-in-nutshell-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/09/18/reinforcement-learning-in-nutshell-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="RL-concepts"><a href="#RL-concepts" class="headerlink" title="RL concepts"></a>RL concepts</h3><p>assuming timestep <code>t</code>:</p>
+<ul>
+<li>the environment state <strong>S</strong>(t)</li>
+<li>agent’s action <strong>A</strong>(t)</li>
+<li>discouted future reward <strong>R</strong>(t), which satisfy: </li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?R_t&space;=&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;r_{t&plus;2}&space;&plus;&space;...&space;&plus;&space;\gamma^k&space;r_{t&plus;k&plus;1}" title="R_t = r_{t+1} + \gamma r_{t+2} + ... + \gamma^k r_{t+k+1}"></p>
+<pre><code>with current state `s` and taking current action `a`, the env will give the reward `r_{t+1}`. `\gamma` is the discount ratio, which usually in [0,1], when $\gamma = 0 $, agent&apos;s value only consider current reward.  check [discount future reward]() in following chapter.
+</code></pre><ul>
+<li><p>agent’s policy <strong>P</strong>(a|s), in current state <code>s</code>, the propability of action <code>a</code></p>
+</li>
+<li><p>agent’s state value <strong>V</strong>(s), in state <code>s</code> and took policy <code>\pi</code>, which usually described as an expectation:</p>
+</li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?V^\pi(s)&space;=&space;E&space;(R_t&space;)" title="V^\pi(s) = E (R_t )"></p>
+<ul>
+<li>agent’s action value <strong>Q</strong>(s, a), which consider both state <code>s</code> and action <code>a</code> effects on value calculation. </li>
+</ul>
+<p><img src="https://latex.codecogs.com/gif.latex?Q^\pi(s,&space;a)&space;=&space;E_{\pi}&space;(&space;R_t&space;|&space;s=s_t,&space;a=a_t)&space;=&space;E_{\pi}&space;(R_{t&plus;1})&space;=&space;E(r_{t&plus;1}&space;&plus;&space;\gamma&space;V^\pi(s_{t&plus;1}))" title="Q^\pi(s, a) = E_{\pi} ( R_t | s=s_t, a=a_t) = E_{\pi} (R_{t+1}) = E(r_{t+1} + \gamma V^\pi(s_{t+1}))"></p>
+<p><img src="https://latex.codecogs.com/gif.latex?V^\pi&space;(s)&space;=&space;E&space;(&space;Q^\pi(s,&space;a)|_{a&space;\sim&space;\pi(a|s)}&space;)" title="V^\pi (s) = E ( Q^\pi(s, a)|_{a \sim \pi(a|s)} )"></p>
+<p>namely, agent’s value is the expectation of its action value with probability distribution <code>p(a|s)</code>. </p>
+<ul>
+<li>state transfer propability <strong>P</strong></li>
+<li>explore rate <code>\eta</code>,  it’s the chance to choose non-max value during iteration, similar as mutation.</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-c9a7f64558173b0b.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
+<h3 id="Markov-decision-process"><a href="#Markov-decision-process" class="headerlink" title="Markov decision process"></a>Markov decision process</h3><p>assuming <code>state transfer propability</code>, <code>agent&#39;s policy</code>, and <code>agent&#39;s value</code> follow <code>Markov assumption</code>. namely, the current state transfer propability, agent’s policy and value only relates to current state.</p>
+<p>agent’s value function <strong>V</strong>(s) meets <a href="">Belman’s equation</a>:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?V(S)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;V(S_{t&plus;1})|S_t&space;=s&space;)" title="V(S) = E( R_{t+1} + \gamma V(S_{t+1})|S_t =s )"></p>
+<p>and agent’s action value function <strong>q</strong>(s) also has Belman’s equation:</p>
+<p><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;a)&space;=&space;E(&space;R_{t&plus;1}&space;&plus;&space;\gamma&space;Q(S_{t&plus;1},&space;A_{t&plus;1}&space;)|S_t&space;=s,&space;A_t&space;=a&space;)" title="Q(s, a) = E( R_{t+1} + \gamma Q(S_{t+1}, A_{t+1} )|S_t =s, A_t =a )"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-54bb214db83cc7b2.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
+<p>in general, env’s state is random; the policy to take action is policy <strong>P(a|s)</strong>. Markov Decision process is: state, action, policy, each <code>[state, action, policy]</code> is an <code>episode</code>, which gives the state-action-reward series:</p>
+<pre><code>s0, a0, r1, s1, a1, r2, ... s(n-1),  a(n-1), rn, sn
+</code></pre><p>Markov assumption is state(n+1) is only depends on state(n).</p>
+<h3 id="Belman’s-equation"><a href="#Belman’s-equation" class="headerlink" title="Belman’s equation"></a>Belman’s equation</h3><p>Belman’s equation gives the recurrence relation in two timesteps. the current state value is calcualted from next future status with given current env status.</p>
+<p><img src="https://latex.codecogs.com/gif.latex?v(s)&space;=&space;E(&space;R_(t&plus;1)&space;&plus;&space;\gamma&space;v(S_(t&plus;1))|S_t&space;=&space;s&space;)" title="v(s) = E( R_(t+1) + \gamma v(S_(t+1))|S_t = s )"></p>
+<h3 id="discounted-future-reward"><a href="#discounted-future-reward" class="headerlink" title="discounted future reward"></a>discounted future reward</h3><p>to achieve better reward in long term, always conside the reward as sum of current and future rewards:</p>
+<pre><code>R(t) = r(t) + r(t+1) + ... r(n)
+</code></pre><p>on the other side, as the env state is random in time, the same action doesn’t give the same reward usually, and as time goes, the difference is even larger. think about the B-tree, as it goes deeper, the number of nodes is larger. so the reward in future doesn’t count the same weight as earlier reward, here define the discount ratio <code>\gamma</code> &lt;- [0, 1]</p>
+<pre><code>R(t) = r(t) + \gamma r(t+1) + ... + \gamma^(n-t) r(n)
+
+R(t) = r(t) = \gamma R(t+1) 
+</code></pre><h3 id="policy-iteration"><a href="#policy-iteration" class="headerlink" title="policy iteration"></a>policy iteration</h3><p>there are two steps:  </p>
+<ul>
+<li><p>policy evaluation, with current policy <code>\pi</code> to evaluate state’s value <code>V&#39;</code></p>
+</li>
+<li><p>policy improvment, with the state value <code>V&#39;</code>, with a special policy update strategy(e.g. greedy) to update policy.</p>
+</li>
+</ul>
+<p>the ideal result is to find the <code>fixed point</code> in value space, which corresponds to the optimized policy at current state with current policy update strategy.  </p>
+<p>in policy iteration, we only consider policy-value mapping.<br><img src="https://upload-images.jianshu.io/upload_images/17414314-40038359d36b0b92.png" alt="image"></p>
+<h3 id="value-iteration"><a href="#value-iteration" class="headerlink" title="value iteration"></a>value iteration</h3><p>where policy iteration based valued is implicit, only value iteration explicit by Belman’s equation. this is also a <code>fixed point</code> application, as we can use the explicit mapping (Belman’s equation) in state value space. so there should guarantee existing an optimized policy. </p>
+<p><img src="https://upload-images.jianshu.io/upload_images/17414314-6fdea50bdaf6fee7.png?imageMogr2/auto-orient/strip|imageView2/2" alt="image"></p>
+<h2 id="an-optimization-problem"><a href="#an-optimization-problem" class="headerlink" title="an optimization problem"></a>an optimization problem</h2><p>reiforcement learning solution is to find the optimal value function to achieve the max reward in each timestep, which leads to optimal policy <code>\pi*</code>, or max value func, or max action value func.</p>
+<pre><code>$$ v(s) = max(v_i(s)) foreach i in value funcs $$ 
+
+$$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$ 
+</code></pre><p>mostly the <code>solution space</code> is not known at hand, if else, the optimal solution can get directly. on the other hand, current state, action set tells a little information about the <code>solution space</code>, as they are part of the <code>solution space</code>, so the optimization algorithms used in convex space can be applied here. </p>
+<p>a few common optimization algorithms includes: </p>
+<h3 id="dynamic-programming-DP"><a href="#dynamic-programming-DP" class="headerlink" title="dynamic programming(DP)"></a>dynamic programming(DP)</h3><p>DP can used in both <code>policy evaluation</code> and <code>policy iteration</code>, but in each <code>calculation step</code>(not even one physical step, and in one physical step, there can be hundreds or thousands of calculation steps) iteration, DP has to recalculate all state(t=current) value to the very first state(t=0) value, which is disaster for high-dimensional problem, and DP by default is kind of <code>integer programming</code>, not fitted to <code>continuous domain</code> either.</p>
+<h3 id="Monte-Carlo-MC"><a href="#Monte-Carlo-MC" class="headerlink" title="Monte Carlo (MC)"></a>Monte Carlo (MC)</h3><p>MC gets a few sample solutions in the <code>solution space</code>, and use these samples solution to approxiamte the <code>solution space</code>. in a geometry explaination, the base vectors of the solution space is unknown, but MC finds a few points in this space, then approximate the (nearly) base vectors, then any point in this space can be approximated by the linear combination of the nearly base vectors.</p>
+<p>MC has no ideas of the propability of state transfer, MC doesn’t care the inner relations of state variables, or model-free.</p>
+<p>MC is robost as it’s model free, on the other hand, if the <code>solution space</code> is high-dimensional, there is a high chance the sampling points are limited in a lower dimension, which weak the presentation of MC approximation; also MC needs to reach the final status, which may be not avaiable in some applications. </p>
+<h3 id="time-serial-Time-Difference-TD"><a href="#time-serial-Time-Difference-TD" class="headerlink" title="time-serial Time Difference(TD)"></a>time-serial Time Difference(TD)</h3><p>MC use the whole list of status for each policy evaluation; in 1st order TD, policy evaluation only use next reward and next state value:</p>
+<pre><code>$ v(s) = R(t+1)  + \gamma S(t+1)|S $
+</code></pre><p>for n-th order TD, the update will use n-th reward :</p>
+<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n S(t+n)|S $
+</code></pre><p>it’s clear here, as n-&gt;infinitly, n-th order TD is closer to MC. <strong>so how close is enough usually, namely which n is enough ?</strong></p>
+<h3 id="SARSA"><a href="#SARSA" class="headerlink" title="SARSA"></a>SARSA</h3><p>in TD, there are two ways: on-line policy, where the same one policy is using to both update value func and upate action; while off-line policy, where one policy is used to update value func, the other policy is used to update action. </p>
+<p>SARSA is kind of on-line policy, and the policy is <code>e-greedy</code>, to choose the max value corresponding action in every iteration with a high probablitiy <code>(1-e)</code>, as <code>e</code> is very small.</p>
+<pre><code>$ \delta(t) v(S, A) = R + \gamma (v(S&apos;, A&apos;) - v(S, A)) $
+</code></pre><p>in the iteration equation above, <code>\delta(t)</code> will give the iteration timestep size, <code>S&#39;</code>, <code>A&#39;</code> are next state and next action, compare to pure 1-st order TD, where the next state value is modified as:  $(Q(S’, A’) - Q(S, A)$, in this way <code>value func</code> keep updated in every func, which can be considered as local correction, compared to the unchanged pure 1-st order TD, which may be highly unstable/diverge in long time series. </p>
+<p>as time-serial TD can’t guarantee converge, so this local correction makes SARSA numerical robost.</p>
+<p>SARSA(\lambda) in mutli-step based is same as n-th order TD. </p>
+<pre><code>$ v(s) = R(t+1) + \gamma R(t+2) + ... + \gamma^(n-1) R(t+n) + \gamma^n ( v(S`) - v(S) ) $
+</code></pre><p>the problem of SARSA is <code>v(S, A)</code> may go huge, as the algorithm is on-line policy, which requires huge memory. </p>
+<h3 id="Q-learning"><a href="#Q-learning" class="headerlink" title="Q-learning"></a>Q-learning</h3><p>Q-learning is off-line policy TD. the policy iteration is use <code>e-greedy policy</code>, same as SARSA; while the policy evaluation to update value func use <code>greedy policy</code>. </p>
+<p>in a word: from status <code>S</code>, using <code>e-greedy policy</code> to choose action <code>A</code>, and get reward <code>R</code>, and in status <code>S&#39;</code>, and using <code>greed policy</code> to get action <code>A&#39;</code>.</p>
+<pre><code>$ \delta(t) Q(S, A) = R + \gamma (Q(S&apos;, A&apos;) - Q(S, A)) $   (a)
+</code></pre><p>where $ A<code>= max v(a|S</code>) $. while in SARSA, both <code>S&#39;</code> and <code>A&#39;</code> update using <code>e-greed</code>.</p>
+<p>usually <code>Q(S,A)</code> is called Q-valued.</p>
+<p>the benefit of choosing a different policy to update action, is kind of decouping status and action, so in this way, they can reach more area in <code>real state-action space</code>, which also lead the <code>solution space</code> a little more robost. </p>
+<p>but still equation (a) is not guaranted to converge as time goes. the converged <code>Q(S,A)</code> should be <strong>convex</strong>, which means its second-order derivative must be less than 0, then the max Q values (max extremum) achieves when first-order derivate is 0.</p>
+<p>while Q-learning has the same problem as SARSA, the huge memory to store Q(S,A) table.</p>
+<p>to make intuitive example, think about an robot walk with 2 choice(e.g. turn left, turn right), and the grid world has 20 box in line, which has 2^20 ~= 10e6 elements in Q(S, A). it can’t scale to any real problem. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf" target="_blank" rel="external">Sutton &amp; Barto, Reinforcement learning: an introduction</a></p>
+<p><a href="https://www.cnblogs.com/pinard/p/9426283.html" target="_blank" rel="external">Pinard</a></p>
+<p><a href="https://www.jianshu.com/p/b392405115bb" target="_blank" rel="external">fromeast</a></p>
+<p><a href="http://www.w3.org/1998/Math/MathML" target="_blank" rel="external">mathxml editor</a></p>
+<p><a href="https://www.codecogs.com/latex/eqneditor.php" target="_blank" rel="external">equation html editor</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/26365534" target="_blank" rel="external">fixed point mechanism</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/python-modules-in-help/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1741,345 +2183,11 @@ A2.x + B2.y + C2.z + P2 = 0
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/30/nancyfx-study/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/30/nancyfx-study/" itemprop="url">nancyfx study</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-30T09:11:39-04:00">
-                2019-08-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/30/nancyfx-study/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/30/nancyfx-study/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://github.com/NancyFx/Nancy/wiki/Documentation" target="_blank" rel="external">document</a>, Nancy is used in lg-sim webUI 2019.07 version, pretty new staff for me.</p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Nancy is a lightweight, low-ceremony framework for building HTTP based services on .NET and Mono. Nancy is designed to handle <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and     <code>PATCH</code> request and provides  a simple, elegant Domain Specific Language(DSL) for returning a response. </p>
-<h3 id="build-to-run-anywhere"><a href="#build-to-run-anywhere" class="headerlink" title="build to run anywhere"></a>build to run anywhere</h3><p>Nancy was designed to not have any dependenceis on existing frameworks, it’s used pretty much wherever you want to. <code>host</code> in Nancy acts as an <code>adaptor</code> for a hosting environment, thus enabling Nancy to run on existing techs, such as ASP.NET, WCF.</p>
-<p>the bare minimum requires to build a Nancy service are the core framework and a host. </p>
-<h3 id="helloworld-service"><a href="#helloworld-service" class="headerlink" title="helloworld service"></a>helloworld service</h3><p>all module should be derived from <code>NancyModule</code>, and define a route handler.  tips: always make the module <code>public</code>, so NancyFx can discover it. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public class HelloWorld : NancyModule </div><div class="line">&#123;</div><div class="line">	public HelloModule()</div><div class="line">	&#123;</div><div class="line">		Get[&quot;/&quot;] = parameters =&gt; &quot;Hello World&quot; ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="exploring-modules"><a href="#exploring-modules" class="headerlink" title="exploring modules"></a>exploring modules</h2><p>module is where you define the logic, is the minimum requirement for any Nancy app. module should inherit from <code>NancyModule</code>, then define the behaviors, with <code>routes</code> and <code>actions</code>.</p>
-<h3 id="modules-are-globally-discovered"><a href="#modules-are-globally-discovered" class="headerlink" title="modules are globally discovered"></a>modules are globally discovered</h3><p>the global discovery of modules will perform once and the information is then cached, so not expensive.</p>
-<h2 id="Define-routes"><a href="#Define-routes" class="headerlink" title="Define routes"></a>Define routes</h2><p>to define a <code>Route</code> need to specify a     <code>Method</code> + <code>Pattern</code> + <code>Action</code> + (optional) <code>Condition</code> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;] = _ =&gt; &#123;</div><div class="line">     	// do sth</div><div class="line">     &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<p>or async run:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class VehicleModule : NancyModule</div><div class="line">&#123;</div><div class="line">   public VehicleModule()</div><div class="line">   &#123;</div><div class="line">     Get[&quot;/vehicle&quot;, runAsnyc: true ] = async(_, token) =&gt; 	  &#123;</div><div class="line">     	// do sth long and tedious</div><div class="line">      &#125;;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h3 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h3><p>method is the <code>HTTP method</code> used to access the resource, Nancy support:  <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>POST</code>, <code>PUT</code> and <code>PATCH</code>.</p>
-<h3 id="secret-for-selecting-the-right-route-to-invoke"><a href="#secret-for-selecting-the-right-route-to-invoke" class="headerlink" title="secret for selecting the right route to invoke"></a>secret for selecting the right route to invoke</h3><p>in case when two routes capture the same request, remember :</p>
-<ul>
-<li><p>the order in which modules are loaded are non-deterministic </p>
-</li>
-<li><p>routes in a given module are discovered in the order in which they are defined </p>
-</li>
-<li><p>if several possible matches found, the most specific match.</p>
-</li>
-</ul>
-<h3 id="root-path"><a href="#root-path" class="headerlink" title="root path"></a>root path</h3><p>all pathes used in Nancy are relative to <code>root path</code>, which tell Nancy where its resources are stored on the file system, which is defined in <code>IRootPathProvider</code></p>
-<h3 id="static-content"><a href="#static-content" class="headerlink" title="static content"></a>static content</h3><p><code>static content</code> is things e.g. javascript files, css, images etc. Nancy uses a convention based approach to figure out what static content it is able to serve at runtime.</p>
-<p>Nancy supports the notion of having multiple conventions for static content and each convention is represented by a <code>delegate</code> with the signature <code>Func&lt;NancyContext, string, Response&gt;</code> </p>
-<p>the delegate accepts two parameters: the context of the current request and the application root path, the output of the delegate is a standard Nancy <code>Response</code> object or <code>null</code>, which means the convention has no static content.</p>
-<h4 id="define-your-own-conventions-usign-the-bootstrapper"><a href="#define-your-own-conventions-usign-the-bootstrapper" class="headerlink" title="define your own conventions usign the bootstrapper"></a>define your own conventions usign the bootstrapper</h4><p><a href="https://github.com/NancyFx/Nancy/wiki/Managing-static-content" target="_blank" rel="external">link</a></p>
-<h2 id="View-engines"><a href="#View-engines" class="headerlink" title="View engines"></a>View engines</h2><p>view engine, takes a <code>template</code>  and an optional <code>model</code>(the data) and outputs(usually) <code>HTML</code> to be rendered into the browser. in lg-sim, the <code>view</code> is rendered in nodejs. </p>
-<h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p><a href="https://docs.microsoft.com/en-us/aspnet/mvc/overview/older-versions-1/overview/understanding-models-views-and-controllers-cs" target="_blank" rel="external">model view controller</a></p>
-<ul>
-<li>understand controller </li>
-</ul>
-<p>a controller is reponsible for controlling the flow logic in the app. e.g. what reponse to send back to a user when a user makes a browser request.</p>
-<p>any public method in a controller is exposed as a controller action. </p>
-<ul>
-<li>understand view</li>
-</ul>
-<p>a view contains the HTML markup and content that is send to the browser. in general to return a view for a controller action, need to create a subfolder in the <code>Views</code> folder with the same name as the controller.</p>
-<ul>
-<li>understand model</li>
-</ul>
-<p>the model is anything not inside a controller or a view. e.g. validation logic, database access. the view should only contain logic related to generating the user interface. the controller should only contain the bare minimum of logic required to return the right view. </p>
-<h2 id="C-anonymous"><a href="#C-anonymous" class="headerlink" title="C# anonymous"></a>C# anonymous</h2><p><a href="https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/statements-expressions-operators/anonymous-functions" target="_blank" rel="external">c# programming guide</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">(input-parameters) =&gt; expression </div><div class="line">(input-parameters) =&gt; &#123;&lt;sequence-of-statements&gt;&#125;</div><div class="line"></div><div class="line">TestDelegate testD = (x) =&gt; &#123;(Console.WriteLine(x);&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li><code>=&gt;</code> is the <code>Lambda</code> operator, on its left is input paramters(if exist). Lambda expression/sequence is equal to a delegate class.</li>
-</ul>
-<ul>
-<li><code>delegate</code> is a refer type, used to pass one function as paramter to another function. e.g. in event handle. </li>
-</ul>
-<h2 id="Nancy-in-lg-sim-WebUI"><a href="#Nancy-in-lg-sim-WebUI" class="headerlink" title="Nancy in lg-sim WebUI"></a>Nancy in lg-sim WebUI</h2><p><a href="https://github.com/lgsvl/simulator/tree/master/Assets/Scripts/Web" target="_blank" rel="external">/Assets/Scripts/Web</a></p>
-<p>a few steps to build  Nancy server: </p>
-<ul>
-<li>Nancyhost.start() </li>
-<li>add NancyModule instance(where define route logic)  </li>
-</ul>
-<p>a few other libs used :</p>
-<ul>
-<li><p>PetaPoco, a light-weight ORM(object relational mapper) framework in C#</p>
-</li>
-<li><p>SQLite</p>
-</li>
-</ul>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://auth0.com/blog/meet-nancy-a-lightweight-web-framework-for-dot-net/" target="_blank" rel="external">meet nancy</a></p>
-<p><a href="http://liulixiang1988.github.io/nancy-webkuang-jia.html#_1" target="_blank" rel="external">nancy doc in chinese</a></p>
-<p>`</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/24/where-are-you-in-next-5-years-9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/24/where-are-you-in-next-5-years-9/" itemprop="url">未来5年在哪里 (8).md</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-24T23:45:37-04:00">
-                2019-08-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/08/24/where-are-you-in-next-5-years-9/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/08/24/where-are-you-in-next-5-years-9/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这一系列的思考来源两个事件：深圳汽车电子行业代表来司交流；与全球机器人大赛参展。</p>
-<h2 id="深圳的中小企业-vs-资本大户"><a href="#深圳的中小企业-vs-资本大户" class="headerlink" title="深圳的中小企业  vs  资本大户"></a>深圳的中小企业  vs  资本大户</h2><p><code>布谷鸟</code> 智能驾驶座舱解决方案供应商。主要产品，车载显示屏，仪表屏和基于Android操作系统的上层应用。展示完，第一感受就是深圳华强北来了。</p>
-<p>当年（2007年)，中国风靡深圳山赛手机。甚至多年以后，山赛智能手机成了中国发展的一个典型案例，为众人津津乐道： <code>眼看他起高楼，眼看他宴宾客，眼看他楼塌了。</code>  这个产业最初蓬勃，但凡投资进去的人，都躺着赚钱，只是没能力在蓬勃发展期间为转型蓄力。后来政策、市场、甚至原材料的任何风吹草动，都足以摧毁它。</p>
-<p>这个产业的问题放大了看，就是 <code>华为/阿里</code> 与 <code>中兴/联想</code> 的对比。国内的制造业小企业，最初都是代理、组装、贴标签、山赛货。如果碰到市场爆发，春风得意，赚的盆满钵满。但是，后续如何发展，创始人的vision就立判高下了。</p>
-<p>一个选择是立足长远利益，未雨绸缪，生于有患。在打开了市场之后，立马投入产品和相关技术、供应链、品牌积累。可以接受眼前的低资金回报，选择了艰辛但持久的终成就行业头部的道路。</p>
-<p>一个选择是只看赚钱。自己做产品积累，回钱周期太久，根本不考虑。资本趋利，大不了赚到钱，再转战下一片红海。这是势利的商人思路，他们对某一个具体行业不带任何感情，冷血。任何行业只是一个资本生长的土壤，不管是做手机、地产、保险、造车等等，都不是出于热爱，而是资本逐利。比如，宝能收购万科，就是冷血的资本挑战性情的行业中人。</p>
-<p>但凡对行业还有所爱的，都难以忍受被资方强奸。所以，恒大站出来说要造车，我的第一反应，就是恒大要来强奸造车人。恒大没有对汽车的感情，只不过跟进资本进军汽车领域。资本原本是公司的生产要素之一，但是资本又最不具有公司界限约束，任何外部资本都能挑战公司自身。所以，如何让资本服务于行业公司？</p>
-<h3 id="制造业创业"><a href="#制造业创业" class="headerlink" title="制造业创业"></a>制造业创业</h3><p>回到<code>布谷鸟</code>，号称做车载计算平台，不自己做计算芯片，不自己做车载屏幕，不自己做车载定制Android操作系统，顶多开发几个上层app。这不又是一家华强北组装厂吗。创业还靠廉价组装竞争？相比，北上的创业公司，诸如硬件地平线、软件旷视等算是技术/境界高多了。</p>
-<p>也不得不提本司。背靠大树，天然壁垒，但实际做的还是华强北的活儿。不同之处是，资本压力小，对技术储备有规划但没有环境和姿态的转变。会聘一两个外国人、一两个教授撑面儿，但这几位基本处于边缘，决策、项目规划都不考虑他们。估计其他家，也好不了哪里去。要不然，市场会有反馈的。</p>
-<p>这样的团队/小公司里面，对想要拔高产品/技术见识的年轻人其实很艰难。因为打开市场，销售是关乎存活的，相比产品是自研的，还是贴牌的，有没有底层开发/设计积累都是次要的。</p>
-<p>要去这种小团队做产品/技术，就需要能单挑担子的产品人/技术大牛。当然，付出与回报怎么权衡。给ceo待遇，似乎可以考虑。</p>
-<p>传统制造业大公司里面的小团队，虽然没有自己去开辟市场的压力，大不了内销，但同时带来的问题，是<code>积重</code>的公司元老，对职业经理人，工程师文化，都是严重的挑战。</p>
-<h3 id="公司元老"><a href="#公司元老" class="headerlink" title="公司元老"></a>公司元老</h3><p>经常会看到，职业mba人在中国企业水土不服，或者回国的硅谷工程师对中国企业文化的抱怨。虽然，宏观数据国内企业似乎都很国际化了，底层的/微观的现代公司管理/制度上，却不是一代就能跟上国际的。比如，mbaer到中国公司，很难战胜资源/权利在握的元老们，按照现代管理办法去调整公司，那基本上就等着被边缘化，然后公司不养闲人，下一步就是踢出去。公司又回到原来的管理模式。老人们再次证明自己不瞎折腾，是公司的积重，继续升官发财。</p>
-<p>工程师文化，不管是如google等互联网公司，还是如ford等汽车制造业公司，都比较明显。hr, manager, 甚至leader团队把自己归为工程师团队提供服务的，在衣食住行、工作环境、设备、交流、培训等等都照顾的很好。</p>
-<p>虽然北美是更成熟的资本社会，他们的企业反而不那么见钱就撒网，没见过ford投资移动互联网，google要去收购造车厂，或者发展文化传媒业务的。他们的业务更倾向纵深，专注，在一个领域深耕，然后成为行业头部。这可能也是成熟资本市场的现代化公司该有的样子。</p>
-<p>相比，国内的企业太草莽。国内的工程师只有听命于人。技术积累对绝大多数企业，都是可以谈谈但不会认真做的。这样的情况，当然长远是没前途的。一波政策、市场的红利之后，基本作死。</p>
-<h3 id="人口基数"><a href="#人口基数" class="headerlink" title="人口基数"></a>人口基数</h3><p>国内也有很多有情怀的创业人或中小企业主，他们也许并不甘与政策红利，也想认真做产品。但是，在这个社会没办法。</p>
-<p>美国的创业环境，想想apple, google, facebook，cruise等等创业经历。首先他们自己没有生存压力，出于热爱开始的；创业阶段，市场/政策对他们的包容度很好，允许决策失败；然后，资本市场、专业人才的补充都有成熟的供应体系。</p>
-<p>国内，一方面有廉价的人口红利，但对大部分创业公司，规模经济反而很难真正成为其产品的利好因素，除了资本玩家，比如，摩拜单车、瑞幸咖啡、yy连锁酒店，滴滴出行等等，这些玩家，根本不是在拼产品，而是资本。谁占有更多资本，谁就能笑到最后。</p>
-<p>这样的创业环境，不能培养社会范围内更好的创业土壤，反而破坏了创业各方面的供应系统，包括创始人的初衷，专业人才队伍，资本法务系统建立等等。归结一个词：浮躁。</p>
-<p>人口基数大，在政治家、资本家眼里是好词，但是对个体，就意味着就业竞争、服务质量差、人际关系不温存。</p>
-<h3 id="经历过大公司的年轻人"><a href="#经历过大公司的年轻人" class="headerlink" title="经历过大公司的年轻人"></a>经历过大公司的年轻人</h3><p>在三四线小城市，有很多生活无忧的年轻人。他们大学毕业后，在大城市瞎晃了一年半载，找不到合适的企业，就打道回府了。家里有条件，在当地慢慢都会活的滋润。我是觉得，经历下一个现代化管理的大公司，也是个不错的体验。至少知道人类社会，最优秀的组织体系是怎么运作的。</p>
-<p>当然，没有上升，一辈子在大公司的系统里打工，就有点无趣。不如回家悠哉悠哉。</p>
-<h2 id="世界机器人大会2019"><a href="#世界机器人大会2019" class="headerlink" title="世界机器人大会2019"></a>世界机器人大会2019</h2><p>整体感受，小企业生存多艰。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2125,7 +2233,7 @@ A2.x + B2.y + C2.z + P2 = 0
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">180</span>
+                <span class="site-state-item-count">182</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

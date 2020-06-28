@@ -291,6 +291,385 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/boto3-streamingBody-to-BytesIO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="url">boto3 streamingBody to BytesIO</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-03T03:58:34-05:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/03/boto3-streamingBody-to-BytesIO/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="boto3-streamingBody-to-BytesIO"><a href="#boto3-streamingBody-to-BytesIO" class="headerlink" title="boto3 streamingBody to BytesIO"></a>boto3 streamingBody to BytesIO</h1><h3 id="boto3-class-into"><a href="#boto3-class-into" class="headerlink" title="boto3 class into"></a>boto3 class into</h3><ul>
+<li>A <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/session.html" target="_blank" rel="external">Session</a> is about a particular configuration. a custom session: </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">session = boto3.session.Session()</div><div class="line">ads = session.client(<span class="string">'ads'</span>)</div><div class="line">ads_s3 = session.resource(<span class="string">'s3'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/resources.html" target="_blank" rel="external">Resources</a> is an object-oriented interface to AWS. Every resource instance has a number of attributes and methods. These can conceptually be split up into identifiers, attributes, actions, references, sub-resources, and collections.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(bucket_name=<span class="string">"boto3"</span>, key=<span class="string">"test.mdf"</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html" target="_blank" rel="external">Client</a> includes common APIs:</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">copy_object()</div><div class="line">delete_object()</div><div class="line">create_bucket()</div><div class="line">delete_bucket()</div><div class="line">delete_objects()</div><div class="line">download_file()</div><div class="line">download_fileobj()</div><div class="line">get_bucket_location()</div><div class="line">get_bucket_policy()</div><div class="line">get_object()</div><div class="line">head_bucket()</div><div class="line">head_object()</div><div class="line">list_buckets()</div><div class="line">list_objects()</div><div class="line">put_bucket_policy()</div><div class="line">put_object()</div><div class="line">upload_file()</div><div class="line">upload_fileobj()</div></pre></td></tr></table></figure>
+<ul>
+<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#service-resource" target="_blank" rel="external">Service Resource</a> have bucket and object subresources, as well as related actions.</p>
+</li>
+<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#bucket" target="_blank" rel="external">Bucket</a>, is an abstract resource representing a S3 bucket.</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">b = ads_s3.Bucket(<span class="string">'name'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#object" target="_blank" rel="external">Object</a>, is an abstract resource representing a S3 object.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(<span class="string">'bucket_name'</span>, <span class="string">'key'</span>)</div></pre></td></tr></table></figure>
+<h3 id="read-s3-object-amp-pipeline-to-mdfreader"><a href="#read-s3-object-amp-pipeline-to-mdfreader" class="headerlink" title="read s3 object &amp; pipeline to mdfreader"></a>read s3 object &amp; pipeline to mdfreader</h3><p>there are a few try-and-outs. first is to streaming s3 object as BufferedReader, which give a file-like object, and can read(), but <code>BufferedReader</code> looks more like a IO streaming than a file, which can’t seek. </p>
+<h4 id="botocore-response-StreamingBody-as-BufferedReader"><a href="#botocore-response-StreamingBody-as-BufferedReader" class="headerlink" title="botocore.response.StreamingBody as BufferedReader"></a>botocore.response.StreamingBody as BufferedReader</h4><p>the following discussion is really really helpful:<br><a href="https://github.com/boto/boto3/issues/426" target="_blank" rel="external">boto3 issue #426:  how to use botocore.response.StreamingBody as stdin PIPE</a></p>
+<p>at the code of the StreamingBody and it seems to me that is is really a wrapper of a class inheriting from io.IOBase) but only the read method from the raw stream is exposed, so not really a file-like object. it would make a lot of sense to expose the io.IOBase interface in the StreamingBody as we could wrapped S3 objects into a io.BufferedReader or a io.TextIOWrapper.read() get a binary string .  the actual file-like object is found in the ._raw_stream attribute of the StreamingBody class</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> io</div><div class="line">buff_reader = io.BufferedReader(body._raw_stream)</div><div class="line">print(buff_reader)</div><div class="line"><span class="comment"># &lt;_io.BufferedReader&gt;</span></div></pre></td></tr></table></figure>
+<p>wheras this <code>buff_reader</code> is not seekable, which makes <a href="">mdfreader</a> failure, due to its file operate needs  <code>seek()</code> method.</p>
+<p><a href="https://stackoverflow.com/questions/39324151/stream-a-non-seekable-file-like-object-to-multiple-sinks" target="_blank" rel="external">steam a non-seekable file-like object</a></p>
+<h4 id="stdio-stream-to-seekable-file-like-object"><a href="#stdio-stream-to-seekable-file-like-object" class="headerlink" title="stdio stream to seekable file-like object"></a>stdio stream to seekable file-like object</h4><p>so I am thinking to transfer the <code>BufferedReader</code> to a seekable file-like object. first, need to understand why it is not seekable. <code>BufferedRandom</code> is seekable, whereas BufferedReader and BufferedWriter <a href="https://github.com/python/cpython/pull/11216" target="_blank" rel="external">are not</a>. <a href="https://grokbase.com/t/python/python-dev/102j1y1dwn/buffered-streams-design-raw-io-gotchas" target="_blank" rel="external">Buffered streams design:</a> BufferedRandom is only suitable when the file is open for reading <strong>and</strong> writing. The ‘rb’ and ‘wb’ modes should return BufferedReader and BufferedWriter, respectively.</p>
+<p>is it possbile to first  read() the content of BufferedReader to some memory, than transfer it to BufferedRandom? which gives me the try to BufferedReader.read(), which basicaly read all the binaries and store it in-memoryA, <strong>then good news:</strong> in-memory binary streams are also aviable as <a href="https://docs.python.org/3/library/io.html" target="_blank" rel="external">Bytesio</a> objects: </p>
+<pre><code class="python">f = io.BytesIO(<span class="string">b"some in-memory binary data"</span>)
+</code></pre>
+<p>what if assign <code>BytesIO</code> to this in-memoryA. which really gives me a seekable object:</p>
+<pre><code class="python">fid_ = io.BufferedReader(mf4_[<span class="string">'Body'</span>]._raw_stream) ;
+read_in_memory = fid_.read()
+bio_ = io.BytesIO(read_in_memory);
+</code></pre>
+<p>then <code>BytesIO</code> object pointer is much more file-like, to do read() and seek(). </p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html" target="_blank" rel="external">boto3 doc</a></p>
+<p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#examples" target="_blank" rel="external">boto3 s3 api samples</a></p>
+<p><a href="https://github.com/ERS-HCL/MDF4Wrapper" target="_blank" rel="external">mdf4wrapper</a></p>
+<p><a href="https://bytes.com/topic/c/answers/649819-ifstream-file" target="_blank" rel="external">iftream to FILE</a></p>
+<p><a href="https://stackoverflow.com/questions/20935404/what-is-the-concept-behind-file-pointer-or-the-stream-pointer" target="_blank" rel="external">what is the concept behind file pointer or stream pointer</a></p>
+<p><a href="https://stackoverflow.com/questions/10199226/using-io-bufferedreader-on-a-stream-obtained-with-open" target="_blank" rel="external">using io.BufferedReader on a stream obtained with open</a></p>
+<p><a href="https://www.devdungeon.com/content/working-binary-data-python" target="_blank" rel="external">working with binary data in python</a></p>
+<p><a href="https://stackoverflow.com/questions/1035340/reading-binary-file-and-looping-over-each-byte" target="_blank" rel="external">read binary file and loop over each byte</a></p>
+<p><a href="https://github.com/RaRe-Technologies/smart_open" target="_blank" rel="external">smart_open project</a></p>
+<p><a href="https://www.python.org/dev/peps/pep-3116/" target="_blank" rel="external">PEP 3116 – New I/O</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/28/ceph-boto3-intro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/28/ceph-boto3-intro/" itemprop="url">ceph & boto3 introduction</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-28T21:16:46-05:00">
+                2020-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/28/ceph-boto3-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/02/28/ceph-boto3-intro/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="ceph-intro"><a href="#ceph-intro" class="headerlink" title="ceph intro"></a>ceph intro</h2><p>A Ceph Storage Cluster requires at least one Ceph Monitor, Ceph Manager, and Ceph OSD (Object Storage Daemon)</p>
+<h3 id="ceph-storage-cluster"><a href="#ceph-storage-cluster" class="headerlink" title="ceph storage cluster"></a>ceph storage cluster</h3><p>The Ceph File System, Ceph Object Storage and Ceph Block Devices read data from and write data to the Ceph Storage Cluster.</p>
+<p><a href="https://docs.ceph.com/docs/master/rados/operations/" target="_blank" rel="external">cluster operations</a></p>
+<p><a href="https://docs.ceph.com/docs/master/rados/operations/data-placement/" target="_blank" rel="external">data placement</a></p>
+<ul>
+<li><p>pools, which are logical groups for storing objects</p>
+</li>
+<li><p>Placement Groups(PG), PGs are fragments of a logical object pool</p>
+</li>
+<li><p>CRUSH maps, provide the physical topology of the cluster to the CRUSH algorithm to determine where the data for an object and its replicas should be stored, and how to do so across failure domains for added data safety among other things.</p>
+</li>
+<li><p>Balancer, a feature that will automatically optimize the distribution of PGs across devices to achieve a balanced data distribution</p>
+</li>
+</ul>
+<h3 id="Librados-APIs-workflow"><a href="#Librados-APIs-workflow" class="headerlink" title="Librados APIs workflow"></a>Librados APIs workflow</h3><p>apis can interact with: Ceph monitor as well as OSD.</p>
+<ul>
+<li><a href="https://docs.ceph.com/docs/master/rados/api/librados-intro/" target="_blank" rel="external">get libs</a></li>
+</ul>
+<h4 id="configure-a-cluster-handling"><a href="#configure-a-cluster-handling" class="headerlink" title="configure a cluster handling"></a>configure a cluster handling</h4><ul>
+<li>the client app must invoke <code>librados</code> and connected to a Ceph Monitor</li>
+<li>librados retrieves the cluster map </li>
+<li>when the client app wants to read or write data, it creates an I/O context and bind to a pool</li>
+<li>with the I/O context, the client provides the object name to <code>librados</code>, for locating the data. </li>
+<li>then the client application can read or write data</li>
+</ul>
+<p>Thus, the first steps in using the cluster from your app are to 1) create a cluster handle that your app will use to connect to the storage cluster, and then 2) use that handle to connect. To connect to the cluster, the app must supply a monitor address, a username and an authentication key (cephx is enabled by defaul</p>
+<p>an easy way, in Ceph configuration file:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[global]</div><div class="line">mon host = 192.168.0.1</div><div class="line">keyring = /etc/ceph/ceph.client.admin.keyring</div></pre></td></tr></table></figure>
+<p><img src="https://docs.ceph.com/docs/master/_images/ditaa-bd1070de50515485f116a874684956bc7e26c664.png" alt="image"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> rados</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">        cluster = rados.Rados(conffile=<span class="string">''</span>)</div><div class="line"><span class="keyword">except</span> TypeError <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">print</span> <span class="string">'Argument validation error: '</span>, e</div><div class="line">        <span class="keyword">raise</span> e</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Created cluster handle."</span></div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">        cluster.connect()</div><div class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">print</span> <span class="string">"connection error: "</span>, e</div><div class="line">        <span class="keyword">raise</span> e</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">        <span class="keyword">print</span> <span class="string">"Connected to the cluster."</span></div></pre></td></tr></table></figure>
+<p>python api, has default <code>admin</code> as id, <code>ceph</code> as cluster name, and <code>ceph.conf</code> as confffile value</p>
+<h4 id="creating-an-I-O-context"><a href="#creating-an-I-O-context" class="headerlink" title="creating an I/O context"></a>creating an I/O context</h4><p>RADOS enables you to interact both synchronously and asynchronously. Once your app has an I/O Context, read/write operations only require you to know the object/xattr name. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">print</span> <span class="string">"\n\nI/O Context and Object Operations"</span></div><div class="line"><span class="keyword">print</span> <span class="string">"================================="</span></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nCreating a context for the 'data' pool"</span></div><div class="line"><span class="keyword">if</span> <span class="keyword">not</span> cluster.pool_exists(<span class="string">'data'</span>):</div><div class="line">        <span class="keyword">raise</span> RuntimeError(<span class="string">'No data pool exists'</span>)</div><div class="line">ioctx = cluster.open_ioctx(<span class="string">'data'</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nWriting object 'hw' with contents 'Hello World!' to pool 'data'."</span></div><div class="line">ioctx.write(<span class="string">"hw"</span>, <span class="string">"Hello World!"</span>)</div><div class="line"><span class="keyword">print</span> <span class="string">"Writing XATTR 'lang' with value 'en_US' to object 'hw'"</span></div><div class="line">ioctx.set_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span>, <span class="string">"en_US"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nWriting object 'bm' with contents 'Bonjour tout le monde!' to pool 'data'."</span></div><div class="line">ioctx.write(<span class="string">"bm"</span>, <span class="string">"Bonjour tout le monde!"</span>)</div><div class="line"><span class="keyword">print</span> <span class="string">"Writing XATTR 'lang' with value 'fr_FR' to object 'bm'"</span></div><div class="line">ioctx.set_xattr(<span class="string">"bm"</span>, <span class="string">"lang"</span>, <span class="string">"fr_FR"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nContents of object 'hw'\n------------------------"</span></div><div class="line"><span class="keyword">print</span> ioctx.read(<span class="string">"hw"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\n\nGetting XATTR 'lang' from object 'hw'"</span></div><div class="line"><span class="keyword">print</span> ioctx.get_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nContents of object 'bm'\n------------------------"</span></div><div class="line"><span class="keyword">print</span> ioctx.read(<span class="string">"bm"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Getting XATTR 'lang' from object 'bm'"</span></div><div class="line"><span class="keyword">print</span> ioctx.get_xattr(<span class="string">"bm"</span>, <span class="string">"lang"</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\nRemoving object 'hw'"</span></div><div class="line">ioctx.remove_object(<span class="string">"hw"</span>)</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Removing object 'bm'"</span></div><div class="line">ioctx.remove_object(<span class="string">"bm"</span>)</div></pre></td></tr></table></figure>
+<h4 id="closing-sessions"><a href="#closing-sessions" class="headerlink" title="closing sessions"></a>closing sessions</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">print</span> <span class="string">"\nClosing the connection."</span></div><div class="line">ioctx.close()</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"Shutting down the handle."</span></div><div class="line">cluster.shutdown()</div></pre></td></tr></table></figure>
+<h3 id="librados-in-Python"><a href="#librados-in-Python" class="headerlink" title="librados in Python"></a><a href="https://docs.ceph.com/docs/master/rados/api/python/" target="_blank" rel="external">librados in Python</a></h3><h4 id="data-level-operations"><a href="#data-level-operations" class="headerlink" title="data level operations"></a>data level operations</h4><ul>
+<li>configure a cluster handle</li>
+</ul>
+<p>To connect to the Ceph Storage Cluster, your application needs to know where to find the Ceph Monitor. Provide this information to your application by specifying the path to your Ceph configuration file, which contains the location of the initial Ceph monitors.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> rados, sys</div><div class="line">cluster = rados.Rados(conffile=<span class="string">'ceph.conf'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>connect to the cluster </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">cluster.connect()</div><div class="line"><span class="keyword">print</span> <span class="string">"\nCluster ID: "</span> + cluster.get_fsid()</div><div class="line"></div><div class="line"><span class="keyword">print</span> <span class="string">"\n\nCluster Statistics"</span></div><div class="line"><span class="keyword">print</span> <span class="string">"=================="</span></div><div class="line">cluster_stats = cluster.get_cluster_stats()</div><div class="line"></div><div class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> cluster_stats.iteritems():</div><div class="line">        <span class="keyword">print</span> key, value</div></pre></td></tr></table></figure>
+<ul>
+<li>manage pools </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cluster.create_pool(<span class="string">'test'</span>)</div><div class="line">pools = cluster.list_pools()</div><div class="line"><span class="keyword">for</span> pool <span class="keyword">in</span> pools:</div><div class="line">        <span class="keyword">print</span> pool</div><div class="line">cluster.delete_pool(<span class="string">'test'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>I/O context </li>
+</ul>
+<p>to read from or write to Ceph Storage cluster, requires ioctx.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ioctx = cluster.open_ioctx($ioctx_name)</div><div class="line"><span class="comment">#</span></div><div class="line">ioctx = cluster.open_ioctx2($pool_id)</div></pre></td></tr></table></figure>
+<p><code>ioctx_name</code> is the name of the pool, <code>pool_id</code> is the ID of the pool</p>
+<ul>
+<li>read, write, remove objects </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ioctx.write_full(<span class="string">"hw"</span>, <span class="string">"hello"</span>)</div><div class="line">ioctx.read(<span class="string">"hw"</span>)</div><div class="line">ioctx.remove_object(<span class="string">"hw"</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>with extended attris</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">ioctx.set_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span> <span class="string">"en_US"</span>)</div><div class="line">ioctx.get_xattr(<span class="string">"hw"</span>, <span class="string">"lang"</span>)</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">* list objs </div><div class="line"></div><div class="line">```python </div><div class="line"></div><div class="line">obj_itr = ioctx.list_objects()</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		rados_obj = obj_itr.next()</div><div class="line">		print(rados_obj.read())</div></pre></td></tr></table></figure>
+<h4 id="RADOS-S3-api"><a href="#RADOS-S3-api" class="headerlink" title="RADOS S3 api"></a>RADOS S3 api</h4><p>Ceph supports <a href="https://docs.ceph.com/docs/dumpling/radosgw/s3/" target="_blank" rel="external">RESTful API</a> that is compatible with basic data access model of Amazon S3 api.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PUT /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1</div><div class="line">DELETE /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1</div><div class="line">GET /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1</div><div class="line">HEAD /&#123;bucket&#125;/&#123;object&#125; HTTP/1.1  //get object info </div><div class="line">GET /&#123;bucket&#125;/&#123;object&#125;?acl HTTP/1.1</div></pre></td></tr></table></figure>
+<h2 id="Amazon-S3"><a href="#Amazon-S3" class="headerlink" title="Amazon S3"></a>Amazon S3</h2><p>Simple Storage Serivce(s3) is used as file/object storage system to store and share files across Internet. it can store any type of objects, with simple key-value. elastic computing cluster(ec2) is Amazon’s computing service. there are three class in S3: servivce, bucket, object.</p>
+<p>there are two ways to access S3, through SDK(boto), or raw  Restful API(GET, PUT). the following is SDK way.</p>
+<h4 id="create-a-bucket"><a href="#create-a-bucket" class="headerlink" title="create a bucket"></a>create a bucket</h4><p>Put(), Get(), return all objects in the bucket. <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-example-creating-buckets.html" target="_blank" rel="external">Bucket</a> is a storage location to hold files(objects). </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_bucket</span><span class="params">(bucket_name, region=None)</span>:</span></div><div class="line">	<span class="keyword">try</span>:</div><div class="line">		<span class="keyword">if</span> region <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">			s3_client = boto3.client(<span class="string">'s3'</span>)</div><div class="line">			s3.client.create_bucket(Bucket=bucket_name)</div><div class="line">		<span class="keyword">else</span>:</div><div class="line">            s3_client = boto3.client(<span class="string">'s3'</span>, region_name=region)</div><div class="line">            location = &#123;<span class="string">'LocationConstraint'</span>: region&#125;</div><div class="line">            s3_client.create_bucket(Bucket=bucket_name,</div><div class="line">            CreateBucketConfiguration=location)</div><div class="line">    <span class="keyword">except</span> ClientError <span class="keyword">as</span> e:</div><div class="line">        logging.error(e)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">True</span>			</div><div class="line"></div><div class="line">response = s3_client.list_buckets()</div><div class="line"><span class="keyword">for</span> bucket <span class="keyword">in</span> response[<span class="string">'Buckets'</span>]:</div><div class="line">	<span class="keyword">print</span> bucket</div></pre></td></tr></table></figure>
+<h4 id="upload-files"><a href="#upload-files" class="headerlink" title="upload files"></a>upload files</h4><p>basically to <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html" target="_blank" rel="external">upload a file</a> to an S3 bucket. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload_file</span><span class="params">(file_name, bucket, object_name=None)</span>:</span></div><div class="line">    <span class="keyword">if</span> object_name <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        object_name = file_name</div><div class="line"></div><div class="line">    <span class="comment"># Upload the file</span></div><div class="line">    s3_client = boto3.client(<span class="string">'s3'</span>)</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        response = s3_client.upload_file(file_name, bucket, object_name)</div><div class="line">    <span class="keyword">except</span> ClientError <span class="keyword">as</span> e:</div><div class="line">        logging.error(e)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">True</span></div></pre></td></tr></table></figure>
+<p><code>upload_file()</code> handles large files by splitting them into smaller chunks and uploading each chunk in parallel. which is same logic as ceph to hide the lower-level detail of data splitting and transfering.</p>
+<p><code>upload_fileobj()</code> accepts a readable file-like object, which should be openedin bin mode, not text mode:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">s3 = boto3.client(<span class="string">'s3'</span>)</div><div class="line"><span class="keyword">with</span> open(<span class="string">"FILE_NAME"</span>, <span class="string">"rb"</span>) <span class="keyword">as</span> f:</div><div class="line">    s3.upload_fileobj(f, <span class="string">"BUCKET_NAME"</span>, <span class="string">"OBJECT_NAME"</span>)</div></pre></td></tr></table></figure>
+<p>all <code>Client</code>, <code>Bucket</code> and <code>Object</code> have these two methods. </p>
+<h4 id="download-files"><a href="#download-files" class="headerlink" title="download files"></a>download files</h4><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-example-download-file.html" target="_blank" rel="external">download_file()</a> a pair of upload files method, which accepts the names of bucket and object to download, and the filename to save the downloaded file to.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">s3 = boto3.client(<span class="string">'s3'</span>)</div><div class="line">s3.download_file(<span class="string">'BUCKET_NAME'</span>, <span class="string">'OBJECT_NAME'</span>, <span class="string">'FILE_NAME'</span>)</div></pre></td></tr></table></figure>
+<p>same as upload file, there is a read-only open method: <code>download_fileobj()</code>.</p>
+<h4 id="bucket-policy"><a href="#bucket-policy" class="headerlink" title="bucket policy"></a>bucket policy</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">s3 = boto3.client(<span class="string">'s3'</span>)</div><div class="line">result = s3.get_bucket_policy(Bucket=<span class="string">'BUCKET_NAME'</span>)</div><div class="line">bucket_policy = json.dumps(bucket_policy)</div><div class="line">s3.put_bucket_policy(Bucket=bucket_name, Policy=bucket_policy)</div><div class="line">s3.delete_bucket_policy(Bucket=<span class="string">'BUCKET_NAME'</span>)</div><div class="line">control_list = s3.get_bucket_acl(Bucket=<span class="string">'BUCKEET_NAME'</span>)</div></pre></td></tr></table></figure>
+<h4 id="get-objects"><a href="#get-objects" class="headerlink" title="get objects"></a>get objects</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">obj_list = s3.list_objects(Bucket=<span class="string">'bucket_name'</span>)</div><div class="line">obj_cont = s3.get_object(Bucket=<span class="string">'bucket_name'</span>, Key=<span class="string">'file_key'</span>)</div></pre></td></tr></table></figure>
+<p>error: botocore.errorfactory.NoSuchKey: An error occurred (NoSuchKey) when calling the GetObject operation: Unknown</p>
+<h4 id="read-objects-through-url-restful-api"><a href="#read-objects-through-url-restful-api" class="headerlink" title="read objects through url (restful api)"></a>read objects through url (restful api)</h4><p>through url path to get a file/object: <code>https://&lt;bucket-name&gt;.s3.amazonaws.com/&lt;key&gt;</code></p>
+<h4 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h4><p><a href="https://docs.ceph.com/docs/master/start/intro/" target="_blank" rel="external">ceph official doc</a></p>
+<p><a href="https://botocore.amazonaws.com/v1/documentation/api/latest/index.html" target="_blank" rel="external">botocore official doc</a></p>
+<p><a href="https://github.com/boto/boto3" target="_blank" rel="external">boto3 github</a></p>
+<p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-examples.html" target="_blank" rel="external">amazon S3 example</a></p>
+<p><a href="https://www.howtoforge.com/how-to-create-an-s3-bucket-object-storage-on-amazon-aws/" target="_blank" rel="external">GUI: create an S3 bucket and store objects in AWS</a></p>
+<p><a href="https://www.cnblogs.com/junneyang/p/5980286.html" target="_blank" rel="external">boto API access S3 object</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/27/from-HPC-to-cloud-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1826,477 +2205,11 @@ CMD [&quot;/bin/bash&quot;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/" itemprop="url">ROS ADS integrated to python talk to lgsvl</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-10T08:35:12-05:00">
-                2020-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p><a href="https://zjli2013.github.io/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" target="_blank" rel="external">previously</a>, we had done ADS ros package directly talk with lgsvl. the step further is to trigger ADS ros nodes from scenario python script</p>
-<p>a few requirements:</p>
-<ul>
-<li><p>for ADS ros should be integrated with each scenario python script, which means, when the python script finished, the ADS ros should exit</p>
-</li>
-<li><p>the ads ros package shell script is independ of python script </p>
-</li>
-</ul>
-<h4 id="execute-shell-in-Python"><a href="#execute-shell-in-Python" class="headerlink" title="execute shell in Python"></a>execute shell in Python</h4><ul>
-<li>to <a href="http://dreamsyssoft.com/python-scripting-tutorial/shell-tutorial.php" target="_blank" rel="external">call a shell command</a> directly with <code>os.system(cmd)</code> or </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">subprocess.call(&quot;ls -lt&quot;, shell=True)</div></pre></td></tr></table></figure>
-<ul>
-<li>to run shell script with a python subprocess </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proc=subprocess.Popen([&quot;&quot;], stdout=subprocess.PIPE)</div></pre></td></tr></table></figure>
-<p><code>subprocess.Popen()</code> return the process object</p>
-<p>a few helpful commands to debug rosrun:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ps -aux | grep &quot;roscore&quot;  </div><div class="line"></div><div class="line">ps -aux | grep &quot;rosmaster&quot;</div><div class="line"></div><div class="line">killall -9 roscore </div><div class="line"></div><div class="line">killall -9 rosmaster</div></pre></td></tr></table></figure>
-<h2 id="ros1-to-python3"><a href="#ros1-to-python3" class="headerlink" title="ros1 to python3"></a>ros1 to python3</h2><p>there is an real issue, due to the ADS ros package is mostly implemented by ROS1, maintained by the algorithm team. but lgsvl scenario is running with python3. <a href="http://design.ros2.org/articles/changes.html" target="_blank" rel="external">ROS1 matches Python2</a>. so there comes the solution, either to upgrade the ADS ros pakcage to ROS2, or find a way to run ROS1 in python3 env.</p>
-<h4 id="conda-base-env"><a href="#conda-base-env" class="headerlink" title="conda base env"></a>conda base env</h4><p>we had decided to adapt ROS1 in python3 env. as the host machine has conda env, first need to <a href="https://stackoverflow.com/questions/54429210/how-do-i-prevent-conda-from-activating-the-base-environment-by-default" target="_blank" rel="external">disable conda base</a>. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda config --set auto_activate_base false</div></pre></td></tr></table></figure>
-<p>as lgsvl scenario is runned with conda python3 env, inside which used <code>subprocess</code> to run ADS ros shell, in which creates a few new <code>gnome-terminal</code>s, which are non log-in terminal, and the trick things here: even though disabled auto activate base, and the terminal has no header <code>(base)</code>, but when check the python path, it still points to the <code>conda/bin/python</code>, which will fail <code>rosbridge_launch.server</code>, which is a pure ros1 and python2 module.</p>
-<p>so need check if <code>conda --version</code> in the ads ros shell script is  in current terminal, if does, run <code>conda deactivate</code>, which gives error:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CommandNotFoundError: Your shell has not been properly configured to use &apos;conda deactivate&apos;.</div></pre></td></tr></table></figure>
-<p>it looks there is some mess up, with init <code>conda.sh</code> is in <code>~/.bashrc</code>, but during the new terminal ceated, it doens’t confgiure all right. which can be fixed :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">conda --version </div><div class="line">if [ $? == 0 ]</div><div class="line">then </div><div class="line">    source ~/anaconda3/etc/profile.d/conda.sh</div><div class="line">    conda deactivate</div><div class="line">fi</div></pre></td></tr></table></figure>
-<p>in this way, we run lgsvl scenario in python3, as well as can new with python2 terminals to run ads ros nodes from this python3 terminal</p>
-<h4 id="ros-scripts-path-is-not-python-path"><a href="#ros-scripts-path-is-not-python-path" class="headerlink" title="ros scripts path is not python path"></a>ros scripts path is not python path</h4><p>as we try to separate python scripts from ads ros nodes, so need some global env variable for the ros scripts path. </p>
-<h2 id="kill-all-ros-nodes-gracefully"><a href="#kill-all-ros-nodes-gracefully" class="headerlink" title="kill all ros nodes gracefully"></a>kill all ros nodes gracefully</h2><p>we need restart/shutdown the ads ros nodes package at each time when python scenario script start/stop, which has two steps:</p>
-<ul>
-<li><p>to shutdown ros nodes, e.g.  <a href="https://answers.ros.org/question/237862/rosnode-kill/" target="_blank" rel="external">rosnode kill</a></p>
-</li>
-<li><p>to close all the gnome-terminals to run the ros nodes</p>
-</li>
-</ul>
-<p>the second step is very tricky, need some understand. A terminal is a file. Like /dev/tty. Files do not have a process id. The process that “owns” the terminal is usually called the controlling process, or more correctly, the process group leader. <code>gnome-terminal</code> <a href="https://askubuntu.com/questions/775025/how-to-detect-the-number-of-opened-terminals-by-the-user" target="_blank" rel="external">runs a single pid</a>, it creates a child process for each and every window and/or tab. and can retrieve these child processes by the command:</p>
-<pre><code>$ pgrep -P &lt;pid_of_gnome-terminal&gt;
-</code></pre><p>Many terminals seem to <a href="https://askubuntu.com/questions/640096/how-do-i-check-which-terminal-i-am-using" target="_blank" rel="external">mask themselves as xterm-compatible</a>, which is reported by echo $TERM or echo $COLORTERM. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$! is the PID of the last backgrounded process.</div><div class="line">kill -0 $PID checks whether it&apos;s still running.</div><div class="line">$$ is the PID of the current shell.</div></pre></td></tr></table></figure>
-<pre><code>#! /bin/bash
-
-gnome_pid=`pgrep gnome-terminal`
-subpids=`pgrep -P ${gnome_pid}`
-
-if [ ! $1 ]; then
-   echo &quot;missing the gnome-terminal pid, exit&quot;
-   exit -1
-fi
-
-#shutdown the ros nodes 
-rosnode kill -a  &gt; /dev/null  2&gt;&amp;1
-killall -9 rosmaster &gt; /dev/null  2&gt;&amp;1
-
-#shutdown the terminals where ros nodes hosted
-for pid in $subpids
-do
-        if [[ $pid != $1 ]] ; then
-                echo $pid
-                kill $pid
-        fi
-done
-</code></pre><p>tips: the implement has a litle problem when integrate with lgsvl when the simulation time is short, e.g. 1sec, then <code>ros_clear.sh</code> can’t catch the opened gnome-terminals from <code>ros_start.sh</code>. </p>
-<h4 id="find-the-process-name-using-PID"><a href="#find-the-process-name-using-PID" class="headerlink" title="find the process name using PID"></a><a href="https://www.tecmint.com/find-process-name-pid-number-linux/" target="_blank" rel="external">find the process name using PID</a></h4><pre><code>$ ps aux | grep PID
-$ ps -p PID -o format         
-$ curpid=`ps -p $$ -o ppid=`
-</code></pre><h4 id="the-output-of-ps-aux"><a href="#the-output-of-ps-aux" class="headerlink" title="the output of ps aux"></a><a href="https://www.computernetworkingnotes.com/linux-tutorials/ps-aux-command-and-ps-command-explained.html" target="_blank" rel="external">the output of ps aux</a></h4><ul>
-<li>–&gt;  in the foreground process group<br>s –&gt;  is a session leader </li>
-</ul>
-<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>so far, we integrated ads ros packages into python, which then talk to lgsvl. </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.jianshu.com/p/2eb33b491024" target="_blank" rel="external">pythn subprocess from Jianshu</a></p>
-<p><a href="https://www.cnblogs.com/vamei/archive/2012/10/07/2713023.html" target="_blank" rel="external">understand linux process group</a></p>
-<p><a href="https://www.cyberciti.biz/faq/linux-pidof-command-examples-find-pid-of-program/" target="_blank" rel="external">pidof command</a></p>
-<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line/476663#476663" target="_blank" rel="external">which_term</a></p>
-<p><a href="https://stackoverflow.com/questions/9378021/how-to-get-process-details-from-its-pid" target="_blank" rel="external">get the info of a PID</a></p>
-<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line" target="_blank" rel="external">get the pid of running terminal</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" itemprop="url">ADS stack in ros talk to lgsvl</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-04T23:02:13-05:00">
-                2020-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h2 id="learning-is-about-repeat-100-times"><a href="#learning-is-about-repeat-100-times" class="headerlink" title="learning is about repeat 100 times !"></a>learning is about repeat 100 times !</h2><p>this maybe the third time to go through ROS, which still looks fresh, but does give a whole picture about how ROS works in ADS dev. </p>
-<ul>
-<li>what is ros topic and message </li>
-</ul>
-<p>the topic is the channel where nodes are subscribed for to read messages or where the nodes publish those messages; the message is the data itself, previously defined. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rostopic echo [topic]</div><div class="line"></div><div class="line">rostopic list </div><div class="line"></div><div class="line">rosmsg show [message]</div><div class="line"></div><div class="line">rosrun [package_name] [node_name]</div><div class="line"></div><div class="line">rospack find [package_name]</div><div class="line"></div><div class="line">rosnode info [node_name]</div></pre></td></tr></table></figure>
-<ul>
-<li>what is a publisher/subscriber</li>
-</ul>
-<p>a publisher (node) publishes messages to a particular topic. <a href="http://wiki.ros.org/roscpp/Overview/Publishers%20and%20Subscribers" target="_blank" rel="external">publish()</a> is asynchronous, and only does work if there are subscribers connected on that topic. <code>publish()</code> itself is very fast, and it does as little work as possible:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">serialize the message to a buffer </div><div class="line">push the buffer onto a queue for later processing</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ros::Publisher advertise(const std::string&amp; topic, uint32_t queue_size, bool latch = false);</div></pre></td></tr></table></figure>
-<p>the <code>queue size</code> is defined in  publihser/outgoing message queue. if publishing faster than roscpp can send the message over the wire, roscpp will start dropping OLD messages. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ros::Subscriber subscribe(const std::string&amp; topic, uint32_t queue_size, &lt;callback, which may involve multiple arguments&gt;, const ros::TransportHints&amp; transport_hints = ros::TransportHints());</div></pre></td></tr></table></figure>
-<p>the queue_size is the incoming message/subscriber queue size, roscpp will use for your callback. if messages are arriving too fast and you are unable to keep up, roscpp will start throwing away OLD messages.</p>
-<p><a href="https://answers.ros.org/question/243855/how-do-publishersubscriber-message-queues-work/" target="_blank" rel="external">in summary</a>: </p>
-<pre><code>* publish() is asynchronous.
-* When you publish, messages are pushed into a queue (A) for later processing. This queue is immediately pushed into the outgoing/publisher queue (B) . PS: If no one subscribes to the topic, the end is here.
-* When a subscriber subscribes to that topic. Messages will be sent/pushed from the corresponding outgoing/publisher queue (B) to the incoming/subscriber queue (C).--&gt; this is done by internal thread
-* When you spin/ callback, the messages handled are from the incoming/subscriber queue (C).
-</code></pre><ul>
-<li><a href="http://wiki.ros.org/Messages" target="_blank" rel="external">messages</a></li>
-</ul>
-<p><strong>msg</strong> files are simple text files for specifying the data structure of a message. These files are stored in the msg subdirectory of a package. the publisher and subscriber must send and receive the same <strong>type/topic</strong> of message</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&quot;op&quot;: &quot;publish&quot;, &quot;topic&quot;: &quot;/talker&quot;, &quot;msg&quot;: &#123;&quot;data&quot; : &quot;_my_message&quot; &#125;&#125;</div></pre></td></tr></table></figure>
-<p>lgsvl defines the rosBridge class, which has a Reader() and Writer(), corresponding to Subsciber and Publisher, respectfually. </p>
-<h2 id="rosBridge-in-lgsvl"><a href="#rosBridge-in-lgsvl" class="headerlink" title="rosBridge in lgsvl"></a>rosBridge in lgsvl</h2><p>rosbridge is an adapter for non-ros apps to talk with ros. it’s common to package ADS software as ros node during dev stage, and rosbridge is the common way to integrate simulator with ADS software.</p>
-<p>the base implementation of <code>rosBridge</code> in lgsvl is as following: </p>
-<h4 id="RosBridge-cs"><a href="#RosBridge-cs" class="headerlink" title="RosBridge.cs"></a>RosBridge.cs</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ConcurrentQueue&lt;Action&gt;  QueuedActions ;</div><div class="line">Dictionary&lt;string, Tuple&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;&gt; Readers ;</div></pre></td></tr></table></figure>
-<p>the topic is packaged as:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123; &quot;op&quot;:  &quot;subscribe or publish or call_service or service_response or set_level&quot;,</div><div class="line">  &quot;topic&quot;:  &#123;&#125;,</div><div class="line">  &quot;type&quot;:  &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>AddReader(topic, callback)</li>
-</ul>
-<p>a few types/topices supported: </p>
-<pre><code>Deteced3DObjectArray, 
-
-Deteced2DObjectArray, 
-
-VehicleControlData, 
-
-Autoware.VehicleCmd, 
-
-TwistStamped, 
-
-Apollo.control_command 
-</code></pre><p>which is the list of ros messages that lgsvl can parsing.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if(!Readers.ContainsKey(topic))</div><div class="line">&#123;</div><div class="line">   Readers.Add(topic, Tuple.Create&lt;Func&lt;JSONNode, object&gt;, List&lt;Action&lt;object&gt;&gt;&gt;(msg=&gt;converter(msg),  new List&lt;Action&lt;object&gt;&gt;()) ) ;</div><div class="line"></div><div class="line">&#125;  </div><div class="line"></div><div class="line">Readers[topic].Item2.Add(msg=&gt;callback(T)msg));</div></pre></td></tr></table></figure>
-<p><code>AddReader</code> is the subscriber nodes in lgsvl. in <code>Sensor</code> group, there are three sensors do <code>AddReader</code>: </p>
-<pre><code>GroundTruth3DVisualizer 
-
-VehicleControlSensor 
-
-GroudTruth2DVisualizer
-</code></pre><p>which means, lgsvl server can read these three typies of messsages. </p>
-<p>if there is no rendering/visual needs, only vehicle conroller (acc, brake) message is required for lgsvl. </p>
-<ul>
-<li>AddWriter(topic)</li>
-</ul>
-<p>the types/topic supported are: </p>
-<pre><code>ImageData, 
-PointCloudData, 
-Detected3DObjectData, 
-Detected2DObjectData, 
-SignalDataArray, 
-DetectedRadarObjectData, 
-CanBusData, 
-GpsData, 
-ImuData, 
-CorrectedImuData, 
-GpsOdometryData, 
-ClockData
-</code></pre><p><code>AddWriter()</code> is a writer adapter, which returns a special type/topic writer/publisher. <code>AddWriter</code> is the publisher nodes in lgsvl, in <code>Sensor</code> group, the following sensors can publish message out:</p>
-<pre><code>LidarSensor 
-SignalSensor
- GpsInsSensor
-GpsOdometrySensor
-DepthCameraSensor
-ImuSensor
-SemanticCameraSensor
-GroudTruth2DSensor
-CanBusSensor
-RadarSensor
-GroudTruth3DSensor
-ClockSensor
-GpsSensor
-ColorCameraSensor
-</code></pre><ul>
-<li>AddService(topic, callback)</li>
-</ul>
-<ul>
-<li>OnMessage(sender, args)</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">if (args.op==&quot;publish&quot;)</div><div class="line">&#123;</div><div class="line">   topic = json[&quot;topic&quot;]</div><div class="line">   Readers.TryGetValue(topic, out readerPair)</div><div class="line">   var parse = readerPair.Item1 ; </div><div class="line">   var readers = readerPair.Item2; </div><div class="line">   var msg = parse(json[&quot;msg&quot;]);</div><div class="line">   foreach (var reader in readers)</div><div class="line">   &#123;</div><div class="line">     QueuedActions.Enqueue(()=&gt;reader(msg));   //</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<p>ros subscriber uses a callback mechanism, when the message is coming, all readers who subscribe this topic will read in this message. </p>
-<h4 id="RosWriter-cs"><a href="#RosWriter-cs" class="headerlink" title="RosWriter.cs"></a>RosWriter.cs</h4><p>the message output is in the format as:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; </div><div class="line">  &quot;op&quot; :  &quot;publish&quot; ,</div><div class="line">  &quot;topic&quot; :  Topic, </div><div class="line">  &quot;msg&quot;:  message </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="websocket-in-ros-bridge"><a href="#websocket-in-ros-bridge" class="headerlink" title="websocket in ros bridge"></a>websocket in ros bridge</h4><p>the implementation of ros bridge in lgsvl is by <code>WebSocket</code>, which maintained a continously communication pipeline, for external ros nodes publishers.</p>
-<h2 id="ros-ads-talk-to-lgsvl-rosbridge"><a href="#ros-ads-talk-to-lgsvl-rosbridge" class="headerlink" title="ros ads talk to lgsvl rosbridge"></a>ros ads talk to lgsvl rosbridge</h2><p>from the previous section, lgsvl talk to external ros nodes (which is the ADS stack) through rosbridge, and which needs external inputs, e.g. vehicle control command, 2d/3d ground truth visualizer. and the ADS stack ros nodes can subscribes Gps, canbus, Lidar, Radar, GroudTruth, SemanticCamera, DeepCamera topics through lgsvl rosbrige.</p>
-<p>so the pipeline are simple as following:</p>
-<pre><code>lgsvl rosbridge  --&gt;  {gps, radar, camera, lidar, groudTruth message} --&gt;  ADS stack nodes 
-
-ADS stack nodes --&gt;  {vehicle control command message} --&gt; lgsvl rosbridge 
-</code></pre><p>usually, the ADS stack nodes are a few related ros nodes, including RTK/GPS sensor, Lidar/Camera/Radar sensors, hdmap node, data fusion node e.t.c.</p>
-<h4 id="run-ROS-ADS-stack"><a href="#run-ROS-ADS-stack" class="headerlink" title="run ROS ADS stack"></a>run ROS ADS stack</h4><p>the following nodes are used commonly in ADS dev:</p>
-<ul>
-<li><p>gps_node</p>
-<pre><code>subscribe: /gps, /odom e.t.c
-
-publish: /sensor/data topics
-</code></pre></li>
-<li><p>camera_node</p>
-<pre><code>subscribe: /camera/raw_data
-
-publish:  /objects_list,  /lane_object e.t.c
-</code></pre></li>
-<li><p>radar_node</p>
-<pre><code>subscribe:  /radar/raw_data
-
-publish: /obstacle/velocity , /obstacle/distance
-</code></pre></li>
-<li><p>hdmap_node</p>
-<pre><code>subcribe: /rtk/data, /ins/data. 
-
-publish:  /lane/info,  /speed_limit e.t.c.
-</code></pre></li>
-<li><p>fusion_node </p>
-<pre><code>subscribe topics: /canbus, rtk/data, /ifv_lane,  /radar/blind, /radar/corner, /esr, /velodey, /lane/info e.t.c
-
-publish topics: /object_list/, /road/info, /vehicle/status and visual related messages e.t.c.
-</code></pre></li>
-<li><p>planning_node </p>
-<pre><code>subscribe topics:  /object_list,  /road/info, /vehicle/status from fusion_node
-
-publish topics: /vehicle/cmd_ctl 
-</code></pre></li>
-</ul>
-<h4 id="ADS-ros-launch"><a href="#ADS-ros-launch" class="headerlink" title="ADS ros launch"></a>ADS ros launch</h4><p>the previous section has a basic idea about what kind of ROS nodes usually needs to run the ADS stack. In road test or simulaiton test, we prefer a simple way to launch all ADS related nodes in one launch.</p>
-<p>which usually give a simple launch file to start all nodes, or a shell script to start each ros nodes sequencially. </p>
-<h4 id="system-verification"><a href="#system-verification" class="headerlink" title="system verification"></a>system verification</h4><p>ros is a common solution to package ADS stack and integrate with the simulation env during SIL sysem verification, as well as road test data collection. since ROS is the cheap solution for ADS dev and test, compared to CAEape/Vector, Dspace solution.</p>
-<p>on the other hand, due to the hardware computing limitation, drivers depends, and espeically the ros is mostly run in Linux kind of non-realtime OS, which is not good for domain controller(HAD) test. so during the real test envrionment, we need to consider these true issues.</p>
-<p>another topic is about how to quick build up a user-friend verification pipeline for, which keeps as little modification as possible, but can run in both simulation verification and physical verification.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://wiki.ros.org/ROS/Tutorials" target="_blank" rel="external">ros overview</a></p>
-<p><a href="https://msadowski.github.io/ros-web-tutorial-pt1/" target="_blank" rel="external">understand rosbridge:  simple ROS UI</a></p>
-<p><a href="http://wiki.ros.org/roslibjs/Tutorials/BasicRosFunctionality" target="_blank" rel="external">roslibjs</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2342,7 +2255,7 @@ publish topics: /vehicle/cmd_ctl
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">180</span>
+                <span class="site-state-item-count">182</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
