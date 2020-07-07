@@ -291,6 +291,315 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/k8s-setup-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/17/k8s-setup-1/" itemprop="url">k8s setup 1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-17T08:50:13-04:00">
+                2020-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/05/17/k8s-setup-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/05/17/k8s-setup-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>transfer from docker swarm to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things: </p>
+<ul>
+<li><p>a more general abstract object. e.g. pod, service/svc, deployment, secret, namespace/ns, role e.t.c.</p>
+</li>
+<li><p>more DevOps engineering  </p>
+</li>
+</ul>
+<p>previously, I <a href="https://zjli2013.github.io/2020/04/09/play-with-k8s/" target="_blank" rel="external">palyed  with k8s</a> in theory. this time is more about build a k8s cluster in reality. </p>
+<h2 id="install-kubeadm"><a href="#install-kubeadm" class="headerlink" title="install kubeadm"></a>install kubeadm</h2><ul>
+<li><p>kubeadm,  used to initial cluster</p>
+</li>
+<li><p>kubectl, the CLI tool for k8s </p>
+</li>
+<li><p>kubelet, run on all nodes in the cluster</p>
+</li>
+</ul>
+<p>all three commands are required on all nodes. check <a href="https://v1-16.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/" target="_blank" rel="external">install kube officially</a></p>
+<ul>
+<li>swapoff </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo swapoff -a</div></pre></td></tr></table></figure>
+<ul>
+<li>create a file <code>/etc/apt/sources.list.d/kubernetes.list</code> with the following content:</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">deb https://mirrors.aliyun.com/kubernetes/apt/  kubernetes-xenial main</div></pre></td></tr></table></figure>
+<ul>
+<li>add gpg key </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gpg --keyserver keyserver.ubuntu.com --recv-keys BA07F4FB </div><div class="line">gpg --<span class="built_in">export</span> --armor BA07F4FB | sudo apt-key add -</div></pre></td></tr></table></figure>
+<ul>
+<li>apt install</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update </div><div class="line">sudo apt-get install kubelet kubectl kubeadm</div></pre></td></tr></table></figure>
+<p>tips, <code>apt-get install</code> will install v1.18.2. </p>
+<ul>
+<li>restart kubelet </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart kubelet</div></pre></td></tr></table></figure>
+<p>if need degrade to v17.3, do the following: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install -qy --allow-downgrades kubelet=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubeadm=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubectl=1.17.3-00</div></pre></td></tr></table></figure>
+<h4 id="kubeadm-setup"><a href="#kubeadm-setup" class="headerlink" title="kubeadm setup"></a>kubeadm setup</h4><p>we setup k8s with kubeadm tool, which requires a list of images:</p>
+<ul>
+<li>check the required images to start kubeadm</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images list</div></pre></td></tr></table></figure>
+<p>which returns:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">k8s.gcr.io/kube-apiserver:v1.18.2</div><div class="line">k8s.gcr.io/kube-controller-manager:v1.18.2</div><div class="line">k8s.gcr.io/kube-scheduler:v1.18.2</div><div class="line">k8s.gcr.io/kube-proxy:v1.18.2</div><div class="line">k8s.gcr.io/pause:3.2</div><div class="line">k8s.gcr.io/etcd:3.4.3-0</div><div class="line">k8s.gcr.io/coredns:1.6.7</div></pre></td></tr></table></figure>
+<p>the image source above is not aviable, which can be solved by:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images pull --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers/</div></pre></td></tr></table></figure>
+<p>if the command above doesn’t work well, try to <code>docker pull</code> directly and tag the name back to <code>k8s.gcr.io</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span></div><div class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span> k8s.gcr.io/<span class="variable">$imageName</span></div></pre></td></tr></table></figure>
+<h4 id="start-a-k8s-cluster"><a href="#start-a-k8s-cluster" class="headerlink" title="start a k8s cluster"></a>start a k8s cluster</h4><p>after the preparation above, finally start a k8s cluster as:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm init --pod-network-cidr=10.4.0.0/16 --cluster_dns=10.3.0.10</div></pre></td></tr></table></figure>
+<p>futher, check <a href="https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/" target="_blank" rel="external">kubeadm init options</a>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">--pod-network-cidr  <span class="comment"># pod network IP range</span></div><div class="line"></div><div class="line">--service-cidr <span class="comment"># default 10.96.0.0/12</span></div><div class="line"></div><div class="line">--service-dns-domain <span class="comment">#cluster.local</span></div></pre></td></tr></table></figure>
+<p><code>cluster_dns</code> option is used as the cluster DNS/namespace, which will be used in the configureMap for <code>coreDNS</code> forwarding. </p>
+<p>if start successfully, </p>
+<ul>
+<li>then run the following as a regular user to config safety-verficiation:</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir -p <span class="variable">$HOME</span>/.kube</div><div class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</div><div class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</div></pre></td></tr></table></figure>
+<ul>
+<li>check</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo kubectl get nodes   <span class="comment">#both nodes are READY</span></div><div class="line">sudo kubectl get pods -n kube-system  <span class="comment">#check system</span></div><div class="line">sudo kubectl describe pod coredns-xxxx  -n kube-system</div></pre></td></tr></table></figure>
+<h4 id="add-pod-network"><a href="#add-pod-network" class="headerlink" title="add pod network"></a>add pod network</h4><p>pod network, is the network through which the cluster nodes can communicate with each other.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</div></pre></td></tr></table></figure>
+<ul>
+<li>worker node to join the new k8s cluster : </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">kubeadm reset</div><div class="line">sudo swapoff -a </div><div class="line">kubeadm join 10.20.180.12:6443 --token o0pcpc.v3v8bafmbu6e4bcs \</div><div class="line">    --discovery-token-ca-cert-hash sha256:2a15d392821f8c51416e49e6ccd5393df6f93d738b24b2132e9a9a19276f4f54</div></pre></td></tr></table></figure>
+<p>then cp <code>flannel-cni.conflist</code> into worker node. <code>/etc/cni/net.d/10-flannel.conflist</code> to the same path in worker node.</p>
+<p>if check <code>sudo kubectl get pods -n kube-system</code> :  there may come <strong>an error: here found: coredns CrashLoopBackOff or Error</strong></p>
+<p>this is due to <code>DNS/nameserver resolving issue in Ubuntu, where</code>coreDNS service<code>forwarding the k8s cluster service to the host</code>/etc/resolv.conf<code>, which only has</code>127.0.0.1`.  the cause for CoreDNS to have CrashLoopBackOff is when a CoreDNS Pod deployed in Kubernetes detects a loop. A number of <a href="https://github.com/coredns/coredns/tree/master/plugin/loop#troubleshooting-loops-in-kubernetes-clusters" target="_blank" rel="external">workarounds are available</a> to avoid Kubernetes trying to restart the CoreDNS Pod every time CoreDNS detects the loop and exits.</p>
+<p>check the <code>coreDNS configMap</code> by :</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl edit cm coredns -n kube-system</div></pre></td></tr></table></figure>
+<p>we see something like:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  prometheus :9153</div><div class="line">#  forward . /etc/resolv.conf</div><div class="line">  forward . 10.3.0.10</div><div class="line">  cache 30</div><div class="line">  loop</div><div class="line">  reload</div><div class="line">  loadbalance</div></pre></td></tr></table></figure>
+<p>so modify <code>forward line</code> to <code>forward . 10.3.0.10</code>.  or to delete <code>loop</code> service there, which is not good idea.</p>
+<p><a href="https://stackoverflow.com/questions/52645473/coredns-fails-to-run-in-kubernetes-cluster" target="_blank" rel="external">a very good explain</a></p>
+<h4 id="test-cluster"><a href="#test-cluster" class="headerlink" title="test cluster"></a>test cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/08.%E9%AA%8C%E8%AF%81%E9%9B%86%E7%BE%A4%E5%8A%9F%E8%83%BD.md" target="_blank" rel="external">test sample</a></p>
+<h4 id="clear-cluster"><a href="#clear-cluster" class="headerlink" title="clear cluster"></a>clear cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/12.%E6%B8%85%E7%90%86%E9%9B%86%E7%BE%A4.md" target="_blank" rel="external">clear test</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl stop kubelet kube-proxy flanneld docker</div></pre></td></tr></table></figure>
+<h2 id="understand-CNI-container-network-interface"><a href="#understand-CNI-container-network-interface" class="headerlink" title="understand CNI (container network interface)"></a>understand CNI (container network interface)</h2><p>the following network plugin can be found from <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/" target="_blank" rel="external">k8s cluster networking</a></p>
+<ul>
+<li>backgroud</li>
+</ul>
+<p>container network is used to connect (container itself) to other containers, host machine or external network. container in runtime has a few network mode:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">none</div><div class="line"></div><div class="line">host</div><div class="line"></div><div class="line">bridge</div></pre></td></tr></table></figure>
+<p>CNI brings a general network framework, used to manage network configure and network resources. </p>
+<h4 id="coreDNS"><a href="#coreDNS" class="headerlink" title="coreDNS"></a>coreDNS</h4><p>first, run coreDNS as a service in the cluster. then, update <code>kubelet</code> parameters to include IP of coreDNS and the cluster domain. </p>
+<p>if there is no existing running Kube-DNS, or need a different <code>CLusterIP</code> for <code>CoreDNS</code>, then need update <code>kubelet</code> configuration to set <code>cluster_dns</code> and <code>cluster_domain</code> appropriately, which can be modified at:</p>
+<p><code>/etc/systemd/system/kubelet.service/10-kubeadm.conf</code> with additional options appending at <code>kubelet</code> line :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--cluster_dns=10.3.0.10   --cluster_domain=cluster.local</div></pre></td></tr></table></figure>
+<ul>
+<li>restart kubelet service </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl status kubelet </div><div class="line">systemctl daemon-reload </div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
+<h2 id="flannel-mis-usage"><a href="#flannel-mis-usage" class="headerlink" title="flannel mis-usage"></a>flannel mis-usage</h2><p>in the settings above, I manually copy <code>flannel-cni.conflist</code> and <code>/run/flannel/subnet.env</code> to worker node every time, whenever reboot the worker node. if else, the cluster bother the worker node is <code>NotReady</code>.  as we deploy the cluster with <code>kubectl</code>, which is kind of a swarm service deploy tool. so the right way to use <code>flannel</code> should have all <code>k8s.gcr.io/kube-proxy</code>, <code>quay.io/coreos/flannel</code> images at worker node as well. </p>
+<p>for version1.17+, <code>flannel</code> replace the default <code>kube-proxy</code>, but it still requires to have <code>kube-proxy</code> running in each node(kubelet). </p>
+<p>after restart kubelet, checking <code>pods -n kube-system</code>, it shows <code>kube-proxy</code> and <code>flannel</code> on each node has a <code>Running</code> status. <code>coreDNS</code> services has run the same size of copies as the number of nodes, but we can find that all of them are running on leader node.</p>
+<h2 id="understand-pod-in-k8s"><a href="#understand-pod-in-k8s" class="headerlink" title="understand pod in k8s"></a>understand pod in k8s</h2><h4 id="accessing-k8s-pods-from-outside-of-cluster"><a href="#accessing-k8s-pods-from-outside-of-cluster" class="headerlink" title="accessing k8s pods from outside of cluster"></a><a href="http://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/" target="_blank" rel="external">accessing k8s pods from outside of cluster</a></h4><ul>
+<li>hostNetwork: true</li>
+</ul>
+<p>this option applies to k8s pods, which work as <code>--network=host</code> in docker env. </p>
+<p>options can used for create pod: <code>name command args env resources ports stdin tty</code></p>
+<p><a href="https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/" target="_blank" rel="external">create pod/deployment using yaml</a></p>
+<p><a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/" target="_blank" rel="external">k8s task1: define a command and args for a container</a></p>
+<p><a href="https://learnk8s.io/templating-yaml-with-code" target="_blank" rel="external">templating YAML in k8s with real code</a></p>
+<p>but <code>hostNetwork</code> is only yaml supported</p>
+<ul>
+<li>hostPort </li>
+</ul>
+<p>the container port is exposed to the external network at <hostip>:<hostport>. </hostport></hostip></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">spec:</div><div class="line">	containers:</div><div class="line">		ports:</div><div class="line">		- containerPort: 8086</div><div class="line">		  hostPort: 8086</div></pre></td></tr></table></figure>
+<p>hostPort allows to expose a single container port on the hostIP. but the hostIP is dynamic when container restarted </p>
+<ul>
+<li>nodePort </li>
+</ul>
+<p>by default, services are accessible at ClusterIP, which is an internal IP address reachable from inside the cluster. to make the service accessible from outside of the cluster, can create a <code>NodePort</code> type service. </p>
+<p>once this service is created, the kube-proxy, which runs on each node of the cluster, and listens on all network interfaces is instructed to accept connections on port 30000, (from any IP ?). the incoming traffc is forwardedby the kube-proxy to the selected pods in a round-robin fashion.</p>
+<p>this service represents a static endpoint through which the selected pods can be reached. </p>
+<ul>
+<li>Ingress</li>
+</ul>
+<p>The Ingress controller is deployed as a Docker container on top of Kubernetes. Its Docker image contains a load balancer like nginx or HAProxy and a controller daemon.</p>
+<h4 id="view-pods-and-nodes"><a href="#view-pods-and-nodes" class="headerlink" title="view pods and nodes"></a><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/" target="_blank" rel="external">view pods and nodes</a></h4><ul>
+<li>check running pods on which node </li>
+</ul>
+<h4 id="resolv-conf-in-k8s-pod"><a href="#resolv-conf-in-k8s-pod" class="headerlink" title="resolv.conf in k8s pod"></a>resolv.conf in k8s pod</h4><p>run as interactive into a k8s pod, then check its <code>resolv.conf</code>:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">nameserver 10.96.0.10</div><div class="line">search default.svc.cluster.local svc.cluster.local cluster.local</div><div class="line">options ndots:5</div></pre></td></tr></table></figure>
+<p> <code>10.96.0.10</code> is the K8S DNS server IP, which is actually the service IP of <code>kube-dns</code> service.</p>
+<p><strong>interesting</strong>, we can ping neither 10.96.0.10, nor 10.4.0.10, which is not existing service in the cluster, nor 10.3.0.10, which is the coreDNS forwarding IP.</p>
+<p>remember during setup the k8s cluster, we had define the coreDNS forwarding to <code>10.3.0.10</code>, is this why I can’t run <code>curl http://&lt;ip&gt;:&lt;port&gt;</code> works ?</p>
+<p>check coreDNS service:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">kubectl describe  pods coredns-66bff467f8-59g97 -n kube-system </div><div class="line">Name:                 coredns-66bff467f8-59g97</div><div class="line">Node:                 meng/10.20.180.12</div><div class="line">Labels:               k8s-app=kube-dns</div><div class="line">IP:                   10.4.0.6</div></pre></td></tr></table></figure>
+<p>when start <code>coreDNS</code>, is actually used to relace <code>kube-dns</code>. </p>
+<h2 id="understand-service-in-k8s"><a href="#understand-service-in-k8s" class="headerlink" title="understand service in k8s"></a>understand service in k8s</h2><p><a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank" rel="external">doc</a></p>
+<p>Each Pod gets its own IP address, however in a Deployment, the set of Pods running in one moment in time could be different from the set of Pods running that application a moment later.</p>
+<p>A Service in Kubernetes is a REST object, similar to a Pod. you can <code>POST</code> a Service definition to the API server to create a new instance. </p>
+<p>Kubernetes assigns this Service an IP address, sometimes called the <code>clusterIP</code>, </p>
+<h4 id="Virtual-IP-and-service-proxies"><a href="#Virtual-IP-and-service-proxies" class="headerlink" title="Virtual IP and service proxies"></a>Virtual IP and service proxies</h4><p>Every node in a Kubernetes cluster runs a <code>kube-proxy</code>, <code>kube-proxy</code> is responsible for implementing a form of virtual IP for Services, whose is type is any but not <code>ExternalName</code>.</p>
+<h4 id="choosing-own-IP-for-service"><a href="#choosing-own-IP-for-service" class="headerlink" title="choosing own IP for service"></a>choosing own IP for service</h4><p>You can specify your own cluster IP address as part of a Service creation request. The IP address that you choose must be a valid IPv4 or IPv6 address from within the service-cluster-ip-range CIDR range that is configured for the API server</p>
+<h4 id="discovering-services"><a href="#discovering-services" class="headerlink" title="discovering services"></a>discovering services</h4><ul>
+<li><p>ENV variables </p>
+</li>
+<li><p>DNS </p>
+</li>
+</ul>
+<h4 id="headless-services"><a href="#headless-services" class="headerlink" title="headless services"></a>headless services</h4><p>by explicitly specifying “None” for the cluster IP (<code>.spec.clusterIP</code>).</p>
+<h4 id="publishing-services-ServiceTypes"><a href="#publishing-services-ServiceTypes" class="headerlink" title="publishing services(ServiceTypes)"></a>publishing services(ServiceTypes)</h4><p>expose a service to an external IP address, outside of the cluster. </p>
+<p>service has four type:</p>
+<ul>
+<li><p>ClusterIP (default): expose the service on a cluster-internal IP, which is only reachable inside the cluster</p>
+</li>
+<li><p>NodePort: expose the service on each node’s IP at a static port(<code>NodePort</code>), to access : <nodeip>:<nodeport></nodeport></nodeip></p>
+</li>
+<li><p>ExternalName: map the services to an <code>externalName</code></p>
+</li>
+<li><p>LoadBalancer: expose the service externally using third-party load balancer(googl cloud, AWS, kubeadm has none LB)</p>
+</li>
+</ul>
+<p><code>NodePort</code> and <code>LoadBalancer</code> can expose service to public, or outside of the cluster.</p>
+<h4 id="external-IPs"><a href="#external-IPs" class="headerlink" title="external IPs"></a>external IPs</h4><p>if there are external IPs that route to one or more cluster nodes, services can be exposed on those externalIPs. </p>
+<h2 id="yaml-deployment-of-service-pod"><a href="#yaml-deployment-of-service-pod" class="headerlink" title="yaml deployment of service/pod"></a>yaml deployment of service/pod</h2><p>the previous sample <code>busybox</code>, is running as <code>pod</code>, through  <code>kubectl run busybox</code> ?  so there is no external </p>
+<ul>
+<li><a href="https://www.jianshu.com/p/6fd42abd9baa" target="_blank" rel="external">deployment obj</a></li>
+</ul>
+<ul>
+<li><a href="https://blog.csdn.net/wucong60/article/details/81699196" target="_blank" rel="external">using yaml file to create service and expose to public</a><br>some basic knowledge: </li>
+</ul>
+<p>1) pod is like container in docker, which assigned a dynamic IP in runtime, but this pod IP is only visible inside cluster </p>
+<p>2) service is an abstract concept of pod, which has an unique exposed IP, and the running pods belong to this service are managed hidden. </p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/41325087/what-is-the-difference-between-a-pod-and-a-deployment" target="_blank" rel="external">pod or deployment or service</a></li>
+</ul>
+<p>both pod and deployment are full-fledged objects in k8s API. deployment manages creating Pods by means of <code>ReplicaSets</code>, namely create pods with <code>spec</code> taken from the template. since it’s rather unlikely to create pods directly in a production env.</p>
+<p>in production, you will almost never use an <code>object</code> with the type <code>pod</code>. but a <code>deployment</code> object, which needs to keep the <code>replicas(pod)</code> alive. what’s use in practice are:</p>
+<p>1) Deployment object, where to specify app containers with some specifications</p>
+<p>2) service object</p>
+<p>you need <code>service object</code> since pods from deployment object can be killed, scaled up and down, their IP address is not persistent. </p>
+<h2 id="kubectrl-commands"><a href="#kubectrl-commands" class="headerlink" title="kubectrl commands"></a>kubectrl commands</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">kubectl get [pods|nodes|namespaces|services|pv] --ns your_namespace</div><div class="line"></div><div class="line">kubectl describe [pods|nodes|namespaces]</div><div class="line"></div><div class="line">kubectl label pods your_pod  new-label=your_label</div><div class="line"></div><div class="line">kubectl apply -f [.yaml|.json]   <span class="comment">#creates and updates resources in the cluster</span></div><div class="line"></div><div class="line">kubectl create deployment service_name --imae=service_image   <span class="comment">#start a single instance of service</span></div><div class="line"></div><div class="line">kubectl rollout <span class="built_in">history</span> deployment/your_service  <span class="comment">#check history of deployment </span></div><div class="line"></div><div class="line">kubectl expose rc your_sevice --port=80 --target-port=8000</div><div class="line"></div><div class="line">kubectl autoscale deployment your_service --min=MIN_Num --max=MAX_Num</div><div class="line"></div><div class="line">kubectl edit your_service <span class="comment">#edit any API resource in your preferred editor </span></div><div class="line"></div><div class="line">kubectl scale --replicas=3 your_service </div><div class="line"></div><div class="line">kubectl delete [pod|service]</div><div class="line"></div><div class="line">kubectl logs your_pod <span class="comment"># dump pod logs </span></div><div class="line"></div><div class="line">kubectl run -i --tty busybox --image=busybox  -- sh  <span class="comment"># run pod as interactive shell </span></div><div class="line"></div><div class="line">kubectl <span class="built_in">exec</span> -ti your_pod -- ls | nslookup kubernetes.default    <span class="comment">#run command in existing pod (1 container case)</span></div></pre></td></tr></table></figure>
+<p><code>kubectl</code> is pretty much like <code>docker</code> command and more. </p>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://computingforgeeks.com/how-to-setup-3-node-kubernetes-cluster-on-ubuntu-18-04-with-weave-net-cni/" target="_blank" rel="external">blog: setup k8s on 3 ubuntu nodes</a></p>
+<p><a href="https://github.com/containernetworking/cni/blob/master/SPEC.md" target="_blank" rel="external">cni readme</a></p>
+<p><a href="https://silenceper.com/blog/201809/flannel-in-k8s/" target="_blank" rel="external">flannel for k8s from  silenceper</a></p>
+<p><a href="https://blogs.infoblox.com/community/coredns-for-kubernetes-service-discovery/" target="_blank" rel="external">coreDNS for k8s service discovery</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/28/services-deploy-in-docker-swarm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2522,206 +2831,6 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/20/real-time-matlab-simulink-code-generation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/20/real-time-matlab-simulink-code-generation/" itemprop="url">real-time matlab/simulink code generation</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-20T06:44:35-04:00">
-                2020-03-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/20/real-time-matlab-simulink-code-generation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/20/real-time-matlab-simulink-code-generation/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="real-time-matlab-code-generation"><a href="#real-time-matlab-code-generation" class="headerlink" title="real-time matlab code generation"></a>real-time matlab code generation</h1><h2 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h2><p>Python and Linux vs Matlab and Windows, I prefer the front. but as a teamwork, I have to understand how matlab/Simulink code generation works, especially with real-time model. </p>
-<h2 id="Simulink-Coder"><a href="#Simulink-Coder" class="headerlink" title="Simulink Coder"></a>Simulink Coder</h2><p>previously named as Real-Time workshop(rtw).</p>
-<h4 id="real-time-model-data-structure"><a href="#real-time-model-data-structure" class="headerlink" title="real time model data structure"></a>real time model data structure</h4><p>access rtModel data by using a set of macros analogous to the ssSetxxx and ssGetxxx macros that S-functions use to access SimStruct data, including noninlined S-functions compiled by the code generator.</p>
-<p>You need to use the set of macros rtmGetxxx and rtmSetxxx to access the real-time model data structure. The rtModel is an optimized data structure that replaces SimStruct as the top level data structure for a model. The rtmGetxxx and rtmSetxxx macros are used in the generated code as well as from the main.c or main.cpp module.</p>
-<p>Usage of rtmGetxxx and rtmSetxxx macros is the same as for the ssSetxxx and ssGetxxx versions, except that you replace SimStruct S by real-time model data structure rtM. </p>
-<table>
-<thead>
-<tr>
-<th>rtm macro</th>
-<th>description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> rtmGetdX(rtm)</td>
-<td>get the derivatives of block continous states</td>
-<td></td>
-</tr>
-<tr>
-<td> rtmGetNumSampleTimes(RT_MDL rtM)</td>
-<td>Get the number of sample times that a block has</td>
-<td></td>
-</tr>
-<tr>
-<td>rtmGetSampleTime(RT_MDL rtM, int TID)</td>
-<td>Get task sample time</td>
-</tr>
-<tr>
-<td>rtmGetStepSize(RT_MDL)</td>
-<td>Return the fundamental step size of the model</td>
-</tr>
-<tr>
-<td>rtmGetT(RT_MDL,t)</td>
-<td>Get the current simulation time </td>
-</tr>
-<tr>
-<td>rtmGetErrorStatus(rtm)</td>
-<td>Get the current error status</td>
-</tr>
-</tbody>
-</table>
-<h4 id="code-generation-to-used-externally"><a href="#code-generation-to-used-externally" class="headerlink" title="code generation to used externally :"></a>code generation to used externally :</h4><p>1) Install the Real-Time Workshop (RTW) Toolbox for MATLAB;</p>
-<p>2) Create the Simulink Model and Prepare it for autocoding;</p>
-<p>3) Correctly configure the RTW options and include a *.tcl file;</p>
-<p>4) Build any S-Functions of the model;</p>
-<p>5) Build the model (generate autocode including makefile);</p>
-<p>6) Tune up the makefile with any missing options/libraries/files;</p>
-<p>7) Integrate autocoded model in RTEMS using the wrapper.</p>
-<h4 id="ert-main"><a href="#ert-main" class="headerlink" title="ert_main()"></a>ert_main()</h4><p>the following is a common sample of real-time model generated C code. </p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">rt_OneStep(<span class="keyword">void</span>)&#123;</div><div class="line">	simulation_custom_step() ;</div><div class="line">&#125;</div><div class="line"></div><div class="line">main()&#123;</div><div class="line">	simulation_initialize();</div><div class="line">	<span class="keyword">while</span>(rtmGetErrorStatus(xx_M) == (<span class="literal">NULL</span>))&#123;</div><div class="line">		 rt_OneStep();</div><div class="line">    &#125;</div><div class="line">    simulation_terminate();</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div></pre></td></tr></table></figure>
-<p>if no time interupt setting up, there is a <a href="https://www.mathworks.com/matlabcentral/answers/92639-how-do-i-customize-the-main-function-generated-by-real-time-workshop-embedded-coder-5-2-r2008b" target="_blank" rel="external">Warning: The simulation will run forever. Generated ERT main won’t simulate model step behavior. To change this behavior select the ‘MAT-file logging’ option.</a></p>
-<p>from real-time Matlab/Simulink model to C/C++ code, we need manually set the while-loop break statement. for example, we can  run 100 times or based on some event-trigger.</p>
-<h4 id="Timing"><a href="#Timing" class="headerlink" title="Timing"></a>Timing</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">    uint16_T clockTick1;  <span class="comment">//base rate counter (5s)</span></div><div class="line">    <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">      uint16_T TID[<span class="number">2</span>];</div><div class="line">    &#125; TaskCounters;  <span class="comment">//subtask counter (0.02s)</span></div><div class="line">  &#125; Timing;</div><div class="line">  </div><div class="line">currentTime =  Timing.clockTick1 * <span class="number">5.0</span> ;</div></pre></td></tr></table></figure>
-<p>absolute timer for sample time: [5.0s, 0.0s]. the resolution of this integer timer is 5.0, which is the step size of the task. so bascially, assuming to run one step need physcially 5s, but inside the module, each internal step is 0.02s. </p>
-<p>if we run a test scenario with 20s, basically we have 4 clockTick1 and inside each clockTick1, we have 250 times internal steps.</p>
-<h2 id="a-few-modification"><a href="#a-few-modification" class="headerlink" title="a few modification"></a>a few modification</h2><p>the following is a few modification based on the auto-generated C code:</p>
-<ul>
-<li>redefine data structure</li>
-</ul>
-<p>matlab coder use most <code>C structure</code> to package signals. in our adas model, most signals have similar inner items, so first I’d like to define a <code>parent structre</code>, then define all other adas signals using <code>typedef</code>:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig1 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig2 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig3 ;</div><div class="line"><span class="keyword">typedef</span> structure parent  adas_sig4 ;</div></pre></td></tr></table></figure>
-<p>with the <code>parent struct</code>, we can define one method to handle all adas signals. </p>
-<ul>
-<li>add trigger model in rt_oneStep()</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">checkTriggerSigs(&amp;FunctionSignal, outputs_name);</div><div class="line">	<span class="keyword">int</span> idx = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span>(; idx&lt;outputs_name.size(); idx++)&#123;</div><div class="line">			<span class="keyword">if</span> ( outputs_name[idx] == <span class="string">"adas_sig1"</span>) &#123;</div><div class="line">				<span class="keyword">double</span> *vals = gd1_struc_2arr(adas_ig1) ; </div><div class="line">				outputs_data.push_back(als);</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> <span class="keyword">if</span>( outputs_name[idx] ==  <span class="string">"adas_sig2"</span>) &#123;</div><div class="line">				<span class="keyword">double</span> *vals = gd1_struc_2arr(adas_sig2) ;</div><div class="line">				outputs_data.push_back(vals);</div><div class="line">			&#125;</div><div class="line"></div><div class="line"><span class="comment">// ws msg send model</span></div></pre></td></tr></table></figure>
-<ul>
-<li>add sim_time to break the loop</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">real_T sim_time = <span class="number">5.0</span> ; </div><div class="line">fflush((<span class="literal">NULL</span>));</div><div class="line"><span class="keyword">while</span> (rtmGetErrorStatus(OpenLoopSimulation_M) == (<span class="literal">NULL</span>) &amp;&amp;  (Timing.clockTick1) * <span class="number">5.0</span> &lt;=  sim_time) &#123;</div><div class="line">      rt_OneStep();</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
-<h2 id="in-summary"><a href="#in-summary" class="headerlink" title="in summary"></a>in summary</h2><p>the work above is the core modifcation to make real-time matlab/simulink model with trigger model translated to C/C++ code, which can be integrated in <a href="https://zjli2013.github.io/2020/03/18/massively-adas-test-pipeline/" target="_blank" rel="external">massively adas test pipeline</a>.  </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://devel.rtems.org/wiki/Packages/Matlab" target="_blank" rel="external">matlab code generation from rtems</a></p>
-<p><a href="https://www.mathworks.com/company/newsletters/articles/the-joy-of-generating-c-code-from-matlab.html" target="_blank" rel="external">the joy of generating C code from MATLAB</a></p>
-<p><a href="https://ww2.mathworks.cn/products/matlab-coder.html" target="_blank" rel="external">matlab coder introduction</a></p>
-<p><a href="https://www.mathworks.com/help/rtw/index.html" target="_blank" rel="external">matlab code doc</a></p>
-<p><a href="https://www.mathworks.com/help/rtw/ug/use-the-real-time-model-data-structure.html" target="_blank" rel="external">real-time model data structure</a></p>
-<p><a href="https://ww2.mathworks.cn/help/simulink/ug/generate-code-from-rate-based-model.html" target="_blank" rel="external">generate code from rate-based model</a></p>
-<p><a href="https://www.mathworks.com/help/stateflow/ug/schedule-one-subsystem-in-a-single-step.html" target="_blank" rel="external">schedule a subsystem multiple times in a single step</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2772,7 +2881,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">182</span>
+                <span class="site-state-item-count">183</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2785,7 +2894,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-count">49</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
