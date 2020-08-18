@@ -291,6 +291,598 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/" itemprop="url">paper reading-autonoVi: AV planning with dynamic maneuvers and traffic constraints</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-29T10:21:35-04:00">
+                2019-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this is the advanced driver module in <a href="https://zjli2013.github.io/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" target="_blank" rel="external">Vi-sim simulation platform</a>. this driver module algorithm pipeline:  </p>
+<p>1) a route plan by graph-search over the network of roads </p>
+<p>2) rules based guiding trajectories generation(traffic and lane following rules) </p>
+<p>3) set of candidate trajectories(control inputs) generation and evaluated by vehicle dynamic model and collision free model</p>
+<p>4) most feasible trajectory evaluated through optimization</p>
+<h3 id="vehicle-state-space"><a href="#vehicle-state-space" class="headerlink" title="vehicle state space"></a>vehicle state space</h3><p>the full state of a vehicle updates: </p>
+<p><code>X = (x, y, v, theta, throttle, steering, behavior)</code></p>
+<p>the vehicle updates its plan at a fixed palnning rate <code>dt</code>; at each pllaning step, the vehicle computes a target speed <code>v</code> and target steering <code>theta</code> to be achieved by the control system </p>
+<p><code>S(u, X)</code> determine if a set of control is feasible, given current state of the vehicle, <code>S(u, X)</code> will return false if the given input <code>u</code> cause a loss of traction or control.</p>
+<h3 id="sensing-and-perception"><a href="#sensing-and-perception" class="headerlink" title="sensing and perception"></a>sensing and perception</h3><p>the sensing module provide an approximation of the center line of lane, closet point on the lane center to the ego-vehicle, and friction coefficient.</p>
+<h3 id="route-choice-and-behavior-state"><a href="#route-choice-and-behavior-state" class="headerlink" title="route choice and behavior state"></a>route choice and behavior state</h3><p>behavior set includes merging, right turn, left run, keep straight. the behavior state of the vehicle is described as a finite-state machine(turn left, turn right, merge left, merge right), which restrict potential control decisions and adjust the weight of the cost function. </p>
+<h3 id="guiding-path"><a href="#guiding-path" class="headerlink" title="guiding path"></a>guiding path</h3><p>the ego-vehicle computes a set of waypoints along the current lane at fixed time intervals. <code>how to create the path based on waypoints</code> </p>
+<h3 id="collision-avoidance"><a href="#collision-avoidance" class="headerlink" title="collision avoidance"></a>collision avoidance</h3><p>define obstacles domain for each neighbor of the ego-vehicle, which is defined as all controls that could lead to collision.  the obstacles domain and the set of dynamic infeasible domain form the boundary of collision-free space for the ego-vehicle. </p>
+<h3 id="trajectory-sampling"><a href="#trajectory-sampling" class="headerlink" title="trajectory sampling"></a>trajectory sampling</h3><p>the exact obstacle domain is not computing time efficent, instead here use a sampling strategy around <code>theta</code> and <code>v</code> to determin a feasible control. each sample is referred to as a candidata control <code>u_c</code>.</p>
+<h3 id="trajectory-cost-function"><a href="#trajectory-cost-function" class="headerlink" title="trajectory cost function"></a>trajectory cost function</h3><p>once the set of suitable control candidates has been computed, the most feasible control will be selected by minimizing the cost function for each sample point <code>i</code> : </p>
+<p><code>C = sum_i{ C_path(i) + C_cmft(i) + C_mnvr(i) + C_prox(i)</code> </p>
+<p>1) path cost, defined as success at tracking its path and the global route.</p>
+<p>2) comfort cost, <code>C_cmfg = ||vel_acc|| +  ||theta_acc||</code> </p>
+<p>3) maneuver cost, penalize lane changes <code>C_mnvr = lane_change</code> </p>
+<p>4)  proximity cost, prevent the ego vehicle from passing close to neighbors. </p>
+<h3 id="control-input"><a href="#control-input" class="headerlink" title="control input"></a>control input</h3><p>one PID controller to driven current speed to match the target speed;  another PID controller drives the current steering angle to match the target.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/未来5年在哪里-6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/29/未来5年在哪里-6/" itemprop="url">未来5年在哪里(6)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-29T10:18:02-04:00">
+                2019-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/29/未来5年在哪里-6/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/29/未来5年在哪里-6/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="广州之行"><a href="#广州之行" class="headerlink" title="广州之行"></a>广州之行</h2><p>投自动驾驶，隐约有些不安全感。比如，激光雷达、定位l3+的HDMap, 仿真环境，l4全栈解决方案。一旦l3+以上的自动驾驶方案短期内不会量产，做这些方向的创业团队、产品投入都会”死“。</p>
+<p>国内所有行业的激烈竞争，造成包括互联网公司、主机厂、创业团队，都强烈需要落地产品。而对于一个遥遥无期，5～10年，甚至更久以后才能实现的产品的技术研发投入是所有公司不能承受之轻。相反，对能快速落地的产品、应用场景，也是各方发力的地方。比如， l1 ~ l2.5 的 adas 产品。</p>
+<p>在国外主机厂侧重研发；国内主机厂侧重落地。也是回国感受到的落差。朋友讲，国内主机厂对供应商的依赖很重。长城的情况大概就是，l3以下的adas产品软硬件全栈由供应商提供，主机厂自身连标定/调参都不参与😓。主机厂的趋势是慢慢自己做，也是国内汽车人的机会吧。相比，福特，通用都是15+万员工的规模，国内自主品牌主机厂的员工规模在1/20。另外，国内主机厂员工大多是dre角色。</p>
+<p>行业走近了，都是深水。想轻轻松松工作，就是表面划水。对行业风险缺乏判断、或者不能承受行业风险的，想挑容易的活儿，那在哪行都待不长。所以啊，年轻人就要在压力环境下活着。</p>
+<h2 id="汽车创业"><a href="#汽车创业" class="headerlink" title="汽车创业"></a>汽车创业</h2><p>了解到一些汽车行业的创业者，比如做汽车云、车载服务、以及自动驾驶软硬件方案。可能因为创业方向本身只是依托于自驾、智能网联车等具体应用场景，其所创的技术只是一些在其他领域成熟或新的技术。比如，云计算、移动操作系统、视觉AI、5G等技术在汽车载体上的转化应用。</p>
+<p>所看到的汽车领域的创业，更像是一个技术转化。而源于汽车领域自身的新创意，似乎只在博世、大陆等成熟技术积淀的企业里面逐步推进的。而且行业内新应用场景的标准定义也是由这些大厂主导的。比如，AutoSar, LTE-V2X, ADAS前装需求定义等等。</p>
+<p>没有行业积淀的汽车创业，看着叫心悬，这样都敢玩！他们最好的命运可能是被主机厂收购，但是更大可能是被互联网巨头挤掉，无声无息。从广州回家的路上想到：自己曾经也是有梦想的人，面对现在的市场环境，也许能去个大平台做点事，就聊以自慰了。</p>
+<p><code>创业</code> 本是个挺好的事儿，但必须有强大的信念，觉得这事儿一定能成。只想搞个概念移植，那是注定要凉。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" itemprop="url">paper reading- autono Vi-Sim simualtion platform</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-28T05:36:00-04:00">
+                2019-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/28/paper-reading-autono-Vi-Sim-simualtion-platform/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="introduction-of-Vi-Sim"><a href="#introduction-of-Vi-Sim" class="headerlink" title="introduction of Vi-Sim"></a>introduction of Vi-Sim</h2><ul>
+<li><p>data generation, allowing exports of traffic data and virtual sensor data on the vehicle, which can be used in training DL by generating automatically labelled classification and control data</p>
+</li>
+<li><p>dynamic traffic conditions, with varying vehicles, pedestrians, lighting, weather </p>
+</li>
+<li><p>rapid scenario construction</p>
+</li>
+</ul>
+<h2 id="simulation-modules"><a href="#simulation-modules" class="headerlink" title="simulation modules"></a>simulation modules</h2><p> Vi-Sim is divided into 8 extensible modules. </p>
+<h3 id="roads"><a href="#roads" class="headerlink" title="roads"></a>roads</h3><p> represented by center line, #lanes, directions, surface friction. the roads can quick constructed by drawing splines on the landscape</p>
+<h3 id="road-network"><a href="#road-network" class="headerlink" title="road network"></a>road network</h3><p> provides connectivity information of road and traffic infrastructure. the road network provides routing and localization purpose.</p>
+<h3 id="infrastructure"><a href="#infrastructure" class="headerlink" title="infrastructure"></a>infrastructure</h3><p> represents traffic lights, signage, and any entities that will modify the behavior of vehicles on the road. </p>
+<h3 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h3><p> represents the time of the day, weather, rain conditions, road friction etc. </p>
+<h3 id="non-vehicle-traffic"><a href="#non-vehicle-traffic" class="headerlink" title="non-vehicle traffic"></a>non-vehicle traffic</h3><p> basically pedestrains and cyclists in the map. both are following safe traffic rules.</p>
+<h3 id="data-capture"><a href="#data-capture" class="headerlink" title="data capture"></a>data capture</h3><p> this module used for logging data of the environment as well as sensor data from ego vehicle</p>
+<h2 id="driving-modules"><a href="#driving-modules" class="headerlink" title="driving modules"></a>driving modules</h2><h3 id="vehicle"><a href="#vehicle" class="headerlink" title="vehicle"></a>vehicle</h3><p>  represented as a physical-driven entity with specific tire, steering, sensor parameters. </p>
+<p>  the vehicle has 3 components: </p>
+<pre><code>* control is provided with steering, throttle, brake inputs;  
+
+
+* dynamics is implemented in Nvidia physX engine; 
+
+
+* perception component is a ray-cast with configurable uncertainty, detection time, classification error rate, and sensor angle/range. 
+</code></pre><p>   a vehicle can equip multiple sensors. the perception component provides interface to a generic camera interface and Monte Carlo scanning ray-casts, which can be extended to Lidar/camera based NN claassifiers. </p>
+<h3 id="driver"><a href="#driver" class="headerlink" title="driver"></a>driver</h3><p>   driving decision module, who fuses information from road network and vehicle’s sensor to make decisions. currently there are 3 driver models</p>
+<pre><code>   * lane-following driver, which employs control command like lane-keeping ADAS
+
+   * manual driver, allows a human drive the vehicle
+
+* autonoVi driver, use optimization-based maneuvering with traffic constraints to generate advanced behaviors 
+</code></pre><h2 id="limitations"><a href="#limitations" class="headerlink" title="limitations"></a>limitations</h2><ul>
+<li><p>lack of calibaration configuration to replicate specific sensors</p>
+</li>
+<li><p>driver modules are limited to hierarchical, rule-based approaches</p>
+</li>
+<li><p>real traffic conditions </p>
+</li>
+</ul>
+<h2 id="thoughts"><a href="#thoughts" class="headerlink" title="thoughts"></a>thoughts</h2><pre><code>1) sensor components in simulation, e.g.  Lidar, camera, Radar
+
+2) sensor calibration in simulation, Apollo and Carla may has some good suggestions 
+
+3) multi-agents environment
+
+4) distributed framework to ensure real time multi-agents simualtion 
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/" itemprop="url">paper reading-distributed simulation platform for autonomous driving</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-28T01:21:13-04:00">
+                2019-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/28/paper-reading-distributed-simulation-platform-for-autonomous-driving/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>to test newly developed algorithms, due to the massive amount of simulation data, need a distributed simulation platform based on Spark distributed framework.</p>
+<ul>
+<li><p>simulation based on synthetic data, used in control and planning </p>
+</li>
+<li><p>simulation based on real data playback, used to test function and performance of different components</p>
+</li>
+</ul>
+<p>in autonomous driving system, each functional module in ROS is deployed as a node, the communication between nodes rely on the messages with well-defined formats. so the test of each module is independent, we can develop simulation module for each functional module. </p>
+<h2 id="anatomy-of-simulator"><a href="#anatomy-of-simulator" class="headerlink" title="anatomy of simulator"></a>anatomy of simulator</h2><p>there should be a dynamic model of the car, a vehicle dynamic model;  then the external environment is needed, which includes static and dynamic scenes.</p>
+<p>the simulator can decompose external environment into basic elements, and rearranges the combination to generate a variety of test cases, each simulating a specific scenario. </p>
+<p>e.g. the position, speed, next step command of the barrier vehicle can give different basic elements. </p>
+<h2 id="ROS-based-simulator"><a href="#ROS-based-simulator" class="headerlink" title="ROS based simulator"></a>ROS based simulator</h2><p>to use the real traffic data to reproduce the real scene requires a distributed simulation platform. </p>
+<ul>
+<li><p>ROSBAG, record from Topic and replay message to Topic. </p>
+<p>  the Record function is to create a recording node in ROS, and call the subscribe method to receive ROS message to all Topics, and then write the message to Bag file. </p>
+<p>  the Play function is to establish a play node, and call the advertise method to send message in bag to specified Topic. </p>
+</li>
+</ul>
+<h2 id="Spark-distributed-platform"><a href="#Spark-distributed-platform" class="headerlink" title="Spark distributed platform"></a>Spark distributed platform</h2><p>the Spark driver launch different simulation applications, e.g. localization algorithms, object recoginization algorithms, vehicle decision-making and control algorithms etc, then allocate resources to each Spark worker, who first reads the RosBag data into memory and launches a ROS node to process the incoming data. </p>
+<p>the interface between Spark and ROS is through Linux pipe, basically data written to the write end of the pipe is buffered by the kernel until it is read from the read end of the pipe.</p>
+<p>two problems: 1) Spark only support text-based data consuming; 2) Spark memeory to ROBag </p>
+<h3 id="Binary-data-streaming"><a href="#Binary-data-streaming" class="headerlink" title="Binary data streaming"></a>Binary data streaming</h3><p>the core Spark data structure is resilient distributed dataset (RDD). to process and transform binary data into a user-defined format and transform the output of Spark computation into a byte stream, even further to a generic binary file(HDFs)</p>
+<pre><code>1) encode and serialize the binary files(image, lidar input data) to form a binary byte stream 
+
+2) de-serialize and decode the binary stream, according to interpret byte stream into an understandable format and perform target computation
+
+3) the output then be encoded and serialized before passed in RDD partitions(e.g. HDFs), and returned to Spark driver 
+</code></pre><h3 id="data-retrieval-through-ROSbag-cache"><a href="#data-retrieval-through-ROSbag-cache" class="headerlink" title="data retrieval through ROSbag cache"></a>data retrieval through ROSbag cache</h3><p>two things: reading from memory through ROSbag play, and writing to memory through ROSbag record. </p>
+<p>solution: design a memoryChunkedFile class, derived from ChuckedFile class, to read/write memory rather than files.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/paper-reading-perception-planning-control-and-coordination-for-autonomous-vehicles/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1259,794 +1851,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/26/自驾初创团队/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/26/自驾初创团队/" itemprop="url">自驾初创团队</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-26T09:25:39-05:00">
-                2019-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/26/自驾初创团队/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/26/自驾初创团队/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <table>
-<thead>
-<tr>
-<th>name</th>
-<th>CEO</th>
-<th>start-date</th>
-<th>business</th>
-<th>funding</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>宏景智驾</td>
-<td>刘飞龙(北美oem 背景）</td>
-<td>2018-8</td>
-<td>L4 Tier1供应商</td>
-<td>天使轮 ¥4千万</td>
-</tr>
-<tr>
-<td>赢彻科技</td>
-<td>翟学魂</td>
-<td>2018-9</td>
-<td>临港物流</td>
-<td>-</td>
-</tr>
-<tr>
-<td>拓疆者</td>
-<td>隋少龙（北美背景）</td>
-<td>2018-4</td>
-<td>无人挖掘机</td>
-<td>-</td>
-</tr>
-<tr>
-<td>驰加科技</td>
-<td>王明彦（国内oem 背景）</td>
-<td>2017-10</td>
-<td>低成本后装解决方案</td>
-<td>-  </td>
-</tr>
-<tr>
-<td>plus ai</td>
-<td>刘万千</td>
-<td>2017-3</td>
-<td>AI 方案？</td>
-<td>-</td>
-</tr>
-<tr>
-<td>纽励科技</td>
-<td>徐雷（特斯拉）</td>
-<td>2017—1</td>
-<td>视觉方案 ？</td>
-<td>-</td>
-</tr>
-<tr>
-<td>momenta</td>
-<td>曹旭东</td>
-<td>2016-7</td>
-<td>视觉方案</td>
-<td>c轮 $2亿 </td>
-</tr>
-<tr>
-<td>极木科技</td>
-<td>祁卫（亿航）</td>
-<td>2016-7</td>
-<td>机器人方案</td>
-<td>- </td>
-</tr>
-<tr>
-<td>驭势科技</td>
-<td>吴甘沙(intel)</td>
-<td>2016</td>
-<td>芯片方案 ？</td>
-<td>-</td>
-</tr>
-<tr>
-<td>易航智能</td>
-<td>陈禹行（吉大）</td>
-<td>2015-8</td>
-<td>汽车动力学、控制软件</td>
-<td>b轮 ¥2.2亿 </td>
-</tr>
-<tr>
-<td>青飞智能</td>
-<td>孙一飞（上交）</td>
-<td>-</td>
-<td>园区短距自驾解决方案</td>
-<td>天使轮 ¥千万</td>
-</tr>
-<tr>
-<td>环宇智行  李明（武大）</td>
-<td>自驾解决方案</td>
-<td>天使轮 ¥千万 </td>
-</tr>
-<tr>
-<td>行深智能</td>
-<td>安向京</td>
-<td>-</td>
-<td>自驾整体解决方案</td>
-<td>- </td>
-</tr>
-<tr>
-<td>畅行智能</td>
-<td>张祖峰（苏州清华）</td>
-<td>物流自驾解决方案</td>
-<td>天使轮 ¥千万</td>
-</tr>
-<tr>
-<td>图森未来</td>
-<td>陈默</td>
-<td>2015-8</td>
-<td>自驾卡车、视觉、ai</td>
-<td>d轮 $0.95亿 </td>
-</tr>
-<tr>
-<td>纵目科技</td>
-<td>唐锐</td>
-<td>2013</td>
-<td>环视adas供应商</td>
-<td>c轮 ¥1亿</td>
-</tr>
-<tr>
-<td>禾多科技</td>
-<td>倪凯（清华）</td>
-<td>2017-3</td>
-<td>L3.5 自驾解决方案</td>
-<td>a轮 $千万</td>
-</tr>
-<tr>
-<td>牧月科技</td>
-<td>杨庆雄（景驰）</td>
-<td>2018-6</td>
-<td>-</td>
-<td>天使轮 ¥5千万</td>
-</tr>
-<tr>
-<td>深兰科技</td>
-<td>陈海波</td>
-<td>2012-8</td>
-<td>?</td>
-<td>a+轮 ¥3亿</td>
-</tr>
-<tr>
-<td>武汉光庭</td>
-<td>朱敦尧</td>
-<td>2011</td>
-<td>智能网联</td>
-<td>上汽并购</td>
-</tr>
-<tr>
-<td>主线科技</td>
-<td>张天雷</td>
-<td>2017-3</td>
-<td>港口卡车（天津港）</td>
-<td>- </td>
-</tr>
-<tr>
-<td>创昂tron</td>
-<td>邓恒（国内oem 背景）</td>
-<td>2018-4</td>
-<td>天使轮 $百万 </td>
-</tr>
-<tr>
-<td>畅风加行</td>
-<td>？</td>
-<td>2018-4</td>
-<td>L3 解决方案</td>
-<td>- </td>
-</tr>
-<tr>
-<td>小马智行</td>
-<td>楼天城</td>
-<td>2016-12</td>
-<td>ai ?</td>
-<td>a+ 轮</td>
-</tr>
-<tr>
-<td>智行者</td>
-<td>韦忠亚</td>
-<td>2015-5</td>
-<td>？</td>
-<td>b+ 轮</td>
-</tr>
-<tr>
-<td>鹰驾科技</td>
-<td>郑智宇</td>
-<td>2015-8</td>
-<td>adas 视觉软硬件</td>
-<td>a轮 ¥千万</td>
-</tr>
-<tr>
-<td>盟识科技</td>
-<td>邱长伍</td>
-<td>-</td>
-<td>矿山、港口、园区自驾解决方案</td>
-<td>-</td>
-</tr>
-<tr>
-<td>飞步科技</td>
-<td>何晓飞（滴滴）</td>
-<td>2018-4</td>
-<td>车载 ai 系统</td>
-<td>-</td>
-</tr>
-<tr>
-<td>文远知行</td>
-<td>韩旭（百度）</td>
-<td>-</td>
-<td>-</td>
-<td>a+$千万</td>
-</tr>
-<tr>
-<td>拿森电子</td>
-<td>陶喆</td>
-<td>2016-3</td>
-<td>汽车电控</td>
-<td>b轮 $1亿</td>
-</tr>
-<tr>
-<td>auto brain</td>
-<td>李明喜</td>
-<td>2017-5</td>
-<td>自驾解决方案（长城合作）</td>
-<td>- </td>
-</tr>
-<tr>
-<td>踏歌智行</td>
-<td>余贵珍（北航）</td>
-<td>-</td>
-<td>特定场景自驾解决方案</td>
-<td>pre-a ¥千万</td>
-</tr>
-<tr>
-<td>云天励飞</td>
-<td>陈宁</td>
-<td>-</td>
-<td>视觉 ai 芯片</td>
-<td>-</td>
-</tr>
-<tr>
-<td>有光科技</td>
-<td>朱积祥</td>
-<td>-</td>
-<td>图像方案</td>
-<td>-</td>
-</tr>
-<tr>
-<td>云洲智能</td>
-<td>张云飞</td>
-<td>-</td>
-<td>无人船</td>
-<td>c轮 ¥4亿</td>
-</tr>
-<tr>
-<td>西井科技</td>
-<td>谭黎敏</td>
-<td>-</td>
-<td>ai 芯片，智能医疗、港口</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>自动驾驶供应链中，ai算法、芯片、传感器（毫米波、激光、相机）等创业公司不计，传统主机厂、供应商内部相关团队不计。独立的小股团队也不计。直接把自动驾驶解决方案当作团队vision的有将近40家公司，分别来自电子芯片、人工智能、传统主机厂等不同背景。</p>
-<p>每年估计烧十几个亿，市场还是有很多热情。2019年也许会死掉很多。另外，对市场时机需要敏感。几个海龟团队都是2018年才开始的。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/22/apollo-self-driving-car/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/22/apollo-self-driving-car/" itemprop="url">apollo self driving car</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-22T09:22:31-05:00">
-                2019-02-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/22/apollo-self-driving-car/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/22/apollo-self-driving-car/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="apollo-self-driving-car"><a href="#apollo-self-driving-car" class="headerlink" title="apollo self-driving car"></a>apollo self-driving car</h1><h2 id="HD-maps"><a href="#HD-maps" class="headerlink" title="HD maps"></a>HD maps</h2><p>where to define the center-meter fidelity level maps, with landmarks, and even the height dimension as well, which is used as the guiding map and also the global coordinate to locate the vehicle in the world.  </p>
-<p>how to keep HD maps updated is a big invest. Baidu has hundreds service cars in China to collect the natural highway HD map data, even still to 2020. </p>
-<h2 id="Localization"><a href="#Localization" class="headerlink" title="Localization"></a>Localization</h2><p>SLAM tech is a robot maping the world at the same time localizing itself in the world. with HD maps prepared first, self-driving car only need localize itself at every timestep. and the common idea is comparing a few local landmarks with the corresponding global landmarks, then transfer the local vehicle position to its global position in HD map.</p>
-<h3 id="LiDAR-localization"><a href="#LiDAR-localization" class="headerlink" title="LiDAR localization"></a>LiDAR localization</h3><p> either based on the cloud points matching from continous timestamps; or calculating the error between the LiDAR points with the HD maps points; or based on the Karman filter, which give the highest possibility of the location of vehicle</p>
-<p>always accessible but not easy to construct, especially requiring HD maps. </p>
-<h3 id="Visual-localization"><a href="#Visual-localization" class="headerlink" title="Visual localization"></a>Visual localization</h3><p>based on particle filters, which give the most likely location of the vehicle.</p>
-<h2 id="Perception"><a href="#Perception" class="headerlink" title="Perception"></a>Perception</h2><h3 id="detection-amp-amp-classification"><a href="#detection-amp-amp-classification" class="headerlink" title="detection &amp;&amp; classification"></a>detection &amp;&amp; classification</h3><p>where the object located, and classify it. detection CNN to find the object in the image; then use classification CNN to classify it. or use a combined CNN to detect and classify at same time.</p>
-<h3 id="tracking"><a href="#tracking" class="headerlink" title="tracking"></a>tracking</h3><p>tracking helps when detection failed; also tracking helps to identity the object, so when objects overlapped in the image, still can tell which is which. </p>
-<h2 id="Prediction"><a href="#Prediction" class="headerlink" title="Prediction"></a>Prediction</h2><h3 id="model-based-prediction"><a href="#model-based-prediction" class="headerlink" title="model based prediction"></a>model based prediction</h3><h3 id="data-driven-prediction"><a href="#data-driven-prediction" class="headerlink" title="data driven prediction"></a>data driven prediction</h3><p>after prediction, then generate the trajectory. </p>
-<h2 id="Planning"><a href="#Planning" class="headerlink" title="Planning"></a>Planning</h2><p>transfer the world to graph, and find routings in the graph. routing is a global path, comparing to trajectory is the local way.</p>
-<h2 id="Vehicle-control"><a href="#Vehicle-control" class="headerlink" title="Vehicle control"></a>Vehicle control</h2><p>linear quadratic regulator</p>
-<p>PID </p>
-<p>model predictive control</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/14/where-am-I-in-next-5-years-6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/14/where-am-I-in-next-5-years-6/" itemprop="url">where am I in next 5 years(6)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-14T23:23:11-05:00">
-                2019-02-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/02/14/where-am-I-in-next-5-years-6/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/02/14/where-am-I-in-next-5-years-6/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>things changes faster than I expected, already in China for two weeks. The first few days with family, that was precious, and the last spring festival at home was 5 years ago. </p>
-<h2 id="life-in-China"><a href="#life-in-China" class="headerlink" title="life in China"></a>life in China</h2><p>I am searching jobs in China now, the recruiters are highly efficient. almost in 24hrs, a reply return; and they prefer wechat rather than email, Liepin ranther LinkedIn. on the other hand, I went to tongji hosptial at Wuhan for a doctor appoitment, but stay in the line waiting most time. People are everywhere, even in a third-class city, like my hometown, I can only find two caffe shop to sit down and use the free wifi; the skyline buildings are everywhere, the evening scene feel like in the movie: Matrix. </p>
-<p>in USA, I never touch the real China, which is attracting but concerned. As many of my friends in USA, we always talking about China, but never take a move back to China. Till the moment I stand in China, things are real. </p>
-<p>In general, if people looking for a stable middle-class, USA definitely is a better choice, with few career pressure, 8 hrs a day, 20 days PTO a year, large house with green grass, and income is about 2 times highly as the same engineering in China, without considering 996 in China.</p>
-<p>people back to China must think big, rather than looking for a stable income.</p>
-<h2 id="self-driving-in-China"><a href="#self-driving-in-China" class="headerlink" title="self-driving in China"></a>self-driving in China</h2><p>OEM level: Changcheng, Audi, Volkswagen, Geely, xiaopeng, Beiqi, and many names I few heared before, are investing in new energy, intelligent vehicles, and self-driving cars and expending, the market sounds high to hell. there are about 500 start-ups focusing on component supply chain, e.g.  in-vehicle sensors, network communication infrastructure, platform solutions, AI algorithms to chips design, specilized scenario applications(mining, seaport, airport, logistics, warehousing, city bus, city-cleaners) </p>
-<p>it was the best of times, it was the worst of times. many start-up companies will die so sure, but the market is the training course for next BIG.</p>
-<p>The second half of 2018 is my time to feel  everything is accelerated. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/22/review-planning-pipelien-in-self-driving-car/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/22/review-planning-pipelien-in-self-driving-car/" itemprop="url">review planning pipelien in self-driving car</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-22T16:17:01-05:00">
-                2019-01-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/01/22/review-planning-pipelien-in-self-driving-car/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/01/22/review-planning-pipelien-in-self-driving-car/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>when understanding planning in self-driving car, all other modules make sense. </p>
-<h2 id="perception-layer"><a href="#perception-layer" class="headerlink" title="perception layer"></a>perception layer</h2><p>with all concepts such as lidar, radar, camera, sensors, GPS, CAN, data fusion, computer vision, SLAM, AI-based detect/tracking algorithms, they are all perception related, which helps the car to understand itself and the surroundings.</p>
-<p>perception first helps the car understand itself located in the world; then helps to predict the intensions of other vehicles/pedestrains around. </p>
-<h2 id="behavior-layer"><a href="#behavior-layer" class="headerlink" title="behavior layer"></a>behavior layer</h2><p>there are two steps here: behavior predictation, behavior planning. </p>
-<p>based on the prediction info of other agents intensions from previous timestep/configuration, the behavior predictation module predicts current behavior of the self-driving car, which usually implemented either by model based methods or data driven method (AI-trained), and which output all the possible feasible maneuvers for current timestep. </p>
-<p>the car choose only one maneuver at each timestep/configuration, and the behavior planning module is used to weight all the feasible maneuvers from the behavior predictation, and find the most-likely maneuver, which usually is implemented based on a cost function with constraints.</p>
-<p>the all possible manuever is also called trajectory planning, and the choosen manuever is also called motion planning, which is locally-space and time-depended. </p>
-<h2 id="control-layer"><a href="#control-layer" class="headerlink" title="control layer"></a>control layer</h2><p>since motion planning, then send the command to vehicle control actor and update the car physically. </p>
-<h2 id="end-2-end-motion-planning"><a href="#end-2-end-motion-planning" class="headerlink" title="end-2-end motion planning"></a>end-2-end motion planning</h2><p>deep learning is also used to demo end2end motion planning. e.g. from camera output to vehicle control output frame to frame, while many situations may not be trained in the model, so not that realisty. </p>
-<h2 id="path-routine-planning"><a href="#path-routine-planning" class="headerlink" title="path/routine planning"></a>path/routine planning</h2><p>the motion planning pipleline above is happening every timestep for self-driving car and locally.</p>
-<p>at high-level is path/routine planning, bascially given the start point and destination point. there are a few algorithms, like global graph search, random tree, incremental graph search. </p>
-<h2 id="reinforcement-learing-in-simulator"><a href="#reinforcement-learing-in-simulator" class="headerlink" title="reinforcement learing in simulator"></a>reinforcement learing in simulator</h2><p><a href="https://zjli2013.github.io/2018/12/01/reinforce-learning-in-simulator/" target="_blank" rel="external">previous blog</a>, it is also popular to learn behavior in simulation environement and train with reinforcement learning. </p>
-<h2 id="simulation-in-self-driving"><a href="#simulation-in-self-driving" class="headerlink" title="simulation in self-driving"></a>simulation in self-driving</h2><p>how simulation tool chain can accelerate self-driving development ? </p>
-<p>usually simualtion enviornemnt can help to verify and test the perception, behavior, control algorithms. </p>
-<p>if working with reinforcement learning, a virtual simulator is required also.</p>
-<p>what else ?</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2097,7 +1901,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">183</span>
+                <span class="site-state-item-count">187</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2110,7 +1914,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-count">51</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
