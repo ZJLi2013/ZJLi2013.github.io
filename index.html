@@ -291,6 +291,199 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/20/system-validation-in-l2-adas/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/09/20/system-validation-in-l2-adas/" itemprop="url">system validation in l2 adas</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-20T01:38:09-04:00">
+                2020-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/09/20/system-validation-in-l2-adas/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/09/20/system-validation-in-l2-adas/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>from system requirements, the functional models can be created. the bottom line of ADAS is safety, which defines the safety requirements. during ADAS system validation, both function modules and safety modules should be covered. </p>
+<p>my experience lay in SiL a lot. a question recently is how much percentage between SiL and HiL is a good choice?   </p>
+<p>a few years early, SiL, especially world-sim, e.g. LGSVL, Carla are highly focused. the big companies said, to achive a L3+ autonmous driving system, there needs at least 10 billion miles driving test, which is almost impossible in traditional vehicle desing lifecycle, which gives a life for virtual sim driving validation.</p>
+<p>which even not consider the iteration of ADAS algorithms. as if there is no mechanism to gurantee the previous road data is valid to validate the new version of algorithms, they have to collect another 10 billion miles for each algorithm version iteration. </p>
+<p>but now most OEM choose the gradually evaluation way from ADAS to AD. during ADAS dev and test, Bosch has mature solutions, they don’t need 10 billion miles to validate AEB, ACC, LK kind of L2 ADAS functions, usually 1500 hrs driving data is enough, and they have ways to re-use these driving hrs as much as possible during their ADAS algorithms iteration. </p>
+<p>I am thinking the difference is about function-based test and scenario-based test. </p>
+<p>ADAS functions always have a few limited <code>if-else</code> internally and state machines in system-level. for function-based test, to cover all these <code>if-else</code> logic and state machines jumping, with additional safety/failure test, the ADAS system can almost gurantee to be a safe and useful product.</p>
+<p>there is no need to cover all scenarios in the world for L2 ADAS system. of course, once someone did find out all physical scenarios in the world, they can define new ADAS features. and add these new features to their products.</p>
+<p>in a word, L2 ADAS is a closed-requirement system, the designers are not responsible for any cases beyond the designed features.</p>
+<p>For L3 AD system, the designers is responsible for any possible scenarios, which is a open-requirements system, there is no gurantee the design features is enough to cover all scenarios in real world, so which need scenario-based test and keep evaluating through OTA.</p>
+<p>For L2 ADAS, OTA is not a have-to option in some way, but L3 ADAS has to OTA frequently. </p>
+<p>OTA for l2 adas is to improve the performance of known features, through analysis of big driving data, but it doesn’t discovery novel features. </p>
+<p>OTA for l3 adas need to improve the performance of known features, as well as to discover new features as much as possible and as quick as possible. </p>
+<p>which of course bring requirement of OEM’s data platform. Tesla is currently the only OEM, who can close the data loop, from customer’s driving data, to OEM’s cloud, and OTA new/better features back to customers.</p>
+<p>there is no doubt, Tesla evaluation is scenario-based. collecting scenarios is not only for validate existing systems, or test purpose, but more for discover new features, e.g. from lane/edestrain/vehicle detection to traffic light detection e.t.c.</p>
+<p>the traditional OEMs still don’t know how to use scenario data valuablely, only image the collected data can do validate or calibrate a better performance known features. </p>
+<h2 id="ADAS-HiL"><a href="#ADAS-HiL" class="headerlink" title="ADAS HiL"></a>ADAS HiL</h2><p>HiL helps to validate embedded software on ECUs using simulation and modeling teches. at the bottom of V model, there are software dev and test, the upper right is software/hardware integration test, namely HiL. </p>
+<p>as I understand, the purpose of HiL is software and hardware integration test, and there are two main sub validation: safety requirements, and function requiements.</p>
+<p>to validate safety in HiL, fault injection is used. safety module is very bottom-line, and any upper functional module is rooted from safety module. in a narraw view, fault injection only focus on known or system-defined faults, which is finite cases; in a wide view, any upper functional cases can reach to a fault injection test case, which is almost unlimited. </p>
+<p>in the narraw view, coverage of functions(both function internnal state machine and across-function jump trig mechanism) is iterable, even though its total size may be hundreds of thousands. </p>
+<h2 id="ADAS-massively-production-solution"><a href="#ADAS-massively-production-solution" class="headerlink" title="ADAS massively production solution"></a>ADAS massively production solution</h2><h4 id="1R1V-3R1V"><a href="#1R1V-3R1V" class="headerlink" title="1R1V(3R1V)"></a>1R1V(3R1V)</h4><p><img src="https://pic4.zhimg.com/v2-62e036891dcc3ab550d08075d733a5a0_r.jpg" alt="image"></p>
+<p>Level 2 ADAS system, some OEMs called it as highway Assist(HWA), mostly provided by Tier1, e.g. Bosch. </p>
+<h4 id="5R1V-5R5V"><a href="#5R1V-5R5V" class="headerlink" title="5R1V(5R5V)"></a>5R1V(5R5V)</h4><p><img src="https://pic4.zhimg.com/80/v2-488c5b081b066d209efd40d39f935398_1440w.jpg" alt="image"></p>
+<p>Level 2+ ADAS system, some OEMs called it as HighWay Pilot(HWP), hidden meaning it’s L3, but in fact, not a fully L3. </p>
+<h4 id="8R1V-5R12V"><a href="#8R1V-5R12V" class="headerlink" title="8R1V(5R12V)"></a>8R1V(5R12V)</h4><p><img src="https://pic3.zhimg.com/80/v2-036ba41699984687fd44fd1cb1614935_1440w.jpg" alt="image"></p>
+<p>camera-priority solution, used in Tesla and Mobileye. </p>
+<h2 id="L2-ADAS-system-validation"><a href="#L2-ADAS-system-validation" class="headerlink" title="L2 ADAS system validation"></a>L2 ADAS system validation</h2><p>from traditional vehicle system test and validation, there are finite cases, e.g. ESP interfaces. for ADAS system validation, which is scenario based, and mostly there are infinite cases.</p>
+<p>there are different ways to cover ADAS system validation:</p>
+<ul>
+<li>fault injection test, the vehicle powertrain, ADAS sensors, ADAS SoC/MCU, all these HW has random probability to fail. </li>
+</ul>
+<h4 id="Fault-Injection"><a href="#Fault-Injection" class="headerlink" title="Fault Injection"></a>Fault Injection</h4><p>fault injection tests is used to increase the test coverage of Safety Requirements. Within the fault injection tests arbitrary errors are introduced into the system to proof the safety mechanisms that have been encoded in the software to examine. fault injection tests is only a subset of Requirements based testing. </p>
+<p>ISO 26262-4 [System] describes the Fault Injection Test as follows:<br>The test uses special means to introduce faults into the item. This can be done within the item via a special test interface or specially prepared elements or communication devices. The method is often used to improve the test coverage of the safety requirements, because during normal operation safety mechanisms are not invoked.</p>
+<p>The ISO 26262-4 [System] defines the fault injection test as follows: Fault Injection Test includes injection of <code>arbitrary faults</code> in order to test safety mechanisms (e.g. corrupting software or hardware components, corrupting values of variables, by introducing code mutations, or by corrupting values of CPU registers). <code>arbitrary faults</code> is actually from a known list of errors.</p>
+<p>fault injection is <a href="https://users.ece.cmu.edu/~koopman/des_s99/fault_injection/index.html" target="_blank" rel="external">good at testing known sorts of bugs or defect</a>, but poor at testing novel faults or defects, which are precisely the sorts of defects we would want to discover. therefore, fault injection in ADAS is to verify the designed safety mechanism/responses. </p>
+<p>to verfication of the system. if an ADAS system is designed to tolerate a certain class of faultss, then these faults can be directly injected into the system to examine their responses. for errors which is too infrequent to effectively test in the field, fault injection is powerful to acclerate the occurence of faults.</p>
+<p>in summary, fault injection is more verification tool, rather than a tool to improve performance or find novel design faults. </p>
+<h4 id="software-verification-and-validation"><a href="#software-verification-and-validation" class="headerlink" title="software verification and validation"></a>software verification and validation</h4><p>verification is about whether there is the functions as required. validation is about how good the functions are as required. verfication tech includes: dynamic testing and static testing. e.g. funcitonal test, random test;  validation tech includes: (h/sw) fault injection, dependency analysis, hazard analysis, risk analysis e.t.c. </p>
+<p>the software verification is usually a combination of review, analyses, and test. review and analyses are performed on the following components:</p>
+<ul>
+<li>requirement analysis </li>
+<li>software arch </li>
+<li>source code </li>
+<li>outputs of integration process</li>
+<li>test cases and their procedures and results </li>
+</ul>
+<p>for test is to demonstrate it satisfies all requirements and to demonstrate that errors leading to unacceptable failure conditions has safe strategies. usually including:</p>
+<ul>
+<li>h/sw integration test: to verify the software is operating correctly in the hardware </li>
+<li>software integration test </li>
+<li>low-level test</li>
+</ul>
+<h2 id="CANape"><a href="#CANape" class="headerlink" title="CANape"></a>CANape</h2><h4 id="measurement"><a href="#measurement" class="headerlink" title="measurement"></a>measurement</h4><ul>
+<li><p>device plugin into CANape box under a special channel group</p>
+</li>
+<li><p>the signals need recorded </p>
+</li>
+<li><p>triger strategy to start recording </p>
+</li>
+</ul>
+<h4 id="calibration"><a href="#calibration" class="headerlink" title="calibration"></a>calibration</h4><h4 id="visulization"><a href="#visulization" class="headerlink" title="visulization"></a>visulization</h4><h2 id="CANoe"><a href="#CANoe" class="headerlink" title="CANoe"></a>CANoe</h2><h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://zhuanlan.zhihu.com/p/139222892" target="_blank" rel="external">ADAS/AD dev: L2+ ADAS/AD sensor arch</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/83822903" target="_blank" rel="external">ADAS/AD dev: SoC chips solution</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/163732559" target="_blank" rel="external">ADAS/AD dev: massive production solutions</a></p>
+<p><a href="https://www.ni.com/en-us/innovations/white-papers/09/using-fault-insertion-units--fius--for-electronic-testing.html" target="_blank" rel="external">using Fault Insertion Units for electronic testing</a></p>
+<p><a href="http://blog.heicon-ulm.de/iso26262-fault-injection-test-do-you-really-need-it/" target="_blank" rel="external">Fault injection test in ISO 26262 – Do you really need it</a></p>
+<p><a href="https://www.researchgate.net/publication/290851811_Fault_Injection_in_the_Automotive_Standard_ISO_26262_An_Initial_Approach" target="_blank" rel="external">paper: Fault Injection in automotive standard ISO 26262: an initial approach</a></p>
+<p><a href="https://users.ece.cmu.edu/~koopman/des_s99/fault_injection/index.html" target="_blank" rel="external">fault injection from CMU EE</a></p>
+<p><a href="https://users.ece.cmu.edu/~koopman/des_s99/verification/" target="_blank" rel="external">verfication/validation/certification from CMU EE</a></p>
+<p><a href="https://www.testandmeasurementtips.com/challenges-hil-testing-adas/" target="_blank" rel="external">the challenege of ADAS HiL</a></p>
+<p><a href="https://ipg-automotive.com/fileadmin/user_upload/content/Download/PDF/Events/Apply_Innovate_2018/Presentations/Apply_and_Innovate_2018_HyundaiAutron_Konrad_Song_Lee.pdf" target="_blank" rel="external">integrated ADAS HiL system with the combination of CarMaker and various ADAS test benches</a></p>
+<p><a href="https://assets.vector.com/cms/content/events/2020/Webinars20/Vector_Webinar_Online_Offline_ADAS_ECU.pdf" target="_blank" rel="external">Vector: online and offline validation of ADAS ECUs</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/18/adas-data-logging-solution-know-how/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1768,168 +1961,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/play-with-ros-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/22/play-with-ros-2/" itemprop="url">play with ros 2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-22T08:32:13-04:00">
-                2020-06-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/06/22/play-with-ros-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/06/22/play-with-ros-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="ros-msgs"><a href="#ros-msgs" class="headerlink" title="ros msgs"></a>ros msgs</h4><p>ros msgs usually used in C++, as our ADS data tool is implemented in Python, I’d try to build <code>*.msg</code> to python module. find two blogs from ROS doc: </p>
-<p><a href="http://wiki.ros.org/rospy_tutorials/Tutorials/Makefile" target="_blank" rel="external">writing a ROS python Makefile</a></p>
-<p><a href="http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv#Common_step_for_msg_and_srv" target="_blank" rel="external">create a ros msg</a></p>
-<p>to build msg into python module, the <code>package.yml</code> should at least include the following lines:</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">&lt;buildtool_depend&gt;catkin&lt;/buildtool_depend&gt;</span></div><div class="line"><span class="string">&lt;build_depend&gt;message_generation&lt;/build_depend&gt;</span></div><div class="line"><span class="string">&lt;build_export_depend&gt;rospy&lt;/build_export_depend&gt;</span></div><div class="line"><span class="string">&lt;build_export_depend&gt;std_msgs&lt;/build_export_depend&gt;</span></div><div class="line"><span class="string">&lt;exec_depend&gt;rospy&lt;/exec_depend&gt;</span></div><div class="line"><span class="string">&lt;exec_depend&gt;std_msgs&lt;/exec_depend&gt;</span></div></pre></td></tr></table></figure>
-<p>the default <code>CMakeList.txt</code> looks like: </p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="string">find_package(catkin</span> <span class="string">REQUIED</span> <span class="string">COMPONENTS</span></div><div class="line">	<span class="string">roscpp</span></div><div class="line">	<span class="string">rospy</span></div><div class="line">	<span class="string">std_msgs</span></div><div class="line">	<span class="string">message_generation</span></div><div class="line"><span class="string">)</span> </div><div class="line"></div><div class="line"><span class="string">add_message_files(</span></div><div class="line">	<span class="string">FILES</span></div><div class="line">	<span class="string">custom.msg</span></div><div class="line"><span class="string">)</span></div><div class="line"></div><div class="line"><span class="string">generate_messages(</span></div><div class="line">	<span class="string">DEPENDENCIES</span></div><div class="line">	<span class="string">std_msgs</span></div><div class="line"><span class="string">)</span></div></pre></td></tr></table></figure>
-<p>the generated msg python module is located at <code>~/catkin_ws/devel/lib/python2.7/dist-packages/my_msg_py/msg</code>,which can add to <code>$PYTHONPATH</code> for later usage</p>
-<h4 id="create-ros-node-with-catkin"><a href="#create-ros-node-with-catkin" class="headerlink" title="create ros node with catkin"></a>create ros node with catkin</h4><p>first check your <code>$ROS_PAKCAGE_PATH</code>, the default pkg path is <code>/opt/ros/kinetic/share</code>, append custom pkgs path from <code>~/cakin_ws/devel/share</code>. </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/my_catkin_ws/src</div><div class="line">catkin_create_pkg my_pkg [dependencies, e.g. sd_msgs rospy]</div><div class="line">rospack find</div></pre></td></tr></table></figure>
-<p><code>catkin_create_pkg</code> will create a <code>CMakeList.txt</code> at pkg level, and a <code>src</code> folder, where can hold custom nodes definition.</p>
-<h4 id="sensor-serial-data-to-ros-node"><a href="#sensor-serial-data-to-ros-node" class="headerlink" title="sensor serial data to ros node"></a>sensor serial data to ros node</h4><p>sensors(e.g. rtk, imu) to ros is communication from external world to ros sys. Things need to take care:  mostly sensor hardware device doesn’t support ROS driver directly, so first need device serial or CAN or Ethernet to get the raw sensor data, and package it as <code>sensor/raw_msg</code> to publish out; the real ros-defined sensor node, will subscribe <code>sensor/raw_msg</code> and publish the repackaged <code>sensor/data</code> to the ros system, (which usually happened in ros callback).</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">rtk_cb</span><span class="params">(std_msgs::ByteMultiArray raw_msg)</span>:</span></div><div class="line">    rtk_msg = func(raw_msg)</div><div class="line">    pub.publish(rtk_msg)</div><div class="line"></div><div class="line">pub = nodeHandler.advertise&lt;sensor_msgs:NavSatFix&gt;(<span class="string">"/rtk_gps/data"</span>, <span class="number">1</span>)</div><div class="line">sub = nodeHandler.subscribe(<span class="string">"/rtk_gps/raw_data"</span>, <span class="number">1</span>, rtk_cb)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">raw_data_generator</span><span class="params">()</span>:</span></div><div class="line">	<span class="keyword">try</span>:	</div><div class="line">		<span class="keyword">with</span> open(<span class="string">"/dev/ttyS0"</span>, <span class="string">"r|w"</span>) <span class="keyword">as</span> fd:</div><div class="line">			header = read(fd, buf, header_line)</div><div class="line">			<span class="keyword">while</span> ros::ok():</div><div class="line">				content = read(fd, buf, content_lines)</div><div class="line">				std::msgs::ByteMultiArray raw_msg </div><div class="line">				raw_msg.data.push_back(header)</div><div class="line">				raw_msg.data.push_back(content)	</div><div class="line">				pub.publish(raw_msg)</div><div class="line">		close(fd)</div><div class="line">	<span class="keyword">except</span>:</div><div class="line">		print(<span class="string">"failed to read raw data\n"</span>)</div></pre></td></tr></table></figure>
-<h4 id="sensor-CAN-data-to-ros-node"><a href="#sensor-CAN-data-to-ros-node" class="headerlink" title="sensor CAN data to ros node"></a>sensor CAN data to ros node</h4><p>sensors(such as camera, radar, lidar e.t.c) go to ros sys through Veh CAN Bus. the difference between <strong>CAN</strong> msg and <strong>serial</strong> msg is data atomicity. as serial msg is only one variable, which gurantee atomicity in application level;  while each CAN frame usually include a few variables, which need custom implement atomicity in application level. </p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">thread0 = pthread_create(recv_thread, raw_can_data)</div><div class="line">thread1 = pthread_create(send_thread)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread0</span><span class="params">()</span>:</span></div><div class="line"> 	 recv_data = func(raw_can_data)</div><div class="line">	 pthread_mutex_lock(mutex_lock)</div><div class="line">	 sensor_raw = recv_data </div><div class="line">	 sem_post(sem_0)</div><div class="line">	 pthread_mutex_unlock(mutex_lock)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">thread1</span><span class="params">()</span>:</span></div><div class="line">	pthread_mutex_lock(mutex_lock)</div><div class="line">	sensor_ros_msg =  sensor_raw </div><div class="line">	pthread_mutex_unlock(mutex_lock)</div><div class="line">	node_.publish(sensor_ros_msg)</div></pre></td></tr></table></figure>
-<h4 id="ros-node-to-external-device"><a href="#ros-node-to-external-device" class="headerlink" title="ros node to external device"></a>ros node to external device</h4><p>another kind of communication, is from ros system to external device/env, such as dSPACE. the external device, if not communication through serial, then usually support Ethernet(udp/tcp), which then need to implement a custom udp/tcp data recv/send func. the ros node subscribe the necessary data, then send it out through udp/tcp.</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cb</span><span class="params">(sensor_msg)</span>:</span></div><div class="line">	data = repack(sensor_msg)</div><div class="line">	udp.send(data)</div><div class="line"></div><div class="line">sub = nodeHandler.subscribe(<span class="string">"/useful/data"</span>, <span class="number">1</span>, cb)</div></pre></td></tr></table></figure>
-<h4 id="xml-rpc-amp-amp-tcpros"><a href="#xml-rpc-amp-amp-tcpros" class="headerlink" title="xml-rpc &amp;&amp; tcpros"></a>xml-rpc &amp;&amp; tcpros</h4><p>the ros sytem has two communication, to register/update ros node, publish/subscribe topics to ros master. this kind of message go through <code>xml-rpc</code>. after worker nodes registered in master node, the P2P communication can generated, and the data is transfered through <code>tcpros</code>. </p>
-<p>each ros node has a <code>xml-rpc</code> server, in code, <code>nodeHandler.advertise()</code> called in publisher/subscriber node, to register their topices to ros master.</p>
-<p>once a subscribe node register to master, which topics it subscribed, master returns a URI as response, then the subscriber and publisher can build connection through this URI. when a publish node register to master, master call <code>publisherUpdate()</code> to notify all subscriber, who subscribe topices from this publisher.</p>
-<h4 id="ros-visual-rviz"><a href="#ros-visual-rviz" class="headerlink" title="ros visual(rviz)"></a>ros visual(rviz)</h4><p><a href="https://github.com/jstnhuang/ros-rviz" target="_blank" rel="external">ros-rviz</a></p>
-<ul>
-<li>how rviz works ?</li>
-</ul>
-<p>If you want to create a node providing a set of interactive markers, you need to instantiate an InteractiveMarkerServer object. This will handle the connection to the client (usually RViz) and make sure that all changes you make are being transmitted and that your application is being notified of all the actions the user performs on the interactive markers. </p>
-<p><img src="http://wiki.ros.org/rviz/Tutorials/Interactive%20Markers:%20Getting%20Started?action=AttachFile&amp;do=get&amp;target=interactive_marker_architecture.png" alt="image"></p>
-<ul>
-<li>rviz rosbag </li>
-</ul>
-<p><strong>rviz config</strong> can customize the rviz display, the default located at <code>~/.rviz/default.rviz</code>. </p>
-<p>the idea to play rosbag and render in rviz is to define a custom node, to receive the custom <code>pkg_msg</code> from replayed rosbag, then repckage <code>pkg_msg</code> as corresponded <code>marker/markerArray</code>, then publish these msg out, which will be received by <code>rviz</code></p>
-<p>usually we define a custom node to receive replayed topics from <code>rosbag.play()</code>, and define a callback func to publish its marker objects out. </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ros::Publisher markerArray </div><div class="line">def pkg_cb(sensor_pkg):</div><div class="line">	for objIdx in sensor_pkg.ObjNum:</div><div class="line">		prepare_marker(marker, sensor_pkg.objects[objIdx]</div><div class="line">		SensorDisplay.markers.append(marker)	</div><div class="line">	markerArray.publish(SensorDisplay)</div><div class="line">	SensorDisplay-&gt;markers.clear()</div><div class="line"></div><div class="line">subPkg = nodeHandler.subscribe("sensor_pkg", 1, pkg_cb);</div><div class="line">markerArray = nodeHandler.advertise&lt;visulization_msgs::MarkerArray&gt;("sensor_pkg", 1)</div></pre></td></tr></table></figure>
-<h4 id="ros-summary"><a href="#ros-summary" class="headerlink" title="ros summary"></a>ros summary</h4><p>ros is a very common communciation way and message type in ADS dev, many demo are implemented based on ros, which gives a bunch of ros related tools. in this blog, we review three of them:</p>
-<ul>
-<li>ros based sensor device data collection </li>
-<li>ros rviz </li>
-<li>rosbag.play </li>
-</ul>
-<p>which can support a few kinds of applications, e.g. debuging, replay, data collection.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1980,7 +2011,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">187</span>
+                <span class="site-state-item-count">188</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

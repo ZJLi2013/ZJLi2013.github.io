@@ -291,6 +291,158 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/" itemprop="url">paper reading-Carla an open urban driving simulator</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-30T03:32:25-04:00">
+                2019-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/03/30/paper-reading-Carla-an-open-urban-driving-simulator/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="http://carla.org" target="_blank" rel="external">CARLA</a> used to support training, prototyping, validation of self-driving models, including perception and control. CARLA is usded to study the performance of three approaches, 1)  classic modular pipeline that comprises a vision-based perception module, a rule-based planner, and a maneuver controller; 2)a deep network that maps sensory input to driving commands via imitaion learning;  3) end-to-end reinforcment learning.</p>
+<p>all approaches make use of a high-level topological planner. the planner takes the current position of the agent and the location of the goal as input, and use A* algorithm to provide a high-level plan.  this plan advises the agent to turn left/right, or keep straight at intersections, but not provide a trajectory neither geometric info. which is a weaker form of common GPS.</p>
+<h2 id="simulation-engine"><a href="#simulation-engine" class="headerlink" title="simulation engine"></a>simulation engine</h2><p>CARLA simulates a dynamic world and provide a simple interface between the world and an agent that interacts with the world. CARLA is designed as a server-client system, where the server runs the simulation and renders the scene, the client API is responsible for interaction between the agent and the server via sockets.</p>
+<p>the client send commands and meta-commands to the server and receives sensor readings in return. the comands control the vehicle and includes steering, accelerating, and braking. meta-commands controls the behavior of hte server, e.g. resetting hte simulation, modifying the sensor suite.</p>
+<h3 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h3><p>the static 3D world, such as buildings, traffic signs,  and the dynamic objects such as vehicles, pedestrains. the behavior of non-player characters is based on standard UE4 vehicle model(PhysXVehicles), and extended with a basic controller to govern NPC’s behavior: lane following, respecting traffic lights, speed limits, and decision making at intersections.</p>
+<h3 id="pedestrains"><a href="#pedestrains" class="headerlink" title="pedestrains"></a>pedestrains</h3><p>pedestrains navigate the streets according to a town-specific navigation map, which conveys a location-based cost, which is designed to encourage pedestrains to walk along sidewalkd and marked road crossing, but allows them to cross road at any point.</p>
+<h3 id="sensors"><a href="#sensors" class="headerlink" title="sensors"></a>sensors</h3><p>camera parameters include 3D location, 3D orientation with respect to the vehicle’s coordinate system, field of view, and depth of field.</p>
+<p>the semantic segmentation pseudo-sensor provides 12 semantic classes:  road, land-marking, traffic sign, sidewalk, fence, pole, wall, building, vegetation, vehicle, pedestrain, and other.</p>
+<p>a range of measurements associated with the state of the agent.  ? </p>
+<p>measurements concerning traffic rules include the percentage of vehicle’s footprint that impinges on wrong-way lanes or sidewalks, as well as states of the traffic lights and speed limit at the current location of the vehicle. </p>
+<p>CARLA provides access to exact location and bounding boxes of all dynamic objects. </p>
+<h2 id="autonomous-driving"><a href="#autonomous-driving" class="headerlink" title="autonomous driving"></a>autonomous driving</h2><p>the agent interacts with the environment over discrete time steps. at each time step, the agent gets an observation, which is a tuple of sensory inputs, and must produce an action, which represents steering, throttle, brake. </p>
+<h3 id="modular-pipeline"><a href="#modular-pipeline" class="headerlink" title="modular pipeline"></a>modular pipeline</h3><p>the pipeline includes:  perception, planning, continuous control. local planning is critical based on visual perception.</p>
+<h4 id="perception"><a href="#perception" class="headerlink" title="perception"></a>perception</h4><p>using semantic segmentation network based on RefineNet to estimate lanes, road limits, and dynamic objects. and a classification model is used to determine proximity to intersections. </p>
+<h4 id="the-local-planner"><a href="#the-local-planner" class="headerlink" title="the local planner"></a>the local planner</h4><p>coordinates low-level navigation by generating a set of waypoints, near-term goal states that represents the desired position and orientation of the car in near future.  the rule-based state:  1) road-following,  2) left-turn, 3) right-turn, 4) intersection-forward, 5) hazard-stop. transitions between states are performed based on estimates provided by the perception module and on topological info provided by the global planner.</p>
+<h4 id="continuous-controller"><a href="#continuous-controller" class="headerlink" title="continuous controller"></a>continuous controller</h4><p>using PID controller, which inputs current pose, speed, a list of waypoints, and outputs steering, throttle, and brake.</p>
+<h2 id="carla-release"><a href="#carla-release" class="headerlink" title="carla release"></a>carla release</h2><h3 id="9-1"><a href="#9-1" class="headerlink" title="9.1"></a>9.1</h3><p>1)   enable client to detect collisions and determine lane changes :  <code>sensor.other.collision</code>, <code>sensor.other.lane_detector</code>, </p>
+<p>2)  access to the road network, waypoints nearby current vehicle and define user navigation algorithms: <code>Map</code></p>
+<p>3) support new map created from external RoadRunner/VectorZero, in OpenDriven map standard </p>
+<h3 id="9-2"><a href="#9-2" class="headerlink" title="9.2"></a>9.2</h3><p>1) simulation of traffic scenarios by <a href="https://github.com/carla-simulator/scenario_runner" target="_blank" rel="external"><code>Scenario Runner</code></a>. e.g.  following leading vehicle,  stationary object crossing, dynamic object crossing, opposite vehicle running red light, vehicle turn right/left etc</p>
+<p>2)upgraded ROS bridge </p>
+<p>3) vehicle navigation from client side: <code>BasicAgent</code>, navigate to a point given location while dealing with other vehicles and traffic lights safely;  <code>RoamingAgent</code>, drives around making random choices when presented to multiple options</p>
+<h3 id="9-3"><a href="#9-3" class="headerlink" title="9.3"></a>9.3</h3><p>1) new town and new pedestrains </p>
+<p>2) no rendering mode, a 2D map visualization tool that display vehicles, traffic lights, speed limits, pedestrains, road, etc. help to improve the server framerate</p>
+<p>3) traffic light class in client <code>TrafficLightState</code> </p>
+<p>4) new sensors.  <code>ObstacleDetector</code>, a simple raycast sensor to detect something in front of the ego vehicle and what is it; and <code>GlobalNavigationSatelliteSystem</code>, attach to ego vehicle and get its geolocation, which is based on the geo-reference define in OpenDriven file associated with each map.</p>
+<h3 id="9-4"><a href="#9-4" class="headerlink" title="9.4"></a>9.4</h3><p>1) allow client side to change physics properties of vehicle or their components in runtime <code>WheelsPhysicsControl</code> </p>
+<p>2) logging and playback system, which includes a camera-following mode to follow a target actor while replaying the simulation, and can replay situations from different viewpoints. and the logging query engine allow users to query different types of events.</p>
+<p>3) random streaming port, which makes it possible to stream sensor data in a secondary port</p>
+<p>4) import maps,  replace maps as tar.gz files in “ExportedMaps” folder </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/29/paper-reading-autonoVi-AV-planning-with-dynamic-maneuvers-and-traffic-constraints/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1690,167 +1842,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/02/apollo-control-module/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/02/apollo-control-module/" itemprop="url">apollo control module</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-02T05:22:51-05:00">
-                2019-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/03/02/apollo-control-module/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/03/02/apollo-control-module/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="纵向控制"><a href="#纵向控制" class="headerlink" title="纵向控制"></a><a href="https://blog.csdn.net/u013914471" target="_blank" rel="external">纵向控制</a></h2><p>通过控制刹车、油门实现对车速的控制。由一个级联控制器和标定表构成。级联控制器包括：位置PID闭环控制器，  速度PID闭环控制器。标定表即速度-加速度-刹车-油门命令 标定表。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Status LonController::ComputeControlCommand(</div><div class="line">	<span class="keyword">const</span> localization::LocalizationEstimate *localization,  </div><div class="line">	<span class="keyword">const</span> canbus::Chassis *chassis, </div><div class="line">	<span class="keyword">const</span> planning::ADCTrajectory *planning_published_trajectory,</div><div class="line">	control::ControlCommand *cmd)</div></pre></td></tr></table></figure>
-<p>其输出是油门\刹车命令cmd. </p>
-<p><img src="/home/Documents/Blog/HexoBlog/source/_posts/apollo-control-module/lon_control.png" alt="avatar"></p>
-<h3 id="位置PID闭环控制器"><a href="#位置PID闭环控制器" class="headerlink" title="位置PID闭环控制器"></a>位置PID闭环控制器</h3><p>输入变量：期望位置 + 当前实际位置 </p>
-<p>输出变量：速度补偿量</p>
-<h3 id="速度PID闭环控制器"><a href="#速度PID闭环控制器" class="headerlink" title="速度PID闭环控制器"></a>速度PID闭环控制器</h3><p>输入变量：速度补偿 + 当前位置-速度偏差</p>
-<p>输出变量：加速度补偿量</p>
-<h3 id="速度-加速度-刹车-油门命令-标定表"><a href="#速度-加速度-刹车-油门命令-标定表" class="headerlink" title="速度-加速度-刹车/油门命令 标定表"></a>速度-加速度-刹车/油门命令 标定表</h3><p>输入变量： 加速度补偿量 +  规划驾速度， 车速</p>
-<p>输出变量： 油门／刹车控制量</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> LonController::ComputeLongitudinalErrors(</div><div class="line">	<span class="keyword">const</span> TrajectoryAnalyzer *trajectory_analyzer, </div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> preview_time ,</div><div class="line">	SimpleLongitudinalDebug *debug)</div></pre></td></tr></table></figure>
-<p>CarSim/Simulink 与 apollo 连结 ？ </p>
-<h2 id="横向控制"><a href="#横向控制" class="headerlink" title="横向控制"></a>横向控制</h2><p>通过调节方向盘转角实现对航向的控制，由一个前馈控制器和反馈控制器组合，实现车辆动力学模型和lqr 模型。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Status LatController::ComputeControlCommand(</div><div class="line">	<span class="keyword">const</span> localization::LocalizationEstimate *localization,</div><div class="line">	<span class="keyword">const</span> canbus::Chassis *chassis,</div><div class="line">	<span class="keyword">const</span> planning::ADCTrajectory *planning_published_trajectory,</div><div class="line">	control::ControlCommand *cmd)</div></pre></td></tr></table></figure>
-<p><img src="/home/Documents/Blog/HexoBlog/source/_posts/apollo-control-module/lat_control.png" alt="avatar"></p>
-<h3 id="前馈控制器"><a href="#前馈控制器" class="headerlink" title="前馈控制器"></a>前馈控制器</h3><p>输入变量：道路曲率</p>
-<p>输出变量：方向盘前馈控制量</p>
-<p>前馈控制变量实现补偿道路曲率对稳态误差的影响。</p>
-<h3 id="反馈控制器"><a href="#反馈控制器" class="headerlink" title="反馈控制器"></a>反馈控制器</h3><p>输入变量： 期望航向角</p>
-<p>输出变量： 方向盘反馈控制量</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// update status matrix </span></div><div class="line"><span class="keyword">void</span> LatController::UpdateStateAnalyticalMatching(</div><div class="line">	SimpleLateralDebug *debug)</div><div class="line"></div><div class="line"><span class="comment">// cal lat error </span></div><div class="line"><span class="keyword">double</span> LatController::ComputeLateralErrors(</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> x, </div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> y,</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> theta,</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> linear_v ,</div><div class="line">	<span class="keyword">const</span> <span class="keyword">double</span> angular_v, </div><div class="line">	<span class="keyword">const</span> TrajectoryAnalyzer &amp;trajectory_analyzer,</div><div class="line">	SimpleLateralDebug *debug)</div><div class="line"></div><div class="line"><span class="keyword">void</span> LatController::UpdateMatrix() </div><div class="line"></div><div class="line"><span class="keyword">void</span> common::math::SolveLQRProblem()  <span class="comment">// gain matrix </span></div><div class="line"></div><div class="line">steer_angle =  steer_angle_feedback + steer_angle_feedforward</div></pre></td></tr></table></figure>
-<p>控制模块更新cmd 后，发送给canbus模块。 </p>
-<h2 id="MPC-模型"><a href="#MPC-模型" class="headerlink" title="MPC 模型"></a>MPC 模型</h2><p>mpc的实现依赖于过程的动态模型。对时域内，每个当前时刻进行优化，求取每个时刻的最优控制解，从而得到整个时域的优化解。</p>
-<ul>
-<li>基于线性化的预测</li>
-</ul>
-<p>实际系统状态-控制方程（系统状态变量、控制变量）具有时域非线性（二次项等）。首先对该系统进行线性近似，从而可以实现通过当前状态变量、控制变量对下一个时刻系统状态和控制的预测。</p>
-<ul>
-<li>滚动优化</li>
-</ul>
-<p>设计符合约束条件的目标函数，为状态、控制的离散的能量二次方程。优化的目标就是在每个时刻，寻找最优控制变量，使得目标函数最小。MPC相当于给出每个时刻的局部最优控制值，整个时域的最优控制就是一个控制序列。</p>
-<ul>
-<li>控制更新</li>
-</ul>
-<p>每个优化的输出即每个时步的控制增量，用于更新当下时步的系统控制变量。</p>
-<h2 id="LQR-模型"><a href="#LQR-模型" class="headerlink" title="LQR 模型"></a>LQR 模型</h2><p>lqr 给出时域系统的全局最优解， 其目标函数是积分函数。相比较，lqr 相当于加权伽辽金方法，给出弹性体的全局最优解，对应强形式的控制方程，解空间非常狭小，甚至不存在。而mpc 相当于有限元方法，给出弹性体每个单元的局部解，对应弱形式的控制方程，每个单元的解空间span可张。理论上弱形式在极限情况给出的解就是强形式的解。</p>
-<p>数值方法上，lqr相当于直接法，mpc相当于迭代法。直接法给出控制方程的唯一真实解；迭代法给出近似解，但近似解可收敛到系统的真实解。</p>
-<h2 id="车辆模型"><a href="#车辆模型" class="headerlink" title="车辆模型"></a>车辆模型</h2><p>运动学模型给出车辆纵向控制变量，即车辆模型刚体质心参考点及航向角的控制方程；动力学模型给出车辆横向控制变量。</p>
-<p>由运动学和动力学模型给出了整车状态-控制方程，采用mpc or lqr 算法求解控制变量，即实现车辆控制。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1901,7 +1892,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">187</span>
+                <span class="site-state-item-count">188</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -291,6 +291,320 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/06/design-a-data-center-for-ADS-applications/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/06/design-a-data-center-for-ADS-applications/" itemprop="url">design a data center for ADS applications</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-06T04:57:57-04:00">
+                2020-04-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/06/design-a-data-center-for-ADS-applications/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/04/06/design-a-data-center-for-ADS-applications/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>A system’s back end can be made up of a number of bare metal servers, data storage facilities, virtual machines, a security mechanism, and services, all built in conformance with a deployment model, and all together responsible for providing a service.</p>
+<h4 id="points-to-consider"><a href="#points-to-consider" class="headerlink" title="points to consider"></a>points to consider</h4><ul>
+<li><p>it’s the primary authority and responsibility of the back end to provide a built-in security mechanism, traffic control and protocols.</p>
+</li>
+<li><p>a central server is responsible for managing and running the system, systematically reviewing the traffic and client request to make certain that everything is running smoothly.</p>
+</li>
+</ul>
+<h2 id="service-viewport"><a href="#service-viewport" class="headerlink" title="service viewport"></a>service viewport</h2><h4 id="busniess-services"><a href="#busniess-services" class="headerlink" title="busniess services"></a>busniess services</h4><p>the most common busniess services or <code>application-as-a-service(aaas)</code> in ADS data center includes:</p>
+<ul>
+<li><p>massively scenario simualtion</p>
+</li>
+<li><p>open-loop re-play simulation </p>
+</li>
+<li><p>AI training </p>
+</li>
+<li><p>sensor data analysis</p>
+</li>
+<li><p>test driven algorithms dev</p>
+</li>
+</ul>
+<h4 id="platform-as-a-service"><a href="#platform-as-a-service" class="headerlink" title="platform as a service"></a>platform as a service</h4><p>busniess services can be considered as the most abstract level services,  paas consider how to support the upper level needs. a few components are obvious:</p>
+<ul>
+<li><p>distributed data storage(aws s3, ceph)</p>
+</li>
+<li><p>massively data analysis(hadoop)</p>
+</li>
+<li><p>massively compute nodes(k8s/docker)</p>
+</li>
+<li><p>vdi server pool</p>
+</li>
+<li><p>sql</p>
+</li>
+<li><p>web server for end-user UI</p>
+</li>
+</ul>
+<h4 id="IaaS"><a href="#IaaS" class="headerlink" title="IaaS"></a>IaaS</h4><p>to support PaaS, we need CPUs, GPUs, network, either in physical mode or virtual mode. the common private cloud vendor would suggest a general virtualization layer, to manage all resources in one shot. but there is always an balance between the easy manage and performance lost. </p>
+<p>for large auto industry OEMs, no doubt <code>easy manage</code> is crucial. so it’s suggested to implement virtual layer(either vmware or customized kvm). if not, I wonder the self-maintainaince will be a disaster in future. </p>
+<h2 id="security-in-cloud"><a href="#security-in-cloud" class="headerlink" title="security in cloud"></a>security in cloud</h2><h4 id="who-is-Cybersecurity-professional"><a href="#who-is-Cybersecurity-professional" class="headerlink" title="who is Cybersecurity professional"></a><a href="https://cloudacademy.com/blog/how-to-become-a-cybersecurity-professional/" target="_blank" rel="external">who is Cybersecurity professional</a></h4><p>the guy who provide security during the development stages of software systems, networks, and data centers. </p>
+<p>must make security measures for any information by designing various defensive systems and strategies against intruders. </p>
+<p> The specialist must create new defensive systems and protocols and report incidents. Granting permissions and privileges to authorized users is also their job.</p>
+<p> The cybersecurity professional must maintain IT security controls documentation, recognize the security gaps, and prepare an action plan accordingly. </p>
+<p> Cybersecurity professionals enable security in IT infrastructure, data, edge devices, and networks.</p>
+<h4 id="Azure-Security-best-practices"><a href="#Azure-Security-best-practices" class="headerlink" title="Azure Security: best practices"></a><a href="https://cloudacademy.com/blog/azure-security-best-practices-you-need-to-know/" target="_blank" rel="external">Azure Security: best practices</a></h4><ul>
+<li><p>control network access </p>
+<p>   At this ring you typically find Firewall policies, Distributed Denial of Service (DDoS) prevention, Intrusion Detection and Intrusion Prevention systems (IDS/IPS), Web Content Filtering, and Vulnerability Management such as Network Anti-Malware, Application Controls, and Antivirus.</p>
+<p>   The second ring is often a Network Security Group (or NSG) applied to the subnet. Network Security Groups allow you to filter network traffic to and from Azure resources in an Azure virtual network.</p>
+<pre><code>all subnets in an Azure Virtual Network (VNet) can communicate freely. By using a network security group for network access control between subnets, you can establish a different security zone or role for each subnet. As such, all subnets should be associated with a properly configured Network Security Group. 
+
+With a virtual server, there is a third ring which is a Network Security Group (NSG) applied to virtual machines network interfaces, 
+
+avoid exposure to the internet with a dedicated WAN connection. Azure offers both site-to-site VPN and ExpressRoute for this purpose.
+</code></pre></li>
+</ul>
+<ul>
+<li>disable remote access (ssh/rdp) </li>
+</ul>
+<p>disable remote access to vm from internet. ssh/rdp only should be provided over a secure dedicated conenction using Just-In-time(JIT) vm access.</p>
+<p> the Just-In-Time VM access policy configures at the NSG to lock down the virtual machines remote management ports. When an authorized user requires access to the VM, they will use Just-In-Time VM Access to request access for up to three hours. After the requested time has elapsed, Azure locks the management ports down to help reduce susceptibility to an attack.</p>
+<ul>
+<li>update vm</li>
+</ul>
+<p>You need to run antivirus and anti-malware. and requires system updates for VMs hosted in Azure</p>
+<ul>
+<li><p>safeguard sensitive data </p>
+</li>
+<li><p>enable encryption </p>
+</li>
+</ul>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/archive/blogs/azuresecurity/what-does-shared-responsibility-in-the-cloud-mean" target="_blank" rel="external">shared responsibility</a></li>
+</ul>
+<p><img src="https://msdnshared.blob.core.windows.net/media/2016/04/image_thumb601.png" alt="image"></p>
+<h4 id="aws-security-instance-level-security"><a href="#aws-security-instance-level-security" class="headerlink" title="aws security: instance level security"></a><a href="https://cloudacademy.com/blog/aws-security-groups-instance-level-security/" target="_blank" rel="external">aws security: instance level security</a></h4><ul>
+<li><p>AWS security groups, provides security at the protocol and port access level, working much the same way as a firewall – contains a set of rules that filter traffic coming in and out of an EC2 instance. </p>
+</li>
+<li><p>os security path management </p>
+</li>
+<li><p>key pairs(public and private key to login EC2 instance)</p>
+</li>
+</ul>
+<h4 id="aws-security-network-ACL-and-subnets-network-level-security"><a href="#aws-security-network-ACL-and-subnets-network-level-security" class="headerlink" title="aws security: network ACL and subnets: network level security"></a><a href="https://cloudacademy.com/blog/aws-network-acl-vpc-subnets-network-security/" target="_blank" rel="external">aws security: network ACL and subnets: network level security</a></h4><h4 id="aws-security-bastion-hosts"><a href="#aws-security-bastion-hosts" class="headerlink" title="aws security: bastion hosts"></a><a href="https://cloudacademy.com/blog/aws-bastion-host-nat-instances-vpc-peering-security/" target="_blank" rel="external">aws security: bastion hosts</a></h4><p>the connectivity flowing from an end-user to resources on a private subnet through a bastion host: </p>
+<p><img src="https://d1o2okarmduwny.cloudfront.net/wp-content/uploads/2015/11/aws-bastion-host-1.png" alt="image"></p>
+<ul>
+<li>updates to bastion host </li>
+</ul>
+<p>skip bastion if using Session Manager, to securely connect to private instance in virtual private cloud wthout needing bastion host or key-pairs</p>
+<p>now push keys for short periods of time and use IAM policies to restrict access as you see fit. This reduces your compliance and audit footprint as well</p>
+<ul>
+<li>NAT(network address translation) [gateway] instance </li>
+</ul>
+<p>allows private instance outgoing connectivity to the internet while at the same time blocking inboud traffic from the internet </p>
+<ul>
+<li>VPC(virtual private cloud) peering </li>
+</ul>
+<p><img src="https://d1o2okarmduwny.cloudfront.net/wp-content/uploads/2015/11/aws-bastion-host-3.png" alt="image"></p>
+<h4 id="aws-security-identity-and-access-management-IAM"><a href="#aws-security-identity-and-access-management-IAM" class="headerlink" title="aws security: identity and access management(IAM)"></a><a href="https://cloudacademy.com/blog/aws-security-identity-and-access-management-iam/" target="_blank" rel="external">aws security: identity and access management(IAM)</a></h4><p>governs and control user acces to VPC resoruces, it achieves the goal through Users/Group/Roles and Policies.</p>
+<h2 id="network-topology-in-cloud"><a href="#network-topology-in-cloud" class="headerlink" title="network topology in cloud"></a>network topology in cloud</h2><h4 id="network-topology-at-first"><a href="#network-topology-at-first" class="headerlink" title="network topology at first"></a>network topology at first</h4><p>I would consider the data center network topology and security mechanism from the following four points:</p>
+<ul>
+<li>internal network topology</li>
+</ul>
+<p>basically the data center will have an internal network, to connect infrastructures, e.g. data storage nodes, k8s compute nodes, hadoop compute nodes, web server nodes,  vdi server nodes e.t.c.</p>
+<ul>
+<li>network gateway to end-users</li>
+</ul>
+<p>there should be a unique network gateway in data center, which is the only network IO for end-user access.</p>
+<ul>
+<li>network gateway to other private/public cloud</li>
+</ul>
+<p>we also need connect to other IT infrastructure, so needanother network gateway.</p>
+<p>the two gateways above, can be either virtual gateway or physical gateway, depends on our hardware. e.g. vlan, bridge, or physical gateway</p>
+<ul>
+<li>admin pass-through network</li>
+</ul>
+<p>network gateway is the normal user access port, but for admin, specially for sysm management, trouble-shooting, e.t.c, we need a pass-through network, which basically directly connect to internal network of data center,<br>admin pass-through network is speed limited, so only for special admin usage.</p>
+<h4 id="h3c-浅谈数据中心网络架构的发展"><a href="#h3c-浅谈数据中心网络架构的发展" class="headerlink" title="h3c: 浅谈数据中心网络架构的发展"></a><a href="http://www.h3c.com/CN/D_201405/826868_30008_0.htm" target="_blank" rel="external">h3c: 浅谈数据中心网络架构的发展</a></h4><ul>
+<li>接入层，用于连接所有的计算节点，在较大规模的数据中心中，通常以柜顶交换机的形式存在；</li>
+<li>汇聚层，用于接入层的互联，并作为该汇聚区域二三层的边界，同时各种防火墙、负载均衡等业务也部署于此；</li>
+<li>核心层，用于汇聚层的的互联，并实现整个数据中心与外部网络的三层通信。</li>
+</ul>
+<p>传统的数据中心内，服务器主要用于对外提供业务访问，不同的业务通过安全分区及VLAN隔离。一个分区通常集中了该业务所需的计算、网络及存储资源，不同的分区之间或者禁止互访，或者经由核心交换通过三层网络交互，数据中心的网络流量大部分集中于南北向.</p>
+<p>在这种设计下，不同分区间计算资源无法共享，资源利用率低下的问题越来越突出。通过虚拟化技术、云计算管理技术等，将各个分区间的资源进行池化，实现数据中心内资源的有效利用。而随着这些新技术的兴起和应用，新的业务需求如虚拟机迁移、数据同步、数据备份、协同计算等在数据中心内开始实现部署，数据中心内部东西向流量开始大幅度增加。</p>
+<h4 id="h3c-two-layer-network-arch"><a href="#h3c-two-layer-network-arch" class="headerlink" title="h3c: two-layer network arch"></a><a href="http://www.h3c.com/cn/d_201010/697894_30008_0.htm" target="_blank" rel="external">h3c: two-layer network arch</a></h4><ul>
+<li>网络三层互联，或称为，数据中心前端网络互联。“前端网络”，是指数据中心面向企业园区的出口。不同数据中心的前端网络通过ip实现互联，园区或分支的客户端通过前端网络访问各数据中心。</li>
+</ul>
+<ul>
+<li><p>网络两层互联，或称为，数据中心服务器网络互联。在不同数据中心服务器网络接入层，构建一个跨数据中心的搭二层网络(vlan)，以满足服务器集群或虚拟机动态迁移等场景</p>
+</li>
+<li><p>san互联，也称为，后端存储网络互联。借助传输技术，实现主中心、灾备中心间磁盘阵列的数据复制</p>
+</li>
+</ul>
+<p>二层互联的业务需求：保证服务器的高可用集群。</p>
+<p>二层互联设计要点：面对中小企业客户（ip网络）</p>
+<h4 id="openstack-neutron-network-for-cloud"><a href="#openstack-neutron-network-for-cloud" class="headerlink" title="openstack neutron: network for cloud"></a><a href="https://www.cnblogs.com/pmyewei/p/6280445.html" target="_blank" rel="external">openstack neutron: network for cloud</a></h4><ul>
+<li>data flow in data center: </li>
+</ul>
+<ul>
+<li><p>manage(API) network, basically the internal managed network</p>
+</li>
+<li><p>user network</p>
+</li>
+<li><p>external network, including vpn, firewall </p>
+</li>
+<li><p>storage network, connect from computing nodes to storage ndoes </p>
+</li>
+</ul>
+<ul>
+<li>NSX arch</li>
+</ul>
+<p><img src="https://images2015.cnblogs.com/blog/1009737/201701/1009737-20170116004552494-794532203.png" alt="image"></p>
+<p>the left most part is computing nodes, for customers bussniess, the dataflow includes: user-network, storage, internal-network, all of which requires 3 NIC</p>
+<p>the middle part is infrastructure, including managing nodes, shared storage, which brings IP based storage for the left most part.</p>
+<p>the right edge part, is external(internet) network services for users, including network to users, as well as network to Internet, firewall, public IP address translation e.t.c.</p>
+<p><img src="https://images2015.cnblogs.com/blog/1009737/201701/1009737-20170116004801510-1392260872.png" alt="image"></p>
+<h4 id="ceph-subnets"><a href="#ceph-subnets" class="headerlink" title="ceph subnets"></a>ceph subnets</h4><p><img src="http://docs.ceph.org.cn/_images/ditaa-2452ee22ef7d825a489a08e0b935453f2b06b0e6.png" alt="image"></p>
+<p>when consider ceph storage for k8s computing nodes, the public network also includes network switches to k8s, as well as normal user data access network switches.</p>
+<ul>
+<li><p>cluster network (Gb NIC, including osd and monitor)</p>
+</li>
+<li><p>ceph client(to k8s) network (gb)</p>
+</li>
+<li><p>ceph admin/user network(mb)</p>
+</li>
+</ul>
+<h4 id="k8s-subnets"><a href="#k8s-subnets" class="headerlink" title="k8s subnets"></a>k8s subnets</h4><p><a href="https://zhuanlan.zhihu.com/p/90992878" target="_blank" rel="external">understand k8s network：pods, service, ingress</a></p>
+<ul>
+<li><p>pods, all containers in one pod, share the same network namespace. the network namespace of pod is different from that of the host machine, but the two is connected by <code>docker bridge</code> </p>
+</li>
+<li><p>services, handle the load balance among pods, as well as encapsulate the IPs of pods, so we don’t directly deal with the local dynamic IPs of pods.</p>
+</li>
+<li><p>how to access k8s service from exteral, or how user acces the k8s hosted in a remote data center?  <strong><a href="https://www.kuboard.cn/learning/k8s-intermediate/service/ingress.html#ingress" target="_blank" rel="external">ingress for k8s</a></strong></p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/1401434-5216e7cf94351457.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200" alt="image"></p>
+<p><a href="https://www.jianshu.com/p/ae2889daa0a5" target="_blank" rel="external">flannel</a><br> setup a two-layer network, the ip of pod is assigend by <code>flannel</code>, each node will has a <code>flannel0</code> virtual NIC, used for node-node communication. </p>
+<h4 id="gpu-vdi-subnets"><a href="#gpu-vdi-subnets" class="headerlink" title="gpu vdi subnets"></a>gpu vdi subnets</h4><p>as mentioned in <a href="https://zjli2013.github.io/2020/04/02/gpu-vdi/" target="_blank" rel="external">gpu vdi</a>,  most solution has a customized vdi client, the vm manager internal network is handled by the vendors, maybe communicate through one Gb NIC, the client-server is simple TCP/ip.</p>
+<h4 id="webserver-subnets"><a href="#webserver-subnets" class="headerlink" title="webserver subnets"></a>webserver subnets</h4><p>a few things in mind:</p>
+<ul>
+<li>using vm.</li>
+</ul>
+<p>web servers are better to deploy in vm, so whenever there is a hardware failure, it can detect and automatically transfer to another vm. </p>
+<ul>
+<li>communicate with in-house services </li>
+</ul>
+<p>in ADS data center, most web application need access data from either sql or even storage services directly, which means the web server need both external ingress services as well as handling internal IP access. </p>
+<h4 id="network-manager"><a href="#network-manager" class="headerlink" title="network manager"></a>network manager</h4><p>the above subnet classification only consider each component itself, for a data center in whole, it’s better to manage all networks of internal subnets and access to external Internet in one module: network manager.</p>
+<p>as mentioned in the previous section: <a href="">security in cloud</a>, the network manager module can further add some security mechanisms.  </p>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://cloudacademy.com/blog/cloud-computing-architecture-an-overview/" target="_blank" rel="external">cloud arch: front end &amp; back end</a></p>
+<p><a href="https://cloudacademy.com/learning-paths/az-500-exam-preparation-microsoft-azure-security-technologies-650/" target="_blank" rel="external">Microsoft Azure security tech training courses</a></p>
+<p><a href="https://cloudacademy.com/blog/foundation-certificate-in-cyber-security-fccs-learning-path/" target="_blank" rel="external">introduction the Foundation certificate in Cyber Security</a></p>
+<p><a href="https://www2.cs.duke.edu/courses/fall10/cps296.2/lectures/16RoutingTopology.pdf" target="_blank" rel="external">datacenter network: topology and routing</a></p>
+<p><a href="https://www.sdnlab.com/mininet-topology/" target="_blank" rel="external">miniNet for data center network topology</a></p>
+<p><a href="https://www.cnblogs.com/pmyewei/p/6413875.html" target="_blank" rel="external">openstack neutron: two-layer network</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/02/gpu-vdi/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2099,201 +2413,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/12/nodejs-introduction/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/12/nodejs-introduction/" itemprop="url">nodejs introduction</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-12T06:07:23-04:00">
-                2020-03-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/12/nodejs-introduction/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/12/nodejs-introduction/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="callback-asnyc"><a href="#callback-asnyc" class="headerlink" title="callback / asnyc"></a>callback / asnyc</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">"fs"</span>) ;</div><div class="line"></div><div class="line">fs.readFile(<span class="string">"input.txt"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(err) <span class="keyword">return</span> <span class="built_in">console</span>.error(err);</div><div class="line">	<span class="built_in">console</span>.log(data.toString());</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>the async fun take the callback fun as its last parameter. </p>
-<h3 id="event-loop"><a href="#event-loop" class="headerlink" title="event loop"></a>event loop</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">'events'</span>)</div><div class="line"><span class="keyword">var</span> emitter = <span class="keyword">new</span> events.EventEmitter();</div><div class="line"><span class="keyword">var</span> connectH = <span class="function"><span class="keyword">function</span> <span class="title">connected</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">"connected"</span>)</div><div class="line">		emitter.emit(<span class="string">'data_received'</span>); <span class="comment">// trig 'data_received'</span></div><div class="line">&#125;</div><div class="line">emitter.on(<span class="string">'connection'</span>, connectH);</div><div class="line">emitter.on(<span class="string">'data_received'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="string">'data received'</span>);</div><div class="line">&#125;)</div><div class="line">emitter.emit(<span class="string">'connection'</span>); <span class="comment">// trig 'connection'</span></div></pre></td></tr></table></figure>
-<h3 id="event-emitter"><a href="#event-emitter" class="headerlink" title="event emitter"></a>event emitter</h3><p>when async IO is done, will send an event to the Event queue. e.g. when fs.readStream() open a file will trig an event. e.t.c</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">addListener(event, listener)</div><div class="line">on(event, listener) #listening</div><div class="line">emit(evnet, [arg1], ...)   #trig</div></pre></td></tr></table></figure>
-<h3 id="file-system"><a href="#file-system" class="headerlink" title="file system"></a>file system</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var fs = require("fs")</div><div class="line">fs.open("input.log", "r+", function(err, fd)&#123;&#125;);</div><div class="line">fs.state("input.log", function(err, stats_info)&#123;&#125;);</div><div class="line">fs.readFile("input.log", function(err, data)&#123;</div><div class="line">		if(err)&#123;</div><div class="line">			return console.error(err);</div><div class="line">		&#125;</div><div class="line">		console.log(data.toString());</div><div class="line">&#125;);</div><div class="line">fs.writeFile("output.log", function(err)&#123;</div><div class="line">	if(err)&#123; return console.error(err);&#125;</div><div class="line">	console.log("write successfully")</div><div class="line">&#125;);</div><div class="line">fs.read(fd,buffer, [args..]) #read binary stream</div></pre></td></tr></table></figure>
-<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h3><p>as js language has only txt bytes data, to deal with binary data, introduce <code>Buffer</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Buffer.alloc(size)</div><div class="line">Buffer.from(buffer||array||string)</div><div class="line">Buffer.write()  #write to buffer</div><div class="line">buffer.toString() #read from buffer</div><div class="line">buffer.toJSON()</div></pre></td></tr></table></figure>
-<h3 id="stream"><a href="#stream" class="headerlink" title="stream"></a>stream</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var fs=require("fs");</div><div class="line">var readerStream = fs.createReadstream("input.file")</div><div class="line">readerStream.on('data', function(chunk, err)&#123;&#125;)</div><div class="line">var writeStream = fs.createWriteStream("output.file")</div><div class="line">writeStream.on('finished', function()&#123;&#125;)</div><div class="line">readerStream.pipe(writeStream); #pipe from a reader stream to a writer stream</div></pre></td></tr></table></figure>
-<h3 id="module-system"><a href="#module-system" class="headerlink" title="module system"></a>module system</h3><p>to enable different nodejs files can use each other, there is a module system, the module can be a nodejs file, or JSON, or compiled C/C++ code.</p>
-<p>nodejs has <code>exports</code> and <code>require</code> used to export modules’ APIs to external usage, or access external APIs.</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</div><div class="line">exports.method = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;</div></pre></td></tr></table></figure>
-<p>the first way export the object itself, the second way only export the certain method.</p>
-<h3 id="Global-Object"><a href="#Global-Object" class="headerlink" title="Global Object"></a>Global Object</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log()</div><div class="line"><span class="built_in">console</span>.error()</div></pre></td></tr></table></figure>
-<h3 id="common-modules"><a href="#common-modules" class="headerlink" title="common modules"></a>common modules</h3><ul>
-<li>path </li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</div><div class="line">path.join(<span class="string">"/user/"</span>, <span class="string">"test1"</span>); </div><div class="line">path.dirname(p_);</div></pre></td></tr></table></figure>
-<ul>
-<li>http server </li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</div><div class="line">http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">request, response</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> url_path = request.url ;</div><div class="line">	server(url_path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">		<span class="keyword">if</span>(err)&#123;</div><div class="line">			<span class="built_in">console</span>.log(err);</div><div class="line">			response.writeHead(<span class="number">404</span>, <span class="string">"xx"</span>);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			response.writeHeead(<span class="number">200</span>, <span class="string">"yy"</span>);</div><div class="line">			response.write(data.toString());</div><div class="line">		&#125;</div><div class="line">		response.end();</div><div class="line">   &#125;);</div><div class="line">&#125;).listen(<span class="number">8080</span>);</div></pre></td></tr></table></figure>
-<ul>
-<li>http client </li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</div><div class="line">url = <span class="string">"http://localhost:8080/index.html"</span></div><div class="line"><span class="keyword">var</span> req = http.request(url, callback);</div><div class="line"><span class="keyword">var</span> callback = <span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</div><div class="line">   <span class="keyword">var</span> body = <span class="string">''</span> ;</div><div class="line">	response.on(<span class="string">'data'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</div><div class="line">		body += data; </div><div class="line">	&#125;);</div><div class="line">	response.on(<span class="string">'end'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(body);</div><div class="line">	&#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h3 id="Express"><a href="#Express" class="headerlink" title="Express"></a>Express</h3><p>Express has <code>requst</code> and <code>response</code> object to handle request and reponse. <code>express.static</code> can handle static resources, e.g. image, css e.t.c</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">"repress"</span>);</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.use(<span class="string">'/public'</span>, express.static(<span class="string">'public'</span>));</div><div class="line">app.get(<span class="string">'/index'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;&#125;)</div><div class="line">app.get(<span class="string">'/user'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> response = &#123;</div><div class="line">		<span class="string">"name"</span>: req.query.name,</div><div class="line">		<span class="string">"id"</span>: req.query.id</div><div class="line">	&#125;;</div><div class="line">	res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">&#125;);</div><div class="line">app.post(<span class="string">'/user'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> response = &#123;</div><div class="line">		<span class="string">"name"</span> : req.body.name ;</div><div class="line">		<span class="string">"id"</span> : req.body.id </div><div class="line">	&#125;;</div><div class="line">	res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">&#125;); </div><div class="line">app.post(<span class="string">'file_upload'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> des_file = __dirname + <span class="string">"/"</span> + req.files[<span class="number">0</span>].originalname ;</div><div class="line">	fs.readFile(req.files[<span class="number">0</span>].path, <span class="function"><span class="keyword">function</span>(<span class="params">err, data</span>)</span>&#123;</div><div class="line">		fs.writeFile(des_file, data, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</div><div class="line">			<span class="keyword">if</span>(err)&#123;<span class="built_in">console</span>.error(err);&#125;</div><div class="line">			<span class="keyword">else</span>&#123;</div><div class="line">				<span class="keyword">var</span> response = &#123;</div><div class="line">						<span class="attr">message</span>: <span class="string">"file uploaded successfully"</span> ,</div><div class="line">						<span class="attr">filename</span>: req.files[<span class="number">0</span>].originalname</div><div class="line">				&#125;;</div><div class="line">			&#125;</div><div class="line">			res.send(<span class="built_in">JSON</span>.stringify(response));</div><div class="line">		&#125;);</div><div class="line">	&#125;);</div><div class="line">&#125;)</div><div class="line"><span class="keyword">var</span> server = app.listen(<span class="number">8080</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;)</div></pre></td></tr></table></figure>
-<p><code>res</code> is what send from server to client, for both <code>/get</code>, <code>/post</code> methods. <a href="https://www.tutorialspoint.com/nodejs/nodejs_request_object.htm" target="_blank" rel="external">req object</a> represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers e.t.c</p>
-<ul>
-<li>req.body</li>
-</ul>
-<p>contains key-value pairs of data submitted in the request body. by default, it’s undefined, and is populated when using body-parsing middleware. e.g. <strong>body-parser</strong></p>
-<ul>
-<li>req.cookies</li>
-</ul>
-<p>when using cookie-parser middleware, this property is an object that contains cookies send by the request</p>
-<ul>
-<li>req.path </li>
-</ul>
-<p>contains the path part of the request url</p>
-<ul>
-<li>req.query </li>
-</ul>
-<p>an object containing a property for each query string parameter in the route</p>
-<ul>
-<li>req.route</li>
-</ul>
-<p>the current mathced route, a string </p>
-<h2 id="data-access-object-DAO"><a href="#data-access-object-DAO" class="headerlink" title="data access object(DAO)"></a>data access object(DAO)</h2><p>Dao pattern is used to <a href="https://www.tutorialspoint.com/design_pattern/data_access_object_pattern.htm" target="_blank" rel="external">separate</a> low level data accessing API or operations form high level business services. usually there are three parts:</p>
-<ul>
-<li><p>DAO interface, which defines the standard operations to be performed on a model object </p>
-</li>
-<li><p>DAO class, the class that implement DAO interfaces, this class is responsible to get data from database, or other storage mechanism</p>
-</li>
-<li><p>model object, a simple POJO containing get/set methods to store data retrieved using DAO class</p>
-</li>
-</ul>
-<p>o/r mapping (orm) is used a lot to map database itme to a special class, and it’s easy to use, but a little drawback of orm is it assume the database is <a href="https://www.open-open.com/lib/view/open1425277196118.html" target="_blank" rel="external">normalized well</a>. DAO is a middleware to do directly SQL mapping, who mapes SQL query language to the output class. </p>
-<h3 id="separting-models-logic-and-daos"><a href="#separting-models-logic-and-daos" class="headerlink" title="separting models, logic and daos"></a>separting models, logic and daos</h3><ul>
-<li><p>routes.js, where to put routes, usually referenced as <code>controllers</code></p>
-</li>
-<li><p>models.js, where to put functions talk to database, usually referenced as <code>dao layer</code></p>
-</li>
-<li><p>views.js</p>
-</li>
-</ul>
-<p>these three components can put under <a href="https://github.com/csanz/node-expressjs-example" target="_blank" rel="external">app</a>;  all static data usually put under <code>public</code> folder; the Express <code>package.json</code> and <code>index.js</code> are at the same level as <code>app</code>.</p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.runoob.com/nodejs/" target="_blank" rel="external">nodejs at runoob.com</a></p>
-<p><a href="https://www.jianshu.com/p/dab01487a9df" target="_blank" rel="external">nodejs &amp; mysql</a></p>
-<p><a href="https://www.open-open.com/lib/view/open1425277196118.html" target="_blank" rel="external">bearcat-dao introduction</a></p>
-<p><a href="https://koajs.com" target="_blank" rel="external">koa</a></p>
-<p><a href="https://github.com/paulmillr/chokidar" target="_blank" rel="external">chokidar</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2344,7 +2463,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">187</span>
+                <span class="site-state-item-count">188</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

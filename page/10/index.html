@@ -291,6 +291,160 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/Unet-intro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/16/Unet-intro/" itemprop="url">Unet intro</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-16T08:06:33-04:00">
+                2019-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/16/Unet-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/16/Unet-intro/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://docs.unity3d.com/Manual/UNetOverview.html" target="_blank" rel="external">unity3d manual</a></p>
+<h3 id="High-Level-API-HLAPI"><a href="#High-Level-API-HLAPI" class="headerlink" title="High Level API(HLAPI)"></a>High Level API(HLAPI)</h3><p> HLAPI is a server authoritative system, triggered from  UnityEngine.Networking</p>
+<h4 id="authority"><a href="#authority" class="headerlink" title="authority"></a>authority</h4><p>  host has the authority over all non-player GameObjects;  Player GameObjects are a special case and treated as having “local authority”. </p>
+<h4 id="local-client-authority-for-npc"><a href="#local-client-authority-for-npc" class="headerlink" title="local/client authority for npc"></a>local/client authority for npc</h4><p>method1:  spawn the npc using <code>NetworkServer.SpawnWithClientAuthority</code><br>method2:  <code>NetworkIdentity.AssignClientAuthority</code> </p>
+<h4 id="network-context-properties"><a href="#network-context-properties" class="headerlink" title="network context properties"></a>network context properties</h4><p>isServer()<br>isClient()<br>sLOcalPlayer()<br>hasAuthority()</p>
+<h4 id="networked-GameObjects"><a href="#networked-GameObjects" class="headerlink" title="networked GameObjects"></a>networked GameObjects</h4><pre><code>multiplayer games typically built using Scenes that contain a mix of networked GOs and regular GOs.  networked GOs needs t obe synchronized across all users; non-networked GOs are either static obstacles or GOs don&apos;t need to synchronized across players 
+
+ networked GO is one which has a NetworkIdentiy component. beyond that, you need define what to syncronize. e.g. transform ,variables ..
+</code></pre><h4 id="player-GO"><a href="#player-GO" class="headerlink" title="player GO"></a>player GO</h4><p> NetworkBehavior class has a property: isLocalPlayer, each client player GO.isLocalPlayer == true, and invoke OnStartLOcalPlayer() </p>
+<p>Player GOs represent the player on the server, and has the ability to run comands from the player’s client. </p>
+<h4 id="spawning-GOs"><a href="#spawning-GOs" class="headerlink" title="spawning GOs"></a>spawning GOs</h4><p>the Network Manager can only spawn and synchronize GOs from registered prefabs, and these prefabs must have a NetworkIdentity component</p>
+<h4 id="spawning-GOs-with-client-authority"><a href="#spawning-GOs-with-client-authority" class="headerlink" title="spawning GOs with client authority"></a>spawning GOs with client authority</h4><p>NetworkServer.SpawnWithClientAuthority(go, NetworkConnection),<br>for these objects, <code>hasAuthority</code> is true on this client and OnStartAuthority() is called on this client.  Spawned with client authority must have <code>LocalPlayerAuthority</code> set to <code>NetworkIdentity</code>, </p>
+<h4 id="state-synchronization"><a href="#state-synchronization" class="headerlink" title="state synchronization"></a>state synchronization</h4><p>[SyncVars] synchronzed from server to client;  if opposite, use [Commands]</p>
+<p>the state of SyncVars is applied to GO on clients before <code>OnStartClient()</code> called. </p>
+<h3 id="engine-and-editor-integration"><a href="#engine-and-editor-integration" class="headerlink" title="engine and editor integration"></a>engine and editor integration</h3><ul>
+<li><code>NetworkIdentity</code> component for networked objects </li>
+<li><code>NetworkBehaviour</code> for networked scripts</li>
+<li>configurable automatic synchronization of object transforms</li>
+<li>automatic snyc var</li>
+</ul>
+<h4 id="build-in-Internet-services"><a href="#build-in-Internet-services" class="headerlink" title="build-in Internet services"></a>build-in Internet services</h4><h4 id="network-visibility"><a href="#network-visibility" class="headerlink" title="network visibility"></a>network visibility</h4><p>relates to whether data should or not sent about the GOs to a particulr clinet.</p>
+<p>method1:  add Network Proximity Checker component to networked GO<br>method2:  </p>
+<h4 id="Scene-GOs"><a href="#Scene-GOs" class="headerlink" title="Scene GOs"></a>Scene GOs</h4><p> saved as part of a Scene, no runtime spawn</p>
+<h4 id="actions-and-communication"><a href="#actions-and-communication" class="headerlink" title="actions and communication"></a>actions and communication</h4><p>method1:  remote actions, call a method across network<br>method2:  networking manager/behavior callbacks<br>method3:  LL network messages </p>
+<h5 id="host-migration"><a href="#host-migration" class="headerlink" title="host migration"></a>host migration</h5><p>host:  a player whose game is acting as a server and a “local client”<br>remote client: all other players<br>so when the host left, host need migrate to one remote client to keep the game alive</p>
+<p>how it works:<br>    enable host migration.  so Unity will distribute the address of all peers to other peers. so when host left,  one peer was selected to be the new host (heart-keeping)</p>
+<h5 id="network-discovery"><a href="#network-discovery" class="headerlink" title="network discovery"></a>network discovery</h5><p>allow players to find each other on a local area network(LAN)</p>
+<p>need component <networkdiscovery>,</networkdiscovery></p>
+<p>in server mode, the Network Discovery sends broadcast message over the network o nthe specified port in Inspector;</p>
+<p>in client mode, the component listens for broadcast message on the specified port</p>
+<h4 id="using-transport-Layer-API-LL-API"><a href="#using-transport-Layer-API-LL-API" class="headerlink" title="using transport Layer API  (LL API)"></a>using transport Layer API  (LL API)</h4><p>socket-based networking</p>
+<h3 id="in-the-end"><a href="#in-the-end" class="headerlink" title="in the end"></a>in the end</h3><p>network is basic cornerstone in server-client applications, Unet is deprecated at this moment, but still many good network resource can take in charge. e.g. websockets, nodejs, and what behind these network protocol or languages, e.g. async/coroutines are charming as well. </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/python-generator-and-asynico/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1693,416 +1847,6 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/23/computing-chips-in-AV/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/06/23/computing-chips-in-AV/" itemprop="url">computing chips in AV</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-23T04:16:37-04:00">
-                2019-06-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/06/23/computing-chips-in-AV/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/06/23/computing-chips-in-AV/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="chips-requirements-in-vehicle"><a href="#chips-requirements-in-vehicle" class="headerlink" title="chips requirements in vehicle"></a>chips requirements in vehicle</h3><p>Bosch :<br><img src="/images/evolution_ee_architecture_bosch.jpg" alt="Bosch"></p>
-<p>BMW:<br><img src="/images/bmw_ee_ architecture.jpg" alt="BMW"></p>
-<p>the next-generation vehicle EE platform can be easily modulized based on the topology of network composed by domain controllers and in-vehicle Ethernets. take an example with <a href="http://www.sohu.com/a/291472706_391994" target="_blank" rel="external">Singulato iS6</a>, which has five domains: smart driving,  powertrain, chassis, smart body, smart seat. </p>
-<p>each domain need support by a domain controller unit(DCU), the core of which is a powerful computing chip, which is usually more powerful than traditional ECUs. in average, L2 requires computing power about 10TOPS , L3 needs 60TOPS, L4 needs 100TOPS.</p>
-<h3 id="computing-chips"><a href="#computing-chips" class="headerlink" title="computing chips"></a>computing chips</h3><table>
-<thead>
-<tr>
-<th>product</th>
-<th>MDC600</th>
-<th>Driver PX Pegasus</th>
-<th>EyeQ 4</th>
-<th>BlueBox</th>
-<th>R-car H3</th>
-<th>Journey2.0</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>Huawei</td>
-<td>Nvidia</td>
-<td>Mobileye</td>
-<td>NXP</td>
-<td>Renesas</td>
-<td>Horizon</td>
-</tr>
-<tr>
-<td>TOPS</td>
-<td>352</td>
-<td>320</td>
-<td>2.5</td>
-<td></td>
-<td></td>
-<td>10</td>
-</tr>
-<tr>
-<td>main cores</td>
-<td>8 * 晟腾310</td>
-<td>16 ARM</td>
-<td>VMP</td>
-<td>LS2084A</td>
-<td>4*Arm/A57</td>
-<td>BPU2.0</td>
-</tr>
-<tr>
-<td>other cores</td>
-<td>Ascend 310</td>
-<td>2 TensorCore GPU</td>
-<td></td>
-<td>S32V234</td>
-<td>4*Arm/A53</td>
-<td>FPGA</td>
-</tr>
-<tr>
-<td>AV-level</td>
-<td>L3+</td>
-<td>L5</td>
-<td>L3</td>
-<td>L4(target)</td>
-<td>IVI</td>
-<td>L3</td>
-</tr>
-<tr>
-<td>Camera support</td>
-<td>16</td>
-<td>10</td>
-<td>8</td>
-<td>8</td>
-<td>8</td>
-<td>4</td>
-</tr>
-<tr>
-<td>Lidar support</td>
-<td>8</td>
-<td>6</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>function safety</td>
-<td>ASIL-D</td>
-<td>ASIL-B</td>
-<td>ASIL-D</td>
-<td>ASIL-D(target)</td>
-<td>ASIL-B</td>
-<td>ASIL-B</td>
-</tr>
-</tbody>
-</table>
-<p><img src="computing-chips-in-AV/r-car-h3-block-diagram.jpg" alt="R-car H3"></p>
-<h3 id="products-timeline"><a href="#products-timeline" class="headerlink" title="products timeline"></a>products timeline</h3><h4 id="Tier1s-Tier2s-timeline"><a href="#Tier1s-Tier2s-timeline" class="headerlink" title="Tier1s/Tier2s timeline"></a>Tier1s/Tier2s timeline</h4><table>
-<thead>
-<tr>
-<th></th>
-<th>2018</th>
-<th>2019</th>
-<th>2020</th>
-<th>2021</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Aptive</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Bosch</td>
-<td>level2</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Conti</td>
-<td>level2</td>
-<td></td>
-<td></td>
-<td>level3+</td>
-</tr>
-<tr>
-<td>Autoliv</td>
-<td>level2</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Intel</td>
-<td>level3</td>
-<td></td>
-<td>level4+</td>
-</tr>
-<tr>
-<td>Nvidia</td>
-<td>level3</td>
-<td>level4+</td>
-</tr>
-</tbody>
-</table>
-<h4 id="Chinese-OEMs-timeline"><a href="#Chinese-OEMs-timeline" class="headerlink" title="Chinese OEMs timeline"></a>Chinese OEMs timeline</h4><table>
-<thead>
-<tr>
-<th></th>
-<th>2019</th>
-<th>2020</th>
-<th>2021</th>
-<th>2022+</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>changan</td>
-<td></td>
-<td></td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>FAW</td>
-<td></td>
-<td></td>
-<td>level4</td>
-<td></td>
-</tr>
-<tr>
-<td>GAC</td>
-<td>level3</td>
-<td></td>
-<td></td>
-<td>level5</td>
-</tr>
-<tr>
-<td>Geely</td>
-<td></td>
-<td>level3</td>
-<td></td>
-<td>level5</td>
-</tr>
-<tr>
-<td>GWM</td>
-<td></td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>SAIC</td>
-<td>level3</td>
-</tr>
-<tr>
-<td>xiaoPeng</td>
-<td></td>
-<td>level3</td>
-</tr>
-<tr>
-<td>WeiMa</td>
-<td></td>
-<td></td>
-<td>level3</td>
-</tr>
-<tr>
-<td>Nio</td>
-<td>level2</td>
-<td></td>
-<td>level4+ </td>
-</tr>
-</tbody>
-</table>
-<h4 id="global-OEMs-timeline"><a href="#global-OEMs-timeline" class="headerlink" title="global OEMs timeline"></a>global OEMs timeline</h4><table>
-<thead>
-<tr>
-<th></th>
-<th>2018</th>
-<th>2019</th>
-<th>2020</th>
-<th>2021</th>
-<th>2022+</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ford</td>
-<td>level2</td>
-<td></td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>GM</td>
-<td>level2</td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Fiat-Crysler</td>
-<td></td>
-<td></td>
-<td></td>
-<td>level3+</td>
-</tr>
-<tr>
-<td>Audi</td>
-<td>level2</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Mercedze</td>
-<td>level2</td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Toyota</td>
-<td>level2</td>
-<td></td>
-<td>level3</td>
-<td></td>
-<td>level4</td>
-</tr>
-<tr>
-<td>Honda</td>
-<td></td>
-<td></td>
-<td>level3</td>
-<td>level4</td>
-</tr>
-</tbody>
-</table>
-<h4 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h4><p><a href="http://www.cheyun.com/content/21571" target="_blank" rel="external">Matrix 1.0</a></p>
-<p><a href="http://www.cheyun.com/content/15377" target="_blank" rel="external">the five chip vendors</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/48679466" target="_blank" rel="external">from GPU to ASIC</a></p>
-<p><a href="http://www.sohu.com/a/315849896_100044558" target="_blank" rel="external">hauwei and the others</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/57378600" target="_blank" rel="external">global chips vendors</a></p>
-<p><a href="https://blog.csdn.net/weixin_42229404/article/details/84306658" target="_blank" rel="external">L4 AI chips</a></p>
-<p><a href="https://www.mobileye.com/our-technology/evolution-eyeq-chip/" target="_blank" rel="external">the evolution of EyeQ</a></p>
-<p><a href="https://www.mobileye.com/our-technology/" target="_blank" rel="external">Mobileye tech</a></p>
-<p><a href="https://autonomoustuff.com/wp-content/uploads/2019/05/nxp_bluebox_fact_sheet-whitelabel.pdf" target="_blank" rel="external">NXP bluebox</a></p>
-<p><a href="https://www.renesas.com/us/en/solutions/automotive/soc/r-car-h3.html" target="_blank" rel="external">R-car H3 soc</a></p>
-<p><a href="https://www.nxp.com/products/product-information/functional-safety-for-iso-26262-and-iec-61508:FNCTNLSFTY" target="_blank" rel="external">NXP function safety</a></p>
-<p><a href="http://www.cheyun.com/content/24350" target="_blank" rel="external">horizontal AI matrix2.0</a></p>
-<p><a href="https://community.plm.automation.siemens.com/t5/Digital-Transformations/Cars-mobility-chip-to-city-design-and-the-iPhone-4/ba-p/562778" target="_blank" rel="external">cars, mobility, chip-to-city design and the Iphone4</a></p>
-<p><a href="">2018-2019 汽车域控制器产业研究报告</a></p>
-<p><a href="http://www.sohu.com/a/283587948_607980" target="_blank" rel="external">汽车电子演化</a></p>
-<p><a href="">Global L3 self-driving vehicle market insights 2019</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/65273004" target="_blank" rel="external">self-driving car research report</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2153,7 +1897,7 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">187</span>
+                <span class="site-state-item-count">188</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
