@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="simulation," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="backgroundwhat’s the basic logic behind simulation in autonomous driving system(ADS) ? or why we need simulation in ADS, during AD development and even after massively produced ? how to integrate simu">
+<meta name="keywords" content="simulation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="find out ADS simulation trend from top teams">
+<meta property="og:url" content="http://yoursite.com/2020/10/07/find-out-ADS-simulation-trend-from-top-teams/index.html">
+<meta property="og:site_name" content="Serious Autonomous Vehicles">
+<meta property="og:description" content="backgroundwhat’s the basic logic behind simulation in autonomous driving system(ADS) ? or why we need simulation in ADS, during AD development and even after massively produced ? how to integrate simu">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn.yun.sooce.cn/4/51701/png/15853709246623a220004b7106964.png?version=1585370929">
+<meta property="og:image" content="https://edge-case-research.com/wp-content/uploads/2019/07/image.png">
+<meta property="og:image" content="https://ecrweb.wpengine.com/wp-content/uploads/2018/08/Web-1920-%E2%80%93-1@2x.png">
+<meta property="og:image" content="https://www.foretellix.com/wp-content/uploads/2020/08/Untitled-design-47.png">
+<meta property="og:image" content="https://www.foretellix.com/wp-content/uploads/2019/09/new%E2%80%94screen_REPLACEMENT.jpg">
+<meta property="og:updated_time" content="2020-10-07T05:14:31.254Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="find out ADS simulation trend from top teams">
+<meta name="twitter:description" content="backgroundwhat’s the basic logic behind simulation in autonomous driving system(ADS) ? or why we need simulation in ADS, during AD development and even after massively produced ? how to integrate simu">
+<meta name="twitter:image" content="https://cdn.yun.sooce.cn/4/51701/png/15853709246623a220004b7106964.png?version=1585370929">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/10/07/find-out-ADS-simulation-trend-from-top-teams/"/>
+
+
+
+
+
+  <title>find out ADS simulation trend from top teams | Serious Autonomous Vehicles</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Serious Autonomous Vehicles</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/07/find-out-ADS-simulation-trend-from-top-teams/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">find out ADS simulation trend from top teams</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-07T01:13:43-04:00">
+                2020-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/07/find-out-ADS-simulation-trend-from-top-teams/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/07/find-out-ADS-simulation-trend-from-top-teams/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>what’s the basic logic behind simulation in autonomous driving system(ADS) ? or why we need simulation in ADS, during AD development and even after massively produced ? how to integrate simulation in the AD closed-loop platform, namely from fleet/test data collection to valuable new features?</p>
+<p>before I can answer these questions, a few steps has went through:</p>
+<ul>
+<li>L2 commerical sims</li>
+</ul>
+<p>e.g. Matlab ADS box, vtd, prescan e.t.c. </p>
+<ul>
+<li>L3+ WorldSim</li>
+</ul>
+<p>few years ago, most ADS teams get the knowledge: AD require at least 10 billion miles verification, which can’t be done in traditional test field. so comes digitial twins, game engine based simulator, e.g. LGsim, Carla, and Tencent, Huawei etc have already made these simulator as service in their public cloud. we also try LGsim, and deploy it in k8s env, that was a good time to learn, but not really helpful in practice. </p>
+<ul>
+<li>L2 LogSim</li>
+</ul>
+<p>to assist L2 ADAS functions/algorithms/features iteration, as mentioned in <a href="https://zjli2013.github.io/2020/09/20/system-validation-in-l2-adas/" target="_blank" rel="external">system validation in l2 adas</a>, most l2 adas features doesn’t necessarily depends on Logsim, standard benchmark test suit are enough most time.</p>
+<p>of course, with more mount of LogSim, definitely can expose more bottleneck of the existing l2 adas features, but there is a balance between costing and profit. currently, large mount of physical data based L2 adas feature optimization is not an efficient invest for most OEMs. </p>
+<p>the special case of l2 feature is false positive of AEB system, which actually requires statiscally measurement.</p>
+<p>in a common development cycle, AEB system have about 5 major versions, and a few minor versions in each major version, so each version deployment need to check its false positive statically, which make logsim is a have-to. </p>
+<p>another common usage of logsim is sensor algorithm development, e.g. Bosch Radar. before each new version of radar algorithm release, they have to check its performance statiscally through logsim. </p>
+<p>LogSim is a very good starting point to integrate simulator into the ADS closed-loop platform, while we deal with data collection, clean, uploading, storage in db, and query through data engine, and DevOps to automatically trig to run, analysis and report. </p>
+<ul>
+<li>system verification and validation</li>
+</ul>
+<p>simulation is a test pathway, that’s the original purpose of simulation. traditionally, new vehicle release has went through closed field test, which has changed during ADS age, as ADS system is open-loop, there is no test suit can do once and forever, so <strong>miles coverage</strong> and <strong>scenario coverage</strong> are the novel pathways in ADS validation, which leads to simulation.</p>
+<ul>
+<li>ADS regulation evalution </li>
+</ul>
+<p>that’s the new trend as ADS getting popular, the goverment make rules/laws to set bars for new ADS players. one obligatory way is simulation.</p>
+<p>thanks for China Automotive Research Institute(CARI) teams. </p>
+<p>the following I’d share some understanding of simulation from top AD simulation teams: </p>
+<h2 id="QCraft"><a href="#QCraft" class="headerlink" title="QCraft"></a><a href="https://www.qcraft.ai/" target="_blank" rel="external">QCraft</a></h2><p>Our mission at QCraft is to bring autonomous driving into real life by using <a href="https://www.qcraft.ai/1852273-1862545.html?newsid=1816799&amp;_t=1582550990" target="_blank" rel="external">a large-scale intelligent simulation system and a self-learning framework for decision-making and planning</a>.</p>
+<p>QCraft was ex-waymo simulation team, has a solid understanding about simulation in AD R&amp;D. the logic behind QCraft: </p>
+<ul>
+<li><p>感知是一个比较确定性的问题，如何测试和评价是非常明确的，整体的方法论也是比较清楚的</p>
+</li>
+<li><p>规划决策视为目前最具挑战性的问题。第一，不确定性难以衡量。现有判断规划决策做得好坏的指标是舒适度和安全性；第二，从方法论的角度来说，行业里占主流位置的规划决策方法论，整体上看与20年前相比并没有大的突破。模仿学习或强化学习的方法，在大规模实际应用时也仍然存在众多问题</p>
+</li>
+</ul>
+<p>许多创业公司从无到有的技术构建过程——先做好建图和定位，再做好感知，最后再开始做规划决策和仿真。</p>
+<p>this is a very good point, as most early start-ups focus on AI based perception or planning, but gradually people realize as  no destructive break-through in AI tech, the AI model evaluation is too slowly, but collecting useful data is the real bottleneck. AI model is the most cheap thing when compare to data. </p>
+<p>the other point, Predict &amp; Planning(P&amp;P) is the real challenging in L3+ ADS, when dealing with L2 adas features, P&amp;P is knowlege based, which is a 20-years-old mindset. as P&amp;P in L3+ requires an efficient way to test, then comes to simulation. </p>
+<p>边界化难题（Cornercase），在你遇上野鸭子之前，你甚至不知道会有野鸭子的问题，所以边界化难题是需要有方法去(自动)发现新的corner case，并解决。</p>
+<p>除了收集大量的数据，更重要的是建立自动化生产的工厂，将源源不断收集来的有效数据，通过自动化的工具，加工成可用的模型。以更快的速度、更高效的方式应对边界化难题（Corner case）。</p>
+<p>测试工具是为了帮助工程师高效地开发，快速复现车辆上的问题，并提前暴露可能的潜在问题，同时也是提供一个评估系统，评价一个版本和另外一个版本比是变好了还是变坏了。</p>
+<p>我们的测试系统可做到和车载系统的高度一致，在路上出现的问题，回来就能在仿真里复现，并进行修复。保证再次上路时不出现同样问题。我们产生的场景库也与现实环境高度一致，因为本来就是从现实中学习来的</p>
+<p>轻舟智航不希望“只见树木不见森林”——通过见招拆招的方式进入到某个具体的小应用场景，变成一家靠堆人来解决问题、无法规模化的工程公司，</p>
+<p>in a word, to build a closed-loop data platform to drive ADS evolution automatically or self-evolution, that’s the real face of autonomous vehicle. </p>
+<h4 id="QCraft-实现无人驾驶需要什么样的仿真系统"><a href="#QCraft-实现无人驾驶需要什么样的仿真系统" class="headerlink" title="QCraft: 实现无人驾驶需要什么样的仿真系统"></a><a href="https://www.qcraft.ai/1852273-1862545.html?newsid=1816797" target="_blank" rel="external">QCraft: 实现无人驾驶需要什么样的仿真系统</a></h4><ul>
+<li>基于游戏引擎开发的仿真软件大都“华而不实”</li>
+</ul>
+<p>仿真软件在自动驾驶领域的重要应用，就是复现(replay)某一次的路测效果。但由于这种第三方软件的开发与自动驾驶软件的开发是相互独立的，很难保证其中各个模块的确定性，导致整个仿真软件存在不确定性，最终影响可用性。</p>
+<p>轻舟智航仿真系统的系统架构可以分为5层：最底层的是轻舟智航自研的Car OS，借助底层的通讯系统来保证模块之间的高效通讯； Car OS与仿真器是高度整合的系统，核心仿真器及评估器，是基于底层的Car OS接口开发的，能保证仿真系统的确定性；再往上一层是仿真周边工具链和基础架构，可保证整个数据闭环的有效性，将全部数据高效利用起来；第四层是大规模场景库构建；最顶层则是分布式系统仿真平台，支持快速、大规模的仿真应用，在短时间内得出正确评估。</p>
+<p>仿真场景库的自动生成的相关工作。视频中红色和绿色的两个点，分别代表两辆车的运动轨迹，这些轨迹的生成和变化，是在真实的交通数据集上，利用深度学习的方法进行训练，再使用训练好的深度神经网络 (生成模型) 合成大规模的互动车辆的轨迹</p>
+<p>我们认为仿真是达到规模化无人驾驶技术的唯一路径。首先，借助仿真及相关工具链，能形成高效的数据测试闭环，支持算法的测试和高效迭代，取代堆人或堆车的方式；其次，只有经过大规模智能仿真验证过的软件，才能够保证安全性和可用性。</p>
+<p><img src="https://cdn.yun.sooce.cn/4/51701/png/15853709246623a220004b7106964.png?version=1585370929" alt="image"></p>
+<p>in a word, this is a very ambitious plan, from carOS to cloud end, the whole data pipeline, from fleet data collection to model training, to new features release. the missing part is who would pay for it and the most evil part is who will pay for the large mount of engineering work, which is not something feeling high for PhDs. </p>
+<h2 id="Latent-Logic"><a href="#Latent-Logic" class="headerlink" title="Latent Logic"></a><a href="https://www.latentlogic.com/" target="_blank" rel="external">Latent Logic</a></h2><p>another waymo simulation startup, offers a platform that uses <strong>imitation learning</strong> to generate virtual drivers, motorists and pedestrians based on footage collected from real-life roads. Teams working on autonomous driving projects can insert these virtual humans into the simulations they use to train the artificial intelligence powering their vehicles. The result, according to Latent Logic, is a closer-to-life simulated training environment that enables AI models to learn more efficiently.</p>
+<h4 id="training-autonomous-vehicles-using-real-life-human-behaviour"><a href="#training-autonomous-vehicles-using-real-life-human-behaviour" class="headerlink" title="training autonomous vehicles using real-life human behaviour"></a><a href="https://www.research.ox.ac.uk/Article/2019-06-19-training-autonomous-vehicles-using-real-life-human-behaviour" target="_blank" rel="external">training autonomous vehicles using real-life human behaviour</a></h4><p>‘Autonomous vehicles must be tested in simulation before they can be deployed on real roads. To make these simulations realistic, it’s not enough to simulate the road environment; we need to simulate the other road users too: the human drivers, cyclists and pedestrians with which an autonomous vehicle may interact.’</p>
+<p>‘We use computer vision to collect these examples from video data provided by traffic cameras and drone footage. We can detect road users, track their motion, and infer their three-dimensional position in the real world. Then, we learn to generate realistic trajectories that imitate this real-life behaviour.’</p>
+<p>in a word, Latent Logic is dealing with P&amp;P training in L3+ ADS, which is the real challenging. </p>
+<h2 id="Roman-Roads"><a href="#Roman-Roads" class="headerlink" title="Roman Roads"></a><a href="https://www.romanroads.io/" target="_blank" rel="external">Roman Roads</a></h2><p>using <strong>imitation learning</strong> to train robots to behave like human, state of the art behavioral tech.</p>
+<p>We offer <strong>R&amp;D solutions</strong> from 3D environment creation, traffic flow collection to testing &amp; validation and deployment.</p>
+<ul>
+<li>driving behavior data collection </li>
+</ul>
+<p>ego view collection, fleet road test </p>
+<ul>
+<li>real-time re-construction</li>
+</ul>
+<p>real time generation of 3d virtual env and human behavior(imitation learning)</p>
+<ul>
+<li>data-driven decision making </li>
+</ul>
+<ul>
+<li>pre-mapping </li>
+</ul>
+<p>The behavior offset are different between two cities. We collect data, like how people change lane and cut in, and learn the naturalistic behaviors at different cities.</p>
+<p>in a word, still a very solid AI team, but who would pay for it and how to get valuable data, or integrate into OEM’s data platform, is the problem. </p>
+<h2 id="Cognata"><a href="#Cognata" class="headerlink" title="Cognata"></a><a href="https://www.cognata.com/" target="_blank" rel="external">Cognata</a></h2><p>the customer includes Hyundai Mobis. Cognata delivers large-scale full product lifecycle simulation for ADAS and Autonomous Vehicle developers.  </p>
+<h4 id="training"><a href="#training" class="headerlink" title="training"></a>training</h4><p>Automatically-generated 3D environments, digital twins or entirely synthetic worlds by DNN, synthetic datasets, and realistic AI-driven traffic agents for AV simulation.</p>
+<h4 id="validation"><a href="#validation" class="headerlink" title="validation"></a>validation</h4><ul>
+<li><p>pre-built scenarios, </p>
+</li>
+<li><p>standard ADAS/AV assessment programs </p>
+</li>
+<li><p>fuzzing for scenario variaties for regulations and certifications </p>
+</li>
+<li><p>UI friendly </p>
+</li>
+</ul>
+<h4 id="analysis"><a href="#analysis" class="headerlink" title="analysis"></a>analysis</h4><ul>
+<li><p>Ready-to-use pass/fail criteria for validation and certification of AV and ADAS</p>
+</li>
+<li><p>Trend mining for large scale simulation</p>
+</li>
+</ul>
+<h4 id="visulization"><a href="#visulization" class="headerlink" title="visulization"></a>visulization</h4><h3 id="how-it-works"><a href="#how-it-works" class="headerlink" title="how it works"></a>how it works</h3><p>static layer: digital twin </p>
+<p>dynamic layer: AI powered vehicles and pedestrains </p>
+<p>sensor layer: most popular sensor models based on DNN </p>
+<p>cloud layer: scalability and on-promise. </p>
+<p>Cognata as an independent simulation platform is so good, but when considering integration with exisitng close loop data platform in OEMs, it’s like a USA company, too general, doesn’t wet the shoe deeply, compare to QCraft, whose architecture is from down to top, from car OS to cloud deployment, which is more reliable solution for massively ADAS/AD products in future.</p>
+<h2 id="applied-intuition"><a href="#applied-intuition" class="headerlink" title="applied intuition"></a><a href="https://www.appliedintuition.com/" target="_blank" rel="external">applied intuition</a></h2><p>another Waymo derived simulation company. Test modules individually or all together with our simulation engine that’s custom built for speed and accuracy.</p>
+<p>improve perception algorithms, Compare the performance of different stack versions to ground truth data. Test new behaviors and uncover edge cases before pushing updates to your vehicles.</p>
+<ul>
+<li><p>Extract valuable data from real world drives and simulations</p>
+</li>
+<li><p>Review interesting events recorded from vehicles and simulations to determine root cause issues. Share the data with other team members for further analysis and fixes.</p>
+</li>
+<li><p>Extract and aggregate performance metrics from drive logs into automatic charts, dashboards, and shareable reports for a holistic view of your development progress.</p>
+</li>
+<li><p>Run your system through thousands of virtual scenarios and variations to catch regressions and measure progress before rolling it out for on-road testing.</p>
+</li>
+</ul>
+<p>in a word, looks pretty.</p>
+<h2 id="metamoto"><a href="#metamoto" class="headerlink" title="metamoto"></a><a href="https://www.metamoto.com/" target="_blank" rel="external">metamoto</a></h2><p>simulation as a service, Enterprise products and services for massively scalable, safe, scenario-based training and testing of autonomous system software</p>
+<p>it’s an interet based simulator compare to preScan, but in core is just another preScan, with scalability. can’t see data loop in the arch. so it’s helpful during R&amp;D, but not realy usefuly after release.</p>
+<h2 id="Parallel-Domain"><a href="#Parallel-Domain" class="headerlink" title="Parallel Domain"></a><a href="https://paralleldomain.com/" target="_blank" rel="external">Parallel Domain</a></h2><p>power AD with synthetic data, the ex-Apple AD simulation team.</p>
+<p>Parallel Domain claims its computing program will be able to generate city blocks less than a minute, Using real-world map data.  Parallel Domain will give customers plenty of options for fine tuning virtual testing environments. The simulator offers the option to incorporate real-world map data, and companies can alter everything from the number of lanes on a simulated road to the condition of its computer-generated pavement. Traffic levels, number of pedestrians, and time of day can be tweaked as well.</p>
+<p><a href="https://www.thedrive.com/tech/20559/parallel-domain-wants-to-create-a-virtual-world-for-self-driving-car-tests" target="_blank" rel="external">Nio is the launch customer of Parallel Domain</a></p>
+<p><a href="https://www.futurecar.com/2229/Parallel-Domain-Looks-to-Train-Autonomous-Vehicles-in-Virtual-Reality" target="_blank" rel="external">PD looks to train AD in virtual reality</a></p>
+<p><strong>from real map to virtual world</strong>, and road parameters are programable. but what about micro traffic flow, vehicle-pedestrain-cars interaction ?</p>
+<p>I think it’s great to generate virtual world with Parallel Domain, but not enough as the simulator in the whole close loop.</p>
+<p>the collected data, of course include real map info, which can used to create virtual world, but why need this virtual world? is to train AD P&amp;C system, which is more than just the static virtual world and with some mimic pedestrain/vehicle behaviors.</p>
+<p>in AI powered AD, valid and meaningful data is the oil. the basic understanding here is to with more data, get more robost and general AI model, which means with more data, the AI AD system can do behavior better with existing scenarios, and more importantly, do increase the ability to handle novel scenarios automatically.</p>
+<p>so is the close loop data in AD.</p>
+<h2 id="righthook"><a href="#righthook" class="headerlink" title="righthook"></a><a href="https://righthook.io/how-it-works/" target="_blank" rel="external">righthook</a></h2><ul>
+<li><p>digital twin of real world </p>
+</li>
+<li><p>scenario creation tool powered by AI</p>
+<p>to derive high-value permuation and test cases automatically(maybe both static and dynamic scenarios)</p>
+</li>
+<li><p>vehicle configuration </p>
+</li>
+</ul>
+<ul>
+<li>test management </li>
+</ul>
+<p>integration with DevOps and cloud on-premise </p>
+<p>in a world, this is something similar like Cognata, to generate vivid world from physical map data or synthetic data, then add imitation learning based agents, then a DevOps tool and web UI configurable.</p>
+<p>the most important and also the difficult part of this pipeline, is how to obtain large mount of valid and useful real data as cheap as possible, to train the scenario generator, as well as agents behavior generator. </p>
+<p>only MaaS taxi companies and OEMs have the data. </p>
+<h2 id="rfpro"><a href="#rfpro" class="headerlink" title="rfpro"></a><a href="http://www.rfpro.com/" target="_blank" rel="external">rfpro</a></h2><p>a driving simulation and digital twin for ad/adas, vd(chassis, powertrain e.t.c) development, test and validation. </p>
+<p> rFpro includes interfaces to all the mainstream vehicle modelling tools including CarMaker, CarSim, Dymola, SIMPACK, dSPACE ASM, AVL VSM, Siemens Virtual lab Motion, DYNAware, Simulink, C++ etc.  rFpro also allows you to use industry standard tools such as MATLAB Simulink and Python to modify and customise experiments.</p>
+<p>rFpro’s open Traffic interface allows the use of Swarm traffic and Programmed Traffic from tools such as the open-source SUMO, IPG Traffic, dSPACE ASM traffic, PTV VisSim, and VTD. Vehicular and pedestrian traffic can share the road network correctly with perfectly synchronised traffic and pedestrian signals, while allowing ad-hoc behaviour, such as pedestrians stepping into the road.</p>
+<p><a href="http://www.rfpro.com/driving-simulation/datafarming/" target="_blank" rel="external">data farming: generating mimic training data</a></p>
+<ul>
+<li><p>the largest lib of digital twins of public roads in the world </p>
+</li>
+<li><p>supervised learning env for perception </p>
+</li>
+</ul>
+<p>in a word, looks like a traditionally tier2. </p>
+<h2 id="edge-case-research"><a href="#edge-case-research" class="headerlink" title="edge case research"></a><a href="https://edge-case-research.com/" target="_blank" rel="external">edge case research</a></h2><h4 id="Hologram"><a href="#Hologram" class="headerlink" title="Hologram"></a>Hologram</h4><p>complements traditional simulation and road testing of perception systems</p>
+<p>Hologram unlocks the value in the perception data that’s collected by your systems.  It helps you find the edge cases where your perception software exhibits odd, potentially unsafe behavior.</p>
+<p>from recorded data, to automated edge case detection(powered by AI), The result: <strong>more robust perception</strong></p>
+<p><img src="https://edge-case-research.com/wp-content/uploads/2019/07/image.png" alt="image"></p>
+<p><img src="https://ecrweb.wpengine.com/wp-content/uploads/2018/08/Web-1920-%E2%80%93-1@2x.png" alt="image"></p>
+<p>most of the cost of developing safety-critical systems is spent on verification and validation. </p>
+<p>in a word, safety is a traditional viewpoint, and most AI based  teams doesn’t have solid understanding. but how ECR ca</p>
+<h2 id="foretellix"><a href="#foretellix" class="headerlink" title="foretellix"></a><a href="https://www.foretellix.com/adas-and-highway-solution/" target="_blank" rel="external">foretellix</a></h2><p>out of box verification automation solution for ADAS and highway functions, developed based on input from OEMs, regulators and compliance bodies. </p>
+<p><strong>Coverage Driven Verification</strong>, Foretellix’s mission is to enable <strong>measurable safety</strong> of ADAS &amp; autonomous vehicles, enabled by a transition from measuring ‘quantity of miles’ to ‘quality of coverage’ </p>
+<p><a href="https://www.foretellix.com/technology/" target="_blank" rel="external">how it works</a></p>
+<ul>
+<li>what to test ?</li>
+</ul>
+<p>Industry proven verification plan and 36 scenario categories covering massive number of challenges and edge cases</p>
+<ul>
+<li>When are you done?</li>
+</ul>
+<p>Functional coverage metrics to guide completeness of testing</p>
+<p><img src="https://www.foretellix.com/wp-content/uploads/2020/08/Untitled-design-47.png" alt="image"></p>
+<p>this is ADAS L2 V&amp;V solution, mostly in functional metric test. </p>
+<h4 id="Open-Language-M-SDL"><a href="#Open-Language-M-SDL" class="headerlink" title="Open Language: M-SDL"></a><a href="https://www.foretellix.com/open-language/" target="_blank" rel="external">Open Language: M-SDL</a></h4><p>M-SDL is an open, human readable, high level language that allows to simplify the capture, reuse and sharing of scenarios, and easily specify any mix of scenarios and operating conditions to identify previously unknown hazardous core &amp; edge cases. It also allows to monitor and measure the coverage of the autonomous functionality critical to prove  ADAS &amp; AV safety, independent of tests and testing platforms. </p>
+<p><img src="https://www.foretellix.com/wp-content/uploads/2019/09/new%E2%80%94screen_REPLACEMENT.jpg" alt="image"></p>
+<h2 id="atlatec"><a href="#atlatec" class="headerlink" title="atlatec"></a><a href="https://www.atlatec.de/simulation.html" target="_blank" rel="external">atlatec</a></h2><p>HD map for simualtion, digitial twin of real road, integrated well with simulation suppliers, e.g. IPG, Vires, Prescan.</p>
+<h2 id="ivex"><a href="#ivex" class="headerlink" title="ivex"></a><a href="https://ivex.ai/" target="_blank" rel="external">ivex</a></h2><p>provides <strong>qualitatively safety assessment of planning and decision making</strong> for all levels of ADs during development. </p>
+<h4 id="safety-assessment-tool"><a href="#safety-assessment-tool" class="headerlink" title="safety assessment tool"></a><a href="https://ivex.ai/assessment_tool/" target="_blank" rel="external">safety assessment tool</a></h4><p>what is safety requirements during AD development ?</p>
+<p>what’s the KPIs to represent these safety requirements ? </p>
+<p>is safety requirements iterative in each functional iteration, or done once for ever ?</p>
+<p>safety requirements can be validate before release, after then, when new corner cases detected, need to do safety validate automatically. so in this way, safety and function should keep in the same step.</p>
+<p>the ability of safety assessment tool :</p>
+<ul>
+<li><p>unsafe cases and decision detection from a large amount of scenarios </p>
+</li>
+<li><p>a qualitative metric of safety (RSS model)</p>
+</li>
+<li><p>statistical analysis of risk and safety metrics </p>
+</li>
+</ul>
+<h4 id="safety-co-pilot"><a href="#safety-co-pilot" class="headerlink" title="safety co-pilot"></a><a href="https://ivex.ai/safety_copilot/" target="_blank" rel="external">safety co-pilot</a></h4><p>guarantee safety of a planned trajectory. </p>
+<p>The safety co-pilot uses the safety model to assess whether (1) a situation is safe, and (2) a planned trajectory for the next few seconds can be considered as safe, accounting for predicted movements of other objects and road users.</p>
+<p>in a word, safety is big topic, but I can’t see the tech behind how Ivex solve it.</p>
+<h2 id="nvidia"><a href="#nvidia" class="headerlink" title="nvidia"></a><a href="https://www.nvidia.com/en-us/self-driving-cars/" target="_blank" rel="external">nvidia</a></h2><h2 id="intel"><a href="#intel" class="headerlink" title="intel"></a><a href="https://www.intel.com/content/www/us/en/automotive/autonomous-vehicles.html" target="_blank" rel="external">intel</a></h2><h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>from the top ADS simulation teams, we see a few trends:</p>
+<ul>
+<li><p>simulation driven P&amp;P iteration</p>
+</li>
+<li><p>simulation driven V&amp;V </p>
+</li>
+</ul>
+<p>can simulation be an independent tool, or it is customized and in-house services ? </p>
+<p>maybe like CAE ages, in the early time, Ford/GM have their own CAE packages, later CAE tools are maintained by external suppliers. when ADS simulation is matured, there maybe few independent ADS simulation companies, like Ansys, Abaqus in CAE fields.</p>
+<p>or a totally differenet story I can’t image here. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://selfdriving.fyi/" target="_blank" rel="external">SelfDriving.fyi</a></p>
+<p><a href="https://www.naincubator.com/" target="_blank" rel="external">north america incubator</a></p>
+<p><a href="https://www.zhihu.com/question/367321729" target="_blank" rel="external">zhihu</a></p>
+<p><a href="https://www.pegasusprojekt.de/en/" target="_blank" rel="external">pegasus symposium 2019</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/simulation/" rel="tag"># simulation</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/20/system-validation-in-l2-adas/" rel="next" title="system validation in l2 adas">
+                <i class="fa fa-chevron-left"></i> system validation in l2 adas
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="David Z.J. Lee" />
+          <p class="site-author-name" itemprop="name">David Z.J. Lee</p>
+           
+              <p class="site-description motion-element" itemprop="description">what I don't know</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">189</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ZJLi2013" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/in/zhengjia13/" target="_blank" title="LinkedIn">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  LinkedIn
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#background"><span class="nav-number">1.</span> <span class="nav-text">background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QCraft"><span class="nav-number">2.</span> <span class="nav-text">QCraft</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#QCraft-实现无人驾驶需要什么样的仿真系统"><span class="nav-number">2.0.1.</span> <span class="nav-text">QCraft: 实现无人驾驶需要什么样的仿真系统</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Latent-Logic"><span class="nav-number">3.</span> <span class="nav-text">Latent Logic</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#training-autonomous-vehicles-using-real-life-human-behaviour"><span class="nav-number">3.0.1.</span> <span class="nav-text">training autonomous vehicles using real-life human behaviour</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Roman-Roads"><span class="nav-number">4.</span> <span class="nav-text">Roman Roads</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cognata"><span class="nav-number">5.</span> <span class="nav-text">Cognata</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#training"><span class="nav-number">5.0.1.</span> <span class="nav-text">training</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#validation"><span class="nav-number">5.0.2.</span> <span class="nav-text">validation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#analysis"><span class="nav-number">5.0.3.</span> <span class="nav-text">analysis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#visulization"><span class="nav-number">5.0.4.</span> <span class="nav-text">visulization</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#how-it-works"><span class="nav-number">5.1.</span> <span class="nav-text">how it works</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#applied-intuition"><span class="nav-number">6.</span> <span class="nav-text">applied intuition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#metamoto"><span class="nav-number">7.</span> <span class="nav-text">metamoto</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Parallel-Domain"><span class="nav-number">8.</span> <span class="nav-text">Parallel Domain</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#righthook"><span class="nav-number">9.</span> <span class="nav-text">righthook</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rfpro"><span class="nav-number">10.</span> <span class="nav-text">rfpro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#edge-case-research"><span class="nav-number">11.</span> <span class="nav-text">edge case research</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hologram"><span class="nav-number">11.0.1.</span> <span class="nav-text">Hologram</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#foretellix"><span class="nav-number">12.</span> <span class="nav-text">foretellix</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Open-Language-M-SDL"><span class="nav-number">12.0.1.</span> <span class="nav-text">Open Language: M-SDL</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#atlatec"><span class="nav-number">13.</span> <span class="nav-text">atlatec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ivex"><span class="nav-number">14.</span> <span class="nav-text">ivex</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#safety-assessment-tool"><span class="nav-number">14.0.1.</span> <span class="nav-text">safety assessment tool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#safety-co-pilot"><span class="nav-number">14.0.2.</span> <span class="nav-text">safety co-pilot</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nvidia"><span class="nav-number">15.</span> <span class="nav-text">nvidia</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#intel"><span class="nav-number">16.</span> <span class="nav-text">intel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-number">17.</span> <span class="nav-text">summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#refer"><span class="nav-number">18.</span> <span class="nav-text">refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David Z.J. Lee</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://zjlee.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2020/10/07/find-out-ADS-simulation-trend-from-top-teams/';
+          this.page.identifier = '2020/10/07/find-out-ADS-simulation-trend-from-top-teams/';
+          this.page.title = 'find out ADS simulation trend from top teams';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://zjlee.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -291,6 +291,153 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/26/boost-python-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/26/boost-python-1/" itemprop="url">boost.python 1</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-26T07:19:15-04:00">
+                2020-06-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/06/26/boost-python-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/06/26/boost-python-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>in OEM’s ADS team, there are bunch of model-based design engineers, who build the ADAS features based on Matlab/Simulink tools, which is good to build quick demos, when comes to massive data verification, we can’t really depends on Matlab solver, which is so slow and licensed. </p>
+<p>so a common idea is to recompile the Matlab/Simulink model to C/C++ code, which can further embedded to more open envs, e.g. python or C++.</p>
+<p>as previously mentioned, we had designed a rq based massive data driven test framework, so the gap from C++ ADAS code to this python test framework is fixed in this blog.</p>
+<p>there are a few wasy to integrate C++ code to Python, one is <code>Boost.Python</code>: </p>
+<h2 id="setup"><a href="#setup" class="headerlink" title="setup"></a>setup</h2><p><a href="https://www.boost.org/doc/libs/1_73_0/more/getting_started/unix-variants.html" target="_blank" rel="external">install boost</a></p>
+<p><a href="https://www.boost.org/doc/libs/1_72_0/libs/python/doc/html/building/configuring_boost_build.html" target="_blank" rel="external">configuring Boost.BUild</a></p>
+<p>python env :  3.6 (from conda env aeb)<br>gcc:  4.5.0 </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> BOOST_BUILD_PATH=`<span class="built_in">pwd</span>`   <span class="comment">#where we keep `user-config.jam`</span></div></pre></td></tr></table></figure>
+<h4 id="user-config-jam"><a href="#user-config-jam" class="headerlink" title="user-config.jam"></a>user-config.jam</h4><figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="string">using</span> <span class="string">gcc</span> <span class="string">:</span> <span class="number">5.4</span><span class="number">.0</span> <span class="string">:</span> <span class="string">/usr/bin/g++</span> <span class="string">;</span></div><div class="line"></div><div class="line"><span class="string">using</span> <span class="string">python</span> <span class="string">:</span> <span class="number">3.6</span></div><div class="line">        <span class="string">:</span> <span class="string">"/home/anaconda3/envs/aeb/bin/python"</span></div><div class="line">        <span class="string">:</span> <span class="string">"/home/anaconda3/envs/aeb/include"</span></div><div class="line">        <span class="string">:</span> <span class="string">"/home/anaconda3/envs/aeb/include/python3.6m"</span> <span class="string">;</span> </div><div class="line"><span class="string">```</span> </div><div class="line"></div><div class="line"><span class="string">bootstrap</span> <span class="string">will</span> <span class="string">find</span> <span class="string">`user-config.jam`</span> <span class="string">from</span> <span class="string">$BOOST_BUILD_PATH.</span> </div><div class="line"></div><div class="line"><span class="string">```sh</span> </div><div class="line"><span class="string">cd</span>  <span class="string">/path/to/boost_1_73_0</span></div><div class="line"><span class="string">./bootstrap.sh</span> <span class="bullet">--help</span></div><div class="line"><span class="string">./bootstrap.sh</span> <span class="bullet">--prefix=/usr/local/</span> <span class="bullet">--show-libraries</span></div><div class="line"><span class="string">b2</span> <span class="bullet">--with-python</span> <span class="bullet">--prefix="/usr/local/"</span> <span class="string">install</span> <span class="string">variant=release</span> <span class="string">link=static</span> <span class="string">address-model=64</span> </div><div class="line"><span class="string">b2</span> <span class="bullet">--clean</span></div></pre></td></tr></table></figure>
+<p><a href="https://cloud.tencent.com/developer/article/1011767" target="_blank" rel="external">a sample of user-config.jam</a></p>
+<ul>
+<li>error fixing </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">fatal error: pyconfig.h: No such file or directory</div><div class="line">compilation terminated.</div></pre></td></tr></table></figure>
+<p>need <code>export CPATH=~/anaconda/envs/aeb/include/python3.6m/</code>,  where located <code>pyconfig.h</code> and other headers</p>
+<p>finally report: boost.python build successfully !</p>
+<h2 id="demo-run"><a href="#demo-run" class="headerlink" title="demo run"></a>demo run</h2><p>the following is simple sample of how to use boost_python wrapper to wrapping an AEB model(in c++) to python</p>
+<h4 id="aeb-h"><a href="#aeb-h" class="headerlink" title="aeb.h"></a>aeb.h</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">	<span class="keyword">float</span> time; </div><div class="line">	<span class="keyword">float</span> dx ;</div><div class="line">	<span class="keyword">float</span> dy ;</div><div class="line">&#125; AEB;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">	AEB out1 ;</div><div class="line">&#125; OP;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">aeb</span> &#123;</span></div><div class="line">    <span class="keyword">public</span>:</div><div class="line">        Student() &#123;&#125;</div><div class="line">	OP op_out ;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">test_op</span><span class="params">()</span></span>&#123;</div><div class="line">            (<span class="keyword">void</span>) <span class="built_in">memset</span>((<span class="keyword">void</span> *)&amp;op_out, <span class="number">0</span>, <span class="keyword">sizeof</span>(OP)); </div><div class="line">            op_out.out1.time = <span class="number">1.0</span> ; </div><div class="line">            op_out.out1.dx = <span class="number">2.0</span> ;</div><div class="line">            op_out.out1.dy = <span class="number">3.0</span> ; </div><div class="line">            AEB o1 = op_out.out1 ;</div><div class="line">            <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; o1.time &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span> ;</div><div class="line">        &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="wrap-aeb-cpp"><a href="#wrap-aeb-cpp" class="headerlink" title="wrap_aeb.cpp"></a>wrap_aeb.cpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Python.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/python.hpp&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/python/suite/indexing/vector_indexing_suite.hpp&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"aeb.h"</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> boost::python;</div><div class="line"></div><div class="line">BOOST_PYTHON_MODULE(aeb) &#123;</div><div class="line">    scope().attr(<span class="string">"__version__"</span>) = <span class="string">"1.0.0"</span>;</div><div class="line">    scope().attr(<span class="string">"__doc__"</span>) = <span class="string">"a demo module to use boost_python."</span>;</div><div class="line">    class_&lt;aeb&gt;(<span class="string">"aeb"</span>, <span class="string">"a class of aeb"</span>)</div><div class="line">        .def(init&lt;&gt;())</div><div class="line">        .def(<span class="string">"test_op"</span>, &amp;aeb::test_op, <span class="string">"test op"</span>)</div><div class="line">        .def_readonly(<span class="string">"op_out"</span>, &amp;aeb::op_out)</div><div class="line">&#125;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">tips, <span class="keyword">if</span> aeb.h <span class="keyword">and</span> aeb.cpp are separated files, it's better to merge them first;  <span class="keyword">for</span> nested structure in wrapper is another topic later.</div><div class="line"></div><div class="line">###<span class="meta"># build and python import </span></div><div class="line"></div><div class="line">* check header location</div><div class="line"></div><div class="line">      Python.h @ `/home/anaconda3/envs/aeb/include/python3<span class="number">.6</span>m`</div><div class="line"></div><div class="line">      boost/python @ `/usr/local/include/boost`</div><div class="line"></div><div class="line">* check .so lib location</div><div class="line">     </div><div class="line">       /usr/local/lib/</div><div class="line"></div><div class="line"></div><div class="line">tips, <span class="keyword">if</span> there is duplicated `boost lib` in system, e.g. `/usr/lib/x86_64-linxu-gnu/libboost_python.so` which maybe conflict with `boost_python` install location at `/usr/local/lib/libboost_python36.so`</div><div class="line"></div><div class="line">* build </div><div class="line"></div><div class="line">```sh</div><div class="line">g++ -I/home/anaconda3/envs/aeb/include/python3<span class="number">.6</span>m -I/usr/local/include/boost -fPIC wrap_aeb.cpp -L/usr/local/lib/ -lboost_python36 -shared -o aeb.so</div></pre></td></tr></table></figure>
+<ul>
+<li>test </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> aeb</div><div class="line">t = aeb.aeb</div><div class="line">t.test_op()</div></pre></td></tr></table></figure>
+<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>this blog gives the basic idea how to use <code>boost.python</code> to integrate c++ to python test framework. there are plenty details need fixed, e.g. nested structures, share_pointers. maybe share in next blog.</p>
+<h4 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h4><p><a href="https://www.boost.org/doc/libs/1_66_0/libs/python/doc/html/tutorial/index.html" target="_blank" rel="external">boost.python tutorial</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/play-with-ros-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2542,185 +2689,6 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/redis-task-queue/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/04/09/redis-task-queue/" itemprop="url">redis task queue</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T02:26:42-04:00">
-                2020-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/04/09/redis-task-queue/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/04/09/redis-task-queue/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>redis is a in-memory database, like SQlite, but the other part of redis, is that it can use to write message queue for task scheduler.</p>
-<p>job/task scheduler is a popular automatic tool used in cloud/HPC, when need to deal with lots of taskes/jobs. </p>
-<p>for ADS simulation, a job scheduler can be used to manage the scenarios feed into the simulator. where the existing scenarios are stored as items in redis, and the redis server looks like a shared volume, which can be access by any worker services through <code>redis_host</code>. where simulator can enpacakged in a redis_worker. </p>
-<h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><h4 id="redis-commands"><a href="#redis-commands" class="headerlink" title="redis commands"></a>redis commands</h4><p>redis is database, so there are plenty of commands used to do db operation. e.g. </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">GET, SET <span class="comment">#string</span></div><div class="line">HGET, HSET, <span class="comment">#hash table</span></div><div class="line">LPUSH, LPOP, BLPOP <span class="comment">#list</span></div><div class="line">SADD, SPOP, <span class="comment">#set</span></div><div class="line">PUBLISH, SUBSCRIBE, UNSUBSCRIBE, PUBSUB <span class="comment">#pub&amp;sub</span></div><div class="line">...</div></pre></td></tr></table></figure>
-<h4 id="redis-in-python"><a href="#redis-in-python" class="headerlink" title="redis in python"></a>redis in python</h4><p>the following is from <a href="https://github.com/andymccurdy/redis-py" target="_blank" rel="external">redis-py api reference</a></p>
-<ul>
-<li>get/set string</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">r = redis.Redis(host=<span class="string">'localhost'</span>, port=<span class="number">6379</span>, db=<span class="number">0</span>)</div><div class="line">r.set(<span class="string">'foo'</span>, <span class="string">'bar'</span>)</div><div class="line">r.get(<span class="string">'foo'</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li>connection pools</li>
-</ul>
-<p>redis-py uses a connection pool to manage connections to a Redis server. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pool = redis.ConnectionPool(host=<span class="string">'localhost'</span>, port=<span class="number">6379</span>, db=<span class="number">0</span>)</div><div class="line">r = redis.Redis(connection_pool=pool)</div></pre></td></tr></table></figure>
-<ul>
-<li>connections </li>
-</ul>
-<p>connectionPools manage a set of Connection instances. the default connection is a normal TCP  socket based; also it can use UnixDomainSocketConnection, or customized protocol.</p>
-<p>connection maintain an open socket to Redis server. when these sockets are disconnected, redis-py will raise a <code>ConnectionError</code> to the caller, also redis-py can issue regular <code>health check</code> to assess the liveliness of a connection. </p>
-<ul>
-<li>parsers</li>
-</ul>
-<p>parser provides the way to control how response from Redis server are parsed, redis-py has: PythonParser and the default HiredisParser. </p>
-<ul>
-<li>response callbacks</li>
-</ul>
-<p>the redis-py has its own client callbacks in <code>RESPONSE_CALLBACKS</code>. custom callbacks can add on per-instance using <code>set_response_callback(command_name, callfn)</code></p>
-<ul>
-<li>pub/sub </li>
-</ul>
-<p>PubSub object can subscribes/unsubscribes to channels or patterns and listens for new messages.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">r = redis.Redis(...)</div><div class="line">p = r.pubsub()</div><div class="line">p.subscribe(<span class="string">'my-first-channel'</span>, ...)</div><div class="line">p.psubscribe(<span class="string">'my-first-patttern'</span>, ...)</div><div class="line">p.unsubscribe(<span class="string">'my-first-channel'</span>)</div><div class="line">p.punsubscribe(<span class="string">'my-first-pattern'</span>)</div></pre></td></tr></table></figure>
-<p>every message read from a PubSub instance will be a dict with following keys:</p>
-<pre><code>- type, e.g. subscribe, unsubscribe, psubscribe, message e.t.c
-- channel
-- pattern
-- data
-</code></pre><p>redis-py allows to register callback funs to handle published messages. these message handlers take a single argument <code>the message</code>. when a message is read with a message handler, the message is created and passed to the message handler:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_handler</span><span class="params">(message)</span>:</span></div><div class="line">	<span class="keyword">print</span> message[<span class="string">'data'</span>]</div><div class="line"></div><div class="line">p.subscribe(**(<span class="string">'my-channel'</span>: a_handler&#125;)</div><div class="line">r.publish(<span class="string">'my-channel'</span>, <span class="string">'awesome handler'</span>)</div><div class="line">p.get_message()</div></pre></td></tr></table></figure>
-<ul>
-<li>get_message()</li>
-</ul>
-<p>get_message() use system’s <code>select</code> module to quickly poll the connection’s socket. if there’s data available to be read, get_message() will read it; if there’s no data to be read, get_message() will immediately return <code>None</code>:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">	message = p.get_message()</div><div class="line">	<span class="keyword">if</span> message:</div><div class="line">		<span class="comment">#do something with the message</span></div><div class="line">	time.sleep(<span class="number">0.01</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li>listen()</li>
-</ul>
-<p>listen() is a generator(e.g. <code>yield</code> keyword), which blocks until a message is avaiable. if the app is ok to be blocked until next message avaiable, listen() is an easy way:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> message <span class="keyword">in</span> p.listen():</div><div class="line">	<span class="comment">#do something with the message</span></div></pre></td></tr></table></figure>
-<ul>
-<li>run_in_thread()</li>
-</ul>
-<p>run an event loop in a separate thread. run_in_thread() returns a thread object, and it is simply a wrapper around get_message(), that runs in a separate thread, essentially creating a tiny non-blocking event loop. since it’s running in a separate thread, there is no way to handle message that aren’t automatically handled with registered message handlers. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">p.subscribe(**&#123;<span class="string">'my-channel'</span>: a_handler&#125;)</div><div class="line">thread = p.run_in_thread(sleep_time = <span class="number">0.01</span>)</div><div class="line"><span class="comment">#when need shut down</span></div><div class="line">thread.stop()</div></pre></td></tr></table></figure>
-<h2 id="redis-task-queue-in-k8s"><a href="#redis-task-queue-in-k8s" class="headerlink" title="redis task queue in k8s"></a>redis task queue in k8s</h2><p><a href="https://kubernetes.io/docs/tasks/job/fine-parallel-processing-work-queue/" target="_blank" rel="external">fine parallel processing using work queue</a> is an good example of how to use redis as task queue.</p>
-<p>first, fill the existing task lists into redis database(server) as a shared volume, then start mutli worker services to the shared volume to get the job to run.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2771,7 +2739,7 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">188</span>
+                <span class="site-state-item-count">189</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
