@@ -291,6 +291,257 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/play-with-k8s/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/09/play-with-k8s/" itemprop="url">play with k8s</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-09T03:31:23-04:00">
+                2020-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/09/play-with-k8s/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/04/09/play-with-k8s/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="basic-k8s"><a href="#basic-k8s" class="headerlink" title="basic k8s"></a>basic k8s</h2><h4 id="kubeadm-init"><a href="#kubeadm-init" class="headerlink" title="kubeadm init"></a>kubeadm init</h4><p>init options can be: </p>
+<ul>
+<li><p><code>--apiserver-bind-port int32</code>, by default, port=6443</p>
+</li>
+<li><p><code>--config string</code>, can pass in a kubeadm.config file to create a kube master node </p>
+</li>
+<li><p><code>--node-name string</code>, attach node name </p>
+</li>
+<li><p><code>--pod-network-cidr string</code>,  used to set the IP address range for all Pods. </p>
+</li>
+<li><p><code>--service-cide string</code>,  set service CIDRs, default value is <code>10.96.0.0/12</code></p>
+</li>
+<li><p><code>--service-dns-domain string</code>, default value is <code>cluster.local</code> </p>
+</li>
+<li><code>--apiserver-advertise-address string</code>, the broadcast listened address by API Server</li>
+</ul>
+<h4 id="nodes-components"><a href="#nodes-components" class="headerlink" title="nodes components"></a>nodes components</h4><table>
+<thead>
+<tr>
+<th>IP</th>
+<th>hostname</th>
+<th>components</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>192.168.0.1</td>
+<td>master</td>
+<td>kube-apiserver, kube-controller-manager, kube-scheduler, etcd, kubelet, docker, flannel, dashboard</td>
+</tr>
+<tr>
+<td>192.168.0.2</td>
+<td>worker</td>
+<td>kubelet, docker, flannel</td>
+</tr>
+</tbody>
+</table>
+<h4 id="ApiServer"><a href="#ApiServer" class="headerlink" title="ApiServer"></a>ApiServer</h4><p>when first launch Kubelet, it will send the Bootstrapping request to kube-apiserver, which then verify the sent token is matched or not. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">--advertise-address = <span class="variable">$&#123;master_ip&#125;</span></div><div class="line"></div><div class="line">--<span class="built_in">bind</span>-address = <span class="variable">$&#123;master_ip&#125;</span>  <span class="comment">#can't be 127.0.0.1 </span></div><div class="line"></div><div class="line">--insecure-bind-address = <span class="variable">$&#123;master_ip&#125;</span></div><div class="line"></div><div class="line">--token-auth-file = /etc/kubernets/token.csv</div><div class="line"></div><div class="line">--service-node-port-range=<span class="variable">$&#123;NODE_PORT_RANGE&#125;</span></div></pre></td></tr></table></figure>
+<p><a href="https://jimmysong.io/posts/kubernetes-installation-on-centos/" target="_blank" rel="external">how to configure master node</a></p>
+<h4 id="cluster-IP"><a href="#cluster-IP" class="headerlink" title="cluster IP"></a>cluster IP</h4><p>it’s the service IP, which is internal, usually expose the service name.</p>
+<p>the cluse IP default values as following:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">--service-cluster-ip-range=10.254.0.0/16</div><div class="line">--service-node-port-range=30000-32767</div></pre></td></tr></table></figure>
+<h2 id="k8s-in-practice"><a href="#k8s-in-practice" class="headerlink" title="k8s in practice"></a>k8s in practice</h2><p><img src="https://jimmysong.io/kubernetes-handbook/images/kubernetes-high-level-component-archtecture.jpg" alt="image"></p>
+<p><img src="https://jimmysong.io/kubernetes-handbook/images/kubernetes-whole-arch.png" alt="image"></p>
+<p><img src="https://jimmysong.io/kubernetes-handbook/images/kubernetes-layers-arch.png" alt="image"></p>
+<p>blueKing is a k8s solution from TenCent. here is a <a href="https://bk.tencent.com/docs/document/5.1/13/652" target="_blank" rel="external">quickstart</a>: </p>
+<ul>
+<li><p>create a task</p>
+</li>
+<li><p>add agnet for the task </p>
+</li>
+<li><p>run the task &amp; check the sys log </p>
+</li>
+<li><p>create task pipeline (CI/CD)</p>
+</li>
+</ul>
+<h4 id="create-a-new-service-in-k8s"><a href="#create-a-new-service-in-k8s" class="headerlink" title="create a new service in k8s"></a>create a new service in k8s</h4><ul>
+<li>create namespace for speical bussiness</li>
+<li>create serivces, <a href="https://www.jianshu.com/p/3f24bbee72ad" target="_blank" rel="external">pull images from private registry hub</a></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">kubectl create -f  my-nginx-2.yaml</div><div class="line">kubctl get pods -o wide</div></pre></td></tr></table></figure>
+<h4 id="how-external-access-to-k8s-pod-service"><a href="#how-external-access-to-k8s-pod-service" class="headerlink" title="how external access to k8s pod service ?"></a>how external access to k8s pod service ?</h4><p>pod has itw own special IP and a lifecyle period. once the node shutdown, the controller manager can transfer the pod to another node. when multi pods, provides the same service for front-end users, the front end users doesn’t care which pod is exactaly running, then here is the concept of <code>service</code>:</p>
+<pre><code>service is an abstraction which defines a logical set of Pods and a policy by which to access them
+</code></pre><p>service can be defined by <code>yaml</code>, <code>json</code>, the target pod can be define by <code>LabelSeletor</code>. a few ways to expose service:</p>
+<ul>
+<li><p><code>ClusterIP</code>, which is the default way, which only  works inside k8s cluster</p>
+</li>
+<li><p><code>NodePort</code>, which use NAT to provide external access through a special port, the port should be among <code>8400~9000</code>. then in this way, no matter where exactly the pod is running on, when access <code>*.portID</code>, we can get the serivce. </p>
+</li>
+<li><p><code>LoadBalancer</code></p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">kubectl get services</div><div class="line">kubectl expose your_service --<span class="built_in">type</span>=<span class="string">"NodePort"</span> --port 8889</div><div class="line">kubctl describe your_service</div></pre></td></tr></table></figure>
+<h4 id="use-persistent-volume"><a href="#use-persistent-volume" class="headerlink" title="use persistent volume"></a>use persistent volume</h4><ul>
+<li><p>access external sql </p>
+</li>
+<li><p>use volume </p>
+</li>
+</ul>
+<p><code>volume</code> is for persistent, <code>k8s volume</code> is similar like <code>docker volume</code>, working as dictory, when mount a volume to a pod, all containers in that pod can access that volume. </p>
+<ul>
+<li>EmptyDir</li>
+<li>hostPath</li>
+<li>external storage service(aws, azure), k8s can directly use cloud storage as volume, or distributed storage system(ceph):</li>
+</ul>
+<p><a href="https://www.cnblogs.com/benjamin77/p/9940266.html" target="_blank" rel="external">sample</a></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">apiVersion: v1</div><div class="line">kind: Pod</div><div class="line">metadata: </div><div class="line">	name: using-ebs</div><div class="line">metadata:</div><div class="line">	name: using-ceph</div><div class="line">spec:</div><div class="line">	containers:</div><div class="line">		-image: busybox1</div><div class="line">		 name: using-ebs</div><div class="line">		 volumeMounts:</div><div class="line">		 	-mountPath: /test-ebs</div><div class="line">		 	name: ebs-volume</div><div class="line">		-image: busybox2</div><div class="line">			name: using-ceph</div><div class="line">			volumeMounts:</div><div class="line">				-name: ceph-volume</div><div class="line">				mountPath: /test-ceph</div><div class="line">				</div><div class="line">		volumes:</div><div class="line">		-name: ebs-volume</div><div class="line">		awsElasticBlockStore:</div><div class="line">			volumeID:  <span class="tag">&lt;<span class="name">volume_id</span>&gt;</span></div><div class="line">			fsType: ext4</div><div class="line">		</div><div class="line">		-name: ceph-volume</div><div class="line">		cephfs:</div><div class="line">			path: /path/in/ceph</div><div class="line">			monitors: "10.20.181.112:6679"</div><div class="line">			secretFile: "/etc/ceph/admin/secret"</div></pre></td></tr></table></figure>
+<h4 id="containers-communication-in-same-pod"><a href="#containers-communication-in-same-pod" class="headerlink" title="containers communication in same pod"></a>containers communication in same pod</h4><p>first, <a href="https://www.mirantis.com/blog/multi-container-pods-and-container-communication-in-kubernetes/" target="_blank" rel="external">containers in the same pod</a>, the share same network namespace and same iPC namespace, and shared volumes. </p>
+<ul>
+<li>shared volumes in a pod </li>
+</ul>
+<p>when one container writes logs or other files to the shared directory, and the other container reads from the shared directory. </p>
+<p><img src="https://cdn.mirantis.com/wp-content/uploads/2017/08/MultiContainerPods.png?resize=565x288" alt="image"></p>
+<ul>
+<li>inter-process communication(IPC)</li>
+</ul>
+<p>as they share the same IPC namespace, they can communicate with each other using standard ipc, e.g. POSIX shared memory, SystemV semaphores</p>
+<p><img src="https://cdn.mirantis.com/wp-content/uploads/2017/08/multicontainerpodproducerconsumer.png?resize=565x288" alt="image"></p>
+<ul>
+<li>inter-container network communication</li>
+</ul>
+<p>containers in a pod are accessible via <code>localhost</code>, as they share the same network namespace. for externals, the observable host name is the pod’s name, as containers all have the same IP and port space, so need differnt ports for each container for incoming connections.</p>
+<p><img src="https://cdn.mirantis.com/wp-content/uploads/2017/08/multicontainerwebapp.png?resize=565x288" alt="image"></p>
+<p>basically, the external incoming HTTP request to port 80 is forwarded to port 5000 on localhost, in pod, and which is not visiable to external. </p>
+<h4 id="how-two-services-communicate"><a href="#how-two-services-communicate" class="headerlink" title="how two services communicate"></a><a href="https://stackoverflow.com/questions/45720084/how-to-make-two-kubernetes-services-talk-to-each-other" target="_blank" rel="external">how two services communicate</a></h4><ul>
+<li>ads_runner</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: Service</div><div class="line">metadata:</div><div class="line">	name: ads_runner</div><div class="line">spec:</div><div class="line">	selector:</div><div class="line">		app: ads</div><div class="line">		tier: api</div><div class="line">	ports:</div><div class="line">		-protocol: TCP</div><div class="line">		 port: 5000</div><div class="line">		 nodePort: 30400</div><div class="line">	type: NodePort</div></pre></td></tr></table></figure>
+<p>if there is a need to autoscale the service, check<br><a href="https://stackoverflow.com/questions/37377119/in-kubernetes-how-do-i-autoscale-based-on-the-size-of-a-queue" target="_blank" rel="external">k8s autoscale based on the size of queue</a>. </p>
+<ul>
+<li>redis-job-queue</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">apiVersion: v1</div><div class="line">kind: Service</div><div class="line">metadata:</div><div class="line">	name: redis-job-queue</div><div class="line">spec:</div><div class="line">	selector:</div><div class="line">		app: redis</div><div class="line">		tier: broker</div><div class="line">	ports:</div><div class="line">		-portocol: TCP </div><div class="line">		port: 6379</div><div class="line">		targetPort: [the port exposed by Redis pod]</div></pre></td></tr></table></figure>
+<p>ads_runner can reach Redis by address: <code>redis-server:6379</code> in the k8s cluster.</p>
+<p><a href="https://redis.io/topics/replication" target="_blank" rel="external">redis replication</a> has great async mechanism to support multi redis instance simutanously, when need scale the redis service, it is ok to start a few replicas of <code>redis</code> service as well.</p>
+<h4 id="redis-work-queue"><a href="#redis-work-queue" class="headerlink" title="redis work queue"></a>redis work queue</h4><p>check <a href="https://zjli2013.github.io/2020/04/09/redis-task-queue/" target="_blank" rel="external">redis task queue</a>: </p>
+<ul>
+<li>start a storage service(redis) to hold the work queue</li>
+<li>create a queu, and fill it with messages, each message represents one task to be done</li>
+<li>start a job that works on tasks from the queue</li>
+</ul>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://jimmysong.io/kubernetes-handbook/cloud-native/play-with-kubernetes.html" target="_blank" rel="external">jimmysong</a></p>
+<p><a href="https://github.com/Tencent/bk-cmdb" target="_blank" rel="external">BlueKing configure manage DB</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1501395" target="_blank" rel="external">k8s: volumes and persistent storage</a></p>
+<p><a href="https://cdn.mirantis.com/wp-content/uploads/2017/08/MultiContainerPods.png?resize=565x288" target="_blank" rel="external">multi-container pods and container communication in k8s</a></p>
+<p><a href="https://kubernetes.io/docs/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume/" target="_blank" rel="external">k8s doc: communicate between containers in the same pod using a shared volume</a></p>
+<p><a href="https://kubemq.io" target="_blank" rel="external">kubeMQ: k8s message queue broker</a></p>
+<p><a href="https://blog.cloudthat.com/3-types-of-cluster-networking-in-kubernetes/" target="_blank" rel="external">3 types of cluster networking in k8s</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/redis-task-queue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2306,158 +2557,6 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/hypervisor-and-gpu-virtualization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/14/hypervisor-and-gpu-virtualization/" itemprop="url">hypervisor and gpu virtualization</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-14T00:18:55-04:00">
-                2020-03-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/14/hypervisor-and-gpu-virtualization/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/14/hypervisor-and-gpu-virtualization/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>to build a private data center for ads training and SIL. a few concepts there:</p>
-<h3 id="linux-remote-desktop"><a href="#linux-remote-desktop" class="headerlink" title="linux remote desktop"></a>linux remote desktop</h3><p>Linux GUI is based on x-protocol, which is kind of CPU based, during deploying gpu-based app in docker swarm, I have studied <a href="https://zjli2013.github.io/2019/11/29/X11-GUI-in-docker/" target="_blank" rel="external">xserver</a>, <code>ssh -X</code> channels give the way for visualization desktop and simple apps(e.g. glxgears) among xserver and xclient. while for really gpu-densive app, e.g. game rendering, machine learning, <code>ssh -X</code> can’t really use gpu resource well, which needs further support from device management mechanism from docker or k8s. </p>
-<h3 id="virutal-machine-cloud-desktop"><a href="#virutal-machine-cloud-desktop" class="headerlink" title="virutal machine/ cloud desktop"></a>virutal machine/ cloud desktop</h3><p>VM is based on <a href="https://www.vmware.com/topics/glossary/content/hypervisor.html?SRC=WWW_US_GP_bare-metal-hypervisor_SiteLink" target="_blank" rel="external">hypervisor</a>, known as a virtual machine monitor(VMM), a type of virtualization software that supports the creation and management of VMs, hypervisor translate requests between the physical and virtual resources, making virtualization possible.</p>
-<p>A hypervisor allows one host computer to support multiple guest VMs by virtually sharing its resources, like memory and processing. </p>
-<p>Generally, there are two types of hypervisors. Type 1 hypervisors, called “bare metal,” run directly on the host’s hardware. Type 2 hypervisors, called “hosted,” run as a software layer on an operating system, like other computer programs, the most common e.g. vmware, citrix. </p>
-<p>When a hypervisor is installed directly on the hardware of a physical machine, between the hardware and the operating system (OS), it is called a <a href="https://www.vmware.com/topics/glossary/content/bare-metal-hypervisor" target="_blank" rel="external">bare metal hypervisor</a>, which separates the OS from the underlying hardware, the software no longer relies on or is limited to specific hardware devices or drivers.</p>
-<h3 id="VDI"><a href="#VDI" class="headerlink" title="VDI"></a>VDI</h3><p>a type of vm application is <a href="https://www.vmware.com/topics/glossary/content/virtual-desktop-infrastructure-vdi" target="_blank" rel="external">virtual desktop inftrastructure(vdi)</a>, VDI hosts desktop environments on a centralized server and deploys them to end-users on request. this process also known as <a href="https://www.vmware.com/topics/glossary/content/server-virtualization" target="_blank" rel="external">server virtualization</a></p>
-<p>VDI is not necessarily requires a physical gpu, without a gpu, we can still run vmware, but the performance is poor. but for many other VM usage, beyond VDI, we still need ways to access GPU devices in VM.</p>
-<h2 id="GPU-techs-in-VM"><a href="#GPU-techs-in-VM" class="headerlink" title="GPU techs in VM"></a>GPU techs in VM</h2><p>vwmare has an introduction about <a href="https://blogs.vmware.com/china/2017/11/09/horizon-7-中的-gpu-方案/" target="_blank" rel="external">gpu tech</a> in vm: </p>
-<ul>
-<li><p>software 3D. using software to mimic GPU calculating. all 3d calculating is done by CPU</p>
-</li>
-<li><p>vsga(vitual shared graphics acceleration), each virtual desktop has a vsga driver, which has a ESXi module, inside which has a GPU driver, which can call the physical gpu, but this shared mode is through Hypervisor</p>
-</li>
-</ul>
-<p><img src="https://blogs.vmware.com/china/files/2017/11/vSGA.png" alt="image"></p>
-<ul>
-<li>vdga(virtual dedicated graphics accleration), or pass through mode, the physical GPU is assigned to a special virtual desktop for one user only.</li>
-</ul>
-<p><img src="http://blogs.vmware.com/china/files/2017/11/vDGA.png" alt="image"></p>
-<ul>
-<li>vgpu, split physical GPU to a few virtual-GPU, each virtual desk can have one vGPU.</li>
-</ul>
-<p><img src="http://blogs.vmware.com/china/files/2017/11/vGPU.png" alt="image"></p>
-<h2 id="VM-vs-docker"><a href="#VM-vs-docker" class="headerlink" title="VM vs docker"></a>VM vs docker</h2><p>docker is a light-weight virtualization way, which  don’t need hypervisor, and the app in docker is access the host physical devices directly, making docker looks like a process, rather than a virtual OS; and scientfic computing apps run in VM is actually using the virtual CPU from hypervisor, which <a href="http://blog.itpub.net/35489/viewspace-2120397/" target="_blank" rel="external">bypass the cpu optimzation</a> used for math calcualting. so usually a physical machine can start hundres or thousands docker, but can only run a few VM.  </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://blog.sina.com.cn/s/blog_59cf67260100l5h4.html" target="_blank" rel="external">linux remote desktop</a></p>
-<p><a href="https://blogs.gartner.com/gunnar-berger/understanding-virtual-desktop-vdi-gpu-technologies/" target="_blank" rel="external">understand vdi gpu tech</a></p>
-<p><a href="https://blogs.vmware.com/apps/2018/09/using-gpus-with-virtual-machines-on-vsphere-part-3-installing-the-nvidia-grid-technology.html" target="_blank" rel="external">nvidia vgpu tech in vSphere</a></p>
-<p><a href="https://www.brightcomputing.com/blog/setting-up-gpu-hypervisors-on-bright-openstack" target="_blank" rel="external">GPU hypervisors on OpenStack </a></p>
-<p><a href="https://cumulusnetworks.com/blog/containers-vs-hypervisors/" target="_blank" rel="external">containers vs hypervisors</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2508,7 +2607,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">189</span>
+                <span class="site-state-item-count">190</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

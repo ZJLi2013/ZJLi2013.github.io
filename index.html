@@ -291,6 +291,208 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/12/why-Hil-MiL-SiL-and-ViL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/10/12/why-Hil-MiL-SiL-and-ViL/" itemprop="url">why Hil MiL SiL and ViL</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-12T19:10:50-04:00">
+                2020-10-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/10/12/why-Hil-MiL-SiL-and-ViL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/10/12/why-Hil-MiL-SiL-and-ViL/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>there are two very different teams in AD. one kind is people from top Tier1 and popular OEMs, the benefit of these guys is they are very matured at the product process management, e.g. V&amp;V and the corresponding R&amp;D process, the other pons of these guys, they have lots of engineering know-how/experience to make things work. mostly we know how the system/tool work, but compared to build the sytem/tool to work, the first knowledge is about 10%. </p>
+<p>the mature R&amp;D process is, as I see, is very valuable in a long time, which we’d say <strong>engineers getting richer as they getting older</strong>. till now, German and Janpanese top companies still have strong atmosphere to respect engineers, which keeps their engineers and their industry process management growing more and more mature. that’s a very good starting point for fresh young men, if they can join these top companies in early time. </p>
+<p>the other team is from Internet companies, they are the kind of people with philosophy: as you can image out, I can build it up. while the philosophy always become true in IT and Internet service companies, and looks promising in industry fields, as the IT infra, like nowadays, service to cloud, office work in cloud, which derives lots of cloud infra, but the core like robot operation, making vehicle driving automatically, or computer aided engineering e.t.c. requires lots of know-how, far beyond the infra. </p>
+<p>Internet teams are popular in China and US, but US still have strong engieer atmosphere like Germany, which is not in China. basically I want to say, there is no apprentice process to train fresh men to matured engineers in either companies or training organizations in China, which makes engineers here show low credit. </p>
+<p>even Internet knowledge and skills in China, often we’d say <strong>programming work are youth meals, as programmer getting older they getting poor</strong></p>
+<p>that’s the tough situation for many young people, if the men got neither good engineering training, nor got smart and young enough to coding, he get doomed in his career. but that’s not a problem for the country neither for the companies, still Chinese workers are cheap, there are always lots of young people need bread beyond a promising career. </p>
+<h2 id="physical-or-virtual"><a href="#physical-or-virtual" class="headerlink" title="physical or virtual"></a>physical or virtual</h2><p>the first-principal of writing a program:</p>
+<ul>
+<li>make it run ok </li>
+<li>make it run correct</li>
+<li>make it run performance-well</li>
+<li>make it extensible </li>
+</ul>
+<p>the following is to understand why we need HiL, mil, sil, to ViL during verification and validation of an ADS product, from the physical or virtual viewpoint. </p>
+<h3 id="physical-or-virtual-world"><a href="#physical-or-virtual-world" class="headerlink" title="physical or virtual world"></a>physical or virtual world</h3><h5 id="case-1-from-physical-world-to-physical-sensor"><a href="#case-1-from-physical-world-to-physical-sensor" class="headerlink" title="case 1) from physical world to physical sensor"></a>case 1) from physical world to physical sensor</h5><p>namely, physical road test, either in closed-field, or open roads. </p>
+<p>this is the case when we need ground truth(G.T.) system to validate the device under test(DUT) sensor, to evaluate or test the DUT’s performance boundary, failure mode e.t.c. </p>
+<p>the people can come from sensor evaluation teams, or system integration teams. </p>
+<h5 id="case-2-from-virtual-world-to-physical-sensor"><a href="#case-2-from-virtual-world-to-physical-sensor" class="headerlink" title="case 2) from virtual world to physical sensor"></a>case 2) from virtual world to physical sensor</h5><p>the virtual world come either from digital twins, or replay from a data collector. this is hardware in loop(HiL) process, which used a lot in validate either sensor, or MCUs. when using HiL to validate MCUs, the virtual world is mimic signals e.t.c</p>
+<h3 id="virtual-sensor"><a href="#virtual-sensor" class="headerlink" title="virtual sensor"></a>virtual sensor</h3><h5 id="case-3-from-virtual-world-to-virtual-sensor"><a href="#case-3-from-virtual-world-to-virtual-sensor" class="headerlink" title="case 3) from virtual world to virtual sensor"></a>case 3) from virtual world to virtual sensor</h5><p>virtual sensor has three kinds basically:</p>
+<ul>
+<li><p>ideal (with noise) sensor model</p>
+</li>
+<li><p>statisticsly satisfied sensor model</p>
+</li>
+<li><p>physical sensor model </p>
+</li>
+</ul>
+<p>of course, the costing is increasing from ideal to physical sensor model. </p>
+<p>ideally, the downside fusion module should be no senstive to sensors, either phyiscal sensors or virtual sensors(sensor models). the benefits of capturing virtual world by virtual sensor is so cheap, which makes it very good to training perception algorithms, when physical sensor data is expensive, which is often the reality for most companies now.</p>
+<p>there is <strong>local maximum</strong> issues with virtual sensor data to train AIs, so in reality, most team used to mix 10% real-world sensor data to improve or jump out from these local maximums.</p>
+<p>of course, virtual sensor is one fundamental element to close loop from virtual world to vehicle moving, in a sim env. </p>
+<h3 id="physical-or-virutal-perception-to-fusion"><a href="#physical-or-virutal-perception-to-fusion" class="headerlink" title="physical or virutal perception to fusion"></a>physical or virutal perception to fusion</h3><p>here is how to test fusion, does it work correctly, performance well, how to handle abnormal(failure) case.</p>
+<h5 id="case-4-from-physical-sensor-perception-data-to-fusion"><a href="#case-4-from-physical-sensor-perception-data-to-fusion" class="headerlink" title="case 4) from physical sensor perception data to fusion"></a>case 4) from physical sensor perception data to fusion</h5><p>physical perception data comes in two ways:</p>
+<ul>
+<li>the sensor system in vehicle</li>
+<li>ground truth system(G.T.)</li>
+</ul>
+<p>during RD stage, the sensor system in vehicle is treated as device under test(DUT), whose result can compare with the labeling outputs from G.T. system, which help to validate DUT performance, as well as to evaluate fusion performance.</p>
+<p>in phyiscal world, ground truth sytem is usually equipped with a few higher precision Lidars, of course the cost is more expensive.</p>
+<p>another pro of physical perception data is extract edge cases, which used to enrich the scenario libs, especially for sensor perception, and fusion. </p>
+<p>during massive production stage, when the data pipeline from data collector in each running vehicle to cloud data platform is closed-loop, which means the back-end system can extract and aggregate highly volume edge case easily, then these large mount of physical perception data can drive fusion logsim.</p>
+<p>question here, edge case scenarios are these abnormal perception/fusion cases, but how to detect edge cases from highly volume data in cloud(back-end), or to design the trigger mechanism in vehicle(front end) to only find out the edge cases, is not an matured work for most teams.</p>
+<p>another question here, to evaluate fusion, requires objective ground truth, which is not avaiable in massive production stage. an alternative option is using a better performance and stable sensor as <strong>semi ground truth</strong>, such as Mobileye sensor.</p>
+<h5 id="case-5-from-virtual-sensor-perception-data-to-fusion"><a href="#case-5-from-virtual-sensor-perception-data-to-fusion" class="headerlink" title="case 5) from virtual sensor perception data to fusion"></a>case 5) from virtual sensor perception data to fusion</h5><p>when in sim world, it’s easily to create a <strong>ground truth sensor</strong>, then it’s easily to check fusion output with the g.t. sensor, which is great, the only assuming here, is the sim world is highly vivid of the physical world. if not, the <strong>ground truth sensor</strong> is not useful, while obviously to build a digital twin as phyiscal as possible is not easy than create the ADS system. </p>
+<p>on the other hand, if the sim world is not used to evaluate fusion, for example, used to generate synthetic images, point cloud to train perception AI modules, which is one benefit. </p>
+<p><strong>in summary</strong>, when evaluate and validate fusion, it requires ground truth labelling, either from physical g.t. system, or virtual g.t. sensor.  1) the g.t. system is only used for during R&amp;D stage, with a small volumn of g.t. data; for massive release stage, there is no good g.t. source yet; 2) g.t. sensor in virtual world is easy to create, but requires the virtual worls is almost physical level. </p>
+<p>second opnion, fusion evaluation is deterministic and objective. so if the fusion can validated well during RD stage, considering its performance robost, stable, there is no need to validate fusion module in massive lease. when perception/fusion edge case happens, we can study them case by case.</p>
+<p>third opinon, for anormal case, e.g. sensor failure, sensor occupied cases, also need validate during RD. </p>
+<h3 id="planning"><a href="#planning" class="headerlink" title="planning"></a>planning</h3><p>the evaluation of planning good or not is very subjective, while in fusion, ground truth is the criteria. so there are two sols:</p>
+<ul>
+<li>to make subjective goals as much quanlity as possible </li>
+<li>define RSS criterias to bound the planning results</li>
+</ul>
+<p>ideally, planning should be not sensitive to fusion output from physical world, or virtual world. and when come to planning verification, we asumme the fusion component is stable and verified-well, namely should not delay find fusion bugs till planning stage. </p>
+<h5 id="case6-from-sim-fusion-output-to-planning"><a href="#case6-from-sim-fusion-output-to-planning" class="headerlink" title="case6) from sim fusion output to planning"></a>case6) from sim fusion output to planning</h5><p>SiL is a good way to verify planning model. previously, planning engineers create test scenarios in vtd, prescan, and check does the planning algorithms work.</p>
+<p>for a matured team, there are maybe hundreds and thousands of planning related scenarios, the should-be verification process requires to regress on all these scenarios, so to automatically and accelerate this verification loop, gives the second solution: cloud SiL with DevOps, like TAD Sim from Tencent, Octopus from Huawei e.t.c.</p>
+<p>another benefits of SiL in cloud is for complex driving behavior, real vehicle/pedestrains to vehicle interactions, and especially when the scenario lib is aggregating as the ADS lifecycle continues.</p>
+<p>if the planning algorithm is AI based, then to mimic the real-human drivers driving behaivor and assign these driving behaviors to the agents in the virtual world, will be very helpful to train the ego’s planning AI model.</p>
+<p>here are two models: imitation learning and reinforcement learning. firstly we train the agent/ego driving behaivor using physical world driving data by imitation learning in a training gym; and transfer these trained model to agents and ego in the sim world, they continue driving and interaction with each other, and keep training itself to do better planning. </p>
+<p>for corner/edge cases, as planning is very subjective, and lots of long-tail scenarios are there, so physical world situations collection is very valuable. </p>
+<h5 id="case-7-from-physical-fusion-output-to-planning"><a href="#case-7-from-physical-fusion-output-to-planning" class="headerlink" title="case 7) from physical fusion output to planning"></a>case 7) from physical fusion output to planning</h5><p>Tesla looks be the only one, who deployed the shadow mode trigging mechanism to get planning corner cases from physical driving, and the data close loop.</p>
+<p>the large volumn of physical driving data is very useful for verification and iteration of planning: </p>
+<ul>
+<li><p>aggregate more real planning scenarios, by detecting edge cases</p>
+</li>
+<li><p>train better driving behavior, as close as possible to humans</p>
+</li>
+</ul>
+<h3 id="control"><a href="#control" class="headerlink" title="control"></a>control</h3><p>control is the process from planning output, e.g. acc, decel, turning-angle to physical actuator response, brake force, engine torque e.t.c</p>
+<p>there are a few common issues :</p>
+<ul>
+<li><p>nonlinear characteristic, mostly we don’t get a perfect control output as expect. e.g. from decel to brake force. </p>
+</li>
+<li><p>the actuator has response delay, which need professional engineers train to get a good balance, but still doesn’t work as expect at all the scenarios </p>
+</li>
+<li><p>the actuators as a whole is very complex, tuning requires.</p>
+</li>
+</ul>
+<h5 id="case-8-from-planning-to-virtual-vehicle-model"><a href="#case-8-from-planning-to-virtual-vehicle-model" class="headerlink" title="case 8) from planning to virtual vehicle model"></a>case 8) from planning to virtual vehicle model</h5><p>this is where sim requires a high-precise vehicle dynamic model, which affects the performance. but a simple vehicle dynamic does work for planing, if not requires to cosist with the physical performance. </p>
+<h4 id="case-9-from-planning-to-physical-vehicle"><a href="#case-9-from-planning-to-physical-vehicle" class="headerlink" title="case 9) from planning to physical vehicle"></a>case 9) from planning to physical vehicle</h4><p>ViL, which is another big topic </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/07/find-out-ADS-simulation-trend-from-top-teams/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2009,138 +2211,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/27/play-with-boost-python-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/27/play-with-boost-python-2/" itemprop="url">play with boost.python 2</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-27T07:53:57-04:00">
-                2020-06-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/06/27/play-with-boost-python-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/06/27/play-with-boost-python-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>in <a href="https://zjli2013.github.io" target="_blank" rel="external">1</a>, we have a basic work flow of boost.python. in reality, the C++ project may have multi headers, where define many structs/classes, and include nested structs. here we give an simple example of nested struct/class.</p>
-<h4 id="api-header-hpp"><a href="#api-header-hpp" class="headerlink" title="api_header.hpp"></a>api_header.hpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">	<span class="keyword">float</span> time; </div><div class="line">	<span class="keyword">float</span> dx ;</div><div class="line">	<span class="keyword">float</span> dy ;</div><div class="line">&#125; AEB;</div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></div><div class="line">	AEB out1 ;</div><div class="line">&#125; OP;</div></pre></td></tr></table></figure>
-<h4 id="aeb-hpp"><a href="#aeb-hpp" class="headerlink" title="aeb.hpp"></a>aeb.hpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"api_header.hpp"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">aeb</span> &#123;</span></div><div class="line">    <span class="keyword">public</span>:</div><div class="line">        aeb() &#123;&#125;</div><div class="line">	OP op_out ;</div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">test_op</span><span class="params">()</span></span>&#123;</div><div class="line">            (<span class="keyword">void</span>) <span class="built_in">memset</span>((<span class="keyword">void</span> *)&amp;op_out, <span class="number">0</span>, <span class="keyword">sizeof</span>(OP)); </div><div class="line">            op_out.out1.time = <span class="number">1.0</span> ; </div><div class="line">            op_out.out1.dx = <span class="number">2.0</span> ;</div><div class="line">            op_out.out1.dy = <span class="number">3.0</span> ; </div><div class="line">            AEB o1 = op_out.out1 ;</div><div class="line">            <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; o1.time &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span> ;</div><div class="line">        &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>for each of them, we can write a separate wrapp files.</p>
-<h4 id="api-wrapper-cpp"><a href="#api-wrapper-cpp" class="headerlink" title="api_wrapper.cpp"></a>api_wrapper.cpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Python.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/python.hpp&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"api_struct.h"</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> boost::python;</div><div class="line"></div><div class="line">BOOST_PYTHON_MODULE(api_wrapper) &#123;  </div><div class="line">    </div><div class="line">    class_&lt;AEB&gt;(<span class="string">"AEB"</span>, <span class="string">"aeb struct"</span>)</div><div class="line">            .def_readwrite(<span class="string">"time"</span>, &amp;AEB::time)</div><div class="line">            .def_readwrite(<span class="string">"dx"</span>, &amp;AEB::dx)</div><div class="line">            .def_readwrite(<span class="string">"dy"</span>, &amp;AEB::dy) ;</div><div class="line"></div><div class="line">    class_&lt;OP&gt;(<span class="string">"OP"</span>, <span class="string">"OP struct"</span>)</div><div class="line">            .def_readwrite(<span class="string">"out1"</span>, &amp;OP::out1);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="aeb-wrapper-cpp"><a href="#aeb-wrapper-cpp" class="headerlink" title="aeb_wrapper.cpp"></a>aeb_wrapper.cpp</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Python.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;boost/python.hpp&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"student.h"</span></span></div><div class="line"></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> boost::python;</div><div class="line"></div><div class="line">BOOST_PYTHON_MODULE(aeb) &#123;                                                                                                                                                                              </div><div class="line">    scope().attr(<span class="string">"__version__"</span>) = <span class="string">"1.0.0"</span>;</div><div class="line">    class_&lt;aeb&gt;(<span class="string">"aeb"</span>, <span class="string">"a class of aeb ADAS"</span>)</div><div class="line">        .def(init&lt;&gt;())</div><div class="line">        .def(init&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">int</span>&gt;())</div><div class="line">        .def_readwrite(<span class="string">"op_out"</span>, &amp;aeb::op_out)</div><div class="line">        .def(<span class="string">"test_op"</span>, &amp;aeb::test_op, <span class="string">"test op"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>compared to previous blog, we had <code>def_readwrite()</code> to include the nested struct in <code>aeb</code> python module, which is dynamic linked during python runtime, so which requires to import <code>api_header</code> module first, then import <code>aeb</code> module.</p>
-<h4 id="build-amp-amp-test"><a href="#build-amp-amp-test" class="headerlink" title="build &amp;&amp; test"></a>build &amp;&amp; test</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">g++ -I/home/anaconda3/envs/aeb/include/python3.6m -I/usr/<span class="built_in">local</span>/include/boost -fPIC wrap_api.cpp -L/usr/<span class="built_in">local</span>/lib/ -lboost_python36 -shared -o wrap_api.so</div><div class="line"></div><div class="line">g++ -I/home/anaconda3/envs/aeb/include/python3.6m -I/usr/<span class="built_in">local</span>/include/boost -fPIC wrap_student.cpp -L/usr/<span class="built_in">local</span>/lib/ -lboost_python36 -shared -o student.so</div></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> wrap_api</div><div class="line"><span class="keyword">import</span> aeb</div><div class="line">s = aeb.aeb()</div><div class="line">s.test_op()</div><div class="line">a = s.op_out.out1 </div><div class="line">a.time</div><div class="line">a.dx</div></pre></td></tr></table></figure>
-<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>this basic workflow is enough to package Matlab/Simulink ADAS models C++ code to Python test framework. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2191,7 +2261,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">189</span>
+                <span class="site-state-item-count">190</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

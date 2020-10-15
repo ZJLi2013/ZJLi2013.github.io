@@ -291,6 +291,137 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/20/real-world-env-in-ADS-simulation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/20/real-world-env-in-ADS-simulation/" itemprop="url">real-world env in ADS simulation</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-20T06:06:28-04:00">
+                2019-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/20/real-world-env-in-ADS-simulation/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/08/20/real-world-env-in-ADS-simulation/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>this topic is based on lg-sim, the advantage is plenty Unity3D resources. to drive planning design, simulation has to keep as real-world env as possible. for <code>L3</code> and below, the high-fidelity is actually most about <code>HD map</code>, since in <code>L3</code> ADS, sensors only cares about the road parternors on road, and <code>planning</code> module take <code>hd map</code> as input. </p>
+<p>so there is a need to build simulation envs based on <code>hd map</code>. </p>
+<h3 id="osm"><a href="#osm" class="headerlink" title="osm"></a>osm</h3><p>in the Unity engine, all in the env(e.g. traffic light, road lanes, lane mark etc) are GameObjects. to describe a map info, one of most common used map format is <code>OSM</code> (another is opendrive, but no open parser in unity yet), however which is not born to used in <code>hd map</code>, but still is very flexible to extend to descripe all info, a <code>hd map</code> requires. e.g. lane id, lane width, lane mark type e.t.c</p>
+<p>the open-source tool <code>OsmImporter</code> is good enough to parse osm meta data into Unity GameObjects. for different map vendors, first to transfer their map format into the extended-osm format. and then can generate all map info related gameObjects in Unity env. that’s the main idea to create real-world env in simualtor.</p>
+<p>the end is to make a toolchain from map vendor input to Unity 3D env.</p>
+<h3 id="waypoints"><a href="#waypoints" class="headerlink" title="waypoints"></a>waypoints</h3><p>in either lg-sim or carla, the npc vehicles in self-driving mode, is actually controlled by following waypoints in the simulator, and <code>waypoints</code> is generated during creating map in step above.</p>
+<p>carla has plenty client APIs to manage the waypoints, and then drive npcs. </p>
+<h3 id="hd-map-tool"><a href="#hd-map-tool" class="headerlink" title="hd-map tool"></a>hd-map tool</h3><p>by default, both lg-sim and carla has a tool to create hd-map, that’s basically mark <code>waypoints</code> on the road in an existing map, which is not strong.  carla later support <code>Vector one</code> to build in map more efficiently.</p>
+<h2 id="L3-virtual-env-generator"><a href="#L3-virtual-env-generator" class="headerlink" title="L3+ virtual env generator"></a>L3+ virtual env generator</h2><p>there are plenty teams working on building/rendering virtual envs directly from sensor data, e.g Lidar cloud point or camera image, and plenty image-AI techs here, which of course gives better immersed experince. and the test task is mostly for perception, data-fusion modules, which is heavier in L3+</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/threading-and-websockets/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1706,164 +1837,6 @@ cat "export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:/path/to/catkin_ws/" &gt;&gt; ~/.
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/play-with-Docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/07/12/play-with-Docker/" itemprop="url">play with Docker</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-12T11:17:46-04:00">
-                2019-07-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/07/12/play-with-Docker/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/07/12/play-with-Docker/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Docker-networking"><a href="#Docker-networking" class="headerlink" title="Docker networking"></a>Docker networking</h2><ul>
-<li><p>bridge: the default network driver, only in standalone containers; best when have multiple containers to communicate on the same host machine.</p>
-</li>
-<li><p>host: for standalone containers, the Docker host use the host machine’s networking directly; best when need no isolated from the host machine.</p>
-</li>
-<li><p>overlay: connect multi Docker containers, enable swarm services to communicate with each other, no OS-level routing; best when need containers running on different host machines to communicate.</p>
-</li>
-<li><p>none: disable all networking</p>
-</li>
-</ul>
-<p>the network base is open source project <a href="https://github.com/docker/libnetwork" target="_blank" rel="external">libnetwork</a></p>
-<p>containers can communicate through hostname, or through DNS(the now Docker engine has default built-in DNS server), but in early days, can use external dns, e.g. <a href="http://docs.blowb.org/index.html" target="_blank" rel="external">Blowb</a></p>
-<p>to host docker images, either pull to Docker Hub, or to create a private cloud by <a href="https://doc.owncloud.org/server/10.2/" target="_blank" rel="external">ownCloud</a>, or <code>docker save/export</code>  tools:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">docker save -o /path/to/save/file  image | gzip</div><div class="line">scp *.tar.gz  remote_user@remote_hostname</div><div class="line">docker load *.tar.gz</div></pre></td></tr></table></figure>
-<h2 id="running-GUI-apps-in-Docker"><a href="#running-GUI-apps-in-Docker" class="headerlink" title="running GUI apps in Docker"></a>running GUI apps in Docker</h2><p>there is a benchmark GUI/openGL test in Linux <code>glxgears</code>. to test the host machine support ssh or container based apps, we can first do the following test: </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install mesa-utils</div><div class="line">glxinfo </div><div class="line">glxgears</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line">Docker by default is bash/text based, but `nvidia-docker` is a gui-supported Docker engine, which requires Nvidia OpenGL drivers and Nvidia Gpus of course. since the gpu hardware version and the docker engine version, please check the compatability at first. </div><div class="line"><span class="meta"></span></div><div class="line"></div><div class="line">#<span class="bash"><span class="comment"># remote hosted apps</span></span></div><div class="line">	</div><div class="line">* configure master and worker nodes communication by setting IP address in the same domain, and setting the master node IP address as the gateway IP address for all worker nodes, basically the master node will work as the swticher.</div><div class="line"></div><div class="line">* install xserver-common,  xserver-utils, as Ubuntu by deafult doesn't have X-server. </div><div class="line"></div><div class="line">```shell</div><div class="line"></div><div class="line">master:~/    ssh -X user@worker</div><div class="line">worker:~/    DISPLAY=:0</div><div class="line">worker:~/	   ./gui_app</div></pre></td></tr></table></figure>
-<ul>
-<li>for docker containers, there is also <code>authority</code> property need take care. </li>
-</ul>
-<h2 id="Dockfile"><a href="#Dockfile" class="headerlink" title="Dockfile"></a>Dockfile</h2><p>when the Docker container starts, usually we want to auto start a shell process, so by <code>CMD</code> or <code>ENTRYPOINT</code> defined in the Dockfile. </p>
-<p>for the base images, e.g.  Ubuntu, busybox, are used as the base for upper applications, usually will use <code>CMD</code> at the end of Dockerfile; but if the Docker container is specially for a certain application, it’s usually using <code>ENTRYPOINT</code>.</p>
-<p>the last line of Ubuntu 16.04 Dockerfile:</p>
-<pre><code>CMD &apos;/bin/bash&apos;
-</code></pre><p>usually in one Dockerfile, there is only one <code>CMD</code> or <code>ENTRYPOINT</code>, and it’s better written in exec format:</p>
-<pre><code>CMD [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
-
-ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
-</code></pre><p>since in shell format: </p>
-<pre><code>CMD exectuable, param1, param2 
-</code></pre><p>Docker will trigger <code>/bin/sh</code> first by default, if not define a shell. and this shell is always the first process in this Docker container, which sometimes is not what we expected.</p>
-<p>when using both <code>CMD</code> and <code>ENTRYPOINT</code> in one Dockfile, the output will looks like append/pipe <code>CMD</code> command after <code>ENTRYPOINT</code> command.  </p>
-<p>a sample of Dockerfile: </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">FROM &lt;image&gt;:[&lt;tag&gt;] [AS &lt;name&gt;]</div><div class="line">ADD [--chown=&lt;user&gt;:&lt;group&gt;] &lt;src&gt; ... &lt;dest&gt;</div><div class="line">ADD [" ", ... " "]</div><div class="line">COPY &lt;src&gt; ... &lt;dest&gt;</div><div class="line">RUN &lt;command&gt;</div><div class="line">VOLUME /mount/name</div><div class="line">CMD ["executable", "param1", "param2"]</div><div class="line">CMD command par1 par2</div></pre></td></tr></table></figure>
-<h3 id="from-docker-image-to-dockerfile"><a href="#from-docker-image-to-dockerfile" class="headerlink" title="from docker image to dockerfile"></a>from docker image to dockerfile</h3><p>we can easily <code>pull</code> images from hub, but when we try to build some images directly, there is also way to get Dockfile from existing docker image: <a href="https://stackoverflow.com/questions/19104847/how-to-generate-a-dockerfile-from-an-image" target="_blank" rel="external">dfimage</a> </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo docker pull chenzj/dfimage</div></pre></td></tr></table></figure>
-<h3 id="mount-host-volume-to-container"><a href="#mount-host-volume-to-container" class="headerlink" title="mount host volume to container"></a>mount host volume to container</h3><p>either we can define in Dockerfile by <code>VOLUME</code>, which is create a volume name in the base image, or during runtime, <code>docker run -v /host/volume/path:/container/volume/path</code>, to bind a host volume to current container.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1914,7 +1887,7 @@ ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">189</span>
+                <span class="site-state-item-count">190</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

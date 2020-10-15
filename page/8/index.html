@@ -291,6 +291,155 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/IoC-in-C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/22/IoC-in-C/" itemprop="url">IoC in C#</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-22T08:58:37-04:00">
+                2019-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/22/IoC-in-C/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2019/10/22/IoC-in-C/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Inversion of Control(IoC) is a design mechanism to decouple components dependencies, a light-weight implementation is: <a href="https://github.com/grumpydev/TinyIoC" target="_blank" rel="external">TinyIoC</a>, which is also part of <a href="http://nancyfx.org" target="_blank" rel="external">Nancy</a>.  </p>
+<p>IoC idea uses commonly in webUI(and backend server) apps,  which is an user friendly solution to cloud deployment management as well as apps in mobile, which should be the right direction in future ADS software tool development.</p>
+<p>the idea of IoC can be explained by the following example from <a href="https://www.tutorialsteacher.com/ioc/register-and-resolve-in-unity-container" target="_blank" rel="external">register and resolve in unity container</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">public interface ICar</div><div class="line">&#123;</div><div class="line">    int Run();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class BMW : ICar</div><div class="line">&#123;</div><div class="line">    private int _miles = 0;</div><div class="line"></div><div class="line">    public int Run()</div><div class="line">    &#123;</div><div class="line">        return ++_miles;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Ford : ICar</div><div class="line">&#123;</div><div class="line">    private int _miles = 0;</div><div class="line"></div><div class="line">    public int Run()</div><div class="line">    &#123;</div><div class="line">        return ++_miles;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Driver</div><div class="line">&#123;</div><div class="line">    private ICar _car = null;</div><div class="line"></div><div class="line">    public Driver(ICar car)</div><div class="line">    &#123;</div><div class="line">        _car = car;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void RunCar()</div><div class="line">    &#123;</div><div class="line">        Console.WriteLine(&quot;Running &#123;0&#125; - &#123;1&#125; mile &quot;, _car.GetType().Name, _car.Run());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>the <code>Driver</code> class depends on <code>ICar</code> interface. so when instantiate the <code>Driver</code> class object, need to pass an instance of <code>ICar</code>, e.g.  BMW, Ford as following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Driver driver = new Driver(new Ford());</div><div class="line">driver.RunCar()</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line">**to use IoC**, taking UnityContainer framework as example, a few other choices: TinyIoC e.t.c.</div><div class="line"></div><div class="line">```c#</div><div class="line"></div><div class="line"> var container = new UnityContainer();</div></pre></td></tr></table></figure>
+<ul>
+<li>Register </li>
+</ul>
+<p>create an object of the <code>BMW</code> class and inject it through a constructor whenever you need to inject an ojbect of <code>ICar</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">container.Register&lt;ICar, BMW&gt;();</div></pre></td></tr></table></figure>
+<ul>
+<li>Resolve</li>
+</ul>
+<p><code>Resolve</code> will create an object of the <code>Driver</code> class by automatically creating and njecting a <code>BMW</code> object in it, since previously register <code>BMW</code> type with <code>ICar</code>.</p>
+<pre><code class="c#">
+Driver  drv =  container.Resolve&lt;Driver&gt;();
+drv.RunCar()
+</code></pre>
+<h3 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h3><p>there are two obvious advantages with IoC. </p>
+<ul>
+<li><p>the instantiate of dependent class can be done in run time, rather during compile. e.g.  <code>ICar</code> class doesn’t instantiate in <code>Driver</code> definition</p>
+</li>
+<li><p>automatic <code>new class</code> management in back. </p>
+</li>
+</ul>
+<p>the power of IoC will be scaled, once the main app is depends on many little services.    </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/21/rosbag-tools-in-ADS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1992,235 +2141,6 @@ $$ q(s, a) = max(q_i(s,a)) foreach i in action value funcs $$
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/18/python-modules-in-help/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/09/18/python-modules-in-help/" itemprop="url">python modules in help</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T09:09:48-04:00">
-                2019-09-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2019/09/18/python-modules-in-help/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2019/09/18/python-modules-in-help/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="unittest"><a href="#unittest" class="headerlink" title="unittest"></a>unittest</h2><h3 id="why-unit-test"><a href="#why-unit-test" class="headerlink" title="why unit test ?"></a>why unit test ?</h3><p>unit test is to test the components of a program automatically. a few good reasons of unit tests:</p>
-<ul>
-<li>test driving practice </li>
-<li>early sanity checking </li>
-<li>for regression test, that the new changes won’t break early work </li>
-<li>unit test is to test the isolated piece of code, usually white box test written by developer; functional test is to test the function requirements, usually black box test written by testers.</li>
-</ul>
-<p>the testcase output can be <code>OK</code>, <code>FAIL</code>, <code>ERROR</code>.</p>
-<h3 id="assertion-functions"><a href="#assertion-functions" class="headerlink" title="assertion functions"></a>assertion functions</h3><ul>
-<li><p>basic boolean asserts:</p>
-<pre><code>assertEqual(arg1, arg2, msg=None)
-assertIsNot(arg1, arg2, msg=None)
-</code></pre></li>
-<li><p>comparative asserts:</p>
-<pre><code>assertAlmostEqual(first, second, places=7, msg=None, delta=None)
-</code></pre></li>
-<li><p>asserts for collections:</p>
-<pre><code>assertListEqual(list1, list2, msg=None)
-assertTupleEqual(tuple1, tuple2, msg=None)
-assertSetEqual(set1, set2, msg=None)
-assertDictEqual(dic1, dic2, msg=None)    
-</code></pre><h3 id="command-line-interface"><a href="#command-line-interface" class="headerlink" title="command line interface"></a>command line interface</h3></li>
-<li><p>run all unittests</p>
-<pre><code>python3 -m unittest discover -v -c
-</code></pre></li>
-<li><p>run single test module</p>
-<pre><code>python3 -m unittest -v -c tests/test_XXXX.py
-</code></pre></li>
-<li><p>run individual test case</p>
-<pre><code>python3 -m unittest -v tests.test_XXX.TestCaseXXX.test_XXX
-</code></pre></li>
-</ul>
-<h2 id="how-to-write-a-unittest"><a href="#how-to-write-a-unittest" class="headerlink" title="how to write a unittest"></a>how to write a unittest</h2><h3 id="unittest-TestCase"><a href="#unittest-TestCase" class="headerlink" title="unittest.TestCase"></a>unittest.TestCase</h3><p>any user defined test class should first derived from <code>unittest.TestCase</code> </p>
-<h3 id="setUp-amp-tearDown"><a href="#setUp-amp-tearDown" class="headerlink" title="setUp() &amp; tearDown()"></a>setUp() &amp; tearDown()</h3><p>setUp() provides the way to set up things before running any method starting with <code>test_xx()</code>  in user defined test class. tearDown() is where to end the setting ups </p>
-<h3 id="depends-on-other-modules-class"><a href="#depends-on-other-modules-class" class="headerlink" title="depends on other modules/class"></a>depends on other modules/class</h3><p>usually the class/methods we try to test have depends on other modules/class, but as unit test want to isolate these depends, so either mock the other methods or fake data. in general there are three types of depends:</p>
-<h4 id="pure-variable"><a href="#pure-variable" class="headerlink" title="pure variable"></a>pure variable</h4><p>this is the most simple case, then you can directly define the same pure type variable in your <code>test_xx()</code> method </p>
-<h4 id="methods-in-other-modules"><a href="#methods-in-other-modules" class="headerlink" title="methods in other modules"></a>methods in other modules</h4><p>here need to use <code>patch</code>, to mock the method and define its return value is your <code>test_xx()</code> method, then in the class where call the real method will be replace by this mocked one.</p>
-<h4 id="methods-in-other-class"><a href="#methods-in-other-class" class="headerlink" title="methods in other class"></a>methods in other class</h4><p>here need to use <code>mock</code>, either MagicMock or Mock will works.</p>
-<h3 id="mock-amp-patch"><a href="#mock-amp-patch" class="headerlink" title="mock &amp; patch"></a>mock &amp; patch</h3><p><a href="https://docs.python.org/3/library/unittest.mock.html" target="_blank" rel="external">mock module</a> is built in <code>unittest.mock</code> after a later Python version, if not, <code>mock</code> module can be installed by <strong>pip install mock</strong>, then directly <code>import mock</code> in code.</p>
-<p>the philosophy of unit test is to isolate classes test, but in reality most classes have some instances of other classes, so to test the ego class isolated from other classes, that’s where <code>mock</code> helps. </p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> mock <span class="keyword">import</span> MagicMock, patch</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestScenario</span><span class="params">(TestCase)</span>:</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_mock</span><span class="params">(self)</span>:</span></div><div class="line">		sim.method = MagicMock(return_value=<span class="string">"xx"</span>)</div><div class="line">		agent = sim.method()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div><div class="line">		</div><div class="line"><span class="meta">	@patch("module/add_agent")</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">test_patch</span><span class="params">(self, mock_add_agent)</span>:</span></div><div class="line">		mock_add_agent.return_value = <span class="string">"xx"</span></div><div class="line">		agent = module.add_agent()</div><div class="line">		self.assertEqual(agent, <span class="string">"xx"</span>)</div></pre></td></tr></table></figure>
-<p><code>Mock</code> helps to mock the method in a class, while <code>patch</code> helps to mock a global method in a module.</p>
-<h3 id="automatical-unittest-generator"><a href="#automatical-unittest-generator" class="headerlink" title="automatical unittest generator"></a>automatical unittest generator</h3><p>there are projects assit to generate unittest code automatically, e.g <a href="">auger</a></p>
-<h3 id="test-with-while-Loop"><a href="#test-with-while-Loop" class="headerlink" title="test with while Loop"></a>test with while Loop</h3><p>TODO</p>
-<h3 id="test-with-raise-Error"><a href="#test-with-raise-Error" class="headerlink" title="test with raise Error"></a>test with raise Error</h3><p>TODO</p>
-<h2 id="coverage-py"><a href="#coverage-py" class="headerlink" title="coverage.py"></a>coverage.py</h2><ul>
-<li><p>(one time only) install coverage.py</p>
-<p>  pip3 install –user coverage</p>
-</li>
-<li><p>run all tests with coverage</p>
-<p>  ~/.local/bin/coverage run -m unittest discover</p>
-</li>
-<li><p>generate html report</p>
-<p>  ~/.local/bin/coverage html –omit “~/.local/<em>“,”tests/</em>“</p>
-</li>
-</ul>
-<p>ps, output is in htmlcov/index.html</p>
-<h2 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h2><p><code>logging()</code> supports more detail message type(info, warn, error, debug) than <code>print()</code>, and the message format is more strict with <code>\%</code>. while <code>print()</code> works both formatted message and message as string simply:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(<span class="string">"1+1 = "</span>, num)</div><div class="line">print(<span class="string">"1+1 = %d"</span>, % num)</div></pre></td></tr></table></figure>
-<p>the following is a general log class, which can plug in any existing Python project:</p>
-<pre><code class="python">
-<span class="keyword">import</span> logging 
-<span class="keyword">import</span> os 
-
-<span class="class"><span class="keyword">class</span> <span class="title">log</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, logger_name)</span>:</span>
-        self.log = logging.getLogger(logger_name)
-        self.log.setLevel(logging.DEBUG)
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.DEBUG)
-        self.log.addHandler(console_handler)
-
-    <span class="function"><span class="keyword">def</span> <span class="title">set_output_file</span><span class="params">(self, filename)</span>:</span>
-        file_handler = logging.FileHandler(filename)
-        file_handler.setLevel(logging.INFO)
-        formatter = logging.Formatter(<span class="string">'%(asctime)s - %(name)s - %(levelname)s - %(message)s'</span>)
-        file_handler.setFormatter(formatter)
-        self.log.addHandler(file_handler)
-
-<span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span>
-    test = log(<span class="string">'scenario-mm'</span>)
-    file_name = <span class="string">"record.log"</span> 
-    dir_name = <span class="string">"/home/python_test/"</span>
-    <span class="keyword">try</span>:
-        os.makedirs(dir_name)
-    <span class="keyword">except</span> OSError:
-        <span class="keyword">pass</span> 
-    file_path =  os.path.join(dir_name, file_name)
-    test.set_output_file(file_path)
-    test.log.debug(<span class="string">"debug in episode 1..."</span>)
-    test.log.info(<span class="string">"info ..."</span>)
-    test.log.warning(<span class="string">"warn ..."</span>)
-    test2 = log(<span class="string">"zjjj"</span>)
-    test2.set_output_file(<span class="string">'record.log'</span>)
-    test2.log.info(<span class="string">"test2 info"</span>)
-    test2.log.warning(<span class="string">"test2 warn"</span>)
-
-
-<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
-    main()
-</code></pre>
-<h2 id="pygame"><a href="#pygame" class="headerlink" title="pygame"></a>pygame</h2><h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.cnblogs.com/beer/p/5075619.html" target="_blank" rel="external">python automatic test series</a></p>
-<p><a href="https://github.com/laffra/auger" target="_blank" rel="external">auger: automated Unittest generation for Python</a></p>
-<p><a href="https://docs.python.org/3/library/unittest.html" target="_blank" rel="external">unittest official</a></p>
-<p><a href="https://github.com/lgsvl/PythonAPI/tree/master/tests" target="_blank" rel="external">unittest in lg-sim project</a></p>
-<p><a href="https://coverage.readthedocs.io/en/stable/" target="_blank" rel="external">coverage.py official</a>  </p>
-<p><a href="https://www.jianshu.com/p/013b9bdecb0d" target="_blank" rel="external">unittest + mock + tox</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2271,7 +2191,7 @@ assertDictEqual(dic1, dic2, msg=None)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">189</span>
+                <span class="site-state-item-count">190</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

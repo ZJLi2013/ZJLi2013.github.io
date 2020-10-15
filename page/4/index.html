@@ -291,6 +291,158 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/hypervisor-and-gpu-virtualization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/14/hypervisor-and-gpu-virtualization/" itemprop="url">hypervisor and gpu virtualization</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-14T00:18:55-04:00">
+                2020-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/14/hypervisor-and-gpu-virtualization/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/14/hypervisor-and-gpu-virtualization/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>to build a private data center for ads training and SIL. a few concepts there:</p>
+<h3 id="linux-remote-desktop"><a href="#linux-remote-desktop" class="headerlink" title="linux remote desktop"></a>linux remote desktop</h3><p>Linux GUI is based on x-protocol, which is kind of CPU based, during deploying gpu-based app in docker swarm, I have studied <a href="https://zjli2013.github.io/2019/11/29/X11-GUI-in-docker/" target="_blank" rel="external">xserver</a>, <code>ssh -X</code> channels give the way for visualization desktop and simple apps(e.g. glxgears) among xserver and xclient. while for really gpu-densive app, e.g. game rendering, machine learning, <code>ssh -X</code> can’t really use gpu resource well, which needs further support from device management mechanism from docker or k8s. </p>
+<h3 id="virutal-machine-cloud-desktop"><a href="#virutal-machine-cloud-desktop" class="headerlink" title="virutal machine/ cloud desktop"></a>virutal machine/ cloud desktop</h3><p>VM is based on <a href="https://www.vmware.com/topics/glossary/content/hypervisor.html?SRC=WWW_US_GP_bare-metal-hypervisor_SiteLink" target="_blank" rel="external">hypervisor</a>, known as a virtual machine monitor(VMM), a type of virtualization software that supports the creation and management of VMs, hypervisor translate requests between the physical and virtual resources, making virtualization possible.</p>
+<p>A hypervisor allows one host computer to support multiple guest VMs by virtually sharing its resources, like memory and processing. </p>
+<p>Generally, there are two types of hypervisors. Type 1 hypervisors, called “bare metal,” run directly on the host’s hardware. Type 2 hypervisors, called “hosted,” run as a software layer on an operating system, like other computer programs, the most common e.g. vmware, citrix. </p>
+<p>When a hypervisor is installed directly on the hardware of a physical machine, between the hardware and the operating system (OS), it is called a <a href="https://www.vmware.com/topics/glossary/content/bare-metal-hypervisor" target="_blank" rel="external">bare metal hypervisor</a>, which separates the OS from the underlying hardware, the software no longer relies on or is limited to specific hardware devices or drivers.</p>
+<h3 id="VDI"><a href="#VDI" class="headerlink" title="VDI"></a>VDI</h3><p>a type of vm application is <a href="https://www.vmware.com/topics/glossary/content/virtual-desktop-infrastructure-vdi" target="_blank" rel="external">virtual desktop inftrastructure(vdi)</a>, VDI hosts desktop environments on a centralized server and deploys them to end-users on request. this process also known as <a href="https://www.vmware.com/topics/glossary/content/server-virtualization" target="_blank" rel="external">server virtualization</a></p>
+<p>VDI is not necessarily requires a physical gpu, without a gpu, we can still run vmware, but the performance is poor. but for many other VM usage, beyond VDI, we still need ways to access GPU devices in VM.</p>
+<h2 id="GPU-techs-in-VM"><a href="#GPU-techs-in-VM" class="headerlink" title="GPU techs in VM"></a>GPU techs in VM</h2><p>vwmare has an introduction about <a href="https://blogs.vmware.com/china/2017/11/09/horizon-7-中的-gpu-方案/" target="_blank" rel="external">gpu tech</a> in vm: </p>
+<ul>
+<li><p>software 3D. using software to mimic GPU calculating. all 3d calculating is done by CPU</p>
+</li>
+<li><p>vsga(vitual shared graphics acceleration), each virtual desktop has a vsga driver, which has a ESXi module, inside which has a GPU driver, which can call the physical gpu, but this shared mode is through Hypervisor</p>
+</li>
+</ul>
+<p><img src="https://blogs.vmware.com/china/files/2017/11/vSGA.png" alt="image"></p>
+<ul>
+<li>vdga(virtual dedicated graphics accleration), or pass through mode, the physical GPU is assigned to a special virtual desktop for one user only.</li>
+</ul>
+<p><img src="http://blogs.vmware.com/china/files/2017/11/vDGA.png" alt="image"></p>
+<ul>
+<li>vgpu, split physical GPU to a few virtual-GPU, each virtual desk can have one vGPU.</li>
+</ul>
+<p><img src="http://blogs.vmware.com/china/files/2017/11/vGPU.png" alt="image"></p>
+<h2 id="VM-vs-docker"><a href="#VM-vs-docker" class="headerlink" title="VM vs docker"></a>VM vs docker</h2><p>docker is a light-weight virtualization way, which  don’t need hypervisor, and the app in docker is access the host physical devices directly, making docker looks like a process, rather than a virtual OS; and scientfic computing apps run in VM is actually using the virtual CPU from hypervisor, which <a href="http://blog.itpub.net/35489/viewspace-2120397/" target="_blank" rel="external">bypass the cpu optimzation</a> used for math calcualting. so usually a physical machine can start hundres or thousands docker, but can only run a few VM.  </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="http://blog.sina.com.cn/s/blog_59cf67260100l5h4.html" target="_blank" rel="external">linux remote desktop</a></p>
+<p><a href="https://blogs.gartner.com/gunnar-berger/understanding-virtual-desktop-vdi-gpu-technologies/" target="_blank" rel="external">understand vdi gpu tech</a></p>
+<p><a href="https://blogs.vmware.com/apps/2018/09/using-gpus-with-virtual-machines-on-vsphere-part-3-installing-the-nvidia-grid-technology.html" target="_blank" rel="external">nvidia vgpu tech in vSphere</a></p>
+<p><a href="https://www.brightcomputing.com/blog/setting-up-gpu-hypervisors-on-bright-openstack" target="_blank" rel="external">GPU hypervisors on OpenStack </a></p>
+<p><a href="https://cumulusnetworks.com/blog/containers-vs-hypervisors/" target="_blank" rel="external">containers vs hypervisors</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/pure-c-c-pointer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1868,179 +2020,6 @@ bio_ = io.BytesIO(read_in_memory);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/27/from-HPC-to-cloud-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/27/from-HPC-to-cloud-2/" itemprop="url">from HPC to cloud (2) - distributed storage intro</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-27T05:21:54-05:00">
-                2020-02-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/02/27/from-HPC-to-cloud-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/02/27/from-HPC-to-cloud-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="常见分布式存储"><a href="#常见分布式存储" class="headerlink" title="常见分布式存储"></a>常见分布式存储</h2><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><ul>
-<li><a href="https://blog.csdn.net/zds05/article/details/79494870" target="_blank" rel="external">块存储 vs 文件存储</a></li>
-</ul>
-<p>文件存储读写慢，利于共享；块存储读写快，不利于共享。所有磁盘阵列都是基于Block块的模式，而所有的NAS产品都是文件级存储。物理块与文件系统之间的映射关系：扇区→物理块→逻辑块→文件系统。所以，文件级备份，需要一层一层往下查找，最后才能完成整个文件复制。</p>
-<ul>
-<li><a href="https://zhuanlan.zhihu.com/p/39305618" target="_blank" rel="external">对象存储 vs 块存储</a></li>
-</ul>
-<p>富含元数据的对象存储使大规模分析成为企业的有吸引力的命题。对象存储也使得提供和管理跨越地理位置的存储变得相对经济。同时，块存储的属性使其成为高性能业务应用程序、事务数据库和虚拟机的理想选择，这些应用程序需要低延迟、细粒度的数据访问和一致的性能。块存储(云盘)只能被一个主机挂载。</p>
-<ul>
-<li><a href="https://caden16.github.io/对象存储/对象存储VS文件系统/" target="_blank" rel="external">文件存储 vs  对象存储</a></li>
-</ul>
-<p>对象存储(ceph, Linux block device)和文件系统(hdfs, gfs, restful Web API)在接口上的本质区别是对象存储不支持fread(), fwrite()类似的随机位置读写操作，即一个文件PUT到对象存储里以后，如果要读取，只能GET整个文件，如果要修改一个对象，只能重新PUT一个新的到对象存储里，覆盖之前的对象或者形成一个新的版本。对象存储的接口是REST风格的，通常是基于HTTP协议的RESTful Web API，通过HTTP请求中的PUT和GET等操作进行文件的上传即写入和下载即读取，通过DELETE操作删除文件。文件存储读写api如，file.open(); 对象存储读写api如 s3.open()。文件存储，多次读写；对象存储，一次写，多次读。对象存储的容量是无上限的；文件存储的容量达到一定上限，性能会极差。</p>
-<p>对象存储，需要对原数据做解析吗？ </p>
-<h4 id="存储类型"><a href="#存储类型" class="headerlink" title="存储类型"></a>存储类型</h4><ul>
-<li><p>块存储<br>Direct Attach Storage(DAS), 每台主机服务器有独立的存储设备，各存储设备之间无法互通，需要跨主机存取。 Storage Area Network(SAN), 高速网络连接的专业存储服务器，与主机群通过高速i/o连结。</p>
-</li>
-<li><p>文件存储<br>Network Attached Storage(NAS), 连接在网络上并提供存取服务。采用NFS或CIFS命令集访问数据，以文件为传输协议，通过TCP/IP实现网络化存储，可扩展性好、价格便宜、用户易管理</p>
-</li>
-<li><p>对象存储<br>核心是将数据通路（数据读或写）和控制通路（元数据）分离，并且基于对象存储设备（Object-based Storage Device，OSD）构建存储系统。对象存储设备具有一定的智能，它有自己的CPU、内存、网络和磁盘系统. 一般配置metadata server(MDS)。</p>
-</li>
-</ul>
-<h4 id="存储用例"><a href="#存储用例" class="headerlink" title="存储用例"></a>存储用例</h4><ul>
-<li><p>对象存储<br>非结构化(文档、图像、视频等)、备份存档、大数据分析（无实时性）</p>
-</li>
-<li><p>块存储<br>比较适合数据库业务、虚拟机</p>
-</li>
-<li><p>文件存储<br><a href="https://cloud.tencent.com/document/product/582/9129" target="_blank" rel="external">企业共享</a>、hpc大数据分析、流媒体处理，web服务。</p>
-</li>
-</ul>
-<h2 id="容器云"><a href="#容器云" class="headerlink" title="容器云"></a>容器云</h2><h4 id="容器云架构"><a href="#容器云架构" class="headerlink" title="容器云架构"></a>容器云架构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">控制台门户(管理员入口）</div><div class="line">saas(）</div><div class="line">paas(容器，微服务、中间件、cicd)</div><div class="line">资源调度管理平台</div><div class="line">iaas(计算、存储、网络），虚拟化提供资源池，</div></pre></td></tr></table></figure>
-<ul>
-<li>物理机直接架构k8s </li>
-</ul>
-<p>容器云与私有云搭建的硬件资源分开。</p>
-<ul>
-<li>虚拟层上支持k8s</li>
-</ul>
-<p>容器部署在虚拟机上的原因：既需要容器，也需要虚拟机的环境。一般互联网公司倾向分开容器的资源 和  虚拟机的资源。不管是容器云，还是虚拟机，都会有一个web管理平台。考虑弹性升缩，vm更灵活。而如果容器直接部署在x86裸机上，如果没有容器的管理层，docker容器挂了，就无法恢复。</p>
-<h4 id="应用部署容器云-vs-私有云"><a href="#应用部署容器云-vs-私有云" class="headerlink" title="应用部署容器云 vs 私有云"></a>应用部署容器云 vs 私有云</h4><ul>
-<li><p>仿真计算，倾向容器环境</p>
-</li>
-<li><p>CI/CD开发工具、中间件，倾向容器环境</p>
-</li>
-<li><p>web server，倾向容器环境</p>
-</li>
-<li><p>sql，倾向物理机或虚拟机 </p>
-</li>
-</ul>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="">KingStack</a></p>
-<p><a href="">UCloud</a></p>
-<p><a href="">EasyStack</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2091,7 +2070,7 @@ bio_ = io.BytesIO(read_in_memory);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">189</span>
+                <span class="site-state-item-count">190</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
