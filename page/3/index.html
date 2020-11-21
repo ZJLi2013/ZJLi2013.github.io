@@ -291,6 +291,268 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/28/redis-task-queue-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/28/redis-task-queue-2/" itemprop="url">redis task queue (2)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-28T08:52:02-04:00">
+                2020-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/28/redis-task-queue-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/04/28/redis-task-queue-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>currently, we add <code>job_queue</code> list inside Dockerfile by <code>COPY</code> the <code>job_queue</code> folder from local host to the docker image, which is not dynamically well, and can’t support additionaly scenarios.</p>
+<p>to design a <code>redisJQ</code> service that can used in swarm/k8s env, need consider <code>DNS</code> to make the servie available and <code>shared volume</code> to share the data in job queue to other services. </p>
+<h4 id="ceph-rbd-driver-for-docker"><a href="#ceph-rbd-driver-for-docker" class="headerlink" title="ceph rbd driver for docker"></a>ceph rbd driver for docker</h4><p>ceph can store files in three ways:</p>
+<ul>
+<li><p>rbd, block storage, which usually used with virtualization kvm</p>
+</li>
+<li><p>object storage, through <code>radosgw</code> api, or access by boto3 APIs. </p>
+</li>
+<li><p>cephfs, mount ceph as file system</p>
+</li>
+</ul>
+<p>the first idea is from local host mount to remote volume(e.g. ceph storage) mount. there are a few popular <a href="https://ceph.io/geen-categorie/getting-started-with-the-docker-rbd-volume-plugin/" target="_blank" rel="external">rbd-drive plugins</a>: </p>
+<ul>
+<li><p><a href="https://github.com/yp-engineering/rbd-docker-plugin" target="_blank" rel="external">Yp engineering</a></p>
+</li>
+<li><p>AcalephStorage </p>
+</li>
+<li><p>Volplugin</p>
+</li>
+<li><p><a href="https://rexray.readthedocs.io/en/stable/" target="_blank" rel="external">rexray.io</a></p>
+</li>
+</ul>
+<p>check <a href="https://ceph.com/geen-categorie/getting-started-with-the-docker-rbd-volume-plugin/" target="_blank" rel="external">ceph rbd driver</a> to understand more details. </p>
+<p>to support rbd-driver plugin in docker, the ceph server also need support block device driver, which sometime is not avaiable, as most small ceph team would support one or another type, either objec storage or block storage. and that’s our situation. so we can’t go with <code>rbd-driver plugin</code>.</p>
+<p>another way is to use <a href="https://gitlab.com/n0r1sk/docker-volume-cephfs" target="_blank" rel="external">docker volume cephfs</a>, similar reason our ceph team doesn’t support <code>cephfs</code>.  </p>
+<h4 id="ceph-object-storage-access"><a href="#ceph-object-storage-access" class="headerlink" title="ceph object storage access"></a>ceph object storage access</h4><p>as the ceph team can support boto3 API to access ceph, which gives us the one and only way to access scenarios: boto3.</p>
+<p>basically the <code>redis_JQ</code> first download all scenaio files from remote ceph through boto3 APIs, then scan the downloaded files into JQ, then feed into the python executors in front.</p>
+<h4 id="s3-client"><a href="#s3-client" class="headerlink" title="s3 client"></a>s3 client</h4><ul>
+<li><a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html" target="_blank" rel="external">aws cli</a></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">curl <span class="string">"https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"</span> -o <span class="string">"awscliv2.zip"</span></div><div class="line">unzip awscliv2.zip</div><div class="line">sudo ./aws/install</div><div class="line">/usr/<span class="built_in">local</span>/bin/aws --version</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://github.com/s3tools/s3cmd" target="_blank" rel="external">s3cmd</a></li>
+</ul>
+<h4 id="access-files-in-folders-in-s3-bucket"><a href="#access-files-in-folders-in-s3-bucket" class="headerlink" title="access files in folders in s3 bucket"></a>access files in folders in s3 bucket</h4><figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_files</span><span class="params">(self, bucket_name, folder_name)</span>:</span></div><div class="line">    files_with_prefix = self.s3_client.list_objects_v2(Bucket=bucket_name, Prefix=folder_name)</div><div class="line">    scenario_basename = <span class="string">"/pythonAPI/job_queue/scenario"</span></div><div class="line">    i = <span class="number">0</span> </div><div class="line">    <span class="keyword">for</span> file_ <span class="keyword">in</span> files_with_prefix[<span class="string">"Contents"</span>]:</div><div class="line">        scenario_name = scenario_basename + <span class="string">"%d"</span>%i + <span class="string">".py"</span></div><div class="line">        print(scenario_name)</div><div class="line">        self.download_file(bucket_name, file_[<span class="string">'Key'</span>], scenario_name, <span class="keyword">False</span>)</div><div class="line">        time.sleep(<span class="number">0.01</span>)</div><div class="line">        i += <span class="number">1</span></div></pre></td></tr></table></figure>
+<h2 id="manage-python-modules"><a href="#manage-python-modules" class="headerlink" title="manage python modules"></a>manage python modules</h2><p>during the project, we really need take care python packages installed by <code>apt-get</code>, <code>pip</code> and <code>conda</code>, if not there will conflicts among different version of modules:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import websockets</div><div class="line">Trackbac:</div><div class="line">  File <span class="string">"/usr/lib/python3/dist-packages/websockets/compatibility.py"</span>, line 8</div><div class="line">    asyncio_ensure_future = asyncio.async           <span class="comment"># Python &lt; 3.5</span></div></pre></td></tr></table></figure>
+<p>so it’s better to use conda or python virtual-env to separate the different running envs. and install packages by <code>conda install</code> is better choice, than the global <code>apt-get install</code>:</p>
+<ul>
+<li><p><a href="https://anaconda.org/conda-forge/websockets" target="_blank" rel="external">conda install ws</a></p>
+</li>
+<li><p><a href="https://anaconda.org/anaconda/pandas" target="_blank" rel="external">conda install pandas</a> </p>
+</li>
+<li><p><a href="https://github.com/danielhrisca/asammdf" target="_blank" rel="external">conda install asammdf</a></p>
+</li>
+<li><p><a href="https://anaconda.org/conda-forge/botocore" target="_blank" rel="external">conda install botocore</a></p>
+</li>
+<li><p><a href="https://anaconda.org/anaconda/sqlalchemy" target="_blank" rel="external">conda install sqlalchemy</a> </p>
+</li>
+<li><p><a href="https://anaconda.org/anaconda/websocket-client" target="_blank" rel="external">conda install websocket-client</a></p>
+</li>
+<li><p><a href="https://anaconda.org/anaconda/redis" target="_blank" rel="external">conda install redis</a></p>
+</li>
+<li><p><a href="https://anaconda.org/anaconda/boto3" target="_blank" rel="external">conda install boto3</a></p>
+</li>
+</ul>
+<h4 id="basic-of-python-import"><a href="#basic-of-python-import" class="headerlink" title="basic of python import"></a>basic of python import</h4><ul>
+<li><p>module,  any <code>*.py</code> file, where its name is the file name </p>
+</li>
+<li><p>package,  any folder containing a file named <code>__init__.py</code> in i, its name is the name of the folder.</p>
+</li>
+</ul>
+<p>When a module named <code>module1</code> is imported, the interpreter first searches for a built-in module with that name. If not found, it then searches for a file named <code>module1.py</code> or a folder named <code>module1</code> in a list of directories given by the variable <code>sys.path</code></p>
+<p><code>sys.path</code> is initialized from 3 locations:</p>
+<ul>
+<li><p>the directory containing the input script, or the current directory</p>
+</li>
+<li><p><code>PYTHONPATH</code> </p>
+</li>
+<li><p>the installation-dependent default</p>
+</li>
+</ul>
+<p>if using <code>export PYTHONPATH</code> directly, it works. but once defined in <code>~/.bashrc</code> it doesn’t actually triggered in <code>conda</code> env.<br>it simpler to add the root directory of the project to the <code>PYTHONPATH</code> environment variable and then running all the scripts from that directory’s level and changing the import statements accordingly. <code>import</code> search for your packages in specific places, listed in sys.path. and The current directory is always appended to this list</p>
+<h2 id="redis-service"><a href="#redis-service" class="headerlink" title="redis service"></a>redis service</h2><p>the common error: <code>redis.exceptions.ConnectionError: Error 111 connecting to 10.20.181.132:6379. Connection refused.</code> , which basically means the system can’t connect to redis server, due to by default redis <a href="https://www.cnblogs.com/likwo/p/5903377.html" target="_blank" rel="external">only allow localhost</a> to access. so we need configure non-localhost IP to access redis db. </p>
+<ul>
+<li>check redis-server running status </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ps aux | grep redis-server</div><div class="line">netstat -tunple | grep 6379</div><div class="line">redis-cli info</div></pre></td></tr></table></figure>
+<ul>
+<li>shutdown redis-server</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo <span class="built_in">kill</span> -9 <span class="variable">$pid</span></div></pre></td></tr></table></figure>
+<h4 id="redis-server-amp-redis-cli"><a href="#redis-server-amp-redis-cli" class="headerlink" title="redis-server &amp; redis-cli"></a>redis-server &amp; redis-cli</h4><p><code>redis-server</code> start redis server with a default config file at <code>/etc/redis/redis.config</code></p>
+<p>a few item in the configure file need take care:</p>
+<ul>
+<li>bind, check <a href="https://stackoverflow.com/questions/16120287/redis-bind-to-more-than-one-ip" target="_blank" rel="external">here</a></li>
+</ul>
+<p>the default setting is to <code>bind 127.0.0.1</code>,which means redis db is stored and only can be access through <code>localhost</code>.  for our case, to allow hostIP(10.20.181.132), or even any IP to access, need :</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bind 0.0.0.0</div></pre></td></tr></table></figure>
+<ul>
+<li>redislog, default place at <code>/var/log/redis/redis-server.log</code> </li>
+</ul>
+<ul>
+<li><p>requirepass, for <a href="https://blog.csdn.net/qq_40460909/article/details/84838245" target="_blank" rel="external">security issues</a>, please consider this item</p>
+</li>
+<li><p>login client with hostIP</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h 10.20.181.132</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://www.tutorialspoint.com/redis/redis_lists.htm" target="_blank" rel="external">basic operation of redis-cli</a></li>
+</ul>
+<p>log in redis-cli first, then run the following: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">LPUSH your_list_name item1 </div><div class="line">LPUSH your_list_name item2 </div><div class="line">LLEN your_list_name</div><div class="line">EXISTS your_list_name</div></pre></td></tr></table></figure>
+<h4 id="redis-service-in-docker"><a href="#redis-service-in-docker" class="headerlink" title="redis service in docker"></a>redis service in docker</h4><p>the following is an example from <a href="https://docker-doc.readthedocs.io/zh_CN/stable/examples/running_redis_service.html" target="_blank" rel="external">create a redis service</a></p>
+<ul>
+<li>connect to the redis container directly</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it redis-image /usr/bin/redis-server /etc/redis/myconfig.conf</div></pre></td></tr></table></figure>
+<p>in this way, <code>redis service</code> will use its docker VIP, which can be checked from:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker ps </div><div class="line">docker inspect &lt;container_id&gt;</div></pre></td></tr></table></figure>
+<p>which will give somehing like:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">"bridge": &#123;</div><div class="line">    "Gateway": "172.17.0.1",</div><div class="line">    "IPAddress": "172.17.0.2",</div></pre></td></tr></table></figure>
+<p>then the redis-server can connect by:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h 172.17.0.2</div></pre></td></tr></table></figure>
+<ul>
+<li>connect to the host os </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -p 6379 redis-image /usr/bin/redis-server /etc/redis/myconfig.conf</div></pre></td></tr></table></figure>
+<p><strong>the redis container has exported 6379, which may map to another port on host os</strong>, check:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker ps </div><div class="line">docker port &lt;container_id&gt; 6379  <span class="comment">#gives the &lt;exernal_port&gt; on host</span></div><div class="line">rdis-cli -h 10.20.181.132 -p &lt;external_port&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li>run redis service with host network</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it --network=host redis-image /usr/bin/redis-server /etc/redis/myconfig.conf</div></pre></td></tr></table></figure>
+<p>in this way, there is no bridge network, or docker VIP. the host IP and port is directly used. so the following works</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">redis-cli -h 10.20.181.132 -p 6379</div></pre></td></tr></table></figure>
+<p>A good way now, is to map host redis_port to container redis_port, and use the second way to access redis.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -p 6379:6379 redisjq /bin/bash</div></pre></td></tr></table></figure>
+<p>tips, need to confirm <code>6379</code> port at host machine is free.</p>
+<h4 id="share-volumes-among-multi-volumes"><a href="#share-volumes-among-multi-volumes" class="headerlink" title="share volumes among multi volumes"></a>share volumes among multi volumes</h4><p>the problem is <code>redisjq service</code> download all scenarios scripts in its own docker container, and only store the scenario name in <code>redis db</code>. when <code>redis_worker</code> access the db, there is no real python scripts. so need to share this <code>job-queue</code> to all <code>redis_worker</code>s</p>
+<p><a href="https://docs.docker.com/storage/volumes/" target="_blank" rel="external">mount volume</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -p 6379:6379 --mount <span class="built_in">source</span>=jq-vol,target=/job_queue redisjq /bin/bash</div></pre></td></tr></table></figure>
+<h4 id="start-pythonapi-to-access-the-shared-volume"><a href="#start-pythonapi-to-access-the-shared-volume" class="headerlink" title="start pythonapi to access the shared volume"></a>start pythonapi to access the shared volume</h4><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it --mount <span class="built_in">source</span>=jq-vol,target=/pythonAPI/job_queue  redispythonapi  /bin/bash</div></pre></td></tr></table></figure>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.cnblogs.com/sammyliu/p/5095976.html" target="_blank" rel="external">qemu/kvm &amp; ceph: rbd drver in qemu</a></p>
+<p><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-ceph-rbd-docker-storage/index.html" target="_blank" rel="external">基于 Ceph RBD 实现 Docker 集群的分布式存储</a></p>
+<p><a href="https://my.oschina.net/u/561758/blog/1813161" target="_blank" rel="external">rexray/rbd 参考</a></p>
+<p><a href="https://stackoverflow.com/questions/22359132/access-cephfs-inside-docker-container-without-mounting-cephfs-on-the-host" target="_blank" rel="external">access cephFS inside docker container without mounting cephFS in host</a></p>
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/user-guide/using-folders.html" target="_blank" rel="external">how to use folders in s3 bucket</a></p>
+<p><a href="https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html" target="_blank" rel="external">the definitive guide to python import statements</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/play-with-k8s/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2337,231 +2599,11 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/stanford-cs-linked-list-problems/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/14/stanford-cs-linked-list-problems/" itemprop="url">stanford cs linked list problems</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-14T23:00:12-04:00">
-                2020-03-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/14/stanford-cs-linked-list-problems/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/14/stanford-cs-linked-list-problems/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p><a href="http://cslibrary.stanford.edu" target="_blank" rel="external">stanford cs</a> gives me some confidence to deal with linked list.</p>
-<h2 id="linked-list-basics"><a href="#linked-list-basics" class="headerlink" title="linked list basics"></a>linked list basics</h2><p><a href="http://cslibrary.stanford.edu/102/PointersAndMemory.pdf" target="_blank" rel="external">basic pointers</a> as well as <a href="">previous blog</a>: </p>
-<ul>
-<li><p>a <code>pointer</code> stores a reference to another variable(<code>pointee</code>). what stored inside <code>pointer</code> is an reference to its pointee’s type.</p>
-</li>
-<li><p>NULL pointer, points to nothing.</p>
-</li>
-<li><p>pointer assignment <code>p=q</code>, makes the two pointers point to the same pointee, namely the two pointers point to the same pointee memory.</p>
-</li>
-</ul>
-<p>it’s a good habit to remember to check the empty list case. </p>
-<p>define the Linked-List structure:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span> &#123;</span></div><div class="line">	<span class="keyword">int</span> val ;</div><div class="line">	ListNode *next;</div><div class="line">	ListNode(<span class="keyword">int</span> x): val(x), next(<span class="literal">NULL</span>)&#123;&#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">typedef</span> ListNode node_ ;</div></pre></td></tr></table></figure>
-<ul>
-<li>iterate over the list with a local pointer</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">node_ *current = head ;</div><div class="line"><span class="keyword">while</span>(current)&#123;</div><div class="line">	current = current-&gt;next;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">for</span>(current=head; current!=<span class="literal">NULL</span>; current=current-&gt;next)&#123;&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li>push a new node to the front of the list </li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">Push</span><span class="params">(ListNode** headRef, <span class="keyword">int</span> val)</span></span>&#123;</div><div class="line">	ListNode newNode = <span class="keyword">new</span> ListNode(val);</div><div class="line">	newNode.next = *headRef ;</div><div class="line">	*headRef = newNode ; </div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">* changes the head pointer by a reference pointer</div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">changetoNull</span><span class="params">(ListNode** head)</span></span>&#123;</div><div class="line">	*head = <span class="literal">NULL</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>build up a list by adding nodes at its head</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">AddatHead</span><span class="params">()</span></span>&#123;</div><div class="line">	ListNode *head = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">		Push(&amp;head, i);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> head;</div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">which gives a <span class="built_in">list</span> &#123;<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>&#125; </div><div class="line"></div><div class="line">* build up a <span class="built_in">list</span> by appending nodes to the tail</div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function">ListNode* <span class="title">BuildwithSpecialCase</span><span class="params">()</span></span>&#123;</div><div class="line">	ListNode* head = <span class="literal">NULL</span> ;</div><div class="line">	ListNode* tail ; </div><div class="line">   Push(&amp;head, <span class="number">1</span>);</div><div class="line">   tail = head ; </div><div class="line">   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">2</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">       Push(&amp;(tail-&gt;next), i);</div><div class="line">       tail = tail-&gt;next;</div><div class="line">   &#125;</div><div class="line">   <span class="keyword">return</span> head; </div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">which gives a <span class="built_in">list</span> &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</div><div class="line"></div><div class="line">* build up a <span class="built_in">list</span> with dummy node </div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function">ListNode* <span class="title">BuildWithDummy</span><span class="params">()</span></span>&#123;</div><div class="line">   ListNode dummy = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</div><div class="line">   ListNode* tail = &amp;dummy ; </div><div class="line">   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">   		Push(&amp;(tail-&gt;next), i);</div><div class="line">   		tail = tail-&gt;next;</div><div class="line">   	&#125;</div><div class="line">   	<span class="keyword">return</span> dummy.next ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>which returns a list {1, 2, 3, 4} </p>
-<ul>
-<li>appendNode(), add new node at the tail</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">appendNode</span><span class="params">(ListNode** headRef, <span class="keyword">int</span> val)</span></span>&#123;</div><div class="line">	ListNode *current  = *headRef ;</div><div class="line">	ListNode newNode = <span class="keyword">new</span> ListNode(num);</div><div class="line">	<span class="keyword">if</span>(!current)&#123;</div><div class="line">		current = &amp;newNode ;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		<span class="keyword">while</span>(current-&gt;next)&#123;</div><div class="line">			current = current-&gt;next ;</div><div class="line">		&#125;</div><div class="line">		current-&gt;next = &amp;newNode ;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">``` </div><div class="line"></div><div class="line">* copyList()</div><div class="line"></div><div class="line">```c++</div><div class="line"><span class="function">ListNode* <span class="title">copyList</span><span class="params">(ListNode* head)</span></span>&#123;</div><div class="line">	ListNode *current = head ;</div><div class="line">	ListNode *newList = <span class="literal">NULL</span> ;</div><div class="line">	ListNode *tail = <span class="literal">NULL</span> ;</div><div class="line">	</div><div class="line">	<span class="keyword">while</span>(current)&#123;</div><div class="line">		<span class="keyword">if</span>(!newList)&#123;</div><div class="line">			newList = &amp;(<span class="keyword">new</span> ListNode(current-&gt;val));</div><div class="line">			tail = newList ;</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			tail-&gt;next = &amp;(<span class="keyword">new</span> ListNode(current-&gt;val));</div><div class="line">			tail = tail-&gt;next ; </div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	<span class="keyword">return</span> newList ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>copyList() recursive </li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function">ListNode* <span class="title">CopyList</span><span class="params">(ListNode* head)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(!head) <span class="keyword">return</span> <span class="literal">NULL</span>;</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		ListNode *current = head ;</div><div class="line">		ListNode *newList = &amp;(ListNode(current-&gt;val));</div><div class="line">		newList-&gt;next = CopyList(current-&gt;next);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="linked-list-problems-further"><a href="#linked-list-problems-further" class="headerlink" title="linked list problems further"></a>linked list problems further</h2><ul>
-<li>InsertNth()</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertNth</span><span class="params">(node_ **head, <span class="keyword">int</span> index, <span class="keyword">int</span> data)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(index==<span class="number">0</span>) Push(head, data);</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		node_ * cur = *head ;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;index<span class="number">-1</span>; i++)&#123;</div><div class="line">				cur = cur-&gt;next ;</div><div class="line">		&#125;	</div><div class="line">		Push(&amp;*cur-&gt;next), data);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>sortedInsert()</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// be notified, here we using **, to use the pointer of the head, as the head node may be updated  </span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sortedInsert</span><span class="params">(node_ **head, node* newNode)</span></span>&#123;</div><div class="line">	<span class="keyword">if</span>(*head == <span class="literal">NULL</span> || head-&gt;val &gt;= newNode-&gt;val)&#123;</div><div class="line">		newNode-&gt;next = *head;</div><div class="line">		*head = newNode;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		node_ *cur = *head ;</div><div class="line">		<span class="keyword">while</span>(cur-&gt;next &amp;&amp; cur-&gt;next-&gt;val &lt; newNode-&gt;val)&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125; </div><div class="line">		newNode-&gt;next = cur-&gt;next ;</div><div class="line">		cur-&gt;next = newNode ;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//with dummy head</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">sortedInsert</span><span class="params">(node_ **head, node* newNode)</span></span>&#123;</div><div class="line">	<span class="function">node_ <span class="title">dummy</span><span class="params">(<span class="number">0</span>)</span></span>;</div><div class="line">	dummy.next = *head ; 	</div><div class="line">	node_ *cur = &amp;dummy ;</div><div class="line">	<span class="keyword">while</span>(cur-&gt;next &amp;&amp; cur-&gt;next-&gt;val &lt; newNode-&gt;val)&#123;</div><div class="line">		cur = cur-&gt;next;</div><div class="line">	&#125;</div><div class="line">	newNode-&gt;next = cur-&gt;next ;</div><div class="line">	cur-&gt;next = newNode ;</div><div class="line">	*head = dummy-&gt;next;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>insertSort()</li>
-</ul>
-<p>given  as unsorted list, and output with an sorted list</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">InsertSort</span><span class="params">(node_ ** head)</span></span>&#123;</div><div class="line">	node_ *result = <span class="literal">NULL</span> ;</div><div class="line">	node_ *cur = *head ;</div><div class="line">	node_ *next ;</div><div class="line">	<span class="keyword">while</span>(cur)&#123;</div><div class="line">		next = cur-&gt;next ;  <span class="comment">// ticky- note the next pointer, before we change it</span></div><div class="line">		sortedInsert(result, cur);</div><div class="line">		cur = next ;</div><div class="line">	&#125;</div><div class="line">	*head = result ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>append() </li>
-</ul>
-<p>append list b to the end of list a </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">append</span><span class="params">(node_ **a, node_ **b)</span></span>&#123;</div><div class="line">	node_ * cur ;</div><div class="line">	<span class="keyword">if</span>( *a == <span class="literal">NULL</span>)&#123; *a = *b ;&#125;</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		cur = *a ;</div><div class="line">		<span class="keyword">while</span>(cur-&gt;next)&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125;</div><div class="line">		cur-&gt;next = *b ;</div><div class="line">	&#125;</div><div class="line">	*b = <span class="literal">NULL</span> ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>frontBackSplit()</li>
-</ul>
-<p>given a list, split it into two sublists: one for the front half, one for the back half</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">frontBackSplit</span><span class="params">(node_ **head, node_ **front, node_ **back)</span></span>&#123;</div><div class="line">	<span class="keyword">int</span> len = length(head);</div><div class="line">	node_ *cur = *head ;</div><div class="line">	<span class="keyword">if</span>(len &lt; <span class="number">2</span>)&#123;</div><div class="line">		*front = *head;</div><div class="line">		*back = <span class="literal">NULL</span> ;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		<span class="keyword">int</span> half = len/<span class="number">2</span>; </div><div class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;half<span class="number">-1</span>; i++)&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125;</div><div class="line">		*front = *head;		</div><div class="line"> 		*back = cur;</div><div class="line">		cur = <span class="literal">NULL</span> ;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">frontBackSplit2</span><span class="params">(node_ **head, node_ **front, node_ **back)</span></span>&#123;</div><div class="line">	node_ *fast, *slow ;</div><div class="line">	<span class="keyword">if</span>(*head == <span class="literal">NULL</span> || (*head)-&gt;next == <span class="literal">NULL</span>)&#123;</div><div class="line">		*front = *head ;</div><div class="line">		*back = <span class="literal">NULL</span> ;</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		slow = head;</div><div class="line">		fast = head-&gt;next ;</div><div class="line">		<span class="keyword">while</span>(fast)&#123;</div><div class="line">			fast = fast-&gt;next;</div><div class="line">			<span class="keyword">if</span>(fast)&#123;</div><div class="line">				fast = fast-&gt;next;</div><div class="line">				slow = slow-&gt;next;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		*front = *head;</div><div class="line">		*back = slow-&gt;next ;</div><div class="line">		slow-&gt;next = <span class="literal">NULL</span> ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>removeDuplicates()</li>
-</ul>
-<p>remove duplicated node from a sorted list </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeDuplicates</span><span class="params">(node_ ** head)</span></span></div><div class="line">&#123;</div><div class="line">	node_ *slow, *fast ;</div><div class="line">	<span class="keyword">if</span>(head == <span class="literal">NULL</span> || head-&gt;next == <span class="literal">NULL</span>)&#123;</div><div class="line"> 		<span class="keyword">return</span> ;</div><div class="line">        &#125;</div><div class="line">	slow = *head ;</div><div class="line">	fast = (*head)-&gt;next ;</div><div class="line">	<span class="keyword">while</span>(fast)&#123;</div><div class="line">		<span class="keyword">if</span>(slow-&gt;val == fast-&gt;val)&#123;</div><div class="line">			node_ * needfree = fast ;</div><div class="line">			fast = fast-&gt;next ;</div><div class="line">			<span class="built_in">free</span>(needfree); </div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">		   slow = slow-&gt;next;</div><div class="line">		   fast = fast-&gt;next;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeDuplicate</span><span class="params">(node_ **head)</span></span>&#123;</div><div class="line">	node_ *cur = *head;</div><div class="line">	<span class="keyword">if</span>(cur==<span class="literal">NULL</span>) <span class="keyword">return</span> ;</div><div class="line">	<span class="keyword">while</span>(cur-&gt;next)&#123;</div><div class="line">		<span class="keyword">if</span>(cur-&gt;val == cur-&gt;next-&gt;val)&#123;</div><div class="line">			node_ *nextNext = cur-&gt;next-&gt;next ;</div><div class="line">			<span class="built_in">free</span>(cur-&gt;next);</div><div class="line">			cur-&gt;next = nextNext;</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			cur = cur-&gt;next;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>moveNode()</li>
-</ul>
-<p>given two list, remove the front node from the second list, and push it onto the front of the first.</p>
-<p>// a = {1, 2, 3};  b = {1, 2, 3}  =&gt;  a={1, 1, 2, 3}, b={2, 3}</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">moveNode</span><span class="params">(node_ **dest, node_ **source)</span></span>&#123;</div><div class="line">	node_ *newNode = *source ; </div><div class="line">	*source = newNode-&gt;next ; </div><div class="line">	newNode-&gt;next = *dest ;</div><div class="line">	*dest = newNode ; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>alternatingSplit()</li>
-</ul>
-<p>given a list, split its nodes into two shorter lists. if we number the elements 0, 1, 2, …, then all the even elements go to the first sublist, and all the odd elements go to tthe second</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">alternatingSplit</span><span class="params">(node_ *source, node_ **ahead, node_ **bhead)</span></span>&#123;</div><div class="line">	node_ *a = <span class="literal">NULL</span> ;</div><div class="line">	node_ *b = <span class="literal">NULL</span> ;</div><div class="line">	node_ *cur = *source ;</div><div class="line">	<span class="keyword">while</span>(cur)&#123;</div><div class="line">		moveNode(&amp;a, &amp;cur);</div><div class="line">		<span class="keyword">if</span>(cur)&#123;</div><div class="line">			moveNode(&amp;b, &amp;cur);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	*ahead = a ;</div><div class="line">	*bhead = b;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>shuffleMerge()</li>
-</ul>
-<p>given two list, merge their nodes together to make one list, takign nodes alternatively between the two lists </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line"><span class="function">node_* <span class="title">shufflMerge</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	node_ *res = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line">	<span class="keyword">while</span>(a || b)&#123;</div><div class="line">		<span class="keyword">if</span>(i % <span class="number">2</span> == <span class="number">0</span> &amp;&amp; a)&#123;</div><div class="line">			moveNode(&amp;res, &amp;a);</div><div class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(b)&#123;</div><div class="line">			moveNode(&amp;res, &amp;b);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125; <span class="comment">//but this gives the tail to front order</span></div><div class="line"></div><div class="line"><span class="function">node_* <span class="title">shufflMerge2</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	<span class="function">node_ <span class="title">dummy</span><span class="params">(<span class="number">0</span>)</span></span>;</div><div class="line">	node *tail = &amp;dummy ;</div><div class="line">	<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">		<span class="keyword">if</span>(a==<span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = b;</div><div class="line">			<span class="keyword">break</span> ;</div><div class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(b == <span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = a;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			tail-&gt;next = a ;</div><div class="line">			tail = a ;</div><div class="line">			a = a-&gt;next ;</div><div class="line">			tail-&gt;next = b;</div><div class="line">			tail = b;</div><div class="line">			b = b-&gt;next;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> dummy.next ;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// recursive ?</span></div><div class="line"><span class="function">node_* <span class="title">shufflMerge3</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	node_ *res ;</div><div class="line">	node_ *recur ; </div><div class="line">	<span class="keyword">if</span>(a==<span class="literal">NULL</span>) <span class="keyword">return</span> b ;</div><div class="line">	<span class="keyword">else</span> <span class="keyword">if</span>(b=<span class="literal">NULL</span>) <span class="keyword">return</span> a ;</div><div class="line">	<span class="keyword">else</span>&#123;</div><div class="line">		recur = shuffleMerge3(a-&gt;next, b-&gt;next);</div><div class="line">		res = a ;</div><div class="line">		a-&gt;next = b ;</div><div class="line">		b-&gt;next = recur ;</div><div class="line">		<span class="keyword">return</span> res;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>sortedMerge()</li>
-</ul>
-<p>given two sorted in incresing order listes, merge into one in increasing order </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function">node_ *<span class="title">sortedMerge</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	<span class="function">node_ <span class="title">dummy</span><span class="params">(<span class="number">0</span>)</span></span>;</div><div class="line">        node_ *tail = &amp;dummy ;</div><div class="line">	dummy.next = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">while</span>(<span class="number">1</span>)&#123;</div><div class="line">		<span class="keyword">if</span>(a==<span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = b ;</div><div class="line">			<span class="keyword">break</span>;</div><div class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span>(b==<span class="literal">NULL</span>)&#123;</div><div class="line">			tail-&gt;next = a;</div><div class="line">			<span class="keyword">break</span> ;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="keyword">if</span>(a-&gt;val &lt;= b-&gt;val)&#123;</div><div class="line">			moveNode(&amp;(tail-&gt;next), &amp;a);</div><div class="line">		&#125;<span class="keyword">else</span>&#123;</div><div class="line">			moveNode(&amp;(tail-&gt;next), &amp;b);</div><div class="line">		&#125;</div><div class="line">		tail = tail-&gt;next; </div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> dummy.next ;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// how this works?</span></div><div class="line"><span class="function">node_ *<span class="title">sortedMerge2</span><span class="params">(node_ *a, node_ *b)</span></span>&#123;</div><div class="line">	node_ *result = <span class="literal">NULL</span> ;</div><div class="line">	<span class="keyword">if</span>(a==<span class="literal">NULL</span>) <span class="keyword">return</span> b;</div><div class="line">	<span class="keyword">if</span>(b==<span class="literal">NULL</span>) <span class="keyword">return</span> a;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(a-&gt;val &lt;= b-&gt;val)&#123;</div><div class="line">		result = a;</div><div class="line">		result-&gt;next = sortedMerge2(a-&gt;next, b);</div><div class="line">	&#125;<span class="keyword">else</span>&#123;</div><div class="line">		result = b;</div><div class="line">		result-&gt;next = sortedMerge2(a, b-&gt;next);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span>  result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>mergeSort()</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">mergeSor</span><span class="params">(node_ ** headRef)</span></span>&#123;</div><div class="line">	node_ *head = *headRef ;</div><div class="line">	node_ *a, *b;</div><div class="line">	<span class="keyword">if</span>( (head==<span class="literal">NULL</span>) || (head-&gt;next == <span class="literal">NULL</span>))&#123;</div><div class="line">		<span class="keyword">return</span> ;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	frontBacksplit(head, &amp;a, &amp;b);</div><div class="line">	mergeSort(&amp;a);</div><div class="line">	mergeSort(&amp;b);</div><div class="line"></div><div class="line">	*headRef = sortedMerge(a,b):</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>reverse()</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">reverse</span><span class="params">(node_ **head)</span></span>&#123;</div><div class="line">	node_ *res = <span class="literal">NULL</span>;</div><div class="line">	node_ *cur = *head ;</div><div class="line">	node_ *next ;</div><div class="line"></div><div class="line">	<span class="keyword">while</span>(cur)&#123;</div><div class="line">		next = cur-&gt;next;</div><div class="line">		cur-&gt;next = res ;</div><div class="line">		res = cur ;</div><div class="line">		cur = next ; </div><div class="line">	&#125;</div><div class="line"></div><div class="line">	*head = res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>recursive reverse()</li>
-</ul>
-<p>// concerned </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">recursiveReverse</span><span class="params">(node_ **head)</span></span>&#123;</div><div class="line">	ndoe_ *first, *rest ;</div><div class="line"></div><div class="line">	<span class="keyword">if</span>(*head == <span class="literal">NULL</span>) <span class="keyword">return</span> ;</div><div class="line">	first = *head ;</div><div class="line">	rest = first-&gt;next ;</div><div class="line">	<span class="keyword">if</span>(rest == <span class="literal">NULL</span>) <span class="keyword">return</span> ;	</div><div class="line">	recursiveReverse(&amp;rest);</div><div class="line">	first-&gt;next-&gt;next = first ;</div><div class="line">	first-&gt;next = <span class="literal">NULL</span> ;</div><div class="line">	</div><div class="line">	*head = rest ;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a href="http://cslibrary.stanford.edu/105/LinkedListProblems.pdf" target="_blank" rel="external">linked list problems</a></p>
-<p><a href="http://cslibrary.stanford.edu/103/LinkedListBasics.pdf" target="_blank" rel="external">linked list basics from standford cs</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2607,7 +2649,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">190</span>
+                <span class="site-state-item-count">191</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

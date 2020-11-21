@@ -291,6 +291,130 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/21/leetCode-swap-pairs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/11/21/leetCode-swap-pairs/" itemprop="url">leetCode_swap_pairs</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-21T08:22:01-05:00">
+                2020-11-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/11/21/leetCode-swap-pairs/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/11/21/leetCode-swap-pairs/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p><a href="https://leetcode-cn.com/problems/swap-nodes-in-pairs/" target="_blank" rel="external">LeetCode24: swap pairs</a></p>
+<h2 id="intuitive-sol"><a href="#intuitive-sol" class="headerlink" title="intuitive sol"></a>intuitive sol</h2><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line">  struct ListNode &#123;</div><div class="line">      int val;</div><div class="line">      ListNode *next;</div><div class="line">      ListNode() : val(0), next(nullptr) &#123;&#125;</div><div class="line">      ListNode(int x) : val(x), next(nullptr) &#123;&#125;</div><div class="line">      ListNode(int x, ListNode *next) : val(x), next(next) &#123;&#125;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">#include &lt;iostream&gt;</div><div class="line"></div><div class="line">class Solution &#123;</div><div class="line">public:</div><div class="line">    ListNode* swapPairs(ListNode* head) &#123;</div><div class="line">        ListNode *dummy = new ListNode(-1);</div><div class="line">        ListNode *prev = dummy ;</div><div class="line">        prev-&gt;next = head ;</div><div class="line">        ListNode *p1=head, *p2=p1-&gt;next, *p3=p2-&gt;next, *p4=p3-&gt;next, *pn, *tmp ;</div><div class="line"></div><div class="line">        if(p1 == nullptr)</div><div class="line">        &#123;</div><div class="line">            return nullptr ;</div><div class="line">        &#125;else if(p2 == nullptr)&#123;</div><div class="line">            return p1 ;</div><div class="line">        &#125;else if(p3 == nullptr)</div><div class="line">        &#123;</div><div class="line">            p2-&gt;next = p1 ;</div><div class="line">            p1-&gt;next = nullptr ;</div><div class="line">            head = p2 ;</div><div class="line">            return head ;</div><div class="line">        &#125;else if(p4 == nullptr)</div><div class="line">        &#123;</div><div class="line">            head-&gt;next = p2 ;</div><div class="line">            p2-&gt;next = p1 ;</div><div class="line">            p1 -&gt;next = p3;</div><div class="line">            return head ;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        for(p1=head, p2=p1-&gt;next, p3=p2-&gt;next, p4=p3-&gt;next ; p4 &amp;&amp; p3 &amp;&amp; p2 &amp;&amp; p1;  prev=p3, p1=prev-&gt;next, p2=p1-&gt;next, p3=p2-&gt;next, p4=p3-&gt;next )</div><div class="line">&#123;</div><div class="line"></div><div class="line">   pn = p4-&gt;next ;</div><div class="line">   p2-&gt;next = p1 ;</div><div class="line">   p4-&gt;next = p3 ;</div><div class="line">   p1-&gt;next = p4;</div><div class="line">   p3-&gt;next = pn ;</div><div class="line">   prev-&gt;next = p2 ;</div><div class="line"></div><div class="line">   if (pn == nullptr)</div><div class="line">   &#123;</div><div class="line">     break;</div><div class="line">   &#125;else if(pn-&gt;next == nullptr)</div><div class="line">   &#123;</div><div class="line">     break;</div><div class="line">   &#125;else if (pn-&gt;next-&gt;next == nullptr)</div><div class="line">   &#123;</div><div class="line">     break;</div><div class="line">   &#125;else if(pn-&gt;next-&gt;next-&gt;next == nullptr)</div><div class="line">   &#123;</div><div class="line">     break;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">  if(pn == nullptr || pn-&gt;next == nullptr)&#123;</div><div class="line">    return prev-&gt;next;</div><div class="line">  &#125;</div><div class="line">   if(pn-&gt;next-&gt;next == nullptr )</div><div class="line">   &#123;</div><div class="line">     tmp = pn-&gt;next ;</div><div class="line">     prev-&gt;next = pn-&gt;next ;</div><div class="line">     tmp-&gt;next = pn ;</div><div class="line">     pn-&gt;next = nullptr;</div><div class="line">   &#125;else if(pn-&gt;next-&gt;next-&gt;next == nullptr)&#123;</div><div class="line">     tmp = pn-&gt;next ;</div><div class="line">     ListNode *last = tmp-&gt;next ;</div><div class="line">     prev-&gt;next = tmp ;</div><div class="line">     pn-&gt;next = last ;</div><div class="line"></div><div class="line">   &#125;</div><div class="line">     return prev-&gt;next;</div><div class="line">    &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   ListNode *head = new ListNode(1);</div><div class="line">   ListNode *sec = new ListNode(2);</div><div class="line">   ListNode *thd = new ListNode(3);</div><div class="line">   ListNode *fth = new ListNode(4);</div><div class="line">   head-&gt;next = sec ;</div><div class="line">   sec-&gt;next = thd ;</div><div class="line">   thd-&gt;next = fth ;</div><div class="line"></div><div class="line">   Solution *sol = new Solution();</div><div class="line"></div><div class="line">   ListNode *res = sol-&gt;swapPairs(head) ;</div><div class="line">   std::cout &lt;&lt; res-&gt;val &lt;&lt; ', ' &lt;&lt; res-&gt;next-&gt;val &lt;&lt; ', ' &lt;&lt; res-&gt;next-&gt;next-&gt;val &lt;&lt; std::endl;</div><div class="line">   return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/12/why-Hil-MiL-SiL-and-ViL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2081,141 +2205,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/28/where-are-you-in-next-4-years-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/28/where-are-you-in-next-4-years-3/" itemprop="url">where are you in next 4 years(3)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-28T08:19:43-04:00">
-                2020-06-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/06/28/where-are-you-in-next-4-years-3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/06/28/where-are-you-in-next-4-years-3/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>temparately, we have high and low, and of course whether you are a safe-well person tells a lot. </p>
-<p>I rejected SxxCVxxW, as the interchange doesn’t tell any difference, the only thing is a new brand and a new office. I am looking for some really changes. </p>
-<p>but what’s that ? I still can’t say, maybe recently I am almost lost the focus. things happen recently:</p>
-<p>Tesla of course, is leading the rocket rising, with new features in AutoPilot, and new vehicle models always on the way. then Zoox is purchused by Amazon with 1.2 billion USD, how these solution-focused start-ups survive become really interesting now; in China, the top 3 new energy start-ups, namely, Nio, LiXiang, XiaoPeng are beyond self-driving solution lonely, but car makers. and their vehicle model is not that productive, but kind of found a way to survive in Chiese market; the MaaS service providers, such as Didi, Ponyai, WeRide, AutoX are still on the way, and push really harsh to make some noise in Shanghai, Guangzhou and other cities. of course, Waymo, as the top one MaaS service provider globally is also finding its way to break through, just bind to Volvo. </p>
-<p>individuals and teams are working really hard to find out the way, but <strong>where is the way</strong>, or at least what’s the right direction in self-driving in next 5 ~ 10 years. technically, there may be still lots of engineering and research work to do; in bussiniess side, looks car-maker teams are really making some progress, just like Tesla, or other traditional OEMs, they follow the gradually evaluation solution to OTA upgrade the vehciles little by little. </p>
-<p>However, it’s just unbelievable to belive OEM teams can lead such a great disruptive innovation in future human life, rather than these innovative and culture-diverse high-tech start-up teams.</p>
-<p>there is a foundamental paradox between bussiness and creativity. this is a capital driven bussiness world, every new product is born to create a new needs for human consumers, even more and more <strong>needs</strong> are unnecessary or anti-human, does this make kind of creativities sound unhuman or irrationaly? I don’t want to answer this question, as I am in one of these teams, and I am even eager to learn how to make success through these creativities.</p>
-<p>anyway, I am staying in an OEM supported start-up now, and running on the way to product some model next year. I don’t know where is the way later, and I am afraid this half year is not easy. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2261,7 +2255,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">190</span>
+                <span class="site-state-item-count">191</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
