@@ -291,6 +291,182 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/22/mobility-data-center-in-ADAS-ADS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/11/22/mobility-data-center-in-ADAS-ADS/" itemprop="url">mobility data center in ADAS/ADS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-11-22T04:10:33-05:00">
+                2020-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/11/22/mobility-data-center-in-ADAS-ADS/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/11/22/mobility-data-center-in-ADAS-ADS/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>keywords</strong>: autosar, data factory, AI training, simulation, v&amp;v, DevOps, IoT, adas applications</p>
+<p>2~3 years ago, the top teams focus on perception, planning kinds of AI algorithms, which is benefited from the bursting of DNN, and lots invest goes there, and the optimism think once the best training model is founded, self-driving is ready to go. </p>
+<p>then there was a famous talk about “long tail problems in AV” from Waymo team in 2018, the people realize to solve this problem, they need as many data as possible and as cheap as possible, which gives a new bussiness about data factory, data pipeline. </p>
+<p>the investors realize the most cuting-edge AI model is just a small piece of done, there should be a data factory, which comes from MaaS serivces providers or traditional OEMs. </p>
+<p>as data collector doesn’t exist common in traditional vehicles, so OEMs have to first make a new vehicle networking arch to make ADAS/ADS data collecting possible. which by the end, the game is back to OEMs. </p>
+<p>at this point, IoT providers see their cake in AD market, OEMs may have a little understanding about in-vehicle gateway, t-box, but edge computing, cloud data pipeline are mostly owned by IoT providers, e.g. HuaWei and public data service providers, e.g. China Mobility. and the emerging of 5G infrastructure nationally also acc their share. </p>
+<p>pipeline is one thing, the other is in-vehicle SoC, which has a few matured choices, such as Renasas, NXP, Mobileye, Nvidia Drive PX2/Xavier/Orin, and a bunch of new teams, such as horizon robotics, HuaWei MDC e.t.c </p>
+<p>the traditionally definition of in-vehicle SoC has a minor underline about data pipeline and the dev tools around. but nowadays, taking a look at HuwWei MDC, the eco is so closed, from hardware to software, from in-vehicle to cloud. of course, the pioneer Nvidia has expand the arch from vehicle to cloud, from dev to validation already.  </p>
+<p>SoC is the source of ADS/ADAS data, which give the role of SoC as mobility data center(MDC), we see the totally mindset transfer from software define vehicle to data defined vehicle. </p>
+<p>the mechanical part of the vehicle is kind of de-valued when thought vehicle just as another source of data on-line. </p>
+<p>to maximize the value of data, the data serivces(software) is better decoupled from vehicle hardwares(ecu, controller), which is another trend in OEMs, e.g. autosar. </p>
+<p>till now, we see the AI models, simulation, data services are just the tip of the iceberg. and this is the time we see self dirving as the integrated  application for AI, 5G, cloud computing infra and future manufacturing. and the market is so large, no one can eat it all. </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://bbs.huaweicloud.com/blogs/142759" target="_blank" rel="external">AutoSAR Classic from Huawei</a></p>
+<p>Mobileye赖以成名的EyeQ系列芯片同样内嵌了感知算法，但其在出售产品时候，往往都是软硬件打包出售，并不会根据客户情况进行针对性修改，或是让客户的算法运行在自己的感知芯片上。但地平线则采用完全开放的理念，即可提供硬件、也可提供包括算法的整体方案，还给客户提供了名为天工开物的完整工具链，让客户自己对芯片上的算法进行调整优化。</p>
+<ul>
+<li><p>Matrix2 (地平线）</p>
+</li>
+<li><p>mdc (huawei)</p>
+</li>
+<li><p>Drive PX 2 (nvidia)</p>
+</li>
+<li><p>DRIVE AGX Xavier （nvidia) </p>
+</li>
+<li><p>Orin (Nvidia)</p>
+</li>
+</ul>
+<p><a href="https://www.sohu.com/a/321995543_391994" target="_blank" rel="external">车载智能计算基础平台 参考架构 1.0</a></p>
+<p><a href="https://blogs.nvidia.cn/category/auto/" target="_blank" rel="external">nvidia self driving form</a></p>
+<p><a href="https://blogs.nvidia.cn/2019/07/01/higher-standard-lead-industry-safety-group/" target="_blank" rel="external">nvidia lead the most safe standard</a></p>
+<p>凭借我们自身在安全和工程方面的经验，NVIDIA已致力于领导欧洲汽车供应商协会（CLEPA）互联自动驾驶车辆工作组。NVIDIA在仿真技术和功能安全方面，拥有丰富的发展历史。我们的自动驾驶汽车团队在汽车安全和工程方面拥有宝贵的经验。</p>
+<p>通过NVIDIA DRIVE Con​​stellation这样的平台，制造商可以通过该平台对他们的技术进行长距离的驾驶测试，还可以设定在现实世界中很少遇到的罕见或危险测试场景</p>
+<p>NVIDIA还与自动化与测量系统标准化协会（ASAM）合作。我们正在领导其中一个工作组，以定义创建仿真场景的开放标准，描述道路拓扑表示、传感器模型、世界模型，以及行业标准和关键性能指标，从而推进自动驾驶车辆部署的验证方法。</p>
+<p>业界正在开发一套新标准——ISO 21448，被称为预期功能安全（SOTIF）。它旨在避免即使所有车辆部件都处于正常运行的状态，但依然有可能会引发风险的情况。例如，如果运行在车辆中的深度神经网络错误地识别了道路中的交通标志或物体，则即使软件没有发生故障也可能产生不安全的情况。</p>
+<p><a href="https://www.nvidia.com/content/dam/en-zz/Solutions/self-driving-cars/safety-report/NVIDIA-Self-Driving-Safety-Report-2018.pdf" target="_blank" rel="external">nvidia drive</a></p>
+<ul>
+<li><p>Drive OS </p>
+</li>
+<li><p>Drive AV(a variety of DNNs)</p>
+</li>
+<li><p>Drive Hyperion(AGX Pegasus, and sensors)</p>
+</li>
+<li><p>Drive IX</p>
+</li>
+<li><p>Drive Mapping </p>
+</li>
+</ul>
+<ul>
+<li>Drive Constellation,  a data center solution to test and validate the actual hardware/software in an AV car</li>
+</ul>
+<p>data factory -&gt; AI training -&gt; </p>
+<p> We also expand the use of our DNNs to support features like automatic emergency steering and autonomous emergency braking, providing redundancy to these functionalities</p>
+<p> We also define key performance metrics to measure the collected data quality and add synthetic data into our training datasets</p>
+<p> we incorporate actual sensor data from automatic emergency braking scenarios using re-simulation to help eliminate false positives.</p>
+<p> NVIDIA created the DRIVE Road Test Operating Handbook to ensure a safe, standardized on-road testing process.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/21/leetCode-swap-pairs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2067,144 +2243,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/28/so-ViL-now/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/28/so-ViL-now/" itemprop="url">so ViL, now</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-28T08:26:20-04:00">
-                2020-06-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/06/28/so-ViL-now/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/06/28/so-ViL-now/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>usually Software-in-Loop(SiL) test and verification is defined to cover 90% of all ADS scenarios, then about 9% is test in HiL or ViL, the last 1% is on the real road. so we are on the way to product, so here is ViL.</p>
-<h2 id="why-ViL"><a href="#why-ViL" class="headerlink" title="why ViL ?"></a>why ViL ?</h2><p>Vehicle-in-Loop(ViL) is the last second step in evaluation and verification before releasing a new vehicle product. as ViL is close to the real car system. the benefits is to offer the real vehicle dynamic, which means the real vehicle respond and delay e.t.c. </p>
-<p>for functions/features development, ViL also helps to calibrate the boundary of some system parameters, which saves a lot of energy of calibration engineers, as they don’t need to the test field and prepare and run the real vehicles day by day.</p>
-<h2 id="how-ViL-works"><a href="#how-ViL-works" class="headerlink" title="how ViL works ?"></a>how ViL works ?</h2><p>the logic of ViL is to integrate the real vehicle (dynamic) into a virtual test environment(VTE):</p>
-<ul>
-<li><p>forward: the real vehicle send vehicle dynamic data(vehicle position, heading, speed e.t.c) to VTE;</p>
-</li>
-<li><p>backward: VTE split out env information to the real vehicle, which is handled by SoC in vehicle. </p>
-</li>
-</ul>
-<p> so first need prepare a VTE, which has the ability to support external vehicle dynamic(VD) plugin, which is a common feature of VTE, e.g. <a href="https://www.lgsvlsimulator.com/docs/ego-vehicle-dynamics/" target="_blank" rel="external">lgsvl full model interface</a></p>
-<p>secondly, VTE has the ability to export sensor data, which includes exporting data type and exporting data protocol. the common solution is <code>rosbag</code> through <code>ros</code> communication.</p>
-<h2 id="ViL-in-reality"><a href="#ViL-in-reality" class="headerlink" title="ViL in reality"></a>ViL in reality</h2><p>the ideal way of plugin real vehicle dynamic into VTE is throuh full-model-interface(FMI), which is especially true for SiL. </p>
-<p>for forward data, vehicle dynamic data here only requies real vehicle position information, which can be obtained in a few ways. from vehicle CAN bus, or from RTK sensor, or from upper application layer, e.g. vehicle status module. but most VTE normally support ros message parsing, rather than CAN message parsing. so additionaly need to define a CAN-ROS message adapter. </p>
-<p>for backward data, most VTE(e.g. LG) does have some kind of message channels, e.g. sensor ros topices, which can be used to publish the virtual environment information(sensor data). or VTE may have well-supported sensor message exporter.</p>
-<h2 id="limitations"><a href="#limitations" class="headerlink" title="limitations"></a>limitations</h2><p>the ViL solution above is an useable and very customized solution, so the extenable ability and data/model precision is limited. </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2255,7 +2293,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">191</span>
+                <span class="site-state-item-count">192</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

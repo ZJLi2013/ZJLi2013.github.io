@@ -291,6 +291,170 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/massively-adas-test-pipeline/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/18/massively-adas-test-pipeline/" itemprop="url">massively adas test pipeline</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-18T05:20:39-04:00">
+                2020-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/18/massively-adas-test-pipeline/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/18/massively-adas-test-pipeline/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>ADAS engineers in OEM use Matlab/Simulink(model based design) to develop the adas algorithms, e.g. aeb. Simulink way is enough for fuction verification in L2 and below; for L2+ scenario, often need to test these adas functions in system level, basically test it in scenarios as much as possible, kind of L3 requirements. </p>
+<p>one way to do sytem level verification is through <strong>replay</strong>, basically the test vehicle fleet can collect large mount of data, then feed in a <strong>test pipeline</strong>, to check if these adas functions are triggered well or missed. </p>
+<p>for replay system test, we handle large mount of data, e.g. Pb, so the Simulink model run is too slow. the <strong>adas test pipeline</strong> with the ability to <strong>run massively</strong> is required. </p>
+<p>the previous blog <a href="https://zjli2013.github.io/2020/03/11/high-concurrent-ws-log-server/" target="_blank" rel="external">high concurrent ws server</a> mentioned about the archetecture of this massively adas test pipeline: with each adas model integrated with a <strong>websocket client</strong>, and all of these ws clients talk to a <strong>websocekt server</strong>, which has api to write database. </p>
+<h2 id="encode-in-C"><a href="#encode-in-C" class="headerlink" title="encode in C"></a>encode in C</h2><p>the adas simulink model can be <a href="https://www.mathworks.com/company/newsletters/articles/the-joy-of-generating-c-code-from-matlab.html" target="_blank" rel="external">encode in c</a>, which of course can encode as c++, while not powerful yet. as in C is more scalable then simulink/matlab. </p>
+<p>matlab/simulink encode has a few choices, massively run is mostly in Linux-like os, here we choose <code>ert</code> env to encode the model, after we can build and test as:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gcc -c adas_model.c -I . </div><div class="line">gcc -c ert_main.c </div><div class="line">gcc ert_main.o adas_model.c -o mytest</div></pre></td></tr></table></figure>
+<h2 id="json-c"><a href="#json-c" class="headerlink" title="json-c"></a>json-c</h2><p>as all messages in <code>adas model in c</code> is stored in program memory, first thing is to serialize these to json.  here we choose <a href="https://github.com/json-c/json-c" target="_blank" rel="external">json-c</a>:</p>
+<ul>
+<li>install on local Ubuntu </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install autoconf automake libtool </div><div class="line">sh autogen.sh</div><div class="line">./configure</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+<p>then the json-c header is at:  </p>
+<pre><code>/usr/local/include/json-c
+</code></pre><p>and the libs at: </p>
+<pre><code>/usr/local/lib/libjson-c.so *.al
+</code></pre><p>when using we can add the following flags:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">JSON_C_DIR=/path/to/json_c/install</div><div class="line">CFLAGS += -I$(JSON_C_DIR)/include/json-c</div><div class="line">LDFLAGS+= -L$(JSON_C_DIR)/lib -ljson-c</div></pre></td></tr></table></figure>
+<p>the json object can be created as:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_obj</span> =  <span class="title">json_object_new_object</span>();</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_arr</span> = <span class="title">json_object_new_array</span>();</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_string</span> = <span class="title">json_object_new_string</span>(<span class="title">name</span>);</span></div><div class="line"><span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line"><span class="keyword">for</span>(; i&lt;<span class="number">20</span>; i++)&#123;</div><div class="line">	    <span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_double</span> = <span class="title">json_object_new_double</span>(<span class="title">vals</span>[<span class="title">i</span>]);</span></div><div class="line">  	    json_object_array_put_idx(json_arr, i, json_double);</div><div class="line">&#125;</div><div class="line">json_object_object_add(json_obj, <span class="string">"name"</span>, json_string);</div><div class="line">json_object_object_add(json_obj, <span class="string">"signals"</span>, json_arr);</div></pre></td></tr></table></figure>
+<p>modern c++ json libs are more pretty, e.g. <a href="https://github.com/open-source-parsers/jsoncpp" target="_blank" rel="external">jsoncpp</a>, <a href="http://rapidjson.org" target="_blank" rel="external">rapidJSON</a>, <a href="https://github.com/nlohmann/json" target="_blank" rel="external">json for modern c++</a></p>
+<h2 id="wsclient-c"><a href="#wsclient-c" class="headerlink" title="wsclient-c"></a>wsclient-c</h2><p>the first ws client I tried is: <a href="https://github.com/payden/libwsclient" target="_blank" rel="external">wsclient in c</a>, with default install, can find the headers and libs, separately at: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/include/wsclient</div><div class="line">/usr/<span class="built_in">local</span>/lib/libwsclient.so or *.a</div></pre></td></tr></table></figure>
+<p>when using:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -o client wsclient.c -I/usr/<span class="built_in">local</span>/include -L/usr/<span class="built_in">local</span>/lib/ -lwsclient</div></pre></td></tr></table></figure>
+<h4 id="onopen"><a href="#onopen" class="headerlink" title="onopen()"></a>onopen()</h4><p>as we need send custom message through this client, and the default message was sent inside <code>onopen()</code>, I have to add additionaly argument <code>char\*</code> into the default function pointer <code>onopen</code> </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">int onopen(wsclient *c, char* message) &#123;</div><div class="line">          libwsclient_send(c, message);</div><div class="line">          return 0;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">void libwsclient_onopen(wsclient *client, int (*cb)(wsclient *c, char* ), char* msg) &#123;</div><div class="line">           pthread_mutex_lock(&amp;client-&gt;lock);</div><div class="line">           client-&gt;onopen = cb;</div><div class="line">           pthread_mutex_unlock(&amp;client-&gt;lock);</div><div class="line">&#125;</div><div class="line"></div><div class="line">	if(pthread_create(&amp;client-&gt;handshake_thread, NULL, libwsclient_handshake_thread, (void *)client)) &#123;</div></pre></td></tr></table></figure>
+<p>and the <a href="https://github.com/payden/libwsclient/issues/15" target="_blank" rel="external">onopen callback</a> is actually excuted inside handshake thread, in which is not legacy to pass char* message. further as there is no global alive status to tell the client-server channel is alive, to call  <code>libwsclient_send()</code> in another thread sounds trouble-possible. </p>
+<p>looks wsclient-c is limited, I transfer to wsclient c++. but need make sure <code>model in c</code> workable with <code>g++</code>. </p>
+<h2 id="wsclient-c-1"><a href="#wsclient-c-1" class="headerlink" title="wsclient c++"></a>wsclient c++</h2><p><a href="https://github.com/zaphoyd/websocketpp" target="_blank" rel="external">websocketpp</a> is <a href="https://github.com/zaphoyd/websocketpp/issues/856" target="_blank" rel="external">a header only C++ library</a>, there is no <code>libs</code> after built, but it is depends on <code>boost</code>, so to use this lib, we can add header and libs as following: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/include/websocketpp </div><div class="line">/usr/lib/x86_64-linux-gnu/libboost_*.so</div></pre></td></tr></table></figure>
+<p>I am using the <a href="https://github.com/zaphoyd/websocketpp/blob/master/tutorials/utility_client/step6.cpp" target="_blank" rel="external">wsclient from sample</a>, and define a public method as the client process:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">client_process</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp; server_url, <span class="built_in">std</span>::<span class="built_in">string</span>&amp; message)</span></span>&#123;</div><div class="line">    websocket_endpoint endpoint;</div><div class="line">    <span class="keyword">int</span> connection_id = endpoint.connect(server_url);</div><div class="line">    <span class="keyword">if</span> (connection_id != <span class="number">-1</span>) &#123;</div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"&gt; Created connection with id "</span> &lt;&lt; connection_id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    connection_metadata::ptr mtdata = endpoint.get_metadata(connection_id);</div><div class="line">    <span class="comment">//<span class="doctag">TODO:</span> optimized with this sleeping time</span></div><div class="line"> boost::this_thread::sleep(boost::posix_time::milliseconds(<span class="number">200</span>));</div><div class="line">    <span class="keyword">int</span> retry_num = <span class="number">0</span>; </div><div class="line">    <span class="keyword">while</span>(mtdata-&gt;get_status() != <span class="string">"Open"</span> &amp;&amp; retry_num &lt; <span class="number">100</span>)&#123;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"&gt; connected is not open "</span> &lt;&lt; connection_id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	boost::this_thread::sleep(boost::posix_time::milliseconds(<span class="number">100</span>));</div><div class="line">	connection_id = endpoint.connect(server_url); </div><div class="line">        mtdata = endpoint.get_metadata(connection_id);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">   <span class="keyword">if</span>(mtdata-&gt;get_status() != <span class="string">"Open"</span>) &#123;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"retry failed, exit -1"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span> ;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">   &#125;</div><div class="line">   endpoint.send(connection_id, message);</div><div class="line">   <span class="built_in">std</span>::<span class="built_in">cout</span>  &lt;&lt; message &lt;&lt;<span class="string">" send successfully"</span>  &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span> ;</div></pre></td></tr></table></figure>
+<p>there is more elegent <a href="https://github.com/maldworth/websocketpp-retry-client" target="_blank" rel="external">retry client</a> solution. </p>
+<p>to build our wsclient: </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"> g++ wsclient.cpp -o ec  -I/usr/local/include -L/usr/lib/x86_64-linux-gnu -lpthread  -lboost_system -lboost_random -lboost_thread -lboost_chrono </div><div class="line">``` </div><div class="line"></div><div class="line">## ws server in python</div><div class="line"></div><div class="line">we implemented a simple ws server with [websockets]():</div><div class="line"></div><div class="line">```python</div><div class="line">#!/usr/bin/env python3</div><div class="line"></div><div class="line">import asyncio</div><div class="line">import websockets</div><div class="line">import json </div><div class="line">from db_ model import dbwriter, adas_msg, Base</div><div class="line"></div><div class="line">class wsdb(object):</div><div class="line">    def __init__(self, host=None, port=None):</div><div class="line">        self.host = host</div><div class="line">        self.port = port</div><div class="line">        self.dbwriter_ = dbwriter()</div><div class="line"></div><div class="line">    async def process(self, websocket, path):</div><div class="line">        try:</div><div class="line">            raw_ = await websocket.recv()</div><div class="line">            jdata = json.loads(raw_)</div><div class="line">            orm_obj = adas_msg(jdata)</div><div class="line">            try:</div><div class="line">                self.dbwriter_.write(orm_obj)</div><div class="line">                self.dbwriter_.commit()</div><div class="line">            except Exception as e:</div><div class="line">                self.dbwriter_.rollback()</div><div class="line">                print(e)</div><div class="line">        except Exception as e:</div><div class="line">            print(e)</div><div class="line"></div><div class="line">        greeting = "hello from server"</div><div class="line">        await websocket.send(greeting)</div><div class="line">        print(f"&gt; &#123;greeting&#125;")</div><div class="line"></div><div class="line">    def run(self):</div><div class="line">        if self.host and self.port :</div><div class="line">            start_server = websockets.serve(self.process, self.host, self.port)</div><div class="line">        else:</div><div class="line">            start_server = websockets.serve(self.process, "localhost", 8867)</div><div class="line">        asyncio.get_event_loop().run_until_complete(start_server)</div><div class="line">        asyncio.get_event_loop().run_forever()       </div><div class="line"></div><div class="line">if __name__=="__main__":</div><div class="line">    test1 = wsdb()</div><div class="line">    test1.run()</div></pre></td></tr></table></figure>
+<p>the simple orm <code>db_writer</code> is from <a href="">sqlalchemy</a> model.</p>
+<h2 id="in-makefile"><a href="#in-makefile" class="headerlink" title="in makefile"></a>in makefile</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">CC=g++</div><div class="line">JSONC_IDIR=/usr/<span class="built_in">local</span>/include</div><div class="line">CFLAGS=-I. -I$(JSONC_IDIR)</div><div class="line">OPEN_LOOP_DEPS= rtwtypes.h adas_test.h </div><div class="line">LDIR=-L/usr/<span class="built_in">local</span>/lib/</div><div class="line">LIBS=-ljson-c</div><div class="line">BOOST_LDIR=-L/usr/lib/x86_64-linux-gnu</div><div class="line">BOOST_LIBS= -pthread -lboost_system -lboost_random -lboost_thread -lboost_chrono</div><div class="line">JSON_DEPS= wsclientpp.h</div><div class="line">obj = adas_test.o ert_main.o </div><div class="line">src=*.c</div><div class="line"></div><div class="line">$(obj): $(src) $(DEPS) $(JSON_DEPS)</div><div class="line">	$(CC) -c $(src) $(CFLAGS)</div><div class="line"></div><div class="line">mytest: $(obj)</div><div class="line">	$(CC) -o mytest $(obj) $(CFLAGS) $(LDIR) $(LIBS) $(BOOST_LDIR) $(BOOST_LIBS)</div><div class="line"></div><div class="line">.PHONY: clean</div><div class="line"></div><div class="line">clean:</div><div class="line">	rm -f *.o</div></pre></td></tr></table></figure>
+<p>so now we have encode adas simulink model to C code, and integrate this model C with a websocket client, which can talk to a ws server, which further write to database, which further can be used an data analysis model. </p>
+<p>we can add front-end web UI and system monitor UI if needed, but so far this <strong>adas test pipeline</strong> can support a few hundred adas test cores to run concurrently.  </p>
+<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p> <a href="https://stackoverflow.com/questions/1352749/multiple-arguments-to-function-called-by-pthread-create" target="_blank" rel="external">pthread_create with multi args</a></p>
+<p><a href="https://github.com/maldworth/websocketpp-retry-client" target="_blank" rel="external">wscpp retry client</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/14/stanford-cs-linked-list-problems/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1861,177 +2025,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/boto3-streamingBody-to-BytesIO/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="url">boto3 streamingBody to BytesIO</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-03T03:58:34-05:00">
-                2020-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/03/boto3-streamingBody-to-BytesIO/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="boto3-streamingBody-to-BytesIO"><a href="#boto3-streamingBody-to-BytesIO" class="headerlink" title="boto3 streamingBody to BytesIO"></a>boto3 streamingBody to BytesIO</h1><h3 id="boto3-class-into"><a href="#boto3-class-into" class="headerlink" title="boto3 class into"></a>boto3 class into</h3><ul>
-<li>A <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/session.html" target="_blank" rel="external">Session</a> is about a particular configuration. a custom session: </li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">session = boto3.session.Session()</div><div class="line">ads = session.client(<span class="string">'ads'</span>)</div><div class="line">ads_s3 = session.resource(<span class="string">'s3'</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/resources.html" target="_blank" rel="external">Resources</a> is an object-oriented interface to AWS. Every resource instance has a number of attributes and methods. These can conceptually be split up into identifiers, attributes, actions, references, sub-resources, and collections.</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(bucket_name=<span class="string">"boto3"</span>, key=<span class="string">"test.mdf"</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html" target="_blank" rel="external">Client</a> includes common APIs:</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">copy_object()</div><div class="line">delete_object()</div><div class="line">create_bucket()</div><div class="line">delete_bucket()</div><div class="line">delete_objects()</div><div class="line">download_file()</div><div class="line">download_fileobj()</div><div class="line">get_bucket_location()</div><div class="line">get_bucket_policy()</div><div class="line">get_object()</div><div class="line">head_bucket()</div><div class="line">head_object()</div><div class="line">list_buckets()</div><div class="line">list_objects()</div><div class="line">put_bucket_policy()</div><div class="line">put_object()</div><div class="line">upload_file()</div><div class="line">upload_fileobj()</div></pre></td></tr></table></figure>
-<ul>
-<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#service-resource" target="_blank" rel="external">Service Resource</a> have bucket and object subresources, as well as related actions.</p>
-</li>
-<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#bucket" target="_blank" rel="external">Bucket</a>, is an abstract resource representing a S3 bucket.</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">b = ads_s3.Bucket(<span class="string">'name'</span>)</div></pre></td></tr></table></figure>
-<ul>
-<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#object" target="_blank" rel="external">Object</a>, is an abstract resource representing a S3 object.</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(<span class="string">'bucket_name'</span>, <span class="string">'key'</span>)</div></pre></td></tr></table></figure>
-<h3 id="read-s3-object-amp-pipeline-to-mdfreader"><a href="#read-s3-object-amp-pipeline-to-mdfreader" class="headerlink" title="read s3 object &amp; pipeline to mdfreader"></a>read s3 object &amp; pipeline to mdfreader</h3><p>there are a few try-and-outs. first is to streaming s3 object as BufferedReader, which give a file-like object, and can read(), but <code>BufferedReader</code> looks more like a IO streaming than a file, which can’t seek. </p>
-<h4 id="botocore-response-StreamingBody-as-BufferedReader"><a href="#botocore-response-StreamingBody-as-BufferedReader" class="headerlink" title="botocore.response.StreamingBody as BufferedReader"></a>botocore.response.StreamingBody as BufferedReader</h4><p>the following discussion is really really helpful:<br><a href="https://github.com/boto/boto3/issues/426" target="_blank" rel="external">boto3 issue #426:  how to use botocore.response.StreamingBody as stdin PIPE</a></p>
-<p>at the code of the StreamingBody and it seems to me that is is really a wrapper of a class inheriting from io.IOBase) but only the read method from the raw stream is exposed, so not really a file-like object. it would make a lot of sense to expose the io.IOBase interface in the StreamingBody as we could wrapped S3 objects into a io.BufferedReader or a io.TextIOWrapper.read() get a binary string .  the actual file-like object is found in the ._raw_stream attribute of the StreamingBody class</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> io</div><div class="line">buff_reader = io.BufferedReader(body._raw_stream)</div><div class="line">print(buff_reader)</div><div class="line"><span class="comment"># &lt;_io.BufferedReader&gt;</span></div></pre></td></tr></table></figure>
-<p>wheras this <code>buff_reader</code> is not seekable, which makes <a href="">mdfreader</a> failure, due to its file operate needs  <code>seek()</code> method.</p>
-<p><a href="https://stackoverflow.com/questions/39324151/stream-a-non-seekable-file-like-object-to-multiple-sinks" target="_blank" rel="external">steam a non-seekable file-like object</a></p>
-<h4 id="stdio-stream-to-seekable-file-like-object"><a href="#stdio-stream-to-seekable-file-like-object" class="headerlink" title="stdio stream to seekable file-like object"></a>stdio stream to seekable file-like object</h4><p>so I am thinking to transfer the <code>BufferedReader</code> to a seekable file-like object. first, need to understand why it is not seekable. <code>BufferedRandom</code> is seekable, whereas BufferedReader and BufferedWriter <a href="https://github.com/python/cpython/pull/11216" target="_blank" rel="external">are not</a>. <a href="https://grokbase.com/t/python/python-dev/102j1y1dwn/buffered-streams-design-raw-io-gotchas" target="_blank" rel="external">Buffered streams design:</a> BufferedRandom is only suitable when the file is open for reading <strong>and</strong> writing. The ‘rb’ and ‘wb’ modes should return BufferedReader and BufferedWriter, respectively.</p>
-<p>is it possbile to first  read() the content of BufferedReader to some memory, than transfer it to BufferedRandom? which gives me the try to BufferedReader.read(), which basicaly read all the binaries and store it in-memoryA, <strong>then good news:</strong> in-memory binary streams are also aviable as <a href="https://docs.python.org/3/library/io.html" target="_blank" rel="external">Bytesio</a> objects: </p>
-<pre><code class="python">f = io.BytesIO(<span class="string">b"some in-memory binary data"</span>)
-</code></pre>
-<p>what if assign <code>BytesIO</code> to this in-memoryA. which really gives me a seekable object:</p>
-<pre><code class="python">fid_ = io.BufferedReader(mf4_[<span class="string">'Body'</span>]._raw_stream) ;
-read_in_memory = fid_.read()
-bio_ = io.BytesIO(read_in_memory);
-</code></pre>
-<p>then <code>BytesIO</code> object pointer is much more file-like, to do read() and seek(). </p>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html" target="_blank" rel="external">boto3 doc</a></p>
-<p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#examples" target="_blank" rel="external">boto3 s3 api samples</a></p>
-<p><a href="https://github.com/ERS-HCL/MDF4Wrapper" target="_blank" rel="external">mdf4wrapper</a></p>
-<p><a href="https://bytes.com/topic/c/answers/649819-ifstream-file" target="_blank" rel="external">iftream to FILE</a></p>
-<p><a href="https://stackoverflow.com/questions/20935404/what-is-the-concept-behind-file-pointer-or-the-stream-pointer" target="_blank" rel="external">what is the concept behind file pointer or stream pointer</a></p>
-<p><a href="https://stackoverflow.com/questions/10199226/using-io-bufferedreader-on-a-stream-obtained-with-open" target="_blank" rel="external">using io.BufferedReader on a stream obtained with open</a></p>
-<p><a href="https://www.devdungeon.com/content/working-binary-data-python" target="_blank" rel="external">working with binary data in python</a></p>
-<p><a href="https://stackoverflow.com/questions/1035340/reading-binary-file-and-looping-over-each-byte" target="_blank" rel="external">read binary file and loop over each byte</a></p>
-<p><a href="https://github.com/RaRe-Technologies/smart_open" target="_blank" rel="external">smart_open project</a></p>
-<p><a href="https://www.python.org/dev/peps/pep-3116/" target="_blank" rel="external">PEP 3116 – New I/O</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2082,7 +2075,7 @@ bio_ = io.BytesIO(read_in_memory);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">191</span>
+                <span class="site-state-item-count">192</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

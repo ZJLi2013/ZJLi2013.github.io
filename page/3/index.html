@@ -291,6 +291,293 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/28/services-deploy-in-docker-swarm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/04/28/services-deploy-in-docker-swarm/" itemprop="url">services deploy in docker swarm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-28T08:54:49-04:00">
+                2020-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/04/28/services-deploy-in-docker-swarm/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/04/28/services-deploy-in-docker-swarm/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="backgroud"><a href="#backgroud" class="headerlink" title="backgroud"></a>backgroud</h2><p>our application so far includes the following three services:</p>
+<ul>
+<li><p>simulator</p>
+</li>
+<li><p>pythonAPI</p>
+</li>
+<li><p>redisJQ</p>
+</li>
+</ul>
+<p><strong>docker swarm network</strong> has the following three kind of networks, of course <code>bridge</code> to host network.</p>
+<ul>
+<li><p>overlay network, services in the same overlay network, can communicate to each other </p>
+</li>
+<li><p>routing network, the service requested can be hosted in any of the running nodes, further as load balancer.</p>
+</li>
+<li><p>host network </p>
+</li>
+</ul>
+<p>usually,  <a href="https://docs.microsoft.com/en-us/dotnet/architecture/microservices/multi-container-microservice-net-applications/multi-container-applications-docker-compose" target="_blank" rel="external">multi-container apps can be deployed with docker-compose.yml</a>, check <a href="https://docs.docker.com/compose/compose-file/" target="_blank" rel="external">docker compse</a> for more details.</p>
+<h2 id="DNS-service-discovery"><a href="#DNS-service-discovery" class="headerlink" title="DNS service discovery"></a>DNS service discovery</h2><p>the following is an example from (<a href="https://github.com/docker/labs/blob/master/networking/A3-overlay-networking.md" target="_blank" rel="external">overlay networking and service discovery</a>:</p>
+<p>my test env includes 2 nodes, with host IP as following. when running docker services, it will generate a responding virtual IP, while which is dynamic assgined. </p>
+<table>
+<thead>
+<tr>
+<th>hostname</th>
+<th>virtualIP</th>
+<th>hostIP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>node1</td>
+<td>10.0.0.4</td>
+<td>xx.20.181.132</td>
+</tr>
+<tr>
+<td>node2</td>
+<td>10.0.0.2</td>
+<td>xx.20.180.212</td>
+</tr>
+</tbody>
+</table>
+<p>a common issue when try first to use overlay network in swarm, e.g. ping the other service doesn’t work, check <code>/etc/resolv.conf</code> file: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># cat /etc/resolv.conf </span></div><div class="line">nameserver 8.8.8.8</div><div class="line">nameserver 8.8.4.4</div><div class="line">``` </div><div class="line"></div><div class="line">the default `dns=8.8.8.8` can<span class="string">'t ping either hostIP or any docker0 IP. the reason can find [#moby/#23910](https://github.com/moby/moby/issues/23910): When spinning up a container, Docker will by default check for a DNS server defined in /etc/resolv.conf in the host OS, and if it doesn'</span>t find one, or finds only 127.0.0.1, will opt to use Google<span class="string">'s public DNS server 8.8.8.8. </span></div><div class="line"></div><div class="line">one solution mentioned:</div><div class="line"></div><div class="line">* cat /etc/docker/daemon.json </div><div class="line"></div><div class="line">```xml</div><div class="line">&#123;</div><div class="line"></div><div class="line">		"dns": ["172.17.0.1", "your.dns.server.ip", "8.8.8.8"]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>add a file <code>/etc/NetworkManager/dnsmasq.d/docker-bridge.conf</code></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">listen-address=172.17.0.1</div></pre></td></tr></table></figure>
+<p>so basically, the default DNS setting only listens to DNS requests from 127.0.0.1 (ie, your computer). by adding <code>listen-address=172.17.0.1</code>, it tells it to listen to the docker bridge also. very importantly, <strong>Docker DNS server is used only for the user created networks</strong>, so need create a new docker network. if use the default <code>ingress</code> overlay network, the dns setup above still doesn’t work.</p>
+<p>another solution is using <strong>host network</strong>, mentioned <a href="https://l-lin.github.io/post/2018/2018-09-03-docker_ubuntu_18_dns/" target="_blank" rel="external">using host DNS in docker container with Ubuntu</a> </p>
+<h4 id="test-virtualIP-network"><a href="#test-virtualIP-network" class="headerlink" title="test virtualIP network"></a>test virtualIP network</h4><ul>
+<li>create a new docker network</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker network create -d overlay l3</div></pre></td></tr></table></figure>
+<p>why here need a new network ?  due to <strong>Docker DNS server(172.17.0.1) is used only for the user created networks</strong></p>
+<ul>
+<li>start the service with the created network: </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">docker service create --name lg --replicas 2 --network l3 20.20.180.212:5000/lg</div><div class="line">``` </div><div class="line"></div><div class="line">* check vip on both nodes</div><div class="line"></div><div class="line">```sh</div><div class="line"> docker network inspect l3</div></pre></td></tr></table></figure>
+<p>check vip by the line <code>IPv4Address</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">node1 vip : `10.0.1.5/24`</div><div class="line">node2 vip: `10.0.1.6/24`</div></pre></td></tr></table></figure>
+<ul>
+<li>go to the running container </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">docker <span class="built_in">exec</span> -it 788e667ea9cb  /bin/bash </div><div class="line">apt-get update &amp;&amp; apt-get install iputils-ping</div><div class="line">ping 10.0.1.5</div><div class="line">ping 10.0.1.6</div></pre></td></tr></table></figure>
+<ul>
+<li>now ping service-name directly </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ping lg </div><div class="line">PING lg (10.0.1.2) 56(84) bytes of data.</div></pre></td></tr></table></figure>
+<ul>
+<li>inspect service </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">docker service inspect lg </div><div class="line">            <span class="string">"VirtualIPs"</span>: [</div><div class="line">                &#123;</div><div class="line">                    <span class="string">"Addr"</span>: <span class="string">"10.0.1.2/24"</span></div><div class="line">                &#125;</div><div class="line">            ]</div></pre></td></tr></table></figure>
+<ul>
+<li>ping host IP from contianer vip</li>
+</ul>
+<p>as far as we add both <code>host dns</code> and <code>docker0 dns</code> to the dns option in <code>/etc/docker/daemon.json</code>, the container vip can ping host IP.</p>
+<h4 id="assign-ENV-variable-from-script"><a href="#assign-ENV-variable-from-script" class="headerlink" title="assign ENV variable from script"></a>assign ENV variable from script</h4><ul>
+<li>get services vip </li>
+</ul>
+<p><a href="https://serverfault.com/questions/925267/how-do-i-list-docker-vip-addresses" target="_blank" rel="external">get vip list</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vip=`sudo docker service inspect --format <span class="string">'&#123;&#123;.Endpoint.VirtualIPs&#125;&#125;'</span>  lgsvl | awk <span class="string">'&#123;print substr($2, 1, length($2)-5)&#125;'</span>`</div><div class="line"><span class="built_in">echo</span> <span class="variable">$vip</span></div></pre></td></tr></table></figure>
+<ul>
+<li>create docker service with runtime env</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">ping -c 1 lg  | awk <span class="string">'NR==1 &#123;print $2&#125;'</span> </div><div class="line">``` </div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">## multi-services test</span></div><div class="line"></div><div class="line"><span class="comment">#### run all services in single docker mode</span></div><div class="line"></div><div class="line">```sh</div><div class="line">docker run -it -p 6379:6379 --mount <span class="built_in">source</span>=jq-vol,target=/job_queue redisjq /bin/bash </div><div class="line">docker run xx.xx.xx.xxx:5000/lg</div><div class="line">docker run -it --mount <span class="built_in">source</span>=jq-vol,target=/pythonAPI/job_queue xx.xx.xx.xxx:5000/redispythonapi  /bin/bash</div></pre></td></tr></table></figure>
+<ul>
+<li>check docker-IP of <code>lg</code> :</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker sh </div><div class="line">docker container inspect &lt;lg&gt; <span class="comment">#get its IP-address</span></div></pre></td></tr></table></figure>
+<ul>
+<li>update <code>SIMULATOR_HOST</code> for <code>redispythonapi</code> </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker <span class="built_in">exec</span> -it &lt;redispythonapi&gt; /bin/bash</div><div class="line"><span class="built_in">export</span> SIMULATOR_HOST=lg_ip_address <span class="comment">#from the step above</span></div><div class="line">./redis_worker.sh  <span class="comment">#where all python scenarios are running in queue</span></div></pre></td></tr></table></figure>
+<p>here we can check the lg container’s IP is <code>172.17.0.3</code> and redispythonapi’s IP is <code>172.17.0.4</code>, then update <code>start_redis_worker.sh</code> with <code>SIMULATOR_HOST=172.17.0.3</code></p>
+<ul>
+<li>get the container IP</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker container ls  | grep -w xx.xx.xx.xxx:5000/lg | awk <span class="string">'&#123;print $1&#125;'</span> </div><div class="line">docker inspect --format=<span class="string">'&#123;&#123;range .NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;'</span>  $(docker container ls  | grep -w xx.xx.xx.xxx:5000/lg | awk <span class="string">'&#123;print $1&#125;'</span> )</div></pre></td></tr></table></figure>
+<h2 id="assign-a-special-IP-to-service-in-swarm"><a href="#assign-a-special-IP-to-service-in-swarm" class="headerlink" title="assign a special IP to service in swarm"></a>assign a special IP to service in swarm</h2><p>docker network create support <a href="https://docs.docker.com/engine/reference/commandline/network_create/" target="_blank" rel="external">subnet</a>, which only ip-addressing function, namely we can use custom-defined virtual IP for our services. a sample: </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">docker network create -d overlay \</div><div class="line">  --subnet=192.168.10.0/25 \</div><div class="line">  --subnet=192.168.20.0/25 \</div><div class="line">  --gateway=192.168.10.100 \</div><div class="line">  --gateway=192.168.20.100 \</div><div class="line">  --aux-address=<span class="string">"my-router=192.168.10.5"</span> --aux-address=<span class="string">"my-switch=192.168.10.6"</span> \</div><div class="line">  --aux-address=<span class="string">"my-printer=192.168.20.5"</span> --aux-address=<span class="string">"my-nas=192.168.20.6"</span> \</div><div class="line">  my-multihost-network</div><div class="line">``` </div><div class="line"></div><div class="line">we can run our application as:</div><div class="line"></div><div class="line">```sh</div><div class="line">docker network create --driver=overlay --subnet=192.168.10.0/28  lgsvl-net</div><div class="line">docker service create --name lgsvl --replicas 2 --network lgsvl-net --host <span class="string">"host:192.168.10.2"</span>  xx.xx.xx.xxx:5000/lgsvl</div><div class="line">docker service create --name redis --replicas 1 --network lgsvl-net  -p 6379:6379 --mount <span class="built_in">source</span>=jq-vol,target=/job_queue  --constraint <span class="string">'node.hostname==ubuntu'</span> xx.xx.xx.xxx:5000/redisjq</div><div class="line">docker service create --name pythonapi --replicas 1 --network lgsvl-net --mount <span class="built_in">source</span>=jq-vol,target=/pythonAPI/job_queue  xx.xx.xx.xxx:5000/redispythonapi</div></pre></td></tr></table></figure>
+<p><a href="https://www.cnblogs.com/milantgh/p/4075912.html" target="_blank" rel="external">understand subnet mask</a>. IP address include <code>master IP</code> and <code>subnet mask</code>, we choose <code>28</code> here, basically generate about <code>2^(32-28)-2= 14</code> avaiable IP address in the subnet. but in a swarm env, subnet IPs are consuming more as the nodes or replicas of service increase.</p>
+<p>taking an example, with 2-nodes and 2-replicas of service, <strong>5 subnet IPs are occupied, rather than 2</strong></p>
+<p>run <code>docker network inspect lgsvl-net</code> on both nodes:</p>
+<ul>
+<li>on node1 gives:</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">lg.1 IPV4Address: 192.168.10.11/28</div><div class="line">lgssvl-net-endpoint: 192.168.10.6/28</div></pre></td></tr></table></figure>
+<ul>
+<li>on node2 gives:</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">lg.2 IPV4Address: 192.168.10.4/28</div><div class="line">lgssvl-net-endpoint: 192.168.10.3/28</div><div class="line">``` </div><div class="line"></div><div class="line">* `docker service inspect lg` gives:</div><div class="line"></div><div class="line">```xml</div><div class="line">VirualIPs: 192.168.10.2/28</div></pre></td></tr></table></figure>
+<p>clearly 5 IP address are occupied. and the IP for each internal service is random picked, there is no gurantee <code>service</code> will always get the first avaiable IP. </p>
+<h4 id="docker-serivce-with-–ip"><a href="#docker-serivce-with-–ip" class="headerlink" title="docker serivce with –ip"></a>docker serivce with –ip</h4><p><strong>only docker run –ip</strong> works, there is no similar <code>--ip</code> option in <code>docker service create</code>. but a lot case require this feature: <a href="https://success.docker.com/article/how-do-i-publish-a-service-port-to-a-specific-ip-address" target="_blank" rel="external">how to publish a service port to a specific IP address</a>,  when publishing a port using <code>--publish</code>, the port is published to <code>0.0.0.0</code> instead of a specific interface’s assigned IP. and there is no way to assign an fixed IP to a service in swarm. </p>
+<p>a few disscussion in <a href="https://github.com/moby/moby/issues/26696" target="_blank" rel="external">moby/#26696</a>, <a href="https://github.com/moby/moby/issues/25303" target="_blank" rel="external">add more options to `service create</a>, <a href="https://github.com/moby/moby/issues/24170#issuecomment-300771012" target="_blank" rel="external">a possible solution</a>, <a href="https://github.com/moby/moby/issues/24170" target="_blank" rel="external">Static/Reserved IP addresses for swarm services</a></p>
+<p>mostly depend on the issues like “ip address is not known in advance, since docker service launched in swarm mode will end up on multiple docker servers”. there should not be applicable to docker swarm setup, since if one decides to go with docker swarm service, has to accept that service will run on multiple hosts with different ip addresses. I.e. trying to attach service / service instance to specific IP address somewhat contradicting with docker swarm service concept. </p>
+<p><a href="https://docs.docker.com/engine/reference/commandline/service_create/" target="_blank" rel="external">docker service create</a> does have options <code>--host host:ip-address</code> and <code>--hostname</code> and similar in <a href="https://docs.docker.com/engine/reference/commandline/service_update/" target="_blank" rel="external">docker service update</a>  support <code>host-add</code> and <code>host-rm</code>.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">$ docker service create --name redis --host <span class="string">"redishost:192.168.10.2"</span> --hostname myredis redis:3.0.6</div><div class="line">``` </div><div class="line"></div><div class="line"><span class="keyword">then</span> <span class="built_in">exec</span> into the running container, we can check out `192.168.10.2 redishost` is one line <span class="keyword">in</span> `/etc/hosts` and `myredis` is <span class="keyword">in</span> `/etc/hostname`</div><div class="line"></div><div class="line">but remember, the DNS <span class="keyword">for</span> this hostIP(192.168.10.2) should be first configured <span class="keyword">in</span> the docker engine DNS list. <span class="keyword">if</span> not, even the hostIP is <span class="keyword">in</span> the arrange of the subnet, it is unreachable from the containers.</div><div class="line"></div><div class="line">[another explain](https://www.freecodecamp.org/news/docker-nginx-letsencrypt-easy-secure-reverse-proxy-40165ba3aee2/): by default docker containers are put on their own network. This means that you won’t be able to access your container by it’s hostname, <span class="keyword">if</span> you’re sitting on your laptop on your host network. It is only the containers that are able to access each other through their hostname.</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">#### dnsrr vs vip </span></div><div class="line"></div><div class="line">```sh</div><div class="line">--endpoint-mode dnsrr</div></pre></td></tr></table></figure>
+<p><code>dnsrr</code> mode, namely DNS round Robin mode, when query Docker’s internal DNS server to get the IP address of the service, it will return IP address of every node running the service.</p>
+<p><code>vip</code> mode, return the IP address of only one of the running cntainers. </p>
+<p>When you submit a DNS query for a service name to the Swarm DNS service, it will return one, or all, the IP addresses of the related containers, depending on the endpoint-mode.</p>
+<p><a href="https://stackoverflow.com/questions/42875572/how-to-load-balance-websocket-apps-in-docker-swarm" target="_blank" rel="external">dnsrr vs vip</a>: Swarm defaults to use a virtual ip (endpoint-mode vip). So each service gets its own IP address, and the swarm load balancer assigns the request as it sees fit; to prevent a service from having an IP address, you can run <code>docker service update your_app --endpoint-mode dnsrr</code>, which will allow an internal load balancer to <code>run a DNS query against a service name</code>, to discover each task/container’s IP for a given service</p>
+<p>in our case, we want to assign a speical IP to the service in swarm. <strong>why?</strong> because our app has websocket server/client communicataion, which is IP address based. we can’ assign <code>service name</code> for WS server/client.</p>
+<p>check another issue: <a href="https://stackoverflow.com/questions/54101508/how-do-you-dockerize-a-websocket-server" target="_blank" rel="external">dockerlize a websocket server</a></p>
+<h2 id="global-mode-to-run-swarm"><a href="#global-mode-to-run-swarm" class="headerlink" title="global mode to run swarm"></a>global mode to run swarm</h2><p>when deploying service with global mode, namely each node will only run one replicas of the service. the benefit of <code>global mode</code> is we can always find the node IP, no matter the IP address is in host network or user-defined overlay network/subnetwork. </p>
+<h4 id="get-service’s-IP-in-global-mode"><a href="#get-service’s-IP-in-global-mode" class="headerlink" title="get service’s IP in global mode"></a>get service’s IP in global mode</h4><p><a href="https://www.cyberciti.biz/faq/unix-linux-check-if-port-is-in-use-command/" target="_blank" rel="external">get listened port</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@c7279faebefa:/lgsvl<span class="comment"># netstat -tulpn | grep LISTEN</span></div><div class="line">tcp        0      0 127.0.0.11:33263        0.0.0.0:*               LISTEN      -               </div><div class="line">tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      7/lgsvl_Core.x86_64</div><div class="line">tcp        0      0 0.0.0.0:8181            0.0.0.0:*               LISTEN      7/lgsvl_Core.x86_64</div></pre></td></tr></table></figure>
+<p>both <code>8080</code> and <code>8181</code> is listening after <code>lgsvl</code> service started. on the <code>lgsvl</code> side, we can modify it to listen on all address with <code>8181</code> port. then the following <a href="https://www.jb51.net/article/173931.htm" target="_blank" rel="external">python script</a> to find node’s IP:</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> socket</div><div class="line"> </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_host_ip</span><span class="params">()</span>:</span></div><div class="line">  <span class="keyword">try</span>:</div><div class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</div><div class="line">    s.connect((<span class="string">'8.8.8.8'</span>, <span class="number">80</span>))</div><div class="line">    ip = s.getsockname()[<span class="number">0</span>]</div><div class="line">  <span class="keyword">finally</span>:</div><div class="line">    s.close()</div><div class="line"> </div><div class="line">  <span class="keyword">return</span> ip</div></pre></td></tr></table></figure>
+<p>in this way, no need to pre-define the <code>SIMULATOR_HOST</code> env variable at first. the pythonAPI only need to find out its own IP and detect if <code>8181</code> is listening on in runtime.</p>
+<h4 id="container-vs-service"><a href="#container-vs-service" class="headerlink" title="container vs service"></a>container vs service</h4><p><a href="https://stackoverflow.com/questions/43408493/what-is-the-difference-between-docker-service-and-docker-container" target="_blank" rel="external">difference between service and container</a>:</p>
+<ul>
+<li><p><code>docker run</code> is used to create a standalone container</p>
+</li>
+<li><p><code>docker service</code> is the one run in a distributed env. when create a service, you specify which container image to use and which commands to execue inside the running containers. </p>
+</li>
+</ul>
+<p>There is only one command(no matter the format is <code>CMD</code> <code>ENTRYPOINT</code> or <code>command in docker-compose</code>) that docker will run to start your container, and when that command exits, the container exits. in swarm service mode, with default restart option(any), the container run and exit and restart again with a different containeID. check <a href="https://stackoverflow.com/questions/56328330/dockerfile-docker-compose-and-swarm-mode-lifecycle" target="_blank" rel="external">dockerfile, docker-compose and swarm mode lifecycle</a> for details. </p>
+<h4 id="docker-container-restart-policy"><a href="#docker-container-restart-policy" class="headerlink" title="docker container restart policy:"></a><a href="https://rollout.io/blog/ensuring-containers-are-always-running-with-dockers-restart-policy/" target="_blank" rel="external">docker container restart policy</a>:</h4><p><a href="https://docs.docker.com/config/containers/start-containers-automatically/" target="_blank" rel="external">docker official doc: start containers automatically</a></p>
+<ul>
+<li><p>no, simply doesn’t restart under any circumstance </p>
+</li>
+<li><p>on-failure, to restart if the exit code has error. user can specify a maximum number of times Docker will automatically restart the container; the container will not restart when app exit with a successful exit code. </p>
+</li>
+<li><p>unless-stopped, only stop when Docker is stopped. so most time, this policy work exactly like <code>always</code>, one exception, when a container is stopped and the server is reboot or the DOcker serivce is restarted, the container won’t restart itself. if the container was running before the reboot, the container would be restarted once the system restarted.</p>
+</li>
+<li><p>always, tells Docker to restart the container under any circumstance. and the service will restart even with reboot. any other policy can’t restart when system reboot.</p>
+</li>
+</ul>
+<p>similar restart policy can be found in :</p>
+<ul>
+<li><a href="https://docs.docker.com/compose/compose-file/#restart_policy" target="_blank" rel="external">docker-compose restart policy</a></li>
+</ul>
+<ul>
+<li><a href="https://docs.docker.com/engine/reference/commandline/service_create/" target="_blank" rel="external">docker service create restat-condition</a></li>
+</ul>
+<h4 id="keep-redisJQ-alive-in-python-script"><a href="#keep-redisJQ-alive-in-python-script" class="headerlink" title="keep redisJQ alive in python script"></a>keep redisJQ alive in python script</h4><p>by default setup, <code>redis server</code> is keep restarting and running, which make the <code>pythonapi</code> service always report: <code>redis.exceptions.ConnectionError: Error 111 connecting to xx.xxx.xxx:6379. Connection refused.</code></p>
+<p>so we can keep redisJQ alive in python script level by simply a <code>while loop</code>.</p>
+<p>for test purpose, we also make pythonAPI restart policy as none, so the service won’t automatically run even with empty jobQueue.</p>
+<p>the final test script can run in the following:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">docker service create --name lgsvl --network lgsvl-net --mode global xx.xx.xx.xxx:5000/lgsvl</div><div class="line">docker service create --name redis -p 6379:6379 --network lgsvl-net --mount <span class="built_in">source</span>=jq-vol,target=/job_queue  --constraint <span class="string">'node.hostname==ubuntu'</span> xx.xx.xx.xxx:5000/redisjq </div><div class="line">docker service create --name pythonapi --network lgsvl-net --mode global --mount <span class="built_in">source</span>=jq-vol,target=/pythonAPI/job_queue --restart-condition none xx.xx.xx.xxx:5000/pythonapi</div></pre></td></tr></table></figure>
+<h4 id="use-python-variable-in-os-system"><a href="#use-python-variable-in-os-system" class="headerlink" title="use python variable in os.system"></a>use python variable in os.system</h4><p><a href="https://stackoverflow.com/questions/27128851/how-to-use-python-variable-in-os-system" target="_blank" rel="external">sample</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">os.system(<span class="string">"ls -lt %s"</span>%your_py_variable)</div></pre></td></tr></table></figure>
+<h2 id="proxy-in-docker-swarm"><a href="#proxy-in-docker-swarm" class="headerlink" title="proxy in docker swarm"></a>proxy in docker swarm</h2><p><a href="https://www.haproxy.com/blog/haproxy-on-docker-swarm-load-balancing-and-dns-service-discovery/" target="_blank" rel="external">HAProxy</a></p>
+<p>Routing external traffic into the cluster, load balancing across replicas, and DNS service discovery are a few capabilities that require finesse. but proxy can’t either assign a special IP to a special service, neither can expose the service with a fixed IP, so in our case, no helpful.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/28/redis-task-queue-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2435,170 +2722,6 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/massively-adas-test-pipeline/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/18/massively-adas-test-pipeline/" itemprop="url">massively adas test pipeline</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-18T05:20:39-04:00">
-                2020-03-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/03/18/massively-adas-test-pipeline/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/03/18/massively-adas-test-pipeline/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>ADAS engineers in OEM use Matlab/Simulink(model based design) to develop the adas algorithms, e.g. aeb. Simulink way is enough for fuction verification in L2 and below; for L2+ scenario, often need to test these adas functions in system level, basically test it in scenarios as much as possible, kind of L3 requirements. </p>
-<p>one way to do sytem level verification is through <strong>replay</strong>, basically the test vehicle fleet can collect large mount of data, then feed in a <strong>test pipeline</strong>, to check if these adas functions are triggered well or missed. </p>
-<p>for replay system test, we handle large mount of data, e.g. Pb, so the Simulink model run is too slow. the <strong>adas test pipeline</strong> with the ability to <strong>run massively</strong> is required. </p>
-<p>the previous blog <a href="https://zjli2013.github.io/2020/03/11/high-concurrent-ws-log-server/" target="_blank" rel="external">high concurrent ws server</a> mentioned about the archetecture of this massively adas test pipeline: with each adas model integrated with a <strong>websocket client</strong>, and all of these ws clients talk to a <strong>websocekt server</strong>, which has api to write database. </p>
-<h2 id="encode-in-C"><a href="#encode-in-C" class="headerlink" title="encode in C"></a>encode in C</h2><p>the adas simulink model can be <a href="https://www.mathworks.com/company/newsletters/articles/the-joy-of-generating-c-code-from-matlab.html" target="_blank" rel="external">encode in c</a>, which of course can encode as c++, while not powerful yet. as in C is more scalable then simulink/matlab. </p>
-<p>matlab/simulink encode has a few choices, massively run is mostly in Linux-like os, here we choose <code>ert</code> env to encode the model, after we can build and test as:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">gcc -c adas_model.c -I . </div><div class="line">gcc -c ert_main.c </div><div class="line">gcc ert_main.o adas_model.c -o mytest</div></pre></td></tr></table></figure>
-<h2 id="json-c"><a href="#json-c" class="headerlink" title="json-c"></a>json-c</h2><p>as all messages in <code>adas model in c</code> is stored in program memory, first thing is to serialize these to json.  here we choose <a href="https://github.com/json-c/json-c" target="_blank" rel="external">json-c</a>:</p>
-<ul>
-<li>install on local Ubuntu </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install autoconf automake libtool </div><div class="line">sh autogen.sh</div><div class="line">./configure</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<p>then the json-c header is at:  </p>
-<pre><code>/usr/local/include/json-c
-</code></pre><p>and the libs at: </p>
-<pre><code>/usr/local/lib/libjson-c.so *.al
-</code></pre><p>when using we can add the following flags:</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">JSON_C_DIR=/path/to/json_c/install</div><div class="line">CFLAGS += -I$(JSON_C_DIR)/include/json-c</div><div class="line">LDFLAGS+= -L$(JSON_C_DIR)/lib -ljson-c</div></pre></td></tr></table></figure>
-<p>the json object can be created as:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_obj</span> =  <span class="title">json_object_new_object</span>();</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_arr</span> = <span class="title">json_object_new_array</span>();</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_string</span> = <span class="title">json_object_new_string</span>(<span class="title">name</span>);</span></div><div class="line"><span class="keyword">int</span> i=<span class="number">0</span>;</div><div class="line"><span class="keyword">for</span>(; i&lt;<span class="number">20</span>; i++)&#123;</div><div class="line">	    <span class="class"><span class="keyword">struct</span> <span class="title">json_object</span> *<span class="title">json_double</span> = <span class="title">json_object_new_double</span>(<span class="title">vals</span>[<span class="title">i</span>]);</span></div><div class="line">  	    json_object_array_put_idx(json_arr, i, json_double);</div><div class="line">&#125;</div><div class="line">json_object_object_add(json_obj, <span class="string">"name"</span>, json_string);</div><div class="line">json_object_object_add(json_obj, <span class="string">"signals"</span>, json_arr);</div></pre></td></tr></table></figure>
-<p>modern c++ json libs are more pretty, e.g. <a href="https://github.com/open-source-parsers/jsoncpp" target="_blank" rel="external">jsoncpp</a>, <a href="http://rapidjson.org" target="_blank" rel="external">rapidJSON</a>, <a href="https://github.com/nlohmann/json" target="_blank" rel="external">json for modern c++</a></p>
-<h2 id="wsclient-c"><a href="#wsclient-c" class="headerlink" title="wsclient-c"></a>wsclient-c</h2><p>the first ws client I tried is: <a href="https://github.com/payden/libwsclient" target="_blank" rel="external">wsclient in c</a>, with default install, can find the headers and libs, separately at: </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/<span class="built_in">local</span>/include/wsclient</div><div class="line">/usr/<span class="built_in">local</span>/lib/libwsclient.so or *.a</div></pre></td></tr></table></figure>
-<p>when using:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gcc -o client wsclient.c -I/usr/<span class="built_in">local</span>/include -L/usr/<span class="built_in">local</span>/lib/ -lwsclient</div></pre></td></tr></table></figure>
-<h4 id="onopen"><a href="#onopen" class="headerlink" title="onopen()"></a>onopen()</h4><p>as we need send custom message through this client, and the default message was sent inside <code>onopen()</code>, I have to add additionaly argument <code>char\*</code> into the default function pointer <code>onopen</code> </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">int onopen(wsclient *c, char* message) &#123;</div><div class="line">          libwsclient_send(c, message);</div><div class="line">          return 0;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">void libwsclient_onopen(wsclient *client, int (*cb)(wsclient *c, char* ), char* msg) &#123;</div><div class="line">           pthread_mutex_lock(&amp;client-&gt;lock);</div><div class="line">           client-&gt;onopen = cb;</div><div class="line">           pthread_mutex_unlock(&amp;client-&gt;lock);</div><div class="line">&#125;</div><div class="line"></div><div class="line">	if(pthread_create(&amp;client-&gt;handshake_thread, NULL, libwsclient_handshake_thread, (void *)client)) &#123;</div></pre></td></tr></table></figure>
-<p>and the <a href="https://github.com/payden/libwsclient/issues/15" target="_blank" rel="external">onopen callback</a> is actually excuted inside handshake thread, in which is not legacy to pass char* message. further as there is no global alive status to tell the client-server channel is alive, to call  <code>libwsclient_send()</code> in another thread sounds trouble-possible. </p>
-<p>looks wsclient-c is limited, I transfer to wsclient c++. but need make sure <code>model in c</code> workable with <code>g++</code>. </p>
-<h2 id="wsclient-c-1"><a href="#wsclient-c-1" class="headerlink" title="wsclient c++"></a>wsclient c++</h2><p><a href="https://github.com/zaphoyd/websocketpp" target="_blank" rel="external">websocketpp</a> is <a href="https://github.com/zaphoyd/websocketpp/issues/856" target="_blank" rel="external">a header only C++ library</a>, there is no <code>libs</code> after built, but it is depends on <code>boost</code>, so to use this lib, we can add header and libs as following: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">/usr/local/include/websocketpp </div><div class="line">/usr/lib/x86_64-linux-gnu/libboost_*.so</div></pre></td></tr></table></figure>
-<p>I am using the <a href="https://github.com/zaphoyd/websocketpp/blob/master/tutorials/utility_client/step6.cpp" target="_blank" rel="external">wsclient from sample</a>, and define a public method as the client process:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">client_process</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp; server_url, <span class="built_in">std</span>::<span class="built_in">string</span>&amp; message)</span></span>&#123;</div><div class="line">    websocket_endpoint endpoint;</div><div class="line">    <span class="keyword">int</span> connection_id = endpoint.connect(server_url);</div><div class="line">    <span class="keyword">if</span> (connection_id != <span class="number">-1</span>) &#123;</div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"&gt; Created connection with id "</span> &lt;&lt; connection_id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">    connection_metadata::ptr mtdata = endpoint.get_metadata(connection_id);</div><div class="line">    <span class="comment">//<span class="doctag">TODO:</span> optimized with this sleeping time</span></div><div class="line"> boost::this_thread::sleep(boost::posix_time::milliseconds(<span class="number">200</span>));</div><div class="line">    <span class="keyword">int</span> retry_num = <span class="number">0</span>; </div><div class="line">    <span class="keyword">while</span>(mtdata-&gt;get_status() != <span class="string">"Open"</span> &amp;&amp; retry_num &lt; <span class="number">100</span>)&#123;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"&gt; connected is not open "</span> &lt;&lt; connection_id &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">	boost::this_thread::sleep(boost::posix_time::milliseconds(<span class="number">100</span>));</div><div class="line">	connection_id = endpoint.connect(server_url); </div><div class="line">        mtdata = endpoint.get_metadata(connection_id);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">   <span class="keyword">if</span>(mtdata-&gt;get_status() != <span class="string">"Open"</span>) &#123;</div><div class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"retry failed, exit -1"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span> ;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">   &#125;</div><div class="line">   endpoint.send(connection_id, message);</div><div class="line">   <span class="built_in">std</span>::<span class="built_in">cout</span>  &lt;&lt; message &lt;&lt;<span class="string">" send successfully"</span>  &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span> ;</div></pre></td></tr></table></figure>
-<p>there is more elegent <a href="https://github.com/maldworth/websocketpp-retry-client" target="_blank" rel="external">retry client</a> solution. </p>
-<p>to build our wsclient: </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"> g++ wsclient.cpp -o ec  -I/usr/local/include -L/usr/lib/x86_64-linux-gnu -lpthread  -lboost_system -lboost_random -lboost_thread -lboost_chrono </div><div class="line">``` </div><div class="line"></div><div class="line">## ws server in python</div><div class="line"></div><div class="line">we implemented a simple ws server with [websockets]():</div><div class="line"></div><div class="line">```python</div><div class="line">#!/usr/bin/env python3</div><div class="line"></div><div class="line">import asyncio</div><div class="line">import websockets</div><div class="line">import json </div><div class="line">from db_ model import dbwriter, adas_msg, Base</div><div class="line"></div><div class="line">class wsdb(object):</div><div class="line">    def __init__(self, host=None, port=None):</div><div class="line">        self.host = host</div><div class="line">        self.port = port</div><div class="line">        self.dbwriter_ = dbwriter()</div><div class="line"></div><div class="line">    async def process(self, websocket, path):</div><div class="line">        try:</div><div class="line">            raw_ = await websocket.recv()</div><div class="line">            jdata = json.loads(raw_)</div><div class="line">            orm_obj = adas_msg(jdata)</div><div class="line">            try:</div><div class="line">                self.dbwriter_.write(orm_obj)</div><div class="line">                self.dbwriter_.commit()</div><div class="line">            except Exception as e:</div><div class="line">                self.dbwriter_.rollback()</div><div class="line">                print(e)</div><div class="line">        except Exception as e:</div><div class="line">            print(e)</div><div class="line"></div><div class="line">        greeting = "hello from server"</div><div class="line">        await websocket.send(greeting)</div><div class="line">        print(f"&gt; &#123;greeting&#125;")</div><div class="line"></div><div class="line">    def run(self):</div><div class="line">        if self.host and self.port :</div><div class="line">            start_server = websockets.serve(self.process, self.host, self.port)</div><div class="line">        else:</div><div class="line">            start_server = websockets.serve(self.process, "localhost", 8867)</div><div class="line">        asyncio.get_event_loop().run_until_complete(start_server)</div><div class="line">        asyncio.get_event_loop().run_forever()       </div><div class="line"></div><div class="line">if __name__=="__main__":</div><div class="line">    test1 = wsdb()</div><div class="line">    test1.run()</div></pre></td></tr></table></figure>
-<p>the simple orm <code>db_writer</code> is from <a href="">sqlalchemy</a> model.</p>
-<h2 id="in-makefile"><a href="#in-makefile" class="headerlink" title="in makefile"></a>in makefile</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">CC=g++</div><div class="line">JSONC_IDIR=/usr/<span class="built_in">local</span>/include</div><div class="line">CFLAGS=-I. -I$(JSONC_IDIR)</div><div class="line">OPEN_LOOP_DEPS= rtwtypes.h adas_test.h </div><div class="line">LDIR=-L/usr/<span class="built_in">local</span>/lib/</div><div class="line">LIBS=-ljson-c</div><div class="line">BOOST_LDIR=-L/usr/lib/x86_64-linux-gnu</div><div class="line">BOOST_LIBS= -pthread -lboost_system -lboost_random -lboost_thread -lboost_chrono</div><div class="line">JSON_DEPS= wsclientpp.h</div><div class="line">obj = adas_test.o ert_main.o </div><div class="line">src=*.c</div><div class="line"></div><div class="line">$(obj): $(src) $(DEPS) $(JSON_DEPS)</div><div class="line">	$(CC) -c $(src) $(CFLAGS)</div><div class="line"></div><div class="line">mytest: $(obj)</div><div class="line">	$(CC) -o mytest $(obj) $(CFLAGS) $(LDIR) $(LIBS) $(BOOST_LDIR) $(BOOST_LIBS)</div><div class="line"></div><div class="line">.PHONY: clean</div><div class="line"></div><div class="line">clean:</div><div class="line">	rm -f *.o</div></pre></td></tr></table></figure>
-<p>so now we have encode adas simulink model to C code, and integrate this model C with a websocket client, which can talk to a ws server, which further write to database, which further can be used an data analysis model. </p>
-<p>we can add front-end web UI and system monitor UI if needed, but so far this <strong>adas test pipeline</strong> can support a few hundred adas test cores to run concurrently.  </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p> <a href="https://stackoverflow.com/questions/1352749/multiple-arguments-to-function-called-by-pthread-create" target="_blank" rel="external">pthread_create with multi args</a></p>
-<p><a href="https://github.com/maldworth/websocketpp-retry-client" target="_blank" rel="external">wscpp retry client</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2649,7 +2772,7 @@ avoid exposure to the internet with a dedicated WAN connection. Azure offers bot
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">191</span>
+                <span class="site-state-item-count">192</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -291,6 +291,177 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/03/boto3-streamingBody-to-BytesIO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="url">boto3 streamingBody to BytesIO</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-03-03T03:58:34-05:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/03/03/boto3-streamingBody-to-BytesIO/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/03/03/boto3-streamingBody-to-BytesIO/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="boto3-streamingBody-to-BytesIO"><a href="#boto3-streamingBody-to-BytesIO" class="headerlink" title="boto3 streamingBody to BytesIO"></a>boto3 streamingBody to BytesIO</h1><h3 id="boto3-class-into"><a href="#boto3-class-into" class="headerlink" title="boto3 class into"></a>boto3 class into</h3><ul>
+<li>A <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/session.html" target="_blank" rel="external">Session</a> is about a particular configuration. a custom session: </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">session = boto3.session.Session()</div><div class="line">ads = session.client(<span class="string">'ads'</span>)</div><div class="line">ads_s3 = session.resource(<span class="string">'s3'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/resources.html" target="_blank" rel="external">Resources</a> is an object-oriented interface to AWS. Every resource instance has a number of attributes and methods. These can conceptually be split up into identifiers, attributes, actions, references, sub-resources, and collections.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(bucket_name=<span class="string">"boto3"</span>, key=<span class="string">"test.mdf"</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html" target="_blank" rel="external">Client</a> includes common APIs:</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">copy_object()</div><div class="line">delete_object()</div><div class="line">create_bucket()</div><div class="line">delete_bucket()</div><div class="line">delete_objects()</div><div class="line">download_file()</div><div class="line">download_fileobj()</div><div class="line">get_bucket_location()</div><div class="line">get_bucket_policy()</div><div class="line">get_object()</div><div class="line">head_bucket()</div><div class="line">head_object()</div><div class="line">list_buckets()</div><div class="line">list_objects()</div><div class="line">put_bucket_policy()</div><div class="line">put_object()</div><div class="line">upload_file()</div><div class="line">upload_fileobj()</div></pre></td></tr></table></figure>
+<ul>
+<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#service-resource" target="_blank" rel="external">Service Resource</a> have bucket and object subresources, as well as related actions.</p>
+</li>
+<li><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#bucket" target="_blank" rel="external">Bucket</a>, is an abstract resource representing a S3 bucket.</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">b = ads_s3.Bucket(<span class="string">'name'</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#object" target="_blank" rel="external">Object</a>, is an abstract resource representing a S3 object.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj = ads_s3.Object(<span class="string">'bucket_name'</span>, <span class="string">'key'</span>)</div></pre></td></tr></table></figure>
+<h3 id="read-s3-object-amp-pipeline-to-mdfreader"><a href="#read-s3-object-amp-pipeline-to-mdfreader" class="headerlink" title="read s3 object &amp; pipeline to mdfreader"></a>read s3 object &amp; pipeline to mdfreader</h3><p>there are a few try-and-outs. first is to streaming s3 object as BufferedReader, which give a file-like object, and can read(), but <code>BufferedReader</code> looks more like a IO streaming than a file, which can’t seek. </p>
+<h4 id="botocore-response-StreamingBody-as-BufferedReader"><a href="#botocore-response-StreamingBody-as-BufferedReader" class="headerlink" title="botocore.response.StreamingBody as BufferedReader"></a>botocore.response.StreamingBody as BufferedReader</h4><p>the following discussion is really really helpful:<br><a href="https://github.com/boto/boto3/issues/426" target="_blank" rel="external">boto3 issue #426:  how to use botocore.response.StreamingBody as stdin PIPE</a></p>
+<p>at the code of the StreamingBody and it seems to me that is is really a wrapper of a class inheriting from io.IOBase) but only the read method from the raw stream is exposed, so not really a file-like object. it would make a lot of sense to expose the io.IOBase interface in the StreamingBody as we could wrapped S3 objects into a io.BufferedReader or a io.TextIOWrapper.read() get a binary string .  the actual file-like object is found in the ._raw_stream attribute of the StreamingBody class</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> io</div><div class="line">buff_reader = io.BufferedReader(body._raw_stream)</div><div class="line">print(buff_reader)</div><div class="line"><span class="comment"># &lt;_io.BufferedReader&gt;</span></div></pre></td></tr></table></figure>
+<p>wheras this <code>buff_reader</code> is not seekable, which makes <a href="">mdfreader</a> failure, due to its file operate needs  <code>seek()</code> method.</p>
+<p><a href="https://stackoverflow.com/questions/39324151/stream-a-non-seekable-file-like-object-to-multiple-sinks" target="_blank" rel="external">steam a non-seekable file-like object</a></p>
+<h4 id="stdio-stream-to-seekable-file-like-object"><a href="#stdio-stream-to-seekable-file-like-object" class="headerlink" title="stdio stream to seekable file-like object"></a>stdio stream to seekable file-like object</h4><p>so I am thinking to transfer the <code>BufferedReader</code> to a seekable file-like object. first, need to understand why it is not seekable. <code>BufferedRandom</code> is seekable, whereas BufferedReader and BufferedWriter <a href="https://github.com/python/cpython/pull/11216" target="_blank" rel="external">are not</a>. <a href="https://grokbase.com/t/python/python-dev/102j1y1dwn/buffered-streams-design-raw-io-gotchas" target="_blank" rel="external">Buffered streams design:</a> BufferedRandom is only suitable when the file is open for reading <strong>and</strong> writing. The ‘rb’ and ‘wb’ modes should return BufferedReader and BufferedWriter, respectively.</p>
+<p>is it possbile to first  read() the content of BufferedReader to some memory, than transfer it to BufferedRandom? which gives me the try to BufferedReader.read(), which basicaly read all the binaries and store it in-memoryA, <strong>then good news:</strong> in-memory binary streams are also aviable as <a href="https://docs.python.org/3/library/io.html" target="_blank" rel="external">Bytesio</a> objects: </p>
+<pre><code class="python">f = io.BytesIO(<span class="string">b"some in-memory binary data"</span>)
+</code></pre>
+<p>what if assign <code>BytesIO</code> to this in-memoryA. which really gives me a seekable object:</p>
+<pre><code class="python">fid_ = io.BufferedReader(mf4_[<span class="string">'Body'</span>]._raw_stream) ;
+read_in_memory = fid_.read()
+bio_ = io.BytesIO(read_in_memory);
+</code></pre>
+<p>then <code>BytesIO</code> object pointer is much more file-like, to do read() and seek(). </p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/index.html" target="_blank" rel="external">boto3 doc</a></p>
+<p><a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.html#examples" target="_blank" rel="external">boto3 s3 api samples</a></p>
+<p><a href="https://github.com/ERS-HCL/MDF4Wrapper" target="_blank" rel="external">mdf4wrapper</a></p>
+<p><a href="https://bytes.com/topic/c/answers/649819-ifstream-file" target="_blank" rel="external">iftream to FILE</a></p>
+<p><a href="https://stackoverflow.com/questions/20935404/what-is-the-concept-behind-file-pointer-or-the-stream-pointer" target="_blank" rel="external">what is the concept behind file pointer or stream pointer</a></p>
+<p><a href="https://stackoverflow.com/questions/10199226/using-io-bufferedreader-on-a-stream-obtained-with-open" target="_blank" rel="external">using io.BufferedReader on a stream obtained with open</a></p>
+<p><a href="https://www.devdungeon.com/content/working-binary-data-python" target="_blank" rel="external">working with binary data in python</a></p>
+<p><a href="https://stackoverflow.com/questions/1035340/reading-binary-file-and-looping-over-each-byte" target="_blank" rel="external">read binary file and loop over each byte</a></p>
+<p><a href="https://github.com/RaRe-Technologies/smart_open" target="_blank" rel="external">smart_open project</a></p>
+<p><a href="https://www.python.org/dev/peps/pep-3116/" target="_blank" rel="external">PEP 3116 – New I/O</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/28/ceph-boto3-intro/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2034,204 +2205,6 @@ CMD [&quot;/bin/bash&quot;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/" itemprop="url">ROS ADS integrated to python talk to lgsvl</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-10T08:35:12-05:00">
-                2020-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/01/10/ROS-ADS-integrated-to-python-talk-to-lgsvl/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p><a href="https://zjli2013.github.io/2020/01/04/ADS-stack-in-ros-talk-to-lgsvl/" target="_blank" rel="external">previously</a>, we had done ADS ros package directly talk with lgsvl. the step further is to trigger ADS ros nodes from scenario python script</p>
-<p>a few requirements:</p>
-<ul>
-<li><p>for ADS ros should be integrated with each scenario python script, which means, when the python script finished, the ADS ros should exit</p>
-</li>
-<li><p>the ads ros package shell script is independ of python script </p>
-</li>
-</ul>
-<h4 id="execute-shell-in-Python"><a href="#execute-shell-in-Python" class="headerlink" title="execute shell in Python"></a>execute shell in Python</h4><ul>
-<li>to <a href="http://dreamsyssoft.com/python-scripting-tutorial/shell-tutorial.php" target="_blank" rel="external">call a shell command</a> directly with <code>os.system(cmd)</code> or </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">subprocess.call(&quot;ls -lt&quot;, shell=True)</div></pre></td></tr></table></figure>
-<ul>
-<li>to run shell script with a python subprocess </li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">proc=subprocess.Popen([&quot;&quot;], stdout=subprocess.PIPE)</div></pre></td></tr></table></figure>
-<p><code>subprocess.Popen()</code> return the process object</p>
-<p>a few helpful commands to debug rosrun:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ps -aux | grep &quot;roscore&quot;  </div><div class="line"></div><div class="line">ps -aux | grep &quot;rosmaster&quot;</div><div class="line"></div><div class="line">killall -9 roscore </div><div class="line"></div><div class="line">killall -9 rosmaster</div></pre></td></tr></table></figure>
-<h2 id="ros1-to-python3"><a href="#ros1-to-python3" class="headerlink" title="ros1 to python3"></a>ros1 to python3</h2><p>there is an real issue, due to the ADS ros package is mostly implemented by ROS1, maintained by the algorithm team. but lgsvl scenario is running with python3. <a href="http://design.ros2.org/articles/changes.html" target="_blank" rel="external">ROS1 matches Python2</a>. so there comes the solution, either to upgrade the ADS ros pakcage to ROS2, or find a way to run ROS1 in python3 env.</p>
-<h4 id="conda-base-env"><a href="#conda-base-env" class="headerlink" title="conda base env"></a>conda base env</h4><p>we had decided to adapt ROS1 in python3 env. as the host machine has conda env, first need to <a href="https://stackoverflow.com/questions/54429210/how-do-i-prevent-conda-from-activating-the-base-environment-by-default" target="_blank" rel="external">disable conda base</a>. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">conda config --set auto_activate_base false</div></pre></td></tr></table></figure>
-<p>as lgsvl scenario is runned with conda python3 env, inside which used <code>subprocess</code> to run ADS ros shell, in which creates a few new <code>gnome-terminal</code>s, which are non log-in terminal, and the trick things here: even though disabled auto activate base, and the terminal has no header <code>(base)</code>, but when check the python path, it still points to the <code>conda/bin/python</code>, which will fail <code>rosbridge_launch.server</code>, which is a pure ros1 and python2 module.</p>
-<p>so need check if <code>conda --version</code> in the ads ros shell script is  in current terminal, if does, run <code>conda deactivate</code>, which gives error:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CommandNotFoundError: Your shell has not been properly configured to use &apos;conda deactivate&apos;.</div></pre></td></tr></table></figure>
-<p>it looks there is some mess up, with init <code>conda.sh</code> is in <code>~/.bashrc</code>, but during the new terminal ceated, it doens’t confgiure all right. which can be fixed :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">conda --version </div><div class="line">if [ $? == 0 ]</div><div class="line">then </div><div class="line">    source ~/anaconda3/etc/profile.d/conda.sh</div><div class="line">    conda deactivate</div><div class="line">fi</div></pre></td></tr></table></figure>
-<p>in this way, we run lgsvl scenario in python3, as well as can new with python2 terminals to run ads ros nodes from this python3 terminal</p>
-<h4 id="ros-scripts-path-is-not-python-path"><a href="#ros-scripts-path-is-not-python-path" class="headerlink" title="ros scripts path is not python path"></a>ros scripts path is not python path</h4><p>as we try to separate python scripts from ads ros nodes, so need some global env variable for the ros scripts path. </p>
-<h2 id="kill-all-ros-nodes-gracefully"><a href="#kill-all-ros-nodes-gracefully" class="headerlink" title="kill all ros nodes gracefully"></a>kill all ros nodes gracefully</h2><p>we need restart/shutdown the ads ros nodes package at each time when python scenario script start/stop, which has two steps:</p>
-<ul>
-<li><p>to shutdown ros nodes, e.g.  <a href="https://answers.ros.org/question/237862/rosnode-kill/" target="_blank" rel="external">rosnode kill</a></p>
-</li>
-<li><p>to close all the gnome-terminals to run the ros nodes</p>
-</li>
-</ul>
-<p>the second step is very tricky, need some understand. A terminal is a file. Like /dev/tty. Files do not have a process id. The process that “owns” the terminal is usually called the controlling process, or more correctly, the process group leader. <code>gnome-terminal</code> <a href="https://askubuntu.com/questions/775025/how-to-detect-the-number-of-opened-terminals-by-the-user" target="_blank" rel="external">runs a single pid</a>, it creates a child process for each and every window and/or tab. and can retrieve these child processes by the command:</p>
-<pre><code>$ pgrep -P &lt;pid_of_gnome-terminal&gt;
-</code></pre><p>Many terminals seem to <a href="https://askubuntu.com/questions/640096/how-do-i-check-which-terminal-i-am-using" target="_blank" rel="external">mask themselves as xterm-compatible</a>, which is reported by echo $TERM or echo $COLORTERM. </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$! is the PID of the last backgrounded process.</div><div class="line">kill -0 $PID checks whether it&apos;s still running.</div><div class="line">$$ is the PID of the current shell.</div></pre></td></tr></table></figure>
-<pre><code>#! /bin/bash
-
-gnome_pid=`pgrep gnome-terminal`
-subpids=`pgrep -P ${gnome_pid}`
-
-if [ ! $1 ]; then
-   echo &quot;missing the gnome-terminal pid, exit&quot;
-   exit -1
-fi
-
-#shutdown the ros nodes 
-rosnode kill -a  &gt; /dev/null  2&gt;&amp;1
-killall -9 rosmaster &gt; /dev/null  2&gt;&amp;1
-
-#shutdown the terminals where ros nodes hosted
-for pid in $subpids
-do
-        if [[ $pid != $1 ]] ; then
-                echo $pid
-                kill $pid
-        fi
-done
-</code></pre><p>tips: the implement has a litle problem when integrate with lgsvl when the simulation time is short, e.g. 1sec, then <code>ros_clear.sh</code> can’t catch the opened gnome-terminals from <code>ros_start.sh</code>. </p>
-<h4 id="find-the-process-name-using-PID"><a href="#find-the-process-name-using-PID" class="headerlink" title="find the process name using PID"></a><a href="https://www.tecmint.com/find-process-name-pid-number-linux/" target="_blank" rel="external">find the process name using PID</a></h4><pre><code>$ ps aux | grep PID
-$ ps -p PID -o format         
-$ curpid=`ps -p $$ -o ppid=`
-</code></pre><h4 id="the-output-of-ps-aux"><a href="#the-output-of-ps-aux" class="headerlink" title="the output of ps aux"></a><a href="https://www.computernetworkingnotes.com/linux-tutorials/ps-aux-command-and-ps-command-explained.html" target="_blank" rel="external">the output of ps aux</a></h4><ul>
-<li>–&gt;  in the foreground process group<br>s –&gt;  is a session leader </li>
-</ul>
-<h2 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h2><p>so far, we integrated ads ros packages into python, which then talk to lgsvl. </p>
-<h2 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h2><p><a href="https://www.jianshu.com/p/2eb33b491024" target="_blank" rel="external">pythn subprocess from Jianshu</a></p>
-<p><a href="https://www.cnblogs.com/vamei/archive/2012/10/07/2713023.html" target="_blank" rel="external">understand linux process group</a></p>
-<p><a href="https://www.cyberciti.biz/faq/linux-pidof-command-examples-find-pid-of-program/" target="_blank" rel="external">pidof command</a></p>
-<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line/476663#476663" target="_blank" rel="external">which_term</a></p>
-<p><a href="https://stackoverflow.com/questions/9378021/how-to-get-process-details-from-its-pid" target="_blank" rel="external">get the info of a PID</a></p>
-<p><a href="https://askubuntu.com/questions/476641/how-can-i-get-the-name-of-the-current-terminal-from-command-line" target="_blank" rel="external">get the pid of running terminal</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2282,7 +2255,7 @@ $ curpid=`ps -p $$ -o ppid=`
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">191</span>
+                <span class="site-state-item-count">192</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
