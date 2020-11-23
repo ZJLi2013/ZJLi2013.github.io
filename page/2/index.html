@@ -291,6 +291,227 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/07/mf4-know-how/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David Z.J. Lee">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Serious Autonomous Vehicles">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/07/07/mf4-know-how/" itemprop="url">mf4 know how</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-07T08:51:49-04:00">
+                2020-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/07/mf4-know-how/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2020/07/07/mf4-know-how/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="preparation"><a href="#preparation" class="headerlink" title="preparation"></a>preparation</h2><h4 id="pip-reinstall"><a href="#pip-reinstall" class="headerlink" title="pip reinstall"></a>pip reinstall</h4><ul>
+<li><p>uninstall current pip </p>
+</li>
+<li><p>apt-get install python-pip  #which install the default 8.1 version</p>
+</li>
+<li><p>sudo -H pip2 install –upgrade pip  #which upgrade to 20.1 version</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pip install --install-option=<span class="string">"--prefix=<span class="variable">$PREFIX_PATH</span>"</span> package_name</div></pre></td></tr></table></figure>
+<p><a href="https://github.com/pypa/pip/issues/4754" target="_blank" rel="external">why does pip3 say I am using v8.1.1, however version 20.1.1 is avail</a></p>
+<h4 id="install-asammdf"><a href="#install-asammdf" class="headerlink" title="install asammdf"></a>install asammdf</h4><p><a href="https://github.com/danielhrisca/asammdf" target="_blank" rel="external">github: asammdf</a></p>
+<p>it’s recommended to use <strong>conda</strong> env to manage this project. name this env as <code>mdf</code>. it’s recommended to install packages through <code>conda install</code>, rather than system <code>apt-get install</code>. </p>
+<p>the following packages is required:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">conda install numpy</div><div class="line">conda install pandas</div><div class="line">conda install -c conda-forge dbus</div><div class="line">conda install lxml=4.5.0</div><div class="line">conda install -c conda-forge canmatrix</div><div class="line">conda install -c conda-forge asammdf</div><div class="line">conda install  pyqt5  <span class="comment">#optionally but recommended, if you need asammdf GUI tool in Linux</span></div></pre></td></tr></table></figure>
+<p>take care the pkg installed path, either globally in <code>conda/pkgs/</code>  or in the special env <code>/conda/envs/mdf/lib/python3/site-packages</code>, can simplely <code>import asammdf</code> to see $PYTHONPATH found the module.</p>
+<h4 id="conda-pythonpath"><a href="#conda-pythonpath" class="headerlink" title="conda pythonpath"></a>conda pythonpath</h4><p>check existing system path.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sys</div><div class="line">sys.path </div><div class="line">[<span class="string">''</span>, <span class="string">'/usr/lib/python3/dist-packages'</span>, <span class="string">'/home/anaconda3/envs/mf4/lib/python3.8/site-packages'</span>]</div></pre></td></tr></table></figure>
+<p>PYTHON loads the modules from the <code>sys.path</code> in the order, so if PYTHON find the required module in the first PATH, which however is the wrong version, then it’s an error.</p>
+<p><a href="https://stackoverflow.com/questions/17386880/does-anaconda-create-a-separate-pythonpath-variable-for-each-new-environment" target="_blank" rel="external">does anaconda create a separate PYTHONPATH for each new env</a>: each environment is a completely separate installation of Python and all the packages. there’s no need to mess with PYTHONPATH because the Python binary in the environment already searches the site-packages in that environment, and the libs of the environment.</p>
+<p>in one word, <strong>when using conda, don’t use system PYTHONPAH</strong></p>
+<h4 id="install-asammdf-gui"><a href="#install-asammdf-gui" class="headerlink" title="install asammdf[gui]"></a>install asammdf[gui]</h4><ul>
+<li>test with PyQt5 </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">python3 </div><div class="line">import PyQt5</div></pre></td></tr></table></figure>
+<p>reports <a href="https://askubuntu.com/questions/308128/failed-to-load-platform-plugin-xcb-while-launching-qt5-app-on-linux-without" target="_blank" rel="external">Could not load the Qt platform plugin “xcb” in “” even though it was found</a></p>
+<p>the reason is due to <a href="https://github.com/neuropoly/spinalcordtoolbox/issues/2436" target="_blank" rel="external">libqxcb.so</a> from <code>~/anaconda3/envs/aeb/lib/python3.6/site-packages/PyQt5/Qt/plugins/platforms</code> not found <code>libxcb-xinerama.so.0</code>, fixed by <a href="https://github.com/supertriodo/Arena-Tracker/issues/52" target="_blank" rel="external">install libxcb-xinerama0</a></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ldd libqxcb.so </div><div class="line">$ libxcb-xinerama.so.0 =&gt; not found</div><div class="line">sudo apt-get install libxcb-xinerama0</div></pre></td></tr></table></figure>
+<ul>
+<li>install </li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PYTHONPATH=<span class="string">""</span></div><div class="line">pip install asammdf[gui]</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Requirement already satisfied: pyqtgraph==0.11.0rc0; extra == <span class="string">"gui"</span> <span class="keyword">in</span> /home/gwm/anaconda3/envs/aeb/lib/python3.6/site-packages (from asammdf[gui]) (0.11.0rc0)</div><div class="line">Requirement already satisfied: psutil; extra == <span class="string">"gui"</span> <span class="keyword">in</span> /home/gwm/anaconda3/envs/aeb/lib/python3.6/site-packages (from asammdf[gui]) (5.7.0)</div><div class="line">Requirement already satisfied: PyQt5&gt;=5.13.1; extra == <span class="string">"gui"</span> <span class="keyword">in</span> /home/gwm/anaconda3/envs/aeb/lib/python3.6/site-packages (from asammdf[gui]) (5.15.0)</div></pre></td></tr></table></figure>
+<h4 id="numpy-utils"><a href="#numpy-utils" class="headerlink" title="numpy utils"></a>numpy utils</h4><ul>
+<li>output precision</li>
+</ul>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">res = np.where(arr==roi)</div><div class="line"><span class="keyword">for</span> x <span class="keyword">in</span> np.nditer(arr):</div><div class="line">	print(x)</div><div class="line">np.set_printoptions(precision=<span class="number">3</span>)</div><div class="line">np.set_printoptions(suppress=<span class="keyword">True</span>)</div><div class="line">np.around([], decimals=<span class="number">2</span>)</div><div class="line"><span class="keyword">for</span> (k,v) <span class="keyword">in</span> dict.items():</div><div class="line">	<span class="keyword">print</span> (k, v)</div></pre></td></tr></table></figure>
+<h2 id="asammdf"><a href="#asammdf" class="headerlink" title="asammdf"></a>asammdf</h2><h4 id="bypass-non-standard-msg"><a href="#bypass-non-standard-msg" class="headerlink" title="bypass non-standard msg"></a>bypass non-standard msg</h4><p>most OEM mdf4 files are collected by <code>Vector CANape</code> tools, which may include many uncommon types, such as Matlab/Simulink objects, measurement signals(multimedia) cam-stream e.t.c, which can’t be parsed by current asammdf tool.</p>
+<p>so a simple fix is to bypass these uncommon data type, submit in the <a href="https://github.com/danielhrisca/asammdf/issues/343" target="_blank" rel="external">git issue</a>.</p>
+<h4 id="bytes-object-to-numerical-values"><a href="#bytes-object-to-numerical-values" class="headerlink" title="bytes object to numerical values"></a>bytes object to numerical values</h4><p>bytes objects basically contain a sequence of integers in the range 0-255, but when represented, Python displays these bytes as ASCII codepoints to make it easier to read their contents.</p>
+<p>Because a bytes object consist of a sequence of integers, you can construct a bytes object from any other sequence of integers with values in the 0-255 range, like a list:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bVal = bytes([72, 101, 108, 108, 111])</div><div class="line">strVal = bVal.decode(<span class="string">'utf-8'</span>)</div></pre></td></tr></table></figure>
+<p>in asammdf, the numerical ndarray can be stored as <code>uint8</code>, <code>uint32</code>, <code>uint64</code> e.t.c, but with a different range and representation. for radar/camera detected obj id, the range is in [0~255], so here need output as <code>uint8</code>.</p>
+<p>sample of ObjID as asammdf.Signal: </p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="string">&lt;Signal</span> <span class="attr">MRR_ObjID_3:</span></div><div class="line">	<span class="string">samples=[b''</span> <span class="string">b''</span> <span class="string">b''</span> <span class="string">...</span> <span class="string">b''</span> <span class="string">b''</span> <span class="string">b'']</span></div><div class="line">	<span class="string">timestamps=[</span> <span class="number">0.08185676</span>  <span class="number">0.13073605</span>  <span class="number">0.18073289</span> <span class="string">...</span> <span class="number">57.5313583</span>  <span class="number">57.5813593</span></div><div class="line"> <span class="number">57.63134464</span><span class="string">]</span></div><div class="line">	<span class="string">invalidation_bits=None</span></div><div class="line">	<span class="string">unit=""</span></div><div class="line">	<span class="string">conversion=None</span></div><div class="line">	<span class="string">source=&lt;asammdf.blocks.source_utils.Source</span> <span class="string">object</span> <span class="string">at</span> <span class="number">0x7f79b91c7ae8</span><span class="string">&gt;</span></div><div class="line">	comment="&lt;CNcomment&gt;</div><div class="line">&lt;TX/&gt;</div><div class="line">&lt;address byte_count="1" byte_order="BE"&gt;0x0008&lt;/address&gt;</div><div class="line">&lt;/CNcomment&gt;"</div><div class="line">	mastermeta="('t', 1)"</div><div class="line">	raw=False</div><div class="line">	display_name=</div><div class="line">	attachment=()&gt;</div></pre></td></tr></table></figure>
+<h4 id="mf4-reader"><a href="#mf4-reader" class="headerlink" title="mf4_reader"></a>mf4_reader</h4><p>first, we need define a high-level APIs to handle collected mf4 from road test. which often includes a bunch of groups for each sensor, and a few channels to record one kind of Signal in one sensor. and another dimension is <code>time</code>, as each Signal is a time serial. the sample Signal output also shows there are two np.narray: <code>samples</code> and <code>timestamps</code>.</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="bullet">-</span><span class="string">&gt; group </span></div><div class="line">----&gt; channel</div><div class="line">--------&gt; samples[timestampIndex]</div></pre></td></tr></table></figure>
+<p>what we need is to repackage the signals from mf4 as structures of input(mostly like sensor packages) and output(another structure or CAN package)  to any model required, e.g. fusion/aeb.  </p>
+<ul>
+<li>init_multi_read(group_name, channel_nums, obj_nums, channel_list)</li>
+</ul>
+<p><code>channel_nums</code>, gives the number of channels/signals for this sensor</p>
+<p><code>obj_nums</code>, is the number of objects can detected by a special sensor, which is given by the vendor of the sensor. e.g. Bosch 5th Radar can detect at most 32 objects.</p>
+<p><code>channel_list</code>, is the name list of the channels, whose length should equal <code>channel_nums</code>. </p>
+<p>this API does read all required channels raw data into memeory initially.</p>
+<ul>
+<li>updateCacheData(group_name, time)</li>
+</ul>
+<p><code>time</code> is the given timestamp, this API returns the interested samples at the given <code>time</code>.  one trick here is <code>time matching</code>, as very possiblly, the given <code>time</code> doesn’t match any of the recorded timestamp in a special channel, here always seek the most closest timestamp to <code>time</code>.</p>
+<ul>
+<li><p>seek_closest_timestamp_index(timestamps, time)</p>
+</li>
+<li><p>get_channel_data_by_name(channel_name, time)</p>
+</li>
+<li><p>get_channel_all_data_by_name(channel_name)</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> asammdf <span class="keyword">import</span> MDF4</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">mf4_reader</span><span class="params">()</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, mf4_file)</span>:</span></div><div class="line">		self.reader = MDF4(mf4_file)</div><div class="line">		self.channelValsCacheMap = dict()</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">init_multi_read</span><span class="params">(group_name, channel_name, obj_nums, channel_namelist)</span>:</span></div><div class="line">		channelValuesMap = dict()</div><div class="line">		<span class="keyword">for</span> i <span class="keyword">in</span> range(obj_nums):</div><div class="line">			<span class="keyword">for</span> base_name <span class="keyword">in</span> channel_namelist:</div><div class="line">				channel_name = base_name + str(i+<span class="number">1</span>)</div><div class="line">				channel_raw_data = self.get_channel_all_data_by_name(channel_name)</div><div class="line">				<span class="keyword">if</span> channel_raw_data :</div><div class="line">					channelValuesMap[channel_name] = channel_raw_data</div><div class="line">				<span class="keyword">else</span>:</div><div class="line">					channelValuesMap[channel_name] = <span class="keyword">None</span></div><div class="line">		self.channelValsCacheMap[group_name] = channelValuesMap</div></pre></td></tr></table></figure>
+<h4 id="fusion-adapter"><a href="#fusion-adapter" class="headerlink" title="fusion adapter"></a>fusion adapter</h4><p>once we can read all raw signals from mf4 files, then need to package these signals as the upper-level application requires. e.g. fusion, aeb input structs.</p>
+<p>taking fusion module as example. the input includes radar structure, camera structure, e.t.c, something like:</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">radar_sensor_pack</span><span class="params">()</span>:</span></div><div class="line">	self.objID, </div><div class="line">        self.objExistProb ,</div><div class="line">        self.objDistx,</div><div class="line">        self.objDisty, </div><div class="line">        self.objRelVelx,</div><div class="line">        self.objRelVely, </div><div class="line">        ...</div></pre></td></tr></table></figure>
+<p>data collection is done by Vector CANape, the sensor pack is defined in <code>*.dbc</code> file, so here basically does package <code>dbc</code> signals to a Python sensor_object, and then assign this sensor_object with the values from mdf4 files.</p>
+<p>we need define a bunch of fusion_adapter to package all the necessary inputs for each module, e.g. fusion, aeb e.t.c</p>
+<h4 id="rosAdapter"><a href="#rosAdapter" class="headerlink" title="rosAdapter"></a>rosAdapter</h4><p>another kind of usage from mf4 file, is transfer mf4 to rosbag. due to most ADS dev/debug/verifcation tools currently are based on ros env. on the other hand, ros base data collection is not robost enough than CANape, so the data collection is in <code>*.mf4</code>. </p>
+<ul>
+<li>build ros message and define ros_sensor_obj</li>
+</ul>
+<p>as asammdf reader is in python, here can build ros message into python module, as mentioned prevously. as ros message built is with <code>catkin_make</code>, which is based on python2.7, so need add the <code>sensor_msgs</code> python module path to $PYTHONPATH in the <code>conda env fusion</code>. </p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> PYTHONPATH=/home/gitlab_/mf4io/linux/toRosbag/catkin_ws/install/lib/python2.7/dist-packages</div></pre></td></tr></table></figure>
+<p>basically, we use <code>python3</code> shell, but we add the <code>catkin_ws/python2.7</code> to its PYTHONPATH.</p>
+<ul>
+<li>write rosbag </li>
+</ul>
+<p>then we can fill in <code>ros_sensor_obj</code> from mf4 structures. and write to bag.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">self.bag.write(<span class="string">'/bose_cr/radar/front_right/object'</span>, ros_sensor_obj.data)</div></pre></td></tr></table></figure>
+<h4 id="rosbag-know-how"><a href="#rosbag-know-how" class="headerlink" title="rosbag know-how"></a>rosbag know-how</h4><ul>
+<li><a href="http://wiki.ros.org/rosbag/Commandline" target="_blank" rel="external">rosbag filter</a></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rosbag filter 20200619-xx.bag  only-mrr.bag <span class="string">"topic==`/bose_mrr/radar/front/object`"</span></div></pre></td></tr></table></figure>
+<ul>
+<li><a href="http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file" target="_blank" rel="external">read message from a bag file</a></li>
+</ul>
+<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://github.com/lxml/lxml" target="_blank" rel="external">lxml</a></p>
+<p><a href="https://github.com/ebroecker/canmatrix" target="_blank" rel="external">canmatrix</a></p>
+<p><a href="https://github.com/danielhrisca/asammdf" target="_blank" rel="external">asammdf</a></p>
+<p><a href="https://stackoverflow.com/questions/2592764/what-does-a-b-prefix-before-a-python-string-mean" target="_blank" rel="external">what does a b prefix before a python string mean</a></p>
+<p><a href="https://www.tutorialspoint.com/numpy/numpy_data_types.htm" target="_blank" rel="external">numpy data type</a></p>
+<p><a href="http://wiki.ros.org/rosbag/Code%20API#cpp_api" target="_blank" rel="external">write rosbag api</a></p>
+<p><a href="http://wiki.ros.org/ROS/Tutorials/Recording%20and%20playing%20back%20data" target="_blank" rel="external">record and play back data</a></p>
+<p><a href="https://github.com/ElectricRCAircraftGuy/eRCaGuy_dotfiles/blob/master/useful_scripts/ros_readbagfile.py" target="_blank" rel="external">ros_readbagfile.py</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/28/so-ViL-now/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1980,315 +2201,6 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/k8s-setup-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="David Z.J. Lee">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Serious Autonomous Vehicles">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/05/17/k8s-setup-1/" itemprop="url">k8s setup 1</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-17T08:50:13-04:00">
-                2020-05-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2020/05/17/k8s-setup-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2020/05/17/k8s-setup-1/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="background"><a href="#background" class="headerlink" title="background"></a>background</h2><p>transfer from docker swarm to K8S finally. this is a lot engineering work, once have some knowledge about docker/swarm. there are two things: </p>
-<ul>
-<li><p>a more general abstract object. e.g. pod, service/svc, deployment, secret, namespace/ns, role e.t.c.</p>
-</li>
-<li><p>more DevOps engineering  </p>
-</li>
-</ul>
-<p>previously, I <a href="https://zjli2013.github.io/2020/04/09/play-with-k8s/" target="_blank" rel="external">palyed  with k8s</a> in theory. this time is more about build a k8s cluster in reality. </p>
-<h2 id="install-kubeadm"><a href="#install-kubeadm" class="headerlink" title="install kubeadm"></a>install kubeadm</h2><ul>
-<li><p>kubeadm,  used to initial cluster</p>
-</li>
-<li><p>kubectl, the CLI tool for k8s </p>
-</li>
-<li><p>kubelet, run on all nodes in the cluster</p>
-</li>
-</ul>
-<p>all three commands are required on all nodes. check <a href="https://v1-16.docs.kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/" target="_blank" rel="external">install kube officially</a></p>
-<ul>
-<li>swapoff </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo swapoff -a</div></pre></td></tr></table></figure>
-<ul>
-<li>create a file <code>/etc/apt/sources.list.d/kubernetes.list</code> with the following content:</li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">deb https://mirrors.aliyun.com/kubernetes/apt/  kubernetes-xenial main</div></pre></td></tr></table></figure>
-<ul>
-<li>add gpg key </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gpg --keyserver keyserver.ubuntu.com --recv-keys BA07F4FB </div><div class="line">gpg --<span class="built_in">export</span> --armor BA07F4FB | sudo apt-key add -</div></pre></td></tr></table></figure>
-<ul>
-<li>apt install</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update </div><div class="line">sudo apt-get install kubelet kubectl kubeadm</div></pre></td></tr></table></figure>
-<p>tips, <code>apt-get install</code> will install v1.18.2. </p>
-<ul>
-<li>restart kubelet </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl restart kubelet</div></pre></td></tr></table></figure>
-<p>if need degrade to v17.3, do the following: </p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install -qy --allow-downgrades kubelet=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubeadm=1.17.3-00</div><div class="line">sudo apt-get install -qy --allow-downgrades kubectl=1.17.3-00</div></pre></td></tr></table></figure>
-<h4 id="kubeadm-setup"><a href="#kubeadm-setup" class="headerlink" title="kubeadm setup"></a>kubeadm setup</h4><p>we setup k8s with kubeadm tool, which requires a list of images:</p>
-<ul>
-<li>check the required images to start kubeadm</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images list</div></pre></td></tr></table></figure>
-<p>which returns:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">k8s.gcr.io/kube-apiserver:v1.18.2</div><div class="line">k8s.gcr.io/kube-controller-manager:v1.18.2</div><div class="line">k8s.gcr.io/kube-scheduler:v1.18.2</div><div class="line">k8s.gcr.io/kube-proxy:v1.18.2</div><div class="line">k8s.gcr.io/pause:3.2</div><div class="line">k8s.gcr.io/etcd:3.4.3-0</div><div class="line">k8s.gcr.io/coredns:1.6.7</div></pre></td></tr></table></figure>
-<p>the image source above is not aviable, which can be solved by:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm config images pull --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers/</div></pre></td></tr></table></figure>
-<p>if the command above doesn’t work well, try to <code>docker pull</code> directly and tag the name back to <code>k8s.gcr.io</code>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span></div><div class="line">docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/<span class="variable">$imageName</span> k8s.gcr.io/<span class="variable">$imageName</span></div></pre></td></tr></table></figure>
-<h4 id="start-a-k8s-cluster"><a href="#start-a-k8s-cluster" class="headerlink" title="start a k8s cluster"></a>start a k8s cluster</h4><p>after the preparation above, finally start a k8s cluster as:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubeadm init --pod-network-cidr=10.4.0.0/16 --cluster_dns=10.3.0.10</div></pre></td></tr></table></figure>
-<p>futher, check <a href="https://kubernetes.io/zh/docs/reference/setup-tools/kubeadm/kubeadm-init/" target="_blank" rel="external">kubeadm init options</a>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">--pod-network-cidr  <span class="comment"># pod network IP range</span></div><div class="line"></div><div class="line">--service-cidr <span class="comment"># default 10.96.0.0/12</span></div><div class="line"></div><div class="line">--service-dns-domain <span class="comment">#cluster.local</span></div></pre></td></tr></table></figure>
-<p><code>cluster_dns</code> option is used as the cluster DNS/namespace, which will be used in the configureMap for <code>coreDNS</code> forwarding. </p>
-<p>if start successfully, </p>
-<ul>
-<li>then run the following as a regular user to config safety-verficiation:</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir -p <span class="variable">$HOME</span>/.kube</div><div class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</div><div class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</div></pre></td></tr></table></figure>
-<ul>
-<li>check</li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo kubectl get nodes   <span class="comment">#both nodes are READY</span></div><div class="line">sudo kubectl get pods -n kube-system  <span class="comment">#check system</span></div><div class="line">sudo kubectl describe pod coredns-xxxx  -n kube-system</div></pre></td></tr></table></figure>
-<h4 id="add-pod-network"><a href="#add-pod-network" class="headerlink" title="add pod network"></a>add pod network</h4><p>pod network, is the network through which the cluster nodes can communicate with each other.</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml</div></pre></td></tr></table></figure>
-<ul>
-<li>worker node to join the new k8s cluster : </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">kubeadm reset</div><div class="line">sudo swapoff -a </div><div class="line">kubeadm join 10.20.180.12:6443 --token o0pcpc.v3v8bafmbu6e4bcs \</div><div class="line">    --discovery-token-ca-cert-hash sha256:2a15d392821f8c51416e49e6ccd5393df6f93d738b24b2132e9a9a19276f4f54</div></pre></td></tr></table></figure>
-<p>then cp <code>flannel-cni.conflist</code> into worker node. <code>/etc/cni/net.d/10-flannel.conflist</code> to the same path in worker node.</p>
-<p>if check <code>sudo kubectl get pods -n kube-system</code> :  there may come <strong>an error: here found: coredns CrashLoopBackOff or Error</strong></p>
-<p>this is due to <code>DNS/nameserver resolving issue in Ubuntu, where</code>coreDNS service<code>forwarding the k8s cluster service to the host</code>/etc/resolv.conf<code>, which only has</code>127.0.0.1`.  the cause for CoreDNS to have CrashLoopBackOff is when a CoreDNS Pod deployed in Kubernetes detects a loop. A number of <a href="https://github.com/coredns/coredns/tree/master/plugin/loop#troubleshooting-loops-in-kubernetes-clusters" target="_blank" rel="external">workarounds are available</a> to avoid Kubernetes trying to restart the CoreDNS Pod every time CoreDNS detects the loop and exits.</p>
-<p>check the <code>coreDNS configMap</code> by :</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">kubectl edit cm coredns -n kube-system</div></pre></td></tr></table></figure>
-<p>we see something like:</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">  prometheus :9153</div><div class="line">#  forward . /etc/resolv.conf</div><div class="line">  forward . 10.3.0.10</div><div class="line">  cache 30</div><div class="line">  loop</div><div class="line">  reload</div><div class="line">  loadbalance</div></pre></td></tr></table></figure>
-<p>so modify <code>forward line</code> to <code>forward . 10.3.0.10</code>.  or to delete <code>loop</code> service there, which is not good idea.</p>
-<p><a href="https://stackoverflow.com/questions/52645473/coredns-fails-to-run-in-kubernetes-cluster" target="_blank" rel="external">a very good explain</a></p>
-<h4 id="test-cluster"><a href="#test-cluster" class="headerlink" title="test cluster"></a>test cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/08.%E9%AA%8C%E8%AF%81%E9%9B%86%E7%BE%A4%E5%8A%9F%E8%83%BD.md" target="_blank" rel="external">test sample</a></p>
-<h4 id="clear-cluster"><a href="#clear-cluster" class="headerlink" title="clear cluster"></a>clear cluster</h4><p><a href="https://www.bookstack.cn/read/follow-me-install-kubernetes-cluster-1.8.x/12.%E6%B8%85%E7%90%86%E9%9B%86%E7%BE%A4.md" target="_blank" rel="external">clear test</a></p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl stop kubelet kube-proxy flanneld docker</div></pre></td></tr></table></figure>
-<h2 id="understand-CNI-container-network-interface"><a href="#understand-CNI-container-network-interface" class="headerlink" title="understand CNI (container network interface)"></a>understand CNI (container network interface)</h2><p>the following network plugin can be found from <a href="https://kubernetes.io/docs/concepts/cluster-administration/networking/" target="_blank" rel="external">k8s cluster networking</a></p>
-<ul>
-<li>backgroud</li>
-</ul>
-<p>container network is used to connect (container itself) to other containers, host machine or external network. container in runtime has a few network mode:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">none</div><div class="line"></div><div class="line">host</div><div class="line"></div><div class="line">bridge</div></pre></td></tr></table></figure>
-<p>CNI brings a general network framework, used to manage network configure and network resources. </p>
-<h4 id="coreDNS"><a href="#coreDNS" class="headerlink" title="coreDNS"></a>coreDNS</h4><p>first, run coreDNS as a service in the cluster. then, update <code>kubelet</code> parameters to include IP of coreDNS and the cluster domain. </p>
-<p>if there is no existing running Kube-DNS, or need a different <code>CLusterIP</code> for <code>CoreDNS</code>, then need update <code>kubelet</code> configuration to set <code>cluster_dns</code> and <code>cluster_domain</code> appropriately, which can be modified at:</p>
-<p><code>/etc/systemd/system/kubelet.service/10-kubeadm.conf</code> with additional options appending at <code>kubelet</code> line :</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">--cluster_dns=10.3.0.10   --cluster_domain=cluster.local</div></pre></td></tr></table></figure>
-<ul>
-<li>restart kubelet service </li>
-</ul>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">systemctl status kubelet </div><div class="line">systemctl daemon-reload </div><div class="line">systemctl restart docker</div></pre></td></tr></table></figure>
-<h2 id="flannel-mis-usage"><a href="#flannel-mis-usage" class="headerlink" title="flannel mis-usage"></a>flannel mis-usage</h2><p>in the settings above, I manually copy <code>flannel-cni.conflist</code> and <code>/run/flannel/subnet.env</code> to worker node every time, whenever reboot the worker node. if else, the cluster bother the worker node is <code>NotReady</code>.  as we deploy the cluster with <code>kubectl</code>, which is kind of a swarm service deploy tool. so the right way to use <code>flannel</code> should have all <code>k8s.gcr.io/kube-proxy</code>, <code>quay.io/coreos/flannel</code> images at worker node as well. </p>
-<p>for version1.17+, <code>flannel</code> replace the default <code>kube-proxy</code>, but it still requires to have <code>kube-proxy</code> running in each node(kubelet). </p>
-<p>after restart kubelet, checking <code>pods -n kube-system</code>, it shows <code>kube-proxy</code> and <code>flannel</code> on each node has a <code>Running</code> status. <code>coreDNS</code> services has run the same size of copies as the number of nodes, but we can find that all of them are running on leader node.</p>
-<h2 id="understand-pod-in-k8s"><a href="#understand-pod-in-k8s" class="headerlink" title="understand pod in k8s"></a>understand pod in k8s</h2><h4 id="accessing-k8s-pods-from-outside-of-cluster"><a href="#accessing-k8s-pods-from-outside-of-cluster" class="headerlink" title="accessing k8s pods from outside of cluster"></a><a href="http://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/" target="_blank" rel="external">accessing k8s pods from outside of cluster</a></h4><ul>
-<li>hostNetwork: true</li>
-</ul>
-<p>this option applies to k8s pods, which work as <code>--network=host</code> in docker env. </p>
-<p>options can used for create pod: <code>name command args env resources ports stdin tty</code></p>
-<p><a href="https://www.mirantis.com/blog/introduction-to-yaml-creating-a-kubernetes-deployment/" target="_blank" rel="external">create pod/deployment using yaml</a></p>
-<p><a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/" target="_blank" rel="external">k8s task1: define a command and args for a container</a></p>
-<p><a href="https://learnk8s.io/templating-yaml-with-code" target="_blank" rel="external">templating YAML in k8s with real code</a></p>
-<p>but <code>hostNetwork</code> is only yaml supported</p>
-<ul>
-<li>hostPort </li>
-</ul>
-<p>the container port is exposed to the external network at <hostip>:<hostport>. </hostport></hostip></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">spec:</div><div class="line">	containers:</div><div class="line">		ports:</div><div class="line">		- containerPort: 8086</div><div class="line">		  hostPort: 8086</div></pre></td></tr></table></figure>
-<p>hostPort allows to expose a single container port on the hostIP. but the hostIP is dynamic when container restarted </p>
-<ul>
-<li>nodePort </li>
-</ul>
-<p>by default, services are accessible at ClusterIP, which is an internal IP address reachable from inside the cluster. to make the service accessible from outside of the cluster, can create a <code>NodePort</code> type service. </p>
-<p>once this service is created, the kube-proxy, which runs on each node of the cluster, and listens on all network interfaces is instructed to accept connections on port 30000, (from any IP ?). the incoming traffc is forwardedby the kube-proxy to the selected pods in a round-robin fashion.</p>
-<p>this service represents a static endpoint through which the selected pods can be reached. </p>
-<ul>
-<li>Ingress</li>
-</ul>
-<p>The Ingress controller is deployed as a Docker container on top of Kubernetes. Its Docker image contains a load balancer like nginx or HAProxy and a controller daemon.</p>
-<h4 id="view-pods-and-nodes"><a href="#view-pods-and-nodes" class="headerlink" title="view pods and nodes"></a><a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/explore/explore-intro/" target="_blank" rel="external">view pods and nodes</a></h4><ul>
-<li>check running pods on which node </li>
-</ul>
-<h4 id="resolv-conf-in-k8s-pod"><a href="#resolv-conf-in-k8s-pod" class="headerlink" title="resolv.conf in k8s pod"></a>resolv.conf in k8s pod</h4><p>run as interactive into a k8s pod, then check its <code>resolv.conf</code>:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">nameserver 10.96.0.10</div><div class="line">search default.svc.cluster.local svc.cluster.local cluster.local</div><div class="line">options ndots:5</div></pre></td></tr></table></figure>
-<p> <code>10.96.0.10</code> is the K8S DNS server IP, which is actually the service IP of <code>kube-dns</code> service.</p>
-<p><strong>interesting</strong>, we can ping neither 10.96.0.10, nor 10.4.0.10, which is not existing service in the cluster, nor 10.3.0.10, which is the coreDNS forwarding IP.</p>
-<p>remember during setup the k8s cluster, we had define the coreDNS forwarding to <code>10.3.0.10</code>, is this why I can’t run <code>curl http://&lt;ip&gt;:&lt;port&gt;</code> works ?</p>
-<p>check coreDNS service:</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">kubectl describe  pods coredns-66bff467f8-59g97 -n kube-system </div><div class="line">Name:                 coredns-66bff467f8-59g97</div><div class="line">Node:                 meng/10.20.180.12</div><div class="line">Labels:               k8s-app=kube-dns</div><div class="line">IP:                   10.4.0.6</div></pre></td></tr></table></figure>
-<p>when start <code>coreDNS</code>, is actually used to relace <code>kube-dns</code>. </p>
-<h2 id="understand-service-in-k8s"><a href="#understand-service-in-k8s" class="headerlink" title="understand service in k8s"></a>understand service in k8s</h2><p><a href="https://kubernetes.io/docs/concepts/services-networking/service/" target="_blank" rel="external">doc</a></p>
-<p>Each Pod gets its own IP address, however in a Deployment, the set of Pods running in one moment in time could be different from the set of Pods running that application a moment later.</p>
-<p>A Service in Kubernetes is a REST object, similar to a Pod. you can <code>POST</code> a Service definition to the API server to create a new instance. </p>
-<p>Kubernetes assigns this Service an IP address, sometimes called the <code>clusterIP</code>, </p>
-<h4 id="Virtual-IP-and-service-proxies"><a href="#Virtual-IP-and-service-proxies" class="headerlink" title="Virtual IP and service proxies"></a>Virtual IP and service proxies</h4><p>Every node in a Kubernetes cluster runs a <code>kube-proxy</code>, <code>kube-proxy</code> is responsible for implementing a form of virtual IP for Services, whose is type is any but not <code>ExternalName</code>.</p>
-<h4 id="choosing-own-IP-for-service"><a href="#choosing-own-IP-for-service" class="headerlink" title="choosing own IP for service"></a>choosing own IP for service</h4><p>You can specify your own cluster IP address as part of a Service creation request. The IP address that you choose must be a valid IPv4 or IPv6 address from within the service-cluster-ip-range CIDR range that is configured for the API server</p>
-<h4 id="discovering-services"><a href="#discovering-services" class="headerlink" title="discovering services"></a>discovering services</h4><ul>
-<li><p>ENV variables </p>
-</li>
-<li><p>DNS </p>
-</li>
-</ul>
-<h4 id="headless-services"><a href="#headless-services" class="headerlink" title="headless services"></a>headless services</h4><p>by explicitly specifying “None” for the cluster IP (<code>.spec.clusterIP</code>).</p>
-<h4 id="publishing-services-ServiceTypes"><a href="#publishing-services-ServiceTypes" class="headerlink" title="publishing services(ServiceTypes)"></a>publishing services(ServiceTypes)</h4><p>expose a service to an external IP address, outside of the cluster. </p>
-<p>service has four type:</p>
-<ul>
-<li><p>ClusterIP (default): expose the service on a cluster-internal IP, which is only reachable inside the cluster</p>
-</li>
-<li><p>NodePort: expose the service on each node’s IP at a static port(<code>NodePort</code>), to access : <nodeip>:<nodeport></nodeport></nodeip></p>
-</li>
-<li><p>ExternalName: map the services to an <code>externalName</code></p>
-</li>
-<li><p>LoadBalancer: expose the service externally using third-party load balancer(googl cloud, AWS, kubeadm has none LB)</p>
-</li>
-</ul>
-<p><code>NodePort</code> and <code>LoadBalancer</code> can expose service to public, or outside of the cluster.</p>
-<h4 id="external-IPs"><a href="#external-IPs" class="headerlink" title="external IPs"></a>external IPs</h4><p>if there are external IPs that route to one or more cluster nodes, services can be exposed on those externalIPs. </p>
-<h2 id="yaml-deployment-of-service-pod"><a href="#yaml-deployment-of-service-pod" class="headerlink" title="yaml deployment of service/pod"></a>yaml deployment of service/pod</h2><p>the previous sample <code>busybox</code>, is running as <code>pod</code>, through  <code>kubectl run busybox</code> ?  so there is no external </p>
-<ul>
-<li><a href="https://www.jianshu.com/p/6fd42abd9baa" target="_blank" rel="external">deployment obj</a></li>
-</ul>
-<ul>
-<li><a href="https://blog.csdn.net/wucong60/article/details/81699196" target="_blank" rel="external">using yaml file to create service and expose to public</a><br>some basic knowledge: </li>
-</ul>
-<p>1) pod is like container in docker, which assigned a dynamic IP in runtime, but this pod IP is only visible inside cluster </p>
-<p>2) service is an abstract concept of pod, which has an unique exposed IP, and the running pods belong to this service are managed hidden. </p>
-<ul>
-<li><a href="https://stackoverflow.com/questions/41325087/what-is-the-difference-between-a-pod-and-a-deployment" target="_blank" rel="external">pod or deployment or service</a></li>
-</ul>
-<p>both pod and deployment are full-fledged objects in k8s API. deployment manages creating Pods by means of <code>ReplicaSets</code>, namely create pods with <code>spec</code> taken from the template. since it’s rather unlikely to create pods directly in a production env.</p>
-<p>in production, you will almost never use an <code>object</code> with the type <code>pod</code>. but a <code>deployment</code> object, which needs to keep the <code>replicas(pod)</code> alive. what’s use in practice are:</p>
-<p>1) Deployment object, where to specify app containers with some specifications</p>
-<p>2) service object</p>
-<p>you need <code>service object</code> since pods from deployment object can be killed, scaled up and down, their IP address is not persistent. </p>
-<h2 id="kubectrl-commands"><a href="#kubectrl-commands" class="headerlink" title="kubectrl commands"></a>kubectrl commands</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">kubectl get [pods|nodes|namespaces|services|pv] --ns your_namespace</div><div class="line"></div><div class="line">kubectl describe [pods|nodes|namespaces]</div><div class="line"></div><div class="line">kubectl label pods your_pod  new-label=your_label</div><div class="line"></div><div class="line">kubectl apply -f [.yaml|.json]   <span class="comment">#creates and updates resources in the cluster</span></div><div class="line"></div><div class="line">kubectl create deployment service_name --imae=service_image   <span class="comment">#start a single instance of service</span></div><div class="line"></div><div class="line">kubectl rollout <span class="built_in">history</span> deployment/your_service  <span class="comment">#check history of deployment </span></div><div class="line"></div><div class="line">kubectl expose rc your_sevice --port=80 --target-port=8000</div><div class="line"></div><div class="line">kubectl autoscale deployment your_service --min=MIN_Num --max=MAX_Num</div><div class="line"></div><div class="line">kubectl edit your_service <span class="comment">#edit any API resource in your preferred editor </span></div><div class="line"></div><div class="line">kubectl scale --replicas=3 your_service </div><div class="line"></div><div class="line">kubectl delete [pod|service]</div><div class="line"></div><div class="line">kubectl logs your_pod <span class="comment"># dump pod logs </span></div><div class="line"></div><div class="line">kubectl run -i --tty busybox --image=busybox  -- sh  <span class="comment"># run pod as interactive shell </span></div><div class="line"></div><div class="line">kubectl <span class="built_in">exec</span> -ti your_pod -- ls | nslookup kubernetes.default    <span class="comment">#run command in existing pod (1 container case)</span></div></pre></td></tr></table></figure>
-<p><code>kubectl</code> is pretty much like <code>docker</code> command and more. </p>
-<h2 id="refere"><a href="#refere" class="headerlink" title="refere"></a>refere</h2><p><a href="https://computingforgeeks.com/how-to-setup-3-node-kubernetes-cluster-on-ubuntu-18-04-with-weave-net-cni/" target="_blank" rel="external">blog: setup k8s on 3 ubuntu nodes</a></p>
-<p><a href="https://github.com/containernetworking/cni/blob/master/SPEC.md" target="_blank" rel="external">cni readme</a></p>
-<p><a href="https://silenceper.com/blog/201809/flannel-in-k8s/" target="_blank" rel="external">flannel for k8s from  silenceper</a></p>
-<p><a href="https://blogs.infoblox.com/community/coredns-for-kubernetes-service-discovery/" target="_blank" rel="external">coreDNS for k8s service discovery</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2339,7 +2251,7 @@ Update the kubelet’s corresponding Node object to use this ConfigMap.
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">192</span>
+                <span class="site-state-item-count">193</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
