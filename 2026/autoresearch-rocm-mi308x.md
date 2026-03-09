@@ -16,7 +16,6 @@ The catch? It only supports NVIDIA GPUs out of the box (H100, Flash Attention 3 
 | Docker Image | `rocm/pytorch:rocm6.4.3_ubuntu24.04_py3.12_pytorch_release_2.6.0` |
 | ROCm | 6.4.43484 |
 | PyTorch | 2.6.0 (ROCm build) |
-| Node | `banff-cyxtera-s71-4.ctr.dcgpu` |
 
 ## What Needed to Change
 
