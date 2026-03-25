@@ -4,7 +4,7 @@ This blog documents my journey and learnings in the field of Artificial Intellig
 
 ## Recent Posts
 
-*   [基于Franka + Genesis 的端到端合成数据管线Demo](2026/franka_genesis_sdg_pipeline/franka_genesis_sdg_pipeline.md)
+*   [E2E SDG Pipeline Demo with Franka + Genesis](2026/franka_genesis_sdg_pipeline/readme-en.md)
 *   [lerobot SO-101 × Genesis Sim in Practice -- week2](2026/lerobot_genesis_2/lerobot_genesis_practice.md)
 *   [lerobot SO-101 × Genesis Sim in Practice -- week1](2026/lerobot_genesis_1/lerobot_genesis_practice.md)
 *   [Running Karpathy's Autoresearch on AMD MI308X with ROCm 6.4.3](2026/autoresearch-rocm-mi308x.md)
