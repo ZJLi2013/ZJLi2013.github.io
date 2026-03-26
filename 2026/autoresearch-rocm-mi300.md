@@ -1,10 +1,10 @@
-# Running Karpathy's Autoresearch on AMD MI308X with ROCm 6.4.3
+# Running Karpathy's Autoresearch on AMD MI300 with ROCm 6.4.3
 
 *2026-03-09 | David Z.J. Lee*
 
 Karpathy recently released [autoresearch](https://github.com/karpathy/autoresearch) -- a minimal autonomous LLM training framework that lets an AI agent iterate on model architecture, hyperparameters, and training code overnight. The idea: give the agent a 5-minute training budget per experiment, let it modify `train.py`, run, check `val_bpb`, keep or discard, repeat.
 
-The catch? It only supports NVIDIA GPUs out of the box (H100, Flash Attention 3 via the `kernels` package, CUDA-specific `torch.compile`). This post documents porting it to a single **AMD Instinct MI308X** using `rocm/pytorch:6.4.3`.
+The catch? It only supports NVIDIA GPUs out of the box (H100, Flash Attention 3 via the `kernels` package, CUDA-specific `torch.compile`). This post documents porting it to a single **AMD Instinct MI300** using `rocm/pytorch:6.4.3`.
 
 ---
 
@@ -12,7 +12,7 @@ The catch? It only supports NVIDIA GPUs out of the box (H100, Flash Attention 3 
 
 | Item | Value |
 |------|-------|
-| GPU | AMD Instinct MI308X (gfx942) |
+| GPU | AMD Instinct MI300 (gfx942) |
 | Docker Image | `rocm/pytorch:rocm6.4.3_ubuntu24.04_py3.12_pytorch_release_2.6.0` |
 | ROCm | 6.4.43484 |
 | PyTorch | 2.6.0 (ROCm build) |
@@ -93,7 +93,7 @@ Loss dropped from 9.0 to 4.3 monotonically. Cosine warm-down kicked in at 50%.
 
 ## Why MFU is Low (and What to Do About It)
 
-**3.18% MFU** is well below what MI308X can do. The main bottleneck is running in eager mode without `torch.compile`. On CUDA with PyTorch 2.9.1, compilation fuses ops and eliminates kernel launch overhead -- easily a 3-10x improvement.
+**3.18% MFU** is well below what MI300 can do. The main bottleneck is running in eager mode without `torch.compile`. On CUDA with PyTorch 2.9.1, compilation fuses ops and eliminates kernel launch overhead -- easily a 3-10x improvement.
 
 The node already has `rocm/pytorch:rocm7.1.1_ubuntu24.04_py3.12_pytorch_release_2.9.1` pulled. Re-running with that image should:
 - Re-enable `torch.compile`
@@ -103,12 +103,12 @@ The node already has `rocm/pytorch:rocm7.1.1_ubuntu24.04_py3.12_pytorch_release_
 Other low-hanging fruit:
 - **Increase `DEVICE_BATCH_SIZE`** -- only using ~97 GB of 192 GB HBM3
 - **Restore sliding-window attention** -- once ROCm flash-attn supports window_size
-- **Multi-GPU** -- the node has 2+ MI308X GPUs
+- **Multi-GPU** -- the node has 2+ MI300 GPUs
 
 ## Reproducibility
 
 ```bash
-# On an AMD MI308X node with Docker + ROCm drivers:
+# On an AMD MI300 node with Docker + ROCm drivers:
 git clone https://github.com/karpathy/autoresearch.git
 cd autoresearch
 
@@ -130,7 +130,7 @@ docker run --rm \
 
 Porting autoresearch to ROCm was straightforward -- three targeted changes in `train.py`, no changes to the data pipeline or model architecture. The PyTorch SDPA + AOTriton path "just works" as a drop-in for Flash Attention on AMD. The main performance gap comes from the older PyTorch 2.6.0 lacking robust `torch.compile` support on ROCm, which is solved in 2.9.1.
 
-Autoresearch is a neat idea. The next step: hook up the autonomous agent loop on MI308X and let it run overnight.
+Autoresearch is a neat idea. The next step: hook up the autonomous agent loop on MI300 and let it run overnight.
 
 ---
 
