@@ -1,7 +1,7 @@
 
 [EN](./blog_en.md) | **CN**
 
-# 将 tiny-cuda-nn 移植到 AMD ROCm：一次深入 GPU 架构差异的调试之旅
+# tiny-rocm-nn: tiny-cuda-nn 的 ROCm 版本
 
 ## 为什么
 

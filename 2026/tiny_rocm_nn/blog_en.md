@@ -1,6 +1,6 @@
 **EN** | [CN](./blog_cn.md)
 
-# Porting tiny-cuda-nn to AMD ROCm: A Deep Dive into GPU Architecture Differences
+# tiny-rocm-nn: A ROCm Port of tiny-cuda-nn
 
 ## Why This Matters
 
