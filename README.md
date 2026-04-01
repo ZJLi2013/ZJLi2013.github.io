@@ -4,6 +4,7 @@ This blog documents my journey and learnings in the field of Artificial Intellig
 
 ## Recent Posts
 
+*   [Tiny-rocm-nn: a ROCM branch for Tiny-cuda-nn](2026/tiny_rocm_nn/blog_cn.md)
 *   [E2E SDG Pipeline Demo with Franka + Genesis](2026/franka_genesis_sdg_pipeline/readme-en.md)
 *   [lerobot SO-101 × Genesis Sim in Practice -- week2](2026/lerobot_genesis_2/lerobot_genesis_practice.md)
 *   [lerobot SO-101 × Genesis Sim in Practice -- week1](2026/lerobot_genesis_1/lerobot_genesis_practice.md)
