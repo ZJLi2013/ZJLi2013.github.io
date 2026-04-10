@@ -1,192 +1,147 @@
-# rocm3d-autorun: 用 AI Agent 自动化 3D 模型的 ROCm 迁移
+# rocm3d: 一张替换表 + Code Agent = CUDA→ROCm 自动迁移
 
-> **TL;DR** — 用一个 AI Agent 驱动的流水线，把 3D 生成/重建主流模型从 CUDA 生态自动迁移到 ROCm 平台：脚本生成 → Docker 执行 → LLM 自动修复 → 经验沉淀，6 个 repo 全部安装成功。项目已开源：[rocm3d-autorun](https://github.com/ZJLi2013/rocm3d-autorun)
-
----
-
-## 背景
-
-在上一篇文章 [Unlocking 3D Generative AI on AMD GPUs](2026/Enable_3D-GenAI-on-AMD.md) 中，我展示了如何在 AMD GPU 上手动跑通主流 3D 重建和生成模型。
-
-手动迁移的问题很明显：
-
-- 每个 repo 的依赖环境各不相同，install 脚本需要逐一调试
-- 错误信息往往隐藏在几百行日志中，定位 root cause 耗时
-- 踩过的坑下次遇到新 repo 时又得重复排查
-- 迁移目标越来越多（3DGS 加速库、World Model、VLA），手动方式无法规模化
-
-**rocm3d-autorun** 就是为了解决这个问题而构建的：一个把"手动迁移+调试"过程自动化的 AI Agent 流水线。
+> **TL;DR** — 把 CUDA→ROCm 迁移的经验浓缩成一份 **Cursor Agent Skill**（ROCm 库替换表），剩下的交给 Code Agent 自动完成。30+ repo 覆盖 3D 生成/重建、视频世界模型、VLA 具身智能，大部分 out-of-box 运行在 AMD MI300X 上。项目已开源：[rocm3d](https://github.com/ZJLi2013/rocm3d)
 
 ---
 
-## 整体架构
+## 从 autorun 到 skill：一次大幅简化
+
+在上一版 `rocm3d-autorun` 中，我构建了一套三模块流水线：Skill 生成脚本 → docker_agent 远端执行 → LLM 分析日志自动 patch。架构看起来很完整，但实际跑下来发现：
+
+- **docker_agent 的能力被 Code Agent 覆盖了。** Cursor、Claude Code 等 Agent 本身就能 SSH 到远端节点执行命令、读日志、修脚本、重试 — 而且上下文更丰富，不需要单独的 JSON patch 协议。
+- **LLM log analyzer 的 few-shot 积累，不如直接写进 Skill。** 与其让 LLM 每次从日志中重新推理 root cause，不如把已知的 error→fix 映射直接编码为规则。
+- **真正有价值且不可替代的是那张替换表。** 哪个 CUDA 库对应哪个 ROCm 安装方式、哪个版本有 wheel、哪个需要源码编译 — 这些信息散落在各个 GitHub issue 和 AMD 文档中，整合成一份 Skill 后，任何 Code Agent 都能直接消费。
+
+所以，**rocm3d** 现在只保留一个核心文件：
 
 ```
-用户输入：repo URL
-         ↓
-┌──────────────────────────────────────────┐
-│  Skill: rocm-install-script-generator   │
-│  消费者：Cursor / Claude Code Agent      │
-│                                          │
-│  读取 repo README + requirements，       │
-│  按 Block A~H 规则组装 install.sh         │
-└──────────────────────────────────────────┘
-         ↓ git push → 远端 GPU 节点 git pull
-┌──────────────────────────────────────────┐
-│  docker_agent（纯命令行，不依赖 IDE）     │
-│                                          │
-│  1. docker run install.sh               │
-│  2. 失败 → LLM 分析日志 → 生成 patch     │
-│  3. 应用 patch → 重试（最多 3 次）       │
-│  4. 输出结构化 JSON 结果                 │
-└──────────────────────────────────────────┘
-         ↓ 经验沉淀
-┌──────────────────────────────────────────┐
-│  两条经验通道                             │
-│  · SKILL.md：通用 ROCm 兼容规则更新      │
-│  · analyzer_fewshot.md：error→patch 示例 │
-└──────────────────────────────────────────┘
+.cursor/skills/rocm-lib-compat/
+  SKILL.md       # ROCm 库替换表 + 版本策略 + 已知坑位
 ```
 
-三个核心模块相互独立，也可以单独使用：
-
-| 模块 | 作用 | 运行环境 |
-|------|------|---------|
-| `rocm-install-script-generator` skill | 生成 install/run 脚本 | 本地 Cursor / Claude Code |
-| `docker_agent` | 执行验证 + 自动 patch | 远端 GPU 节点（只需 Python + Docker） |
-| `llm_log_analyzer` | 日志分析 + patch 生成 | 随 docker_agent 自动调用 |
+外围的 docker_agent、LLM analyzer、结构化 JSON 输出全部移除。脚本生成、远端执行、日志分析、错误修复 — 这些工作交给 Cursor / Claude Code 等通用 Code Agent 完成。
 
 ---
 
-## Skill：冷启动生成脚本
+## 核心：ROCm 库替换表
 
-Skill 是给 AI Agent 读的操作手册（`docs/skills/rocm-install-script-generator/SKILL.md`），定义了一套标准化的脚本生成规范，分为 Block A~H：
+迁移一个 ML repo 到 ROCm，核心难点是依赖替换。SKILL.md 维护了一张实战验证过的替换表：
 
-| Block | 作用 |
-|-------|------|
-| A | 基础环境（ROCm PyTorch 安装） |
-| B | ROCm 版本适配（xFormers、gsplat 等） |
-| C | 过滤 requirements.txt 中的冲突包 |
-| D | `--no-build-isolation` 场景处理 |
-| E | git+URL 依赖过滤（避免覆盖已安装包） |
-| F | CUDA kernel hipify（待扩展） |
-| G | run 阶段脚本生成 |
-| H | 经验约束（已知 fail pattern 的防御性规则） |
+| CUDA 库 | ROCm 方案 | ROCm 版本 |
+|---------|----------|----------|
+| flash-attn | `FLASH_ATTENTION_TRITON_AMD_ENABLE=TRUE pip install flash-attn` (Triton) | 6.x / 7.x |
+| flash-attn | `pip install aiter` — AITER CK 后端，**快 ~25%** | **7.x** |
+| xformers | `pip install xformers --index-url https://download.pytorch.org/whl/rocm6.4` | 6.4 |
+| gsplat | `pip install gsplat --index-url=https://pypi.amd.com/simple` | 6.4 / 7.0 |
+| pytorch3d | 预编译 ROCm wheel（源码编译产出 CPU-only，已踩坑） | 6.4 |
+| bitsandbytes | `pip install bitsandbytes` (≥v0.45.3 原生支持 ROCm) | 6.4+ |
+| nvdiffrast | [ROCm fork](https://github.com/ZJLi2013/nvdiffrast/tree/rocm) (RDNA + CDNA3) | 6.4+ |
+| flex_gemm | [ROCm fork](https://github.com/ZJLi2013/FlexGEMM/tree/rocm) (Triton backend) | 6.4+ |
+| cumesh | [ROCm fork](https://github.com/ZJLi2013/CuMesh/tree/rocm) (hipified) | 6.4+ |
+| tinycudann | [tiny-rocm-nn](https://github.com/ZJLi2013/tiny-rocm-nn) | 6.4+ |
 
-在 Cursor 中对话触发后，Agent 读取 repo 的 README 和 `requirements.txt`，按 Block 规则组装出可在 ROCm 环境运行的 `install.sh`，输出到 `samples/auto_gen/<repo>_install.sh`。
+配合版本策略决策规则：
+- Repo 用了 xformers / gsplat / pytorch3d → **ROCm 6.4**（wheel 生态最完整）
+- Repo 只用 flash-attn 且追求极致性能 → **ROCm 7.x**（AITER CK）
+- 纯 PyTorch → **任意 ROCm 版本**，SDPA 自动走 AOTriton
 
 ---
 
-## docker_agent：自动闭环执行
+## 工作流：人给方向，Agent 执行
 
-生成的脚本推送到远端 GPU 节点后，`docker_agent` 负责完整的执行+修复闭环：
-
-```bash
-PYTHONPATH=./src python -m docker_agent \
-  --repo_url https://github.com/<owner>/<repo> \
-  --base-image rocm/pytorch:rocm6.4.3_ubuntu24.04_py3.12_pytorch_release_2.6.0 \
-  --install-script samples/auto_gen/<repo>_install.sh \
-  --auto-patch-on-fail \
-  --max-auto-patch-retries 3 \
-  -o samples/auto_gen/test_output/<repo>.json
-```
-
-失败时的自动修复流程：
+实际使用流程极简：
 
 ```
-install 失败
-    ↓
-LLM 分析日志（stdout tail + stderr tail + script_text）
-    ↓
-生成 JSON patch plan：
-  {
-    "root_cause": { "evidence": [...], "why": "..." },
-    "execution_plan": {
-      "action": "patch_script",
-      "patches": [
-        { "op": "replace_line", "match": "旧行", "content": "新行" }
-      ]
-    }
-  }
-    ↓
-应用 patch 到 install.sh → 重试 install
-    ↓（最多 3 次，或 action=need_human 时停止）
+1. 在 Cursor 中说：
+   "使用 rocm-lib-compat skill，给 https://github.com/<owner>/<repo> 生成 ROCm install 脚本"
+
+2. Agent 读取 repo 的 README + requirements.txt，
+   按替换表生成 install.sh
+
+3. Agent SSH 到远端 GPU 节点，在 Docker 中执行
+
+4. 失败 → Agent 读日志、修脚本、重试
+   （Code Agent 本身的能力，不需要额外框架）
+
+5. 成功 → 跑推理/训练/eval，收集结果
 ```
 
-输出的结构化 JSON 包含完整执行日志、patch 记录和最终状态，方便离线分析和 CI 集成。
+这个流程中没有任何自定义的 Python 框架，只有一份 SKILL.md 和通用的 Code Agent 能力。
 
 ---
 
-## LLM Provider：轻量多 Provider 支持
+## 验证结果
 
-项目内置一个零依赖（纯 Python stdlib）的 LLM 客户端，支持：
+基于 AMD MI300X + ROCm 6.4，已验证 30+ repo 横跨四个领域：
 
-```python
-# OpenAI
-LLM_PROVIDER=openai
-LLM_API_KEY=sk-...
+### 3D 生成与重建（12 个已验证）
 
-# Anthropic
-LLM_PROVIDER=anthropic
-LLM_API_KEY=sk-ant-...
-LLM_MODEL=claude-3-5-haiku-20241022
+| Repo | 领域 | 关键 ROCm 库 |
+|------|------|-------------|
+| [Tencent/Hunyuan3D-2](https://github.com/Tencent/Hunyuan3D-2) | Image-to-3D + PBR | — (AOTriton FA) |
+| [microsoft/TRELLIS.2](https://github.com/microsoft/TRELLIS.2) | Image-to-3D (O-Voxel, 4B) | flash-attn, flex_gemm, cumesh, nvdiffrast ([ROCm fork](https://github.com/ZJLi2013/TRELLIS.2/tree/rocm)) |
+| [wgsxm/PartCrafter](https://github.com/wgsxm/PartCrafter) | 部件感知 3D 生成 | pytorch3d |
+| [apple/ml-sharp](https://github.com/apple/ml-sharp) | 3D 重建 | gsplat |
+| [naver/dust3r](https://github.com/naver/dust3r) | 稠密立体重建 | croco |
+| [facebookresearch/fast3r](https://github.com/facebookresearch/fast3r) | 快速 3D 重建 | croco |
+| [nv-tlabs/Difix3D](https://github.com/nv-tlabs/Difix3D) | 3D 扩散修复 | xformers |
+| [facebookresearch/vggt](https://github.com/facebookresearch/vggt) | 视觉定位 | — |
+| [ByteDance-Seed/Depth-Anything-3](https://github.com/ByteDance-Seed/Depth-Anything-3) | 单目深度 + 3DGS | xformers, gsplat |
+| [expenses/gaussian-splatting](https://github.com/expenses/gaussian-splatting) | 3DGS | diff-gaussian-rasterization |
+| [facebookresearch/map-anything](https://github.com/facebookresearch/map-anything) | 地图重建 | — |
+| [openai/shap-e](https://github.com/openai/shap-e) | 文本/图像转 3D | — |
 
-# 任意 OpenAI-compatible（AMD Gateway、vLLM、Ollama）
-LLM_PROVIDER=openai_compat
-LLM_BASE_URL=https://llm-api.example.com/v1
-LLM_API_KEY=<key>
-```
+### 视频生成 / 世界模型（4 个已验证）
 
-没有 LangChain，没有 vendor SDK，只需 `requirements.txt` 中的 `docker>=7.0.0`。LLM 不可达时，自动回退到 `need_human` 状态，不影响执行链路。
+| Repo | 领域 | 亮点 |
+|------|------|------|
+| [SkyworkAI/Matrix-Game](https://github.com/SkyworkAI/Matrix-Game) | 视频世界模型 | AITER CK 后端，PR ready |
+| [lucas-maes/le-wm](https://github.com/lucas-maes/le-wm) | 学习型世界模型 | 推理 + 8-GPU 训练 |
+| [H-EmbodVis/HyDRA](https://github.com/H-EmbodVis/HyDRA) | 混合记忆视频世界模型 | FA2 Triton vs SDPA 对比 |
+| [ABU121111/DreamWorld](https://github.com/ABU121111/DreamWorld) | 视频生成 (Wan2.1) | 2 videos, ~39min |
 
----
+### VLA / 具身智能（2 个已验证）
 
-## 当前验证结果
+| Repo | 领域 | 亮点 |
+|------|------|------|
+| [yuantianyuan01/FastWAM](https://github.com/yuantianyuan01/FastWAM) | World Action Model | LIBERO eval 5/5 success, out-of-box |
+| [starVLA/starVLA](https://github.com/starVLA/starVLA) | VLA 框架 (Qwen3-VL) | 8-GPU 训练 20K steps + LIBERO 3-suite eval avg **97.8%**, out-of-box |
 
-基于 MI300X GPU 节点，ROCm 6.4 环境，验证了以下 6 个 3D 生成/重建 repo：
+### 标杆项目：TRELLIS.2 端到端 ROCm 适配
 
-| Repo | 领域 | Install 状态 | 备注 |
-|------|------|------------|------|
-| [mvinverse](https://github.com/dvlab-research/mvinverse) | 多视角 3D 重建 | ✅ AUTO_SUCCESS | |
-| [Anything-3D](https://github.com/Anything-of-anything/Anything-3D) | 通用 3D 分割 | ✅ AUTO_SUCCESS | |
-| [any4d](https://github.com/snap-research/any4d) | 4D 动态场景 | ✅ AUTO_SUCCESS | |
-| [DimensionX](https://github.com/wenqsun/DimensionX) | 视频→3D | ✅ AUTO_SUCCESS | |
-| [FLARE](https://github.com/ant-research/FLARE) | 大规模重建 | ✅ LLM_FIXED | auto-patch 修复后成功 |
-| [ReCamMaster](https://github.com/KwaiVGI/ReCamMaster) | 相机轨迹控制 | ✅ AUTO_SUCCESS | |
+[TRELLIS.2](https://github.com/microsoft/TRELLIS.2) 是目前依赖最复杂的验证案例 — 同时需要 flash-attn、FlexGEMM、CuMesh、nvdiffrast、o-voxel 五个 CUDA 原生库。为此创建了完整的 [ROCm fork](https://github.com/ZJLi2013/TRELLIS.2/tree/rocm)，`setup.sh` 自动检测平台并安装对应的 ROCm 兼容依赖，实现了 `git clone + setup.sh` 一键部署。
 
-6/6 安装成功，其中 FLARE 经历了 1 轮 LLM auto-patch 后成功（`--no-build-isolation` 场景）。
+### 标杆项目：starVLA 训练 + LIBERO Eval
 
----
-
-## 经验沉淀机制
-
-这是整个系统中我认为最有价值的部分。
-
-每次新 repo 踩坑后，经验分两条通道沉淀：
-
-**通道 1：SKILL.md 更新（通用规则）**
-
-当发现可以推广到所有 repo 的新规则时，更新 `docs/skills/rocm-install-script-generator/SKILL.md`，让下一次冷启动生成的脚本直接规避这个问题。
-
-典型例子：发现 `git+https://...@<commit>` 依赖会覆盖已安装的 ROCm 版本 torch 后，在 Block E 中添加过滤规则。
-
-**通道 2：analyzer_fewshot.md 追加（具体 patch 示例）**
-
-当发现可复用的 `error signal → patch` 模式时，追加一个示例到 `src/docker_agent/prompts/analyzer_fewshot.md`，让 LLM 在未来遇到同类错误时直接模仿。
-
-格式要求：给出错误特征 + 完整的 patch JSON（含 op/match/content），LLM 直接模仿，不需要再推理。
+[starVLA](https://github.com/starVLA/starVLA) 是最新的 VLA 框架，在 AMD MI300X 上实现了完整的 8-GPU 分布式训练（DeepSpeed ZeRO-2）+ LIBERO 机器人仿真评估。20K steps 的 checkpoint 在三个 LIBERO suite 上取得了 spatial 96.7% / object 100% / goal 96.7%（avg 97.8%）的成功率，与 NVIDIA 30K steps 基线持平。整个过程 zero code change — 纯 PyTorch + AOTriton SDPA out-of-box。
 
 ---
 
-## 与手动迁移的对比
+## 关键发现
 
-| 方面 | 手动迁移 | rocm3d-autorun |
-|------|---------|---------------|
-| 脚本生成 | 逐行手写，参考文档 | Agent 自动生成，30 秒内 |
-| 错误定位 | 人工读几百行日志 | LLM 自动提取 error snippet |
-| 修复迭代 | 手动改脚本重跑 | auto-patch + retry，无人值守 |
-| 经验复用 | 靠记忆或注释 | 结构化沉淀到 SKILL.md + fewshot |
-| 规模化 | 线性增长的人力 | 新 repo 只需触发 agent，基础设施复用 |
+跑完这些 repo 后，几个值得分享的观察：
+
+**1. 大部分 ML repo 已经 out-of-box。** 纯 PyTorch 的 repo（无 flash-attn / xformers / gsplat）通常零改动就能跑。PyTorch 2.6+ 的 SDPA 自动走 AOTriton，性能接近 flash-attn。
+
+**2. ROCm 6.4 的 wheel 生态比想象中完整。** xformers、gsplat、pytorch3d 都有预编译 wheel，flash-attn 走 Triton 路径 37 秒装完（不需要编译 2199 个 .hip 文件）。
+
+**3. 真正的 blocker 集中在少数深度绑定 CUDA 的库。** tinycudann、spconv、nvdiffrast — 这些需要源码级 hipify 或维护 ROCm fork。但它们数量有限，逐个击破后可惠及整个下游生态。
+
+**4. Skill > Framework。** 一开始我以为需要构建复杂的 agent 流水线（docker_agent + LLM analyzer + patch protocol），实践证明一份好的 Skill 文档 + 通用 Code Agent 就够了。Skill 是可组合、可演化的知识载体；Framework 是僵化的、需要维护的代码。
+
+---
+
+## 与上一版的对比
+
+| 方面 | v1 (rocm3d-autorun) | v2 (rocm3d) |
+|------|-------------------|-------------|
+| 架构 | Skill + docker_agent + LLM analyzer | **只有 Skill** |
+| 代码量 | ~2000 行 Python | **~0 行**（纯 Markdown） |
+| 依赖 | docker SDK, LLM API client | **无** |
+| 执行方式 | 自建 CLI + JSON patch 协议 | **Cursor / Claude Code 原生能力** |
+| 经验沉淀 | 两条通道（SKILL.md + fewshot.md） | **一条通道**（SKILL.md） |
+| 覆盖范围 | 6 repo（仅 install） | **30+ repo**（install + 推理 + 训练 + eval） |
+| 可维护性 | 需要维护 Python 代码 | **只需更新替换表** |
 
 ---
 
@@ -194,39 +149,33 @@ LLM_API_KEY=<key>
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/ZJLi2013/rocm3d-autorun.git
-cd rocm3d-autorun
+git clone https://github.com/ZJLi2013/rocm3d.git
 
-# 2. 安装依赖（远端 GPU 节点）
-pip install -r requirements.txt
+# 2. 在 Cursor 中，项目根目录下触发 skill：
+#    "使用 rocm-lib-compat skill，给 https://github.com/<owner>/<repo> 生成 ROCm install 脚本"
 
-# 3. 配置 LLM provider
-cp .env.example .env
-# 编辑 .env，填写 LLM_PROVIDER / LLM_API_KEY / LLM_BASE_URL
-
-# 4. 本地用 Cursor 生成 install 脚本（对话触发 skill）
-# "给 https://github.com/<owner>/<repo> 生成 ROCm install 脚本"
-
-# 5. git push 后，远端节点执行
-PYTHONPATH=./src python -m docker_agent \
-  --repo_url https://github.com/<owner>/<repo> \
-  --base-image rocm/pytorch:rocm6.4.3_ubuntu24.04_py3.12_pytorch_release_2.6.0 \
-  --install-script samples/auto_gen/<repo>_install.sh \
-  --auto-patch-on-fail \
-  -o samples/auto_gen/test_output/<repo>.json
+# 3. Agent 会自动：
+#    - 读取目标 repo 的依赖
+#    - 按替换表生成 install 命令
+#    - SSH 到远端 GPU 节点执行
+#    - 失败时自动修复重试
 ```
+
+不需要安装任何依赖。Skill 是纯文本，任何支持 Agent Skill 的工具都能消费。
 
 ---
 
 ## 后续方向
 
-当前 6 个 repo 的 install 阶段全部完成，下一步按优先级：
-
-1. **run 阶段打通（近期）**：在已安装容器内跑推理，暴露 ROCm 真实 runtime 障碍（算子兼容、`torch.cuda.*` 调用等），补充 runtime 类 fewshot 经验
-2. **Gaussian Splatting 加速库（中期）**：`diff-gaussian-rasterization`、`simple-knn` 等核心库的 HIP 适配，一旦打通可惠及整个 3DGS 生态
-3. **World Model / VLA（中期）**：等 3DGS 基础库稳定后进入
-4. **Skill 体系扩展**：增加 `python-api-sample-generator` skill，自动生成推理示例代码
+1. **补齐 ROCm fork 生态**：tinycudann (tiny-rocm-nn)、spconv — 打通后可覆盖 NeRF/3DGS 全栈
+2. **ROCm 7.x 全面验证**：AITER CK 在 flash-attn 密集型 workload 上快 25%，但 xformers/gsplat wheel 尚未跟进
+3. **更多 VLA / 世界模型**：具身智能和视频世界模型是 ROCm 生态的新增长点
+4. **上游贡献**：将验证过的 ROCm 兼容性以 PR / Issue 形式回馈原始 repo
 
 ---
 
-*项目地址：[https://github.com/ZJLi2013/rocm3d-autorun](https://github.com/ZJLi2013/rocm3d-autorun)*
+*项目地址：[https://github.com/ZJLi2013/rocm3d](https://github.com/ZJLi2013/rocm3d)*
+
+*系列文章：*
+- *[Unlocking 3D Generative AI on AMD GPUs](Enable_3D-GenAI-on-AMD.md) — 手动迁移 10 个 3D 重建/生成模型*
+- *[Autoresearch on AMD MI300](autoresearch-rocm-mi300.md) — Karpathy's autoresearch 迁移实录*
