@@ -78,7 +78,7 @@ NVIDIA 那条链路其实同时解决了这两层：**NuRec / 3DGRUT**（基于 
 
 前面两层拼起来，落到一个能说明问题的 demo：**Unitree Go2 在 Marble 生成的厨房里物理行走**（`examples/go2_kitchen/`）。跑在 AMD R9700（RDNA4/gfx1201）节点上，场景正是 NVIDIA 教程里**同一个免费资产**——World Labs Marble 的「Rustic kitchen with natural light」（2M 高斯的 `.ply`）。
 
-<video src="media/walk_fixedcam_long.mp4" controls width="100%" muted loop></video>
+<video src="/2026/vkgs_scene_on_amd/media/walk_fixedcam_long.mp4" controls width="100%" muted loop></video>
 
 *Go2 在 Marble 生成的 3DGS 厨房里行走：机器人 mesh 与高斯 splat 同一次渲染，遵守场景几何。*
 

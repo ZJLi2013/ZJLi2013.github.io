@@ -78,7 +78,7 @@ At run time, vk_gs's pybind renderer exposes `add_mesh` / `set_mesh_transform` /
 
 With both layers together, it comes down to one demo that makes the point: **a Unitree Go2 physically walking in a Marble-generated kitchen** (`examples/go2_kitchen/`). It runs on an AMD R9700 (RDNA4/gfx1201) node, in the very **same free asset** from NVIDIA's tutorial — World Labs Marble's "Rustic kitchen with natural light" (a 2M-Gaussian `.ply`).
 
-<video src="media/walk_fixedcam_long.mp4" controls width="100%" muted loop></video>
+<video src="/2026/vkgs_scene_on_amd/media/walk_fixedcam_long.mp4" controls width="100%" muted loop></video>
 
 *Go2 walking in the Marble-generated 3DGS kitchen: robot mesh and Gaussian splats rendered in one pass, obeying scene geometry.*
 
