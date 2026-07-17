@@ -1,6 +1,6 @@
 # Rendering a 3DGS Scene and a Robot in One Pass on AMD: A Pure-Vulkan Nyx Alternative
 
-> English | [中文](readme-cn.md)
+> English | [中文](/2026/vkgs_scene_on_amd/readme-cn.md)
 
 Generative world models (like World Labs' Marble) can turn a single prompt into a photorealistic, simulation-ready 3D scene, compressing "build a robot sim environment" from weeks to hours. NVIDIA recently walked this pipeline end to end: Marble generates a 3DGS kitchen → NuRec converts the format → import into Isaac Sim, add physics → drop a robot in and run — a mature workflow built around the CUDA ecosystem.
 

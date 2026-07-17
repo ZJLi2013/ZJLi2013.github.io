@@ -1,8 +1,8 @@
 # human centric data for humanoid
 
-> [English](readme-en.md) | 中文
+> [English](/2026/human-for-humanoid/readme-en.md) | 中文
 
-![cover](image.png)
+![cover](/2026/human-for-humanoid/image.png)
 
 用人类视频——而不是遥操作、动捕或专门的采集装置——来大规模生产机器人操作数据，正在成为一次范式级的转移。这篇文章从最上层的范式讲起，一层层收敛到一条具体可落地的技术线：灵巧手加显式 3D 重建；再把这条线放进 real、世界模型、仿真三种数据产线里做对比，借此看清这个方向正在发生的变化。
 

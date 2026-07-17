@@ -1,8 +1,8 @@
 # Human-Centric Data for Humanoids
 
-> English | [中文](readme.md)
+> English | [中文](/2026/human-for-humanoid/readme.md)
 
-![cover](image.png)
+![cover](/2026/human-for-humanoid/image.png)
 
 Producing robot manipulation data at scale from **human video** — rather than teleoperation, motion capture, or dedicated capture rigs — is becoming a paradigm-level shift. This article starts from the top-level paradigm and converges, layer by layer, onto one concrete and deployable technical line: dexterous hands plus explicit 3D reconstruction. It then places that line inside three data-generation pipelines — real, world model, and simulation — to see clearly what is changing in this direction.
 

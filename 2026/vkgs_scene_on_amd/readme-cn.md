@@ -1,6 +1,6 @@
 # AMD 上把 3DGS 场景和机器人渲进同一个渲染 pass：一个纯 Vulkan 的 Nyx 替代
 
-> [English](readme-en.md) | 中文
+> [English](/2026/vkgs_scene_on_amd/readme-en.md) | 中文
 
 生成式世界模型（如 World Labs 的 Marble）能从一句话生成照片级、可仿真的 3D 场景，正把"搭一个机器人仿真环境"从几周压缩到几小时。NVIDIA 最近的教程把这条链路完整走通了：Marble 生成 3DGS 厨房 → NuRec 转格式 → 导进 Isaac Sim 加物理 → 放机器人进去跑——一套围绕 CUDA 生态打磨得很成熟的方案。
 

@@ -1,8 +1,8 @@
 # From Imitation to Imagination: How VLA Breaks Through the Ceiling with RL and World Models
 
-> English | [中文](readme.md)
+> English | [中文](/2026/vla_rl/readme.md)
 
-![cover](cover.png)
+![cover](/2026/vla_rl/cover.png)
 
 Over the past two years, VLA (Vision-Language-Action models) has raced ahead on imitation learning, yet keeps hitting the same ceiling: **no matter how well it mimics, it can't surpass the demonstration data**. In 2026, the whole field's attention converged on one question — how to let robots **self-improve with reward**, and how to sidestep the "real-robot trial-and-error is too expensive" barrier by simply **trying and failing cheaply inside a learned "world model."**
 
