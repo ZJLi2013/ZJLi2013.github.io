@@ -2,6 +2,8 @@
 
 > English | [中文](readme.md)
 
+![cover](cover.png)
+
 Over the past two years, VLA (Vision-Language-Action models) has raced ahead on imitation learning, yet keeps hitting the same ceiling: **no matter how well it mimics, it can't surpass the demonstration data**. In 2026, the whole field's attention converged on one question — how to let robots **self-improve with reward**, and how to sidestep the "real-robot trial-and-error is too expensive" barrier by simply **trying and failing cheaply inside a learned "world model."**
 
 This article follows that line and explains it top-down: why VLA needs RL (§1) → how the choice of action head decides the entire RL route (§2) → the core obstacle and solution for doing RL with a flow head (§3) → using three orthogonal axes to place the sprawling body of work in one shot (§4); then turning to "where experience comes from" (§5), leading into the full world-model-RFT spectrum of using a world model as a low-cost rollout engine (§6), and its reward-free parallel line, WAM (§7); finally converging on an underrated but worthwhile direction (§8) — **rather than curing a world model's "hallucination," just use real physics to build a world model that inherently cannot hallucinate.**
