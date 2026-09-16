@@ -1,6 +1,6 @@
 **CN** | [EN](./readme.md)
 
-# 将 spconv 移植到 ROCm：FlyDSL 如何替代 20,000 行 CUDA 代码生成
+# 将 spconv 移植到 ROCm：1.5k FlyDSL 如何替代 20k 行 CUDA 代码生成
 
 ## 为什么重要
 

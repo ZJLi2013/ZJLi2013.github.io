@@ -4,12 +4,14 @@ Engineering notes on Physical AI and embodied intelligence — robot learning, w
 
 ## ⭐ Featured
 
+*   [WorldLoop: Training-Free VLM as Rewards for Online RL of VLA inside World Model](2026/worldloop-1/frozen-vlm-as-reward-libero-en.md)
 *   [Rendering a 3DGS Scene and a Robot in One Pass on AMD: A Pure-Vulkan Nyx Alternative](2026/vkgs_scene_on_amd/readme-en.md)
 *   [RoboSmith: A Synthetic-Data Pipeline for Embodied Interactive Manipulation (ROCm-native)](https://andyluo7.github.io/rocm/amd/mi300x/robotics/embodiedai/sdg/2026/07/01/robosmith-rocm-native-synthetic-data-pipeline/)
 *   [From Imitation to Imagination: How VLA Breaks the Ceiling with RL and World Models](2026/vla_rl/readme-en.md)
 
 ## Robotics · VLA · World Models
 
+*   [WorldLoop: Training-Free VLM as Rewards for Online RL of VLA inside World Model](2026/worldloop-1/frozen-vlm-as-reward-libero-en.md)
 *   [From Imitation to Imagination: How VLA Breaks the Ceiling with RL and World Models](2026/vla_rl/readme-en.md)
 *   [Human-Centric Data for Humanoids](2026/human-for-humanoid/readme-en.md)
 *   [RoboSmith: A Synthetic-Data Pipeline for Embodied Interactive Manipulation (ROCm-native)](https://andyluo7.github.io/rocm/amd/mi300x/robotics/embodiedai/sdg/2026/07/01/robosmith-rocm-native-synthetic-data-pipeline/)
@@ -31,4 +33,4 @@ Engineering notes on Physical AI and embodied intelligence — robot learning, w
 
 ## About Me
 
-David Z.J. Lee. Engineer working on Physical AI — mostly on AMD GPUs.
+David Z.J. Lee. Engineer working on Physical AI Infra — mostly on AMD GPUs.
