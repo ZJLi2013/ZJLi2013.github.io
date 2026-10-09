@@ -180,37 +180,47 @@ Manager 不只审批文本。它读代码、核对工具表、运行最小 probe
 
 官方 apply 路径对候选执行“只组合公开工具”的安全检查；现有手写 LIBERO 技能普遍 import numpy 或 `_lib`，因此 Reviewer 对 `grasp_object`、`place_*`、`execute_previewed_move` 的更新无法沿同一路径合入。当前闭环更擅长新增组合技能和修改 wiki，却难以修复真正卡住执行的底层技能。
 
-## 下一步
+## 下一步：把演化层与执行层接起来
 
-### 把外层 controller 移进 RoboRSI
+### 当前范式的边界在原语能力
 
-项目内可以增加一个显式状态机，持有 task set、release、预算和停止条件，依次调用现有的 `eval-suite`、evolve、Manager resume 与 tag 接口。它必须把每次状态转移和 evidence 落盘，并在框架修复、不可逆操作、预算耗尽或方案权衡时暂停等待 human。这样可以去掉 Cursor 作为必需运行时，
-同时保留这次实验使用的治理边界。
+这套装置本质上是 **LLM-as-Policy over tools**：Planner 和 Engineer 能改变计划、工具顺序、参数、重试与恢复，Manager 能把可靠做法写成 wiki 或代码。
+它擅长修正“该做什么、何时做、失败后换哪条路”，却不能凭组合创造一个原语本身没有的物理能力。
 
-### 把 Manager 与外层编排的账纳入资源账本
+第一轮已经给出直接证据：`move_plate_by_rim` 5/5 进入 `execute`、没有契约错误，却 0/5 真正抬起盘子；`get_grasp_pose` 30/30 失败，
+`visual_pick_place` 14/14 失败，`execute_previewed_move` 33/66 次没有到达目标。继续增加 prompt、wiki lead 或组合技能，只会在坏原语之上搜索更多路径。
+现有 apply 门禁又无法更新使用 numpy / `_lib` 的手写 LIBERO 技能，使这条能力边界更难被闭环本身突破。
 
-relay 应在请求时写入 role、episode、release 和 cache 明细；Cursor / Claude Code Manager 与外层编排会话也需要导出 token 与费用。
-否则最昂贵的跨 run 推理可能正好落在统计之外，无法比较“自进化”与重新采样、best-of-N 或人工修复哪个更划算。
+### RoboRSI 管演化，Harness VLA 管接触执行
 
-### 优先修复不能被组合绕过的底层能力
+[Harness VLA](https://arxiv.org/abs/2607.08448) 提供的不是另一套治理系统，而是另一种原语后端：高层 LLM 仍负责计划与恢复，
+冻结 VLA 把抓取、放置等接触动作实现成可重试工具。它与 RoboRSI 位于两个正交层，可以组合：
 
-第一轮暴露了几个高频硬瓶颈：
+```mermaid
+flowchart TB
+    M["RoboRSI Manager<br/>诊断、接纳、版本、回滚"] --> P["Planner / Engineer<br/>选择原语与恢复路径"]
+    P --> I["稳定的 tool interface"]
+    I --> V["接触原语<br/>冻结 VLA：grasp / place"]
+    I --> C["非接触原语<br/>解析控制：transport / IK / safety"]
+    V --> E["环境 + 独立 verifier"]
+    C --> E
+    E --> M
+```
 
-- `get_grasp_pose` 在没有 GraspGen 服务时 30/30 失败；
-- `execute_previewed_move` 在 round 1 中 33/66 次未到达目标；
-- `visual_pick_place` 14/14 失败；
-- 盘沿技能 5/5 进入执行，却 0/5 真正抬起盘子。
+RoboRSI 保留 wiki、Manager、gate、git release 和冻结评测，继续回答“什么变化可以进入下一版”；Harness VLA 替换最脆弱的接触原语，回答“抓取和放置怎样真正执行”。这比让 VLA 接管全部控制更可审计：运输、位姿调整和安全边界仍由可解释代码负责，VLA 只覆盖解析方法反复失败的接触段。
 
-这些问题不应继续靠更多 prompt 或 wiki lead 绕过。更合理的优先级是：先让 existing-skill update 有合法门禁，再修复底层工具，然后观察 Manager 是否能把这些修复推广到多个任务。
 
-### 降低 Engineer 的上下文成本
+### 工程收尾
 
-Engineer 占 94.9% tokens，优化空间集中在这里：
+RoboRSI 可以内置一个持有 task set、release、预算和停止条件的 `evolve-loop` 状态机，替代外层 Cursor 的运行时编排。
+资源账本应统一记录 API role、cache、Cursor / Claude Code Manager 和外层 controller 的 tokens 与费用。
 
-- 把长工具结果压成稳定、结构化的状态摘要；
-- 感知结果按帧与查询缓存，避免同一步重复调用；
-- 对无进展的重复动作设置更早的恢复与停止条件；
-- 将稳定的多步模式编译成一次工具调用，前提是冻结评测证明它真的被采用且有效。
+### 从组合演化走向执行器共演化
+
+当前 RoboRSI 主要演化 orchestrator：经验被写成 wiki、路由、计划与技能组合，底层执行器本身基本不变。Harness VLA 补上了另一半：把跨任务复用的接触能力放进 VLA，使系统不仅学会重新安排已有工具，也能改善工具真正完成物理动作的能力。
+
+两者结合后，长期演化对象不再只是不断增长的技能代码，而是彼此约束的两层系统：RoboRSI 负责从失败中形成知识、决定接纳什么并维护版本；VLA 负责把验证过的交互经验吸收到共享执行能力中。编排层与执行层共同演化，才可能突破“高层越来越聪明，底层原语仍停在原地”的上限。
+
 
 ## 结论
 
@@ -218,17 +228,15 @@ Engineer 占 94.9% tokens，优化空间集中在这里：
 
 > 同一个固定 40 任务集上，r0 为 11/40；29 个失败进入 evolve，持久 Manager 接纳一组 wiki / skill 改动后封存 r1； r1 为 17/40，净增 6。
 
-最有价值的产出不是 +6 本身，而是边界变清楚了：技能写出来、合进去、被调用，仍然可能 0 收益；wiki 整理与新技能同时变化时，
-单遍评测无法归因；Engineer 消耗几乎全部 API tokens；真正的底层技能又暂时不在官方更新路径内；完整实验还依赖 RoboRSI 之外的
-Cursor controller 才能可靠推进和停止。
+最有价值的产出不是 +6 本身，而是边界变清楚了：技能写出来、合进去、被调用，仍然可能 0 收益；wiki 整理与新技能同时变化时，单遍评测无法归因；Engineer 消耗几乎全部 API tokens；真正的底层技能又暂时不在官方更新路径内；完整实验还依赖 RoboRSI 之外的 Cursor controller 才能可靠推进和停止。
 
-RoboRSI 的思想成立在“经验被写回、验证、版本化”这条链上。下一步要证明的是：这条链能否在多轮、独立 lineage 和更强对照下，
-持续把物理失败变成稳定能力，而不是只在一轮里得到一次好看的翻转。
+RoboRSI 的思想成立在“经验被写回、验证、版本化”这条链上。下一步的关键不是单独把这条链多转几轮，而是让它接上一个能跨过接触瓶颈的执行层：用 Harness VLA 式冻结 VLA 提供通用接触原语，用 RoboRSI 管理诊断、接纳、版本与回滚，再在多轮、独立 lineage 和对照臂下验证它是否持续把物理失败变成稳定能力。
 
 ## References
 
 1. [RoboRSI](https://github.com/nssmd/RoboRSI)
 2. [LIBERO-PRO](https://github.com/Zxy-MLlab/LIBERO-PRO)
+3. [Harness VLA](https://arxiv.org/abs/2607.08448) · [RPent](https://github.com/RLinf/RPent)
 
 ## AI usage disclosure
 

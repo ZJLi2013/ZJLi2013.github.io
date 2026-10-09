@@ -184,37 +184,41 @@ The experiment ran only r0 → r1. Establishing sustained improvement across rou
 
 The official apply path subjects candidates to a "public-tool composition only" safety check. Existing hand-written LIBERO skills commonly import numpy or `_lib`, so Reviewer updates to `grasp_object`, `place_*`, or `execute_previewed_move` cannot pass through the same path. The current loop is better at adding composition skills and editing wiki entries than at fixing the low-level skills that block execution.
 
-## Next Steps
+## Next Steps: Connect the Evolution and Execution Layers
 
-### Move the Outer Controller into RoboRSI
+### Primitive Capability Is the Boundary of the Current Paradigm
 
-A project-native state machine can own the task set, release, budget, and stop conditions, then call the existing `eval-suite`, evolve, Manager-resume, and tag interfaces in sequence. It should persist every state transition and its evidence, pausing for human input on framework repairs, irreversible actions, exhausted budgets, or material trade-offs.
+This setup is fundamentally **LLM-as-Policy over tools**. Planner and Engineer can change plans, tool order, parameters, retries, and recovery, while Manager can retain reliable procedures in wiki entries or code. The system is good at improving what to do, when to do it, and which route to try after failure. It cannot create a physical capability that none of its primitives possess.
 
-That would remove Cursor as a required runtime while preserving the governance boundaries used here.
+Round 1 makes that boundary concrete. `move_plate_by_rim` entered `execute` 5/5 times without contract errors but lifted the plate 0/5 times. `get_grasp_pose` failed 30/30 calls, `visual_pick_place` failed 14/14, and `execute_previewed_move` missed its target on 33/66 calls. More prompts, wiki leads, or composition skills only search for additional routes over broken primitives. The current apply gate also cannot update hand-written LIBERO skills that use numpy or `_lib`, making this boundary harder for the loop itself to cross.
 
-### Account for Manager and Outer-Orchestrator Usage
+### Let RoboRSI Govern Evolution and Harness VLA Execute Contact
 
-The relay should record role, episode, release, and cache details for every request. Cursor or Claude Code Manager sessions and the outer orchestration session should also export tokens and cost. Otherwise, the most expensive cross-run reasoning may sit outside the accounting ledger, making self-evolution impossible to compare fairly against resampling, best-of-N, or manual repair.
+[Harness VLA](https://arxiv.org/abs/2607.08448) is not another governance system. It offers a different primitive backend: the high-level LLM still plans and recovers, while a frozen VLA implements contact actions such as grasping and placement as retryable tools. It is orthogonal to RoboRSI and can be composed with it:
 
-### Repair Low-Level Capabilities That Composition Cannot Bypass
+```mermaid
+flowchart TB
+    M["RoboRSI Manager<br/>diagnosis, adoption, versions, rollback"] --> P["Planner / Engineer<br/>select primitives and recovery paths"]
+    P --> I["Stable tool interface"]
+    I --> V["Contact primitives<br/>frozen VLA: grasp / place"]
+    I --> C["Non-contact primitives<br/>analytic control: transport / IK / safety"]
+    V --> E["Environment + independent verifier"]
+    C --> E
+    E --> M
+```
 
-Round 1 exposed several frequent hard blockers:
+RoboRSI would retain the wiki, Manager, gates, git releases, and frozen evaluation, continuing to answer which changes are allowed into the next version. Harness VLA would replace the most fragile contact primitives, answering how grasping and placement are actually executed. This is more auditable than handing all control to a VLA: transport, pose adjustment, and safety boundaries remain explicit, while the VLA covers contact segments where analytic pipelines repeatedly fail.
 
-- `get_grasp_pose` failed 30/30 calls without a GraspGen service;
-- `execute_previewed_move` missed its target on 33/66 calls;
-- `visual_pick_place` failed 14/14 calls;
-- the plate-rim skill entered execution 5/5 times but lifted the plate 0/5 times.
+### Move from Composition Evolution to Executor Co-Evolution
 
-More prompting and wiki leads should not be used to route around these indefinitely. The higher-value sequence is to give existing-skill updates a valid gate, repair the low-level tools, and then measure whether the Manager can generalize those fixes across tasks.
+RoboRSI currently evolves the orchestrator: experience becomes wiki entries, routing, plans, and skill compositions, while the underlying executor changes little. Harness VLA supplies the missing half by placing reusable contact capability in a VLA. The system would then learn not only how to rearrange existing tools, but how to improve the tools' ability to complete physical actions.
 
-### Reduce Engineer Context Cost
+In that combined direction, the long-term unit of evolution is no longer an ever-growing skill-code library. It is a pair of constrained layers: RoboRSI turns failures into knowledge and governs adoption, versions, and rollback; the VLA absorbs verified interaction experience into a shared executor. Co-evolving orchestration and execution is the path beyond the ceiling where the high-level system improves while its primitives remain fixed.
 
-Engineer accounts for 94.9% of API-role tokens. The main opportunities are:
+### Two Engineering Follow-Ups
 
-- compress long tool outputs into stable, structured state summaries;
-- cache perception by frame and query instead of repeating calls within one step;
-- trigger recovery and stopping earlier after repeated no-progress actions;
-- compile stable multi-step patterns into one tool call, but only after frozen evaluation shows that the tool is both adopted and effective.
+RoboRSI can internalize an `evolve-loop` state machine that owns the task set, release, budget, and stop conditions, replacing the outer Cursor runtime.
+The resource ledger should account for API roles, cache, Cursor or Claude Code Manager sessions, and the outer controller's tokens and cost.
 
 ## Conclusion
 
@@ -224,12 +228,13 @@ This experiment moves RoboRSI from "self-evolution in principle" to one auditabl
 
 The most useful result is not the +6 by itself. The boundaries are now clearer: a skill can be authored, applied, and called while producing zero benefit; changing wiki routing and skills together prevents causal attribution from one pass; Engineer consumes almost all API tokens; low-level skills remain outside the current update path; and reliable progression and stopping still depend on a Cursor controller outside RoboRSI.
 
-RoboRSI's central idea rests on a chain of persistence, validation, and versioning. The next question is whether that chain can repeatedly convert physical failures into stable capability across multiple rounds, independent lineages, and stronger controls—not whether it can produce one favorable flip.
+RoboRSI's central idea rests on a chain of persistence, validation, and versioning. The next step is not merely to run that chain more times, but to connect it to an execution layer that can cross the contact bottleneck: use Harness-VLA-style frozen VLA primitives for reusable contact skills, let RoboRSI govern diagnosis, adoption, versions, and rollback, and then test whether the combined system repeatedly turns physical failures into stable capability across multiple rounds, independent lineages, and controlled comparisons.
 
 ## References
 
 1. [RoboRSI](https://github.com/nssmd/RoboRSI)
 2. [LIBERO-PRO](https://github.com/Zxy-MLlab/LIBERO-PRO)
+3. [Harness VLA](https://arxiv.org/abs/2607.08448) · [RPent](https://github.com/RLinf/RPent)
 
 ## AI Usage Disclosure
 
