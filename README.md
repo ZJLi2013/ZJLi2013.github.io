@@ -4,6 +4,7 @@ Engineering notes on Physical AI and embodied intelligence — robot learning, w
 
 ## ⭐ Featured
 
+*   [Learning to Fail: Failure Fidelity and Training Stability for RL inside World Models](2026/wmforge-1/learning-to-fail-wm-rl-en.md)
 *   [$93.90 to Reproduce One RoboRSI Round: What We Learned](2026/roborsi-1/blog-roborsi-one-round-rsi-en.md)
 *   [WorldLoop: Training-Free VLM as Rewards for Online RL of VLA inside World Model](2026/worldloop-1/frozen-vlm-as-reward-libero-en.md)
 *   [Rendering a 3DGS Scene and a Robot in One Pass on AMD: A Pure-Vulkan Nyx Alternative](2026/vkgs_scene_on_amd/readme-en.md)
@@ -12,6 +13,7 @@ Engineering notes on Physical AI and embodied intelligence — robot learning, w
 
 ## Robotics · VLA · World Models
 
+*   [Learning to Fail: Failure Fidelity and Training Stability for RL inside World Models](2026/wmforge-1/learning-to-fail-wm-rl-en.md)
 *   [$93.90 to Reproduce One RoboRSI Round: What We Learned](2026/roborsi-1/blog-roborsi-one-round-rsi-en.md)
 *   [WorldLoop: Training-Free VLM as Rewards for Online RL of VLA inside World Model](2026/worldloop-1/frozen-vlm-as-reward-libero-en.md)
 *   [From Imitation to Imagination: How VLA Breaks the Ceiling with RL and World Models](2026/vla_rl/readme-en.md)
