@@ -4,6 +4,7 @@ Engineering notes on Physical AI and embodied intelligence — robot learning, w
 
 ## ⭐ Featured
 
+*   [先有终产物，再有管线：一个 agentic 项目 6 天 40 个 PR 的复盘（v0.1）](2026/agentic-dev-1/agentic_product_development_best_practice_v01.md)
 *   [Learning to Fail: Failure Fidelity and Training Stability for RL inside World Models](2026/wmforge-1/learning-to-fail-wm-rl-en.md)
 *   [$93.90 to Reproduce One RoboRSI Round: What We Learned](2026/roborsi-1/blog-roborsi-one-round-rsi-en.md)
 *   [WorldLoop: Training-Free VLM as Rewards for Online RL of VLA inside World Model](2026/worldloop-1/frozen-vlm-as-reward-libero-en.md)
@@ -34,6 +35,10 @@ Engineering notes on Physical AI and embodied intelligence — robot learning, w
 *   [Porting spconv to ROCm: How FlyDSL Replaced 20,000 Lines of CUDA Codegen](2026/spconv_rocm_feature/readme.md)
 *   [Tiny-rocm-nn: a ROCM branch for Tiny-cuda-nn](2026/tiny_rocm_nn/blog_cn.md)
 *   [Running Karpathy's Autoresearch on AMD MI300 with ROCm 6.4.3](2026/autoresearch-rocm-mi300.md)
+
+## Agentic Engineering
+
+*   [先有终产物，再有管线：一个 agentic 项目 6 天 40 个 PR 的复盘（v0.1）](2026/agentic-dev-1/agentic_product_development_best_practice_v01.md)
 
 ## About Me
 
